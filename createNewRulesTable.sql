@@ -1,4 +1,5 @@
-use fakeadfice;
+-- use fakeadfice;
+
 CREATE TABLE med_rules(
 id INT AUTO_INCREMENT PRIMARY KEY,
 medication_criteria_id varchar(8),
@@ -10,16 +11,16 @@ preselect_criteria varchar(1000),
 selector_logic varchar(1000),
 condition_logic varchar(1000),
 reference int
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE med_advice_text (
 id INT AUTO_INCREMENT PRIMARY KEY,
 medication_criteria_id varchar(8),
-selectBoxNum int, 
-selectBoxCategory varchar(20), 
-selectBoxDesignator varchar(20), 
-cdss varchar(2000), 
-epic varchar(1000), 
+selectBoxNum int,
+selectBoxCategory varchar(20),
+selectBoxDesignator varchar(20),
+cdss varchar(2000),
+epic varchar(1000),
 patient varchar(5000)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
