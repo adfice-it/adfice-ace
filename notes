@@ -1,0 +1,21 @@
+DB setup:
+* download MariaDB 10.5 from mariadb.org
+* untar, cd to directory, run scripts/mariadb-install-db
+* bin/launch-mariadbd \
+	-b /home/ace/mariadb-10.5.10-linux-systemd-x86_64 \
+	-p 13306
+
+Connect to the test DB:
+* ~/mariadb-10.5.10-linux-systemd-x86_64/bin/mariadb \
+	--host=127.0.0.1 \
+	--port=13306 \
+	--user=root@localhost \
+	test
+
+* ~/mariadb-10.5.10-linux-systemd-x86_64/bin/mariadb \
+	--port=13306 --host=127.0.0.1 --user=root@localhost \
+	test < createNewRulesTable.sql
+
+* ~/mariadb-10.5.10-linux-systemd-x86_64/bin/mariadb \
+	--port=13306 --host=127.0.0.1 --user=root@localhost \
+	test < createPatientTables.sql
