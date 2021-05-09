@@ -1,20 +1,20 @@
 #!/bin/bash
 
-if [ ! -f adfice_mariadb_root_password ]; then
-	cat /dev/urandom \
-		| tr --delete --complement 'a-zA-Z0-9' \
-		| fold --width=32 \
-		| head --lines=1 \
-		> adfice_mariadb_root_password
-fi
-MYSQL_PASSWORD=`cat adfice_mariadb_user_password | xargs`
-
 if [ ! -f adfice_mariadb_user_password ]; then
 	cat /dev/urandom \
 		| tr --delete --complement 'a-zA-Z0-9' \
 		| fold --width=32 \
 		| head --lines=1 \
 		> adfice_mariadb_user_password
+fi
+MYSQL_PASSWORD=`cat adfice_mariadb_user_password | xargs`
+
+if [ ! -f adfice_mariadb_root_password ]; then
+	cat /dev/urandom \
+		| tr --delete --complement 'a-zA-Z0-9' \
+		| fold --width=32 \
+		| head --lines=1 \
+		> adfice_mariadb_root_password
 fi
 MYSQL_ROOT_PASSWORD=`cat adfice_mariadb_root_password | xargs`
 
