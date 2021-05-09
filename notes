@@ -1,4 +1,4 @@
 JS setup:
 * sudo apt install npm
 * npm install mariadb
-
+* on Windows, download and install node.js
