@@ -36,11 +36,8 @@ for CNT in `seq 10`; do
 done
 
 # insertSynthetic_allergies.sql \
-# populateProblemMap.sql \
-# insertSynthetic_measurements.sql \
-# insertSynthetic_patient.sql \
-# insertSynthetic_problems.sql \
-# insertSynthetic_medications.sql \
+
+
 
 for SQL in \
 	createNewRulesTable.sql \
@@ -48,7 +45,12 @@ for SQL in \
 	insertSynthetic_labs.sql \
 	newAdviceTable.sql \
 	newRulesTable.sql \
-	populateStaticPatientTables.sql
+	populateStaticPatientTables.sql \
+	populateProblemMap.sql \
+	insertSynthetic_patient.sql \
+	insertSynthetic_medications.sql \
+	insertSynthetic_problems.sql \
+	insertSynthetic_measurements.sql
 do
 	docker cp $SQL adfice_mariadb:/
 	docker exec adfice_mariadb mariadb \

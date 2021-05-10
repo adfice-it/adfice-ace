@@ -1,5 +1,5 @@
-INSERT INTO patient_medications, (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
-(2,'2021-02-11',"darifenacin ","darifenacin ","G04BD10 ",'2019-02-11'),
+INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
+(2,'2021-02-11',"darifenacin","darifenacin","G04BD10",'2019-02-11'),
 (4,'2021-02-11',"diazepam","diazepam","N05BA01 ",'2021-02-12'),
 (5,'2021-02-11',"diazepam","diazepam","N05BA01 ",'2019-02-11'),
 (6,'2021-02-11',"diazepam","diazepam","N05BA01 ",'2019-02-11'),

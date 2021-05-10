@@ -83,7 +83,7 @@ CREATE TABLE `patient_problems` (
   `date_retrieved` datetime DEFAULT NULL,
   `problem_id` smallint NOT NULL,
   `start_date` date DEFAULT NULL,
-  `ICD_10` varchar(15) DEFAULT NULL,
+  `name` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `patient_id` (`patient_id`,`date_retrieved`,`problem_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
