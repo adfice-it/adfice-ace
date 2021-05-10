@@ -26,7 +26,7 @@ CREATE TABLE `patient_labs` (
 CREATE TABLE `patient_measurements` (
   `id` int NOT NULL AUTO_INCREMENT,
   `patient_id` int NOT NULL,
-  `date_retrieved` date DEFAULT NULL,
+  `date_retrieved` datetime DEFAULT NULL,
   `height_cm` decimal(5,2)DEFAULT NULL,
   `height_date_measured` date DEFAULT NULL,
   `weight_kg` decimal(5,2)DEFAULT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE `patient_measurements` (
 CREATE TABLE `patient_medications` (
   `id` int NOT NULL AUTO_INCREMENT,
   `patient_id` int NOT NULL,
-  `date_retrieved` date DEFAULT NULL,
+  `date_retrieved` datetime DEFAULT NULL,
   `medication_name` varchar(100) DEFAULT NULL,
   `generic_name` varchar(100) DEFAULT NULL,
   `ATC_code` varchar(100) DEFAULT NULL,
@@ -80,11 +80,12 @@ CREATE TABLE `patient_medications` (
 CREATE TABLE `patient_problems` (
   `id` int NOT NULL AUTO_INCREMENT,
   `patient_id` int NOT NULL,
-  `date_retrieved` date DEFAULT NULL,
+  `date_retrieved` datetime DEFAULT NULL,
   `problem_id` smallint NOT NULL,
   `start_date` date DEFAULT NULL,
   `ICD_10` varchar(15) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `patient_id` (`patient_id`,`date_retrieved`,`problem_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `problems` (

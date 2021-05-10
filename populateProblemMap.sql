@@ -1,4 +1,4 @@
-INSERT INTO `fakeadfice`.`problem_map`
+INSERT INTO `problem_map`
 (`amc_icd_id`,
 `adfice_nr`,
 `problem_name`,
@@ -296,15 +296,7 @@ VALUES
 (15285,25,"dwaarslaesie","T06.1","Letsels van zenuwen en ruggenmerg van overige multipele lichaamsregio\'s"),
 (15297,25,"dwaarslaesie","T09.3","Letsel van ruggenmerg, niveau niet gespecificeerd"),
 (15298,25,"dwaarslaesie","T09.4","Letsel van niet gespecificeerde zenuw, zenuwwortel en spinale plexus van romp"),
-(15884,25,"dwaarslaesie","T91.3","Late gevolgen van letsel van ruggenmerg");
-
-INSERT INTO `fakeadfice`.`problem_map`
-(`amc_icd_id`,
-`adfice_nr`,
-`problem_name`,
-`icd_10`,
-`icd_name`)
-VALUES
+(15884,25,"dwaarslaesie","T91.3","Late gevolgen van letsel van ruggenmerg"),
 (1775,26,"diabetes","E10.0","Type 1 diabetes mellitus; Met coma"),
 (1776,26,"diabetes","E10.1","Type 1 diabetes mellitus; Met ketoacidose"),
 (1777,26,"diabetes","E10.2","Type 1 diabetes mellitus; Met niercomplicaties"),

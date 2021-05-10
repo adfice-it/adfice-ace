@@ -1,7 +1,7 @@
 INSERT INTO patient (display_name,login_token,birth_date,education_level) VALUES
 ("Mevr. Empty","mvempty",'1940-02-10',NULL),
 ("Mevr. Predict","mvpredict",'1940-02-11',"HEAO"),
-("Mr. Predict","mrpredict",'1942-01-01',Gymnasium 1 jaar");
+("Mr. Predict","mrpredict",'1942-01-01',"Gymnasium 1 jaar");
 
 -- Remember to check the patient id numbers and adjust ours if needed!!
 
