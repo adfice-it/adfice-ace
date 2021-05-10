@@ -1,19 +1,20 @@
 -- Note that collation gives a warning. Not sure why this collation is used but we should probably use a different one.
 
 CREATE TABLE `patient` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `display_name` varchar(100) DEFAULT NULL,
   `login_token` varchar(100) NOT NULL,
   `birth_date` date,
   `education_level` varchar(100) ,
-  `age` int,
+  `age` int unsigned,
+  `is_fake` tinyint,
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_token` (`login_token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `patient_labs` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `patient_id` int DEFAULT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `patient_id` int unsigned DEFAULT NULL,
   `date_retrieved` datetime DEFAULT NULL,
   `date_measured` date DEFAULT NULL,
   `lab_test_name` varchar(100) DEFAULT NULL,
@@ -24,8 +25,8 @@ CREATE TABLE `patient_labs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `patient_measurements` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `patient_id` int NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `patient_id` int unsigned NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,
   `height_cm` decimal(5,2)DEFAULT NULL,
   `height_date_measured` date DEFAULT NULL,
@@ -33,14 +34,14 @@ CREATE TABLE `patient_measurements` (
   `weight_date_measured` date DEFAULT NULL,
   `BMI` decimal(5,2) DEFAULT NULL,
   `BMI_date_measured` date DEFAULT NULL,
-  `GDS_score` int DEFAULT NULL,
+  `GDS_score` int unsigned DEFAULT NULL,
   `GDS_date_measured` date DEFAULT NULL,
   `grip_kg` decimal(5,2)DEFAULT NULL,
   `grip_date_measured` date DEFAULT NULL,
   `walking_speed_m_per_s` decimal(5,3) DEFAULT NULL,
   `walking_date_measured` date DEFAULT NULL,
-  `systolic_bp_mmHg` int DEFAULT NULL,
-  `diastolic_bp_mmHg` int DEFAULT NULL,
+  `systolic_bp_mmHg` int unsigned DEFAULT NULL,
+  `diastolic_bp_mmHg` int unsigned DEFAULT NULL,
   `bp_date_measured` date DEFAULT NULL,
   `functional_limit_trap` varchar(100) DEFAULT NULL,
   `functional_limit_kleding` varchar(100) DEFAULT NULL,
@@ -56,7 +57,7 @@ CREATE TABLE `patient_measurements` (
   `FES_helling` varchar(100) DEFAULT NULL,
   `FES_sociale` varchar(100) DEFAULT NULL,
   `fear_of_falls_date_measured` date DEFAULT NULL,
-  `nr_falls_12m` int DEFAULT NULL,
+  `nr_falls_12m` int unsigned DEFAULT NULL,
   `nr_falls_date_measured` date DEFAULT NULL,
   `smoking` tinyint DEFAULT NULL,
   `smoking_date_measured` date DEFAULT NULL,
@@ -65,8 +66,8 @@ CREATE TABLE `patient_measurements` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `patient_medications` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `patient_id` int NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `patient_id` int unsigned NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,
   `medication_name` varchar(100) DEFAULT NULL,
   `generic_name` varchar(100) DEFAULT NULL,
@@ -78,10 +79,10 @@ CREATE TABLE `patient_medications` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `patient_problems` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `patient_id` int NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `patient_id` int unsigned NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,
-  `problem_id` smallint NOT NULL,
+  `problem_id` smallint unsigned NOT NULL,
   `start_date` date DEFAULT NULL,
   `name` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -89,13 +90,13 @@ CREATE TABLE `patient_problems` (
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `problems` (
-  `id` smallint NOT NULL AUTO_INCREMENT,
+  `id` smallint unsigned NOT NULL AUTO_INCREMENT,
   `problem_name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `education_levels` (
-  `id` smallint NOT NULL AUTO_INCREMENT,
+  `id` smallint unsigned NOT NULL AUTO_INCREMENT,
   `coded_level` tinyint NOT NULL DEFAULT '0',
   `level` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
@@ -103,9 +104,9 @@ CREATE TABLE `education_levels` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `problem_map` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `amc_icd_id` int,
-  `adfice_nr` smallint,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `amc_icd_id` int unsigned,
+  `adfice_nr` smallint unsigned,
   `problem_name` varchar(100),
   `icd_10` varchar(10),
   `icd_name` varchar(256),

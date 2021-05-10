@@ -1,7 +1,7 @@
 -- use fakeadfice;
 
 CREATE TABLE med_rules(
-id INT AUTO_INCREMENT PRIMARY KEY,
+id int unsigned AUTO_INCREMENT PRIMARY KEY,
 medication_criteria_id varchar(8),
 active varchar(5),
 needs_review varchar(5),
@@ -17,13 +17,13 @@ condition_age varchar(200),
 condition_drug varchar(500),
 condition_labs varchar(500),
 condition_allergy varchar(500),
-reference int
+reference int unsigned
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE med_advice_text (
-id INT AUTO_INCREMENT PRIMARY KEY,
+id int unsigned AUTO_INCREMENT PRIMARY KEY,
 medication_criteria_id varchar(8),
-selectBoxNum int,
+selectBoxNum smallint unsigned,
 selectBoxCategory varchar(20),
 selectBoxDesignator varchar(20),
 precheck_or varchar(500),
