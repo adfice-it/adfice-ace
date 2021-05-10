@@ -38,7 +38,6 @@ done
 # insertSynthetic_allergies.sql \
 
 
-
 for SQL in \
 	createNewRulesTable.sql \
 	createPatientTables.sql \
@@ -50,7 +49,9 @@ for SQL in \
 	insertSynthetic_patient.sql \
 	insertSynthetic_medications.sql \
 	insertSynthetic_problems.sql \
-	insertSynthetic_measurements.sql
+	insertSynthetic_measurements.sql \
+	updateRulesWithSeparatedCriteria.sql \
+	updateRulesWithSeparatedSelectors.sql
 do
 	docker cp $SQL adfice_mariadb:/
 	docker exec adfice_mariadb mariadb \
