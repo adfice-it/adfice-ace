@@ -17,9 +17,7 @@ condition_age varchar(200),
 condition_drug varchar(500),
 condition_lab varchar(500),
 condition_allergy varchar(500),
-reference int unsigned,
-PRIMARY KEY (`id`),
-UNIQUE KEY `medication_criteria_id` (`medication_criteria_id`)
+reference int unsigned
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE med_advice_text (
@@ -30,9 +28,7 @@ selectBoxCategory varchar(20),
 selectBoxDesignator varchar(20),
 cdss varchar(3000),
 epic varchar(2000),
-patient varchar(5000),
-PRIMARY KEY (`id`),
-UNIQUE KEY `medication_criteria_id` (`medication_criteria_id`,`selectBoxNum`)
+patient varchar(5000)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE preselect_rules (
@@ -46,6 +42,5 @@ preselect_age varchar(20),
 preselect_drug varchar(500),
 preselect_lab varchar(500),
 preselect_allergy varchar(500),
-preselect_vervolg tinyint,
-PRIMARY KEY (`id`),
+preselect_vervolg tinyint
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
