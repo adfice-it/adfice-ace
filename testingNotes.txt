@@ -1,7 +1,10 @@
-The first task is to correctly select rules based on selectors and criteria.
+---- Table med_rules ----
+
+The first task is to correctly select rules based on selectors and criteria. These are described in this table.
+
 For each medication for this patient, we want to select the rules that apply.
 We can assume that the data will load all at once from the EHR, so as soon as the data is fully loaded we start processing rules.
-It is possible that we will get new data about the same patient, so it is probably good to use a SELECT ... ORDER BY date_retrieved LIMIT 1;
+It is possible that we will get new data about the same patient, so it is probably good to use a SELECT statement that limits the results to the newest results. (There is a date_retrieved field for this purpose.);
 
 The general format of the rules is:
 (selector_or & NOT (selector_not))
@@ -10,14 +13,78 @@ The general format of the rules is:
 
 The list of drugs in selector_or is joined with or, the list of drugs in selector_not is joined with AND NOT.
 
-The only exception to this format is rule 19 and 19a, which have a condition_problem & condition_drug. I've designated this by starting the condition_drug block with an & .
+The only exception to this format is rule 19 and 19a, which have a condition_problem & condition_drug. I've designated this by starting the condition_drug block with an & . If we decide this is too inconvenient, we can simply merge these two rules and mention it in the advice text instead.
 
 Condition_problem has boolean logic (ands and ors).
-Condition.drug can contain a list of drugs or medication.startDate. A comma-sepaarated list of drugs is joined with OR, ! and &! indicate that it should be joined with NOT and AND NOT.
+Condition.drug can contain a list of drugs or medication.startDate. A comma-sepaarated list of drugs is joined with OR, ! and &! indicate that it should be joined with NOT and AND NOT. A list of drugs here is checking for ANY medication in the patient's medication list; it *will not* be one of the medications in selector_or or selector_not.
 Condition_age and condition_lab can have < and > .
 Condition_lab can have a value or a date or both. ! indicates that the value is missing (i.e. there is no natrium value for this patient).
 If we are lucky, if an allergy is a drug allergy we will get an ATC code for the class or classes of drugs that the patient is allergic to. If they are allergic to THIS drug then condition_allergy = true. I suspect allergies are free text, though, so this is low priority.
 
+The table med_rules also contains the column reference; this gives the number of the page of references associated with this rule. The references pages are in the repo in the folder refpages. Links to the refpages for rules that fired will appear in the UI.
 
+---- Table med_advice_text ----
+This table contains that advice that should appear, checkboxes, and text that appears with the checkboxes in the cdss (doctor view), Epic text (text for copy-pasting into the EHR), and patient text (advice that can be printed for the patient and will appear in the portal).
+Text is formatted with Markdown.
 
+Checkboxes have a "category" and should appear in the UI in the following order:
+stop
+taper-stop
+taper-reduce
+switch
+continue
+consult
+refer
+[anything else]
+follow-up
+free text
 
+Checkboxes also have a "designator"; this is because a rule can have more than one checkbox in the same category, so the designator gives a way to have aa meaningful unique ID for the checkbox.
+
+Within these categories, the order doesn't matter much, although "in the order that they appeara in the table" is good.
+The advice is also phrased so that it can appear in any order, but the order that it appears in the table is preferred.
+
+{{free text}} in the cdss column indicates a free text box to be filled by the user. {{free text}} in the epic or patient column indicates that the free text that is filled by the user appears in the epic or patient text, respectively. 
+
+{{free text: pre-filled: ...}} indicates that the free text box should be pre-filled with some suggested text. IMO this is a convenience feature and I am not even sure it's a good idea, so we can just ignore it.
+
+---- Table preselect_rules ----
+
+Preselect rules determine if a particular check box should be pre-selected. The same box can be selected by more than one criterion, so I gave it its own table.
+
+The preselect rules work exactly the same as the med_rules.
+
+There is one other "preselect" rule: if a stop, taper-stop, taper-reduce, or switch option is selected, then the follow-up box associated with this group should also be checked. For now I've put this in the preselect table, but it's actually a different sort of functionality since it is responding to UI events rather than patient characteristics. As far as I'm concerned, this is a convenience feature and is not mission-critical. I've decided to remove it from this table since IMO it's a different beast.
+
+---- Non-medication advice ----
+
+There will also be a list of checkboxes for non-medication advice at the bottom of the screen, but this is the same for all patients so it should be trivial to implement. It also has cdss, epic, and patient text. A couple of the boxes are pre-selected, but they are also the same for all patients.
+
+---- Persistance ----
+
+Eventully we will want to record the state, so if the user quits in the middle they can pick up again where they left off. We should assume that the state belongs to the patient and is the same for all users.
+
+There will be a "reload" button which will allow the user to reload new data from Epic. This will be useful if there was a mistake in the data (e.g. an order that was never discontinued in Epic). The system should keep the selections that were made for medications that haven't changed.
+
+There will be a button to "finalize" the decisions and release the result for the patient portal. This will make the system "read only". We've decided not to let the user go back from this, because otherwise that could create aa weird discrepiency between the information the patient saw and what is now in the system. Of course *we* can change it but an admin will have to do it. This should also log everything that the user (ultimately) selected.
+
+The system will also need to write a pseudononymized copy of the data out to a research database, but we haven't yet been given the connection informtion for this database so we can't do much about that yet.
+
+---- UI ----
+
+There is a demo UI built in Adobe XD. I will try to get a copy/screenshots of it.
+
+---- Patient portal ----
+Allegedly the patient portal is working except for some browser compatability issues. I haven't seen it yet. The "portal" is basically some static web pages, apart from the advice from the patient column, which is identical to the patient view of the doctor's CDSS.
+
+---- Nice-to-have ----
+Each medication should be accompanied by a link to its information page in the "farmacotherapeutische kompas". Usually
+https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/
+<first letter of generic name>/<generic name>.
+A few don't, so if we get a 404 we can redirect to the site's search page.
+
+Logging UI events: use of the different views, selecting/deselecting check boxes, etc.
+
+Locking: What happens if two users try to view the same patient at the same time? (Best way is to throw up a warning but allow the 2nd user to throw out the first.)
+
+Automatically check a free text checkbox if the user edited the free text.
