@@ -41,6 +41,5 @@ preselect_problem varchar(500),
 preselect_age varchar(20),
 preselect_drug varchar(500),
 preselect_lab varchar(500),
-preselect_allergy varchar(500),
-preselect_vervolg tinyint
+preselect_allergy varchar(500)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
