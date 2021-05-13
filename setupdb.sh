@@ -44,6 +44,7 @@ for SQL in \
 	insertSynthetic_labs.sql \
 	newAdviceTable.sql \
 	newRulesTable.sql \
+	newPreselectRulesTable.sql \
 	populateStaticPatientTables.sql \
 	populateProblemMap.sql \
 	insertSynthetic_patient.sql \
