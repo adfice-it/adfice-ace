@@ -1,8 +1,32 @@
 <html>
 <head></head>
 <body>
-<% for (var i = 0; i < N.length;  ++i ) { %>
-	<%= N[i] %></br>
+
+<table>
+<!--
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `medication_criteria_id` varchar(8) DEFAULT NULL,
+  `selectBoxNum` smallint(5) unsigned DEFAULT NULL,
+  `selectBoxCategory` varchar(20) DEFAULT NULL,
+  `selectBoxDesignator` varchar(20) DEFAULT NULL,
+  `cdss` varchar(3000) DEFAULT NULL,
+  `epic` varchar(2000) DEFAULT NULL,
+  `patient` varchar(5000) DEFAULT NULL,
+-->
+<% for (var i = 0; i < advice_texts.length; ++i ) { %>
+<%      var row = advice_texts[i]; %>
+	<tr>
+	<td><%= row.id %></td>
+	<td><%= row.medication_criteria_id %></td>
+	<td><%= row.selectBoxNum %></td>
+	<td><%= row.selectBoxCategory %></td>
+	<td><%= row.selectBoxDesignator %></td>
+	<td><%= row.cdss %></td>
+	<td><%= row.epic %></td>
+	<td><%= row.patient %></td>
+	</tr>
 <% } %>
+</table>
+
 </body>
 </html>

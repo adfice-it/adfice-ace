@@ -3,3 +3,4 @@ adfice_mariadb_user_password
 node_modules
 package-lock.json
 *.tar.gz
+coverage/
