@@ -55,6 +55,7 @@ for SQL in \
 	updateRulesWithSeparatedSelectors.sql
 do
 	docker cp $SQL adfice_mariadb:/
+	echo "sourcing $SQL"
 	docker exec adfice_mariadb mariadb \
 		--host=127.0.0.1 \
 		--port=3306 \
