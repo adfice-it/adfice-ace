@@ -24,8 +24,8 @@ async function main() {
 
 		counter = 0;
 		do {
-			counter++;
 			console.log(meds[counter].ATC_code);
+			counter++;
 
 		} while (counter < meds.length);
 
