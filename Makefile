@@ -4,6 +4,7 @@ dbsetup:
 	./setupdb.sh
 
 check: dbsetup
+	npm install
 	npm test adfice
 	@echo
 	./acceptance-test.sh
