@@ -5,6 +5,9 @@ dbsetup:
 
 check: dbsetup
 	npm test adfice
+	@echo
+	./acceptance-test.sh
+	@echo "SUCCESS $@"
 
 tidy:
 	js-beautify -r --end-with-newline \
