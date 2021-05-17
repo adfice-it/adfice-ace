@@ -1,3 +1,17 @@
+#
+# Makefile cheat-sheet:
+#
+# $@ : target label
+# $< : the first prerequisite after the colon
+# $^ : all of the prerequisite files
+# $* : wildcard matched part
+#
+# Target-specific Variable syntax:
+# https://www.gnu.org/software/make/manual/html_node/Target_002dspecific.html
+#
+# patsubst : $(patsubst pattern,replacement,text)
+#       https://www.gnu.org/software/make/manual/html_node/Text-Functions.html
+
 SHELL=/bin/bash
 
 default: check
