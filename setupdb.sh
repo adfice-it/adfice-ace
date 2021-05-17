@@ -1,7 +1,10 @@
 #!/bin/bash
 
 echo 'establishing adfice_mariadb_user_password'
-if [ ! -f adfice_mariadb_user_password ]; then
+if [ -f adfice_mariadb_user_password ]; then
+	echo "    adfice_mariadb_user_password file exists"
+else
+	echo "    creating new password from /dev/urandom"
 	cat /dev/urandom \
 		| tr --delete --complement 'a-zA-Z0-9' \
 		| fold --width=32 \
@@ -11,7 +14,10 @@ fi
 MYSQL_PASSWORD=`cat adfice_mariadb_user_password | xargs`
 
 echo 'establishing adfice_mariadb_root_password'
-if [ ! -f adfice_mariadb_root_password ]; then
+if [ -f adfice_mariadb_root_password ]; then
+	echo "    adfice_mariadb_root_password file exists"
+else
+	echo "    creating new password from /dev/urandom"
 	cat /dev/urandom \
 		| tr --delete --complement 'a-zA-Z0-9' \
 		| fold --width=32 \
@@ -19,7 +25,6 @@ if [ ! -f adfice_mariadb_root_password ]; then
 		> adfice_mariadb_root_password
 fi
 MYSQL_ROOT_PASSWORD=`cat adfice_mariadb_root_password | xargs`
-
 
 echo "check user '$USER' for group 'docker' membership"
 if groups | grep -q docker; then

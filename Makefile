@@ -21,6 +21,12 @@ npmsetup:
 	@echo "$@ complete"
 
 dbsetup: npmsetup
+	if [ ! -f adfice_mariadb_user_password ]; then \
+		echo 'test_data_user_password' > adfice_mariadb_user_password; \
+	fi
+	if [ ! -f adfice_mariadb_root_password ]; then \
+		echo 'test_data_root_password' > adfice_mariadb_root_password; \
+	fi
 	./setupdb.sh
 	@echo "$@ complete"
 
