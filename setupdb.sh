@@ -20,6 +20,21 @@ if [ ! -f adfice_mariadb_root_password ]; then
 fi
 MYSQL_ROOT_PASSWORD=`cat adfice_mariadb_root_password | xargs`
 
+
+echo "check user '$USER' for group 'docker' membership"
+if groups | grep -q docker; then
+	echo "user '$USER' is member of 'docker' group (ok)"
+else
+	echo
+	echo '------------------------------------------'
+	echo "user $USER not in group 'docker'"
+	echo "groups are: $(groups | sed -e's/\s/\n\t/g')"
+	echo 'consider:'
+	echo "    sudo usermod -a -G docker $USER"
+	echo '------------------------------------------'
+	echo
+fi
+
 echo 'ensure db container is not already running'
 docker stop adfice_mariadb
 
