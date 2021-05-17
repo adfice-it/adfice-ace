@@ -16,11 +16,15 @@ SHELL=/bin/bash
 
 default: check
 
-dbsetup:
+npmsetup:
+	npm install
+	@echo "$@ complete"
+
+dbsetup: npmsetup
 	./setupdb.sh
+	@echo "$@ complete"
 
 check: dbsetup
-	npm install
 	npm test adfice
 	@echo
 	./acceptance-test.sh
@@ -28,9 +32,9 @@ check: dbsetup
 
 tidy:
 	js-beautify -r --end-with-newline \
+		ping-db.js \
 		adfice.js \
-		SandboxEJSWebserver.js \
+		AdficeWebserver.js \
 		testSimpleSelector.js \
 		adfice.test.js \
 		test1.js
-

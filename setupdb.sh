@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo 'establishing adfice_mariadb_user_password'
 if [ ! -f adfice_mariadb_user_password ]; then
 	cat /dev/urandom \
 		| tr --delete --complement 'a-zA-Z0-9' \
@@ -9,6 +10,7 @@ if [ ! -f adfice_mariadb_user_password ]; then
 fi
 MYSQL_PASSWORD=`cat adfice_mariadb_user_password | xargs`
 
+echo 'establishing adfice_mariadb_root_password'
 if [ ! -f adfice_mariadb_root_password ]; then
 	cat /dev/urandom \
 		| tr --delete --complement 'a-zA-Z0-9' \
@@ -18,8 +20,10 @@ if [ ! -f adfice_mariadb_root_password ]; then
 fi
 MYSQL_ROOT_PASSWORD=`cat adfice_mariadb_root_password | xargs`
 
+echo 'ensure db container is not already running'
 docker stop adfice_mariadb
 
+echo 'start db container'
 docker run -d \
 	-p 127.0.0.1:13306:3306 \
 	--name adfice_mariadb \
@@ -30,13 +34,19 @@ docker run -d \
 	--rm \
 	mariadb:10.5
 
-for CNT in `seq 10`; do
-	echo "waiting for db $(( 10 - $CNT ))"
-	sleep 1;
+i=0
+while [ $i -lt 10 ]; do
+	echo "waiting for db $i"
+	if node ping-db.js ; then
+		echo 'db available'
+		break
+	else
+		i=$(( $i + 1 ))
+	fi
 done
 
+echo 'load schema and test data'
 # insertSynthetic_allergies.sql \
-
 
 for SQL in \
 	createNewRulesTable.sql \
@@ -65,5 +75,6 @@ do
 		-e "source /$SQL"
 done
 
+echo 'db container is up and running'
 echo 'stop the instance with:'
 echo '    docker stop adfice_mariadb'
