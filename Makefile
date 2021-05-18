@@ -37,7 +37,7 @@ check: dbsetup
 	@echo "SUCCESS $@"
 
 tidy:
-	js-beautify -r --end-with-newline \
+	js-beautify --replace --end-with-newline \
 		ping-db.js \
 		adfice.js \
 		AdficeWebserver.js \
