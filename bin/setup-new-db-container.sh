@@ -71,16 +71,11 @@ echo 'load schema and test data'
 for SQL in \
 	createNewRulesTable.sql \
 	createPatientTables.sql \
-	insertSynthetic_labs.sql \
 	newAdviceTable.sql \
 	newRulesTable.sql \
 	newPreselectRulesTable.sql \
 	populateStaticPatientTables.sql \
 	populateProblemMap.sql \
-	insertSynthetic_patient.sql \
-	insertSynthetic_medications.sql \
-	insertSynthetic_problems.sql \
-	insertSynthetic_measurements.sql \
 	updateRulesWithSeparatedCriteria.sql \
 	updateRulesWithSeparatedSelectors.sql
 do

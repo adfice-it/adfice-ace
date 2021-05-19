@@ -27,7 +27,8 @@ dbsetup: npmsetup
 	if [ ! -f adfice_mariadb_root_password ]; then \
 		echo 'test_data_root_password' > adfice_mariadb_root_password; \
 	fi
-	./setupdb.sh
+	bin/setup-new-db-container.sh
+	bin/load-synthetic-data.sh
 	@echo "$@ complete"
 
 check: dbsetup
