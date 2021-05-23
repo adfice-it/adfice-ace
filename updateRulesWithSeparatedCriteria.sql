@@ -19,7 +19,7 @@ UPDATE med_rules SET condition_problem = "parkinson | lewy-bodies-dementia | mul
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="16";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = "allergic-reaction" WHERE medication_criteria_id ="17";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="18";
-UPDATE med_rules SET condition_problem = "depressie", condition_age = NULL, condition_drug = "&(medication.startDate > now-6-months)", condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="19";
+UPDATE med_rules SET condition_problem = "depressie", condition_age = NULL, condition_drug = "&(medication.startDate >= now-6-months | !medication.startDate)", condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="19";
 UPDATE med_rules SET condition_problem = "depressie", condition_age = NULL, condition_drug = "&(medication.startDate < now-6-months)", condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="19a";
 UPDATE med_rules SET condition_problem = "angststoornis &!depressie", condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="19b";
 UPDATE med_rules SET condition_problem = "!depressie &!angststoornis", condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="19c";

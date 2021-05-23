@@ -793,3 +793,4 @@ UPDATE med_rules SET preselect_criteria = NULL WHERE medication_criteria_id in("
 `reference`) VALUES ("132a","yes","no","AVertigomedicatie
 N06BX03 (piracetam)","all","","atc:N06BX03","",12); */
 UPDATE med_rules SET selector_logic = "atc:N06BX03" WHERE medication_criteria_id in("133","134");
+UPDATE med_rules SET patient group criteria = "medication started less than 6 months ago (or unknown) & depressie", criteria_logic = "(medication.startDate > now-6-months | !medication.startDate) & problem:depressie" where medication_criteria_id = "19";
