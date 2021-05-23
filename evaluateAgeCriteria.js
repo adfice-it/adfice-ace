@@ -17,10 +17,12 @@ console.log(result);
 /*
 Evalutes whether the patient meets the age criteria.
 If the patient's age meets the criteria returns true, else returns false.
+If ageString is empty returns true.
 If age is unknown returns false.
 */
 function evaluateAgeCriteria(age, ageString) {
-	if(age == null || ageString == null){return false;}
+	if(ageString == null){return true;}
+	if(age == null){return false;}
 	var ageInString = ageString.match(/\d+/g);
 	if(ageString.substr(0,1) === "<"){
 		return age < ageInString;
