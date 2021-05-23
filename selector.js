@@ -30,17 +30,10 @@ async function main() {
             var rulesToFire = new Array();
             medsWithRulesToFire[meds[medCounter].ATC_code] = medsWithRulesToFire[meds[medCounter].ATC_code] || [];
 			do {
-				//try to match the selector
-				var selectorStrings = rules[ruleCounter].selector_or.split(",");
-				var selectorCounter = 0;
-				do {
-					var selector = selectorStrings[selectorCounter].trim();
-					var subATC = meds[medCounter].ATC_code.substr(0, selector.length);
-					if (subATC === selector){
-						rulesToFire.push(rules[ruleCounter].medication_criteria_id);
-					}
-					selectorCounter++;
-				} while (selectorCounter < selectorStrings.length)
+				if(matchesSelector(meds[medCounter].ATC_code, rules[ruleCounter].selector_or)
+					&& !matchesSelector(meds[medCounter].ATC_code, rules[ruleCounter].selector_not)){
+							rulesToFire.push(rules[ruleCounter].medication_criteria_id);
+						} // else do nothing
 				ruleCounter++;
 			} while (ruleCounter < rules.length)
 			medsWithRulesToFire[meds[medCounter].ATC_code].push(rulesToFire);
@@ -56,6 +49,23 @@ console.log(util.inspect(medsWithRulesToFire));
             return result;
         }
     }
+}
+
+
+function matchesSelector(atcCode, selectorString){
+	if(selectorString != null){
+		var selectorStrings = selectorString.split(",");
+		var selectorCounter = 0;
+		do {
+			var selector = selectorStrings[selectorCounter].trim();
+			var subATC = atcCode.substr(0, selector.length);
+			if (subATC === selector){
+				return true;
+			}
+			selectorCounter++;
+		} while (selectorCounter < selectorStrings.length)
+	}
+	return false;
 }
 
 main();
