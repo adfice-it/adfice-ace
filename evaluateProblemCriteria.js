@@ -1,4 +1,4 @@
-//const util = require("util");
+const util = require("util");
 
 /*
 // problem_criteria can contain items in the following formats:
@@ -33,8 +33,12 @@ function main(){
 console.log(result);
 }
 
+/*
+Returns true if the patient meets the criteria and returns false if the patient does not meet the criteria
+If problemString is null return true.
+*/
 function evaluateProblemCriteria(problemList, problemString){
-	if(problemString == null || problemList.length == 0){return true;}
+	if(problemString == null){return true;}
 	if(problemString.includes("(")){
 		var parentheticalMap = parentheticalProblem(problemString);
 		var insideProblemMap = splitProblems(parentheticalMap.get("problemStringInside"));
@@ -111,18 +115,21 @@ function evaluateCriteria(problemList, problemMap){
 	var hasRequiredProblem = false;
 	var hasForbiddenProblem = false;
 	problemMap.get("problemNot").forEach((notProblem, index) => {
-		if(problemList.includes(notProblem)){
+		if(problemList.length > 0 && problemList.includes(notProblem)){
 			hasForbiddenProblem = true;
 		}
 	});
 	if(!hasForbiddenProblem){
 		problemMap.get("problem").forEach((problem, index) => {
-			if(problemList.includes(problem)){
+			if(problemList.length > 0 && problemList.includes(problem)){
 				hasRequiredProblem = true;
 			}
 		});
 	}
-	if(hasRequiredProblem == true && hasForbiddenProblem == false){
+	if((problemMap.get("problem").length == 0 && !hasForbiddenProblem) // there are no positive criteria but there are negative criteria
+		|| (hasRequiredProblem && problemMap.get("problemNot").length == 0) // there are positive criteria but no negative criteria
+		|| (problemMap.get("problem").length > 0 && hasRequiredProblem
+			&& problemMap.get("problemNot").length > 0 && !hasForbiddenProblem)){ // there are both positive and negative criteria
 		return true;
 	} else {return false;}
 }
