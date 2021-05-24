@@ -112,6 +112,7 @@ async function getAdviceForPatient(patientNumber) {
         v.adviceTextsNoCheckboxes = await getAdviceTextsNoCheckboxes(fired);
         rv.push(v);
     }
+    //TODO get the reference field for all rules that fired for this medication and add it to this object
     return rv;
 }
 
