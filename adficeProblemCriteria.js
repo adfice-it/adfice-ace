@@ -52,6 +52,7 @@ module.exports = {
             }
             // there actually are no criteria like this, but
             // it's trivial to have the functionality
+            /* istanbul ignore else */
             if (operator == "|") {
                 if (evaluateCriteria(problemList, insideProblemMap) ||
                     evaluateCriteria(problemList, afterProblemMap)) {
@@ -59,6 +60,8 @@ module.exports = {
                 } else {
                     return false;
                 }
+            } else {
+                throw new Error("Unexpected operator: " + operator);
             }
         } else {
             var problemMap = splitProblems(problemString);
@@ -74,9 +77,8 @@ function parentheticalProblem(problemString) {
     var problemStringBefore = "";
     var regExp = /^(.*?)\(/;
     var regExpResult = regExp.exec(problemString);
-    if (regExpResult != null) {
-        problemStringBefore = regExpResult[1] || "";
-    }
+    assert(regExpResult !== null);
+    problemStringBefore = regExpResult[1] || "";
 
     // capture the part in the parentheses
     regExp = /\(([^)]+)\)/;
@@ -86,17 +88,17 @@ function parentheticalProblem(problemString) {
     var problemStringOperator = "";
     regExp = /\)[ ]*([&|]*)/;
     regExpResult = regExp.exec(problemString);
-    if (regExpResult != null) {
-        problemStringOperator = regExpResult[1].trim();
-    }
+    assert(regExpResult !== null);
+    assert(regExpResult[1] !== null);
+    problemStringOperator = regExpResult[1].trim();
 
     // capture the part after the parentheses
     var problemStringAfter = "";
     regExp = /\) [&|](.*)/;
     regExpResult = regExp.exec(problemString);
-    if (regExpResult != null) {
-        problemStringAfter = regExpResult[1].trim();
-    }
+    assert(regExpResult !== null);
+    assert(regExpResult[1] !== null);
+    problemStringAfter = regExpResult[1].trim();
 
     parentheticalMap.set("problemStringBefore", problemStringBefore);
     parentheticalMap.set("problemStringInside", problemStringInside);
