@@ -42,6 +42,7 @@ module.exports = {
                 "problemStringAfter"));
             var operator = parentheticalMap.get(
                 "problemStringOperator");
+
             if (operator == "&") {
                 if (evaluateCriteria(problemList, insideProblemMap) &&
                     evaluateCriteria(problemList, afterProblemMap)) {
@@ -50,18 +51,15 @@ module.exports = {
                     return false;
                 }
             }
+
             // there actually are no criteria like this, but
             // it's trivial to have the functionality
-            /* istanbul ignore else */
-            if (operator == "|") {
-                if (evaluateCriteria(problemList, insideProblemMap) ||
-                    evaluateCriteria(problemList, afterProblemMap)) {
-                    return true;
-                } else {
-                    return false;
-                }
+            assert(operator == "|", "Unexpected operator: " + operator);
+            if (evaluateCriteria(problemList, insideProblemMap) ||
+                evaluateCriteria(problemList, afterProblemMap)) {
+                return true;
             } else {
-                throw new Error("Unexpected operator: " + operator);
+                return false;
             }
         } else {
             var problemMap = splitProblems(problemString);
