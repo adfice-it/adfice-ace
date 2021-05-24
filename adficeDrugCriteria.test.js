@@ -91,7 +91,6 @@ test('nine', () => {
     expect(result).toBe(null);
 });
 
-if (0) {
 test('ten', () => {
     const drugList = ["J02AB02", "C09AA01", "C07AA01"];
     const drugString = "C09B";
@@ -99,6 +98,5 @@ test('ten', () => {
     var result = adc.evaluateDrugCriteria(drugList, drugString, startDate);
     expect(result).toBe(false);
 })
-}
 
 // vim: set sts=4 expandtab :
