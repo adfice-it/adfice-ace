@@ -38,5 +38,5 @@ function matchesSelector(atcCode, selectorString) {
 }
 
 module.exports = {
-	evaluateSelectors: evaluateSelectors
+    evaluateSelectors: evaluateSelectors
 }

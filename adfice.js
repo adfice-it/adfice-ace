@@ -45,5 +45,23 @@ module.exports = {
             question_marks(rule_numbers.length) +
             ") ORDER BY id";
         return sql_select(sql, rule_numbers);
+    },
+
+    getActiveRules: async function() {
+        var sql = "SELECT * FROM med_rules WHERE active = 'yes';"
+        return sql_select(sql);
+    },
+
+    getAtcCodesForPatient: async function(patientNumber) {
+        var sql = "" +
+            "SELECT ATC_code" +
+            "  FROM patient_medications" +
+            " WHERE patient_id=?" +
+            "   AND date_retrieved = (" +
+            "           SELECT MAX(date_retrieved)" +
+            "             FROM patient_medications" +
+            "            WHERE patient_id=?" +
+            "       )";
+        return sql_select(sql, [patientNumber, patientNumber]);
     }
 }

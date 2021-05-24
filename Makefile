@@ -48,6 +48,7 @@ tidy:
 		adficeProblemCriteria.test.js \
 		adficeDrugCriteria.js \
 		adficeDrugCriteria.test.js \
+		adficeSelector.js \
+		adficeSelector.test.js \
 		AdficeWebserver.js \
-		selector.js \
 		test1.js
