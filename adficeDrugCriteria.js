@@ -49,6 +49,15 @@ module.exports = {
     }
 }
 
+function assert(condition, message) {
+    /* istanbul ignore else */
+    if (condition) {
+        return;
+    } else {
+        throw new Error(message || "Assertion failed");
+    }
+}
+
 function evaluateStartDate(drugString, selectorStartDate) {
     if (drugString.includes("!medication.startDate") && selectorStartDate == null) {
         return true;
@@ -66,12 +75,14 @@ function evaluateStartDate(drugString, selectorStartDate) {
     // right now the date criteria are always of the form "now-N-months".
     // If we get some that use years or something other than now we'll
     // add those functions.
+    /* istanbul ignore else */
     if (drugStringDateCriteria.includes("now-") && drugStringDateCriteria.includes("months")) {
         regExp = /(\d+)/
         regExpResult = regExp.exec(drugStringDateCriteria);
         var drugStringMonths = regExpResult[1]
     } else {
-        console.log("Unrecognized medication.startDate criteria. This criterion cannot be evaluated!");
+        throw new Error( "Unrecognized medication.startDate criteria: '"
+                + drugString + "', '" + selectorStartDate + "'");
     }
     var targetDate = new Date();
     targetDate.setMonth(targetDate.getMonth() - drugStringMonths);
@@ -84,11 +95,13 @@ function evaluateStartDate(drugString, selectorStartDate) {
     if (drugStringOperator === "<=") {
         return selectorStartDate <= targetDate;
     }
+    /* istanbul ignore else */
     if (drugStringOperator === ">=") {
         return selectorStartDate >= targetDate;
+    } else {
+        throw new Error("Unrecognized medication.startDate criteria: '"
+                + drugString + "', '" + selectorStartDate + "'");
     }
-    // we should never get here, but if we do, return false.
-    return false;
 }
 
 function evaluateDrugList(drugList, drugString) {
