@@ -35,6 +35,7 @@ check: dbsetup
 	npm test adfice
 	@echo
 	./acceptance-test.sh
+	./acceptance-test-cafe.sh
 	@echo "SUCCESS $@"
 
 tidy:
