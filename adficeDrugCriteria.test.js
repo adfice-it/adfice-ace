@@ -99,4 +99,44 @@ test('ten', () => {
     expect(result).toBe(false);
 })
 
+test('eleven', () => {
+    const drugList = ["J02AB02", "C09AA01", "C07AA01"];
+    var drugString = "&(medication.startDate > now-6-months)";
+    var startDate = new Date();
+    var result = adc.evaluateDrugCriteria(drugList, drugString, startDate);
+    expect(result).toBe(true);
+
+    startDate.setMonth(startDate.getMonth() - 13);
+    result = adc.evaluateDrugCriteria(drugList, drugString, startDate);
+    expect(result).toBe(false);
+})
+
+test('twelve', () => {
+    const drugList = ["J02AB02", "C09AA01", "C07AA01"];
+    var drugString = "&(medication.startDate <= now-6-months)";
+    var startDate = new Date();
+    var result = adc.evaluateDrugCriteria(drugList, drugString, startDate);
+    expect(result).toBe(false);
+
+    startDate.setMonth(startDate.getMonth() - 13);
+    result = adc.evaluateDrugCriteria(drugList, drugString, startDate);
+    expect(result).toBe(true);
+})
+
+test('does not have forbidden', () => {
+    const drugList = ["J02AB02", "C07AA01"];
+    const drugString = "!C09A,!C09B";
+    const startDate = new Date();
+    var result = adc.evaluateDrugCriteria(drugList, drugString, startDate);
+    expect(result).toBe(true);
+})
+
+test('has required does not have forbidden', () => {
+    const drugList = ["J02AB02", "C07AA01"];
+    const drugString = "J02AB02,!C09B";
+    const startDate = new Date();
+    var result = adc.evaluateDrugCriteria(drugList, drugString, startDate);
+    expect(result).toBe(true);
+})
+
 // vim: set sts=4 expandtab :

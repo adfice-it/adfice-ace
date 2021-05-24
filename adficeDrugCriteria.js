@@ -1,3 +1,4 @@
+const util = require("util");
 /*
 Condition_drug checks one of three things:
  * the presence of one or more other drugs in the patient's file
@@ -137,10 +138,7 @@ function evaluateDrugList(drugList, drugString) {
         return true;
     }
     // there are positive criteria but no negative criteria
-    if (hasRequiredDrug && hasForbiddenDrug == null) {
-        return true;
-    }
-    // there are both positive and negative criteria
+    // or there are both positive and negative criteria
     if (hasRequiredDrug && !hasForbiddenDrug) {
         return true;
     }
