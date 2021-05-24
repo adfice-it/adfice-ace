@@ -44,7 +44,7 @@ UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_d
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="30";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = "allergic-reaction" WHERE medication_criteria_id ="30a";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="31";
-UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = "!C09A &!C09B", condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="35";
+UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = "!C09A,!C09B", condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="35";
 UPDATE med_rules SET condition_problem = "hartfalen", condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="36";
 UPDATE med_rules SET condition_problem = "hartfalen", condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="37";
 UPDATE med_rules SET condition_problem = "hypertensie &!hartfalen", condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="38";
