@@ -23,7 +23,16 @@ async function sql_select(sql, params) {
     let conn;
     try {
         conn = await pool.getConnection();
-        return await conn.query(sql, params);
+        // This version of the driver seems to always place the "meta" in
+        // with the rows, no matter which calling convention we try.
+        let results = await conn.query(sql, params);
+        // So, we will filter out anything that is not in the iterator:
+        let objects = [];
+        for (let i = 0; i < results.length; ++i) {
+            let row = results[i];
+            objects.push(row);
+        }
+        return objects;
     } finally {
         /* istanbul ignore else */
         if (conn) {
@@ -88,8 +97,27 @@ async function getRulesForPatient(patientNumber) {
     return as.evaluateSelectors(meds, rules);
 }
 
+async function getAdviceForPatient(patientNumber) {
+    var rules = await getActiveRules();
+    var meds = await getAtcCodesForPatient(patientNumber);
+    var medsWithRulesToFire = as.evaluateSelectors(meds, rules);
+    // need to check the criteria at some point (not written yet)
+    let rv = [];
+    for (let i = 0; i < meds.length; ++i) {
+        let fired = medsWithRulesToFire[meds[i].ATC_code];
+        let v = {};
+        v.ATC_code = meds[i].ATC_code.trim();
+        v.medication_name = meds[i].medication_name.trim();
+        v.adviceTextsCheckboxes = await getAdviceTextsCheckboxes(fired);
+        v.adviceTextsNoCheckboxes = await getAdviceTextsNoCheckboxes(fired);
+        rv.push(v);
+    }
+    return rv;
+}
+
 module.exports = {
     getActiveRules: getActiveRules,
+    getAdviceForPatient: getAdviceForPatient,
     getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
     getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
     getAtcCodesForPatient: getAtcCodesForPatient,
