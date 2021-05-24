@@ -84,7 +84,7 @@ function parentheticalProblem(problemString) {
 
     // capture the operator after the parentheses
     var problemStringOperator = "";
-    regExp = /\)([^a-z]*)/;
+    regExp = /\)[ ]*([&|]*)/;
     regExpResult = regExp.exec(problemString);
     if (regExpResult != null) {
         problemStringOperator = regExpResult[1].trim();

@@ -82,11 +82,9 @@ test('one match not inside parens', () => {
     expect(result).toBe(false);
 })
 
-if (0) {
 test('positive and not negative', () => {
     const problemList = ["diabetes"];
-    const problemString = "(epilepsy | diabetes) &! angststoornis";
+    const problemString = "diabetes & !angststoornis";
     var result = apc.evaluateProblemCriteria(problemList, problemString);
     expect(result).toBe(true);
 })
-}
