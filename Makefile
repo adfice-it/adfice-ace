@@ -41,7 +41,12 @@ tidy:
 	js-beautify --replace --end-with-newline \
 		ping-db.js \
 		adfice.js \
-		AdficeWebserver.js \
-		testSimpleSelector.js \
 		adfice.test.js \
+		adficeAgeCriteria.js \
+		adficeAgeCriteria.test.js \
+		adficeProblemCriteria.js \
+		adficeProblemCriteria.test.js \
+		evaluateDrugCriteria.js \
+		AdficeWebserver.js \
+		selector.js \
 		test1.js
