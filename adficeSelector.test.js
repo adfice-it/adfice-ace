@@ -1,5 +1,4 @@
 const adfice = require('./adfice')
-const as = require('./adficeSelector')
 
 test('full selector acceptance for patient 68', async () => {
     var expected = {
@@ -15,8 +14,6 @@ test('full selector acceptance for patient 68', async () => {
             ]
         ]
     };
-    var rules = await adfice.getActiveRules();
-    var meds = await adfice.getAtcCodesForPatient(68);
-    var result = as.evaluateSelectors(meds, rules);
+    var result = await adfice.getRulesForPatient(68);
     expect(result).toEqual(expected);
 })

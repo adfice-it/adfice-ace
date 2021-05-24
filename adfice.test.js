@@ -1,10 +1,6 @@
 // vim: set sts=4 expandtab :
 const adfice = require('./adfice')
 
-test('first test', () => {
-    expect(adfice.getOurData().N[4]).toBe(5);
-})
-
 test('test advice text 6e', async () => {
     var rule_numbers = ["6e"];
     var texts = await adfice.getAdviceTexts(rule_numbers);

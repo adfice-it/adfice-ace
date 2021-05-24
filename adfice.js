@@ -1,5 +1,6 @@
 // vim: set sts=4 expandtab :
 var fs = require('fs');
+const as = require('./adficeSelector')
 
 function question_marks(num) {
     return '?,'.repeat(num - 1) + '?';
@@ -32,36 +33,41 @@ async function sql_select(sql, params) {
     }
 }
 
+async function getAdviceTexts(rule_numbers) {
+    var sql = "SELECT * FROM med_advice_text" +
+        " WHERE medication_criteria_id IN (" +
+        question_marks(rule_numbers.length) +
+        ") ORDER BY id";
+    return sql_select(sql, rule_numbers);
+}
+
+async function getActiveRules() {
+    var sql = "SELECT * FROM med_rules WHERE active = 'yes';"
+    return sql_select(sql);
+}
+
+async function getAtcCodesForPatient(patientNumber) {
+    var sql = "" +
+        "SELECT ATC_code" +
+        "  FROM patient_medications" +
+        " WHERE patient_id=?" +
+        "   AND date_retrieved = (" +
+        "           SELECT MAX(date_retrieved)" +
+        "             FROM patient_medications" +
+        "            WHERE patient_id=?" +
+        "       )";
+    return sql_select(sql, [patientNumber, patientNumber]);
+}
+
+async function getRulesForPatient(patientNumber) {
+    var rules = await getActiveRules();
+    var meds = await getAtcCodesForPatient(patientNumber);
+    return as.evaluateSelectors(meds, rules);
+}
+
 module.exports = {
-    getOurData: function() {
-        return {
-            N: [1, 1, 2, 3, 5, 8, 13, 21]
-        };
-    },
-
-    getAdviceTexts: async function(rule_numbers) {
-        var sql = "SELECT * FROM med_advice_text" +
-            " WHERE medication_criteria_id IN (" +
-            question_marks(rule_numbers.length) +
-            ") ORDER BY id";
-        return sql_select(sql, rule_numbers);
-    },
-
-    getActiveRules: async function() {
-        var sql = "SELECT * FROM med_rules WHERE active = 'yes';"
-        return sql_select(sql);
-    },
-
-    getAtcCodesForPatient: async function(patientNumber) {
-        var sql = "" +
-            "SELECT ATC_code" +
-            "  FROM patient_medications" +
-            " WHERE patient_id=?" +
-            "   AND date_retrieved = (" +
-            "           SELECT MAX(date_retrieved)" +
-            "             FROM patient_medications" +
-            "            WHERE patient_id=?" +
-            "       )";
-        return sql_select(sql, [patientNumber, patientNumber]);
-    }
+    getActiveRules: getActiveRules,
+    getAdviceTexts: getAdviceTexts,
+    getAtcCodesForPatient: getAtcCodesForPatient,
+    getRulesForPatient: getRulesForPatient
 }
