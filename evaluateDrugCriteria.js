@@ -18,7 +18,9 @@ function main(){
 // hard code some stuff
 var drugList = ["J02AB02","C09AA01","C07AA01"];
 //var drugString = "J02AB02,J02AC04,J02AC03,J02AC02,J01FA09,V03AX03,J05AE03,J05AE01,J05AR10";
-var drugString = "&(medication.startDate >= now-6-months | !medication.startDate)";
+var drugString = "!C09A,!C09B";
+// var drugString = "C09A,!C09B"; // this doesn't exist currently but it is handled by this code
+//var drugString = "&(medication.startDate >= now-6-months | !medication.startDate)";
 //var drugString = "&(medication.startDate < now-6-months)";
 var selectorStartDate = new Date();
 
@@ -30,11 +32,12 @@ console.log(result);
 /*
 Evaluates whether the patient meets the criteria.
 Returns true if the patient does meet the criteria, false if they don't.
-If drugString is empty, returns true.
+If drugString is null, returns null. Should probably throw an error.
+drugList should be an array, drugString should be a string, selectorStartDate should be a Date object
 */
 function evaluateDrugCriteria(drugList, drugString, selectorStartDate) {
 	// TODO check what happens if you call this function without a selectorStartDate
-	if(drugString == null){return true;}
+	if(drugString == null || ((drugList == null || drugList.length == 0) && selectorStartDate == null)){return null;}
 	// figure out what kind of string we have
 	if(drugString.includes("startDate")){
 		return evaluateStartDate(drugString, selectorStartDate);
@@ -51,20 +54,75 @@ function evaluateStartDate(drugString, selectorStartDate){
 	var regExp = /startDate ([^a-z0-9]*)/;
 	var regExpResult = regExp.exec(drugString);
 	var drugStringOperator = regExpResult[1].trim();
-console.log(drugStringOperator);
 	// capture the expression after the operator
 	regExp = /[<>=]+ (.*)(?:\)| \| !medication.startDate)/;
 	regExpResult = regExp.exec(drugString);
 	var drugStringDateCriteria = regExpResult[1].trim();
-console.log(drugStringDateCriteria);
-
-//	&(medication.startDate >= now-6-months | !medication.startDate)
-// medication.startDate < now-6-months
+	// right now the date criteria are always of the form "now-N-months". If we get some that use years or something other than now we'll add those functions.
+	if(drugStringDateCriteria.includes("now-") && drugStringDateCriteria.includes("months")){
+		regExp = /(\d+)/
+		regExpResult = regExp.exec(drugStringDateCriteria);
+		var drugStringMonths = regExpResult[1]
+	} else {console.log("Unrecognized medication.startDate criteria. This criterion cannot be evaluated!");}
+	var targetDate = new Date();
+    targetDate.setMonth(targetDate.getMonth() - drugStringMonths);
+	if(drugStringOperator === "<"){
+		return selectorStartDate < targetDate;
+	}
+	if(drugStringOperator === ">"){
+		return selectorStartDate > targetDate;
+	}
+	if(drugStringOperator === "<="){
+		return selectorStartDate <= targetDate;
+	}
+	if(drugStringOperator === ">="){
+		return selectorStartDate >= targetDate;
+	}
+// we should never get here, but if we do, return false.
 return false;
 }
 
 function evaluateDrugList(drugList, drugString){
-return false;
+	var drugCriteria = drugString.split(",");
+	// for each drugString, check if it matches a drug on the patient's drug list.
+	// if the drug string is a !, check to make sure that drug is not on the drug list.
+	var hasRequiredDrug = null;
+	var hasForbiddenDrug = null;
+	var drugCriteriaCounter = 0;
+	do{
+		var drugCriterion = drugCriteria[drugCriteriaCounter];
+		if(drugCriterion.includes("!")){
+			var drugCriterionATC = drugCriterion.substr(1,drugCriterion.length).trim();
+			if(drugIsOnList(drugCriterionATC, drugList)){
+				hasForbiddenDrug = true;
+			} else {hasForbiddenDrug = false;}
+		} else {
+			var drugCriterionATC = drugCriterion.trim();
+			if(drugIsOnList(drugCriterionATC, drugList)){
+				hasRequiredDrug = true;
+			} else {hasRequiredDrug = false;}
+		}
+	} while (drugCriteriaCounter < drugCriteria.length && !hasForbiddenDrug && !hasRequiredDrug)
+
+
+
+	if((hasRequiredDrug == null && !hasForbiddenDrug) // there are no positive criteria but there are negative criteria
+		|| (hasRequiredDrug && hasForbiddenDrug == null) // there are positive criteria but no negative criteria
+		|| (hasRequiredDrug && !hasForbiddenDrug)){ // there are both positive and negative criteria
+		return true;
+	} else {return false;}
+}
+
+function drugIsOnList(drugCriterionATC, drugList){
+		var drugListCounter = 0;
+		do {
+			var drugFromList = drugList[drugListCounter].substr(0,drugCriterionATC.length).trim();
+			if (drugFromList === drugCriterionATC){
+				return true;
+			}
+			drugListCounter++;
+		} while (drugListCounter < drugList.length)
+		return false;
 }
 
 main();
