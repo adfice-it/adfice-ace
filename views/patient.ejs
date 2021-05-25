@@ -1,36 +1,41 @@
 <html>
-<head></head>
+<head>
+</head>
 <body>
-
-Patient: 68
+Patient: <%= patient_id %>
 <ul>
-<li>
-Enalapril:C09AA02
-reference pages: 5,12
-<table>
-  <tr>
-   <td>64b</td>
-   <td>Discontinue if patient develops cough</td>
-   <table>
-     <tr>
-       <td>1</td><!-- selectBoxNum -->
-       <td></td>
-       <td>[] Stop this medication</td>
-       <td>Stop</td>
-       <td>Your doctor wants you to stop this medication.</td>
-     </tr>
-    </table>
-  </tr>
-<!-- same thing for next rule -->
+<% for (let i = 0; i < patient_advice.length; ++i ) { %>
+<%     let row = patient_advice[i]; %>
+<li><%= row.medication_name %>: <%= row.ATC_code %><br/>
+<table id="adviceTextsNoCheckboxesTable_<%= i %>">
+<tr><th>criterion</th><th>cdss</th></tr>
+<%     let advices = row.adviceTextsNoCheckboxes; %>
+<%     for (let j = 0; j < advices.length; ++j ) { %>
+<%         let advice = advices[j]; %>
+<tr id="att_<%=j%>">
+<td id="att_mc_<%= j %>"><%= advice.medication_criteria_id %></td>
+<td id="att_cdss_<%= j %>"><%= advice.cdss %></td>
+</tr>
+<%     } %>
+</table>
+<table id="adviceTextsCheckboxesTable_<%= i %>">
+<tr><th>criterion</th><th>box</th><th>category</th>
+<th>cdss</th><th>epic</th><th>patient</th></tr>
+<%     let cb_advices = row.adviceTextsCheckboxes; %>
+<%     for (let j = 0; j < cb_advices.length; ++j ) { %>
+<%         let cb_advice = cb_advices[j]; %>
+<tr id="atcbt_<%= j %>">
+<td id="atcbt_mc_<%= j %>"><%= cb_advice.medication_criteria_id %></td>
+<td id="atcbt_sbn_<%= j %>"><%= cb_advice.selectBoxNum %></td>
+<td id="atcbt_sbc_<%= j %>"><%= cb_advice.selectBoxCategory %></td>
+<td id="atcbt_cdss_<%= j %>"><%= cb_advice.cdss %></td>
+<td id="atcbt_epic_<%= j %>"><%= cb_advice.epic %></td>
+<td id="atcbt_patient_<%= j %>"><%= cb_advice.patient %></td>
+</tr>
+<%     } %>
 </table>
 </li>
-<li>
-Hydrochlorthiazide:C03AA03
-reference pages: 7,11
-<table>
-<!-- so on for the next medication -->
-</table>
-</li>
-</ol>
+<% } %>
+</ul>
 </body>
 </html>
