@@ -37,3 +37,21 @@ test('getAdviceForPatient(68)', async () => {
     expect(noCheckbox0['cdss']).toContain("ACE");
     expect(noCheckbox0['cdss']).toContain("AT2-");
 })
+
+test('getAdviceForPatient(null)', async () => {
+    let patientNumber = null;
+    let advice = await adfice.getAdviceForPatient(patientNumber);
+    expect(advice.length).toBe(0);
+})
+
+test('getAdviceForPatient(-1)', async () => {
+    let patientNumber = -1;
+    let advice = await adfice.getAdviceForPatient(patientNumber);
+    expect(advice.length).toBe(0);
+})
+
+test('getAdviceForPatient(bogus)', async () => {
+    let patientNumber = 'bogus';
+    let advice = await adfice.getAdviceForPatient(patientNumber);
+    expect(advice.length).toBe(0);
+})

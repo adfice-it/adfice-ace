@@ -143,16 +143,23 @@ async function getRulesForPatient(patientNumber) {
 }
 
 async function getAdviceForPatient(patientNumber) {
+    let patient_id = parseInt(patientNumber) || 0;
+
+    var meds = await getMedsForPatient(patient_id);
+
     var rules = await getActiveRules();
-    var meds = await getMedsForPatient(patientNumber);
     var medsWithRulesToFire = as.evaluateSelectors(meds, rules);
+
     // need to check the criteria at some point (not written yet)
+
     let rv = [];
     for (let i = 0; i < meds.length; ++i) {
-        let fired = medsWithRulesToFire[meds[i].ATC_code];
+        let med = meds[i];
+        let atc_code = med.ATC_code;
+        let fired = medsWithRulesToFire[atc_code];
         let v = {};
-        v.ATC_code = meds[i].ATC_code.trim();
-        v.medication_name = meds[i].medication_name.trim();
+        v.ATC_code = atc_code.trim();
+        v.medication_name = med.medication_name.trim();
         v.adviceTextsCheckboxes = await getAdviceTextsCheckboxes(fired);
         v.adviceTextsNoCheckboxes = await getAdviceTextsNoCheckboxes(fired);
         rv.push(v);

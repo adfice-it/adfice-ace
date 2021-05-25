@@ -110,9 +110,10 @@ function evaluateDrugList(drugList, drugString) {
     // on the drug list.
     var hasRequiredDrug = null;
     var hasForbiddenDrug = null;
-    var drugCriteriaCounter = 0;
-    do {
-        var drugCriterion = drugCriteria[drugCriteriaCounter];
+    for (let i = 0; i < drugCriteria.length &&
+        !hasForbiddenDrug && !hasRequiredDrug;
+        ++i) {
+        var drugCriterion = drugCriteria[i];
         if (drugCriterion.includes("!")) {
             var dcLen = drugCriterion.length;
             var drugCriterionATC = drugCriterion.substr(1, dcLen).trim();
@@ -129,10 +130,7 @@ function evaluateDrugList(drugList, drugString) {
                 hasRequiredDrug = false;
             }
         }
-        ++drugCriteriaCounter;
-    } while (drugCriteriaCounter < drugCriteria.length &&
-        !hasForbiddenDrug && !hasRequiredDrug)
-
+    }
     // there are no positive criteria but there are negative criteria
     if (hasRequiredDrug == null && !hasForbiddenDrug) {
         return true;
@@ -147,15 +145,14 @@ function evaluateDrugList(drugList, drugString) {
 }
 
 function drugIsOnList(drugCriterionATC, drugList) {
-    var drugListCounter = 0;
-    do {
+    for (let drugListCounter = 0; drugListCounter < drugList.length;
+        ++drugListCounter) {
         var dcLen = drugCriterionATC.length;
         var drugFromList = drugList[drugListCounter].substr(0, dcLen).trim();
         if (drugFromList === drugCriterionATC) {
             return true;
         }
-        drugListCounter++;
-    } while (drugListCounter < drugList.length)
+    }
     return false;
 }
 

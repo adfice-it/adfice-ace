@@ -2,37 +2,34 @@ var fs = require('fs');
 const util = require("util");
 
 function evaluateSelectors(meds, rules) {
-    var medsWithRulesToFire = {};
-    var medCounter = 0;
-    do {
-        var ruleCounter = 0;
-        var rulesToFire = new Array();
-        medsWithRulesToFire[meds[medCounter].ATC_code] = medsWithRulesToFire[meds[medCounter].ATC_code] || [];
-        do {
-            if (matchesSelector(meds[medCounter].ATC_code, rules[ruleCounter].selector_or) &&
-                !matchesSelector(meds[medCounter].ATC_code, rules[ruleCounter].selector_not)) {
-                rulesToFire.push(rules[ruleCounter].medication_criteria_id);
+    let medsWithRulesToFire = {};
+    for (let i = 0; i < meds.length; ++i) {
+        let med = meds[i];
+        let atc_code = med.ATC_code.trim();
+        let rulesToFire = new Array();
+        medsWithRulesToFire[atc_code] = medsWithRulesToFire[atc_code] || [];
+        for (let ruleCounter = 0; ruleCounter < rules.length; ++ruleCounter) {
+            let rule = rules[ruleCounter];
+            if (matchesSelector(atc_code, rule.selector_or) &&
+                !matchesSelector(atc_code, rule.selector_not)) {
+                rulesToFire.push(rule.medication_criteria_id);
             } // else do nothing
-            ruleCounter++;
-        } while (ruleCounter < rules.length)
-        medsWithRulesToFire[meds[medCounter].ATC_code].push(rulesToFire);
-        medCounter++;
-    } while (medCounter < meds.length);
+        }
+        medsWithRulesToFire[atc_code].push(rulesToFire);
+    }
     return medsWithRulesToFire;
 }
 
 function matchesSelector(atcCode, selectorString) {
     if (selectorString != null) {
-        var selectorStrings = selectorString.split(",");
-        var selectorCounter = 0;
-        do {
-            var selector = selectorStrings[selectorCounter].trim();
-            var subATC = atcCode.substr(0, selector.length);
+        let selectorStrings = selectorString.split(",");
+        for (let i = 0; i < selectorStrings.length; ++i) {
+            let selector = selectorStrings[i].trim();
+            let subATC = atcCode.substr(0, selector.length);
             if (subATC === selector) {
                 return true;
             }
-            selectorCounter++;
-        } while (selectorCounter < selectorStrings.length)
+        }
     }
     return false;
 }
