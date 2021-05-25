@@ -61,10 +61,10 @@ test('Complete normal labs, check if natrium is recent', () => {
 */
 test('Complete normal labs, check if natrium is missing', () => {
     const labTests = new Map();
-	labTests.set("natrium", normalNatrium);
-	labTests.set("kalium", normalKalium);
-	labTests.set("calcium", normalCalcium);
-	labTests.set("eGFR", normaleGFR);
+    labTests.set("natrium", normalNatrium);
+    labTests.set("kalium", normalKalium);
+    labTests.set("calcium", normalCalcium);
+    labTests.set("eGFR", normaleGFR);
     const labString = "!lab.natrium.value";
     var result = alc.evaluateLabCriteria(labTests, labString);
     expect(result).toBe(true);

@@ -40,16 +40,19 @@ check: dbsetup
 
 tidy:
 	js-beautify --replace --end-with-newline \
-		ping-db.js \
-		adfice.js \
-		adfice.test.js \
+		acceptance-test-cafe.js \
 		adficeAgeCriteria.js \
 		adficeAgeCriteria.test.js \
-		adficeProblemCriteria.js \
-		adficeProblemCriteria.test.js \
 		adficeDrugCriteria.js \
 		adficeDrugCriteria.test.js \
+		adfice.js \
+		adficeLabCriteria.js \
+		adficeLabCriteria.test.js \
+		adficeProblemCriteria.js \
+		adficeProblemCriteria.test.js \
 		adficeSelector.js \
 		adficeSelector.test.js \
+		adfice.test.js \
 		AdficeWebserver.js \
+		ping-db.js \
 		test1.js

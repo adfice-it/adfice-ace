@@ -35,52 +35,55 @@ If drugString is null, returns null. Should probably throw an error.
 drugList should be an array, drugString should be a string, selectorStartDate should be a Date object
 */
 module.exports = {
-	 evaluateLabCriteria: function(labTests, labString) {
-		// figure out if we have one criterion or more than one
-		// right now we don't have anything more complex than A & B. If we get other criteria, we can add code to deal with them.
-		if(labString.includes("&")){
-			var labStrings = labString.split("&");
-			return (evaluateACriterion(labTests, labStrings[0]) && evaluateACriterion(labTests, labStrings[1]));
-		} else {return evaluateACriterion(labTests, labString);}
-	}
+    evaluateLabCriteria: function(labTests, labString) {
+        // figure out if we have one criterion or more than one
+        // right now we don't have anything more complex than A & B. If we get other criteria, we can add code to deal with them.
+        if (labString.includes("&")) {
+            var labStrings = labString.split("&");
+            return (evaluateACriterion(labTests, labStrings[0]) && evaluateACriterion(labTests, labStrings[1]));
+        } else {
+            return evaluateACriterion(labTests, labString);
+        }
+    }
 }
 
-function evaluateACriterion(labTests, labString){
-	// figure out what kind of criterion we have
-	// check for !lab.xxx.value
-	var regExp = /!lab\.[a-zA-Z]+\.value/;
-	if(regExp.exec(labString) != null){
-		return checkIfLabTestExists(labTests, labString);
-	} else { // check for lab.xxx.value. Needs to be in an else because it will also match !lab.xxx.value
-    	regExp = /lab\.[a-zA-Z]+\.value/;
-		if(regExp.exec(labString) != null){
-			return checkLabTestResult(labTests, labString);
-		}
-	}
-	// check for lab.xxx.date xxx
-	regExp = /lab\.[a-zA-Z]+\.date/;
-	/* istanbul ignore else */
-	if(regExp.exec(labString) != null){
-		return checkDateOfLabTest(labTests, labString);
-	}
-	else {throw new Error("Unrecognized criteria string: '" + labString);}
+function evaluateACriterion(labTests, labString) {
+    // figure out what kind of criterion we have
+    // check for !lab.xxx.value
+    var regExp = /!lab\.[a-zA-Z]+\.value/;
+    if (regExp.exec(labString) != null) {
+        return checkIfLabTestExists(labTests, labString);
+    } else { // check for lab.xxx.value. Needs to be in an else because it will also match !lab.xxx.value
+        regExp = /lab\.[a-zA-Z]+\.value/;
+        if (regExp.exec(labString) != null) {
+            return checkLabTestResult(labTests, labString);
+        }
+    }
+    // check for lab.xxx.date xxx
+    regExp = /lab\.[a-zA-Z]+\.date/;
+    /* istanbul ignore else */
+    if (regExp.exec(labString) != null) {
+        return checkDateOfLabTest(labTests, labString);
+    } else {
+        throw new Error("Unrecognized criteria string: '" + labString);
+    }
 }
 
-function checkIfLabTestExists(labTests, labString){
-	var regExp = /!lab\.([a-zA-Z]+)\.value/;
-	var regExpResult = regExp.exec(labString);
-	// if the named test isn't in the map, it will return undefined
-	if(typeof labTests.get(regExpResult[1]) == 'undefined'){
-		return false;
-	} else return true;
+function checkIfLabTestExists(labTests, labString) {
+    var regExp = /!lab\.([a-zA-Z]+)\.value/;
+    var regExpResult = regExp.exec(labString);
+    // if the named test isn't in the map, it will return undefined
+    if (typeof labTests.get(regExpResult[1]) == 'undefined') {
+        return false;
+    } else return true;
 }
 
-function checkLabTestResult(labTests, labString){
-	//TODO
-	return false;
+function checkLabTestResult(labTests, labString) {
+    //TODO
+    return false;
 }
 
-function checkDateOfLabTest(labTests, labString){
-	//TODO
-	return false;
+function checkDateOfLabTest(labTests, labString) {
+    //TODO
+    return false;
 }

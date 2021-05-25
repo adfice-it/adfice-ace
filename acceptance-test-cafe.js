@@ -1,4 +1,6 @@
-import { Selector } from 'testcafe';
+import {
+    Selector
+} from 'testcafe';
 
 fixture `Adfice`
     .page `http://localhost:8080/patient?id=68`;
