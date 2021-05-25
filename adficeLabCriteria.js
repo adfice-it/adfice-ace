@@ -94,3 +94,4 @@ function checkDateOfLabTest(labTests, labString) {
 module.exports = {
     evaluateLabCriteria: evaluateLabCriteria
 }
+// vim: set sts=4 expandtab :
