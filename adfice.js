@@ -1,6 +1,6 @@
 // vim: set sts=4 expandtab :
 var fs = require('fs');
-const as = require('./adficeSelector')
+const as = require('./adficeSelector');
 
 function question_marks(num) {
     return '?,'.repeat(num - 1) + '?';
@@ -77,9 +77,9 @@ async function getActiveRules() {
     return sql_select(sql);
 }
 
-async function getAtcCodesForPatient(patientNumber) {
+async function getMedsForPatient(patientNumber) {
     var sql = "" +
-        "SELECT ATC_code, medication_name" +
+        "SELECT ATC_code, medication_name, start_date" +
         "  FROM patient_medications" +
         " WHERE patient_id=?" +
         "   AND date_retrieved = (" +
@@ -90,16 +90,61 @@ async function getAtcCodesForPatient(patientNumber) {
         "ORDER BY ATC_code";
     return sql_select(sql, [patientNumber, patientNumber]);
 }
+/*
+async function getProblemsForPatient(patientNumber) {
+    var sql = "" +
+        "SELECT name, start_date" +
+        "  FROM patient_problems" +
+        " WHERE patient_id=?" +
+        "   AND date_retrieved = (" +
+        "           SELECT MAX(date_retrieved)" +
+        "             FROM patient_problems" +
+        "            WHERE patient_id=?" +
+        "       )" +
+        "ORDER BY id";
+    return sql_select(sql, [patientNumber, patientNumber]);
+}
 
+async function getAgeForPatient(patientNumber) {
+    var sql = "" +
+        "SELECT age" +
+        "  FROM patient" +
+        " WHERE patient_id=?" +
+        "   AND date_retrieved = (" +
+        "           SELECT MAX(date_retrieved)" +
+        "             FROM patient" +
+        "            WHERE patient_id=?" +
+        "       )" +
+        "ORDER BY id";
+    return sql_select(sql, [patientNumber, patientNumber]);
+}
+
+async function getLabsForPatient(patientNumber) {
+    var sql = "" +
+        "SELECT lab_test_name, lab_test_result, date_measured" +
+        "  FROM patient_labs" +
+        " WHERE patient_id=?" +
+        "   AND date_retrieved = (" +
+        "           SELECT MAX(date_retrieved)" +
+        "             FROM patient_labs" +
+        "            WHERE patient_id=?" +
+        "       )" +
+        "ORDER BY id";
+    return sql_select(sql, [patientNumber, patientNumber]);
+
+function structureLabs(labQueryResult){
+	//TODO structure the lab result in the format expected by adficeLabCriteria.js
+}
+*/
 async function getRulesForPatient(patientNumber) {
     var rules = await getActiveRules();
-    var meds = await getAtcCodesForPatient(patientNumber);
+    var meds = await getMedsForPatient(patientNumber);
     return as.evaluateSelectors(meds, rules);
 }
 
 async function getAdviceForPatient(patientNumber) {
     var rules = await getActiveRules();
-    var meds = await getAtcCodesForPatient(patientNumber);
+    var meds = await getMedsForPatient(patientNumber);
     var medsWithRulesToFire = as.evaluateSelectors(meds, rules);
     // need to check the criteria at some point (not written yet)
     let rv = [];
@@ -121,6 +166,6 @@ module.exports = {
     getAdviceForPatient: getAdviceForPatient,
     getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
     getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
-    getAtcCodesForPatient: getAtcCodesForPatient,
+    getMedsForPatient: getMedsForPatient,
     getRulesForPatient: getRulesForPatient
 }
