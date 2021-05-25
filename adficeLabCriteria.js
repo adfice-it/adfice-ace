@@ -38,19 +38,14 @@ drugList should be an array,
 drugString should be a string,
 selectorStartDate should be a Date object
 */
-module.exports = {
-    evaluateLabCriteria: function(labTests, labString) {
-        // figure out if we have one criterion or more than one
-        // right now we don't have anything more complex than A & B.
-        // If we get other criteria, we can add code to deal with them.
-        if (labString.includes("&")) {
-            var labStrings = labString.split("&");
-            return (evaluateACriterion(labTests, labStrings[0]) &&
-                evaluateACriterion(labTests, labStrings[1]));
-        } else {
-            return evaluateACriterion(labTests, labString);
-        }
+function evaluateLabCriteria(labTests, labString) {
+    // TODO what if labstrings is null or empty?
+    let labStrings = labString.split("&");
+    let result = true;
+    for (let i = 0; result && i < labStrings.length; ++i) {
+        result = result && evaluateACriterion(labTests, labStrings[i]);
     }
+    return result;
 }
 
 function evaluateACriterion(labTests, labString) {
@@ -94,4 +89,8 @@ function checkLabTestResult(labTests, labString) {
 function checkDateOfLabTest(labTests, labString) {
     //TODO
     return false;
+}
+
+module.exports = {
+    evaluateLabCriteria: evaluateLabCriteria
 }
