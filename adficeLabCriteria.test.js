@@ -170,16 +170,13 @@ test('borderline eGFR, check eGFR value', () => {
     expect(result).toBe(true);
 })
 
-
-if (0) {
-    test('Old labs, check if natrium is recent', () => {
-        let labTests = {};
-        labTests["natrium"] = oldNatrium;
-        let labString = "lab.natrium.date >= now-11-months";
-        let result = alc.evaluateLabCriteria(labTests, labString);
-        expect(result).toBe(true);
-    })
-}
+test('Old labs, check if natrium is recent', () => {
+    let labTests = {};
+    labTests["natrium"] = oldNatrium;
+    let labString = "lab.natrium.date >= now-11-months";
+    let result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(false);
+})
 
 test('no labs, check natrium value', () => {
     let labTests = {};
