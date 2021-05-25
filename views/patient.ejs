@@ -1,41 +1,46 @@
-<html>
+<!DOCTYPE html>
+<%# see https://ejs.co/#docs -%>
+<html lang="<%= lang %>">
 <head>
+<title>Patient <%= patient_id %></title>
 </head>
 <body>
 Patient: <%= patient_id %>
 <ul>
-<% for (let i = 0; i < patient_advice.length; ++i ) { %>
-<%     let row = patient_advice[i]; %>
+<% for (let i = 0; i < patient_advice.length; ++i ) { -%>
+<%     let row = patient_advice[i]; -%>
 <li><%= row.medication_name %>: <%= row.ATC_code %><br/>
 <table id="adviceTextsNoCheckboxesTable_<%= i %>">
 <tr><th>criterion</th><th>cdss</th></tr>
-<%     let advices = row.adviceTextsNoCheckboxes; %>
-<%     for (let j = 0; j < advices.length; ++j ) { %>
-<%         let advice = advices[j]; %>
-<tr id="att_<%=j%>">
-<td id="att_mc_<%= j %>"><%= advice.medication_criteria_id %></td>
-<td id="att_cdss_<%= j %>"><%= advice.cdss %></td>
+<%     let advices = row.adviceTextsNoCheckboxes; -%>
+<%     for (let j = 0; j < advices.length; ++j ) { -%>
+<%         let advice = advices[j]; -%>
+<%           let att_prefix = "att_" + i + "_" + j; -%>
+<tr id="<%= att_prefix %>">
+<td id="<%= att_prefix %>_mc"><%= advice.medication_criteria_id %></td>
+<td id="<%= att_prefix %>_cdss"><%- md.makeHtml(advice.cdss) %></td>
 </tr>
-<%     } %>
+<%     } -%>
 </table>
 <table id="adviceTextsCheckboxesTable_<%= i %>">
 <tr><th>criterion</th><th>box</th><th>category</th>
 <th>cdss</th><th>epic</th><th>patient</th></tr>
-<%     let cb_advices = row.adviceTextsCheckboxes; %>
-<%     for (let j = 0; j < cb_advices.length; ++j ) { %>
-<%         let cb_advice = cb_advices[j]; %>
-<tr id="atcbt_<%= j %>">
-<td id="atcbt_mc_<%= j %>"><%= cb_advice.medication_criteria_id %></td>
-<td id="atcbt_sbn_<%= j %>"><%= cb_advice.selectBoxNum %></td>
-<td id="atcbt_sbc_<%= j %>"><%= cb_advice.selectBoxCategory %></td>
-<td id="atcbt_cdss_<%= j %>"><%= cb_advice.cdss %></td>
-<td id="atcbt_epic_<%= j %>"><%= cb_advice.epic %></td>
-<td id="atcbt_patient_<%= j %>"><%= cb_advice.patient %></td>
+<%     let cb_advices = row.adviceTextsCheckboxes; -%>
+<%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
+<%         let cb_advice = cb_advices[j]; -%>
+<%           let atcbt_prefix = "atcbt_" + i + "_" + j; -%>
+<tr id="<%= atcbt_prefix %>">
+<td id="<%= atcbt_prefix %>_mc"><%= cb_advice.medication_criteria_id %></td>
+<td id="<%= atcbt_prefix %>_sbn"><%= cb_advice.selectBoxNum %></td>
+<td id="<%= atcbt_prefix %>_sbc"><%= cb_advice.selectBoxCategory %></td>
+<td id="<%= atcbt_prefix %>_cdss"><%- md.makeHtml(cb_advice.cdss) %></td>
+<td id="<%= atcbt_prefix %>_epic"><%- md.makeHtml(cb_advice.epic) %></td>
+<td id="<%= atcbt_prefix %>_patient"><%- md.makeHtml(cb_advice.patient) %></td>
 </tr>
-<%     } %>
+<%     } -%>
 </table>
 </li>
-<% } %>
+<% } -%>
 </ul>
 </body>
 </html>
