@@ -1,4 +1,5 @@
 const util = require("util");
+const autil = require('./adficeUtil')
 
 /*
 Lab criteria can:
@@ -64,12 +65,9 @@ function evaluateACriterion(labTests, labString) {
     }
     // check for lab.xxx.date xxx
     regExp = /lab\.[a-zA-Z]+\.date/;
-    /* istanbul ignore else */
-    if (regExp.exec(labString) != null) {
-        return checkDateOfLabTest(labTests, labString);
-    } else {
-        throw new Error("Unrecognized criteria string: '" + labString);
-    }
+    autil.assert((regExp.exec(labString) != null),
+        "Unrecognized criteria string: '" + labString);
+    return checkDateOfLabTest(labTests, labString);
 }
 
 function checkIfLabTestExists(labTests, labString) {

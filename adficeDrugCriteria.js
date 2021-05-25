@@ -1,4 +1,6 @@
 const util = require("util");
+const autil = require('./adficeUtil');
+
 /*
 Condition_drug checks one of three things:
  * the presence of one or more other drugs in the patient's file
@@ -69,21 +71,7 @@ function evaluateStartDate(drugString, selectorStartDate) {
     regExp = /[<>=]+ (.*)(?:\)| \| !medication.startDate)/;
     regExpResult = regExp.exec(drugString);
     var drugStringDateCriteria = regExpResult[1].trim();
-    // right now the date criteria are always of the form "now-N-months".
-    // If we get some that use years or something other than now we'll
-    // add those functions.
-    /* istanbul ignore else */
-    if (drugStringDateCriteria.includes("now-") &&
-        drugStringDateCriteria.includes("months")) {
-        regExp = /(\d+)/
-        regExpResult = regExp.exec(drugStringDateCriteria);
-        var drugStringMonths = regExpResult[1]
-    } else {
-        throw new Error("Unrecognized medication.startDate criteria: '" +
-            drugString + "', '" + selectorStartDate + "'");
-    }
-    var targetDate = new Date();
-    targetDate.setMonth(targetDate.getMonth() - drugStringMonths);
+    var targetDate = autil.getTargetDate(drugStringDateCriteria);
     if (drugStringOperator === "<") {
         return selectorStartDate < targetDate;
     }
@@ -93,13 +81,11 @@ function evaluateStartDate(drugString, selectorStartDate) {
     if (drugStringOperator === "<=") {
         return selectorStartDate <= targetDate;
     }
-    /* istanbul ignore else */
-    if (drugStringOperator === ">=") {
-        return selectorStartDate >= targetDate;
-    } else {
-        throw new Error("Unrecognized medication.startDate criteria: '" +
-            drugString + "', '" + selectorStartDate + "'");
-    }
+    // Last known operator is ">=", so if it's not that, error
+    autil.assert((drugStringOperator === ">="),
+        "Unrecognized medication.startDate criteria: '" +
+        drugString + "', '" + selectorStartDate + "'");
+    return selectorStartDate >= targetDate;
 }
 
 function evaluateDrugList(drugList, drugString) {

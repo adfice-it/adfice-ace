@@ -1,14 +1,6 @@
 // vim: set sts=4 expandtab :
 const util = require("util");
-
-function assert(condition, message) {
-    /* istanbul ignore else */
-    if (condition) {
-        return;
-    } else {
-        throw new Error(message || "Assertion failed");
-    }
-}
+const autil = require('./adficeUtil');
 
 /*
 // problem_criteria can contain items in the following formats:
@@ -54,7 +46,7 @@ module.exports = {
 
             // there actually are no criteria like this, but
             // it's trivial to have the functionality
-            assert(operator == "|", "Unexpected operator: " + operator);
+            autil.assert(operator == "|", "Unexpected operator: " + operator);
             if (evaluateCriteria(problemList, insideProblemMap) ||
                 evaluateCriteria(problemList, afterProblemMap)) {
                 return true;
@@ -75,7 +67,7 @@ function parentheticalProblem(problemString) {
     var problemStringBefore = "";
     var regExp = /^(.*?)\(/;
     var regExpResult = regExp.exec(problemString);
-    assert(regExpResult !== null);
+    autil.assert(regExpResult !== null);
     problemStringBefore = regExpResult[1] || "";
 
     // capture the part in the parentheses
@@ -86,16 +78,16 @@ function parentheticalProblem(problemString) {
     var problemStringOperator = "";
     regExp = /\)[ ]*([&|]*)/;
     regExpResult = regExp.exec(problemString);
-    assert(regExpResult !== null);
-    assert(regExpResult[1] !== null);
+    autil.assert(regExpResult !== null);
+    autil.assert(regExpResult[1] !== null);
     problemStringOperator = regExpResult[1].trim();
 
     // capture the part after the parentheses
     var problemStringAfter = "";
     regExp = /\) [&|](.*)/;
     regExpResult = regExp.exec(problemString);
-    assert(regExpResult !== null);
-    assert(regExpResult[1] !== null);
+    autil.assert(regExpResult !== null);
+    autil.assert(regExpResult[1] !== null);
     problemStringAfter = regExpResult[1].trim();
 
     parentheticalMap.set("problemStringBefore", problemStringBefore);
@@ -107,7 +99,7 @@ function parentheticalProblem(problemString) {
 }
 
 function splitProblems(problemString) {
-    assert(problemString !== null);
+    autil.assert(problemString !== null);
 
     var problemMap = new Map();
     var problem = new Array();
