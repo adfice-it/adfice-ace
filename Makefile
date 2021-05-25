@@ -41,18 +41,18 @@ check: dbsetup
 tidy:
 	js-beautify --replace --end-with-newline \
 		acceptance-test-cafe.js \
+		adfice.js \
+		adfice.test.js \
 		adficeAgeCriteria.js \
 		adficeAgeCriteria.test.js \
 		adficeDrugCriteria.js \
 		adficeDrugCriteria.test.js \
-		adfice.js \
+		adficeEvaluator.js \
+		adficeEvaluator.test.js \
 		adficeLabCriteria.js \
 		adficeLabCriteria.test.js \
 		adficeProblemCriteria.js \
 		adficeProblemCriteria.test.js \
-		adficeSelector.js \
-		adficeSelector.test.js \
-		adfice.test.js \
 		AdficeWebserver.js \
 		ping-db.js \
 		test1.js

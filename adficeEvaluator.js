@@ -5,19 +5,29 @@ const ac = require('./adficeAgeCriteria');
 const apc = require('./adficeProblemCriteria');
 const adc = require('./adficeDrugCriteria');
 
-function evaluateSelectors(meds, rules) {
+function evaluateRules(meds, rules, drugList, problemList, age, labTests) {
     let medsWithRulesToFire = {};
     for (let i = 0; i < meds.length; ++i) {
         let med = meds[i];
         let atc_code = med.ATC_code.trim();
+        let startDate = med.start_date;
         let rulesToFire = new Array();
         medsWithRulesToFire[atc_code] = medsWithRulesToFire[atc_code] || [];
         for (let ruleCounter = 0; ruleCounter < rules.length; ++ruleCounter) {
             let rule = rules[ruleCounter];
             if (matchesSelector(atc_code, rule.selector_or) &&
                 !matchesSelector(atc_code, rule.selector_not)) {
-                rulesToFire.push(rule.medication_criteria_id);
-            } // else do nothing
+                let drugString = rule.condition_drug;
+                let problemString = rule.condition_problem;
+                let ageString = rule.condition_age;
+                let labString = rule.condition_lab;
+
+                if (doesRuleFire(startDate, drugString, drugList,
+                        problemString, problemList, ageString, age,
+                        labString, labTests)) {
+                    rulesToFire.push(rule.medication_criteria_id);
+                }
+            }
         }
         medsWithRulesToFire[atc_code].push(rulesToFire);
     }
@@ -72,6 +82,6 @@ function doesRuleFire(
 module.exports = {
     matchesSelector: matchesSelector,
     doesRuleFire: doesRuleFire,
-    evaluateSelectors: evaluateSelectors
+    evaluateRules: evaluateRules
 }
 // vim: set sts=4 expandtab :

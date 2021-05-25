@@ -10,6 +10,5 @@ test('Test page for patient 68', async t => {
     await t.expect(selector.withText('C09AA02').exists).ok()
     await t.expect(selector.withText('63a').exists).ok()
     await t.expect(selector.withText('C03AA03').exists).ok()
-    await t.expect(selector.withText('40c').exists).ok()
     await t.expect(selector.withText('6a').exists).notOk()
 });

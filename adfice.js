@@ -1,6 +1,6 @@
 // vim: set sts=4 expandtab :
 var fs = require('fs');
-const as = require('./adficeSelector');
+const as = require('./adficeEvaluator');
 
 function question_marks(num) {
     return '?,'.repeat(num - 1) + '?';
@@ -87,10 +87,11 @@ async function getMedsForPatient(patientNumber) {
         "             FROM patient_medications" +
         "            WHERE patient_id=?" +
         "       )" +
-        "ORDER BY ATC_code";
-    return sql_select(sql, [patientNumber, patientNumber]);
+        " ORDER BY ATC_code";
+    let params = [patientNumber, patientNumber];
+    return sql_select(sql, params);
 }
-/*
+
 async function getProblemsForPatient(patientNumber) {
     var sql = "" +
         "SELECT name, start_date" +
@@ -101,7 +102,7 @@ async function getProblemsForPatient(patientNumber) {
         "             FROM patient_problems" +
         "            WHERE patient_id=?" +
         "       )" +
-        "ORDER BY id";
+        " ORDER BY id";
     return sql_select(sql, [patientNumber, patientNumber]);
 }
 
@@ -109,13 +110,8 @@ async function getAgeForPatient(patientNumber) {
     var sql = "" +
         "SELECT age" +
         "  FROM patient" +
-        " WHERE patient_id=?" +
-        "   AND date_retrieved = (" +
-        "           SELECT MAX(date_retrieved)" +
-        "             FROM patient" +
-        "            WHERE patient_id=?" +
-        "       )" +
-        "ORDER BY id";
+        " WHERE id=?" +
+        " ORDER BY age DESC LIMIT 1";
     return sql_select(sql, [patientNumber, patientNumber]);
 }
 
@@ -129,28 +125,62 @@ async function getLabsForPatient(patientNumber) {
         "             FROM patient_labs" +
         "            WHERE patient_id=?" +
         "       )" +
-        "ORDER BY id";
-    return sql_select(sql, [patientNumber, patientNumber]);
-
-function structureLabs(labQueryResult){
-	//TODO structure the lab result in the format expected by adficeLabCriteria.js
+        " ORDER BY id";
+    let params = [patientNumber, patientNumber];
+    let result = sql_select(sql, params);
+    return result;
 }
-*/
-async function getRulesForPatient(patientNumber) {
-    var rules = await getActiveRules();
-    var meds = await getMedsForPatient(patientNumber);
-    return as.evaluateSelectors(meds, rules);
+
+function structureLabs(labRows) {
+    let labTests = {};
+    for (let i = 0; i < labRows.length; ++i) {
+        let row = labRows[i];
+        let lab_test_name = row.lab_test_name;
+        let lab_test_result = row.lab_test_result;
+        let date_measured = row.date_measured;
+        labTests[lab_test_name] = labTests[lab_test_name] || {};
+        labTests[lab_test_name][lab_test_result] = lab_test_result;
+        labTests[lab_test_name][date_measured] = date_measured;
+    }
+    return labTests;
 }
 
 async function getAdviceForPatient(patientNumber) {
-    let patient_id = parseInt(patientNumber) || 0;
+    let patient_id;
+    if (typeof patientNumber == 'number') {
+        patient_id = patientNumber;
+    } else {
+        patient_id = parseInt(patientNumber);
+    }
+    patient_id = patient_id || 0;
+
+    let age = await getAgeForPatient(patient_id);
+
+    let labRows = await getLabsForPatient(patient_id);
+    let labTests = structureLabs(labRows);
+
+    let problems = await getProblemsForPatient(patient_id);
+    let problemList = [];
+    for (let i = 0; i < problems.length; ++i) {
+        problemList.push(problems[i].name);
+    }
 
     var meds = await getMedsForPatient(patient_id);
+    let drugList = [];
+    for (let i = 0; i < meds.length; ++i) {
+        drugList.push(meds[i].ATC_code);
+    }
 
     var rules = await getActiveRules();
-    var medsWithRulesToFire = as.evaluateSelectors(meds, rules);
 
-    // need to check the criteria at some point (not written yet)
+    var medsWithRulesToFire = as.evaluateRules(meds, rules, drugList,
+        problemList, age, labTests);
+    /*
+        console.log(JSON.stringify({
+            rules: rules,
+            medsWithRulesToFire: medsWithRulesToFire
+        }, null, 4));
+    */
 
     let rv = [];
     for (let i = 0; i < meds.length; ++i) {
@@ -174,5 +204,4 @@ module.exports = {
     getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
     getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
     getMedsForPatient: getMedsForPatient,
-    getRulesForPatient: getRulesForPatient
 }

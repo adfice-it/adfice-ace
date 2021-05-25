@@ -15,7 +15,7 @@ test('test advice text 6e', async () => {
     expect(texts[0].cdss).toContain('angststoornis');
 })
 
-test('getAdviceForPatient(68)', async () => {
+test('getAdviceForPatient(68), no labs, no problems', async () => {
     let patientNumber = 68;
     let advice = await adfice.getAdviceForPatient(patientNumber);
     expect(advice.length).toBe(2);
@@ -24,19 +24,44 @@ test('getAdviceForPatient(68)', async () => {
     expect(adv0['medication_name']).toBe('hydrochlorothiazide');
 
     let adviceTextsCheckboxes = adv0['adviceTextsCheckboxes'];
-    expect(adviceTextsCheckboxes.length).toBe(9);
+    expect(adviceTextsCheckboxes.length).toBe(6);
     let checkbox0 = adviceTextsCheckboxes[0];
-    expect(checkbox0['medication_criteria_id']).toBe("35");
+    expect(checkbox0['medication_criteria_id']).toBe("42");
     expect(checkbox0['selectBoxNum']).toBe(1);
-    expect(checkbox0['selectBoxCategory']).toBe('switch');
+    expect(checkbox0['selectBoxCategory']).toBe('consult');
 
     let adviceTextsNoCheckboxes = adv0['adviceTextsNoCheckboxes'];
-    expect(adviceTextsNoCheckboxes.length).toBe(10);
+    expect(adviceTextsNoCheckboxes.length).toBe(4);
     let noCheckbox0 = adviceTextsNoCheckboxes[0];
-    expect(noCheckbox0['medication_criteria_id']).toBe("35");
+    expect(noCheckbox0['medication_criteria_id']).toBe("41");
     expect(noCheckbox0['cdss']).toContain("ACE");
-    expect(noCheckbox0['cdss']).toContain("AT2-");
+    expect(noCheckbox0['cdss']).toContain("antagonisten");
 })
+
+
+test('getAdviceForPatient(27), with labs and problems', async () => {
+    let patientNumber = 27;
+    let advice = await adfice.getAdviceForPatient(patientNumber);
+    expect(advice.length).toBe(1);
+    let adv0 = advice[0];
+    expect(adv0['ATC_code']).toBe('N06AA09');
+    expect(adv0['medication_name']).toBe('amitriptyline');
+
+    let adviceTextsCheckboxes = adv0['adviceTextsCheckboxes'];
+    expect(adviceTextsCheckboxes.length).toBe(14);
+    let checkbox0 = adviceTextsCheckboxes[0];
+    expect(checkbox0['medication_criteria_id']).toBe("19f");
+    expect(checkbox0['selectBoxNum']).toBe(1);
+    expect(checkbox0['selectBoxCategory']).toBe('taper-stop');
+
+    let adviceTextsNoCheckboxes = adv0['adviceTextsNoCheckboxes'];
+    expect(adviceTextsNoCheckboxes.length).toBe(5);
+    let noCheckbox0 = adviceTextsNoCheckboxes[0];
+    expect(noCheckbox0['medication_criteria_id']).toBe("19a");
+    expect(noCheckbox0['cdss']).toContain("TCA");
+    expect(noCheckbox0['cdss']).toContain("SSRI");
+})
+
 
 test('getAdviceForPatient(null)', async () => {
     let patientNumber = null;

@@ -1,23 +1,5 @@
 const adfice = require('./adfice')
-const as = require('./adficeSelector');
-
-test('full selector acceptance for patient 68', async () => {
-    var expected = {
-        C09AA02: [
-            ['45', '48', '63', '63a', '63b']
-        ],
-        C03AA03: [
-            [
-                '35', '40', '40a',
-                '40b', '40c', '41',
-                '42', '43', '44',
-                '45', '48'
-            ]
-        ]
-    };
-    var result = await adfice.getRulesForPatient(68);
-    expect(result).toEqual(expected);
-})
+const as = require('./adficeEvaluator');
 
 function monthsAgo(months) {
     var targetDate = new Date();
