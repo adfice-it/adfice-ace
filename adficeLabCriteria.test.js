@@ -26,6 +26,10 @@ let bordereGFR = {};
 bordereGFR["lab_test_result"] = 30;
 bordereGFR["date_measured"] = new Date();
 
+let loweGFR = {};
+loweGFR["lab_test_result"] = 20;
+loweGFR["date_measured"] = new Date();
+
 let outOfDate = new Date();
 outOfDate.setMonth(outOfDate.getMonth() - 12);
 
@@ -197,34 +201,28 @@ test('no labs, check missing natrium', () => {
     expect(result).toBe(true);
 })
 
-if (0) {
+test('eGFR normal, check if normal and in date', () => {
+    let labTests = {};
+    labTests["eGFR"] = normaleGFR;
+    let labString = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
+    let result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(true);
+})
 
-    // TODO!!! This criterion will not parse correctly:
-    // !lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months
-    // will be interpreted as "check if eGFR is missing" but should be interpreted as "not lab value <= 30"
-    test('eGFR normal, check if normal and in date', () => {
-        let labTests = {};
-        labTests["eGFR"] = normaleGFR;
-        let labString = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
-        let result = alc.evaluateLabCriteria(labTests, labString);
-        expect(result).toBe(true);
-    })
+test('eGFR low, check if normal and in date', () => {
+    let labTests = {};
+    labTests["eGFR"] = loweGFR;
+    let labString = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
+    let result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(false);
+})
 
-    test('eGFR low, check if normal and in date', () => {
-        let labTests = {};
-        labTests["eGFR"] = loweGFR;
-        let labString = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
-        let result = alc.evaluateLabCriteria(labTests, labString);
-        expect(result).toBe(false);
-    })
-
-    test('old eGFR, check if normal and in date', () => {
-        let labTests = {};
-        labTests["eGFR"] = oldeGFR;
-        let labString = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
-        let result = alc.evaluateLabCriteria(labTests, labString);
-        expect(result).toBe(false);
-    })
-}
+test('old eGFR, check if normal and in date', () => {
+    let labTests = {};
+    labTests["eGFR"] = oldeGFR;
+    let labString = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
+    let result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(false);
+})
 
 // vim: set sts=4 expandtab :

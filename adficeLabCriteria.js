@@ -44,30 +44,41 @@ function evaluateLabCriteria(labTests, labString) {
     let labStrings = labString.split("&");
     let result = true;
     for (let i = 0; result && i < labStrings.length; ++i) {
-        result = result && evaluateACriterion(labTests, labStrings[i]);
+        let labStr = labStrings[i].trim();
+        result = result && evaluateACriterion(labTests, labStr);
     }
     return result;
 }
 
 function evaluateACriterion(labTests, labString) {
+    // check for !lab.xxx.value <= 30
+    var regExp = /!lab\.[a-zA-Z]+\.value\s*[<>=]+\s*[0-9]/;
+    if (regExp.exec(labString) != null) {
+        let result = checkLabTestResult(labTests, labString);
+        return result;
+    }
+
     // figure out what kind of criterion we have
     // check for !lab.xxx.value
-    var regExp = /!lab\.[a-zA-Z]+\.value/;
+    regExp = /!lab\.[a-zA-Z]+\.value/;
     if (regExp.exec(labString) != null) {
-        return checkIfLabTestNotExists(labTests, labString);
+        let result = checkIfLabTestNotExists(labTests, labString);
+        return result;
     } else {
         // check for lab.xxx.value. Needs to be in an else because it will
         // also match !lab.xxx.value
         regExp = /lab\.[a-zA-Z]+\.value/;
         if (regExp.exec(labString) != null) {
-            return checkLabTestResult(labTests, labString);
+            let result = checkLabTestResult(labTests, labString);
+            return result;
         }
     }
     // check for lab.xxx.date xxx
     regExp = /lab\.[a-zA-Z]+\.date/;
     autil.assert((regExp.exec(labString) != null),
         "Unrecognized criteria string: '" + labString);
-    return checkDateOfLabTest(labTests, labString);
+    let result = checkDateOfLabTest(labTests, labString);
+    return result;
 }
 
 function checkIfLabTestNotExists(labTests, labString) {
@@ -76,11 +87,19 @@ function checkIfLabTestNotExists(labTests, labString) {
     // if the named test isn't in the map, it will return undefined
     if (typeof labTests[regExpResult[1]] == 'undefined') {
         return true;
-    } else return false;
+    }
+    return false;
 }
 
 function checkLabTestResult(labTests, labString) {
-    autil.assert(labString != null && labString.length > 0);
+    autil.assert(labString != null);
+    labString = labString.trim();
+    autil.assert(labString.length > 0);
+
+    let invert = false;
+    if (labString[0] == '!') {
+        invert = true;
+    }
 
     let regExp = /lab\.([a-zA-Z]+)\.value\s*([><=]+)\s*([^\s]+)/;
     let regExpResult = regExp.exec(labString);
@@ -88,12 +107,17 @@ function checkLabTestResult(labTests, labString) {
     let operator = regExpResult[2].trim();
     let value = regExpResult[3].trim();
 
+    let result;
     if (typeof labTests[labKey] == 'undefined') {
-        return false;
+        result = false;
+    } else {
+        let lab_test_result = labTests[labKey]['lab_test_result'];
+        result = autil.compareNumbers(lab_test_result, operator, value);
     }
-
-    let lab_test_result = labTests[labKey]['lab_test_result'];
-    return autil.compareNumbers(lab_test_result, operator, value);
+    if (invert) {
+        result = !result;
+    }
+    return result;
 }
 
 function checkDateOfLabTest(labTests, labString) {
@@ -110,7 +134,8 @@ function checkDateOfLabTest(labTests, labString) {
     }
 
     let date = labTests[labKey]['date_measured'];
-    return autil.compareDateToExpression(date, operator, expression);
+    let result = autil.compareDateToExpression(date, operator, expression);
+    return result;
 }
 
 module.exports = {
