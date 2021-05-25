@@ -85,8 +85,20 @@ function checkLabTestResult(labTests, labString) {
 }
 
 function checkDateOfLabTest(labTests, labString) {
-    //TODO
-    return false;
+    autil.assert(labString != null && labString.length > 0);
+
+    let regExp = /lab\.([a-zA-Z]+)\.date\s*([><=]+)\s*([^\s]+)/;
+    let regExpResult = regExp.exec(labString);
+    let labKey = regExpResult[1].trim();
+    let operator = regExpResult[2].trim();
+    let expression = regExpResult[3].trim();
+
+    if (typeof labTests.get(labKey) == 'undefined') {
+        return false;
+    }
+
+    let date = labTests.get(labKey).get('date_measured');
+    return autil.compareDateToExpression(date, operator, expression);
 }
 
 module.exports = {

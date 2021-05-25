@@ -70,30 +70,45 @@ test('Complete normal labs, check for low eGFR', () => {
     expect(result).toBe(false);
 })
 
-if (0) {
-    test('Complete normal labs, check if natrium is recent', () => {
-        const labTests = new Map();
-        labTests.set("natrium", normalNatrium);
-        labTests.set("kalium", normalKalium);
-        labTests.set("calcium", normalCalcium);
-        labTests.set("eGFR", normaleGFR);
-        const labString = "lab.natrium.date >= now-11-months";
-        var result = alc.evaluateLabCriteria(labTests, labString);
-        expect(result).toBe(true);
-    })
-}
-
-if (0) {
-test('Complete normal labs, check if natrium is missing', () => {
+test('Complete normal labs, check if natrium is recent', () => {
     const labTests = new Map();
     labTests.set("natrium", normalNatrium);
     labTests.set("kalium", normalKalium);
     labTests.set("calcium", normalCalcium);
     labTests.set("eGFR", normaleGFR);
-    const labString = "!lab.natrium.value";
+    const labString = "lab.natrium.date >= now-11-months";
+    var result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(true);
+})
+
+test('Complete normal labs, check if natrium is recent, but old', () => {
+    const labTests = new Map();
+    labTests.set("natrium", oldNatrium);
+    const labString = "lab.natrium.date >= now-3-months";
     var result = alc.evaluateLabCriteria(labTests, labString);
     expect(result).toBe(false);
 })
+
+test('Complete normal labs, check if natrium is recent, but missing', () => {
+    const labTests = new Map();
+    labTests.set("kalium", normalKalium);
+    const labString = "lab.natrium.date >= now-11-months";
+    var result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(false);
+})
+
+
+if (0) {
+    test('Complete normal labs, check if natrium is missing', () => {
+        const labTests = new Map();
+        labTests.set("natrium", normalNatrium);
+        labTests.set("kalium", normalKalium);
+        labTests.set("calcium", normalCalcium);
+        labTests.set("eGFR", normaleGFR);
+        const labString = "!lab.natrium.value";
+        var result = alc.evaluateLabCriteria(labTests, labString);
+        expect(result).toBe(false);
+    })
 }
 
 if (0) {
@@ -124,20 +139,20 @@ if (0) {
         expect(result).toBe(true);
     })
 
-	test('borderline eGFR, check eGFR value', () => {
-		const labTests = new Map();
-		labTests.set("eGFR", borderlineeGFR);
-		const labString = "lab.eGFR.value <= 30";
-		var result = alc.evaluateLabCriteria(labTests, labString);
-		expect(result).toBe(true);
+    test('borderline eGFR, check eGFR value', () => {
+        const labTests = new Map();
+        labTests.set("eGFR", borderlineeGFR);
+        const labString = "lab.eGFR.value <= 30";
+        var result = alc.evaluateLabCriteria(labTests, labString);
+        expect(result).toBe(true);
     })
 
-	test('Old labs, check if natrium is recent', () => {
-		const labTests = new Map();
-		labTests.set("natrium", oldNatrium);
-		const labString = "lab.natrium.date >= now-11-months";
-		var result = alc.evaluateLabCriteria(labTests, labString);
-		expect(result).toBe(true);
+    test('Old labs, check if natrium is recent', () => {
+        const labTests = new Map();
+        labTests.set("natrium", oldNatrium);
+        const labString = "lab.natrium.date >= now-11-months";
+        var result = alc.evaluateLabCriteria(labTests, labString);
+        expect(result).toBe(true);
     })
 
     test('no labs, check natrium value', () => {
@@ -148,10 +163,10 @@ if (0) {
     })
 
     test('no labs, check natrium date', () => {
-		const labTests = new Map();
-		const labString = "lab.natrium.date >= now-11-months";
-		var result = alc.evaluateLabCriteria(labTests, labString);
-		expect(result).toBe(false);
+        const labTests = new Map();
+        const labString = "lab.natrium.date >= now-11-months";
+        var result = alc.evaluateLabCriteria(labTests, labString);
+        expect(result).toBe(false);
     })
 
     test('no labs, check missing natrium', () => {
@@ -161,31 +176,31 @@ if (0) {
         expect(result).toBe(true);
     })
 
-// TODO!!! This criterion will not parse correctly:
-// !lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months
-// will be interpreted as "check if eGFR is missing" but should be interpreted as "not lab value <= 30"
-	test('eGFR normal, check if normal and in date', () => {
-		const labTests = new Map();
-		labTests.set("eGFR", normaleGFR);
-		const labString = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
-		var result = alc.evaluateLabCriteria(labTests, labString);
-		expect(result).toBe(true);
+    // TODO!!! This criterion will not parse correctly:
+    // !lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months
+    // will be interpreted as "check if eGFR is missing" but should be interpreted as "not lab value <= 30"
+    test('eGFR normal, check if normal and in date', () => {
+        const labTests = new Map();
+        labTests.set("eGFR", normaleGFR);
+        const labString = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
+        var result = alc.evaluateLabCriteria(labTests, labString);
+        expect(result).toBe(true);
     })
 
-	test('eGFR low, check if normal and in date', () => {
-		const labTests = new Map();
-		labTests.set("eGFR", loweGFR);
-		const labString = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
-		var result = alc.evaluateLabCriteria(labTests, labString);
-		expect(result).toBe(false);
+    test('eGFR low, check if normal and in date', () => {
+        const labTests = new Map();
+        labTests.set("eGFR", loweGFR);
+        const labString = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
+        var result = alc.evaluateLabCriteria(labTests, labString);
+        expect(result).toBe(false);
     })
 
-	test('old eGFR, check if normal and in date', () => {
-		const labTests = new Map();
-		labTests.set("eGFR", oldeGFR);
-		const labString = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
-		var result = alc.evaluateLabCriteria(labTests, labString);
-		expect(result).toBe(false);
+    test('old eGFR, check if normal and in date', () => {
+        const labTests = new Map();
+        labTests.set("eGFR", oldeGFR);
+        const labString = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
+        var result = alc.evaluateLabCriteria(labTests, labString);
+        expect(result).toBe(false);
     })
 
 }

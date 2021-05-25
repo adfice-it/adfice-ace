@@ -71,21 +71,9 @@ function evaluateStartDate(drugString, selectorStartDate) {
     regExp = /[<>=]+ (.*)(?:\)| \| !medication.startDate)/;
     regExpResult = regExp.exec(drugString);
     var drugStringDateCriteria = regExpResult[1].trim();
-    var targetDate = autil.getTargetDate(drugStringDateCriteria);
-    if (drugStringOperator === "<") {
-        return selectorStartDate < targetDate;
-    }
-    if (drugStringOperator === ">") {
-        return selectorStartDate > targetDate;
-    }
-    if (drugStringOperator === "<=") {
-        return selectorStartDate <= targetDate;
-    }
-    // Last known operator is ">=", so if it's not that, error
-    autil.assert((drugStringOperator === ">="),
-        "Unrecognized medication.startDate criteria: '" +
-        drugString + "', '" + selectorStartDate + "'");
-    return selectorStartDate >= targetDate;
+    return autil.compareDateToExpression(selectorStartDate,
+        drugStringOperator,
+        drugStringDateCriteria);
 }
 
 function evaluateDrugList(drugList, drugString) {
