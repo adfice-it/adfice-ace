@@ -118,18 +118,16 @@ test('Complete normal labs, check if natrium is missing (missing)', () => {
     expect(result).toBe(true);
 })
 
-if (0) {
-    test('Complete normal labs, check criteria with AND', () => {
-        let labTests = {};
-        labTests["natrium"] = normalNatrium;
-        labTests["kalium"] = normalKalium;
-        labTests["calcium"] = normalCalcium;
-        labTests["eGFR"] = normaleGFR;
-        let labString = "lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
-        let result = alc.evaluateLabCriteria(labTests, labString);
-        expect(result).toBe(false);
-    })
-}
+test('Complete normal labs, check criteria with AND', () => {
+    let labTests = {};
+    labTests["natrium"] = normalNatrium;
+    labTests["kalium"] = normalKalium;
+    labTests["calcium"] = normalCalcium;
+    labTests["eGFR"] = normaleGFR;
+    let labString = "lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
+    let result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(false);
+})
 
 test('low natrium, check natrium value (low)', () => {
     let labTests = {};
