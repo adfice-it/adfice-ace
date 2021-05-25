@@ -74,7 +74,7 @@ function checkIfLabTestNotExists(labTests, labString) {
     var regExp = /!lab\.([a-zA-Z]+)\.value/;
     var regExpResult = regExp.exec(labString);
     // if the named test isn't in the map, it will return undefined
-    if (typeof labTests.get(regExpResult[1]) == 'undefined') {
+    if (typeof labTests[regExpResult[1]] == 'undefined') {
         return true;
     } else return false;
 }
@@ -88,11 +88,11 @@ function checkLabTestResult(labTests, labString) {
     let operator = regExpResult[2].trim();
     let value = regExpResult[3].trim();
 
-    if (typeof labTests.get(labKey) == 'undefined') {
+    if (typeof labTests[labKey] == 'undefined') {
         return false;
     }
 
-    let lab_test_result = labTests.get(labKey).get('lab_test_result');
+    let lab_test_result = labTests[labKey]['lab_test_result'];
     return autil.compareNumbers(lab_test_result, operator, value);
 }
 
@@ -105,11 +105,11 @@ function checkDateOfLabTest(labTests, labString) {
     let operator = regExpResult[2].trim();
     let expression = regExpResult[3].trim();
 
-    if (typeof labTests.get(labKey) == 'undefined') {
+    if (typeof labTests[labKey] == 'undefined') {
         return false;
     }
 
-    let date = labTests.get(labKey).get('date_measured');
+    let date = labTests[labKey]['date_measured'];
     return autil.compareDateToExpression(date, operator, expression);
 }
 
