@@ -129,31 +129,48 @@ if (0) {
         var result = alc.evaluateLabCriteria(labTests, labString);
         expect(result).toBe(false);
     })
+}
 
-    test('low natrium, check natrium value', () => {
-        const labTests = new Map();
-        labTests.set("natrium", lowNatrium);
-        const labString = "lab.natrium.value < 135";
-        var result = alc.evaluateLabCriteria(labTests, labString);
-        expect(result).toBe(true);
-    })
+test('low natrium, check natrium value (low)', () => {
+    const labTests = new Map();
+    labTests.set("natrium", lowNatrium);
+    const labString = "lab.natrium.value < 135";
+    var result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(true);
+})
 
-    test('high calcium, check calcium value', () => {
-        const labTests = new Map();
-        labTests.set("calcium", highCalcium);
-        const labString = "lab.calcium.value > 2.65";
-        var result = alc.evaluateLabCriteria(labTests, labString);
-        expect(result).toBe(true);
-    })
+test('low natrium, check natrium value (normal)', () => {
+    const labTests = new Map();
+    labTests.set("natrium", normalNatrium);
+    const labString = "lab.natrium.value < 135";
+    var result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(false);
+})
 
-    test('borderline eGFR, check eGFR value', () => {
-        const labTests = new Map();
-        labTests.set("eGFR", borderlineeGFR);
-        const labString = "lab.eGFR.value <= 30";
-        var result = alc.evaluateLabCriteria(labTests, labString);
-        expect(result).toBe(true);
-    })
+test('low natrium, check natrium value (missing)', () => {
+    const labTests = new Map();
+    const labString = "lab.natrium.value < 135";
+    var result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(false);
+})
 
+test('high calcium, check calcium value', () => {
+    const labTests = new Map();
+    labTests.set("calcium", highCalcium);
+    const labString = "lab.calcium.value > 2.65";
+    var result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(true);
+})
+
+test('borderline eGFR, check eGFR value', () => {
+    const labTests = new Map();
+    labTests.set("eGFR", bordereGFR);
+    const labString = "lab.eGFR.value <= 30";
+    var result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(true);
+})
+
+if (0) {
     test('Old labs, check if natrium is recent', () => {
         const labTests = new Map();
         labTests.set("natrium", oldNatrium);
@@ -161,27 +178,30 @@ if (0) {
         var result = alc.evaluateLabCriteria(labTests, labString);
         expect(result).toBe(true);
     })
+}
 
-    test('no labs, check natrium value', () => {
-        const labTests = new Map();
-        const labString = "lab.natrium.value < 135";
-        var result = alc.evaluateLabCriteria(labTests, labString);
-        expect(result).toBe(false);
-    })
+test('no labs, check natrium value', () => {
+    const labTests = new Map();
+    const labString = "lab.natrium.value < 135";
+    var result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(false);
+})
 
-    test('no labs, check natrium date', () => {
-        const labTests = new Map();
-        const labString = "lab.natrium.date >= now-11-months";
-        var result = alc.evaluateLabCriteria(labTests, labString);
-        expect(result).toBe(false);
-    })
+test('no labs, check natrium date', () => {
+    const labTests = new Map();
+    const labString = "lab.natrium.date >= now-11-months";
+    var result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(false);
+})
 
-    test('no labs, check missing natrium', () => {
-        const labTests = new Map();
-        const labString = "!lab.natrium.value";
-        var result = alc.evaluateLabCriteria(labTests, labString);
-        expect(result).toBe(true);
-    })
+test('no labs, check missing natrium', () => {
+    const labTests = new Map();
+    const labString = "!lab.natrium.value";
+    var result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(true);
+})
+
+if (0) {
 
     // TODO!!! This criterion will not parse correctly:
     // !lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months
@@ -209,7 +229,6 @@ if (0) {
         var result = alc.evaluateLabCriteria(labTests, labString);
         expect(result).toBe(false);
     })
-
 }
 
 // vim: set sts=4 expandtab :

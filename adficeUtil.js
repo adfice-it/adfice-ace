@@ -45,9 +45,23 @@ function compareDateToExpression(date, operator, expression)
     return date >= targetDate;
 }
 
+function compareNumbers(a, operator, b) {
+    if (operator === "<=") { return (+a <= +b); }
+    if (operator === "<") { return (+a < +b); }
+    if (operator === ">") { return (+a > +b); }
+    if (operator === ">=") { return (+a >= +b); }
+    if (operator === "==") { return (+a == +b); }
+    if (operator === "=") { return (+a == +b); }
+    if (operator === "!==") { return (+a !== +b); }
+    // last known operator is "!="
+    assert((operator === "!="), "Unrecognized operator '" + operator + "'");
+    return (+a !== +b);
+}
+
 module.exports = {
     assert: assert,
     compareDateToExpression: compareDateToExpression,
+    compareNumbers: compareNumbers,
     getDateFromExpression: getDateFromExpression
 }
 

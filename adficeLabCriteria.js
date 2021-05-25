@@ -80,8 +80,20 @@ function checkIfLabTestNotExists(labTests, labString) {
 }
 
 function checkLabTestResult(labTests, labString) {
-    //TODO
-    return false;
+    autil.assert(labString != null && labString.length > 0);
+
+    let regExp = /lab\.([a-zA-Z]+)\.value\s*([><=]+)\s*([^\s]+)/;
+    let regExpResult = regExp.exec(labString);
+    let labKey = regExpResult[1].trim();
+    let operator = regExpResult[2].trim();
+    let value = regExpResult[3].trim();
+
+    if (typeof labTests.get(labKey) == 'undefined') {
+        return false;
+    }
+
+    let lab_test_result = labTests.get(labKey).get('lab_test_result');
+    return autil.compareNumbers(lab_test_result, operator, value);
 }
 
 function checkDateOfLabTest(labTests, labString) {
