@@ -54,7 +54,7 @@ function evaluateACriterion(labTests, labString) {
     // check for !lab.xxx.value
     var regExp = /!lab\.[a-zA-Z]+\.value/;
     if (regExp.exec(labString) != null) {
-        return checkIfLabTestExists(labTests, labString);
+        return checkIfLabTestNotExists(labTests, labString);
     } else {
         // check for lab.xxx.value. Needs to be in an else because it will
         // also match !lab.xxx.value
@@ -70,13 +70,13 @@ function evaluateACriterion(labTests, labString) {
     return checkDateOfLabTest(labTests, labString);
 }
 
-function checkIfLabTestExists(labTests, labString) {
+function checkIfLabTestNotExists(labTests, labString) {
     var regExp = /!lab\.([a-zA-Z]+)\.value/;
     var regExpResult = regExp.exec(labString);
     // if the named test isn't in the map, it will return undefined
     if (typeof labTests.get(regExpResult[1]) == 'undefined') {
-        return false;
-    } else return true;
+        return true;
+    } else return false;
 }
 
 function checkLabTestResult(labTests, labString) {
