@@ -1,5 +1,9 @@
 var fs = require('fs');
 const util = require("util");
+const alc = require('./adficeLabCriteria');
+const ac = require('./adficeAgeCriteria');
+const apc = require('./adficeProblemCriteria');
+const adc = require('./adficeDrugCriteria');
 
 function evaluateSelectors(meds, rules) {
     let medsWithRulesToFire = {};
@@ -34,6 +38,40 @@ function matchesSelector(atcCode, selectorString) {
     return false;
 }
 
+function doesRuleFire(
+    startDate, drugString, drugList,
+    problemString, problemList,
+    ageString, age,
+    labString, labTests) {
+
+    // TODO return true if all strings are null
+
+    if (drugString != null &&
+        adc.evaluateDrugCriteria(drugList, drugString, startDate)) {
+        return true;
+    }
+    if (problemString != null &&
+        apc.evaluateProblemCriteria(problemList, problemString)) {
+        return true;
+    }
+    if (ageString != null && ac.evaluateAgeCriteria(age, ageString)) {
+        return true;
+    }
+    if (labString != null && alc.evaluateLabCriteria(labTests, labString)) {
+        return true;
+    }
+
+    if ((drugString == null) && (problemString == null) &&
+        (ageString == null) && (labString == null)) {
+        return true;
+    }
+
+    return false;
+}
+
 module.exports = {
+    matchesSelector: matchesSelector,
+    doesRuleFire: doesRuleFire,
     evaluateSelectors: evaluateSelectors
 }
+// vim: set sts=4 expandtab :
