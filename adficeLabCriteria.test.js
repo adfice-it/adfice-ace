@@ -83,6 +83,7 @@ if (0) {
     })
 }
 
+if (0) {
 test('Complete normal labs, check if natrium is missing', () => {
     const labTests = new Map();
     labTests.set("natrium", normalNatrium);
@@ -93,6 +94,7 @@ test('Complete normal labs, check if natrium is missing', () => {
     var result = alc.evaluateLabCriteria(labTests, labString);
     expect(result).toBe(false);
 })
+}
 
 if (0) {
     test('Complete normal labs, check criteria with AND', () => {
