@@ -133,3 +133,5 @@ INSERT INTO patient (id,display_name,login_token,birth_date) VALUES
 (128,"Mr. CombiBB","mrcombibb",'1940-06-14'),
 (129,"Mr. CombiNSAID","mrcombinsaid",'1940-06-15'),
 (130,"Mr. CombiNaproxPPI","mrcombinaproxppi",'1940-06-16');
+
+UPDATE patient SET age = FLOOR(DATEDIFF(NOW(), birth_date)/365);
