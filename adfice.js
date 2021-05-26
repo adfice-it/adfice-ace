@@ -45,6 +45,9 @@ async function sql_select(sql, params) {
 }
 
 async function getAdviceTextsCheckboxes(rule_numbers) {
+    if (rule_numbers == null) {
+        return [];
+    }
     var sql = `/* getAdviceTextsCheckboxes */
         SELECT medication_criteria_id,
                selectBoxNum,
@@ -62,6 +65,9 @@ async function getAdviceTextsCheckboxes(rule_numbers) {
 }
 
 async function getAdviceTextsNoCheckboxes(rule_numbers) {
+    if (rule_numbers == null) {
+        return [];
+    }
     var sql = `/* getAdviceTextsNoCheckboxes */
         SELECT medication_criteria_id,
                cdss

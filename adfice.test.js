@@ -66,6 +66,13 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
     expect(noCheckbox0['cdss']).toContain("SSRI");
 })
 
+test('getAdviceForPatient(60), sparse patient', async () => {
+    let patientNumber = 60;
+    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    let advice = patientAdvice.medication_advice;
+    expect(advice.length).toBe(1);
+})
+
 
 test('getAdviceForPatient(null)', async () => {
     let patientNumber = null;
