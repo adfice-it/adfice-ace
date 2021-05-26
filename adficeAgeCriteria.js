@@ -2,6 +2,7 @@
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 // vim: set sts=4 expandtab :
 /* age is easy. It is >, <, >=, or <= some number */
+"use strict";
 
 /*
 Evalutes whether the patient meets the age criteria.

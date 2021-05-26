@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 // vim: set sts=4 expandtab :
+"use strict";
+
 const autil = require('./adficeUtil')
 
 test('assert true', () => {
