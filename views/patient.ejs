@@ -10,6 +10,7 @@
 Patient: <%= patient_id %><br/>
 Leeftijd: <%= patient_advice.age %><br/>
 
+<form id="patient_form">
 <table id="patient_problems">
 <tr><th>probleem</th><th>begin</th></tr>
 <%     let problems = patient_advice.problems; -%>
@@ -58,7 +59,8 @@ Leeftijd: <%= patient_advice.age %><br/>
 <ul>
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
 <%     let row = medication_advice[i]; -%>
-<li><%= row.medication_name %>: <%= row.ATC_code %><br/>
+<%     let atc = row.ATC_code; -%>
+<li><%= row.medication_name %>: <%= atc %><br/>
 <table id="adviceTextsNoCheckboxesTable_<%= i %>">
 <tr><th>criterion</th><th>cdss</th></tr>
 <%     let advices = row.adviceTextsNoCheckboxes; -%>
@@ -78,9 +80,18 @@ Leeftijd: <%= patient_advice.age %><br/>
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
 <%         let cb_advice = cb_advices[j]; -%>
 <%           let atcbt_prefix = "atcbt_" + i + "_" + j; -%>
+<%           let rulenum = cb_advice.medication_criteria_id; -%>
+<%           let boxnum = cb_advice.selectBoxNum; -%>
+<%           let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
 <tr id="<%= atcbt_prefix %>">
 <td id="<%= atcbt_prefix %>_mc"><%= cb_advice.medication_criteria_id %></td>
-<td id="<%= atcbt_prefix %>_sbn"><%= cb_advice.selectBoxNum %></td>
+<td id="<%= atcbt_prefix %>_sbn">
+<input type="checkbox"
+	id="<%= checkbox_id %>"
+	name="<%= checkbox_id %>"
+	value="<%= checkbox_id %>"
+/>
+</td>
 <td id="<%= atcbt_prefix %>_sbc"><%= cb_advice.selectBoxCategory %></td>
 <td id="<%= atcbt_prefix %>_cdss"><%- md.makeHtml(cb_advice.cdss) %></td>
 <td id="<%= atcbt_prefix %>_epic"><%- md.makeHtml(cb_advice.epic) %></td>
@@ -91,5 +102,6 @@ Leeftijd: <%= patient_advice.age %><br/>
 </li>
 <% } -%>
 </ul>
+</form>
 </body>
 </html>
