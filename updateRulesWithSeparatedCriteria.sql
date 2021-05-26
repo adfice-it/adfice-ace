@@ -88,7 +88,7 @@ UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_d
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="67";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "lab.eGFR.value > 30 & lab.eGFR.date > now-11-months", condition_allergy = NULL WHERE medication_criteria_id ="68";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months", condition_allergy = NULL WHERE medication_criteria_id ="69";
-UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "!lab.eGFR", condition_allergy = NULL WHERE medication_criteria_id ="70";
+UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "!lab.eGFR.value", condition_allergy = NULL WHERE medication_criteria_id ="70";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "lab.eGFR.date > now-11-months", condition_allergy = NULL WHERE medication_criteria_id ="71";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="72";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="73";
@@ -109,7 +109,7 @@ UPDATE med_rules SET condition_problem = "!paraplegia &!dwarslesie", condition_a
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="88";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "lab.eGFR.value > 30 & lab.eGFR.date > now-11-months", condition_allergy = NULL WHERE medication_criteria_id ="89";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months", condition_allergy = NULL WHERE medication_criteria_id ="90";
-UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "!lab.eGFR", condition_allergy = NULL WHERE medication_criteria_id ="91";
+UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "!lab.eGFR.value", condition_allergy = NULL WHERE medication_criteria_id ="91";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "lab.eGFR.date > now-11-months", condition_allergy = NULL WHERE medication_criteria_id ="92";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = "allergic-reaction" WHERE medication_criteria_id ="93";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="94";
