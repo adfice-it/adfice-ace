@@ -43,32 +43,32 @@ async function sql_select(sql, params) {
 }
 
 async function getAdviceTextsCheckboxes(rule_numbers) {
-    var sql = "" +
-        "SELECT medication_criteria_id," +
-        "       selectBoxNum," +
-        "       selectBoxCategory," +
-        "       cdss," +
-        "       epic," +
-        "       patient" +
-        "  FROM med_advice_text" +
-        " WHERE selectBoxNum IS NOT NULL" +
-        "   AND medication_criteria_id IN(" +
+    var sql = `/* getAdviceTextsCheckboxes */
+        SELECT medication_criteria_id,
+               selectBoxNum,
+               selectBoxCategory,
+               cdss,
+               epic,
+               patient
+          FROM med_advice_text
+         WHERE selectBoxNum IS NOT NULL
+           AND medication_criteria_id IN(` +
         question_marks(rule_numbers.length) +
-        ")" +
-        " ORDER BY id";
+        `)
+         ORDER BY id`
     return sql_select(sql, rule_numbers);
 }
 
 async function getAdviceTextsNoCheckboxes(rule_numbers) {
-    var sql = "" +
-        "SELECT medication_criteria_id," +
-        "       cdss" +
-        "  FROM med_advice_text" +
-        " WHERE selectBoxNum IS NULL" +
-        "   AND medication_criteria_id IN(" +
+    var sql = `/* getAdviceTextsNoCheckboxes */
+        SELECT medication_criteria_id,
+               cdss
+          FROM med_advice_text
+         WHERE selectBoxNum IS NULL
+           AND medication_criteria_id IN(` +
         question_marks(rule_numbers.length) +
-        ")" +
-        " ORDER BY id";
+        `)
+         ORDER BY id`;
     return sql_select(sql, rule_numbers);
 }
 
@@ -78,54 +78,56 @@ async function getActiveRules() {
 }
 
 async function getMedsForPatient(patientNumber) {
-    var sql = "" +
-        "SELECT ATC_code, medication_name, start_date" +
-        "  FROM patient_medications" +
-        " WHERE patient_id=?" +
-        "   AND date_retrieved = (" +
-        "           SELECT MAX(date_retrieved)" +
-        "             FROM patient_medications" +
-        "            WHERE patient_id=?" +
-        "       )" +
-        " ORDER BY ATC_code";
+    var sql = `/* getMedsForPatient */
+        SELECT ATC_code, medication_name, start_date
+          FROM patient_medications
+         WHERE patient_id=?
+           AND date_retrieved = (
+                   SELECT MAX(date_retrieved)
+                     FROM patient_medications
+                    WHERE patient_id=?
+               )
+         ORDER BY ATC_code`;
     let params = [patientNumber, patientNumber];
     return sql_select(sql, params);
 }
 
 async function getProblemsForPatient(patientNumber) {
-    var sql = "" +
-        "SELECT name, start_date" +
-        "  FROM patient_problems" +
-        " WHERE patient_id=?" +
-        "   AND date_retrieved = (" +
-        "           SELECT MAX(date_retrieved)" +
-        "             FROM patient_problems" +
-        "            WHERE patient_id=?" +
-        "       )" +
-        " ORDER BY id";
+    var sql = `/* getProblemsForPatient */
+        SELECT name, start_date
+          FROM patient_problems
+         WHERE patient_id=?
+           AND date_retrieved = (
+                   SELECT MAX(date_retrieved)
+                     FROM patient_problems
+                    WHERE patient_id=?
+               )
+        ORDER BY id`;
     return sql_select(sql, [patientNumber, patientNumber]);
 }
 
 async function getAgeForPatient(patientNumber) {
-    var sql = "" +
-        "SELECT age" +
-        "  FROM patient" +
-        " WHERE id=?" +
-        " ORDER BY age DESC LIMIT 1";
+    var sql = `/* getAgeForPatient */
+        SELECT age
+          FROM patient
+         WHERE id=?
+         ORDER BY age DESC LIMIT 1`;
     return sql_select(sql, [patientNumber, patientNumber]);
 }
 
 async function getLabsForPatient(patientNumber) {
-    var sql = "" +
-        "SELECT lab_test_name, lab_test_result, date_measured" +
-        "  FROM patient_labs" +
-        " WHERE patient_id=?" +
-        "   AND date_retrieved = (" +
-        "           SELECT MAX(date_retrieved)" +
-        "             FROM patient_labs" +
-        "            WHERE patient_id=?" +
-        "       )" +
-        " ORDER BY id";
+    var sql = `/* getLabsForPatient */
+        SELECT lab_test_name,
+               lab_test_result,
+               date_measured
+          FROM patient_labs
+         WHERE patient_id=?
+           AND date_retrieved = (
+                   SELECT MAX(date_retrieved)
+                     FROM patient_labs
+                    WHERE patient_id=?
+               )
+         ORDER BY id`;
     let params = [patientNumber, patientNumber];
     let result = sql_select(sql, params);
     return result;
