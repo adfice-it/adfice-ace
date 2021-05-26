@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 // vim: set sts=4 expandtab :
+"use strict";
+
 var fs = require('fs');
+const autil = require('./adficeUtil');
 const ae = require('./adficeEvaluator');
 
 function question_marks(num) {
@@ -45,9 +48,8 @@ async function sql_select(sql, params) {
 }
 
 async function getAdviceTextsCheckboxes(rule_numbers) {
-    if (rule_numbers == null) {
-        return [];
-    }
+    autil.assert(rule_numbers !== null);
+    autil.assert(rule_numbers.length > 0);
     var sql = `/* getAdviceTextsCheckboxes */
         SELECT m.medication_criteria_id,
                m.selectBoxNum,
@@ -67,9 +69,8 @@ async function getAdviceTextsCheckboxes(rule_numbers) {
 }
 
 async function getAdviceTextsNoCheckboxes(rule_numbers) {
-    if (rule_numbers == null) {
-        return [];
-    }
+    autil.assert(rule_numbers !== null);
+    autil.assert(rule_numbers.length > 0);
     var sql = `/* getAdviceTextsNoCheckboxes */
         SELECT medication_criteria_id,
                cdss

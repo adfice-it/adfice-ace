@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 // vim: set sts=4 expandtab :
+"use strict";
 
 let http = require('http');
 let ws = require('ws');
@@ -65,15 +66,38 @@ const server = http.createServer(app);
 const wss = new ws.Server({
     server
 });
+server.wss = wss;
 
-
+server.receivers = new Set();
 wss.on('connection', (ws) => {
+    console.log(`adding receiver`);
+    server.receivers.add(ws);
+    ws.on('close', function clear() {
+        console.log(`removing receiver`);
+        server.receivers.delete(ws);
+    });
+    ws.on('message', function incoming(data) {
+        console.log('recieved: ', data);
+        server.receivers.forEach((rws) => {
+            rws.send(data);
+        });
+    });
+
     let message = {};
     message.type = 'hello';
     message.info = 'world';
 
     ws.send(JSON.stringify(message));
 });
+
+/*
+wss.on('message', function incoming(data) {
+    console.log('recieved: ', data);
+    server.receivers.forEach((rws) => {
+        rws.send(data);
+    });
+});
+*/
 
 server.listen(PORT, () => {
     console.log("server is listening on " + PORT);

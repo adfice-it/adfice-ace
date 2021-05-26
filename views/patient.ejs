@@ -6,6 +6,10 @@
 <head>
 <title>Patient <%= patient_id %></title>
 <script src="static/patient.js"></script>
+<script>
+let patient_id = "<%= patient_id %>";
+console.log('patient_id: ', patient_id);
+</script>
 </head>
 <body>
 Patient: <%= patient_id %><br/>

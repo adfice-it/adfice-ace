@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+// vim: set sts=4 expandtab :
+"use strict";
+
 import {
     Selector
 } from 'testcafe';
@@ -9,6 +12,9 @@ fixture `Adfice`
 
 test('Test page for patient 68', async t => {
     let selector = Selector('body');
+    let window1 = await t.getCurrentWindow();
+
+    // initial check that patient data is rendered
     await t.expect(selector.withText('C09AA02').exists).ok()
     await t.expect(selector.withText('63a').exists).ok()
     await t.expect(selector.withText('C03AA03').exists).ok()
@@ -18,10 +24,33 @@ test('Test page for patient 68', async t => {
     let rule = "42";
     let cbn = "3";
     let checkbox_id = `cb_${atc}_${rule}_${cbn}`;
+    let checkbox_css_selector = `input#${checkbox_id}`;
 
-    let cb_selector = Selector(`input#${checkbox_id}`, {
+    // checkbox starts invisible,
+    // but becomes visible via websocket message
+    // thus we check that we have received the message
+    let cb_selector = Selector(checkbox_css_selector, {
         timeout: 1000,
         visibilityCheck: true
     });
     await t.expect(cb_selector.visible).ok();
+    await t.expect(cb_selector.checked).notOk();
+
+    // open a second window and check a box
+    let window2 = await t.openWindow('http://localhost:8080/patient?id=68');
+
+    let cb_selector2 = Selector(`input#${checkbox_id}`, {
+        timeout: 1000,
+        visibilityCheck: true
+    });
+    await t.expect(cb_selector.checked).notOk();
+    await t.click(checkbox_css_selector);
+    await t.expect(cb_selector.checked).ok();
+
+    await t.switchToWindow(window1);
+
+    // await t.wait(1000);
+
+    // finally ensure that we see the box checked in the initial window.
+    await t.expect(cb_selector.checked).ok();
 });
