@@ -133,6 +133,17 @@ async function getAdviceTextsNoCheckboxes(rule_numbers) {
     return split_advice_texts_cdss_epic_patient(advice_text);
 }
 
+async function getReferenceNumbers(rule_numbers) {
+    var sql = `/* getReferenceNumbers */
+        SELECT DISTINCT reference
+          FROM med_rules
+         WHERE medication_criteria_id IN(` +
+        question_marks(rule_numbers.length) +
+        `)
+         ORDER BY id`
+    return sql_select(sql, rule_numbers);
+}
+
 async function getActiveRules() {
     var sql = "SELECT * FROM med_rules WHERE active = 'yes' ORDER BY id";
     let rules = await sql_select(sql);
@@ -346,7 +357,6 @@ async function getAdviceForPatient(patientIdentifier) {
     let advice = [];
     for (let i = 0; i < meds.length; ++i) {
         let med = meds[i];
-
         // TODO get the reference field for all rules that fired for this
         // medication and add it to this object
         let atc_code = med.ATC_code;
@@ -361,6 +371,7 @@ async function getAdviceForPatient(patientIdentifier) {
         adv.medication_name = med.medication_name.trim();
         adv.adviceTextsCheckboxes = advice_text;
         adv.adviceTextsNoCheckboxes = advice_text_no_box;
+        adv.referenceNumbers = await getReferenceNumbers(fired);
         advice.push(adv);
 
         //console.log(JSON.stringify({adv: adv}, null, 4));
