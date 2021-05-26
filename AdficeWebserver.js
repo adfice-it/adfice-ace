@@ -26,28 +26,6 @@ async function renderAdviceTextsCheckboxes(req, res) {
     let query_id = req.query.id || "6e";
     let rule_numbers = query_id.split(',');
     let advice_texts = await adfice.getAdviceTextsCheckboxes(rule_numbers);
-/*
-TODO
-The checkboxes should be sorted based on category.
-Regardless of medication_criterion_id, the checkboxes should appear in the following order:
-	stop
-	taper-stop
-	taper-reduce
-	switch
-	continue
-	consult
-	refer
-	[anything else]
-	follow-up
-	free text
-The order that checkboxes appear within these categories isn't really important, but it should be consistent, so I would suggest ordering within the categories based on id.
-Thus, for example, the checkboxes for patient 68: enalapril: C09AA02 should be:
-63 	1 	taper-stop 	Afbouwen waarna stoppen...
-63 	2 	taper-reduce 	Afbouwen tot minimaal effectief ...
-63 	3 	continue 	Continueren
-63b	1	follow-up	Vervolgaafspraak...
-63 	4 	free_text
-*/
     res.render("index", {
         advice_texts: advice_texts
     }); // .ejs

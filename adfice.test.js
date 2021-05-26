@@ -8,9 +8,14 @@ test('test advice text 6e', async () => {
     var rule_numbers = ["6e"];
     var texts = await adfice.getAdviceTextsCheckboxes(rule_numbers);
     expect(texts.length).toBe(11);
-    expect(texts[9].cdss).toBe('Continueren');
-    expect(texts[9].epic).toBe('Continueren');
-    expect(texts[9].patient).toBe('Gebruik dit medicijn zoals u tot nu toe doet.');
+    expect(texts[0].selectBoxCategory).toBe('stop');
+    expect(texts[1].selectBoxCategory).toBe('taper-stop');
+    expect(texts[2].selectBoxCategory).toBe('taper-reduce');
+    expect(texts[10].selectBoxCategory).toBe('free_text');
+
+    expect(texts[5].cdss).toBe('Continueren');
+    expect(texts[5].epic).toBe('Continueren');
+    expect(texts[5].patient).toBe('Gebruik dit medicijn zoals u tot nu toe doet.');
 
     texts = await adfice.getAdviceTextsNoCheckboxes(rule_numbers);
     expect(texts.length).toBe(1);
@@ -30,8 +35,8 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
     expect(adviceTextsCheckboxes.length).toBe(6);
     let checkbox0 = adviceTextsCheckboxes[0];
     expect(checkbox0['medication_criteria_id']).toBe("42");
-    expect(checkbox0['selectBoxNum']).toBe(1);
-    expect(checkbox0['selectBoxCategory']).toBe('consult');
+    expect(checkbox0['selectBoxNum']).toBe(2);
+    expect(checkbox0['selectBoxCategory']).toBe('taper-stop');
 
     let adviceTextsNoCheckboxes = adv0['adviceTextsNoCheckboxes'];
     expect(adviceTextsNoCheckboxes.length).toBe(4);

@@ -73,6 +73,7 @@ echo 'load schema and test data'
 for SQL in \
 	createNewRulesTable.sql \
 	createPatientTables.sql \
+	createPriority.sql \
 	newAdviceTable.sql \
 	newRulesTable.sql \
 	newPreselectRulesTable.sql \

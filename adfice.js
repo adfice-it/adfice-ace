@@ -49,18 +49,20 @@ async function getAdviceTextsCheckboxes(rule_numbers) {
         return [];
     }
     var sql = `/* getAdviceTextsCheckboxes */
-        SELECT medication_criteria_id,
-               selectBoxNum,
-               selectBoxCategory,
-               cdss,
-               epic,
-               patient
-          FROM med_advice_text
+        SELECT m.medication_criteria_id,
+               m.selectBoxNum,
+               m.selectBoxCategory,
+               m.cdss,
+               m.epic,
+               m.patient
+          FROM med_advice_text m
+     LEFT JOIN select_box_category_priority p
+            ON (m.selectBoxCategory = p.select_box_category)
          WHERE selectBoxNum IS NOT NULL
            AND medication_criteria_id IN(` +
         question_marks(rule_numbers.length) +
         `)
-         ORDER BY id`
+         ORDER BY p.priority ASC, m.id ASC`
     return sql_select(sql, rule_numbers);
 }
 
