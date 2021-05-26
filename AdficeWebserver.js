@@ -56,6 +56,6 @@ app.get("/", renderAdviceTextsCheckboxes);
 app.get("/index", renderAdviceTextsCheckboxes);
 app.get("/checkboxes", renderAdviceTextsCheckboxes);
 
-app.listen(8080, function() {
+app.listen(PORT, function() {
     console.log("server is listening on " + PORT);
 });

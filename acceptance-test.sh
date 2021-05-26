@@ -2,13 +2,15 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 
-node AdficeWebserver.js &
+PORT=8888
+node AdficeWebserver.js $PORT &
 CHILD_PID=%1
 sleep 1
 FILE="patient_validation?id=68"
 
 rm -fv "$FILE"
-wget 'localhost:8080/patient_validation?id=68'
+URL="localhost:${PORT}/patient_validation?id=68"
+wget $URL
 WGET_EXIT_CODE=$?
 
 kill $CHILD_PID
