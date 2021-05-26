@@ -1,6 +1,6 @@
 // vim: set sts=4 expandtab :
 var fs = require('fs');
-const as = require('./adficeEvaluator');
+const ae = require('./adficeEvaluator');
 
 function question_marks(num) {
     return '?,'.repeat(num - 1) + '?';
@@ -175,7 +175,7 @@ async function getAdviceForPatient(patientNumber) {
 
     var rules = await getActiveRules();
 
-    var medsWithRulesToFire = as.evaluateRules(meds, rules, drugList,
+    var medsWithRulesToFire = ae.evaluateRules(meds, rules, drugList,
         problemList, age, labTests);
     /*
         console.log(JSON.stringify({

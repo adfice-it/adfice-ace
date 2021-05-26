@@ -1,5 +1,5 @@
 const adfice = require('./adfice')
-const as = require('./adficeEvaluator');
+const ae = require('./adficeEvaluator');
 
 function monthsAgo(months) {
     var targetDate = new Date();
@@ -43,37 +43,37 @@ test('one condition in rule', () => {
     let result = null;
 
     // all criteria strings are null:
-    result = as.doesRuleFire(medicationStartDate, drugString, drugList,
+    result = ae.doesRuleFire(medicationStartDate, drugString, drugList,
         problemString, problemList, ageString, patientAge, labString, labTests);
     expect(result).toBe(true);
 
     labString = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months";
-    result = as.doesRuleFire(medicationStartDate, drugString, drugList,
+    result = ae.doesRuleFire(medicationStartDate, drugString, drugList,
         problemString, problemList, ageString, patientAge, labString, labTests);
     expect(result).toBe(true);
     labString = null;
 
     ageString = "<80";
-    result = as.doesRuleFire(medicationStartDate, drugString, drugList,
+    result = ae.doesRuleFire(medicationStartDate, drugString, drugList,
         problemString, problemList, ageString, patientAge, labString, labTests);
     expect(result).toBe(true);
     ageString = null;
 
     problemString = "angststoornis";
-    result = as.doesRuleFire(medicationStartDate, drugString, drugList,
+    result = ae.doesRuleFire(medicationStartDate, drugString, drugList,
         problemString, problemList, ageString, patientAge, labString, labTests);
     expect(result).toBe(true);
     problemString = null;
 
     drugString = drugString = "C09A,!C09B";
-    result = as.doesRuleFire(medicationStartDate, drugString, drugList,
+    result = ae.doesRuleFire(medicationStartDate, drugString, drugList,
         problemString, problemList, ageString, patientAge, labString, labTests);
     expect(result).toBe(true);
     drugString = null;
 
     // this criteria fails to be met
     ageString = ">80";
-    result = as.doesRuleFire(medicationStartDate, drugString, drugList,
+    result = ae.doesRuleFire(medicationStartDate, drugString, drugList,
         problemString, problemList, ageString, patientAge, labString, labTests);
     expect(result).toBe(false);
     ageString = null;
