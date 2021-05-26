@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 INSERT INTO med_advice_text (medication_criteria_id, selectBoxNum, selectBoxCategory, selectBoxDesignator, cdss, epic, patient) VALUES
 ("6",NULL,"","","**Deze patiënt heeft een angststoornis:** Bij sommige patiënten met een angststoornis is langdurig gebruik van benzo&#39;s nodig. Overweeg veiligere alternatieven en lagere dosis. Benzo&#39;s kunnen ook gebruikt worden bij acute slaapstoornis voor \&lt; 2 weken.","",""),
 ("6a",NULL,"","","**Deze patiënt heeft epilepsie:** Afbouwen is aanbevolen behalve bij: epileptische aanval, angststoornis of korte-termijn gebruik bij acute slaapstoornis (\&lt;2w). Benzo&#39;s kunnen ook gebruikt worden voor \&lt; 2 weken bij acute slaapstoornis.","",""),

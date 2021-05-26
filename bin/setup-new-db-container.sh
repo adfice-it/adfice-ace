@@ -1,4 +1,6 @@
 #!/bin/bash
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 
 echo 'establishing adfice_mariadb_user_password'
 if [ -f adfice_mariadb_user_password ]; then

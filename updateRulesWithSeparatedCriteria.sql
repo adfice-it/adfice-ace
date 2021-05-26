@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 UPDATE med_rules SET condition_problem = "angststoornis &!epilepsy", condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="6";
 UPDATE med_rules SET condition_problem = "epilepsy", condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="6a";
 UPDATE med_rules SET condition_problem = "!angststoornis &!epilepsy", condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="6b";

@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 INSERT INTO patient (id,display_name,login_token,birth_date,education_level) VALUES
 (1,"Mevr. Empty","mvempty",'1940-02-10',NULL),
 (2,"Mevr. Predict","mvpredict",'1940-02-11',"HEAO"),

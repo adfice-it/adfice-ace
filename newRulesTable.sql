@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 -- use adfice;
 INSERT INTO med_rules (medication_criteria_id, active, needs_review, medication_criteria, patient_group_criteria, preselect_criteria, selector_logic, condition_logic, reference) VALUES
 ("6","yes","no","benzo\'s and sedatives

@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 UPDATE med_rules SET selector_or = "N05C,N05BA", selector_not = "N05CH" WHERE medication_criteria_id = "6";
 UPDATE med_rules SET selector_or = "N05C,N05BA", selector_not = "N05CH" WHERE medication_criteria_id = "6a";
 UPDATE med_rules SET selector_or = "N05C,N05BA", selector_not = "N05CH" WHERE medication_criteria_id = "6b";

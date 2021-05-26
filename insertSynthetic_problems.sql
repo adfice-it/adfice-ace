@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 INSERT INTO patient_problems (patient_id, date_retrieved, problem_id, start_date, name) VALUES
 (5,'2021-02-11',11,'2019-02-11',"angststoornis"),
 (6,'2021-02-11',12,'2019-02-11',"epilepsy"),

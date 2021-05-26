@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 const adfice = require('./adfice')
 const ae = require('./adficeEvaluator');
 

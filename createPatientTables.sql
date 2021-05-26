@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 -- Note that collation gives a warning. Not sure why this collation is used but we should probably use a different one.
 
 CREATE TABLE `patient` (

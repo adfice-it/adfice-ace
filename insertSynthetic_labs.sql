@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 INSERT INTO patient_labs (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_result, lab_test_units) VALUES
 (27,'2021-02-11','2021-02-11',"natrium",140,"mmol/l "),
 (30,'2021-02-11','2020-02-11',"natrium",140,"mmol/l "),

@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 INSERT INTO patient_allergies (patient_id, date_retrieved, ATC, start_date, as_documented) VALUES
 (7,'2021-02-11',"N05BA",'2021-02-11',"benzodiazepines"),
 (13,'2021-02-11',"N05BE01",'2021-02-11',"buspar"),
