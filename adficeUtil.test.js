@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+// vim: set sts=4 expandtab :
 const autil = require('./adficeUtil')
 
 test('assert true', () => {
@@ -59,5 +60,3 @@ test('compareNumbers', () => {
     expect(autil.compareNumbers("1", "!==", "2")).toBe(true);
     expect(autil.compareNumbers("2", "!==", "2")).toBe(false);
 })
-
-// vim: set sts=4 expandtab :

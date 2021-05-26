@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+// vim: set sts=4 expandtab :
 const adfice = require('./adfice')
 const ae = require('./adficeEvaluator');
 
@@ -81,4 +82,3 @@ test('one condition in rule', () => {
     ageString = null;
 
 })
-// vim: set sts=4 expandtab :

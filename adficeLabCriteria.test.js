@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+// vim: set sts=4 expandtab :
 const alc = require('./adficeLabCriteria')
 
 /* we need to reuse these a lot, so I'm parking them up here */
@@ -226,5 +227,3 @@ test('old eGFR, check if normal and in date', () => {
     let result = alc.evaluateLabCriteria(labTests, labString);
     expect(result).toBe(false);
 })
-
-// vim: set sts=4 expandtab :

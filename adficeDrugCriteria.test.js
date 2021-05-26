@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+// vim: set sts=4 expandtab :
 const adc = require('./adficeDrugCriteria')
 
 test('one', () => {
@@ -140,5 +141,3 @@ test('has required does not have forbidden', () => {
     var result = adc.evaluateDrugCriteria(drugList, drugString, startDate);
     expect(result).toBe(true);
 })
-
-// vim: set sts=4 expandtab :

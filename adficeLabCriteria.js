@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+// vim: set sts=4 expandtab :
 const util = require("util");
 const autil = require('./adficeUtil')
 
@@ -143,4 +144,3 @@ function checkDateOfLabTest(labTests, labString) {
 module.exports = {
     evaluateLabCriteria: evaluateLabCriteria
 }
-// vim: set sts=4 expandtab :
