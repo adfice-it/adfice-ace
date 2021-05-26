@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+
+let http = require('http');
+let ws = require('ws');
 let express = require('express');
 let ejs = require('ejs');
 let util = require('util');
@@ -8,7 +11,7 @@ let adfice = require('./adfice.js');
 
 let md = new showdown.Converter();
 
-const PORT = process.argv[2] || 8080;
+const PORT = process.argv[2] || process.env.PORT || 8080;
 console.log('PORT: ', PORT);
 
 async function renderAdviceForPatient(req, res) {
@@ -56,6 +59,11 @@ app.get("/", renderAdviceTextsCheckboxes);
 app.get("/index", renderAdviceTextsCheckboxes);
 app.get("/checkboxes", renderAdviceTextsCheckboxes);
 
-app.listen(PORT, function() {
+const server = http.createServer(app);
+server.listen(PORT, () => {
     console.log("server is listening on " + PORT);
 });
+
+// server.on('close', function() {
+//    console.log(`closing server is running on ${PORT}`);
+// });
