@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw -->
+<%# see https://ejs.co/#docs -%>
+<html lang="<%= lang %>">
+<head>
+<title>Patient <%= patient_id %></title>
+</head>
+<body>
+Patient: <%= patient_id %><br/>
+Leeftijd: <%= patient_advice.age %><br/>
+
+<table id="patient_problems">
+<tr><th>probleem</th><th>begin</th></tr>
+<%     let problems = patient_advice.problems; -%>
+<% for (let i = 0; i < problems.length; ++i ) { -%>
+<%     let problem = problems[i]; -%>
+<%     let prob_prefix = "prob_" + i; -%>
+<tr id="<%= prob_prefix %>">
+<td id="<%= prob_prefix %>_name"><%= problem.name %></td>
+<td id="<%= prob_prefix %>_from">
+	<%= JSON.stringify(problem.start_date).substring(1,11) %></td>
+</tr>
+<% } -%>
+</table>
+
+<%     let labs = patient_advice.labs; -%>
+<table id="patient_labs">
+<tr><th>naam</th><th>resultaat</th><th>datum</th></tr>
+<% for (let i = 0; i < labs.length; ++i ) { -%>
+<%     let lab = labs[i]; -%>
+<%     let lab_prefix = "lab_" + i; -%>
+<tr id="<%= lab_prefix %>">
+<td id="<%= lab_prefix %>_name"><%= lab.lab_test_name %></td>
+<td id="<%= lab_prefix %>_result"><%= lab.lab_test_result %></td>
+<td id="<%= lab_prefix %>_date">
+	<%= JSON.stringify(lab.date_measured).substring(1,11) %></td>
+</tr>
+<% } -%>
+</table>
+
+<%     let meds = patient_advice.medications; -%>
+<table id="patient_medications">
+<tr><th>ATC</th><th>medicijn</th><th>begin</th></tr>
+<% for (let i = 0; i < meds.length; ++i ) { -%>
+<%     let med = meds[i]; -%>
+<%     let med_prefix = "med_" + i; -%>
+<tr id="<%= med_prefix %>">
+<td id="<%= med_prefix %>_atc"><%= med.ATC_code %></td>
+<td id="<%= med_prefix %>_name"><%= med.medication_name %></td>
+<td id="<%= med_prefix %>_from">
+	<%= JSON.stringify(med.start_date).substring(1,11) %></td>
+</tr>
+<% } -%>
+</table>
+
+<%     let medication_advice = patient_advice.medication_advice; -%>
+<ul>
+<% for (let i = 0; i < medication_advice.length; ++i ) { -%>
+<%     let row = medication_advice[i]; -%>
+<li><%= row.medication_name %>: <%= row.ATC_code %><br/>
+<table id="adviceTextsNoCheckboxesTable_<%= i %>">
+<tr><th>criterion</th><th>cdss</th></tr>
+<%     let advices = row.adviceTextsNoCheckboxes; -%>
+<%     for (let j = 0; j < advices.length; ++j ) { -%>
+<%         let advice = advices[j]; -%>
+<%           let att_prefix = "att_" + i + "_" + j; -%>
+<tr id="<%= att_prefix %>">
+<td id="<%= att_prefix %>_mc"><%= advice.medication_criteria_id %></td>
+<td id="<%= att_prefix %>_cdss"><%- md.makeHtml(advice.cdss) %></td>
+</tr>
+<%     } -%>
+</table>
+<table id="adviceTextsCheckboxesTable_<%= i %>">
+<tr><th>criterion</th><th>box</th><th>category</th>
+<th>cdss</th><th>epic</th><th>patient</th></tr>
+<%     let cb_advices = row.adviceTextsCheckboxes; -%>
+<%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
+<%         let cb_advice = cb_advices[j]; -%>
+<%           let atcbt_prefix = "atcbt_" + i + "_" + j; -%>
+<tr id="<%= atcbt_prefix %>">
+<td id="<%= atcbt_prefix %>_mc"><%= cb_advice.medication_criteria_id %></td>
+<td id="<%= atcbt_prefix %>_sbn"><%= cb_advice.selectBoxNum %></td>
+<td id="<%= atcbt_prefix %>_sbc"><%= cb_advice.selectBoxCategory %></td>
+<td id="<%= atcbt_prefix %>_cdss"><%- md.makeHtml(cb_advice.cdss) %></td>
+<td id="<%= atcbt_prefix %>_epic"><%- md.makeHtml(cb_advice.epic) %></td>
+<td id="<%= atcbt_prefix %>_patient"><%- md.makeHtml(cb_advice.patient) %></td>
+</tr>
+<%     } -%>
+</table>
+</li>
+<% } -%>
+</ul>
+</body>
+</html>

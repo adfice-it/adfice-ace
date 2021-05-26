@@ -5,10 +5,10 @@
 node AdficeWebserver.js &
 CHILD_PID=%1
 sleep 1
-FILE="patient?id=68"
+FILE="patient_validation?id=68"
 
 rm -fv "$FILE"
-wget 'localhost:8080/patient?id=68'
+wget 'localhost:8080/patient_validation?id=68'
 WGET_EXIT_CODE=$?
 
 kill $CHILD_PID

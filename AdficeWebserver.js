@@ -22,6 +22,17 @@ async function renderAdviceForPatient(req, res) {
     }); // .ejs
 }
 
+async function renderValidationAdviceForPatient(req, res) {
+    let patient_id = req.query.id || 0;
+    let patient_advice = await adfice.getAdviceForPatient(patient_id);
+    res.render("patient_validation", {
+        lang: 'nl',
+        md: md,
+        patient_id: patient_id,
+        patient_advice: patient_advice
+    }); // .ejs
+}
+
 async function renderAdviceTextsCheckboxes(req, res) {
     let query_id = req.query.id || "6e";
     let rule_numbers = query_id.split(',');
@@ -39,6 +50,7 @@ let app = express();
 app.set('view engine', 'ejs');
 
 app.get("/patient", renderAdviceForPatient);
+app.get("/patient_validation", renderValidationAdviceForPatient);
 
 app.get("/", renderAdviceTextsCheckboxes);
 app.get("/index", renderAdviceTextsCheckboxes);

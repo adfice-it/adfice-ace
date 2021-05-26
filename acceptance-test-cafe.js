@@ -5,7 +5,7 @@ import {
 } from 'testcafe';
 
 fixture `Adfice`
-    .page `http://localhost:8080/patient?id=68`;
+    .page `http://localhost:8080/patient_validation?id=68`;
 
 test('Test page for patient 68', async t => {
     let selector = Selector('body');
