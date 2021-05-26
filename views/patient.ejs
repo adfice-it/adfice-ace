@@ -7,10 +7,55 @@
 <title>Patient <%= patient_id %></title>
 </head>
 <body>
-Patient: <%= patient_id %>
+Patient: <%= patient_id %><br/>
+Leeftijd: <%= patient_advice.age %><br/>
+
+<table id="patient_problems">
+<tr><th>probleem</th><th>begin</th></tr>
+<%     let problems = patient_advice.problems; -%>
+<% for (let i = 0; i < problems.length; ++i ) { -%>
+<%     let problem = problems[i]; -%>
+<%     let prob_prefix = "prob_" + i; -%>
+<tr id="<%= prob_prefix %>">
+<td id="<%= prob_prefix %>_name"><%= problem.name %></td>
+<td id="<%= prob_prefix %>_from">
+	<%= JSON.stringify(problem.start_date).substring(1,11) %></td>
+</tr>
+<% } -%>
+</table>
+
+<%     let labs = patient_advice.labs; -%>
+<table id="patient_labs">
+<tr><th>naam</th><th>resultaat</th><th>datum</th></tr>
+<% for (let i = 0; i < labs.length; ++i ) { -%>
+<%     let lab = labs[i]; -%>
+<%     let lab_prefix = "lab_" + i; -%>
+<tr id="<%= lab_prefix %>">
+<td id="<%= lab_prefix %>_name"><%= lab.lab_test_name %></td>
+<td id="<%= lab_prefix %>_result"><%= lab.lab_test_result %></td>
+<td id="<%= lab_prefix %>_date">
+	<%= JSON.stringify(lab.date_measured).substring(1,11) %></td>
+</tr>
+<% } -%>
+
+<%     let meds = patient_advice.medications; -%>
+<table id="patient_medications">
+<tr><th>ATC</th><th>medicijn</th><th>begin</th></tr>
+<% for (let i = 0; i < meds.length; ++i ) { -%>
+<%     let med = meds[i]; -%>
+<%     let med_prefix = "med_" + i; -%>
+<tr id="<%= med_prefix %>">
+<td id="<%= med_prefix %>_atc"><%= med.ATC_code %></td>
+<td id="<%= med_prefix %>_name"><%= med.medication_name %></td>
+<td id="<%= med_prefix %>_from">
+	<%= JSON.stringify(med.start_date).substring(1,11) %></td>
+</tr>
+<% } -%>
+
+<%     let medication_advice = patient_advice.medication_advice; -%>
 <ul>
-<% for (let i = 0; i < patient_advice.length; ++i ) { -%>
-<%     let row = patient_advice[i]; -%>
+<% for (let i = 0; i < medication_advice.length; ++i ) { -%>
+<%     let row = medication_advice[i]; -%>
 <li><%= row.medication_name %>: <%= row.ATC_code %><br/>
 <table id="adviceTextsNoCheckboxesTable_<%= i %>">
 <tr><th>criterion</th><th>cdss</th></tr>

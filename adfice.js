@@ -27,11 +27,11 @@ async function sql_select(sql, params) {
         conn = await pool.getConnection();
         // This version of the driver seems to always place the "meta" in
         // with the rows, no matter which calling convention we try.
-        let results = await conn.query(sql, params);
+        let result_set = await conn.query(sql, params);
         // So, we will filter out anything that is not in the iterator:
         let objects = [];
-        for (let i = 0; i < results.length; ++i) {
-            let row = results[i];
+        for (let i = 0; i < result_set.length; ++i) {
+            let row = result_set[i];
             objects.push(row);
         }
         return objects;
@@ -114,7 +114,11 @@ async function getAgeForPatient(patientNumber) {
           FROM patient
          WHERE id=?
          ORDER BY age DESC LIMIT 1`;
-    return sql_select(sql, [patientNumber, patientNumber]);
+    let results = await sql_select(sql, [patientNumber, patientNumber]);
+    if (results.length > 0) {
+        return results[0].age;
+    }
+    return null;
 }
 
 async function getLabsForPatient(patientNumber) {
@@ -177,7 +181,7 @@ async function getAdviceForPatient(patientNumber) {
 
     var rules = await getActiveRules();
 
-    var medsWithRulesToFire = ae.evaluateRules(meds, rules, drugList,
+    var medsWithRulesToFire = await ae.evaluateRules(meds, rules, drugList,
         problemList, age, labTests);
     /*
         console.log(JSON.stringify({
@@ -186,20 +190,31 @@ async function getAdviceForPatient(patientNumber) {
         }, null, 4));
     */
 
-    let rv = [];
+    let advice = [];
     for (let i = 0; i < meds.length; ++i) {
         let med = meds[i];
+        // TODO get the reference field for all rules that fired for this
+        // medication and add it to this object
         let atc_code = med.ATC_code;
         let fired = medsWithRulesToFire[atc_code];
-        let v = {};
-        v.ATC_code = atc_code.trim();
-        v.medication_name = med.medication_name.trim();
-        v.adviceTextsCheckboxes = await getAdviceTextsCheckboxes(fired);
-        v.adviceTextsNoCheckboxes = await getAdviceTextsNoCheckboxes(fired);
-        rv.push(v);
+        let adv = {};
+        adv.ATC_code = atc_code.trim();
+        adv.medication_name = med.medication_name.trim();
+        adv.adviceTextsCheckboxes = await getAdviceTextsCheckboxes(fired);
+        adv.adviceTextsNoCheckboxes = await getAdviceTextsNoCheckboxes(fired);
+        advice.push(adv);
     }
-    //TODO get the reference field for all rules that fired for this medication and add it to this object
-    return rv;
+
+    let patient_advice = {};
+
+    patient_advice.patient_id = patient_id;
+    patient_advice.age = age;
+    patient_advice.labs = labRows;
+    patient_advice.medications = meds;
+    patient_advice.problems = problems;
+    patient_advice.medication_advice = advice;
+
+    return patient_advice;
 }
 
 module.exports = {

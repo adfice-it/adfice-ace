@@ -19,7 +19,8 @@ test('test advice text 6e', async () => {
 
 test('getAdviceForPatient(68), no labs, no problems', async () => {
     let patientNumber = 68;
-    let advice = await adfice.getAdviceForPatient(patientNumber);
+    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(2);
     let adv0 = advice[0];
     expect(adv0['ATC_code']).toBe('C03AA03');
@@ -43,7 +44,8 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
 
 test('getAdviceForPatient(27), with labs and problems', async () => {
     let patientNumber = 27;
-    let advice = await adfice.getAdviceForPatient(patientNumber);
+    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(1);
     let adv0 = advice[0];
     expect(adv0['ATC_code']).toBe('N06AA09');
@@ -67,18 +69,21 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
 
 test('getAdviceForPatient(null)', async () => {
     let patientNumber = null;
-    let advice = await adfice.getAdviceForPatient(patientNumber);
+    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(0);
 })
 
 test('getAdviceForPatient(-1)', async () => {
     let patientNumber = -1;
-    let advice = await adfice.getAdviceForPatient(patientNumber);
+    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(0);
 })
 
 test('getAdviceForPatient(bogus)', async () => {
     let patientNumber = 'bogus';
-    let advice = await adfice.getAdviceForPatient(patientNumber);
+    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(0);
 })
