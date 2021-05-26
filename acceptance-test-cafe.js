@@ -19,6 +19,9 @@ test('Test page for patient 68', async t => {
     let cbn = "3";
     let checkbox_id = `cb_${atc}_${rule}_${cbn}`;
 
-    let cb_selector = Selector(`input#${checkbox_id}`);
-    await t.expect(cb_selector.exists).ok();
+    let cb_selector = Selector(`input#${checkbox_id}`, {
+        timeout: 1000,
+        visibilityCheck: true
+    });
+    await t.expect(cb_selector.visible).ok();
 });

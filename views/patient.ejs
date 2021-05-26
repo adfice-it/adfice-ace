@@ -5,6 +5,7 @@
 <html lang="<%= lang %>">
 <head>
 <title>Patient <%= patient_id %></title>
+<script src="static/patient.js"></script>
 </head>
 <body>
 Patient: <%= patient_id %><br/>
@@ -90,6 +91,7 @@ Leeftijd: <%= patient_advice.age %><br/>
 	id="<%= checkbox_id %>"
 	name="<%= checkbox_id %>"
 	value="<%= checkbox_id %>"
+	style="visibility:hidden"
 />
 </td>
 <td id="<%= atcbt_prefix %>_sbc"><%= cb_advice.selectBoxCategory %></td>

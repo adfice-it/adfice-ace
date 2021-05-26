@@ -58,8 +58,22 @@ app.get("/patient_validation", renderValidationAdviceForPatient);
 app.get("/", renderAdviceTextsCheckboxes);
 app.get("/index", renderAdviceTextsCheckboxes);
 app.get("/checkboxes", renderAdviceTextsCheckboxes);
+app.use("/static", express.static('static'));
 
 const server = http.createServer(app);
+const wss = new ws.Server({
+    server
+});
+
+
+wss.on('connection', (ws) => {
+    let message = {};
+    message.type = 'hello';
+    message.info = 'world';
+
+    ws.send(JSON.stringify(message));
+});
+
 server.listen(PORT, () => {
     console.log("server is listening on " + PORT);
 });

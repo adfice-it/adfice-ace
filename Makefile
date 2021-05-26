@@ -56,5 +56,6 @@ tidy:
 		adficeProblemCriteria.js \
 		adficeProblemCriteria.test.js \
 		AdficeWebserver.js \
+		static/patient.js \
 		ping-db.js \
 		test1.js
