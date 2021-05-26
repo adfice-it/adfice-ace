@@ -37,6 +37,7 @@ Leeftijd: <%= patient_advice.age %><br/>
 	<%= JSON.stringify(lab.date_measured).substring(1,11) %></td>
 </tr>
 <% } -%>
+</table>
 
 <%     let meds = patient_advice.medications; -%>
 <table id="patient_medications">
@@ -51,6 +52,7 @@ Leeftijd: <%= patient_advice.age %><br/>
 	<%= JSON.stringify(med.start_date).substring(1,11) %></td>
 </tr>
 <% } -%>
+</table>
 
 <%     let medication_advice = patient_advice.medication_advice; -%>
 <ul>
