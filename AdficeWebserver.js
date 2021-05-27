@@ -16,6 +16,10 @@ let md = new showdown.Converter();
 const PORT = process.argv[2] || process.env.PORT || 8080;
 console.log('PORT: ', PORT);
 
+const DEBUG = ((process.env.DEBUG !== undefined) &&
+    (process.env.DEBUG !== "0"));
+console.log('DEBUG: ', DEBUG);
+
 async function renderAdviceForPatient(req, res) {
     let patient_id = req.query.id || 0;
     let patient_advice = await adfice.getAdviceForPatient(patient_id);
@@ -75,8 +79,9 @@ function send_all(kind, id, message) {
     message[id_key] = id;
     message.viewers = server.receivers[kind][id].size;
 
+    let msg_string = JSON.stringify(message, null, 4);
     server.receivers[kind][id].forEach((rws) => {
-        rws.send(JSON.stringify(message));
+        rws.send(msg_string);
     });
 }
 
@@ -92,7 +97,9 @@ server.on('upgrade', function upgrade(request, socket, head) {
         let path_parts = pathname.split('/');
         let id = path_parts.pop();
         let kind = path_parts.pop();
-        console.log(`adding receiver[${kind}][${id}]`);
+        if (DEBUG > 0) {
+            console.log(`adding receiver[${kind}][${id}]`);
+        }
         if (server.receivers[kind] == null) {
             server.receivers[kind] = {};
         }
@@ -102,13 +109,17 @@ server.on('upgrade', function upgrade(request, socket, head) {
         server.receivers[kind][id].add(ws);
 
         ws.on('close', function clear() {
-            console.log(`removing receiver[${kind}][${id}]`);
+            if (DEBUG > 0) {
+                console.log(`removing receiver[${kind}][${id}]`);
+            }
             server.receivers[kind][id].delete(ws);
             hello_all(kind, id);
         });
 
         ws.on('message', function incoming(data) {
-            console.log('recieved: ', data);
+            if (DEBUG > 0) {
+                console.log('received: ', data);
+            }
             try {
                 let message = JSON.parse(data);
                 message.viewers = server.receivers[kind][id].size;
