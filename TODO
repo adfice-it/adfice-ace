@@ -1,1 +1,23 @@
+High Prio:
+* styling, try to match existing mock-ups
+  * styling, break into 3 separate tables;
+    * epic text for doctors to copy-paste
+    * list which medications did and did not fire rules
+  * styling, hide the unused views
+* edit boxes, free-text
+* default checkbox values if none selected
+* get reference numbers to link
+* non-medication advice (same for every patient)
+
+Mid:
+* static content at the top
+* get prediction model color-bar or link to why no prediction
+* notification of loss of server connection, attempt to reload if lost
+* styling, e.g.: viewers in yellow, hidden when 1
+* test-cafe : get the innnerHTML out of an element
+
+Low Prio:
+* naming consistency thoughout the SQL
+* naming consistency thoughout the javascript
+* naming consistency thoughout the html
 * create table atc_code(id int PK, code varchar(100))
