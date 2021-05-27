@@ -36,6 +36,9 @@ test('Test page for patient 68', async t => {
     await t.expect(cb_selector.visible).ok();
     await t.expect(cb_selector.checked).notOk();
 
+    let view_cnt_css_sel = "div#viewer_count";
+    await t.expect(Selector(view_cnt_css_sel).withText("1").exists).ok();
+
     // open a second window and check a box
     let window2 = await t.openWindow('http://localhost:8080/patient?id=68');
 
@@ -43,14 +46,23 @@ test('Test page for patient 68', async t => {
         timeout: 1000,
         visibilityCheck: true
     });
+    await t.expect(Selector(view_cnt_css_sel).withText("2").exists).ok();
+    await t.switchToWindow(window1);
+    await t.expect(Selector(view_cnt_css_sel).withText("2").exists).ok();
+    await t.switchToWindow(window2);
+
     await t.expect(cb_selector.checked).notOk();
     await t.click(checkbox_css_selector);
     await t.expect(cb_selector.checked).ok();
 
     await t.switchToWindow(window1);
 
-    // await t.wait(1000);
-
     // finally ensure that we see the box checked in the initial window.
     await t.expect(cb_selector.checked).ok();
+
+    await t.switchToWindow(window2);
+    await t.closeWindow(window2);
+    await t.switchToWindow(window1);
+
+    await t.expect(Selector(view_cnt_css_sel).withText("1").exists).ok();
 });

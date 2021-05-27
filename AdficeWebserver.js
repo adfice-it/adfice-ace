@@ -52,6 +52,11 @@ process.on('exit', function() {
 });
 
 let app = express();
+const server = http.createServer(app);
+server.wss = new ws.Server({
+    noServer: true
+});
+
 app.set('view engine', 'ejs');
 
 app.get("/patient", renderAdviceForPatient);
@@ -62,47 +67,69 @@ app.get("/index", renderAdviceTextsCheckboxes);
 app.get("/checkboxes", renderAdviceTextsCheckboxes);
 app.use("/static", express.static('static'));
 
-const server = http.createServer(app);
-const wss = new ws.Server({
-    server
-});
-server.wss = wss;
+server.receivers = {};
 
-server.receivers = new Set();
-wss.on('connection', (ws) => {
-    console.log(`adding receiver`);
-    server.receivers.add(ws);
-    ws.on('close', function clear() {
-        console.log(`removing receiver`);
-        server.receivers.delete(ws);
-    });
-    ws.on('message', function incoming(data) {
-        console.log('recieved: ', data);
-        server.receivers.forEach((rws) => {
-            rws.send(data);
-        });
-    });
+function send_all(kind, id, message) {
+    message.kind = kind;
+    let id_key = `${kind}_id`;
+    message[id_key] = id;
+    message.viewers = server.receivers[kind][id].size;
 
+    server.receivers[kind][id].forEach((rws) => {
+        rws.send(JSON.stringify(message));
+    });
+}
+
+function hello_all(kind, id) {
     let message = {};
-    message.type = 'hello';
-    message.info = 'world';
+    message.info = 'hello';
+    send_all(kind, id, message);
+}
 
-    ws.send(JSON.stringify(message));
-});
+server.on('upgrade', function upgrade(request, socket, head) {
+    const pathname = request.url;
+    server.wss.handleUpgrade(request, socket, head, function done(ws) {
+        let path_parts = pathname.split('/');
+        let id = path_parts.pop();
+        let kind = path_parts.pop();
+        console.log(`adding receiver[${kind}][${id}]`);
+        if (server.receivers[kind] == null) {
+            server.receivers[kind] = {};
+        }
+        if (server.receivers[kind][id] == null) {
+            server.receivers[kind][id] = new Set();
+        }
+        server.receivers[kind][id].add(ws);
 
-/*
-wss.on('message', function incoming(data) {
-    console.log('recieved: ', data);
-    server.receivers.forEach((rws) => {
-        rws.send(data);
+        ws.on('close', function clear() {
+            console.log(`removing receiver[${kind}][${id}]`);
+            server.receivers[kind][id].delete(ws);
+            hello_all(kind, id);
+        });
+
+        ws.on('message', function incoming(data) {
+            console.log('recieved: ', data);
+            try {
+                let message = JSON.parse(data);
+                message.viewers = server.receivers[kind][id].size;
+                let id_key = `${kind}_id`;
+                if (message[id_key] == id) {
+                    send_all(kind, id, message);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        });
+        let message = {};
+        message.info = 'hello';
+        send_all(kind, id, message);
     });
 });
-*/
 
 server.listen(PORT, () => {
-    console.log("server is listening on " + PORT);
+    console.log(`server is listening on ${PORT}`);
 });
 
-// server.on('close', function() {
-//    console.log(`closing server is running on ${PORT}`);
-// });
+server.on('close', function() {
+    console.log(`closing server running on ${PORT}`);
+});

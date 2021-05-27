@@ -1,2 +1,1 @@
-* convert socket listeners from global set to per-patient set
 * create table atc_code(id int PK, code varchar(100))

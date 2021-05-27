@@ -49,15 +49,13 @@ function ws_on_message(event) {
         var checkbox = document.getElementById(data.checkbox_id);
         checkbox.checked = data.checkbox_checked;
     }
+
+    let element = document.getElementById("viewer_count");
+    element.innerHTML = `Viewers: ${data.viewers}`
+    element.style.display = null;
 }
 
 window.addEventListener('load', (event) => {
-    /* init_chart(); */
-    /*
-        var serverDataElem = document.getElementById("serverData");
-        var previous = serverDataElem.innerHTML;
-        serverDataElem.innerHTML = `ws://${hostname}:${port}/sub<br>${ws}`;
-    */
     var url = new URL(document.URL);
     var hostname = url.hostname;
     var port = url.port;
