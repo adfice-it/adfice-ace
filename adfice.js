@@ -64,7 +64,7 @@ async function getAdviceTextsCheckboxes(rule_numbers) {
            AND medication_criteria_id IN(` +
         question_marks(rule_numbers.length) +
         `)
-         ORDER BY p.priority ASC, m.id ASC`
+         ORDER BY p.priority ASC, m.selectBoxNum ASC, m.id ASC`
     return sql_select(sql, rule_numbers);
 }
 
@@ -226,7 +226,29 @@ async function getAdviceForPatient(patientNumber) {
     return patient_advice;
 }
 
+function boxStatesToSelectionStates(patientIdentifier, box_states) {
+    const patient_id = parseInt(patientIdentifier, 10);
+
+    let output = [];
+
+    const checkbox_ids = Object.keys(box_states);
+    checkbox_ids.forEach((checkbox_id, index) => {
+        let parts = checkbox_id.split('_');
+        let atc = parts[1];
+        let criterion = parts[2];
+        let box_num = parseInt(parts[3], 10);
+        let checked = 0;
+        if (box_states[checkbox_id]) {
+            checked = 1;
+        }
+        output.push([patient_id, atc, criterion, box_num, checked]);
+    });
+
+    return output;
+}
+
 module.exports = {
+    boxStatesToSelectionStates: boxStatesToSelectionStates,
     getActiveRules: getActiveRules,
     getAdviceForPatient: getAdviceForPatient,
     getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,

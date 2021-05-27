@@ -24,6 +24,20 @@ test('test advice text 6e', async () => {
     expect(texts[0].cdss).toContain('angststoornis');
 })
 
+test('boxStatesToSelectionStates', () => {
+    const patient_id = "32";
+    const box_states = {
+        "cb_C03AA03_42_2": false,
+        "cb_C03AA03_42b_3": true
+    };
+    const expected = [
+        [32, "C03AA03", "42", 2, 0],
+        [32, "C03AA03", "42b", 3, 1]
+    ];
+    let out = adfice.boxStatesToSelectionStates(patient_id, box_states);
+    expect(out).toStrictEqual(expected);
+});
+
 test('getAdviceForPatient(68), no labs, no problems', async () => {
     let patientNumber = 68;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
@@ -46,8 +60,27 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
     expect(noCheckbox0['medication_criteria_id']).toBe("41");
     expect(noCheckbox0['cdss']).toContain("ACE");
     expect(noCheckbox0['cdss']).toContain("antagonisten");
-})
 
+    /*
+    let new_selection_states = {
+        "cb_C03AA03_42_2": false,
+        "cb_C03AA03_42_3": true,
+        "cb_C03AA03_42_4": false,
+        "cb_C03AA03_42_1": false,
+        "cb_C03AA03_42_6": false,
+        "cb_C03AA03_42_5": false,
+        "cb_C09AA02_63_1": false,
+        "cb_C09AA02_63_2": true,
+        "cb_C09AA02_63_3": false,
+        "cb_C09AA02_63_4": false
+        "cb_C09AA02_63b_1": true,
+    };
+
+    adfice.setAdviceForPatient(
+
+    patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    */
+})
 
 test('getAdviceForPatient(27), with labs and problems', async () => {
     let patientNumber = 27;
