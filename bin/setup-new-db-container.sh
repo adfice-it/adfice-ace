@@ -74,6 +74,7 @@ for SQL in \
 	createNewRulesTable.sql \
 	createPatientTables.sql \
 	createPriority.sql \
+	createTablePatientAdviceSelection.sql \
 	newAdviceTable.sql \
 	newRulesTable.sql \
 	newPreselectRulesTable.sql \
