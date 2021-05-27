@@ -339,6 +339,7 @@ module.exports = {
     getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
     getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
     getMedsForPatient: getMedsForPatient,
-    setSelectionsForPatient: setSelectionsForPatient,
-    selectionStatesToBoxStates: selectionStatesToBoxStates
+    getSelectionsForPatient: getSelectionsForPatient,
+    selectionStatesToBoxStates: selectionStatesToBoxStates,
+    setSelectionsForPatient: setSelectionsForPatient
 }

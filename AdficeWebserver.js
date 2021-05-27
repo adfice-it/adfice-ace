@@ -93,7 +93,7 @@ function hello_all(kind, id) {
 
 server.on('upgrade', function upgrade(request, socket, head) {
     const pathname = request.url;
-    server.wss.handleUpgrade(request, socket, head, function done(ws) {
+    server.wss.handleUpgrade(request, socket, head, async function done(ws) {
         let path_parts = pathname.split('/');
         let id = path_parts.pop();
         let kind = path_parts.pop();
@@ -116,7 +116,7 @@ server.on('upgrade', function upgrade(request, socket, head) {
             hello_all(kind, id);
         });
 
-        ws.on('message', function incoming(data) {
+        ws.on('message', async function incoming(data) {
             if (DEBUG > 0) {
                 console.log('received: ', data);
             }
@@ -125,6 +125,10 @@ server.on('upgrade', function upgrade(request, socket, head) {
                 message.viewers = server.receivers[kind][id].size;
                 let id_key = `${kind}_id`;
                 if (message[id_key] == id) {
+                    if (message.type == 'checkboxes') {
+                        let selections = message['box_states'];
+                        await adfice.setSelectionsForPatient(id, selections);
+                    }
                     send_all(kind, id, message);
                 }
             } catch (error) {
@@ -133,6 +137,8 @@ server.on('upgrade', function upgrade(request, socket, head) {
         });
         let message = {};
         message.info = 'hello';
+        message.type = 'checkboxes';
+        message['box_states'] = await adfice.getSelectionsForPatient(id);
         send_all(kind, id, message);
     });
 });
