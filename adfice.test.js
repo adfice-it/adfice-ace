@@ -101,7 +101,7 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
     let adviceTextsNoCheckboxes = adv0['adviceTextsNoCheckboxes'];
     expect(adviceTextsNoCheckboxes.length).toBe(5);
     let noCheckbox0 = adviceTextsNoCheckboxes[0];
-    expect(noCheckbox0['medication_criteria_id']).toBe("19a");
+    expect(noCheckbox0['medication_criteria_id']).toBe("19");
     expect(noCheckbox0['cdss']).toContain("TCA");
     expect(noCheckbox0['cdss']).toContain("SSRI");
 })
