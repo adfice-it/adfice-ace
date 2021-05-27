@@ -19,6 +19,7 @@ Mid:
 * test-cafe : get the innnerHTML out of an element
 
 Low Prio:
+* specify DB port, separate instance for local human testing, automated testing
 * naming consistency thoughout the SQL
 * naming consistency thoughout the javascript
 * naming consistency thoughout the html
