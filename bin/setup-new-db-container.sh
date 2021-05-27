@@ -30,7 +30,7 @@ MYSQL_ROOT_PASSWORD=`cat adfice_mariadb_root_password | xargs`
 
 echo "check user '$USER' for group 'docker' membership"
 if groups | grep -q docker; then
-	echo "user '$USER' is member of 'docker' group (ok)"
+	echo "    user '$USER' is member of 'docker' group (ok)"
 else
 	echo
 	echo '------------------------------------------'

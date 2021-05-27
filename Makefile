@@ -24,10 +24,14 @@ npmsetup:
 
 dbsetup: npmsetup
 	if [ ! -f adfice_mariadb_user_password ]; then \
-		echo 'test_data_user_password' > adfice_mariadb_user_password; \
+		echo 'creating test db user password file' \
+		echo 'test_data_user_password' \
+			> adfice_mariadb_user_password; \
 	fi
 	if [ ! -f adfice_mariadb_root_password ]; then \
-		echo 'test_data_root_password' > adfice_mariadb_root_password; \
+		echo 'creating test db root password file' \
+		echo 'test_data_root_password' \
+			> adfice_mariadb_root_password; \
 	fi
 	bin/setup-new-db-container.sh
 	bin/load-synthetic-data.sh

@@ -6,10 +6,10 @@ PORT=8888
 node AdficeWebserver.js $PORT &
 CHILD_PID=%1
 sleep 1
-FILE="patient_validation?id=68"
+FILE="patient-validation?id=68"
 
 rm -fv "$FILE"
-URL="localhost:${PORT}/patient_validation?id=68"
+URL="localhost:${PORT}/patient-validation?id=68"
 wget $URL
 WGET_EXIT_CODE=$?
 

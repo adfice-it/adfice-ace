@@ -30,7 +30,7 @@ async function renderAdviceForPatient(req, res) {
 async function renderValidationAdviceForPatient(req, res) {
     let patient_id = req.query.id || 0;
     let patient_advice = await adfice.getAdviceForPatient(patient_id);
-    res.render("patient_validation", {
+    res.render("patient-validation", {
         lang: 'nl',
         md: md,
         patient_id: patient_id,
@@ -55,7 +55,7 @@ let app = express();
 app.set('view engine', 'ejs');
 
 app.get("/patient", renderAdviceForPatient);
-app.get("/patient_validation", renderValidationAdviceForPatient);
+app.get("/patient-validation", renderValidationAdviceForPatient);
 
 app.get("/", renderAdviceTextsCheckboxes);
 app.get("/index", renderAdviceTextsCheckboxes);
