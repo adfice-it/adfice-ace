@@ -6,16 +6,16 @@
 var fs = require('fs');
 const autil = require('./adficeUtil');
 const ae = require('./adficeEvaluator');
+const mariadb = require('mariadb');
 
 function question_marks(num) {
     return '?,'.repeat(num - 1) + '?';
 }
 
-async function sql_select(sql, params) {
+async function createPool() {
     let passwd = await fs.promises.readFile('adfice_mariadb_user_password');
     passwd = String(passwd).trim();
 
-    const mariadb = require('mariadb');
     const pool = mariadb.createPool({
         host: '127.0.0.1',
         port: 13306,
@@ -24,7 +24,38 @@ async function sql_select(sql, params) {
         database: 'adfice',
         connectionLimit: 5
     });
+    return pool;
+}
 
+function endPool(conn, pool) {
+    /* istanbul ignore else */
+    if (conn) {
+        let result = conn.end();
+        pool.end();
+    }
+}
+
+async function as_sql_transaction(sqls_and_params) {
+    let pool = await createPool();
+    let results = [];
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        conn.beginTransaction();
+        for (let i = 0; i < sqls_and_params.length; ++i) {
+            let sql = sqls_and_params[i][0];
+            let params = sqls_and_params[i][1];
+            conn.query(sql, params);
+        }
+        let rs = await conn.commit();
+        return rs;
+    } finally {
+        endPool(conn, pool);
+    }
+}
+
+async function sql_select(sql, params) {
+    let pool = await createPool();
     let conn;
     try {
         conn = await pool.getConnection();
@@ -39,11 +70,7 @@ async function sql_select(sql, params) {
         }
         return objects;
     } finally {
-        /* istanbul ignore else */
-        if (conn) {
-            let result = conn.end();
-            pool.end();
-        }
+        endPool(conn, pool);
     }
 }
 
@@ -88,7 +115,7 @@ async function getActiveRules() {
     return sql_select(sql);
 }
 
-async function getMedsForPatient(patientNumber) {
+async function getMedsForPatient(patientIdentifier) {
     var sql = `/* getMedsForPatient */
         SELECT ATC_code, medication_name, start_date
           FROM patient_medications
@@ -99,11 +126,11 @@ async function getMedsForPatient(patientNumber) {
                     WHERE patient_id=?
                )
          ORDER BY ATC_code`;
-    let params = [patientNumber, patientNumber];
+    let params = [patientIdentifier, patientIdentifier];
     return sql_select(sql, params);
 }
 
-async function getProblemsForPatient(patientNumber) {
+async function getProblemsForPatient(patientIdentifier) {
     var sql = `/* getProblemsForPatient */
         SELECT name, start_date
           FROM patient_problems
@@ -114,23 +141,23 @@ async function getProblemsForPatient(patientNumber) {
                     WHERE patient_id=?
                )
         ORDER BY id`;
-    return sql_select(sql, [patientNumber, patientNumber]);
+    return sql_select(sql, [patientIdentifier, patientIdentifier]);
 }
 
-async function getAgeForPatient(patientNumber) {
+async function getAgeForPatient(patientIdentifier) {
     var sql = `/* getAgeForPatient */
         SELECT age
           FROM patient
          WHERE id=?
          ORDER BY age DESC LIMIT 1`;
-    let results = await sql_select(sql, [patientNumber, patientNumber]);
+    let results = await sql_select(sql, [patientIdentifier, patientIdentifier]);
     if (results.length > 0) {
         return results[0].age;
     }
     return null;
 }
 
-async function getLabsForPatient(patientNumber) {
+async function getLabsForPatient(patientIdentifier) {
     var sql = `/* getLabsForPatient */
         SELECT lab_test_name,
                lab_test_result,
@@ -143,9 +170,46 @@ async function getLabsForPatient(patientNumber) {
                     WHERE patient_id=?
                )
          ORDER BY id`;
-    let params = [patientNumber, patientNumber];
+    let params = [patientIdentifier, patientIdentifier];
     let result = sql_select(sql, params);
     return result;
+}
+
+async function setSelectionsForPatient(patientIdentifier, cb_states) {
+    const patient_id = parseInt(patientIdentifier, 10);
+
+    let sqls_and_params = [];
+
+    let delete_sql = `/* setSelectionsForPatient */
+ DELETE FROM patient_advice_selection
+  WHERE patient_id = ?`;
+    sqls_and_params.push([delete_sql, patient_id]);
+
+    let insert_sql = "INSERT INTO patient_advice_selection" +
+        "(patient_id, ATC_code, medication_criteria_id" +
+        ",select_box_num, selected) VALUES (?,?,?,?,?)";
+    let params = boxStatesToSelectionStates(patientIdentifier, cb_states);
+    for (let i = 0; i < params.length; ++i) {
+        sqls_and_params.push([insert_sql, params[i]]);
+    }
+
+    let rs = await as_sql_transaction(sqls_and_params);
+    return rs;
+}
+
+async function getSelectionsForPatient(patient_id) {
+    var sql = `/* getSelectionsForPatient */
+        SELECT patient_id,
+               ATC_code,
+               medication_criteria_id,
+               select_box_num,
+               selected
+          FROM patient_advice_selection
+         WHERE patient_id=?
+         ORDER BY id`;
+    let params = [patient_id];
+    let results = await sql_select(sql, params);
+    return selectionStatesToBoxStates(results);
 }
 
 function structureLabs(labRows) {
@@ -162,12 +226,12 @@ function structureLabs(labRows) {
     return labTests;
 }
 
-async function getAdviceForPatient(patientNumber) {
+async function getAdviceForPatient(patientIdentifier) {
     let patient_id;
-    if (typeof patientNumber == 'number') {
-        patient_id = patientNumber;
+    if (typeof patientIdentifier == 'number') {
+        patient_id = patientIdentifier;
     } else {
-        patient_id = parseInt(patientNumber);
+        patient_id = parseInt(patientIdentifier);
     }
     patient_id = patient_id || 0;
 
@@ -214,14 +278,16 @@ async function getAdviceForPatient(patientNumber) {
         advice.push(adv);
     }
 
-    let patient_advice = {};
+    let selected_advice = await getSelectionsForPatient(patient_id);
 
+    let patient_advice = {};
     patient_advice.patient_id = patient_id;
     patient_advice.age = age;
     patient_advice.labs = labRows;
     patient_advice.medications = meds;
     patient_advice.problems = problems;
     patient_advice.medication_advice = advice;
+    patient_advice.selected_advice = selected_advice;
 
     return patient_advice;
 }
@@ -247,6 +313,25 @@ function boxStatesToSelectionStates(patientIdentifier, box_states) {
     return output;
 }
 
+function selectionStatesToBoxStates(selection_states) {
+    let output = {};
+    for (let i = 0; i < selection_states.length; ++i) {
+        let row = selection_states[i];
+        let atc = row['ATC_code'];
+        let rule = row['medication_criteria_id'];
+        let box = row['select_box_num'];
+        let checkbox_id = `cb_${atc}_${rule}_${box}`;
+        let checked;
+        if (row['selected']) {
+            checked = true;
+        } else {
+            checked = false;
+        }
+        output[checkbox_id] = checked;
+    }
+    return output;
+}
+
 module.exports = {
     boxStatesToSelectionStates: boxStatesToSelectionStates,
     getActiveRules: getActiveRules,
@@ -254,4 +339,6 @@ module.exports = {
     getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
     getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
     getMedsForPatient: getMedsForPatient,
+    setSelectionsForPatient: setSelectionsForPatient,
+    selectionStatesToBoxStates: selectionStatesToBoxStates
 }

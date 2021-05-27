@@ -38,6 +38,31 @@ test('boxStatesToSelectionStates', () => {
     expect(out).toStrictEqual(expected);
 });
 
+test('selectionStatesToBoxStates', () => {
+    const selection_states = [{
+        patient_id: 32,
+        ATC_code: "C03AA03",
+        medication_criteria_id: "42",
+        select_box_num: 2,
+        selected: 0
+    }, {
+        patient_id: 32,
+        ATC_code: "C03AA03",
+        medication_criteria_id: "42b",
+        select_box_num: 3,
+        selected: 1
+    }];
+
+    const expected = {
+        "cb_C03AA03_42_2": false,
+        "cb_C03AA03_42b_3": true
+    };
+
+    let out = adfice.selectionStatesToBoxStates(selection_states);
+
+    expect(out).toStrictEqual(expected);
+});
+
 test('getAdviceForPatient(68), no labs, no problems', async () => {
     let patientNumber = 68;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
@@ -60,9 +85,13 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
     expect(noCheckbox0['medication_criteria_id']).toBe("41");
     expect(noCheckbox0['cdss']).toContain("ACE");
     expect(noCheckbox0['cdss']).toContain("antagonisten");
+});
 
-    /*
-    let new_selection_states = {
+test('setAdviceForPatient(68)', async () => {
+    let patientNumber = 68;
+    let advice = await adfice.getAdviceForPatient(patientNumber);
+
+    let old_advice = {
         "cb_C03AA03_42_2": false,
         "cb_C03AA03_42_3": true,
         "cb_C03AA03_42_4": false,
@@ -72,14 +101,32 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
         "cb_C09AA02_63_1": false,
         "cb_C09AA02_63_2": true,
         "cb_C09AA02_63_3": false,
-        "cb_C09AA02_63_4": false
-        "cb_C09AA02_63b_1": true,
+        "cb_C09AA02_63_4": false,
+        "cb_C09AA02_63b_1": true
     };
 
-    adfice.setAdviceForPatient(
+    adfice.setSelectionsForPatient(patientNumber, old_advice);
 
-    patientAdvice = await adfice.getAdviceForPatient(patientNumber);
-    */
+    advice = await adfice.getAdviceForPatient(patientNumber);
+    expect(advice.selected_advice).toStrictEqual(old_advice);
+
+    let new_advice = {
+        "cb_C03AA03_42_2": true,
+        "cb_C03AA03_42_3": false,
+        "cb_C03AA03_42_4": false,
+        "cb_C03AA03_42_1": false,
+        "cb_C03AA03_42_6": false,
+        "cb_C03AA03_42_5": false,
+        "cb_C09AA02_63_1": false,
+        "cb_C09AA02_63_2": false,
+        "cb_C09AA02_63_3": true,
+        "cb_C09AA02_63_4": false,
+        "cb_C09AA02_63b_1": false
+    };
+    adfice.setSelectionsForPatient(patientNumber, new_advice);
+
+    advice = await adfice.getAdviceForPatient(patientNumber);
+    expect(advice.selected_advice).toStrictEqual(new_advice);
 })
 
 test('getAdviceForPatient(27), with labs and problems', async () => {
