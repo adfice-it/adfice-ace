@@ -7,10 +7,11 @@ import {
     Selector
 } from 'testcafe';
 
-fixture `Adfice`
-    .page `http://localhost:8080/patient?id=68`;
+fixture `Adfice`;
 
-test('Test page for patient 68', async t => {
+test.page(`http://localhost:8080/patient?id=68`)
+    ('Test page for patient 68', async t => {
+
     let selector = Selector('body');
     let window1 = await t.getCurrentWindow();
 
