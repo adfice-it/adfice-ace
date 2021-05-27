@@ -13,6 +13,8 @@ Mid:
 * static content at the top
 * get prediction model color-bar or link to why no prediction
 * notification of loss of server connection, attempt to reload if lost
+* record changes between views, connections and disconnects
+* stash the preselect checkboxes to compare what doctor ultimately chose
 * styling, e.g.: viewers in yellow, hidden when 1
 * test-cafe : get the innnerHTML out of an element
 
