@@ -270,16 +270,22 @@ async function getAdviceForPatient(patientIdentifier) {
         // medication and add it to this object
         let atc_code = med.ATC_code;
         let fired = medsWithRulesToFire[atc_code];
+
         let advice_text = await getAdviceTextsCheckboxes(fired);
+        for (let j = 0; j < advice_text.length; ++j) {
+            let row = advice_text[j];
+            let advice_text_cdss = row.cdss;
+            let cdss_checkbox_text = autil.splitFreetext(advice_text_cdss);
+            row.cdss_split = cdss_checkbox_text;
+        }
+
         let advice_text_no_box = await getAdviceTextsNoCheckboxes(fired);
-
-        let advice_text_cdss = advice_text.cdss;
-        let cdss_checkbox_text = autil.splitFreetext(advice_text_cdss);
-        advice_text.cdss_split = cdss_checkbox_text;
-
-        let advice_text_cdss_no_box = advice_text_no_box.cdss;
-        let cdss_no_box_text = autil.splitFreetext(advice_text_cdss_no_box);
-        advice_text_no_box.cdss_split = cdss_no_box_text;
+        for (let j = 0; j < advice_text_no_box.length; ++j) {
+            let row = advice_text_no_box[j];
+            let advice_text_cdss = row.cdss;
+            let cdss_checkbox_text = autil.splitFreetext(advice_text_cdss);
+            row.cdss_split = cdss_checkbox_text;
+        }
 
         let adv = {};
         adv.ATC_code = atc_code.trim();
@@ -287,6 +293,9 @@ async function getAdviceForPatient(patientIdentifier) {
         adv.adviceTextsCheckboxes = advice_text;
         adv.adviceTextsNoCheckboxes = advice_text_no_box;
         advice.push(adv);
+
+        //console.log(JSON.stringify({adv: adv}, null, 4));
+
     }
 
     let selected_advice = await getSelectionsForPatient(patient_id);

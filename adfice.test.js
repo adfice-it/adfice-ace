@@ -79,12 +79,16 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
     expect(checkbox0['selectBoxNum']).toBe(2);
     expect(checkbox0['selectBoxCategory']).toBe('taper-stop');
 
+    expect(checkbox0['cdss']).toContain('Afbouwen waarna stoppen');
+    expect(checkbox0['cdss_split'].length).toBe(2);
+
     let adviceTextsNoCheckboxes = adv0['adviceTextsNoCheckboxes'];
     expect(adviceTextsNoCheckboxes.length).toBe(4);
     let noCheckbox0 = adviceTextsNoCheckboxes[0];
     expect(noCheckbox0['medication_criteria_id']).toBe("41");
     expect(noCheckbox0['cdss']).toContain("ACE");
     expect(noCheckbox0['cdss']).toContain("antagonisten");
+
 });
 
 test('setAdviceForPatient(68)', async () => {

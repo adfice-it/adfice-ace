@@ -159,3 +159,11 @@ test('Test selecting views', async t => {
     await t.expect(div_patient_view.visible).notOk();
     await t.expect(div_epic_box.visible).ok();
 });
+
+test('Test free text fields', async t => {
+    let url = 'http://localhost:9090/patient?id=85';
+    let window1 = await t.openWindow(url);
+
+    let asa_0_1_cdss = Selector('#asa_0_1_cdss_1_e');
+    await t.expect(asa_0_1_cdss.exists).ok();
+});
