@@ -75,7 +75,7 @@ Ga direct naar medicijnen met aanbevolen maatregelen:
 <%     let med = meds[i]; -%>
 <%     let med_prefix = "med_" + i; -%>
 <%     let med_begin = JSON.stringify(med.start_date).substring(1,11) -%>
-<tr id="<%= med_prefix %>">
+<span id="<%= med_prefix %>">
 <a href="https://en.wikipedia.org/wiki/ATC_code_<%= med.ATC_code %>"
    title="<%= med.medication_name %> begin: <%= med_begin %>">
 <%= med.medication_name.trim() %></a>
@@ -88,6 +88,7 @@ Ga direct naar medicijnen met aanbevolen maatregelen:
 If there are no medications without advice, show this text:
 -->
 Geen
+</span>
 </span>
 <span id="patient_problems">
 <%     let problems = patient_advice.problems; -%>
@@ -140,7 +141,7 @@ Gedetecteerde relevante problemen:
 <%     for (let j = 0; j < advices.length; ++j ) { -%>
 <%         let advice = advices[j]; -%>
 <%           let att_prefix = "att_" + i + "_" + j; -%>
-<%- md.makeHtml(advice.cdss) %></td>
+<%- md.makeHtml(advice.cdss) %>
 <%     } -%>
 </div>
 <table id="adviceTextsCheckboxesTable_<%= i %>">
