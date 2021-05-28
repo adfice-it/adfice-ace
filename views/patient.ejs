@@ -102,14 +102,18 @@ medicijnen:
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
-<li><%= row.medication_name %>: <%= atc %><br/>
+<li><%= row.medication_name %>: <span id="adv_<%= atc %>"><%= atc %></span><br/>
 <div id="advice_<%= atc %>" class="advice_no_checkbox">
 <strong>Advies:</strong>
 <%     let advices = row.adviceTextsNoCheckboxes; -%>
 <%     for (let j = 0; j < advices.length; ++j ) { -%>
 <%         let advice = advices[j]; -%>
 <%           let att_prefix = "att_" + i + "_" + j; -%>
-<%- md.makeHtml(advice.cdss) %></td>
+<span id="<%= att_prefix %>">
+<span id="<%= advice.medication_criteria_id %>">
+<%- md.makeHtml(advice.cdss) %>
+</span>
+</span>
 <%     } -%>
 </div>
 <table id="adviceTextsCheckboxesTable_<%= i %>">
