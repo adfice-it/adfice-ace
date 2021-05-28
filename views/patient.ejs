@@ -84,17 +84,18 @@ Ga direct naar medicijnen met aanbevolen maatregelen:
 <% for (let i = 0; i < meds.length; ++i ) { -%>
 <%     let med = meds[i]; -%>
 <%     let med_prefix = "med_" + i; -%>
+<%     if (i) { -%>
+,
+<%     } -%>
 <%     let med_begin = JSON.stringify(med.start_date).substring(1,11) -%>
 <span id="<%= med_prefix %>">
 <a href="https://en.wikipedia.org/wiki/ATC_code_<%= med.ATC_code %>"
    title="<%= med.medication_name %> begin: <%= med_begin %>">
 <%= ucfirst(med.medication_name).trim() %></a>
-<%     if (i < (meds.length -1) ) { -%>
-,
-<%     } -%>
 <% } -%>
 <br/>Medicijnen zonder aanbevolen maatregelen:
-<!-- TODO add list of medications where there is no advice (list of fired rules is empty) 
+<!-- TODO add list of medications where there is no advice
+	(list of fired rules is empty)
 If there are no medications without advice, show this text:
 -->
 Geen
@@ -108,34 +109,40 @@ Gedetecteerde relevante problemen:
 <% for (let i = 0; i < problems.length; ++i ) { -%>
 <%     let problem = problems[i]; -%>
 <%     let prob_prefix = "prob_" + i; -%>
+<%     if (i) { %>
+,
+<%     } -%>
 <span id="<%= prob_prefix %>">
 <span id="<%= prob_prefix %>_from">
 <!-- <%= JSON.stringify(problem.start_date).substring(1,11) %> -->
 </span>
 <span id="<%= prob_prefix %>_name"><%= problem.name %></span><br/>
 </span>
-<%     if (i < (problems.length -1) ) { -%>
-,
-<%     } -%>
 <% } -%>
 <% } -%>
 </span>
-</div>
-
 <%     let labs = patient_advice.labs; -%>
-<table id="patient_labs">
-<tr><th>naam</th><th>resultaat</th><th>datum</th></tr>
+<span id="patient_labs">
+<%     if ( labs.length ) { -%>
+Labs:
+<%     } -%>
 <% for (let i = 0; i < labs.length; ++i ) { -%>
 <%     let lab = labs[i]; -%>
 <%     let lab_prefix = "lab_" + i; -%>
-<tr id="<%= lab_prefix %>">
-<td id="<%= lab_prefix %>_name"><%= lab.lab_test_name %></td>
-<td id="<%= lab_prefix %>_result"><%= lab.lab_test_result %></td>
-<td id="<%= lab_prefix %>_date">
-	<%= JSON.stringify(lab.date_measured).substring(1,11) %></td>
-</tr>
+<%     if (i) { -%>
+,
+<%     } -%>
+<span id="<%= lab_prefix %>">
+<span id="<%= lab_prefix %>_name"><%= lab.lab_test_name %></span>:
+<span id="<%= lab_prefix %>_result"><%= lab.lab_test_result %></span>
+<!--
+<span id="<%= lab_prefix %>_date">
+	<%= JSON.stringify(lab.date_measured).substring(1,11) %></span>
+-->
+</span>
 <% } -%>
-</table>
+</span>
+</div>
 
 <strong>Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren</strong>
 <img src="static/sharedDecisionMaking.png" style="max-width:100%;" alt="SDM advies">
