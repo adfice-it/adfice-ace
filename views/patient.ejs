@@ -169,34 +169,55 @@ Labs:
 <%- md.makeHtml(advice.cdss) %>
 <%     } -%>
 </div>
-<p>Maatregelen (aangekruist indien aanbevolen):</p>
-<table id="adviceTextsCheckboxesTable_<%= i %>">
-<tr><th>criterion</th><th>box</th><th>category</th>
-<th>cdss</th><th>epic</th><th>patient</th></tr>
+
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
+
+<span id="advice_selection_area_<%= i %>" class="advice_selection_area">
+<p>Maatregelen (aangekruist indien aanbevolen):</p>
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
 <%         let cb_advice = cb_advices[j]; -%>
-<%           let atcbt_prefix = "atcbt_" + i + "_" + j; -%>
+<%           let asa_prefix = "atcbt_" + i + "_" + j; -%>
 <%           let rulenum = cb_advice.medication_criteria_id; -%>
 <%           let boxnum = cb_advice.selectBoxNum; -%>
 <%           let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
-<tr id="<%= atcbt_prefix %>">
-<td id="<%= atcbt_prefix %>_mc"><%= cb_advice.medication_criteria_id %></td>
-<td id="<%= atcbt_prefix %>_sbn">
+<span id="<%= asa_prefix %>">
+<span id="<%= asa_prefix %>_sbn">
 <input type="checkbox"
 	id="<%= checkbox_id %>"
 	name="<%= checkbox_id %>"
 	value="<%= checkbox_id %>"
 	style="visibility:hidden"
 />
-</td>
-<td id="<%= atcbt_prefix %>_sbc"><%= cb_advice.selectBoxCategory %></td>
-<td id="<%= atcbt_prefix %>_cdss"><%- md.makeHtml(cb_advice.cdss) %></td>
-<td id="<%= atcbt_prefix %>_epic"><%- md.makeHtml(cb_advice.epic) %></td>
-<td id="<%= atcbt_prefix %>_patient"><%- md.makeHtml(cb_advice.patient) %></td>
-</tr>
+</span>
+<span id="<%= asa_prefix %>_cdss"><%- md.makeHtml(cb_advice.cdss) %></span>
+</span> <!-- <%= asa_prefix %> -->
 <%     } -%>
-</table>
+</span><!-- advice_selection_area_<%= i %> -->
+
+<span id="advice_epic_area_<%= i %>" class="advice_epic_area">
+<p>Epic:</p>
+<%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
+<%         let cb_advice = cb_advices[j]; -%>
+<%           let aea_prefix = "aea_" + i + "_" + j; -%>
+<%           let rulenum = cb_advice.medication_criteria_id; -%>
+<%           let boxnum = cb_advice.selectBoxNum; -%>
+<%           let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
+<span id="<%= aea_prefix %>_epic"><%- md.makeHtml(cb_advice.epic) %></span>
+<%     } -%>
+</span> <!-- advice_epic_area_<%= i %> -->
+
+<span id="advice_patient_area_<%= i %>" class="advice_patient_area">
+<p>Patient:
+<%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
+<%         let cb_advice = cb_advices[j]; -%>
+<%           let apa_prefix = "atcbt_" + i + "_" + j; -%>
+<%           let rulenum = cb_advice.medication_criteria_id; -%>
+<%           let boxnum = cb_advice.selectBoxNum; -%>
+<%           let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
+<span id="<%= apa_prefix %>_patient"><%- md.makeHtml(cb_advice.patient) %></span>
+<%     } -%>
+</span> <!-- advice_patient_area_<%= i %> -->
+
 <% } -%>
 </form>
 <p>Andere medicatie-gerelateerde advies:</p><!-- TODO add a free text box where the doctor can type in whatever they want. Like other free text boxes, this should be copied to the Epic and Patient text. -->
