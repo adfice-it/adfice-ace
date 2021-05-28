@@ -59,6 +59,10 @@ div.advice_header{
 div.whitespace{
 	height: 3cm;
 }
+div.refpages{
+	display:inline;
+	float: right;
+}
 </style>
 </head>
 <body>
@@ -155,6 +159,7 @@ Labs:
 <%     let atc = row.ATC_code; -%>
 <a href="https://en.wikipedia.org/wiki/ATC_code_<%= atc %>">
 <%= ucfirst(row.medication_name).trim() %></a>
+<div class="refpages">Meer informatie over het advies:<!--TODO put refpages here--></div>
 <div id="advice_<%= atc %>" class="advice_no_checkbox">
 <strong>Advies:</strong>
 <%     let advices = row.adviceTextsNoCheckboxes; -%>

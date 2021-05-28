@@ -59,6 +59,7 @@ Leeftijd: <%= patient_advice.age %><br/>
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
 <%     let row = medication_advice[i]; -%>
 <li><%= row.medication_name %>: <%= row.ATC_code %><br/>
+<div class="refpages">Referenties:<!--TODO put refpages here--></div>
 <table id="adviceTextsNoCheckboxesTable_<%= i %>">
 <tr><th>criterion</th><th>cdss</th></tr>
 <%     let advices = row.adviceTextsNoCheckboxes; -%>
