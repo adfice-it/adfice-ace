@@ -17,8 +17,8 @@ test.page(`http://localhost:9090/patient?id=68`)
 
         // initial check that patient data is rendered
         await t.expect(selector.withText('geen decompensatio').exists).ok()
-        await t.expect(selector.withText('enalapril').exists).ok()
-        await t.expect(selector.withText('hydrochlorothiazide').exists).ok()
+        await t.expect(selector.withText('Enalapril').exists).ok()
+        await t.expect(selector.withText('Hydrochlorothiazide').exists).ok()
         await t.expect(selector.withText('ACE-remmers').exists).ok()
 
         let atc = "C03AA03"; // hydrochlorothiazide

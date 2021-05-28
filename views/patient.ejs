@@ -2,6 +2,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw -->
 <%# see https://ejs.co/#docs -%>
+<% function ucfirst(s) { if (typeof s !== 'string') { return s; } return s.charAt(0).toUpperCase() + s.slice(1); } -%>
 <html lang="<%= lang %>">
 <head>
 <meta charset="UTF-8">
@@ -78,7 +79,7 @@ Ga direct naar medicijnen met aanbevolen maatregelen:
 <span id="<%= med_prefix %>">
 <a href="https://en.wikipedia.org/wiki/ATC_code_<%= med.ATC_code %>"
    title="<%= med.medication_name %> begin: <%= med_begin %>">
-<%= med.medication_name.trim() %></a>
+<%= ucfirst(med.medication_name).trim() %></a>
 <%     if (i < (meds.length -1) ) { -%>
 ,
 <%     } -%>
@@ -134,7 +135,7 @@ Gedetecteerde relevante problemen:
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
 <a href="https://en.wikipedia.org/wiki/ATC_code_<%= atc %>">
-<%= row.medication_name %></a><br/>
+<%= ucfirst(row.medication_name).trim() %></a>
 <div id="advice_<%= atc %>" class="advice_no_checkbox">
 <strong>Advies:</strong>
 <%     let advices = row.adviceTextsNoCheckboxes; -%>
