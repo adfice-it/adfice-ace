@@ -71,15 +71,20 @@ test('ucfirst', () => {
 })
 
 test('split freetext advice strings', () => {
+
     let example = "initial:{{free text: pre-filled: first free text}}" +
-    " some addtional text:{{free text: pre-filled: more pre-filled}}";
+    " some addtional text:{{free text}}";
 
     let expected = [
         { id: 0, text: "initial:", editable: false },
         { id: 1, text: "first free text", editable: true },
         { id: 2, text: "some addtional text:", editable: false },
-        { id: 3, text: "more pre-filled", editable: true }
+        { id: 3, text: "", editable: true }
     ];
 
     expect(autil.splitFreetext(example)).toStrictEqual(expected);
+
+    expected = [{ id: 0, text: "foo", editable: false }];
+    expect(autil.splitFreetext("foo")).toStrictEqual(expected);
+    expect(autil.splitFreetext(null)).toStrictEqual([]);
 })

@@ -71,6 +71,7 @@ function compareNumbers(a, operator, b) {
 }
 
 function splitFreetext(str) {
+    if (str == null) { return [] };
     let substrings = str.split(/{{|}}/);
     let editable = false;
     let result = [];
@@ -78,13 +79,9 @@ function splitFreetext(str) {
     for (let i = 0; i < substrings.length; ++i) {
         let text = substrings[i];
         if (editable) {
-            let regExp = /\s*free\s+text\s*?(:\s*pre-filled\s*:\s*(.*))/;
+            let regExp = /\s*free\s+text\s*(:\s*pre-filled\s*:\s*(.*))?/;
             let regExpResult = regExp.exec(text);
-            if (regExpResult.length == 3) {
-                text = regExpResult[2];
-            } else {
-                text = "";
-            }
+            text = regExpResult[2] || "";
         }
         if (editable || text.length > 0) {
             result.push({

@@ -271,20 +271,21 @@ async function getAdviceForPatient(patientIdentifier) {
         let atc_code = med.ATC_code;
         let fired = medsWithRulesToFire[atc_code];
         let advice_text = await getAdviceTextsCheckboxes(fired);
+        let advice_text_no_box = await getAdviceTextsNoCheckboxes(fired);
 
-        console.log(JSON.stringify({
-            patient_id: patient_id,
-            atc: atc_code,
-            advice_text: advice_text
-        }, null, 4));
+        let advice_text_cdss = advice_text.cdss;
+        let cdss_checkbox_text = autil.splitFreetext(advice_text_cdss);
+        advice_text.cdss_split = cdss_checkbox_text;
 
-        let advice_text_checkboxes = transform_free_text(advice_text);
+        let advice_text_cdss_no_box = advice_text_no_box.cdss;
+        let cdss_no_box_text = autil.splitFreetext(advice_text_cdss_no_box);
+        advice_text_no_box.cdss_split = cdss_no_box_text;
 
         let adv = {};
         adv.ATC_code = atc_code.trim();
         adv.medication_name = med.medication_name.trim();
-        adv.adviceTextsCheckboxes = advice_text_checkboxes_raw;
-        adv.adviceTextsNoCheckboxes = await getAdviceTextsNoCheckboxes(fired);
+        adv.adviceTextsCheckboxes = advice_text;
+        adv.adviceTextsNoCheckboxes = advice_text_no_box;
         advice.push(adv);
     }
 
