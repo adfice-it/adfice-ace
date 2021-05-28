@@ -9,7 +9,7 @@ import {
 
 fixture `Adfice`;
 
-test.page(`http://localhost:8080/patient?id=68`)
+test.page(`http://localhost:9090/patient?id=68`)
     ('Check multiple viewers making changes', async t => {
 
         let selector = Selector('body');
@@ -41,7 +41,7 @@ test.page(`http://localhost:8080/patient?id=68`)
         await t.expect(Selector(view_cnt_css_sel).withText("1").exists).ok();
 
         // open a second window and check a box
-        let window2 = await t.openWindow('http://localhost:8080/patient?id=68');
+        let window2 = await t.openWindow('http://localhost:9090/patient?id=68');
 
         let cb_selector2 = Selector(`input#${checkbox_id}`, {
             timeout: 1000,
@@ -71,7 +71,7 @@ test.page(`http://localhost:8080/patient?id=68`)
 test('Checkbox persistence', async t => {
     let checkbox_id = "cb_N02AA01_72_1";
     let checkbox_css_selector = `input#${checkbox_id}`;
-    let url = 'http://localhost:8080/patient?id=78';
+    let url = 'http://localhost:9090/patient?id=78';
 
     // Open the patient window, uncheck the box if needed
     let window1 = await t.openWindow(url);
