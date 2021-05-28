@@ -26,6 +26,11 @@ test.page(`http://localhost:9090/patient?id=68`)
         let cbn = "3";
         let checkbox_id = `cb_${atc}_${rule}_${cbn}`;
         let checkbox_css_selector = `input#${checkbox_id}`;
+        let freetext_id = `ft_${atc}_${rule}_${cbn}_1_e`;
+        let freetext_css_selector = `input#${freetext_id}`;
+        const defaultFreetext = "serie van 5 data elke 2 weken, " +
+            "startdatum is datum van vandaag.";
+        const newFreetext = "foo";
 
         // checkbox starts invisible,
         // but becomes visible via websocket message
@@ -37,6 +42,12 @@ test.page(`http://localhost:9090/patient?id=68`)
         }
         await t.expect(cb_selector.checked).notOk();
 
+        // type some text into the freetext field for this row.
+        let freetext_selector_1 = Selector(freetext_css_selector);
+        await t.selectText(freetext_selector_1);
+        await t.typeText(freetext_selector_1, defaultFreetext);
+        await t.expect(freetext_selector_1.value).eql(defaultFreetext);
+
         let view_cnt_css_sel = "span#viewer_count";
         await t.expect(Selector(view_cnt_css_sel).withText("1").exists).ok();
         await t.expect(Selector(view_cnt_css_sel).withText("1").visible).notOk();
@@ -44,6 +55,7 @@ test.page(`http://localhost:9090/patient?id=68`)
         // open a second window and check a box
         let window2 = await t.openWindow('http://localhost:9090/patient?id=68');
 
+        // verify that we show 2 visitors
         let cb_selector2 = Selector(`input#${checkbox_id}`, {
             timeout: 1000,
             visibilityCheck: true
@@ -55,19 +67,31 @@ test.page(`http://localhost:9090/patient?id=68`)
         await t.expect(Selector(view_cnt_css_sel).withText("2").visible).ok();
         await t.switchToWindow(window2);
 
+        // click on the checkbox
         await t.expect(cb_selector2.checked).notOk();
         await t.click(cb_selector2);
         await t.expect(cb_selector2.checked).ok();
 
+        // type some text into the freetext field for this row.
+        let freetext_selector_2 = Selector(freetext_css_selector);
+        await t.selectText(freetext_selector_2);
+        await t.typeText(freetext_selector_2, newFreetext);
+        await t.expect(freetext_selector_2.value).eql(newFreetext);
+
         await t.switchToWindow(window1);
 
-        // finally ensure that we see the box checked in the initial window.
+        // ensure that we see the box checked in the initial window.
         await t.expect(cb_selector.checked).ok();
 
+        // ensure the text is updated in the initial window
+        await t.expect(freetext_selector_1.value).eql(newFreetext);
+
+        // close the second window
         await t.switchToWindow(window2);
         await t.closeWindow(window2);
         await t.switchToWindow(window1);
 
+        // ensure that we have one viewer after close
         await t.expect(Selector(view_cnt_css_sel).withText("1").exists).ok();
         await t.expect(Selector(view_cnt_css_sel).withText("1").visible).notOk();
     });

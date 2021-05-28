@@ -20,12 +20,16 @@ const DEBUG = ((process.env.DEBUG !== undefined) &&
     (process.env.DEBUG !== "0"));
 console.log('DEBUG: ', DEBUG);
 
+let render_count = 0;
+
 async function renderAdviceForPatient(req, res) {
+    ++render_count;
     let patient_id = req.query.id || 0;
     let patient_advice = await adfice.getAdviceForPatient(patient_id);
     res.render("patient", {
         lang: 'nl',
         md: md,
+        viewer_id: render_count,
         patient_id: patient_id,
         patient_advice: patient_advice
     }); // .ejs
@@ -128,6 +132,9 @@ server.on('upgrade', function upgrade(request, socket, head) {
                     if (message.type == 'checkboxes') {
                         let selections = message['box_states'];
                         await adfice.setSelectionsForPatient(id, selections);
+                    }
+                    if (message.type == 'freetexts') {
+                        // persistance
                     }
                     send_all(kind, id, message);
                 }
