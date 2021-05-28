@@ -50,6 +50,15 @@ div.prediction{
 	margin: auto;
 	width: 50%;
 }
+div.advice_header{
+	margin: auto;
+	width: 10%;
+	font-size: 16px;
+	font-weight: bold;
+}
+div.whitespace{
+	height: 3cm;
+}
 </style>
 </head>
 <body>
@@ -128,6 +137,9 @@ Gedetecteerde relevante problemen:
 <% } -%>
 </table>
 
+<strong>Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren</strong>
+<img src="static/sharedDecisionMaking.png" style="max-width:100%;" alt="SDM advies">
+<div class="advice_header">Medicatiefactoren</div>
 
 <form id="patient_form">
 <%     let medication_advice = patient_advice.medication_advice; -%>
@@ -145,6 +157,7 @@ Gedetecteerde relevante problemen:
 <%- md.makeHtml(advice.cdss) %>
 <%     } -%>
 </div>
+<p>Maatregelen (aangekruist indien aanbevolen):</p>
 <table id="adviceTextsCheckboxesTable_<%= i %>">
 <tr><th>criterion</th><th>box</th><th>category</th>
 <th>cdss</th><th>epic</th><th>patient</th></tr>
@@ -174,5 +187,10 @@ Gedetecteerde relevante problemen:
 </table>
 <% } -%>
 </form>
+<p>Andere medicatie-gerelateerde advies:</p><!-- TODO add a free text box where the doctor can type in whatever they want. Like other free text boxes, this should be copied to the Epic and Patient text. -->
+<div class="advice_header" style="width:20%">Andere risicofactoren</div>
+<!-- TODO add non-med advice -->
+<p>Andere advies:</p><!-- TODO add a free text box where the doctor can type in whatever they want. Like other free text boxes, this should be copied to the Epic and Patient text. -->
+<div class="whitespace"></div>
 </body>
 </html>
