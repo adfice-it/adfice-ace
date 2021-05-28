@@ -13,6 +13,13 @@ function assert(condition, message) {
     }
 }
 
+function ucfirst(s) {
+    if (typeof s !== 'string') {
+        return s;
+    }
+    return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 // The date criteria are always of the form "now-N-months".
 // If we get some that use years or something other than now we'll
 // add those functions.
@@ -67,5 +74,6 @@ module.exports = {
     assert: assert,
     compareDateToExpression: compareDateToExpression,
     compareNumbers: compareNumbers,
-    getDateFromExpression: getDateFromExpression
+    getDateFromExpression: getDateFromExpression,
+    ucfirst: ucfirst
 }

@@ -11,6 +11,13 @@ var ws;
 var weirdness = 0;
 var messages_received = 0;
 
+function ucfirst(s) {
+    if (typeof s !== 'string') {
+        return s;
+    }
+    return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 function boxclicked(checkbox) {
     if (DEBUG > 0) {
         console.log('Checkbox ' + checkbox.id + ' clicked' +

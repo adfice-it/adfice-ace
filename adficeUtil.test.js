@@ -62,3 +62,10 @@ test('compareNumbers', () => {
     expect(autil.compareNumbers("1", "!==", "2")).toBe(true);
     expect(autil.compareNumbers("2", "!==", "2")).toBe(false);
 })
+
+test('ucfirst', () => {
+    expect(autil.ucfirst('foo bar')).toBe('Foo bar');
+    expect(autil.ucfirst('FOOo')).toBe('FOOo');
+    expect(autil.ucfirst(null)).toBe(null);
+    expect(autil.ucfirst(7)).toBe(7);
+})
