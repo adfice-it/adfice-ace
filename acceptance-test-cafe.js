@@ -109,21 +109,53 @@ test('Checkbox persistence', async t => {
     await t.expect(checkbox3.checked).ok();
 });
 
-test('test selecting views', async t => {
+test('Test selecting views', async t => {
     let url = 'http://localhost:9090/patient?id=85';
     let window1 = await t.openWindow(url);
 
-    let clinician_view_button = Selector('input#button_clinician_view');
-    let condensed_view_button = Selector('input#button_condensed_view');
-    let patient_view_button = Selector('input#button_patient_view');
+    let button_clinician_view = Selector('button#button_clinician_view');
+    let button_condensed_view = Selector('button#button_condensed_view');
+    let button_patient_view = Selector('button#button_patient_view');
 
-    await t.expect(clinician_view_button.exists).ok();
-    await t.expect(condensed_view_button.exists).ok();
-    await t.expect(patient_view_button.exists).ok();
+    let div_clinician_view = Selector('div#div_clinician_view');
+    let div_condensed_view = Selector('div#div_condensed_view');
+    let div_patient_view = Selector('div#div_patient_view');
+    let div_epic_box = Selector('div#div_epic_box');
 
-    await t.expect(clinician_view_button.value).eql('Voorbereiding');
-    await t.expect(condensed_view_button.value).eql('Consult');
-    await t.expect(patient_view_button.value).eql('Advies');
+    // the buttons should exist
+    await t.expect(button_clinician_view.exists).ok();
+    await t.expect(button_condensed_view.exists).ok();
+    await t.expect(button_patient_view.exists).ok();
 
-    //t.click(clinician_view_button);
+    // the buttons should have the right text
+    await t.expect(button_clinician_view.innerText).eql('Voorbereiding');
+    await t.expect(button_condensed_view.innerText).eql('Consult');
+    await t.expect(button_patient_view.innerText).eql('Advies');
+
+    // initial view should be clinician view
+    await t.expect(div_clinician_view.visible).ok();
+    await t.expect(div_condensed_view.visible).notOk();
+    await t.expect(div_patient_view.visible).notOk();
+    await t.expect(div_epic_box.visible).ok();
+
+    // try switching to the patient view
+    await t.click(button_patient_view);
+    await t.expect(div_clinician_view.visible).notOk();
+    await t.expect(div_condensed_view.visible).notOk();
+    await t.expect(div_patient_view.visible).ok();
+    await t.expect(div_epic_box.visible).notOk();
+
+    // try switching to the condensed view
+    await t.click(button_condensed_view);
+    await t.expect(div_clinician_view.visible).notOk();
+    await t.expect(div_condensed_view.visible).ok();
+    await t.expect(div_patient_view.visible).notOk();
+    await t.expect(div_epic_box.visible).ok();
+
+    // try switching to the clinician view
+    await t.click(button_clinician_view);
+    await t.expect(div_clinician_view.visible).ok();
+    await t.expect(div_condensed_view.visible).notOk();
+    await t.expect(div_patient_view.visible).notOk();
+    await t.expect(div_epic_box.visible).ok();
 });

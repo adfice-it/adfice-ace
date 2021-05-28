@@ -75,9 +75,12 @@ div.refpages{
 >
 <div id="footer">
 Patient: <%= patient_id %>
-<input id="button_clinician_view" type="button" value="Voorbereiding"/>
-<input id="button_condensed_view" type="button" value="Consult"/>
-<input id="button_patient_view" type="button" value="Advies"/>
+<button id="button_clinician_view" type="button"
+	onclick="switch_to_view('clinician')">Voorbereiding</button>
+<button id="button_condensed_view" type="button"
+	onclick="switch_to_view('condensed')">Consult</button>
+<button id="button_patient_view" type="button"
+	onclick="switch_to_view('patient')">Advies</button>
 <span id="viewer_count"></span>
 </div>
 <div id=patient_info>
@@ -153,12 +156,11 @@ Labs:
 <% } -%>
 </span>
 </div>
-
+<% let medication_advice = patient_advice.medication_advice; -%>
+<div id="div_clinician_view" class="div_clinician_view">
 <strong>Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren</strong>
 <img src="static/sharedDecisionMaking.png" style="max-width:100%;" alt="SDM advies">
 <div class="advice_header">Medicatiefactoren</div>
-
-<%     let medication_advice = patient_advice.medication_advice; -%>
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
@@ -174,9 +176,7 @@ Labs:
 <%- md.makeHtml(advice.cdss) %>
 <%     } -%>
 </div>
-
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
-
 <div id="advice_selection_area_<%= i %>" class="advice_selection_area">
 <p>Maatregelen (aangekruist indien aanbevolen):</p>
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
@@ -198,19 +198,49 @@ Labs:
 </span> <!-- <%= asa_prefix %> -->
 <%     } -%>
 </div><!-- advice_selection_area_<%= i %> -->
+<% } -%>
+</div><!-- div_clinician_view -->
 
-<div id="advice_epic_area_<%= i %>" class="advice_epic_area">
-<p>Epic:</p>
+<div id="div_condensed_view" class="div_condensed_view">
+<div class="advice_header">Medicatiefactoren</div>
+<% for (let i = 0; i < medication_advice.length; ++i ) { -%>
+<%     let row = medication_advice[i]; -%>
+<%     let atc = row.ATC_code; -%>
+<a href="https://en.wikipedia.org/wiki/ATC_code_<%= atc %>">
+<%= ucfirst(row.medication_name).trim() %></a>
+<div class="refpages">Meer informatie over het advies:<!--TODO put refpages here--></div>
+<div id="advice_<%= atc %>" class="advice_no_checkbox">
+<strong>Advies:</strong>
+<%     let advices = row.adviceTextsNoCheckboxes; -%>
+<%     for (let j = 0; j < advices.length; ++j ) { -%>
+<%         let advice = advices[j]; -%>
+<%           let att_prefix = "att_" + i + "_" + j; -%>
+<%- md.makeHtml(advice.cdss) %>
+<%     } -%>
+</div>
+<%     let cb_advices = row.adviceTextsCheckboxes; -%>
+<div id="advice_selection_area_<%= i %>" class="advice_selection_area">
+<p>Maatregelen (aangekruist indien aanbevolen):</p>
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
 <%         let cb_advice = cb_advices[j]; -%>
-<%           let aea_prefix = "aea_" + i + "_" + j; -%>
+<%           let asa_prefix = "atcbt_" + i + "_" + j; -%>
 <%           let rulenum = cb_advice.medication_criteria_id; -%>
 <%           let boxnum = cb_advice.selectBoxNum; -%>
 <%           let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
-<span id="<%= aea_prefix %>_epic"><%- md.makeHtml(cb_advice.epic) %></span>
+<span id="<%= asa_prefix %>">
+</span> <!-- <%= asa_prefix %>_sbn -->
+<span id="<%= asa_prefix %>_cdss"><%- md.makeHtml(cb_advice.cdss) %></span>
+</span> <!-- <%= asa_prefix %> -->
 <%     } -%>
-</div> <!-- advice_epic_area_<%= i %> -->
+</div><!-- advice_selection_area_<%= i %> -->
+<% } -%>
+</div><!-- div_condensed_view -->
 
+<div id="div_patient_view" class="div_patient_view">
+<% for (let i = 0; i < medication_advice.length; ++i ) { -%>
+<%     let row = medication_advice[i]; -%>
+<%     let atc = row.ATC_code; -%>
+<%     let cb_advices = row.adviceTextsCheckboxes; -%>
 <div id="advice_patient_area_<%= i %>" class="advice_patient_area">
 <p>Patient:
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
@@ -219,15 +249,40 @@ Labs:
 <%           let rulenum = cb_advice.medication_criteria_id; -%>
 <%           let boxnum = cb_advice.selectBoxNum; -%>
 <%           let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
+<% /* TODO only display those items which the clinician has select */ -%>
 <span id="<%= apa_prefix %>_patient"><%- md.makeHtml(cb_advice.patient) %></span>
 <%     } -%>
 </div> <!-- advice_patient_area_<%= i %> -->
-
 <% } -%>
+</div> <!-- div_patient_view -->
+
+<div id="div_other_med_advice" class="div_other_med_advice">
 <p>Andere medicatie-gerelateerde advies:</p><!-- TODO add a free text box where the doctor can type in whatever they want. Like other free text boxes, this should be copied to the Epic and Patient text. -->
 <div class="advice_header" style="width:20%">Andere risicofactoren</div>
 <!-- TODO add non-med advice -->
 <p>Andere advies:</p><!-- TODO add a free text box where the doctor can type in whatever they want. Like other free text boxes, this should be copied to the Epic and Patient text. -->
+</div><!-- div_other_med_advice -->
+
+<div id="div_epic_box" class="div_epic_box"><!-- not in patient view -->
+<% for (let i = 0; i < medication_advice.length; ++i ) { -%>
+<div id="advice_epic_area_<%= i %>" class="advice_epic_area">
+<%     let row = medication_advice[i]; -%>
+<%     let atc = row.ATC_code; -%>
+<%     let cb_advices = row.adviceTextsCheckboxes; -%>
+<p>Epic:</p>
+<%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
+<%         let cb_advice = cb_advices[j]; -%>
+<%           let aea_prefix = "aea_" + i + "_" + j; -%>
+<%           let rulenum = cb_advice.medication_criteria_id; -%>
+<%           let boxnum = cb_advice.selectBoxNum; -%>
+<%           let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
+<% /* TODO only display those items which the clinician has select */ -%>
+<span id="<%= aea_prefix %>_epic"><%- md.makeHtml(cb_advice.epic) %></span>
+<%     } -%>
+</div> <!-- advice_epic_area_<%= i %> -->
+<% } -%>
+</div> <!-- epic_box -->
+
 <div class="whitespace"></div>
 </form>
 </body>
