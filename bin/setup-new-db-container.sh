@@ -81,7 +81,8 @@ for SQL in \
 	populateStaticPatientTables.sql \
 	populateProblemMap.sql \
 	updateRulesWithSeparatedCriteria.sql \
-	updateRulesWithSeparatedSelectors.sql
+	updateRulesWithSeparatedSelectors.sql \
+	updateMedRulesWithSQLConditions.sql
 do
 	docker cp $SQL adfice_mariadb:/
 	echo "sourcing $SQL"
