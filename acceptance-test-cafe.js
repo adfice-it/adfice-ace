@@ -161,9 +161,11 @@ test('Test selecting views', async t => {
 });
 
 test('Test free text fields', async t => {
-    let url = 'http://localhost:9090/patient?id=85';
+    let url = 'http://localhost:9090/patient?id=23';
     let window1 = await t.openWindow(url);
 
-    let asa_0_1_cdss = Selector('#asa_0_1_cdss_1_e');
-    await t.expect(asa_0_1_cdss.exists).ok();
+    let ft_N05AD01_16_2_1_e = Selector('#ft_N05AD01_16_2_1_e');
+    await t.expect(ft_N05AD01_16_2_1_e.exists).ok();
+    await t.expect(ft_N05AD01_16_2_1_e.tagName).eql("input");
+    await t.expect(ft_N05AD01_16_2_1_e.value).contains("nemen");
 });

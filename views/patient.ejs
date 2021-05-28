@@ -15,6 +15,7 @@ console.log('patient_id: ', patient_id);
 </script>
 <style>
    * { box-sizing: border-box; }
+input { display: inline; }
 body {
 	font-family: Arial, sans-serif;
 }
@@ -200,11 +201,18 @@ Labs:
 </td>
 <td>
 <span id="<%= asa_prefix %>_cdss">
-<%           for (let k = 0; k < cb_advice.cdss_split.length; ++k) { -%>
-<span id="<%= asa_prefix %>_cdss_<%= k %>_e">
-<%- md.makeHtml(cb_advice.cdss_split[k].text) -%>
+<%          for (let k = 0; k < cb_advice.cdss_split.length; ++k) { -%>
+<%              let chunk = cb_advice.cdss_split[k]; -%>
+<%		let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}_e`; -%>
+<%              if (chunk.editable) { -%>
+<input id="<%= chunk_id %>" type="text"
+	value="<%= chunk.text %>"/>
+<%              } else { -%>
+<span id="<%= chunk_id %>">
+<%- md.makeHtml(chunk.text) -%>
 </span> <!-- <%= asa_prefix %>_cdss_<%= k %>_e -->
-<%           } -%>
+<%              } -%>
+<%          } -%>
 </span> <!-- <%= asa_prefix %>_cdss -->
 </td>
 </tr>
