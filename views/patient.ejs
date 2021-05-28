@@ -6,6 +6,7 @@
 <html lang="<%= lang %>">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patient <%= patient_id %></title>
 <script src="static/patient.js"></script>
 <script>
@@ -13,6 +14,7 @@ let patient_id = "<%= patient_id %>";
 console.log('patient_id: ', patient_id);
 </script>
 <style>
+   * { box-sizing: border-box; }
 body {
 	font-family: Arial, sans-serif;
 }
@@ -66,12 +68,16 @@ div.refpages{
 </style>
 </head>
 <body>
+<form id="patient_form">
 <img src="static/Advice_IT_logo_small.png"
      style="max-width: 10%; height: auto;"
      alt="Advice IT logo"
 >
 <div id="footer">
 Patient: <%= patient_id %>
+<input id="button_clinician_view" type="button" value="Voorbereiding"/>
+<input id="button_condensed_view" type="button" value="Consult"/>
+<input id="button_patient_view" type="button" value="Advies"/>
 <span id="viewer_count"></span>
 </div>
 <div id=patient_info>
@@ -152,7 +158,6 @@ Labs:
 <img src="static/sharedDecisionMaking.png" style="max-width:100%;" alt="SDM advies">
 <div class="advice_header">Medicatiefactoren</div>
 
-<form id="patient_form">
 <%     let medication_advice = patient_advice.medication_advice; -%>
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
 <%     let row = medication_advice[i]; -%>
@@ -172,7 +177,7 @@ Labs:
 
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
 
-<span id="advice_selection_area_<%= i %>" class="advice_selection_area">
+<div id="advice_selection_area_<%= i %>" class="advice_selection_area">
 <p>Maatregelen (aangekruist indien aanbevolen):</p>
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
 <%         let cb_advice = cb_advices[j]; -%>
@@ -188,13 +193,13 @@ Labs:
 	value="<%= checkbox_id %>"
 	style="visibility:hidden"
 />
-</span>
+</span> <!-- <%= asa_prefix %>_sbn -->
 <span id="<%= asa_prefix %>_cdss"><%- md.makeHtml(cb_advice.cdss) %></span>
 </span> <!-- <%= asa_prefix %> -->
 <%     } -%>
-</span><!-- advice_selection_area_<%= i %> -->
+</div><!-- advice_selection_area_<%= i %> -->
 
-<span id="advice_epic_area_<%= i %>" class="advice_epic_area">
+<div id="advice_epic_area_<%= i %>" class="advice_epic_area">
 <p>Epic:</p>
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
 <%         let cb_advice = cb_advices[j]; -%>
@@ -204,9 +209,9 @@ Labs:
 <%           let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
 <span id="<%= aea_prefix %>_epic"><%- md.makeHtml(cb_advice.epic) %></span>
 <%     } -%>
-</span> <!-- advice_epic_area_<%= i %> -->
+</div> <!-- advice_epic_area_<%= i %> -->
 
-<span id="advice_patient_area_<%= i %>" class="advice_patient_area">
+<div id="advice_patient_area_<%= i %>" class="advice_patient_area">
 <p>Patient:
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
 <%         let cb_advice = cb_advices[j]; -%>
@@ -216,14 +221,14 @@ Labs:
 <%           let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
 <span id="<%= apa_prefix %>_patient"><%- md.makeHtml(cb_advice.patient) %></span>
 <%     } -%>
-</span> <!-- advice_patient_area_<%= i %> -->
+</div> <!-- advice_patient_area_<%= i %> -->
 
 <% } -%>
-</form>
 <p>Andere medicatie-gerelateerde advies:</p><!-- TODO add a free text box where the doctor can type in whatever they want. Like other free text boxes, this should be copied to the Epic and Patient text. -->
 <div class="advice_header" style="width:20%">Andere risicofactoren</div>
 <!-- TODO add non-med advice -->
 <p>Andere advies:</p><!-- TODO add a free text box where the doctor can type in whatever they want. Like other free text boxes, this should be copied to the Epic and Patient text. -->
 <div class="whitespace"></div>
+</form>
 </body>
 </html>

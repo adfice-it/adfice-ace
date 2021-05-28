@@ -30,11 +30,11 @@ test.page(`http://localhost:9090/patient?id=68`)
         // checkbox starts invisible,
         // but becomes visible via websocket message
         // thus we check that we have received the message
-        let cb_selector = Selector(checkbox_css_selector, {
-            timeout: 1000,
-            visibilityCheck: true
-        });
+        let cb_selector = Selector(checkbox_css_selector);
         await t.expect(cb_selector.visible).ok();
+        if (await cb_selector.checked) {
+            await t.click(cb_selector);
+        }
         await t.expect(cb_selector.checked).notOk();
 
         let view_cnt_css_sel = "span#viewer_count";
@@ -55,9 +55,9 @@ test.page(`http://localhost:9090/patient?id=68`)
         await t.expect(Selector(view_cnt_css_sel).withText("2").visible).ok();
         await t.switchToWindow(window2);
 
-        await t.expect(cb_selector.checked).notOk();
-        await t.click(checkbox_css_selector);
-        await t.expect(cb_selector.checked).ok();
+        await t.expect(cb_selector2.checked).notOk();
+        await t.click(cb_selector2);
+        await t.expect(cb_selector2.checked).ok();
 
         await t.switchToWindow(window1);
 
@@ -107,4 +107,23 @@ test('Checkbox persistence', async t => {
         visibilityCheck: true
     });
     await t.expect(checkbox3.checked).ok();
+});
+
+test('test selecting views', async t => {
+    let url = 'http://localhost:9090/patient?id=85';
+    let window1 = await t.openWindow(url);
+
+    let clinician_view_button = Selector('input#button_clinician_view');
+    let condensed_view_button = Selector('input#button_condensed_view');
+    let patient_view_button = Selector('input#button_patient_view');
+
+    await t.expect(clinician_view_button.exists).ok();
+    await t.expect(condensed_view_button.exists).ok();
+    await t.expect(patient_view_button.exists).ok();
+
+    await t.expect(clinician_view_button.value).eql('Voorbereiding');
+    await t.expect(condensed_view_button.value).eql('Consult');
+    await t.expect(patient_view_button.value).eql('Advies');
+
+    //t.click(clinician_view_button);
 });
