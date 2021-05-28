@@ -30,6 +30,7 @@ console.log('patient_id: ', patient_id);
 }
 #patient_info {
 	background: #d9d9d9;
+	width: 100%;
 }
 .advice_no_checkbox {
 	border: 2px solid green;
@@ -38,9 +39,14 @@ console.log('patient_id: ', patient_id);
 	padding-bottom: 5px;
 	padding-left: 5px;
 }
+div.prediction{
+	margin: auto;
+	width: 50%;
+}
 </style>
 </head>
 <body>
+<img src="static/Advice_IT_logo_small.png" style="max-width: 10%; height: auto;">
 <div id="footer">
 Patient: <%= patient_id %>
 <span id="viewer_count"><span/>
@@ -49,6 +55,10 @@ Patient: <%= patient_id %>
 <strong>Pati&euml;ntinformatie:</strong><br/>
 Patient: <%= patient_id %><br/>
 Leeftijd: <%= patient_advice.age %><br/>
+<div class="prediction" id = "prediction">
+<p>Kans om te vallen binnen 12 maanden: <span style="color: red;">70%</span> (lees meer over het predictiemodel)</p>
+<img src="static/riskScale70.png">
+</div>
 <%     let meds = patient_advice.medications; -%>
 <span id="patient_medications">
 medicijnen:
@@ -102,18 +112,14 @@ medicijnen:
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
-<li><%= row.medication_name %>: <span id="adv_<%= atc %>"><%= atc %></span><br/>
+<li><%= row.medication_name %>: <%= atc %><br/>
 <div id="advice_<%= atc %>" class="advice_no_checkbox">
 <strong>Advies:</strong>
 <%     let advices = row.adviceTextsNoCheckboxes; -%>
 <%     for (let j = 0; j < advices.length; ++j ) { -%>
 <%         let advice = advices[j]; -%>
 <%           let att_prefix = "att_" + i + "_" + j; -%>
-<span id="<%= att_prefix %>">
-<span id="<%= advice.medication_criteria_id %>">
-<%- md.makeHtml(advice.cdss) %>
-</span>
-</span>
+<%- md.makeHtml(advice.cdss) %></td>
 <%     } -%>
 </div>
 <table id="adviceTextsCheckboxesTable_<%= i %>">
