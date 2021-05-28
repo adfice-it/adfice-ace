@@ -33,6 +33,10 @@ body {
 #patient_info {
 	background: #d9d9d9;
 	width: 100%;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
 }
 .advice_no_checkbox {
 	border: 2px solid green;
@@ -48,10 +52,13 @@ div.prediction{
 </style>
 </head>
 <body>
-<img src="static/Advice_IT_logo_small.png" style="max-width: 10%; height: auto;">
+<img src="static/Advice_IT_logo_small.png"
+     style="max-width: 10%; height: auto;"
+     alt="Advice IT logo"
+>
 <div id="footer">
 Patient: <%= patient_id %>
-<span id="viewer_count"><span/>
+<span id="viewer_count"></span>
 </div>
 <div id=patient_info>
 <strong>Pati&euml;ntinformatie:</strong><br/>
@@ -59,7 +66,7 @@ Patient: <%= patient_id %><br/>
 Leeftijd: <%= patient_advice.age %><br/>
 <div class="prediction" id = "prediction">
 <p>Kans om te vallen binnen 12 maanden: <span style="color: red;">70%</span> (lees meer over het predictiemodel)</p>
-<img src="static/riskScale70.png">
+<img src="static/riskScale70.png" alt="risk:70%">
 </div>
 <%     let meds = patient_advice.medications; -%>
 <span id="patient_medications">
@@ -77,21 +84,27 @@ medicijnen:
 <%     } -%>
 <% } -%>
 </span>
-</div>
-<form id="patient_form">
-<table id="patient_problems">
-<tr><th>probleem</th><th>begin</th></tr>
+<span id="patient_problems">
 <%     let problems = patient_advice.problems; -%>
+<%     if ( problems.length ) { -%>
+<br/>
+problemen:
 <% for (let i = 0; i < problems.length; ++i ) { -%>
 <%     let problem = problems[i]; -%>
 <%     let prob_prefix = "prob_" + i; -%>
-<tr id="<%= prob_prefix %>">
-<td id="<%= prob_prefix %>_name"><%= problem.name %></td>
-<td id="<%= prob_prefix %>_from">
-	<%= JSON.stringify(problem.start_date).substring(1,11) %></td>
-</tr>
+<span id="<%= prob_prefix %>">
+<span id="<%= prob_prefix %>_from">
+<!-- <%= JSON.stringify(problem.start_date).substring(1,11) %> -->
+</span>
+<span id="<%= prob_prefix %>_name"><%= problem.name %></span><br/>
+</span>
+<%     if (i < (problems.length -1) ) { -%>
+,
+<%     } -%>
 <% } -%>
-</table>
+<% } -%>
+</span>
+</div>
 
 <%     let labs = patient_advice.labs; -%>
 <table id="patient_labs">
@@ -109,12 +122,13 @@ medicijnen:
 </table>
 
 
+<form id="patient_form">
 <%     let medication_advice = patient_advice.medication_advice; -%>
-<ul>
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
-<li><%= row.medication_name %>: <%= atc %><br/>
+<a href="https://en.wikipedia.org/wiki/ATC_code_<%= atc %>">
+<%= row.medication_name %></a><br/>
 <div id="advice_<%= atc %>" class="advice_no_checkbox">
 <strong>Advies:</strong>
 <%     let advices = row.adviceTextsNoCheckboxes; -%>
@@ -151,9 +165,7 @@ medicijnen:
 </tr>
 <%     } -%>
 </table>
-</li>
 <% } -%>
-</ul>
 </form>
 </body>
 </html>
