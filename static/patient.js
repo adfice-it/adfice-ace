@@ -3,7 +3,7 @@
 // vim: set sts=4 expandtab :
 "use strict";
 
-const DEBUG = 0;
+var DEBUG = 1;
 if (DEBUG > 0) {
     console.log("hello world!");
 }
@@ -77,7 +77,11 @@ function ws_on_message(event) {
 
     let element = document.getElementById("viewer_count");
     element.innerHTML = `Viewers: ${data.viewers}`
-    element.style.display = null;
+    if (data.viewers > 1) {
+        element.style.visibility = 'visible';
+    } else {
+        element.style.visibility = 'hidden'
+    }
 }
 
 window.addEventListener('load', (event) => {

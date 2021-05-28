@@ -37,8 +37,9 @@ test.page(`http://localhost:9090/patient?id=68`)
         await t.expect(cb_selector.visible).ok();
         await t.expect(cb_selector.checked).notOk();
 
-        let view_cnt_css_sel = "div#viewer_count";
+        let view_cnt_css_sel = "span#viewer_count";
         await t.expect(Selector(view_cnt_css_sel).withText("1").exists).ok();
+        await t.expect(Selector(view_cnt_css_sel).withText("1").visible).notOk();
 
         // open a second window and check a box
         let window2 = await t.openWindow('http://localhost:9090/patient?id=68');
@@ -48,8 +49,10 @@ test.page(`http://localhost:9090/patient?id=68`)
             visibilityCheck: true
         });
         await t.expect(Selector(view_cnt_css_sel).withText("2").exists).ok();
+        await t.expect(Selector(view_cnt_css_sel).withText("2").visible).ok();
         await t.switchToWindow(window1);
         await t.expect(Selector(view_cnt_css_sel).withText("2").exists).ok();
+        await t.expect(Selector(view_cnt_css_sel).withText("2").visible).ok();
         await t.switchToWindow(window2);
 
         await t.expect(cb_selector.checked).notOk();
@@ -66,6 +69,7 @@ test.page(`http://localhost:9090/patient?id=68`)
         await t.switchToWindow(window1);
 
         await t.expect(Selector(view_cnt_css_sel).withText("1").exists).ok();
+        await t.expect(Selector(view_cnt_css_sel).withText("1").visible).notOk();
     });
 
 test('Checkbox persistence', async t => {
