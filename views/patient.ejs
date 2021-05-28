@@ -70,7 +70,7 @@ Leeftijd: <%= patient_advice.age %><br/>
 </div>
 <%     let meds = patient_advice.medications; -%>
 <span id="patient_medications">
-medicijnen:
+Ga direct naar medicijnen met aanbevolen maatregelen:
 <% for (let i = 0; i < meds.length; ++i ) { -%>
 <%     let med = meds[i]; -%>
 <%     let med_prefix = "med_" + i; -%>
@@ -83,6 +83,11 @@ medicijnen:
 ,
 <%     } -%>
 <% } -%>
+<br/>Medicijnen zonder aanbevolen maatregelen:
+<!-- TODO add list of medications where there is no advice (list of fired rules is empty) 
+If there are no medications without advice, show this text:
+-->
+Geen
 </span>
 <span id="patient_problems">
 <%     let problems = patient_advice.problems; -%>
