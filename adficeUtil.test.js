@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
-// vim: set sts=4 expandtab :
+// vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
 const autil = require('./adficeUtil')
@@ -68,4 +68,18 @@ test('ucfirst', () => {
     expect(autil.ucfirst('FOOo')).toBe('FOOo');
     expect(autil.ucfirst(null)).toBe(null);
     expect(autil.ucfirst(7)).toBe(7);
+})
+
+test('split freetext advice strings', () => {
+    let example = "initial:{{free text: pre-filled: first free text}}" +
+    " some addtional text:{{free text: pre-filled: more pre-filled}}";
+
+    let expected = [
+        { id: 0, text: "initial:", editable: false },
+        { id: 1, text: "first free text", editable: true },
+        { id: 2, text: "some addtional text:", editable: false },
+        { id: 3, text: "more pre-filled", editable: true }
+    ];
+
+    expect(autil.splitFreetext(example)).toStrictEqual(expected);
 })

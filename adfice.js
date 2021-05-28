@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
-// vim: set sts=4 expandtab :
+// vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
 var fs = require('fs');
@@ -270,10 +270,20 @@ async function getAdviceForPatient(patientIdentifier) {
         // medication and add it to this object
         let atc_code = med.ATC_code;
         let fired = medsWithRulesToFire[atc_code];
+        let advice_text = await getAdviceTextsCheckboxes(fired);
+
+        console.log(JSON.stringify({
+            patient_id: patient_id,
+            atc: atc_code,
+            advice_text: advice_text
+        }, null, 4));
+
+        let advice_text_checkboxes = transform_free_text(advice_text);
+
         let adv = {};
         adv.ATC_code = atc_code.trim();
         adv.medication_name = med.medication_name.trim();
-        adv.adviceTextsCheckboxes = await getAdviceTextsCheckboxes(fired);
+        adv.adviceTextsCheckboxes = advice_text_checkboxes_raw;
         adv.adviceTextsNoCheckboxes = await getAdviceTextsNoCheckboxes(fired);
         advice.push(adv);
     }
