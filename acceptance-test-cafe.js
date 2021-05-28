@@ -16,12 +16,12 @@ test.page(`http://localhost:9090/patient?id=68`)
         let window1 = await t.getCurrentWindow();
 
         // initial check that patient data is rendered
-        await t.expect(selector.withText('C09AA02').exists).ok()
+        await t.expect(selector.withText('geen decompensatio').exists).ok()
+        await t.expect(selector.withText('enalapril').exists).ok()
+        await t.expect(selector.withText('hydrochlorothiazide').exists).ok()
         await t.expect(selector.withText('ACE-remmers').exists).ok()
-        await t.expect(selector.withText('C03AA03').exists).ok()
-        await t.expect(selector.withText('6a').exists).notOk()
 
-        let atc = "C03AA03";
+        let atc = "C03AA03"; // hydrochlorothiazide
         let rule = "42";
         let cbn = "3";
         let checkbox_id = `cb_${atc}_${rule}_${cbn}`;
