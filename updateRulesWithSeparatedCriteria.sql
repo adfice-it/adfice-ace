@@ -98,8 +98,8 @@ UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_d
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "lab.eGFR.value > 30", condition_allergy = NULL WHERE medication_criteria_id ="79";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months", condition_allergy = NULL WHERE medication_criteria_id ="80";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "!lab.eGFR.value <= 30 & lab.eGFR.date > now-11-months", condition_allergy = NULL WHERE medication_criteria_id ="80a";
-UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "! lab.eGFR.value <= 30", condition_allergy = NULL WHERE medication_criteria_id ="80b";
-UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "! lab.eGFR", condition_allergy = NULL WHERE medication_criteria_id ="81";
+UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "!lab.eGFR.value <= 30", condition_allergy = NULL WHERE medication_criteria_id ="80b";
+UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "!lab.eGFR.value", condition_allergy = NULL WHERE medication_criteria_id ="81";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = "lab.eGFR.date > now-11-months", condition_allergy = NULL WHERE medication_criteria_id ="82";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="83";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = "allergic-reaction" WHERE medication_criteria_id ="83a";
