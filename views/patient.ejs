@@ -28,6 +28,16 @@ console.log('patient_id: ', patient_id);
 	text-shadow: 0 1px 0 #84BAFF;
 	box-shadow: 0 0 15px #00214B
 }
+#patient_info {
+	background: #CCCCCC;
+}
+.advice_no_checkbox {
+	border: 2px solid green;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+}
 </style>
 </head>
 <body>
@@ -35,9 +45,27 @@ console.log('patient_id: ', patient_id);
 Patient: <%= patient_id %>
 <span id="viewer_count"><span/>
 </div>
+<div id=patient_info>
+<strong>Pati&euml;ntinformatie:</strong><br/>
 Patient: <%= patient_id %><br/>
 Leeftijd: <%= patient_advice.age %><br/>
-
+<%     let meds = patient_advice.medications; -%>
+<span id="patient_medications">
+medicijnen:
+<% for (let i = 0; i < meds.length; ++i ) { -%>
+<%     let med = meds[i]; -%>
+<%     let med_prefix = "med_" + i; -%>
+<%     let med_begin = JSON.stringify(med.start_date).substring(1,11) -%>
+<tr id="<%= med_prefix %>">
+<a href="https://en.wikipedia.org/wiki/ATC_code_<%= med.ATC_code %>"
+   title="<%= med.medication_name %> begin: <%= med_begin %>">
+<%= med.medication_name.trim() %></a>
+<%     if (i < (meds.length -1) ) { -%>
+,
+<%     } -%>
+<% } -%>
+</span>
+</div>
 <form id="patient_form">
 <table id="patient_problems">
 <tr><th>probleem</th><th>begin</th></tr>
@@ -68,20 +96,6 @@ Leeftijd: <%= patient_advice.age %><br/>
 <% } -%>
 </table>
 
-<%     let meds = patient_advice.medications; -%>
-<table id="patient_medications">
-<tr><th>ATC</th><th>medicijn</th><th>begin</th></tr>
-<% for (let i = 0; i < meds.length; ++i ) { -%>
-<%     let med = meds[i]; -%>
-<%     let med_prefix = "med_" + i; -%>
-<tr id="<%= med_prefix %>">
-<td id="<%= med_prefix %>_atc"><%= med.ATC_code %></td>
-<td id="<%= med_prefix %>_name"><%= med.medication_name %></td>
-<td id="<%= med_prefix %>_from">
-	<%= JSON.stringify(med.start_date).substring(1,11) %></td>
-</tr>
-<% } -%>
-</table>
 
 <%     let medication_advice = patient_advice.medication_advice; -%>
 <ul>
@@ -89,18 +103,15 @@ Leeftijd: <%= patient_advice.age %><br/>
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
 <li><%= row.medication_name %>: <%= atc %><br/>
-<table id="adviceTextsNoCheckboxesTable_<%= i %>">
-<tr><th>criterion</th><th>cdss</th></tr>
+<div id="advice_<%= atc %>" class="advice_no_checkbox">
+<strong>Advies:</strong>
 <%     let advices = row.adviceTextsNoCheckboxes; -%>
 <%     for (let j = 0; j < advices.length; ++j ) { -%>
 <%         let advice = advices[j]; -%>
 <%           let att_prefix = "att_" + i + "_" + j; -%>
-<tr id="<%= att_prefix %>">
-<td id="<%= att_prefix %>_mc"><%= advice.medication_criteria_id %></td>
-<td id="<%= att_prefix %>_cdss"><%- md.makeHtml(advice.cdss) %></td>
-</tr>
+<%- md.makeHtml(advice.cdss) %></td>
 <%     } -%>
-</table>
+</div>
 <table id="adviceTextsCheckboxesTable_<%= i %>">
 <tr><th>criterion</th><th>box</th><th>category</th>
 <th>cdss</th><th>epic</th><th>patient</th></tr>
