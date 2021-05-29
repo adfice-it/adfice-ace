@@ -1,5 +1,4 @@
 High Prio:
-* propagate free-text
 * styling, try to match existing mock-ups
 * list which medications did and did not fire rules
 * default checkbox values if none selected

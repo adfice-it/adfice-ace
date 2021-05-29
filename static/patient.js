@@ -140,17 +140,18 @@ function process_checkboxes(message) {
 
 function process_freetexts(message) {
     let fields = message['field_entires'];
-    if (message.viewer_id == viewer_id) {
-        return;
-    }
     // TODO? save cursor position of box we are currently typing in?
     const field_ids = Object.keys(fields);
     field_ids.forEach((field_id, index) => {
         let value = fields[field_id];
         var field = document.getElementById(field_id);
-        if (field.value != value) {
+        // only what changed AND from some other source
+        if (field.value != value && message.viewer_id != viewer_id) {
             field.value = value;
         }
+        let epic_text_id = field_id.replace(/^ft_/, 'eft_');
+        var epic_field = document.getElementById(epic_text_id);
+        epic_field.innerText = value;
     });
 }
 

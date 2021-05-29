@@ -220,18 +220,27 @@ test('Test free text fields', async t => {
     let url = 'http://localhost:9090/patient?id=23';
     let window1 = await t.openWindow(url);
 
+    // ensure our cb is selected
+    let cb_N05AD01_16_2 = Selector('#cb_N05AD01_16_2');
+    if (!(await cb_N05AD01_16_2.checked)) {
+        await t.click(cb_N05AD01_16_2);
+    }
+    await t.expect(cb_N05AD01_16_2.checked).ok();
+
     let ft_N05AD01_16_2_1 = Selector('#ft_N05AD01_16_2_1');
-    //let ft_N05AD01_16_2_1 = Selector('#eft_N05AD01_16_2_1');
+    let eft_N05AD01_16_2_1 = Selector('#eft_N05AD01_16_2_1');
     await t.expect(ft_N05AD01_16_2_1.exists).ok();
     await t.expect(ft_N05AD01_16_2_1.tagName).eql('input');
+
     await t.selectText(ft_N05AD01_16_2_1);
     await t.typeText(ft_N05AD01_16_2_1, 'foo');
-    await t.expect(ft_N05AD01_16_2_1.value).eql('foo');
 
-    /*
-    let ft_N05AD01_16_2_1_c = Selector('#ft_N05AD01_16_2_1_c');
-    await t.expect(ft_N05AD01_16_2_1_c.exists).ok();
-    await t.expect(ft_N05AD01_16_2_1_c.tagName).eql("input");
-    await t.expect(ft_N05AD01_16_2_1_c.value).contains("nemen");
-    */
+    await t.expect(ft_N05AD01_16_2_1.value).eql('foo');
+    await t.expect(eft_N05AD01_16_2_1.innerText).eql('foo');
+
+    await t.selectText(ft_N05AD01_16_2_1);
+    await t.typeText(ft_N05AD01_16_2_1, 'bar');
+
+    await t.expect(ft_N05AD01_16_2_1.value).eql('bar');
+    await t.expect(eft_N05AD01_16_2_1.innerText).eql('bar');
 });
