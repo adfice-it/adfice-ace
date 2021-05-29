@@ -327,13 +327,27 @@ Labs:
 <%         let boxnum = cb_advice.selectBoxNum; -%>
 <%         let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
 <% /* TODO only display those items which the clinician has select */ -%>
-<span id="<%= aea_prefix %>_epic"><%- md.makeHtml(cb_advice.epic) %></span>
+<span id="<%= aea_prefix %>_epic">
+<%         for (let k = 0; k < cb_advice.epic_split.length; ++k) { -%>
+<%             let chunk = cb_advice.epic_split[k]; -%>
+<%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}_e`; -%>
+<%             let chunk_id_epic = chunk_id + "pic"; -%>
+<% /* TODO replcace editable {{freetext}} with chunk_id freetext */ -%>
+<%             if (chunk.editable) { -%>
+<%- md.makeHtml(chunk.text) -%>
+<%             } else { -%>
+<%- md.makeHtml(chunk.text) -%>
+</span> <!-- <%= aea_prefix %>_cdss_<%= k %>_e -->
+<%             } -%>
+<%         } -%>
+</span> <!-- <%= aea_prefix %>_cdss -->
 <%     } -%>
 </div> <!-- advice_epic_area_<%= i %> -->
 <% } -%>
 </div> <!-- epic_box -->
 
 <div class="whitespace"></div>
+
 </form>
 </body>
 </html>
