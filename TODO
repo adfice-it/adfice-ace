@@ -10,6 +10,8 @@ High Prio:
 * non-medication advice (same for every patient)
 
 Mid:
+* the "consult view" button could be renamed "Consult verneiuwen" in order to
+  remove the items which have been un-checked/disabled
 * static content at the top
 * get prediction model color-bar or link to why no prediction
 * notification of loss of server connection, attempt to reload if lost

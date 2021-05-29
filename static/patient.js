@@ -13,20 +13,36 @@ var messages_received = 0;
 
 function switch_to_view(view) {
     let div_clinician_view = document.getElementById("div_clinician_view");
-    let div_condensed_view = document.getElementById("div_condensed_view");
     let div_patient_view = document.getElementById("div_patient_view");
     let div_epic_box = document.getElementById("div_epic_box");
+    let checkboxes = document.querySelectorAll("[id ^= cb_]");
+    let checkbox_rows = document.querySelectorAll("[id ^= tr_]");
+
+    if (checkboxes.length !== checkbox_rows.length) {
+        ++weirdness;
+        console.log(`Found ${checkboxes.length} checkboxes but`,
+            `${checkbox_rows.length} checkboxes so aborted switch`,
+            `to '${view}'`);
+        return;
+    }
 
     if (view === "patient") {
         div_clinician_view.style.display = 'none';
-        div_condensed_view.style.display = 'none';
         div_patient_view.style.display = 'block';
         div_epic_box.style.display = 'none';
     } else if (view === "condensed") {
-        div_clinician_view.style.display = 'none';
-        div_condensed_view.style.display = 'block';
+        div_clinician_view.style.display = 'block';
         div_patient_view.style.display = 'none';
         div_epic_box.style.display = 'block';
+        for (let i=0; i < checkbox_rows.length; ++i) {
+            // Note: nodes should be returned in document order, which should
+            // pair the checkboxes and rows.
+            if (checkboxes[i].checked) {
+                checkbox_rows[i].style.display = 'block';
+            } else {
+                checkbox_rows[i].style.display = 'none';
+            }
+        }
     } else {
         if (view !== "clinician") {
             ++weirdness;
@@ -34,9 +50,11 @@ function switch_to_view(view) {
                 ` name' ${view}'`);
         }
         div_clinician_view.style.display = 'block';
-        div_condensed_view.style.display = 'none';
         div_patient_view.style.display = 'none';
         div_epic_box.style.display = 'block';
+        for (let i=0; i < checkbox_rows.length; ++i) {
+            checkbox_rows[i].style.display = 'block';
+        }
     }
 }
 
