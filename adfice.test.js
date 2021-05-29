@@ -16,8 +16,9 @@ test('test advice text 6e', async () => {
     expect(texts[10].selectBoxCategory).toBe('free_text');
 
     expect(texts[5].cdss_split[0].text).toBe('Continueren');
-    expect(texts[5].epic).toBe('Continueren');
-    expect(texts[5].patient).toBe('Gebruik dit medicijn zoals u tot nu toe doet.');
+    expect(texts[5].epic_split[0].text).toBe('Continueren');
+    let str = 'Gebruik dit medicijn zoals u tot nu toe doet.';
+    expect(texts[5].patient_split[0].text).toBe(str);
 
     texts = await adfice.getAdviceTextsNoCheckboxes(rule_numbers);
     expect(texts.length).toBe(1);

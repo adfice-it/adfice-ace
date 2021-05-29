@@ -77,13 +77,18 @@ async function sql_select(sql, params) {
     }
 }
 
-function split_advice_text_cdss(advice_texts) {
+function split_advice_texts_cdss_epic_patient(advice_texts) {
     for (let j = 0; j < advice_texts.length; ++j) {
         let row = advice_texts[j];
-        let advice_text_cdss = row.cdss;
-        let cdss_checkbox_text = autil.splitFreetext(advice_text_cdss);
-        row.cdss_split = cdss_checkbox_text;
-        delete row.cdss;
+
+        row.cdss_split = autil.splitFreetext(row.cdss);
+        /* delete row.cdss; TODO: switch patient-validation to cdss_split */
+
+        row.epic_split = autil.splitFreetext(row.epic);
+        /* delete row.epic */
+
+        row.patient_split = autil.splitFreetext(row.patient);
+        /* delete row.patient */
     }
     return advice_texts;
 }
@@ -107,7 +112,7 @@ async function getAdviceTextsCheckboxes(rule_numbers) {
         `)
       ORDER BY p.priority ASC, m.selectBoxNum ASC, m.id ASC`
     let advice_text = await sql_select(sql, rule_numbers);
-    return split_advice_text_cdss(advice_text);
+    return split_advice_texts_cdss_epic_patient(advice_text);
 }
 
 async function getAdviceTextsNoCheckboxes(rule_numbers) {
@@ -123,7 +128,7 @@ async function getAdviceTextsNoCheckboxes(rule_numbers) {
         `)
       ORDER BY id`;
     let advice_text = await sql_select(sql, rule_numbers);
-    return split_advice_text_cdss(advice_text);
+    return split_advice_texts_cdss_epic_patient(advice_text);
 }
 
 async function getActiveRules() {
