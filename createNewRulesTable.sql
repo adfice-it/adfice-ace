@@ -37,6 +37,7 @@ CREATE TABLE preselect_rules (
 id int unsigned AUTO_INCREMENT PRIMARY KEY,
 medication_criteria_id varchar(8),
 selectBoxNum smallint unsigned,
+preselectNum smallint unsigned,
 preselect_or varchar(500),
 preselect_not varchar(500),
 preselect_problem varchar(500),
