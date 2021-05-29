@@ -295,12 +295,25 @@ Labs:
 <p>Patient:
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
 <%         let cb_advice = cb_advices[j]; -%>
-<%         let apa_prefix = "atcbt_" + i + "_" + j; -%>
+<%         let apa_prefix = "apa_" + i + "_" + j; -%>
 <%         let rulenum = cb_advice.medication_criteria_id; -%>
 <%         let boxnum = cb_advice.selectBoxNum; -%>
 <%         let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
 <% /* TODO only display those items which the clinician has select */ -%>
-<span id="<%= apa_prefix %>_patient"><%- md.makeHtml(cb_advice.patient) %></span>
+<span id="<%= apa_prefix %>_patient">
+<%         for (let k = 0; k < cb_advice.patient_split.length; ++k) { -%>
+<%             let chunk = cb_advice.patient_split[k]; -%>
+<%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
+<%             let chunk_id_e = chunk_id + "_e"; -%>
+<%             let chunk_id_p = chunk_id + "_p"; -%>
+<% /* TODO replcace editable {{freetext}} with chunk_id_e freetext */ -%>
+<%             if (chunk.editable) { -%>
+<%- md.makeHtml(chunk.text) -%>
+<%             } else { -%>
+<%- md.makeHtml(chunk.text) -%>
+<%             } -%>
+<%         } -%>
+</span> <!-- <%= apa_prefix %>_patient -->
 <%     } -%>
 </div> <!-- advice_patient_area_<%= i %> -->
 <% } -%>
