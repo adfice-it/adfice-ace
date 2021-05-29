@@ -149,9 +149,14 @@ function process_freetexts(message) {
         if (field.value != value && message.viewer_id != viewer_id) {
             field.value = value;
         }
+
         let epic_text_id = field_id.replace(/^ft_/, 'eft_');
         var epic_field = document.getElementById(epic_text_id);
         epic_field.innerText = value;
+
+        let patient_text_id = field_id.replace(/^ft_/, 'pft_');
+        var patient_field = document.getElementById(patient_text_id);
+        patient_field.innerText = value;
     });
 }
 

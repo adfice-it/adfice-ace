@@ -257,17 +257,15 @@ Labs:
          let checkbox_id = 'cb_' + advice_id_base;
          let row_id = 'pt_' + advice_id_base;
 -%>
-<% /* TODO only display those items which the clinician has select */ -%>
 <div id="<%= row_id %>">
 <%         for (let k = 0; k < cb_advice.patient_split.length; ++k) { -%>
 <%             let chunk = cb_advice.patient_split[k]; -%>
-<%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
-<% /* TODO replcace editable {{freetext}} with chunk_id freetext */ -%>
-<%             if (chunk.editable) { -%>
-<%- md.makeHtml(chunk.text) -%>
-<%             } else { -%>
+<%             let chunk_id = `pft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
+<div id="<%= chunk_id %>">
+<%             if (!chunk.editable) { -%>
 <%- md.makeHtml(chunk.text) -%>
 <%             } -%>
+</div><!-- <%= chunk_id %> -->
 <%         } -%>
 </div><!-- <%= row_id %> -->
 <%     } -%>
@@ -299,12 +297,10 @@ Labs:
          let checkbox_id = 'cb_' + advice_id_base;
          let row_id = 'et_' + advice_id_base;
 -%>
-<% /* TODO only display those items which the clinician has select */ -%>
 <div id="<%= row_id %>">
 <%         for (let k = 0; k < cb_advice.epic_split.length; ++k) { -%>
 <%             let chunk = cb_advice.epic_split[k]; -%>
 <%             let chunk_id = `eft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
-<% /* TODO replace editable {{freetext}} with chunk_id freetext */ -%>
 <div id="<%= chunk_id %>">
 <%             if (!chunk.editable) { -%>
 <%- md.makeHtml(chunk.text) -%>

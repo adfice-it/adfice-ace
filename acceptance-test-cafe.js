@@ -229,18 +229,17 @@ test('Test free text fields', async t => {
 
     let ft_N05AD01_16_2_1 = Selector('#ft_N05AD01_16_2_1');
     let eft_N05AD01_16_2_1 = Selector('#eft_N05AD01_16_2_1');
-    await t.expect(ft_N05AD01_16_2_1.exists).ok();
-    await t.expect(ft_N05AD01_16_2_1.tagName).eql('input');
+    let pft_N05AD01_16_2_1 = Selector('#pft_N05AD01_16_2_1');
 
     await t.selectText(ft_N05AD01_16_2_1);
     await t.typeText(ft_N05AD01_16_2_1, 'foo');
-
     await t.expect(ft_N05AD01_16_2_1.value).eql('foo');
     await t.expect(eft_N05AD01_16_2_1.innerText).eql('foo');
+    await t.expect(pft_N05AD01_16_2_1.innerText).eql('foo');
 
     await t.selectText(ft_N05AD01_16_2_1);
     await t.typeText(ft_N05AD01_16_2_1, 'bar');
-
     await t.expect(ft_N05AD01_16_2_1.value).eql('bar');
     await t.expect(eft_N05AD01_16_2_1.innerText).eql('bar');
+    await t.expect(pft_N05AD01_16_2_1.innerText).eql('bar');
 });
