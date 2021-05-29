@@ -31,7 +31,8 @@ async function renderAdviceForPatient(req, res) {
         md: md,
         viewer_id: render_count,
         patient_id: patient_id,
-        patient_advice: patient_advice
+        patient_advice: patient_advice,
+        risk_score: patient_id
     }); // .ejs
 }
 

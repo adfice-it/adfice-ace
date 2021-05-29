@@ -2,6 +2,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw -->
 <%# see https://ejs.co/#docs -%>
+<% let gauge_width = 500; -%>
 <% function ucfirst(s) { if (typeof s !== 'string') { return s; } return s.charAt(0).toUpperCase() + s.slice(1); } -%>
 <html lang="<%= lang %>">
 <head>
@@ -67,6 +68,27 @@ div.refpages{
 	display:inline;
 	float: right;
 }
+div.gauge_background {
+    width:<%= gauge_width %>px;
+    height:70px;
+    background: linear-gradient(to right, #0F0, #FF0 15%, #F00);
+    display: inline-block;
+}
+div.gauge_line {
+    width:3px;
+    height:80px;
+    background: #000;
+    position: relative;
+    left: <%= gauge_width * risk_score / 100 %>px;
+    top: -5px;
+    display: inline-block;
+}
+div.gauge_text {
+    position: relative;
+    top: 10px;
+    display: inline-block;
+    padding-bottom: 20px;
+}
 </style>
 </head>
 <body>
@@ -90,8 +112,12 @@ Patient: <%= patient_id %>
 Patient: <%= patient_id %><br/>
 Leeftijd: <%= patient_advice.age %><br/>
 <div class="prediction" id = "prediction">
-<p>Kans om te vallen binnen 12 maanden: <span style="color: red;">70%</span> (lees meer over het predictiemodel)</p>
-<img src="static/riskScale70.png" alt="risk:70%">
+<p>Kans om te vallen binnen 12 maanden: <span style="color: red;"><%= risk_score %>%</span> (lees meer over het predictiemodel)</p>
+<div class='gauge_text'>0%</div>
+<div class='gauge_background'>
+    <div class='gauge_line'></div>
+</div>
+<div class='gauge_text'>100%</div>
 </div>
 <span id="patient_medications">
 <span id="meds_with_rules">
