@@ -78,11 +78,11 @@ div.refpages{
 <div id="footer">
 Patient: <%= patient_id %>
 <button id="button_clinician_view" type="button"
-	onclick="switch_to_view('clinician')">Voorbereiding</button>
+        onclick="switch_to_view('clinician')">Voorbereiding</button>
 <button id="button_condensed_view" type="button"
-	onclick="switch_to_view('condensed')">Consult</button>
+        onclick="switch_to_view('condensed')">Consult</button>
 <button id="button_patient_view" type="button"
-	onclick="switch_to_view('patient')">Advies</button>
+        onclick="switch_to_view('patient')">Advies</button>
 <span id="viewer_count"></span>
 </div>
 <div id=patient_info>
@@ -110,7 +110,7 @@ Ga direct naar medicijnen met aanbevolen maatregelen:
 <% } -%>
 <br/>Medicijnen zonder aanbevolen maatregelen:
 <!-- TODO add list of medications where there is no advice
-	(list of fired rules is empty)
+        (list of fired rules is empty)
 If there are no medications without advice, show this text:
 -->
 Geen
@@ -152,7 +152,7 @@ Labs:
 <span id="<%= lab_prefix %>_result"><%= lab.lab_test_result %></span>
 <!--
 <span id="<%= lab_prefix %>_date">
-	<%= JSON.stringify(lab.date_measured).substring(1,11) %></span>
+        <%= JSON.stringify(lab.date_measured).substring(1,11) %></span>
 -->
 </span>
 <% } -%>
@@ -175,20 +175,20 @@ Labs:
 <%     for (let j = 0; j < advices.length; ++j ) { -%>
 <%         let advice = advices[j]; -%>
 <%         let att_prefix = "att_" + i + "_" + j; -%>
-<%	   let bogus_rule = "NonCB"; -%>
+<%         let bogus_rule = "NonCB"; -%>
 <span id="<%= att_prefix %>_cdss">
-<%          for (let k = 0; k < advice.cdss_split.length; ++k) { -%>
-<%              let chunk = advice.cdss_split[k]; -%>
-<%		let chunk_id = `ft_${atc}_${bogus_rule}_${j}_${k}_e`; -%>
-<%              if (chunk.editable) { -%>
+<%         for (let k = 0; k < advice.cdss_split.length; ++k) { -%>
+<%             let chunk = advice.cdss_split[k]; -%>
+<%             let chunk_id = `ft_${atc}_${bogus_rule}_${j}_${k}_e`; -%>
+<%             if (chunk.editable) { -%>
 <input id="<%= chunk_id %>" type="text"
-	value="<%= chunk.text %>"/>
-<%              } else { -%>
+        value="<%= chunk.text %>"/>
+<%             } else { -%>
 <span id="<%= chunk_id %>">
 <%- md.makeHtml(chunk.text) -%>
 </span> <!-- <%= att_prefix %>_cdss_<%= k %>_e -->
-<%              } -%>
-<%          } -%>
+<%             } -%>
+<%         } -%>
 </span> <!-- <%= att_prefix %>_cdss -->
 <%     } -%>
 </div>
@@ -198,36 +198,36 @@ Labs:
 <p>Maatregelen (aangekruist indien aanbevolen):</p>
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
 <%         let cb_advice = cb_advices[j]; -%>
-<%           let asa_prefix = "asa_" + i + "_" + j; -%>
-<%           let rulenum = cb_advice.medication_criteria_id; -%>
-<%           let boxnum = cb_advice.selectBoxNum; -%>
-<%           let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
+<%         let asa_prefix = "asa_" + i + "_" + j; -%>
+<%         let rulenum = cb_advice.medication_criteria_id; -%>
+<%         let boxnum = cb_advice.selectBoxNum; -%>
+<%         let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
 <span id="<%= asa_prefix %>">
 <tr>
 <td>
 <span id="<%= asa_prefix %>_sbn">
 <input type="checkbox"
-	id="<%= checkbox_id %>"
-	name="<%= checkbox_id %>"
-	value="<%= checkbox_id %>"
-	style="visibility:hidden"
+        id="<%= checkbox_id %>"
+        name="<%= checkbox_id %>"
+        value="<%= checkbox_id %>"
+        style="visibility:hidden"
 />
 </span> <!-- <%= asa_prefix %>_sbn -->
 </td>
 <td>
 <span id="<%= asa_prefix %>_cdss">
-<%          for (let k = 0; k < cb_advice.cdss_split.length; ++k) { -%>
-<%              let chunk = cb_advice.cdss_split[k]; -%>
-<%		let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}_e`; -%>
-<%              if (chunk.editable) { -%>
+<%         for (let k = 0; k < cb_advice.cdss_split.length; ++k) { -%>
+<%             let chunk = cb_advice.cdss_split[k]; -%>
+<%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}_e`; -%>
+<%             if (chunk.editable) { -%>
 <input id="<%= chunk_id %>" type="text"
-	value="<%= chunk.text %>"/>
-<%              } else { -%>
+        value="<%= chunk.text %>"/>
+<%             } else { -%>
 <span id="<%= chunk_id %>">
 <%- md.makeHtml(chunk.text) -%>
 </span> <!-- <%= asa_prefix %>_cdss_<%= k %>_e -->
-<%              } -%>
-<%          } -%>
+<%             } -%>
+<%         } -%>
 </span> <!-- <%= asa_prefix %>_cdss -->
 </td>
 </tr>
@@ -251,8 +251,17 @@ Labs:
 <%     let advices = row.adviceTextsNoCheckboxes; -%>
 <%     for (let j = 0; j < advices.length; ++j ) { -%>
 <%         let advice = advices[j]; -%>
-<%           let att_prefix = "att_" + i + "_" + j; -%>
-<%- md.makeHtml(advice.cdss) %>
+<%         let catt_prefix = "ccatt_" + i + "_" + j; -%>
+<%         let bogus_rule = "NonCB"; -%>
+<span id="<%= catt_prefix %>_cdss">
+<%         for (let k = 0; k < advice.cdss_split.length; ++k) { -%>
+<%              let chunk = advice.cdss_split[k]; -%>
+<%              let chunk_id = `ft_${atc}_${bogus_rule}_${j}_${k}_c`; -%>
+<span id="<%= chunk_id %>">
+<%- md.makeHtml(chunk.text) -%>
+</span> <!-- <%= catt_prefix %>_cdss_<%= k %>_e -->
+<%         } -%>
+</span> <!-- <%= catt_prefix %>_cdss -->
 <%     } -%>
 </div>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
@@ -260,10 +269,10 @@ Labs:
 <p>Maatregelen (aangekruist indien aanbevolen):</p>
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
 <%         let cb_advice = cb_advices[j]; -%>
-<%           let asa_prefix = "atcbt_" + i + "_" + j; -%>
-<%           let rulenum = cb_advice.medication_criteria_id; -%>
-<%           let boxnum = cb_advice.selectBoxNum; -%>
-<%           let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
+<%         let asa_prefix = "atcbt_" + i + "_" + j; -%>
+<%         let rulenum = cb_advice.medication_criteria_id; -%>
+<%         let boxnum = cb_advice.selectBoxNum; -%>
+<%         let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
 <span id="<%= asa_prefix %>">
 </span> <!-- <%= asa_prefix %>_sbn -->
 <span id="<%= asa_prefix %>_cdss"><%- md.makeHtml(cb_advice.cdss) %></span>
@@ -282,10 +291,10 @@ Labs:
 <p>Patient:
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
 <%         let cb_advice = cb_advices[j]; -%>
-<%           let apa_prefix = "atcbt_" + i + "_" + j; -%>
-<%           let rulenum = cb_advice.medication_criteria_id; -%>
-<%           let boxnum = cb_advice.selectBoxNum; -%>
-<%           let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
+<%         let apa_prefix = "atcbt_" + i + "_" + j; -%>
+<%         let rulenum = cb_advice.medication_criteria_id; -%>
+<%         let boxnum = cb_advice.selectBoxNum; -%>
+<%         let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
 <% /* TODO only display those items which the clinician has select */ -%>
 <span id="<%= apa_prefix %>_patient"><%- md.makeHtml(cb_advice.patient) %></span>
 <%     } -%>
@@ -309,10 +318,10 @@ Labs:
 <p>Epic:</p>
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
 <%         let cb_advice = cb_advices[j]; -%>
-<%           let aea_prefix = "aea_" + i + "_" + j; -%>
-<%           let rulenum = cb_advice.medication_criteria_id; -%>
-<%           let boxnum = cb_advice.selectBoxNum; -%>
-<%           let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
+<%         let aea_prefix = "aea_" + i + "_" + j; -%>
+<%         let rulenum = cb_advice.medication_criteria_id; -%>
+<%         let boxnum = cb_advice.selectBoxNum; -%>
+<%         let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
 <% /* TODO only display those items which the clinician has select */ -%>
 <span id="<%= aea_prefix %>_epic"><%- md.makeHtml(cb_advice.epic) %></span>
 <%     } -%>
