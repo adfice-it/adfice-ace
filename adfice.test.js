@@ -167,6 +167,11 @@ test('getAdviceForPatient(60), sparse patient', async () => {
     expect(advice.length).toBe(1);
 })
 
+test('getAdviceForPatient(9), patient with non-rule med', async () => {
+    let patientNumber = 9;
+    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    expect(patientAdvice.meds_without_rules.length).toBe(1);
+})
 
 test('getAdviceForPatient(null)', async () => {
     let patientNumber = null;
@@ -210,3 +215,10 @@ test('freetext round trip', async () => {
 
     expect(actual).toStrictEqual(freetexts);
 })
+
+test('no rules fired', async () => {
+    expect(await adfice.getAdviceTextsCheckboxes(null)).toStrictEqual([]);
+    expect(await adfice.getAdviceTextsNoCheckboxes(null)).toStrictEqual([]);
+    expect(await adfice.getAdviceTextsCheckboxes([])).toStrictEqual([]);
+    expect(await adfice.getAdviceTextsNoCheckboxes([])).toStrictEqual([]);
+});

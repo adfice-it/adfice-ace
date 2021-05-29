@@ -84,3 +84,14 @@ test('one condition in rule', () => {
     ageString = null;
 
 })
+
+test('one condition in rule', () => {
+    let rulesResult = {
+        C09AA01: ["one", "two"],
+        J02AB02: [],
+        C07AA01: ["foo", "bar"]
+    };
+    let expected = ["J02AB02"];
+    let actual = ae.drugsWithoutFiredRules(rulesResult);
+    expect(actual).toStrictEqual(expected);
+});

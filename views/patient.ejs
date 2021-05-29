@@ -93,29 +93,38 @@ Leeftijd: <%= patient_advice.age %><br/>
 <p>Kans om te vallen binnen 12 maanden: <span style="color: red;">70%</span> (lees meer over het predictiemodel)</p>
 <img src="static/riskScale70.png" alt="risk:70%">
 </div>
-<%     let meds = patient_advice.medications; -%>
 <span id="patient_medications">
+<span id="meds_with_rules">
 Ga direct naar medicijnen met aanbevolen maatregelen:
-<% for (let i = 0; i < meds.length; ++i ) { -%>
-<%     let med = meds[i]; -%>
-<%     let med_prefix = "med_" + i; -%>
+<%     let rule_meds = patient_advice.meds_with_rules; -%>
+<% for (let i = 0; i < rule_meds.length; ++i ) { -%>
+<%     let med = rule_meds[i]; %>
 <%     if (i) { -%>
 ,
 <%     } -%>
-<%     let med_begin = JSON.stringify(med.start_date).substring(1,11) -%>
-<span id="<%= med_prefix %>">
-<a href="https://en.wikipedia.org/wiki/ATC_code_<%= med.ATC_code %>"
-   title="<%= med.medication_name %> begin: <%= med_begin %>">
+<!-- TODO link to further down -->
+<a href="#advice_<%= med.ATC_code %>" title="<%= med.medication_name %>">
 <%= ucfirst(med.medication_name).trim() %></a>
 <% } -%>
-<br/>Medicijnen zonder aanbevolen maatregelen:
-<!-- TODO add list of medications where there is no advice
-        (list of fired rules is empty)
-If there are no medications without advice, show this text:
--->
+</span><!-- meds_with_rules -->
+<br/>
+<span id="meds_without_rules">
+Medicijnen zonder aanbevolen maatregelen:
+<%     let other_meds = patient_advice.meds_without_rules; -%>
+<% if (other_meds.length == 0) { %>
 Geen
-</span>
-</span>
+<% } else { %>
+<%     for (let i = 0; i < other_meds.length; ++i ) { -%>
+<%         let med = other_meds[i]; %>
+<%         if (i) { -%>
+,
+<%         } -%>
+<!-- TODO link to further down -->
+<%= ucfirst(med.medication_name).trim() %>
+<%     } -%>
+<% } -%>
+</span><!-- meds_without_rules -->
+</span><!-- patient_medications -->
 <span id="patient_problems">
 <%     let problems = patient_advice.problems; -%>
 <%     if ( problems.length ) { -%>

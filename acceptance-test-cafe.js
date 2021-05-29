@@ -243,3 +243,17 @@ test('Test free text fields', async t => {
     await t.expect(eft_N05AD01_16_2_1.innerText).eql('bar');
     await t.expect(pft_N05AD01_16_2_1.innerText).eql('bar');
 });
+
+test('Test med lists', async t => {
+    let url = 'http://localhost:9090/patient?id=9';
+    let window1 = await t.openWindow(url);
+
+    // ensure our cb is selected
+    let meds_with_rules = Selector("#meds_with_rules");
+    await t.expect(meds_with_rules.withText("Zolpidem").exists).ok();
+    await t.expect(meds_with_rules.withText("Ketoconazol").exists).notOk();
+
+    let meds_without_rules = Selector("#meds_without_rules");
+    await t.expect(meds_without_rules.withText("Zolpidem").exists).notOk();
+    await t.expect(meds_without_rules.withText("Ketoconazol").exists).ok();
+});

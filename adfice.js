@@ -94,8 +94,9 @@ function split_advice_texts_cdss_epic_patient(advice_texts) {
 }
 
 async function getAdviceTextsCheckboxes(rule_numbers) {
-    autil.assert(rule_numbers !== null);
-    autil.assert(rule_numbers.length > 0);
+    if ((rule_numbers === null) || (!rule_numbers.length)) {
+        return [];
+    }
     var sql = `/* adfice.getAdviceTextsCheckboxes */
         SELECT m.medication_criteria_id,
                m.selectBoxNum,
@@ -110,14 +111,15 @@ async function getAdviceTextsCheckboxes(rule_numbers) {
            AND medication_criteria_id IN(` +
         question_marks(rule_numbers.length) +
         `)
-      ORDER BY p.priority ASC, m.selectBoxNum ASC, m.id ASC`
+      ORDER BY p.priority ASC, m.selectBoxNum ASC, m.id ASC`;
     let advice_text = await sql_select(sql, rule_numbers);
     return split_advice_texts_cdss_epic_patient(advice_text);
 }
 
 async function getAdviceTextsNoCheckboxes(rule_numbers) {
-    autil.assert(rule_numbers !== null);
-    autil.assert(rule_numbers.length > 0);
+    if (rule_numbers === null || !rule_numbers.length) {
+        return [];
+    }
     var sql = `/* adfice.getAdviceTextsNoCheckboxes */
         SELECT medication_criteria_id,
                cdss
@@ -139,7 +141,9 @@ async function getActiveRules() {
 
 async function getMedsForPatient(patientIdentifier) {
     var sql = `/* adfice.getMedsForPatient */
-        SELECT ATC_code, medication_name, start_date
+        SELECT ATC_code,
+               medication_name,
+               start_date
           FROM patient_medications
          WHERE patient_id=?
            AND date_retrieved = (
@@ -333,18 +337,16 @@ async function getAdviceForPatient(patientIdentifier) {
 
     var rules = await getActiveRules();
 
-    var medsWithRulesToFire = await ae.evaluateRules(meds, rules, drugList,
+    let evaluated = await ae.evaluateRules(meds, rules, drugList,
         problemList, age, labTests);
-    /*
-        console.log(JSON.stringify({
-            rules: rules,
-            medsWithRulesToFire: medsWithRulesToFire
-        }, null, 4));
-    */
+    let medsWithRulesToFire = evaluated.medsWithRulesToFire;
+    let meds_with_fired = evaluated.meds_with_fired;
+    let meds_without_fired = evaluated.meds_without_fired;
 
     let advice = [];
     for (let i = 0; i < meds.length; ++i) {
         let med = meds[i];
+
         // TODO get the reference field for all rules that fired for this
         // medication and add it to this object
         let atc_code = med.ATC_code;
@@ -372,6 +374,8 @@ async function getAdviceForPatient(patientIdentifier) {
     patient_advice.age = age;
     patient_advice.labs = labRows;
     patient_advice.medications = meds;
+    patient_advice.meds_without_rules = meds_without_fired;
+    patient_advice.meds_with_rules = meds_with_fired;
     patient_advice.problems = problems;
     patient_advice.medication_advice = advice;
     patient_advice.selected_advice = selected_advice;

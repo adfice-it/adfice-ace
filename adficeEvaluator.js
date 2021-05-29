@@ -12,11 +12,12 @@ const adc = require('./adficeDrugCriteria');
 
 function evaluateRules(meds, rules, drugList, problemList, age, labTests) {
     let medsWithRulesToFire = {};
+    let meds_with_fired = [];
+    let meds_without_fired = [];
     for (let i = 0; i < meds.length; ++i) {
         let med = meds[i];
         let atc_code = med.ATC_code.trim();
         let startDate = med.start_date;
-        let rulesToFire = new Array();
         medsWithRulesToFire[atc_code] = medsWithRulesToFire[atc_code] || [];
         for (let ruleCounter = 0; ruleCounter < rules.length; ++ruleCounter) {
             let rule = rules[ruleCounter];
@@ -30,13 +31,22 @@ function evaluateRules(meds, rules, drugList, problemList, age, labTests) {
                 if (doesRuleFire(startDate, drugString, drugList,
                         problemString, problemList, ageString, age,
                         labString, labTests)) {
-                    rulesToFire.push(rule.medication_criteria_id);
+                    medsWithRulesToFire[atc_code].push(rule.medication_criteria_id);
                 }
             }
         }
-        medsWithRulesToFire[atc_code].push(rulesToFire);
+        if (medsWithRulesToFire[atc_code].length > 0) {
+            meds_with_fired.push(med);
+        } else {
+            meds_without_fired.push(med);
+        }
     }
-    return medsWithRulesToFire;
+    let rv = {
+        medsWithRulesToFire: medsWithRulesToFire,
+        meds_with_fired: meds_with_fired,
+        meds_without_fired: meds_without_fired
+    };
+    return rv;
 }
 
 function matchesSelector(atcCode, selectorString) {
@@ -84,8 +94,22 @@ function doesRuleFire(
     return false;
 }
 
+function drugsWithoutFiredRules(rulesResult) {
+    let results = [];
+    let keys = Object.keys(rulesResult);
+    for (let i = 0; i < keys.length; ++i) {
+        let key = keys[i];
+        let value = rulesResult[key];
+        if (!value.length) {
+            results.push(key);
+        }
+    };
+    return results;
+}
+
 module.exports = {
     matchesSelector: matchesSelector,
     doesRuleFire: doesRuleFire,
+    drugsWithoutFiredRules: drugsWithoutFiredRules,
     evaluateRules: evaluateRules
 }

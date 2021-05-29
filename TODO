@@ -1,8 +1,8 @@
 High Prio:
 * styling, try to match existing mock-ups
-* list which medications did and did not fire rules
 * default checkbox values if none selected
 * get reference numbers to link
+* do not display advice for meds without advice
 
 First after demo:
 * non-medication advice (same for every patient)
