@@ -119,6 +119,13 @@ function process_checkboxes(message) {
         let checked = box_states[checkbox_id];
         var checkbox = document.getElementById(checkbox_id);
         checkbox.checked = checked;
+        let epic_row_id = checkbox_id.replace(/^cb_/, 'et_');
+        let epic_row = document.getElementById(epic_row_id);
+        if (checked) {
+            epic_row.style.display = 'block';
+        } else {
+            epic_row.style.display = 'none';
+        }
     });
 }
 

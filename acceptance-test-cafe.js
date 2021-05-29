@@ -150,6 +150,8 @@ test('Test selecting views', async t => {
     let checkbox1 = Selector('#cb_M01AB05_78_3');
     let row0 = Selector('#tr_M01AB05_80b_2');
     let row1 = Selector('#tr_M01AB05_78_3');
+    let epic0 = Selector('#et_M01AB05_80b_2');
+    let epic1 = Selector('#et_M01AB05_78_3');
 
     // set checkbox0 to unchecked, checkbox1 to checked
     {
@@ -202,6 +204,10 @@ test('Test selecting views', async t => {
     await t.expect(div_epic_box.visible).ok();
     await t.expect(row0.visible).ok();
     await t.expect(row1.visible).ok();
+
+    // the epic texts are only ever visible if checked
+    await t.expect(epic0.visible).notOk();
+    await t.expect(epic1.visible).ok();
 });
 
 test('Test free text fields', async t => {

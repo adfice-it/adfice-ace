@@ -289,27 +289,30 @@ Labs:
 <%     let atc = row.ATC_code; -%>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
 <p>Epic:</p>
-<%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
-<%         let cb_advice = cb_advices[j]; -%>
-<%         let aea_prefix = "aea_" + i + "_" + j; -%>
-<%         let rulenum = cb_advice.medication_criteria_id; -%>
-<%         let boxnum = cb_advice.selectBoxNum; -%>
-<%         let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
+<%
+     for (let j = 0; j < cb_advices.length; ++j ) {
+         let cb_advice = cb_advices[j];
+         let aea_prefix = "aea_" + i + "_" + j;
+         let rulenum = cb_advice.medication_criteria_id;
+         let boxnum = cb_advice.selectBoxNum;
+         let advice_id_base =`${atc}_${rulenum}_${boxnum}`;
+         let checkbox_id = 'cb_' + advice_id_base;
+         let row_id = 'et_' + advice_id_base;
+-%>
 <% /* TODO only display those items which the clinician has select */ -%>
-<span id="<%= aea_prefix %>_epic">
+<span id="<%= row_id %>">
 <%         for (let k = 0; k < cb_advice.epic_split.length; ++k) { -%>
 <%             let chunk = cb_advice.epic_split[k]; -%>
 <%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}_e`; -%>
 <%             let chunk_id_epic = chunk_id + "pic"; -%>
-<% /* TODO replcace editable {{freetext}} with chunk_id freetext */ -%>
+<% /* TODO replace editable {{freetext}} with chunk_id freetext */ -%>
 <%             if (chunk.editable) { -%>
 <%- md.makeHtml(chunk.text) -%>
 <%             } else { -%>
 <%- md.makeHtml(chunk.text) -%>
-</span> <!-- <%= aea_prefix %>_cdss_<%= k %>_e -->
 <%             } -%>
 <%         } -%>
-</span> <!-- <%= aea_prefix %>_cdss -->
+</span> <!-- <%= row_id %> -->
 <%     } -%>
 </div> <!-- advice_epic_area_<%= i %> -->
 <% } -%>
