@@ -81,6 +81,8 @@ div.gauge_line {
     margin-left: calc(-<%= gauge_width %> / 200 / 2 - 0.5px);
     margin-right: calc(-<%= gauge_width %> / 200 / 2 - 0.5px);
     padding-bottom: calc(10% + 1ex);
+    padding-left: 0;
+    padding-right: 0;
     background: #000;
     position: relative;
     left: calc(1% * <%= risk_score %>);
@@ -89,15 +91,19 @@ div.gauge_line {
 }
 div.gauge_text_left {
     position: relative;
-    width: 0px;
     top: 10px;
+    margin: 0px;
+    padding: 0px;
+    width: 0px;
     display: inline-block;
 }
 div.gauge_text_right {
     position: relative;
+    margin: 0px;
+    padding: 0px;
     width: 0px;
     top: 10px;
-    left: calc(100% - 4ch - 1em);
+    left: calc(100% - 3ch - 1em);
     display: inline-block;
 }
 </style>
@@ -125,9 +131,9 @@ Leeftijd: <%= patient_advice.age %><br/>
 <div class="prediction" id = "prediction">
 <p>Kans om te vallen binnen 12 maanden: <span style="color: red;"><%= risk_score %>%</span> (lees meer over het predictiemodel)</p>
 <div class='gauge_background'>
-    <div class='gauge_text_left'>0%</div>
-    <div class='gauge_line'></div>
-    <div class='gauge_text_right'>100%</div>
+    <div class='gauge_text_left'>0%
+    </div><div class='gauge_line'>
+    </div><div class='gauge_text_right'>100%</div>
 </div>
 </div>
 <span id="patient_medications">
