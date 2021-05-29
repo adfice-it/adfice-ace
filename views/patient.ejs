@@ -163,6 +163,13 @@ Labs:
 <strong>Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren</strong>
 <img src="static/sharedDecisionMaking.png" style="max-width:100%;" alt="SDM advies">
 <div class="advice_header">Medicatiefactoren</div>
+<p class="staticText" id="GeneralMedAdvice">In het algemeen dient een medicament gestopt of afgebouwd worden als:
+<ol><li>er geen indicatie (meer) is </li>
+<li>er een veiliger alternatief beschikbaar is</li>
+</ol>
+Het is wenselijk om iedere patient na een medicatiewijziging actief te monitoren (middels follow-up) op het optreden van een (hernieuwde) val en/of klachten zoals duizeligheid of licht in het hoofd bij opstaan veranderen. 
+</p>
+
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
