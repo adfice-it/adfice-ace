@@ -174,8 +174,22 @@ Labs:
 <%     let advices = row.adviceTextsNoCheckboxes; -%>
 <%     for (let j = 0; j < advices.length; ++j ) { -%>
 <%         let advice = advices[j]; -%>
-<%           let att_prefix = "att_" + i + "_" + j; -%>
-<%- md.makeHtml(advice.cdss) -%>
+<%         let att_prefix = "att_" + i + "_" + j; -%>
+<%	   let bogus_rule = "NonCB"; -%>
+<span id="<%= att_prefix %>_cdss">
+<%          for (let k = 0; k < advice.cdss_split.length; ++k) { -%>
+<%              let chunk = advice.cdss_split[k]; -%>
+<%		let chunk_id = `ft_${atc}_${bogus_rule}_${j}_${k}_e`; -%>
+<%              if (chunk.editable) { -%>
+<input id="<%= chunk_id %>" type="text"
+	value="<%= chunk.text %>"/>
+<%              } else { -%>
+<span id="<%= chunk_id %>">
+<%- md.makeHtml(chunk.text) -%>
+</span> <!-- <%= att_prefix %>_cdss_<%= k %>_e -->
+<%              } -%>
+<%          } -%>
+</span> <!-- <%= att_prefix %>_cdss -->
 <%     } -%>
 </div>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
