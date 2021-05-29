@@ -24,3 +24,4 @@ Low Prio:
 * naming consistency thoughout the javascript
 * naming consistency thoughout the html
 * create table atc_code(id int PK, code varchar(100))
+* duck-typing on message['checkbox'] rather than type
