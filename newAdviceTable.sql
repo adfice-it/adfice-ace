@@ -236,7 +236,7 @@ Bij meerdere risicofactoren voor toxiciteit of leeftijd \&gt; 85 jaar: eerste da
 ("64",1,"stop","","Stoppen (afbouwen niet nodig)","Stop","U kunt direct stoppen."),
 ("64",2,"switch","pravastatine","Vervangen door pravastatine: Bij **dyslipidemie** 10-40 mg 1dd. Bij **cardiovasculaire preventie** 40 mg 1dd. [[https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/p/pravastatine](https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/p/pravastatine)]","Vervangen door pravastatine 10-40 mg 1dd.","Vervangen door pravastatine. Neem pravastatine in volgens de instructies van de apotheek. Vraag de apotheek naar de meest voorkomende bijwerkingen."),
 ("64",3,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe doet"),
-("64",4,"free_text","","{{free text}}","{{free text}}","{free text}}"),
+("64",4,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
 
 ("64a",NULL,"","","Stoppen van statines is aanbevolen bij patiënten zonder **coronaire, cerebrale of perifeer arteriële symptomen**. Overweeg bij kwetsbare ouderen met cardiovasculaire aandoeningen te stoppen, vooral bij (vermoedelijke) bijwerkingen, slechte therapietrouw of bij een korte geschatte levensverwachting.","",""),
 ("64a",1,"taper-stop","","Afbouwen waarna stoppen. Afbouwschema: {{free text}}","Afbouwen volgens afbouwschema waarna stop {{free text}}","Stoppen via een afbouwschema. {{free text}}"),
