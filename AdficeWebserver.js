@@ -130,8 +130,11 @@ server.on('upgrade', function upgrade(request, socket, head) {
                 let id_key = `${kind}_id`;
                 if (message[id_key] == id) {
                     if (message.type == 'checkboxes') {
+                        let patient_id = id;
+                        let viewer = message.viewer_id;
                         let selections = message['box_states'];
-                        await adfice.setSelectionsForPatient(id, selections);
+                        await adfice.setSelectionsForPatient(
+                            patient_id, viewer, selections);
                     }
                     if (message.type == 'freetexts') {
                         // persistance

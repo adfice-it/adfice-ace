@@ -25,16 +25,17 @@ test('test advice text 6e', async () => {
 })
 
 test('boxStatesToSelectionStates', () => {
-    const patient_id = "32";
+    const patient_id = 32;
+    const viewer = 188;
     const box_states = {
         "cb_C03AA03_42_2": false,
         "cb_C03AA03_42b_3": true
     };
     const expected = [
-        [32, "C03AA03", "42", 2, 0],
-        [32, "C03AA03", "42b", 3, 1]
+        [32, 188, "C03AA03", "42", 2, 0],
+        [32, 188, "C03AA03", "42b", 3, 1]
     ];
-    let out = adfice.boxStatesToSelectionStates(patient_id, box_states);
+    let out = adfice.boxStatesToSelectionStates(patient_id, viewer, box_states);
     expect(out).toStrictEqual(expected);
 });
 
@@ -93,6 +94,7 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
 
 test('setAdviceForPatient(68)', async () => {
     let patientNumber = 68;
+    let viewer = 999;
     let advice = await adfice.getAdviceForPatient(patientNumber);
 
     let old_advice = {
@@ -109,7 +111,7 @@ test('setAdviceForPatient(68)', async () => {
         "cb_C09AA02_63b_1": true
     };
 
-    adfice.setSelectionsForPatient(patientNumber, old_advice);
+    adfice.setSelectionsForPatient(patientNumber, viewer, old_advice);
 
     advice = await adfice.getAdviceForPatient(patientNumber);
     expect(advice.selected_advice).toStrictEqual(old_advice);
@@ -127,7 +129,7 @@ test('setAdviceForPatient(68)', async () => {
         "cb_C09AA02_63_4": false,
         "cb_C09AA02_63b_1": false
     };
-    adfice.setSelectionsForPatient(patientNumber, new_advice);
+    adfice.setSelectionsForPatient(patientNumber, viewer, new_advice);
 
     advice = await adfice.getAdviceForPatient(patientNumber);
     expect(advice.selected_advice).toStrictEqual(new_advice);

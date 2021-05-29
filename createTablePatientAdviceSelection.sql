@@ -1,5 +1,6 @@
 CREATE TABLE patient_advice_selection (
   id int unsigned NOT NULL AUTO_INCREMENT,
+  viewer_id int unsigned NOT NULL,
   patient_id int unsigned NOT NULL,
   ATC_code varchar(100) NOT NULL,
   medication_criteria_id varchar(8) NOT NULL,

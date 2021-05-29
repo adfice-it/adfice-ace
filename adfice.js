@@ -91,7 +91,7 @@ async function getAdviceTextsCheckboxes(rule_numbers) {
            AND medication_criteria_id IN(` +
         question_marks(rule_numbers.length) +
         `)
-         ORDER BY p.priority ASC, m.selectBoxNum ASC, m.id ASC`
+      ORDER BY p.priority ASC, m.selectBoxNum ASC, m.id ASC`
     return sql_select(sql, rule_numbers);
 }
 
@@ -106,7 +106,7 @@ async function getAdviceTextsNoCheckboxes(rule_numbers) {
            AND medication_criteria_id IN(` +
         question_marks(rule_numbers.length) +
         `)
-         ORDER BY id`;
+      ORDER BY id`;
     return sql_select(sql, rule_numbers);
 }
 
@@ -125,7 +125,7 @@ async function getMedsForPatient(patientIdentifier) {
                      FROM patient_medications
                     WHERE patient_id=?
                )
-         ORDER BY ATC_code`;
+      ORDER BY ATC_code`;
     let params = [patientIdentifier, patientIdentifier];
     return sql_select(sql, params);
 }
@@ -140,7 +140,7 @@ async function getProblemsForPatient(patientIdentifier) {
                      FROM patient_problems
                     WHERE patient_id=?
                )
-        ORDER BY id`;
+      ORDER BY id`;
     return sql_select(sql, [patientIdentifier, patientIdentifier]);
 }
 
@@ -149,7 +149,7 @@ async function getAgeForPatient(patientIdentifier) {
         SELECT age
           FROM patient
          WHERE id=?
-         ORDER BY age DESC LIMIT 1`;
+      ORDER BY age DESC LIMIT 1`;
     let results = await sql_select(sql, [patientIdentifier, patientIdentifier]);
     if (results.length > 0) {
         return results[0].age;
@@ -169,14 +169,15 @@ async function getLabsForPatient(patientIdentifier) {
                      FROM patient_labs
                     WHERE patient_id=?
                )
-         ORDER BY id`;
+      ORDER BY id`;
     let params = [patientIdentifier, patientIdentifier];
     let result = sql_select(sql, params);
     return result;
 }
 
-async function setSelectionsForPatient(patientIdentifier, cb_states) {
+async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
     const patient_id = parseInt(patientIdentifier, 10);
+    const viewer_id = parseInt(viewer, 10);
 
     let sqls_and_params = [];
 
@@ -185,10 +186,16 @@ async function setSelectionsForPatient(patientIdentifier, cb_states) {
   WHERE patient_id = ?`;
     sqls_and_params.push([delete_sql, patient_id]);
 
-    let insert_sql = "INSERT INTO patient_advice_selection" +
-        "(patient_id, ATC_code, medication_criteria_id" +
-        ",select_box_num, selected) VALUES (?,?,?,?,?)";
-    let params = boxStatesToSelectionStates(patientIdentifier, cb_states);
+    let insert_sql = `/* setSelectionsForPatient */
+ INSERT INTO patient_advice_selection (
+             patient_id,
+             viewer_id,
+             ATC_code,
+             medication_criteria_id,
+             select_box_num,
+             selected)
+      VALUES (?,?,?,?,?,?)`;
+    let params = boxStatesToSelectionStates(patient_id, viewer_id, cb_states);
     for (let i = 0; i < params.length; ++i) {
         sqls_and_params.push([insert_sql, params[i]]);
     }
@@ -200,13 +207,14 @@ async function setSelectionsForPatient(patientIdentifier, cb_states) {
 async function getSelectionsForPatient(patient_id) {
     var sql = `/* getSelectionsForPatient */
         SELECT patient_id,
+               viewer_id,
                ATC_code,
                medication_criteria_id,
                select_box_num,
                selected
           FROM patient_advice_selection
          WHERE patient_id=?
-         ORDER BY id`;
+      ORDER BY id`;
     let params = [patient_id];
     let results = await sql_select(sql, params);
     return selectionStatesToBoxStates(results);
@@ -312,9 +320,7 @@ async function getAdviceForPatient(patientIdentifier) {
     return patient_advice;
 }
 
-function boxStatesToSelectionStates(patientIdentifier, box_states) {
-    const patient_id = parseInt(patientIdentifier, 10);
-
+function boxStatesToSelectionStates(patient_id, viewer_id, box_states) {
     let output = [];
 
     const checkbox_ids = Object.keys(box_states);
@@ -327,7 +333,7 @@ function boxStatesToSelectionStates(patientIdentifier, box_states) {
         if (box_states[checkbox_id]) {
             checked = 1;
         }
-        output.push([patient_id, atc, criterion, box_num, checked]);
+        output.push([patient_id, viewer_id, atc, criterion, box_num, checked]);
     });
 
     return output;
