@@ -1,12 +1,11 @@
 High Prio:
+* propagate free-text
 * styling, try to match existing mock-ups
-  * styling, break into 3 separate tables;
-    * epic text for doctors to copy-paste
-    * list which medications did and did not fire rules
-  * styling, hide the unused views
-* edit boxes, free-text
+* list which medications did and did not fire rules
 * default checkbox values if none selected
 * get reference numbers to link
+
+First after demo:
 * non-medication advice (same for every patient)
 
 Mid:

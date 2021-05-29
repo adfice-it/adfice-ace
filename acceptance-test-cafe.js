@@ -152,6 +152,9 @@ test('Test selecting views', async t => {
     let row1 = Selector('#tr_M01AB05_78_3');
     let epic0 = Selector('#et_M01AB05_80b_2');
     let epic1 = Selector('#et_M01AB05_78_3');
+    let patient0 = Selector('#pt_M01AB05_80b_2');
+    let patient1 = Selector('#pt_M01AB05_78_3');
+
 
     // set checkbox0 to unchecked, checkbox1 to checked
     {
@@ -188,6 +191,9 @@ test('Test selecting views', async t => {
     await t.expect(div_clinician_view.visible).notOk();
     await t.expect(div_patient_view.visible).ok();
     await t.expect(div_epic_box.visible).notOk();
+    // the patient texts are only visible if checked in clinician view
+    await t.expect(patient0.visible).notOk();
+    await t.expect(patient1.visible).ok();
 
     // try switching to the condensed view
     await t.click(button_condensed_view);

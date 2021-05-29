@@ -194,8 +194,8 @@ Labs:
 </div>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
 <div id="advice_selection_area_<%= i %>" class="advice_selection_area">
-<table>
 <p>Maatregelen (aangekruist indien aanbevolen):</p>
+<table>
 <%
      for (let j = 0; j < cb_advices.length; ++j ) {
          let cb_advice = cb_advices[j];
@@ -206,7 +206,6 @@ Labs:
          let checkbox_id = 'cb_' + advice_id_base;
          let row_id = 'tr_' + advice_id_base;
 -%>
-<span id="<%= asa_prefix %>">
 <tr id="<%= row_id %>">
 <td>
 <span id="<%= asa_prefix %>_sbn">
@@ -235,7 +234,6 @@ Labs:
 </span> <!-- <%= asa_prefix %>_cdss -->
 </td>
 </tr>
-</span> <!-- <%= asa_prefix %> -->
 <%     } -%>
 </table>
 </div><!-- advice_selection_area_<%= i %> -->
@@ -249,14 +247,18 @@ Labs:
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
 <div id="advice_patient_area_<%= i %>" class="advice_patient_area">
 <p>Patient:
-<%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
-<%         let cb_advice = cb_advices[j]; -%>
-<%         let apa_prefix = "apa_" + i + "_" + j; -%>
-<%         let rulenum = cb_advice.medication_criteria_id; -%>
-<%         let boxnum = cb_advice.selectBoxNum; -%>
-<%         let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
+<%
+     for (let j = 0; j < cb_advices.length; ++j ) {
+         let cb_advice = cb_advices[j];
+         let paa_prefix = "paa_" + i + "_" + j;
+         let rulenum = cb_advice.medication_criteria_id;
+         let boxnum = cb_advice.selectBoxNum;
+         let advice_id_base =`${atc}_${rulenum}_${boxnum}`;
+         let checkbox_id = 'cb_' + advice_id_base;
+         let row_id = 'pt_' + advice_id_base;
+-%>
 <% /* TODO only display those items which the clinician has select */ -%>
-<span id="<%= apa_prefix %>_patient">
+<div id="<%= row_id %>">
 <%         for (let k = 0; k < cb_advice.patient_split.length; ++k) { -%>
 <%             let chunk = cb_advice.patient_split[k]; -%>
 <%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
@@ -269,7 +271,7 @@ Labs:
 <%- md.makeHtml(chunk.text) -%>
 <%             } -%>
 <%         } -%>
-</span> <!-- <%= apa_prefix %>_patient -->
+</div><!-- <%= row_id %> -->
 <%     } -%>
 </div> <!-- advice_patient_area_<%= i %> -->
 <% } -%>

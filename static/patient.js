@@ -34,7 +34,7 @@ function switch_to_view(view) {
         div_clinician_view.style.display = 'block';
         div_patient_view.style.display = 'none';
         div_epic_box.style.display = 'block';
-        for (let i=0; i < checkbox_rows.length; ++i) {
+        for (let i = 0; i < checkbox_rows.length; ++i) {
             // Note: nodes should be returned in document order, which should
             // pair the checkboxes and rows.
             if (checkboxes[i].checked) {
@@ -52,7 +52,7 @@ function switch_to_view(view) {
         div_clinician_view.style.display = 'block';
         div_patient_view.style.display = 'none';
         div_epic_box.style.display = 'block';
-        for (let i=0; i < checkbox_rows.length; ++i) {
+        for (let i = 0; i < checkbox_rows.length; ++i) {
             checkbox_rows[i].style.display = 'block';
         }
     }
@@ -119,12 +119,21 @@ function process_checkboxes(message) {
         let checked = box_states[checkbox_id];
         var checkbox = document.getElementById(checkbox_id);
         checkbox.checked = checked;
+
         let epic_row_id = checkbox_id.replace(/^cb_/, 'et_');
         let epic_row = document.getElementById(epic_row_id);
         if (checked) {
             epic_row.style.display = 'block';
         } else {
             epic_row.style.display = 'none';
+        }
+
+        let patient_row_id = checkbox_id.replace(/^cb_/, 'pt_');
+        let patient_row = document.getElementById(patient_row_id);
+        if (checked) {
+            patient_row.style.display = 'block';
+        } else {
+            patient_row.style.display = 'none';
         }
     });
 }
