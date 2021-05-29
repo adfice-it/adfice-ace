@@ -259,29 +259,33 @@ Labs:
 <%              let chunk_id = `ft_${atc}_${bogus_rule}_${j}_${k}_c`; -%>
 <span id="<%= chunk_id %>">
 <%- md.makeHtml(chunk.text) -%>
-</span> <!-- <%= catt_prefix %>_cdss_<%= k %>_e -->
+</span> <!-- <%= chunk_id %> -->
 <%         } -%>
 </span> <!-- <%= catt_prefix %>_cdss -->
 <%     } -%>
 </div>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
 <div id="advice_selection_area_<%= i %>" class="advice_selection_area">
-<p>Maatregelen (aangekruist indien aanbevolen):</p>
+<p>Maatregelen:</p>
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
 <%         let cb_advice = cb_advices[j]; -%>
-<%         let asa_prefix = "atcbt_" + i + "_" + j; -%>
+<%         let casa_prefix = "casa_" + i + "_" + j; -%>
 <%         let rulenum = cb_advice.medication_criteria_id; -%>
 <%         let boxnum = cb_advice.selectBoxNum; -%>
 <%         let checkbox_id = `cb_${atc}_${rulenum}_${boxnum}`; -%>
-<span id="<%= asa_prefix %>">
-</span> <!-- <%= asa_prefix %>_sbn -->
-<span id="<%= asa_prefix %>_cdss"><%- md.makeHtml(cb_advice.cdss) %></span>
-</span> <!-- <%= asa_prefix %> -->
+<span id="<%= casa_prefix %>_cdss">
+<%         for (let k = 0; k < cb_advice.cdss_split.length; ++k) { -%>
+<%             let chunk = cb_advice.cdss_split[k]; -%>
+<%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}_c`; -%>
+<span id="<%= chunk_id %>">
+<%- md.makeHtml(chunk.text) -%>
+</span> <!-- <%= chunk_id %> -->
+<%         } -%>
+</span> <!-- <%= casa_prefix %>_cdss -->
 <%     } -%>
 </div><!-- advice_selection_area_<%= i %> -->
 <% } -%>
 </div><!-- div_condensed_view -->
-
 <div id="div_patient_view" class="div_patient_view">
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
 <%     let row = medication_advice[i]; -%>

@@ -83,6 +83,7 @@ function split_advice_text_cdss(advice_texts) {
         let advice_text_cdss = row.cdss;
         let cdss_checkbox_text = autil.splitFreetext(advice_text_cdss);
         row.cdss_split = cdss_checkbox_text;
+        delete row.cdss;
     }
     return advice_texts;
 }

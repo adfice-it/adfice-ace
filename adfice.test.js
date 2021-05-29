@@ -15,13 +15,13 @@ test('test advice text 6e', async () => {
     expect(texts[2].selectBoxCategory).toBe('taper-reduce');
     expect(texts[10].selectBoxCategory).toBe('free_text');
 
-    expect(texts[5].cdss).toBe('Continueren');
+    expect(texts[5].cdss_split[0].text).toBe('Continueren');
     expect(texts[5].epic).toBe('Continueren');
     expect(texts[5].patient).toBe('Gebruik dit medicijn zoals u tot nu toe doet.');
 
     texts = await adfice.getAdviceTextsNoCheckboxes(rule_numbers);
     expect(texts.length).toBe(1);
-    expect(texts[0].cdss).toContain('angststoornis');
+    expect(texts[0].cdss_split[0].text).toContain('angststoornis');
 })
 
 test('boxStatesToSelectionStates', () => {
@@ -80,15 +80,15 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
     expect(checkbox0['selectBoxNum']).toBe(2);
     expect(checkbox0['selectBoxCategory']).toBe('taper-stop');
 
-    expect(checkbox0['cdss']).toContain('Afbouwen waarna stoppen');
+    expect(checkbox0['cdss_split'][0].text).toContain('Afbouwen waarna stoppen');
     expect(checkbox0['cdss_split'].length).toBe(2);
 
     let adviceTextsNoCheckboxes = adv0['adviceTextsNoCheckboxes'];
     expect(adviceTextsNoCheckboxes.length).toBe(4);
     let noCheckbox0 = adviceTextsNoCheckboxes[0];
     expect(noCheckbox0['medication_criteria_id']).toBe("41");
-    expect(noCheckbox0['cdss']).toContain("ACE");
-    expect(noCheckbox0['cdss']).toContain("antagonisten");
+    expect(noCheckbox0['cdss_split'][0].text).toContain("ACE");
+    expect(noCheckbox0['cdss_split'][0].text).toContain("antagonisten");
 
 });
 
@@ -155,8 +155,8 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
     expect(adviceTextsNoCheckboxes.length).toBe(5);
     let noCheckbox0 = adviceTextsNoCheckboxes[0];
     expect(noCheckbox0['medication_criteria_id']).toBe("19");
-    expect(noCheckbox0['cdss']).toContain("TCA");
-    expect(noCheckbox0['cdss']).toContain("SSRI");
+    expect(noCheckbox0.cdss_split[0].text).toContain("TCA");
+    expect(noCheckbox0.cdss_split[0].text).toContain("SSRI");
 })
 
 test('getAdviceForPatient(60), sparse patient', async () => {
