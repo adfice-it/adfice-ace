@@ -81,7 +81,11 @@ function splitFreetext(str) {
         if (editable) {
             let regExp = /\s*free\s+text\s*(:\s*pre-filled\s*:\s*(.*))?/;
             let regExpResult = regExp.exec(text);
-            text = regExpResult[2] || "";
+            if (regExpResult != null && regExpResult.length == 3) {
+                text = regExpResult[2] || "";
+            } else {
+                text = "BAD DATA";
+            }
         }
         if (editable || text.length > 0) {
             result.push({
