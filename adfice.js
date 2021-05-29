@@ -28,9 +28,12 @@ async function createPool() {
 }
 
 function endPool(conn, pool) {
-    /* istanbul ignore else */
-    if (conn) {
-        let result = conn.end();
+    try {
+        conn.end();
+    } catch (error) {
+        /* istanbul ignore next */
+        console.log(error);
+    } finally {
         pool.end();
     }
 }
@@ -74,6 +77,16 @@ async function sql_select(sql, params) {
     }
 }
 
+function split_advice_text_cdss(advice_texts) {
+    for (let j = 0; j < advice_texts.length; ++j) {
+        let row = advice_texts[j];
+        let advice_text_cdss = row.cdss;
+        let cdss_checkbox_text = autil.splitFreetext(advice_text_cdss);
+        row.cdss_split = cdss_checkbox_text;
+    }
+    return advice_texts;
+}
+
 async function getAdviceTextsCheckboxes(rule_numbers) {
     autil.assert(rule_numbers !== null);
     autil.assert(rule_numbers.length > 0);
@@ -92,7 +105,8 @@ async function getAdviceTextsCheckboxes(rule_numbers) {
         question_marks(rule_numbers.length) +
         `)
       ORDER BY p.priority ASC, m.selectBoxNum ASC, m.id ASC`
-    return sql_select(sql, rule_numbers);
+    let advice_text = await sql_select(sql, rule_numbers);
+    return split_advice_text_cdss(advice_text);
 }
 
 async function getAdviceTextsNoCheckboxes(rule_numbers) {
@@ -107,12 +121,14 @@ async function getAdviceTextsNoCheckboxes(rule_numbers) {
         question_marks(rule_numbers.length) +
         `)
       ORDER BY id`;
-    return sql_select(sql, rule_numbers);
+    let advice_text = await sql_select(sql, rule_numbers);
+    return split_advice_text_cdss(advice_text);
 }
 
 async function getActiveRules() {
     var sql = "SELECT * FROM med_rules WHERE active = 'yes' ORDER BY id";
-    return sql_select(sql);
+    let rules = await sql_select(sql);
+    return rules;
 }
 
 async function getMedsForPatient(patientIdentifier) {
@@ -127,7 +143,8 @@ async function getMedsForPatient(patientIdentifier) {
                )
       ORDER BY ATC_code`;
     let params = [patientIdentifier, patientIdentifier];
-    return sql_select(sql, params);
+    let meds = await sql_select(sql, params);
+    return meds;
 }
 
 async function getProblemsForPatient(patientIdentifier) {
@@ -141,7 +158,8 @@ async function getProblemsForPatient(patientIdentifier) {
                     WHERE patient_id=?
                )
       ORDER BY id`;
-    return sql_select(sql, [patientIdentifier, patientIdentifier]);
+    let probs = await sql_select(sql, [patientIdentifier, patientIdentifier]);
+    return probs;
 }
 
 async function getAgeForPatient(patientIdentifier) {
@@ -171,7 +189,7 @@ async function getLabsForPatient(patientIdentifier) {
                )
       ORDER BY id`;
     let params = [patientIdentifier, patientIdentifier];
-    let result = sql_select(sql, params);
+    let result = await sql_select(sql, params);
     return result;
 }
 
@@ -327,20 +345,8 @@ async function getAdviceForPatient(patientIdentifier) {
         let fired = medsWithRulesToFire[atc_code];
 
         let advice_text = await getAdviceTextsCheckboxes(fired);
-        for (let j = 0; j < advice_text.length; ++j) {
-            let row = advice_text[j];
-            let advice_text_cdss = row.cdss;
-            let cdss_checkbox_text = autil.splitFreetext(advice_text_cdss);
-            row.cdss_split = cdss_checkbox_text;
-        }
 
         let advice_text_no_box = await getAdviceTextsNoCheckboxes(fired);
-        for (let j = 0; j < advice_text_no_box.length; ++j) {
-            let row = advice_text_no_box[j];
-            let advice_text_cdss = row.cdss;
-            let cdss_checkbox_text = autil.splitFreetext(advice_text_cdss);
-            row.cdss_split = cdss_checkbox_text;
-        }
 
         let adv = {};
         adv.ATC_code = atc_code.trim();
