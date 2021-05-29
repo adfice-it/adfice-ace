@@ -28,8 +28,8 @@ test.page(`http://localhost:9090/patient?id=68`)
         let checkbox_css_selector = `input#${checkbox_id}`;
         let freetext_id = `ft_${atc}_${rule}_${cbn}_1_e`;
         let freetext_css_selector = `input#${freetext_id}`;
-        const defaultFreetext = "serie van 5 data elke 2 weken, " +
-            "startdatum is datum van vandaag.";
+
+        const oldFreetext = "old";
         const newFreetext = "foo";
 
         // checkbox starts invisible,
@@ -45,8 +45,8 @@ test.page(`http://localhost:9090/patient?id=68`)
         // type some text into the freetext field for this row.
         let freetext_selector_1 = Selector(freetext_css_selector);
         await t.selectText(freetext_selector_1);
-        await t.typeText(freetext_selector_1, defaultFreetext);
-        await t.expect(freetext_selector_1.value).eql(defaultFreetext);
+        await t.typeText(freetext_selector_1, oldFreetext);
+        await t.expect(freetext_selector_1.value).eql(oldFreetext);
 
         let view_cnt_css_sel = "span#viewer_count";
         await t.expect(Selector(view_cnt_css_sel).withText("1").exists).ok();

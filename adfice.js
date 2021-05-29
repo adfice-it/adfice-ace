@@ -77,7 +77,7 @@ async function sql_select(sql, params) {
 async function getAdviceTextsCheckboxes(rule_numbers) {
     autil.assert(rule_numbers !== null);
     autil.assert(rule_numbers.length > 0);
-    var sql = `/* getAdviceTextsCheckboxes */
+    var sql = `/* adfice.getAdviceTextsCheckboxes */
         SELECT m.medication_criteria_id,
                m.selectBoxNum,
                m.selectBoxCategory,
@@ -98,7 +98,7 @@ async function getAdviceTextsCheckboxes(rule_numbers) {
 async function getAdviceTextsNoCheckboxes(rule_numbers) {
     autil.assert(rule_numbers !== null);
     autil.assert(rule_numbers.length > 0);
-    var sql = `/* getAdviceTextsNoCheckboxes */
+    var sql = `/* adfice.getAdviceTextsNoCheckboxes */
         SELECT medication_criteria_id,
                cdss
           FROM med_advice_text
@@ -116,7 +116,7 @@ async function getActiveRules() {
 }
 
 async function getMedsForPatient(patientIdentifier) {
-    var sql = `/* getMedsForPatient */
+    var sql = `/* adfice.getMedsForPatient */
         SELECT ATC_code, medication_name, start_date
           FROM patient_medications
          WHERE patient_id=?
@@ -131,7 +131,7 @@ async function getMedsForPatient(patientIdentifier) {
 }
 
 async function getProblemsForPatient(patientIdentifier) {
-    var sql = `/* getProblemsForPatient */
+    var sql = `/* adfice.getProblemsForPatient */
         SELECT name, start_date
           FROM patient_problems
          WHERE patient_id=?
@@ -145,7 +145,7 @@ async function getProblemsForPatient(patientIdentifier) {
 }
 
 async function getAgeForPatient(patientIdentifier) {
-    var sql = `/* getAgeForPatient */
+    var sql = `/* adfice.getAgeForPatient */
         SELECT age
           FROM patient
          WHERE id=?
@@ -158,7 +158,7 @@ async function getAgeForPatient(patientIdentifier) {
 }
 
 async function getLabsForPatient(patientIdentifier) {
-    var sql = `/* getLabsForPatient */
+    var sql = `/* adfice.getLabsForPatient */
         SELECT lab_test_name,
                lab_test_result,
                date_measured
@@ -181,12 +181,12 @@ async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
 
     let sqls_and_params = [];
 
-    let delete_sql = `/* setSelectionsForPatient */
+    let delete_sql = `/* adfice.setSelectionsForPatient */
  DELETE FROM patient_advice_selection
   WHERE patient_id = ?`;
     sqls_and_params.push([delete_sql, patient_id]);
 
-    let insert_sql = `/* setSelectionsForPatient */
+    let insert_sql = `/* adfice.setSelectionsForPatient */
  INSERT INTO patient_advice_selection (
              patient_id,
              viewer_id,
@@ -205,7 +205,7 @@ async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
 }
 
 async function getSelectionsForPatient(patient_id) {
-    var sql = `/* getSelectionsForPatient */
+    var sql = `/* adfice.getSelectionsForPatient */
         SELECT patient_id,
                viewer_id,
                ATC_code,
@@ -218,6 +218,53 @@ async function getSelectionsForPatient(patient_id) {
     let params = [patient_id];
     let results = await sql_select(sql, params);
     return selectionStatesToBoxStates(results);
+}
+
+async function setFreetextsForPatient(patientIdentifier, viewer, freetexts) {
+    const patient_id = parseInt(patientIdentifier, 10);
+    const viewer_id = parseInt(viewer, 10);
+
+    let sqls_and_params = [];
+
+    let delete_sql = `/* adfice.setFreetextsForPatient */
+ DELETE FROM patient_advice_freetext
+  WHERE patient_id = ?`;
+    sqls_and_params.push([delete_sql, patient_id]);
+
+    let insert_sql = `/* adfice.setFreetextForPatient */
+ INSERT INTO patient_advice_freetext (
+             patient_id,
+             viewer_id,
+             ATC_code,
+             medication_criteria_id,
+             select_box_num,
+             freetext_num,
+             freetext)
+      VALUES (?,?,?,?,?,?,?)`;
+    let params = freetextsToRows(patient_id, viewer_id, freetexts);
+    for (let i = 0; i < params.length; ++i) {
+        sqls_and_params.push([insert_sql, params[i]]);
+    }
+
+    let rs = await as_sql_transaction(sqls_and_params);
+    return rs;
+}
+
+async function getFreetextsForPatient(patient_id) {
+    var sql = `/* adfice.getFreetextForPatient */
+         SELECT patient_id,
+                viewer_id,
+                ATC_code,
+                medication_criteria_id,
+                select_box_num,
+                freetext_num,
+                freetext
+           FROM patient_advice_freetext
+          WHERE patient_id=?
+       ORDER BY id`;
+    let params = [patient_id];
+    let results = await sql_select(sql, params);
+    return rowsToFreetexts(results);
 }
 
 function structureLabs(labRows) {
@@ -358,14 +405,53 @@ function selectionStatesToBoxStates(selection_states) {
     return output;
 }
 
+function rowsToFreetexts(rows) {
+    let output = {};
+    for (let i = 0; i < rows.length; ++i) {
+        let row = rows[i];
+        let atc = row['ATC_code'];
+        let rule = row['medication_criteria_id'];
+        let box = row['select_box_num'];
+        let ftn = row['freetext_num'];
+        let freetext_edit_id = `ft_${atc}_${rule}_${box}_${ftn}_e`;
+        output[freetext_edit_id] = row['freetext'];
+    }
+    return output;
+}
+
+function freetextsToRows(patient_id, viewer_id, freetexts) {
+    let output = [];
+    const freetext_ids = Object.keys(freetexts);
+    freetext_ids.forEach((freetext_id, index) => {
+        let parts = freetext_id.split('_');
+        let atc = parts[1];
+        let criterion = parts[2];
+        let box_num = parseInt(parts[3], 10);
+        let text_num = parseInt(parts[4], 10);
+        let freetext = freetexts[freetext_id];
+        output.push([
+            patient_id,
+            viewer_id,
+            atc,
+            criterion,
+            box_num,
+            text_num,
+            freetext
+        ]);
+    });
+    return output;
+}
+
 module.exports = {
     boxStatesToSelectionStates: boxStatesToSelectionStates,
     getActiveRules: getActiveRules,
     getAdviceForPatient: getAdviceForPatient,
     getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
     getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
+    getFreetextsForPatient: getFreetextsForPatient,
     getMedsForPatient: getMedsForPatient,
     getSelectionsForPatient: getSelectionsForPatient,
     selectionStatesToBoxStates: selectionStatesToBoxStates,
+    setFreetextsForPatient: setFreetextsForPatient,
     setSelectionsForPatient: setSelectionsForPatient
 }

@@ -77,12 +77,15 @@ app.use("/static", express.static('static'));
 
 server.receivers = {};
 
-function send_all(kind, id, message) {
+function msg_header(message, kind, id) {
     message.kind = kind;
     let id_key = `${kind}_id`;
     message[id_key] = id;
     message.viewers = server.receivers[kind][id].size;
+}
 
+function send_all(kind, id, message) {
+    msg_header(message, kind, id);
     let msg_string = JSON.stringify(message, null, 4);
     server.receivers[kind][id].forEach((rws) => {
         rws.send(msg_string);
@@ -91,8 +94,25 @@ function send_all(kind, id, message) {
 
 function hello_all(kind, id) {
     let message = {};
-    message.info = 'hello';
+    message.type = 'hello';
+    message.info = 'world';
     send_all(kind, id, message);
+}
+
+async function init_patient_data(ws, kind, id) {
+    let freetexts = await adfice.getFreetextsForPatient(id);
+    let selections = await adfice.getSelectionsForPatient(id);
+
+    let message = {};
+    msg_header(message, kind, id);
+
+    message.type = 'init';
+    message.info = 'hello';
+    message['field_entires'] = freetexts;
+    message['box_states'] = selections;
+
+    let msg_string = JSON.stringify(message, null, 4);
+    ws.send(msg_string);
 }
 
 server.on('upgrade', function upgrade(request, socket, head) {
@@ -137,7 +157,11 @@ server.on('upgrade', function upgrade(request, socket, head) {
                             patient_id, viewer, selections);
                     }
                     if (message.type == 'freetexts') {
-                        // persistance
+                        let patient_id = id;
+                        let viewer = message.viewer_id;
+                        let freetexts = message['field_entires'];
+                        await adfice.setFreetextsForPatient(
+                            patient_id, viewer, freetexts);
                     }
                     send_all(kind, id, message);
                 }
@@ -145,11 +169,10 @@ server.on('upgrade', function upgrade(request, socket, head) {
                 console.log(error);
             }
         });
-        let message = {};
-        message.info = 'hello';
-        message.type = 'checkboxes';
-        message['box_states'] = await adfice.getSelectionsForPatient(id);
-        send_all(kind, id, message);
+        if (kind == 'patient') {
+            await init_patient_data(ws, kind, id);
+        }
+        hello_all(kind, id);
     });
 });
 

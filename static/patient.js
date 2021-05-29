@@ -153,9 +153,10 @@ function ws_on_message(event) {
         ++weirdness;
         return;
     }
-    if (data.type == "checkboxes") {
+    if (data.type == "checkboxes" || data.type == "init") {
         process_checkboxes(data);
-    } else if (data.type == "freetexts") {
+    }
+    if (data.type == "freetexts" || data.type == "init") {
         process_freetexts(data);
     }
 
