@@ -75,7 +75,7 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
     expect(adv0['medication_name']).toBe('hydrochlorothiazide');
 
     let adviceTextsCheckboxes = adv0['adviceTextsCheckboxes'];
-    expect(adviceTextsCheckboxes.length).toBe(6);
+    expect(adviceTextsCheckboxes.length).toBe(7);
     let checkbox0 = adviceTextsCheckboxes[0];
     expect(checkbox0['medication_criteria_id']).toBe("42");
     expect(checkbox0['selectBoxNum']).toBe(2);
@@ -85,7 +85,7 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
     expect(checkbox0['cdss_split'].length).toBe(2);
 
     let adviceTextsNoCheckboxes = adv0['adviceTextsNoCheckboxes'];
-    expect(adviceTextsNoCheckboxes.length).toBe(4);
+    expect(adviceTextsNoCheckboxes.length).toBe(3);
     let noCheckbox0 = adviceTextsNoCheckboxes[0];
     expect(noCheckbox0['medication_criteria_id']).toBe("41");
     expect(noCheckbox0['cdss_split'][0].text).toContain("ACE");
