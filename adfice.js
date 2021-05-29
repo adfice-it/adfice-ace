@@ -425,7 +425,7 @@ function rowsToFreetexts(rows) {
         let rule = row['medication_criteria_id'];
         let box = row['select_box_num'];
         let ftn = row['freetext_num'];
-        let freetext_edit_id = `ft_${atc}_${rule}_${box}_${ftn}_e`;
+        let freetext_edit_id = `ft_${atc}_${rule}_${box}_${ftn}`;
         output[freetext_edit_id] = row['freetext'];
     }
     return output;

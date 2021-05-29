@@ -179,14 +179,14 @@ Labs:
 <span id="<%= att_prefix %>_cdss">
 <%         for (let k = 0; k < advice.cdss_split.length; ++k) { -%>
 <%             let chunk = advice.cdss_split[k]; -%>
-<%             let chunk_id = `ft_${atc}_${bogus_rule}_${j}_${k}_e`; -%>
+<%             let chunk_id = `ft_${atc}_${bogus_rule}_${j}_${k}`; -%>
 <%             if (chunk.editable) { -%>
 <input id="<%= chunk_id %>" type="text"
         value="<%= chunk.text %>"/>
 <%             } else { -%>
 <span id="<%= chunk_id %>">
 <%- md.makeHtml(chunk.text) -%>
-</span> <!-- <%= att_prefix %>_cdss_<%= k %>_e -->
+</span> <!-- <%= att_prefix %>_cdss_<%= k %> -->
 <%             } -%>
 <%         } -%>
 </span> <!-- <%= att_prefix %>_cdss -->
@@ -221,14 +221,14 @@ Labs:
 <span id="<%= asa_prefix %>_cdss">
 <%         for (let k = 0; k < cb_advice.cdss_split.length; ++k) { -%>
 <%             let chunk = cb_advice.cdss_split[k]; -%>
-<%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}_e`; -%>
+<%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
 <%             if (chunk.editable) { -%>
 <input id="<%= chunk_id %>" type="text"
         value="<%= chunk.text %>"/>
 <%             } else { -%>
 <span id="<%= chunk_id %>">
 <%- md.makeHtml(chunk.text) -%>
-</span> <!-- <%= asa_prefix %>_cdss_<%= k %>_e -->
+</span> <!-- <%= asa_prefix %>_cdss_<%= k %> -->
 <%             } -%>
 <%         } -%>
 </span> <!-- <%= asa_prefix %>_cdss -->
@@ -262,9 +262,7 @@ Labs:
 <%         for (let k = 0; k < cb_advice.patient_split.length; ++k) { -%>
 <%             let chunk = cb_advice.patient_split[k]; -%>
 <%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
-<%             let chunk_id_e = chunk_id + "_e"; -%>
-<%             let chunk_id_p = chunk_id + "_p"; -%>
-<% /* TODO replcace editable {{freetext}} with chunk_id_e freetext */ -%>
+<% /* TODO replcace editable {{freetext}} with chunk_id freetext */ -%>
 <%             if (chunk.editable) { -%>
 <%- md.makeHtml(chunk.text) -%>
 <%             } else { -%>
@@ -305,7 +303,7 @@ Labs:
 <span id="<%= row_id %>">
 <%         for (let k = 0; k < cb_advice.epic_split.length; ++k) { -%>
 <%             let chunk = cb_advice.epic_split[k]; -%>
-<%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}_e`; -%>
+<%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
 <%             let chunk_id_epic = chunk_id + "pic"; -%>
 <% /* TODO replace editable {{freetext}} with chunk_id freetext */ -%>
 <%             if (chunk.editable) { -%>

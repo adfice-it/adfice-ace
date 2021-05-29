@@ -194,15 +194,15 @@ test('freetext round trip', async () => {
     let viewer = "2";
     let patient = "26";
     let freetexts = {
-        ft_C03AA03_42_1_1_e: "",
-        ft_C03AA03_42_2_1_e: "serie van",
-        ft_C03AA03_42_3_1_e: "foo",
-        ft_C03AA03_42_5_1_e: "",
-        ft_C03AA03_42_6_1_e: "bar",
-        ft_C09AA02_63_1_1_e: "",
-        ft_C09AA02_63_2_1_e: "",
-        ft_C09AA02_63_4_1_e: "",
-        ft_C09AA02_63b_1_1_e: "baz"
+        ft_C03AA03_42_1_1: "",
+        ft_C03AA03_42_2_1: "serie van",
+        ft_C03AA03_42_3_1: "foo",
+        ft_C03AA03_42_5_1: "",
+        ft_C03AA03_42_6_1: "bar",
+        ft_C09AA02_63_1_1: "",
+        ft_C09AA02_63_2_1: "",
+        ft_C09AA02_63_4_1: "",
+        ft_C09AA02_63b_1_1: "baz"
     };
 
     await adfice.setFreetextsForPatient(patient, viewer, freetexts);

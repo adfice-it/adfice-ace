@@ -26,7 +26,7 @@ test.page(`http://localhost:9090/patient?id=68`)
         let cbn = "3";
         let checkbox_id = `cb_${atc}_${rule}_${cbn}`;
         let checkbox_css_selector = `input#${checkbox_id}`;
-        let freetext_id = `ft_${atc}_${rule}_${cbn}_1_e`;
+        let freetext_id = `ft_${atc}_${rule}_${cbn}_1`;
         let freetext_css_selector = `input#${freetext_id}`;
 
         const oldFreetext = "old";
@@ -220,10 +220,13 @@ test('Test free text fields', async t => {
     let url = 'http://localhost:9090/patient?id=23';
     let window1 = await t.openWindow(url);
 
-    let ft_N05AD01_16_2_1_e = Selector('#ft_N05AD01_16_2_1_e');
-    await t.expect(ft_N05AD01_16_2_1_e.exists).ok();
-    await t.expect(ft_N05AD01_16_2_1_e.tagName).eql("input");
-    await t.expect(ft_N05AD01_16_2_1_e.value).contains("nemen");
+    let ft_N05AD01_16_2_1 = Selector('#ft_N05AD01_16_2_1');
+    //let ft_N05AD01_16_2_1 = Selector('#eft_N05AD01_16_2_1');
+    await t.expect(ft_N05AD01_16_2_1.exists).ok();
+    await t.expect(ft_N05AD01_16_2_1.tagName).eql('input');
+    await t.selectText(ft_N05AD01_16_2_1);
+    await t.typeText(ft_N05AD01_16_2_1, 'foo');
+    await t.expect(ft_N05AD01_16_2_1.value).eql('foo');
 
     /*
     let ft_N05AD01_16_2_1_c = Selector('#ft_N05AD01_16_2_1_c');
