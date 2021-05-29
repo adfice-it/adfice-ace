@@ -1,8 +1,8 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
 -- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 INSERT INTO preselect_rules (medication_criteria_id, selectBoxNum, preselect_or, preselect_not, preselect_problem, preselect_age, preselect_drug, preselect_lab, preselect_allergy) VALUES
-("6e",1,NULL,NULL,"!angststoornis &!epilepsy",NULL,"&medication.startDate < now-2-weeks",NULL,NULL), 
-("6e",2,NULL,NULL,"!angststoornis &!epilepsy",NULL,"&medication.startDate > now-2-weeks",NULL,NULL),
+("6e",1,NULL,NULL,"!angststoornis &!epilepsy",NULL,"&medication.startDate >= now-2-weeks",NULL,NULL), 
+("6e",2,NULL,NULL,"!angststoornis &!epilepsy",NULL,"&medication.startDate < now-2-weeks",NULL,NULL),
 ("6e",2,NULL,NULL,"parkinson | lewy-bodies-dementia | multiple-system-atrophy | progressive-supranuclear-palsy",NULL,NULL,NULL,NULL),
 ("6e",2,"N05CM05",NULL,NULL,NULL,NULL,NULL,NULL),
 ("13",1,"N05BB01",NULL,NULL,NULL,NULL,NULL,NULL),
