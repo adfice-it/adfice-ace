@@ -67,7 +67,7 @@ INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, ge
 (65,'2021-02-11',"quinapril","quinapril","C09AA06",'2019-02-11'),
 (66,'2021-02-11',"simvastatine","simvastatine","C10AA01",'2019-02-11'),
 (67,'2021-02-11',"simvastatine","simvastatine","C10AA01",'2019-02-11'),
-(68,'2021-02-11',"hydrochlorothiazide","hydrochlorothiazide","C03AA03",'2019-02-11'),
+(68,'2021-02-11',"hydrochlorothiazide","hydrochloorthiazide","C03AA03",'2019-02-11'),
 (68,'2021-02-11',"enalapril","enalapril","C09AA02",'2019-02-11'),
 (69,'2021-02-11',"amlodipine","amlodipine","C08CA01",'2019-02-11'),
 (70,'2021-02-11',"hydrochlorothiazide","hydrochloorthiazide","C03AA03",'2019-02-11'),
