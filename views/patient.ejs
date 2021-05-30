@@ -268,12 +268,7 @@ Labs:
 </span>
 </div>
 <div id="div_clinician_view" class="div_clinician_view">
-<% let use_static_shared_decision_image = 0; -%>
-<% if (use_static_shared_decision_image) { -%>
 <strong>Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren</strong>
-<img src="static/sharedDecisionMaking.png" style="max-width:100%;" alt="SDM advies">
-<% } else { -%>
-
 <div class="instruction_box">
 <div class = "instruction_row">
 <div id="sdm1" class ="sdm_left sdm">
@@ -322,7 +317,6 @@ Labs:
 <div class="spacer"></div>
 </div><!-- instruction_box -->
 
-<% } -%>
 <div class="advice_header">Medicatiefactoren</div>
 <% let medication_advice = patient_advice.medication_advice || [];
 for (let i = 0; i < medication_advice.length; ++i ) {
