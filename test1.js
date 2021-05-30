@@ -7,19 +7,12 @@ var fs = require('fs');
 
 async function main() {
 
+    var dbconfig = require('./dbconfig.json');
     let passwd = await fs.promises.readFile('adfice_mariadb_user_password');
-    passwd = String(passwd).trim();
+    dbconfig['password'] = String(passwd).trim();
 
-    console.log('Password: "' + passwd + '"');
     const mariadb = require('mariadb');
-    const pool = mariadb.createPool({
-        host: '127.0.0.1',
-        port: 13306,
-        user: 'adfice',
-        password: passwd,
-        database: 'adfice',
-        connectionLimit: 5
-    });
+    const pool = mariadb.createPool(dbconfig);
 
     let conn;
     try {

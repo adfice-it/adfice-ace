@@ -6,6 +6,7 @@
 var fs = require('fs');
 const autil = require('./adficeUtil');
 const ae = require('./adficeEvaluator');
+var dbconfig = require('./dbconfig.json');
 const mariadb = require('mariadb');
 
 function question_marks(num) {
@@ -13,17 +14,11 @@ function question_marks(num) {
 }
 
 async function createPool() {
-    let passwd = await fs.promises.readFile('adfice_mariadb_user_password');
-    passwd = String(passwd).trim();
-
-    const pool = mariadb.createPool({
-        host: '127.0.0.1',
-        port: 13306,
-        user: 'adfice',
-        password: passwd,
-        database: 'adfice',
-        connectionLimit: 5
-    });
+    if (!dbconfig['password']) {
+        let passwd = await fs.promises.readFile(dbconfig['passwordFile']);
+        dbconfig['password'] = String(passwd).trim();
+    }
+    const pool = mariadb.createPool(dbconfig);
     return pool;
 }
 

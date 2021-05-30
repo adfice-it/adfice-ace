@@ -1,0 +1,8 @@
+{
+    "host": "127.0.0.1",
+    "port": 13306,
+    "user": "adfice",
+    "database": "adfice",
+    "connectionLimit": 5,
+    "passwordFile": "adfice_mariadb_user_password"
+}
