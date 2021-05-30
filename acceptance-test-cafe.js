@@ -149,6 +149,7 @@ test('Test selecting views', async t => {
     let div_condensed_view = Selector('div#div_condensed_view');
     let div_patient_view = Selector('div#div_patient_view');
     let div_epic_box = Selector('div#div_epic_box');
+    let div_advice_M01AB05 = Selector('div#advice_M01AB05');
 
     let checkbox0 = Selector('#cb_M01AB05_80b_2');
     let checkbox1 = Selector('#cb_M01AB05_78_3');
@@ -185,6 +186,7 @@ test('Test selecting views', async t => {
 
     // initial view should be clinician view
     await t.expect(div_clinician_view.visible).ok();
+    await t.expect(div_advice_M01AB05.visible).ok();
     await t.expect(div_patient_view.visible).notOk();
     await t.expect(div_epic_box.visible).ok();
     await t.expect(row0.visible).ok();
@@ -193,6 +195,7 @@ test('Test selecting views', async t => {
     // try switching to the patient view
     await t.click(button_patient_view);
     await t.expect(div_clinician_view.visible).notOk();
+    await t.expect(div_advice_M01AB05.visible).notOk();
     await t.expect(div_patient_view.visible).ok();
     await t.expect(div_epic_box.visible).notOk();
     // the patient texts are only visible if checked in clinician view
@@ -202,6 +205,7 @@ test('Test selecting views', async t => {
     // try switching to the condensed view
     await t.click(button_condensed_view);
     await t.expect(div_clinician_view.visible).ok();
+    await t.expect(div_advice_M01AB05.visible).notOk();
     await t.expect(div_patient_view.visible).notOk();
     await t.expect(div_epic_box.visible).ok();
     await t.expect(row0.visible).notOk();
@@ -210,6 +214,7 @@ test('Test selecting views', async t => {
     // try switching to the clinician view
     await t.click(button_clinician_view);
     await t.expect(div_clinician_view.visible).ok();
+    await t.expect(div_advice_M01AB05.visible).ok();
     await t.expect(div_patient_view.visible).notOk();
     await t.expect(div_epic_box.visible).ok();
     await t.expect(row0.visible).ok();

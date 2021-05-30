@@ -11,6 +11,13 @@ var ws;
 var weirdness = 0;
 var messages_received = 0;
 
+function set_class_display(class_name, val) {
+    let elms = document.getElementsByClassName(class_name);
+    for (let i = 0; i < elms.length; ++i) {
+        elms[i].style.display = val;
+    }
+}
+
 function switch_to_view(view) {
     let div_clinician_view = document.getElementById("div_clinician_view");
     let div_patient_view = document.getElementById("div_patient_view");
@@ -30,6 +37,7 @@ function switch_to_view(view) {
         div_clinician_view.style.display = 'none';
         div_patient_view.style.display = 'block';
         div_epic_box.style.display = 'none';
+        set_class_display("advice_no_checkbox", 'none');
     } else if (view === "condensed") {
         div_clinician_view.style.display = 'block';
         div_patient_view.style.display = 'none';
@@ -43,6 +51,7 @@ function switch_to_view(view) {
                 checkbox_rows[i].style.display = 'none';
             }
         }
+        set_class_display("advice_no_checkbox", 'none');
     } else {
         if (view !== "clinician") {
             ++weirdness;
@@ -55,6 +64,7 @@ function switch_to_view(view) {
         for (let i = 0; i < checkbox_rows.length; ++i) {
             checkbox_rows[i].style.display = 'block';
         }
+        set_class_display("advice_no_checkbox", 'block');
     }
 }
 
@@ -112,6 +122,28 @@ function freetextentered(textfield) {
     ws.send(msg_str);
 }
 
+function process_checkbox(checkbox, checked) {
+    checkbox.checked = checked;
+
+    let checkbox_id = checkbox.id;
+
+    let epic_row_id = checkbox_id.replace(/^cb_/, 'et_');
+    let epic_row = document.getElementById(epic_row_id);
+    if (checked) {
+        epic_row.style.display = 'block';
+    } else {
+        epic_row.style.display = 'none';
+    }
+
+    let patient_row_id = checkbox_id.replace(/^cb_/, 'pt_');
+    let patient_row = document.getElementById(patient_row_id);
+    if (checked) {
+        patient_row.style.display = 'block';
+    } else {
+        patient_row.style.display = 'none';
+    }
+}
+
 function process_checkboxes(message) {
     if (!('box_states' in message)) {
         return;
@@ -121,23 +153,7 @@ function process_checkboxes(message) {
     checkbox_ids.forEach((checkbox_id, index) => {
         let checked = box_states[checkbox_id];
         var checkbox = document.getElementById(checkbox_id);
-        checkbox.checked = checked;
-
-        let epic_row_id = checkbox_id.replace(/^cb_/, 'et_');
-        let epic_row = document.getElementById(epic_row_id);
-        if (checked) {
-            epic_row.style.display = 'block';
-        } else {
-            epic_row.style.display = 'none';
-        }
-
-        let patient_row_id = checkbox_id.replace(/^cb_/, 'pt_');
-        let patient_row = document.getElementById(patient_row_id);
-        if (checked) {
-            patient_row.style.display = 'block';
-        } else {
-            patient_row.style.display = 'none';
-        }
+        process_checkbox(checkbox, checked);
     });
 }
 
@@ -186,6 +202,7 @@ function first_incoming_message(event) {
         checkbox.onclick = () => {
             boxclicked(checkbox)
         };
+        process_checkbox(checkbox, false)
     })
     elementList = document.querySelectorAll("input[type='text']");
     elementList.forEach((textfield) => {
