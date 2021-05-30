@@ -29,6 +29,10 @@ test.page(`http://localhost:9090/patient?id=68`)
         let freetext_id = `ft_${atc}_${rule}_${cbn}_1`;
         let freetext_css_selector = `input#${freetext_id}`;
 
+        let ref_page_num = 14;
+        let ref_C03AA03 = Selector(`#atc_ref_page_${atc}_${ref_page_num}`);
+        await t.expect(ref_C03AA03.exists).ok();
+
         const oldFreetext = "old";
         const newFreetext = "foo";
 

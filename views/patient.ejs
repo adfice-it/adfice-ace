@@ -220,7 +220,21 @@ Labs:
 <div id="div_advice_<%= atc %>">
 <a href="https://en.wikipedia.org/wiki/ATC_code_<%= atc %>">
 <%= ucfirst(row.medication_name).trim() %></a>
-<div class="refpages">Meer informatie over het advies:<!--TODO put refpages here--></div>
+<div id="div_refpages_<%= atc %>" class="refpages">Meer informatie over het advies:
+<%
+	let referenceNumbers = row.referenceNumbers;
+        for (let k = 0; k < referenceNumbers.length; ++k ) {
+            let ref_page_num = referenceNumbers[k].reference;
+	    if (k) {
+-%>
+,
+<%          } -%>
+<span id="atc_ref_page_<%= atc %>_<%= ref_page_num %>" class="atc_ref_page">
+<a href="https://kik.amc.nl/falls/refpages/refpage<%= ref_page_num %>.html"
+   target="_blank>"><%= ref_page_num %></a>
+</span><!-- atc_ref_page_<%= atc %>_<%= ref_page_num %> -->
+<% } -%>
+</div><!-- div_refpages_<%= atc %> -->
 <div id="advice_<%= atc %>" class="advice_no_checkbox">
 <strong>Advies:</strong>
 <%     let advices = row.adviceTextsNoCheckboxes; -%>
