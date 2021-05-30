@@ -51,6 +51,9 @@ body {
 	padding-bottom: 5px;
 	padding-left: 5px;
 }
+.freetext {
+	display: inline;
+}
 div.prediction{
 	margin: auto;
 	width: 50%;
@@ -422,8 +425,8 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <input id="<%= chunk_id %>" type="text"
         value="<%= chunk.text %>"/>
 <%             } else { -%>
-<div id="<%= chunk_id %>">
-<%
+<div id="<%= chunk_id %>" class ="freetext">
+<% //
 	let cbString = md.makeHtml(chunk.text);
 	cbString = cbString.replace("<p>", "");
 	cbString = cbString.replace("</p>", ""); //Select Box texts don't contain legit paragraphs. It is already in a span so this does not need to be replaced, just destroyed.
