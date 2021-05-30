@@ -134,6 +134,9 @@ async function getAdviceTextsNoCheckboxes(rule_numbers) {
 }
 
 async function getReferenceNumbers(rule_numbers) {
+    if (rule_numbers === null || !rule_numbers.length) {
+        return [];
+    }
     var sql = `/* getReferenceNumbers */
         SELECT DISTINCT reference
           FROM med_rules
