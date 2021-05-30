@@ -1,8 +1,5 @@
 High Prio:
 * styling, try to match existing mock-ups
-* default checkbox values if none selected
-* preselection of some kind (taper-reduce if present?)
-* do not display advice for meds without advice
 
 First after demo:
 * non-medication advice (same for every patient)

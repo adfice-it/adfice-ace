@@ -94,7 +94,7 @@ function split_advice_texts_cdss_epic_patient(advice_texts) {
 }
 
 async function getAdviceTextsCheckboxes(rule_numbers) {
-    if ((rule_numbers === null) || (!rule_numbers.length)) {
+    if ((rule_numbers == null) || (!rule_numbers.length)) {
         return [];
     }
     var sql = `/* adfice.getAdviceTextsCheckboxes */
@@ -117,7 +117,7 @@ async function getAdviceTextsCheckboxes(rule_numbers) {
 }
 
 async function getAdviceTextsNoCheckboxes(rule_numbers) {
-    if (rule_numbers === null || !rule_numbers.length) {
+    if (rule_numbers == null || !rule_numbers.length) {
         return [];
     }
     var sql = `/* adfice.getAdviceTextsNoCheckboxes */
@@ -134,7 +134,7 @@ async function getAdviceTextsNoCheckboxes(rule_numbers) {
 }
 
 async function getReferenceNumbers(rule_numbers) {
-    if (rule_numbers === null || !rule_numbers.length) {
+    if (rule_numbers == null || !rule_numbers.length) {
         return [];
     }
     var sql = `/* getReferenceNumbers */
@@ -157,6 +157,7 @@ async function getMedsForPatient(patientIdentifier) {
     var sql = `/* adfice.getMedsForPatient */
         SELECT ATC_code,
                medication_name,
+               generic_name,
                start_date
           FROM patient_medications
          WHERE patient_id=?
@@ -364,6 +365,9 @@ async function getAdviceForPatient(patientIdentifier) {
         // medication and add it to this object
         let atc_code = med.ATC_code;
         let fired = medsWithRulesToFire[atc_code];
+        if (!fired || !fired.length) {
+            continue;
+        }
 
         let advice_text = await getAdviceTextsCheckboxes(fired);
 
@@ -372,13 +376,11 @@ async function getAdviceForPatient(patientIdentifier) {
         let adv = {};
         adv.ATC_code = atc_code.trim();
         adv.medication_name = med.medication_name.trim();
+        adv.generic_name = med.generic_name.trim();
         adv.adviceTextsCheckboxes = advice_text;
         adv.adviceTextsNoCheckboxes = advice_text_no_box;
         adv.referenceNumbers = await getReferenceNumbers(fired);
         advice.push(adv);
-
-        //console.log(JSON.stringify({adv: adv}, null, 4));
-
     }
 
     let selected_advice = await getSelectionsForPatient(patient_id);
@@ -480,6 +482,7 @@ module.exports = {
     getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
     getFreetextsForPatient: getFreetextsForPatient,
     getMedsForPatient: getMedsForPatient,
+    getReferenceNumbers: getReferenceNumbers,
     getSelectionsForPatient: getSelectionsForPatient,
     selectionStatesToBoxStates: selectionStatesToBoxStates,
     setFreetextsForPatient: setFreetextsForPatient,

@@ -209,18 +209,25 @@ Labs:
 <% } -%>
 </span>
 </div>
-<% let medication_advice = patient_advice.medication_advice; -%>
 <div id="div_clinician_view" class="div_clinician_view">
 <strong>Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren</strong>
 <img src="static/sharedDecisionMaking.png" style="max-width:100%;" alt="SDM advies">
 <div class="advice_header">Medicatiefactoren</div>
-<% for (let i = 0; i < medication_advice.length; ++i ) { -%>
-<%     let row = medication_advice[i]; -%>
-<%     let atc = row.ATC_code; -%>
+<% let medication_advice = patient_advice.medication_advice || [];
+for (let i = 0; i < medication_advice.length; ++i ) {
+     let row = medication_advice[i];
+     let atc = row.ATC_code;
+     let generic_name = row.generic_name;
+     let d = generic_name[0];
+     let med_url = "https://www.farmacotherapeutischkompas.nl" +
+			"/bladeren/preparaatteksten" +
+			"/" + generic_name[0] + "/" + generic_name;
+-%>
 <div id="div_advice_<%= atc %>">
-<a href="https://en.wikipedia.org/wiki/ATC_code_<%= atc %>">
-<%= ucfirst(row.medication_name).trim() %></a>
-<div id="div_refpages_<%= atc %>" class="refpages">Meer informatie over het advies:
+<%= ucfirst(row.medication_name).trim() %>
+ <a href="<%= med_url %>" class="fklink">FK</a>
+<div id="div_refpages_<%= atc %>"
+	class="refpages">Meer informatie over het advies:
 <%
 	let referenceNumbers = row.referenceNumbers;
         for (let k = 0; k < referenceNumbers.length; ++k ) {

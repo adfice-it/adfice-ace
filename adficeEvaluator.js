@@ -39,6 +39,7 @@ function evaluateRules(meds, rules, drugList, problemList, age, labTests) {
             meds_with_fired.push(med);
         } else {
             meds_without_fired.push(med);
+            delete medsWithRulesToFire[atc_code];
         }
     }
     let rv = {
