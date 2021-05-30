@@ -37,6 +37,10 @@ body {
 	text-shadow: 0 1px 0 #84BAFF;
 	box-shadow: 0 0 15px #00214B
 }
+.button_advice_view {
+	border-radius: 8px;
+	border: 2px solid green;
+}
 #patient_info {
 	background: #d9d9d9;
 	width: 99%;
@@ -169,11 +173,11 @@ div.gauge_text_right {
 >
 <div id="footer">
 Patient: <%= patient_id %>
-<button id="button_clinician_view" type="button"
+<button id="button_clinician_view" type="button" class='button_advice_view'
         onclick="switch_to_view('clinician')">Voorbereiding</button>
-<button id="button_condensed_view" type="button"
+<button id="button_condensed_view" type="button" class='button_advice_view'
         onclick="switch_to_view('condensed')">Consult</button>
-<button id="button_patient_view" type="button"
+<button id="button_patient_view" type="button" class='button_advice_view'
         onclick="switch_to_view('patient')">Advies</button>
 <span id="viewer_count"></span>
 </div>

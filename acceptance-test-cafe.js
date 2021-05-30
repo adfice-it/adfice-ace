@@ -184,6 +184,17 @@ test('Test selecting views', async t => {
     await t.expect(button_condensed_view.innerText).eql('Consult');
     await t.expect(button_patient_view.innerText).eql('Advies');
 
+    // and the right colors
+    let test_button_style = 0;
+    if (test_button_style) {
+        await t.expect(button_clinician_view.style.backgroundColor).eql('green');
+        await t.expect(button_clinician_view.color).eql('white');
+        await t.expect(button_condensed_view.style.backgroundColor).eql('white');
+        await t.expect(button_condensed_view.color).eql('green');
+        await t.expect(button_patient_view.style.backgroundColor).eql('white');
+        await t.expect(button_patient_view.color).eql('green');
+    }
+
     // initial view should be clinician view
     await t.expect(div_clinician_view.visible).ok();
     await t.expect(div_advice_M01AB05.visible).ok();
@@ -202,6 +213,16 @@ test('Test selecting views', async t => {
     await t.expect(patient0.visible).notOk();
     await t.expect(patient1.visible).ok();
 
+    // check button colors
+    if (test_button_style) {
+        await t.expect(button_clinician_view.style.backgroundColor).eql('white');
+        await t.expect(button_clinician_view.color).eql('green');
+        await t.expect(button_condensed_view.style.backgroundColor).eql('white');
+        await t.expect(button_condensed_view.color).eql('green');
+        await t.expect(button_patient_view.style.backgroundColor).eql('green');
+        await t.expect(button_patient_view.color).eql('white');
+    }
+
     // try switching to the condensed view
     await t.click(button_condensed_view);
     await t.expect(div_clinician_view.visible).ok();
@@ -211,6 +232,16 @@ test('Test selecting views', async t => {
     await t.expect(row0.visible).notOk();
     await t.expect(row1.visible).ok();
 
+    // and the right colors
+    if (test_button_style) {
+        await t.expect(button_clinician_view.style.backgroundColor).eql('white');
+        await t.expect(button_clinician_view.color).eql('green');
+        await t.expect(button_condensed_view.style.backgroundColor).eql('green');
+        await t.expect(button_condensed_view.color).eql('white');
+        await t.expect(button_patient_view.style.backgroundColor).eql('white');
+        await t.expect(button_patient_view.color).eql('green');
+    }
+
     // try switching to the clinician view
     await t.click(button_clinician_view);
     await t.expect(div_clinician_view.visible).ok();
@@ -219,6 +250,16 @@ test('Test selecting views', async t => {
     await t.expect(div_epic_box.visible).ok();
     await t.expect(row0.visible).ok();
     await t.expect(row1.visible).ok();
+
+    // check colors one more time.
+    if (test_button_style) {
+        await t.expect(button_clinician_view.style.backgroundColor).eql('green');
+        await t.expect(button_clinician_view.color).eql('white');
+        await t.expect(button_condensed_view.style.backgroundColor).eql('white');
+        await t.expect(button_condensed_view.color).eql('green');
+        await t.expect(button_patient_view.style.backgroundColor).eql('white');
+        await t.expect(button_patient_view.style.color).eql('green');
+    }
 
     // the epic texts are only ever visible if checked
     await t.expect(epic0.visible).notOk();

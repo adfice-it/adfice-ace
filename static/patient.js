@@ -25,6 +25,10 @@ function switch_to_view(view) {
     let checkboxes = document.querySelectorAll("[id ^= cb_]");
     let checkbox_rows = document.querySelectorAll("[id ^= tr_]");
 
+    let button_clinician = document.getElementById("button_clinician_view");
+    let button_condensed = document.getElementById("button_condensed_view");
+    let button_patient = document.getElementById("button_patient_view");
+
     if (checkboxes.length !== checkbox_rows.length) {
         ++weirdness;
         console.log(`Found ${checkboxes.length} checkboxes but`,
@@ -33,11 +37,23 @@ function switch_to_view(view) {
         return;
     }
 
+    button_clinician.style.backgroundColor = 'white';
+    button_clinician.style.color = 'green';
+    button_condensed.style.backgroundColor = 'white';
+    button_condensed.style.color = 'green';
+    button_patient.style.backgroundColor = 'white';
+    button_patient.style.color = 'green';
+
+
     if (view === "patient") {
         div_clinician_view.style.display = 'none';
         div_patient_view.style.display = 'block';
         div_epic_box.style.display = 'none';
         set_class_display("advice_no_checkbox", 'none');
+
+        button_patient.style.backgroundColor = 'green';
+        button_patient.style.color = 'white';
+
     } else if (view === "condensed") {
         div_clinician_view.style.display = 'block';
         div_patient_view.style.display = 'none';
@@ -52,6 +68,10 @@ function switch_to_view(view) {
             }
         }
         set_class_display("advice_no_checkbox", 'none');
+
+        button_condensed.style.backgroundColor = 'green';
+        button_condensed.style.color = 'white';
+
     } else {
         if (view !== "clinician") {
             ++weirdness;
@@ -65,6 +85,9 @@ function switch_to_view(view) {
             checkbox_rows[i].style.display = 'block';
         }
         set_class_display("advice_no_checkbox", 'block');
+
+        button_clinician.style.backgroundColor = 'green';
+        button_clinician.style.color = 'white';
     }
 }
 
