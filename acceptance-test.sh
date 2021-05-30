@@ -25,4 +25,9 @@ if [ $(grep -c '63b' "$FILE") -eq 0 ]; then
 	exit 1;
 fi
 
+if [ $(grep -c 'refpages/refpage13.html' "$FILE") -eq 0]; then
+	echo 'refpages not found' >&2
+	exit 1;
+fi
+
 rm -fv "$FILE"
