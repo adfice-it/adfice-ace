@@ -145,8 +145,7 @@ Ga direct naar medicijnen met aanbevolen maatregelen:
 <%     if (i) { -%>
 ,
 <%     } -%>
-<!-- TODO link to further down -->
-<a href="#advice_<%= med.ATC_code %>" title="<%= med.medication_name %>">
+<a href="#div_advice_<%= med.ATC_code %>" title="<%= med.medication_name %>">
 <%= ucfirst(med.medication_name).trim() %></a>
 <% } -%>
 </span><!-- meds_with_rules -->
@@ -218,6 +217,7 @@ Labs:
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
+<div id="div_advice_<%= atc %>">
 <a href="https://en.wikipedia.org/wiki/ATC_code_<%= atc %>">
 <%= ucfirst(row.medication_name).trim() %></a>
 <div class="refpages">Meer informatie over het advies:<!--TODO put refpages here--></div>
@@ -289,6 +289,7 @@ Labs:
 <%     } -%>
 </table>
 </div><!-- advice_selection_area_<%= i %> -->
+</div><!-- div_advice_<%= atc %> -->
 <% } -%>
 </div><!-- div_clinician_view -->
 
