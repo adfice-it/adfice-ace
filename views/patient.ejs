@@ -238,7 +238,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <%          } -%>
 <span id="atc_ref_page_<%= atc %>_<%= ref_page_num %>" class="atc_ref_page">
 <a href="https://kik.amc.nl/falls/refpages/refpage<%= ref_page_num %>.html"
-   target="_blank>"><%= ref_page_num %></a>
+   target="_blank"><%= ref_page_num %></a>
 </span><!-- atc_ref_page_<%= atc %>_<%= ref_page_num %> -->
 <% } -%>
 </div><!-- div_refpages_<%= atc %> -->
@@ -249,7 +249,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <%         let advice = advices[j]; -%>
 <%         let att_prefix = "att_" + i + "_" + j; -%>
 <%         let bogus_rule = "NonCB"; -%>
-<span id="<%= att_prefix %>_cdss">
+<div id="<%= att_prefix %>_cdss">
 <%         for (let k = 0; k < advice.cdss_split.length; ++k) { -%>
 <%             let chunk = advice.cdss_split[k]; -%>
 <%             let chunk_id = `ft_${atc}_${bogus_rule}_${j}_${k}`; -%>
@@ -257,12 +257,12 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <input id="<%= chunk_id %>" type="text"
         value="<%= chunk.text %>"/>
 <%             } else { -%>
-<span id="<%= chunk_id %>">
+<div id="<%= chunk_id %>">
 <%- md.makeHtml(chunk.text) -%>
-</span> <!-- <%= att_prefix %>_cdss_<%= k %> -->
+</div> <!-- <%= chunk_id %> -->
 <%             } -%>
 <%         } -%>
-</span> <!-- <%= att_prefix %>_cdss -->
+</div> <!-- <%= att_prefix %>_cdss -->
 <%     } -%>
 </div>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
@@ -291,7 +291,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 </span> <!-- <%= asa_prefix %>_sbn -->
 </td>
 <td>
-<span id="<%= asa_prefix %>_cdss">
+<div id="<%= asa_prefix %>_cdss">
 <%         for (let k = 0; k < cb_advice.cdss_split.length; ++k) { -%>
 <%             let chunk = cb_advice.cdss_split[k]; -%>
 <%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
@@ -299,12 +299,12 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <input id="<%= chunk_id %>" type="text"
         value="<%= chunk.text %>"/>
 <%             } else { -%>
-<span id="<%= chunk_id %>">
+<div id="<%= chunk_id %>">
 <%- md.makeHtml(chunk.text) -%>
-</span> <!-- <%= asa_prefix %>_cdss_<%= k %> -->
+</div> <!-- <%= chunk_id %> -->
 <%             } -%>
 <%         } -%>
-</span> <!-- <%= asa_prefix %>_cdss -->
+</div> <!-- <%= asa_prefix %>_cdss -->
 </td>
 </tr>
 <%     } -%>
