@@ -127,6 +127,9 @@ span.instruction_step {
 	padding-right: 5px;
 	padding-left: 5px;
 }
+div.general_advice{
+	margin-bottom: 1em;
+}
 div.gauge_background {
     width:<%= gauge_width %>;
     height: 0px;
@@ -318,6 +321,15 @@ Labs:
 </div><!-- instruction_box -->
 
 <div class="advice_header">Medicatiefactoren</div>
+<div id="general_advice" class="general_advice">
+In het algemeen dient een medicament gestopt of afgebouwd worden als:
+<ul>
+<li>er geen indicatie (meer) is </li>
+<li>er een veiliger alternatief beschikbaar is</li>
+</ul>
+Het is wenselijk om iedere patient na een medicatiewijziging actief te monitoren (middels follow-up) op het optreden van een (hernieuwde) val en/of klachten zoals duizeligheid of licht in het hoofd bij opstaan veranderen. 
+</div><!-- general advice -->
+
 <% let medication_advice = patient_advice.medication_advice || [];
 for (let i = 0; i < medication_advice.length; ++i ) {
      let row = medication_advice[i];

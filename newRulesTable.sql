@@ -53,6 +53,7 @@ N05BA Benzodiazepine derivatives ","Parkinson and parkinson-like conditions","",
 N05C (Hypnotics and sedatives) EXCLUDING N05CH (melatonin)
 or
 N05BA Benzodiazepine derivatives ","all","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","((atc:N05C & ! atc:N05CH) | atc:N05BA)","",5),
+("12","yes", "no", "anxiolytica", "not angststoornis", "", "atc:N05B & !atc:N05BA & !atc:N05BB", "!problem:angststoornis & ! problem:slaapstoornis",5),
 ("13","yes","no","anxiolytica
 N05B Anxiolytics 
 excluding benzos (covered above) and antihistamines","all","","atc:N05B & !atc:N05BA & !atc:N05BB","",6),
