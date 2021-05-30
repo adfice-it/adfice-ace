@@ -423,7 +423,12 @@ for (let i = 0; i < medication_advice.length; ++i ) {
         value="<%= chunk.text %>"/>
 <%             } else { -%>
 <div id="<%= chunk_id %>">
-<%- md.makeHtml(chunk.text) -%>
+<%
+	let cbString = md.makeHtml(chunk.text);
+	cbString = cbString.replace("<p>", "");
+	cbString = cbString.replace("</p>", ""); //Select Box texts don't contain legit paragraphs. It is already in a span so this does not need to be replaced, just destroyed.
+%>
+<%- cbString -%>
 </div> <!-- <%= chunk_id %> -->
 <%             } -%>
 <%         } -%>
