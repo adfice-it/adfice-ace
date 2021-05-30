@@ -58,6 +58,14 @@ body {
 .advice_selection_area{
 	background: #f5f5f5;
 }
+.med_name{
+	display: inline;
+	font-size: large;
+	font-weight: bold;
+}
+.div_epic_box{
+	border:1px solid black;
+}
 div.prediction{
 	margin: auto;
 	width: 50%;
@@ -65,7 +73,7 @@ div.prediction{
 div.advice_header{
 	margin: auto;
 	width: 10%;
-	font-size: 16px;
+	font-size: large;
 	font-weight: bold;
 }
 div.whitespace{
@@ -354,7 +362,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 			"/" + generic_name[0] + "/" + generic_name;
 -%>
 <div id="div_advice_<%= atc %>">
-<%= ucfirst(row.medication_name).trim() %>
+<div id="div_med_name_<%= atc %>" class = "med_name"><%= ucfirst(row.medication_name).trim() %></div>
  <a href="<%= med_url %>" class="fklink" target="_blank">FK</a>
 <div id="div_refpages_<%= atc %>"
 	class="refpages">Meer informatie over het advies:
@@ -397,7 +405,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 </div>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
 <div id="advice_selection_area_<%= i %>" class="advice_selection_area">
-<p>Maatregelen (aangekruist indien aanbevolen):</p>
+<p><strong>Maatregelen (aangekruist indien aanbevolen):</strong></p>
 <table>
 <%
      for (let j = 0; j < cb_advices.length; ++j ) {
@@ -495,8 +503,8 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
-<p>Epic:</p>
-<%
+<p>Tekst om te knippen en plakken in Epic:</p>
+<% //
      for (let j = 0; j < cb_advices.length; ++j ) {
          let cb_advice = cb_advices[j];
          let aea_prefix = "aea_" + i + "_" + j;
