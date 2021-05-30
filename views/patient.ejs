@@ -88,41 +88,43 @@ div.refpages{
 	display:inline;
 	float: right;
 }
-div.instruction_box_row {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
+div.spacer{
+	display: block;
+	clear: both;
+	height: 0.5em;
+}
+div.instruction_box{
+	display: block;
+	clear: both;
+	max-width: 95%;
+	margin-bottom: 2em;
+}
+
+div.instruction_row{
+	clear: both;
 	width: 100%;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 25px;
-	padding-left: 10px;
+	margin: 5px;
 }
-div.instruction_col {
-	display: flex;
-	flex-direction: column;
-	flex-basis: 100%;
-	flex: 1;
-	padding-right: 25px;
+div.sdm_left {
+	float: left;
 }
-div.instruction_step {
-	font-family: Arial, sans-serif;
+div.sdm_right {
+	float: right;
+}
+div.sdm{
 	background: #DDDDDD;
 	text-align: left;
 	border: 2px solid black;
-	padding-top: 5px;
-	padding-bottom: 5px;
+	width: 48%;
 }
-div.instruction_box_heading {
+span.instruction_step {
+	font-family: Arial, sans-serif;
+}
+span.instruction_heading {
 	font-weight: bold;
 }
-div.instruction_step_heading {
-	font-weight: bold;
-}
-div.instruction_step_item {
-	padding-top: 5px;
+span.instruction_step {
 	padding-right: 5px;
-	padding-bottom: 5px;
 	padding-left: 5px;
 }
 div.gauge_background {
@@ -271,89 +273,54 @@ Labs:
 <strong>Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren</strong>
 <img src="static/sharedDecisionMaking.png" style="max-width:100%;" alt="SDM advies">
 <% } else { -%>
-<div id='instruction_box'  class='instruction_box'>
- <div id='instruction_box_heading' class='instruction_box_heading'>
-Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren
- </div>
- <div id='instruction_box_row_1' class='instruction_box_row'>
-  <div id='instruction_col_1' class='instruction_col'>
 
-   <div id='instruction_step_1' class='instruction_step'>
-     <div id='instruction_step_heading_1' class='instruction_step_heading'>
-Stap 1: Voorbereiding
-     </div>
-     <div id='instruction_step_item_1_1' class='instruction_step_item'>
-Heeft de pati&euml;nt beperkingen op het gebied van horen/ziel/taal/cognitie?
-     </div>
-     <div id='instruction_step_item_1_2' class='instruction_step_item'>
-Heeft de pati&euml;nt (een) naaste(n) mee?
-     </div>
-   </div><!-- instruction_step_1 -->
+<div class="instruction_box">
+<div class = "instruction_row">
+<div id="sdm1" class ="sdm_left sdm">
+<span class="instruction_heading">Stap 1: Voorbereiding</span><br/>
+<span class="instruction_step">Heeft de pati&euml;nt beperkingen op het gebied van horen/ziel/taal/cognitie?<br/></span>
+<span class="instruction_step">Heeft de pati&euml;nt (een) naaste(n) mee?<br/></span>
+</div><!-- sdm1 -->
 
-   <div id='instruction_step_2' class='instruction_step'>
-     <div id='instruction_step_heading_2' class='instruction_step_heading'>
-Stap 2: Bespreek mogelijke behandeldoelen
-     </div>
-     <div id='instruction_step_item_2_1' class='instruction_step_item'>
-Wat past wel/niet bij de pati&euml;nt?
-     </div>
-     <div id='instruction_step_item_2_2' class='instruction_step_item'>
-Waar staat voor de pati&euml;nt kwaliteit van leven foor?<br/>
-&nbsp;&nbsp;Wat draagt hier aan bij en wat staat dit in de weg?
-     </div>
-   </div><!-- instruction_step_2 -->
+<div id="sdm2" class ="sdm sdm_right">
+<span class="instruction_heading">Stap 2: Bespreek mogelijke behandeldoelen<br/></span>
+<span class="instruction_step">Wat past wel/niet bij de pati&euml;nt?<br/></span>
+<span class="instruction_step">Waar staat voor de pati&euml;nt kwaliteit van leven foor?<br/>
+&nbsp;&nbsp;Wat draagt hier aan bij en wat staat dit in de weg?<br/></span>
+</div><!-- sdm2 -->
+</div><!-- instruction_row_1-->
+<div class ="spacer"></div>
 
-   <div id='instruction_step_3' class='instruction_step'>
-     <div id='instruction_step_heading_3' class='instruction_step_heading'>
-Stap 3: Kies (een) behandeldoel(en)
-     </div>
-     <div id='instruction_step_item_3_1' class='instruction_step_item'>
-Wat zijn de behandeldoelen van de pati&euml;nt?
-     </div>
-   </div><!-- instruction_step_3 -->
+<div class = "instruction_row">
+<div id="sdm3" class ="sdm_left sdm">
+<span class="instruction_heading">Stap 3: Kies (een) behandeldoel(en)<br/></span>
+<span class="instruction_step">Wat zijn de behandeldoelen van de pati&euml;nt?</span>
+</div><!-- sdm3 -->
 
-  </div><!-- instruction_col_1 -->
+<div id="sdm4" class ="sdm sdm_right">
+<span class="instruction_heading">Stap 4: Bespreek de behandelopties<br/></span>
+<span class="instruction_step"><em>Gebruik hier de "Consult" weergave voor</em><br/></span>
+<span class="instruction_step">Bespreek de voor- en nadelen van de verschillende behandelopties<br/></span>
+</div><!-- sdm4 -->
+</div><!-- instruction_row_2 -->
+<div class ="spacer"></div>
 
-  <div id='instruction_col_2' class='instruction_col'>
+<div class = "instruction_row">
+<div class ="sdm sdm_left">
+<span class="instruction_heading">Stap 5: Besluitvorming<br/></span>
+<span class="instruction_step">Sluit het besluit aan bij de normen en waarden van de pati&euml;nt?<br/></span>
+</div><!-- sdm5 -->
 
-   <div id='instruction_step_4' class='instruction_step'>
-     <div id='instruction_step_heading_4' class='instruction_step_heading'>
-Stap 4: Bespreek de behandelopties
-     </div>
-     <div id='instruction_step_item_4_1' class='instruction_step_item'>
-Gebruik hier de "Consult" weergave voor
-     </div>
-     <div id='instruction_step_item_4_2' class='instruction_step_item'>
-Bespreek de voor- en nadelen van de verschillende behandelopties
-     </div>
-   </div><!-- instruction_step_4 -->
-
-   <div id='instruction_step_5' class='instruction_step'>
-     <div id='instruction_step_heading_5' class='instruction_step_heading'>
-Stap 5: Besluitvorming
-     </div>
-     <div id='instruction_step_item_5_1' class='instruction_step_item'>
-Sluit het besluit aan bij de normen en waarden van de pati&euml;nt?
-     </div>
-   </div><!-- instruction_step_5 -->
-
-   <div id='instruction_step_6' class='instruction_step'>
-     <div id='instruction_step_heading_6' class='instruction_step_heading'>
-Stap 6: Evalueren
-     </div>
-     <div id='instruction_step_item_6_1' class='instruction_step_item'>
-Gebruik hier de "Advies" weergave voor
-     </div>
-     <div id='instruction_step_item_6_2' class='instruction_step_item'>
-Zijn de pati&euml;nt en eventuele mantelzorgers(s) tevreden met het besluit?
-     </div>
-     <div id='instruction_step_item_6_3' class='instruction_step_item'>
-Stel een behandelplan op
-     </div>
-   </div><!-- instruction_step_6 -->
-  </div><!-- instruction_col_2 -->
- </div><!-- instruction_box_row_1 -->
+<div id="sdm6" class ="sdm sdm_right">
+<span class="instruction_heading">Stap 6: Evalueren<br/></span>
+<span class="instruction_step">Gebruik hier de "Advies" weergave voor<br/></span>
+<span class="instruction_step">Zijn de pati&euml;nt en eventuele mantelzorgers(s) tevreden met het besluit?<br/></span>
+<span class="instruction_step">Stel een behandelplan op<br/></span>
+</div><!-- sdm6 -->
+</div><!-- instruction_row3 -->
+<div class="spacer"></div>
 </div><!-- instruction_box -->
+
 <% } -%>
 <div class="advice_header">Medicatiefactoren</div>
 <% let medication_advice = patient_advice.medication_advice || [];
