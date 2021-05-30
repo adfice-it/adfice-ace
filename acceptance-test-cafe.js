@@ -185,14 +185,15 @@ test('Test selecting views', async t => {
     await t.expect(button_patient_view.innerText).eql('Advies');
 
     // and the right colors
-    let test_button_style = 0;
+
+    let test_button_style = true;
     if (test_button_style) {
-        await t.expect(button_clinician_view.style.backgroundColor).eql('green');
-        await t.expect(button_clinician_view.color).eql('white');
-        await t.expect(button_condensed_view.style.backgroundColor).eql('white');
-        await t.expect(button_condensed_view.color).eql('green');
-        await t.expect(button_patient_view.style.backgroundColor).eql('white');
-        await t.expect(button_patient_view.color).eql('green');
+        await t.expect(button_clinician_view.style).contains({ 'background-color': 'rgb(0, 128, 0)' });
+        await t.expect(button_clinician_view.style).contains({ 'color': 'rgb(255, 255, 255)' });
+        await t.expect(button_condensed_view.style).contains({ 'background-color': 'rgb(255, 255, 255)' });
+        await t.expect(button_condensed_view.style).contains({ 'color': 'rgb(0, 128, 0)' });
+        await t.expect(button_patient_view.style).contains({ 'background-color': 'rgb(255, 255, 255)' });
+        await t.expect(button_patient_view.style).contains({ 'color': 'rgb(0, 128, 0)' });
     }
 
     // initial view should be clinician view
@@ -215,12 +216,12 @@ test('Test selecting views', async t => {
 
     // check button colors
     if (test_button_style) {
-        await t.expect(button_clinician_view.style.backgroundColor).eql('white');
-        await t.expect(button_clinician_view.color).eql('green');
-        await t.expect(button_condensed_view.style.backgroundColor).eql('white');
-        await t.expect(button_condensed_view.color).eql('green');
-        await t.expect(button_patient_view.style.backgroundColor).eql('green');
-        await t.expect(button_patient_view.color).eql('white');
+        await t.expect(button_clinician_view.style).contains({ 'background-color': 'rgb(255, 255, 255)' });
+        await t.expect(button_clinician_view.style).contains({ 'color': 'rgb(0, 128, 0)' });
+        await t.expect(button_condensed_view.style).contains({ 'background-color': 'rgb(255, 255, 255)' });
+        await t.expect(button_condensed_view.style).contains({ 'color': 'rgb(0, 128, 0)' });
+        await t.expect(button_patient_view.style).contains({ 'background-color': 'rgb(0, 128, 0)' });
+        await t.expect(button_patient_view.style).contains({ 'color': 'rgb(255, 255, 255)' });
     }
 
     // try switching to the condensed view
@@ -234,12 +235,12 @@ test('Test selecting views', async t => {
 
     // and the right colors
     if (test_button_style) {
-        await t.expect(button_clinician_view.style.backgroundColor).eql('white');
-        await t.expect(button_clinician_view.color).eql('green');
-        await t.expect(button_condensed_view.style.backgroundColor).eql('green');
-        await t.expect(button_condensed_view.color).eql('white');
-        await t.expect(button_patient_view.style.backgroundColor).eql('white');
-        await t.expect(button_patient_view.color).eql('green');
+        await t.expect(button_clinician_view.style).contains({ 'background-color': 'rgb(255, 255, 255)' });
+        await t.expect(button_clinician_view.style).contains({ 'color': 'rgb(0, 128, 0)' });
+        await t.expect(button_condensed_view.style).contains({ 'background-color': 'rgb(0, 128, 0)' });
+        await t.expect(button_condensed_view.style).contains({ 'color': 'rgb(255, 255, 255)' });
+        await t.expect(button_patient_view.style).contains({ 'background-color': 'rgb(255, 255, 255)' });
+        await t.expect(button_patient_view.style).contains({ 'color': 'rgb(0, 128, 0)' });
     }
 
     // try switching to the clinician view
@@ -253,12 +254,12 @@ test('Test selecting views', async t => {
 
     // check colors one more time.
     if (test_button_style) {
-        await t.expect(button_clinician_view.style.backgroundColor).eql('green');
-        await t.expect(button_clinician_view.color).eql('white');
-        await t.expect(button_condensed_view.style.backgroundColor).eql('white');
-        await t.expect(button_condensed_view.color).eql('green');
-        await t.expect(button_patient_view.style.backgroundColor).eql('white');
-        await t.expect(button_patient_view.style.color).eql('green');
+        await t.expect(button_clinician_view.style).contains({ 'background-color': 'rgb(0, 128, 0)' });
+        await t.expect(button_clinician_view.style).contains({ 'color': 'rgb(255, 255, 255)' });
+        await t.expect(button_condensed_view.style).contains({ 'background-color': 'rgb(255, 255, 255)' });
+        await t.expect(button_condensed_view.style).contains({ 'color': 'rgb(0, 128, 0)' });
+        await t.expect(button_patient_view.style).contains({ 'background-color': 'rgb(255, 255, 255)' });
+        await t.expect(button_patient_view.style).contains({ 'color': 'rgb(0, 128, 0)' });
     }
 
     // the epic texts are only ever visible if checked
