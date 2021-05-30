@@ -32,3 +32,5 @@ bin/load-synthetic-data.sh
 ```
 node AdficeWebserver.js 8080
 ```
+
+Finally, browse to the server: http://localhost:8080/patient?id=1
