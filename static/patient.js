@@ -113,6 +113,9 @@ function freetextentered(textfield) {
 }
 
 function process_checkboxes(message) {
+    if (!('box_states' in message)) {
+        return;
+    }
     let box_states = message['box_states'];
     const checkbox_ids = Object.keys(box_states);
     checkbox_ids.forEach((checkbox_id, index) => {
@@ -139,6 +142,9 @@ function process_checkboxes(message) {
 }
 
 function process_freetexts(message) {
+    if (!('field_entires' in message)) {
+        return;
+    }
     let fields = message['field_entires'];
     // TODO? save cursor position of box we are currently typing in?
     const field_ids = Object.keys(fields);
@@ -158,6 +164,19 @@ function process_freetexts(message) {
         var patient_field = document.getElementById(patient_text_id);
         patient_field.innerText = value;
     });
+}
+
+function process_viewer_count(message) {
+    if (!('viewers' in message)) {
+        return;
+    }
+    let element = document.getElementById("viewer_count");
+    element.innerHTML = `Viewers: ${message.viewers}`
+    if (message.viewers > 1) {
+        element.style.visibility = 'visible';
+    } else {
+        element.style.visibility = 'hidden'
+    }
 }
 
 function first_incoming_message(event) {
@@ -186,27 +205,19 @@ function ws_on_message(event) {
         console.log('received: ', event.data);
     }
 
-    const data = JSON.parse(event.data);
-    if (data.type !== 'hello' && data.patient_id != patient_id) {
-        console.log(`expected id of '${patient_id}'`);
-        console.log(`       but was '${data.patient_id}'`);
+    const message = JSON.parse(event.data);
+    if ((!('patient_id' in message)) || (message.patient_id != patient_id)) {
+        console.log(`expected patient_id of '${patient_id}'`);
+        console.log(`               but was '${message.patient_id}'`);
         ++weirdness;
         return;
     }
-    if (data.type == "checkboxes" || data.type == "init") {
-        process_checkboxes(data);
-    }
-    if (data.type == "freetexts" || data.type == "init") {
-        process_freetexts(data);
-    }
 
-    let element = document.getElementById("viewer_count");
-    element.innerHTML = `Viewers: ${data.viewers}`
-    if (data.viewers > 1) {
-        element.style.visibility = 'visible';
-    } else {
-        element.style.visibility = 'hidden'
-    }
+    process_checkboxes(message);
+
+    process_freetexts(message);
+
+    process_viewer_count(message);
 }
 
 window.addEventListener('load', (event) => {
