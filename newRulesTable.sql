@@ -105,6 +105,7 @@ orthostatic hypotension","","atc:N04","(problem:parkinson | problem:lewy-bodies-
 ("27b","yes","no","Anti-parkinson drugs N04","all","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:N04","",9),
 ("28","yes","no","Antiepileptics N03","all","","atc:N03","",10),
 ("29","yes","no","anti-epileptica except barbituates","","","atc:N03 && ! atc:N03AA","",10),
+("29a","yes", "no","Older generation antiepileptics","all","","atc:N03AB02 | atc:N03AG01 | atc:N03AF01", "",10),
 ("30","yes","no","anti-epileptica except lamotrigine or levetiracetam","","","atc:N03 & ! atc:N03AX09 & ! atc:N03AX14","",10),
 ("30a","yes","no","Antiepileptics N03","","","atc:N03","allergic-reaction",10),
 ("31","yes","no","Antiepileptics N03","","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:N03","",10),
@@ -785,15 +786,14 @@ UPDATE med_rules SET selector_logic = "atc:R06A | atc:N07CA | atc:N05BB01" WHERE
 UPDATE med_rules SET selector_logic = "atc:A03AA07 |atc:A03AB05 | atc:A03BA01 | atc:A03BA03" WHERE medication_criteria_id in("105a","105b","105c");
 UPDATE med_rules SET preselect_criteria = "{preselect box 1}{}" WHERE medication_criteria_id in("110");
 UPDATE med_rules SET preselect_criteria = NULL WHERE medication_criteria_id in("128");
-/* INSERT INTO med_rules (`medication_criteria_id`,
-`active`,
-`needs_review`,
-`medication_criteria`,
-`patient_group_criteria`,
-`preselect_criteria`,
-`selector_logic`,
-`condition_logic`,
-`reference`) VALUES ("132a","yes","no","AVertigomedicatie
+* INSERT INTO med_rules (`medication_criteria_id`, active`,`needs_review`,`medication_criteria`,`patient_group_criteria`,`preselect_criteria`,`selector_logic`,`condition_logic`,`reference`) VALUES ("132a","yes","no","AVertigomedicatie
 N06BX03 (piracetam)","all","","atc:N06BX03","",12); */
 UPDATE med_rules SET selector_logic = "atc:N06BX03" WHERE medication_criteria_id in("133","134");
 UPDATE med_rules SET patient_group_criteria = "medication started less than 6 months ago (or unknown) & depressie", condition_logic = "(medication.startDate > now-6-months | !medication.startDate) & problem:depressie" where medication_criteria_id = "19";
+
+UPDATE med_rules SET active = "no" where condition_logic = "allergic-reaction" and medication_criterion_id != "25";
+/*
+INSERT INTO med_rules (`medication_criteria_id`, active`,`needs_review`,`medication_criteria`,`patient_group_criteria`,`preselect_criteria`,`selector_logic`,`condition_logic`,`reference`) VALUES 
+("12","yes", "no", "anxiolytica", "not angststoornis", "", "atc:N05B & !atc:N05BA & !atc:N05BB", "!problem:angststoornis & ! problem:slaapstoornis",5),
+("29a","yes", "no", "Older generation antiepileptics", "all", "", "atc:N03AB02 | atc:N03AG01 | atc:N03AF01", "",10);
+*/

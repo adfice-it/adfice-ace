@@ -9,6 +9,7 @@ UPDATE med_rules SET selector_or = "N05C,N05BA", selector_not = "N05CH" WHERE me
 UPDATE med_rules SET selector_or = "N05C,N05BA", selector_not = "N05CH" WHERE medication_criteria_id = "9";
 UPDATE med_rules SET selector_or = "N05BA12,N05CD05,N05CF02,N05CF01", selector_not = NULL WHERE medication_criteria_id = "10";
 UPDATE med_rules SET selector_or = "N05C,N05BA", selector_not = "N05CH" WHERE medication_criteria_id = "11";
+UPDATE med_rules SET selector_or = "N05B", selector_not = "N05BA,N05BB" WHERE medication_criteria_id = "12";
 UPDATE med_rules SET selector_or = "N05B", selector_not = "N05BA,N05BB" WHERE medication_criteria_id = "13";
 UPDATE med_rules SET selector_or = "N05B", selector_not = "N05BA,N05BB" WHERE medication_criteria_id = "13a";
 UPDATE med_rules SET selector_or = "N05B", selector_not = "N05BA,N05BB" WHERE medication_criteria_id = "13b";
@@ -43,6 +44,7 @@ UPDATE med_rules SET selector_or = "N04", selector_not = NULL WHERE medication_c
 UPDATE med_rules SET selector_or = "N04", selector_not = NULL WHERE medication_criteria_id = "27b";
 UPDATE med_rules SET selector_or = "N03", selector_not = NULL WHERE medication_criteria_id = "28";
 UPDATE med_rules SET selector_or = "N03", selector_not = "N03AA" WHERE medication_criteria_id = "29";
+UPDATE med_rules SET selector_or = "N03AB02,N03AG01,N03AF01" WHERE medication_criteria_id = "29a";
 UPDATE med_rules SET selector_or = "N03", selector_not = "N03AX09,N03AX14" WHERE medication_criteria_id = "30";
 UPDATE med_rules SET selector_or = "N03", selector_not = NULL WHERE medication_criteria_id = "30a";
 UPDATE med_rules SET selector_or = "N03", selector_not = NULL WHERE medication_criteria_id = "31";

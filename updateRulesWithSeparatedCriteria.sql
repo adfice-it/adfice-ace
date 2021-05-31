@@ -9,6 +9,7 @@ UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_d
 UPDATE med_rules SET condition_problem = "parkinson | lewy-bodies-dementia | multiple-system-atrophy | progressive-supranuclear-palsy", condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="9";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = "J02AB02,J02AC04,J02AC03,J02AC02,J01FA09,V03AX03,J05AE03,J05AE01,J05AR10", condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="10";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="11";
+UPDATE med_rules SET condition_problem = "!angststoornis", condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="12";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="13";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="13a";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = "allergic-reaction" WHERE medication_criteria_id ="13b";
