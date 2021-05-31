@@ -55,7 +55,6 @@ UPDATE med_rules SET condition_problem = "hypokalemia", condition_age = NULL, co
 UPDATE med_rules SET condition_problem = "hyponatremia", condition_age = NULL, condition_drug = NULL, condition_lab = "lab.natrium.value < 130", condition_allergy = NULL WHERE medication_criteria_id ="40a";
 UPDATE med_rules SET condition_problem = "hypercalciemie", condition_age = NULL, condition_drug = NULL, condition_lab = "lab.calcium.value > 2.65", condition_allergy = NULL WHERE medication_criteria_id ="40b";
 UPDATE med_rules SET condition_problem = "jicht", condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="40c";
-UPDATE med_rules SET condition_problem = "!hartfalen &!hypertensiea", condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="41";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="42";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = "allergic-reaction" WHERE medication_criteria_id ="43";
 UPDATE med_rules SET condition_problem = NULL, condition_age = NULL, condition_drug = NULL, condition_lab = NULL, condition_allergy = NULL WHERE medication_criteria_id ="44";

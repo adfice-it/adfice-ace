@@ -109,11 +109,7 @@ orthostatic hypotension","","atc:N04","(problem:parkinson | problem:lewy-bodies-
 ("30","yes","no","anti-epileptica except lamotrigine or levetiracetam","","","atc:N03 & ! atc:N03AX09 & ! atc:N03AX14","",10),
 ("30a","yes","no","Antiepileptics N03","","","atc:N03","allergic-reaction",10),
 ("31","yes","no","Antiepileptics N03","","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:N03","",10),
-("35","yes","no","Diuretica: C03 diuretics
-C02L Antihypertensives and diuretics in combination 
-C07B Beta blocking agents and thiazides 
-C07C Beta blocking agents and other diuretics 
-C07D Beta blocking agents, thiazides and other diuretics ","no ACE-i or ARB or Ca+ antagonist","","(atc:C03 | atc:C02L | atc:C07B | atc:C07C | atc:C07D )","! (atc:C09)",13),
+("35","yes","no","Diuretica: C03 diuretics, C02L Antihypertensives and diuretics in combination OR C07 systemic beta-blokker (not eyedrops)","no concomittant ACE or AT-II (C09)","","(atc:C03 | atc:C02L | atc:C07 )","! (atc:C09)",13),
 ("36","yes","no","Lisdiuretica:
 C03CA Sulfonamides, plain 
 and C03CB Sulfonamides and potassium in combination 
@@ -153,7 +149,7 @@ C07B Beta blocking agents and thiazides
 C07C Beta blocking agents and other diuretics 
 C07D Beta blocking agents, thiazides and other diuretics 
 C09BA and C09DA ACEi and ARB with diuretics","NOT hartfalen and NOT hypertensie","","(atc:C03 | atc:C02L | atc:C07B | atc:C07C | atc:C07D | atc:C09BA | atc:C09DA)","! problem:hartfalen & ! problem:hypertensie",13),
-("42","yes","no","Diuretica: C03 diuretics
+("42","yes","no","Diuretica: C03 diuretics except lisdiruetics
 C02L Antihypertensives and diuretics in combination 
 C07B Beta blocking agents and thiazides 
 C07C Beta blocking agents and other diuretics 
@@ -192,7 +188,7 @@ orthostatische hypotensie (probleemlijst)))
 
 or
 (SELECTOR(C07DA) AND CONDITION())
-}}","(atc:C03 | atc:C02L | atc:C07B | atc:C07C | atc:C07D )","",13),
+}}","((atc:C03 &! C03CA &! C03CB &! C03EB) | atc:C02L | atc:C07B | atc:C07C | atc:C07D )","",13),
 ("43","yes","no","Diuretica: C03 diuretics
 C02L Antihypertensives and diuretics in combination 
 C07B Beta blocking agents and thiazides 
@@ -258,6 +254,9 @@ orthostatische hypotensie (probleemlijst)
 }}","atc:C08D | atc:C01A | atc:C01B","",16),
 ("50a","yes","no","Antiaritmica not covered by other rules: C01A Cardiac glycosides, C01B Antiarrhythmics, class I and III ","bijwerking","","atc:C01A | atc:C01B","allergic-reaction",16),
 ("50b","yes","no","Antiaritmica not covered by other rules: C01A Cardiac glycosides, C01B Antiarrhythmics, class I and III ","all","{{preselect vervolg if a stop-, afbouw-, or vervangen- option is checked}}","atc:C01A | atc:C01B","",16),
+("51","yes","no","Alpha-blockers (AB) used as antihypertensives
+C02CA Alpha-adrenoreceptor antagonists","all","","atc: C02CA","",17),
+("51a","yes","no","vasodilators used in cardiac diseases, except alpha blockers","all","","(atc:C04 | atc:C07E | atc:C08 | atc:C02DA | atc:C02DB | atc:C02DC | atc:C02DG01 | atc:C02DD01 | atc:C01DX16 | atc:C01DA | atc:C01EA01 | atc:C10BX03 | atc:C10BX07 | atc:C10BX09 | atc:C10BX11 | atc:C10BX14)","",17),
 ("52","yes","no","vasodilators
 Interpreted as:
 C04 Peripheral vasodilators
@@ -442,7 +441,6 @@ AND NOT N02AB03 ) AND CONDITION()}}","atc:N02A","",22),
 ("69","yes","no","Opiates N02A ","low renal function","","atc:N02A","measurement.eGFR.value <= 30  && measurement.eGFR.date <= now-11-months",22),
 ("70","yes","no","Opiates N02A ","unknown renal function","","atc:N02A","! measurement.eGFR",22),
 ("71","yes","no","Opiates N02A ","old renal function measurement","","atc:N02A","measurement.eGFR.date > now-11-months",22),
-("72","yes","no","Opiates N02A NOT tramadol N02AX02","all","","atc:N02A & ! atc:N02AX02","",22),
 ("73","yes","no","Opiates N02A NOT morphine N02AA01, oxycodone N02AA05, fentanyl N02AB03","all","","atc:N02A & ! atc:N02AA01 & ! atc:N02AA05 & ! atc:N02AB03","",22),
 ("75","yes","no","Opiates N02A ","bijwerking","","atc:N02A","allergic-reaction",22),
 ("76","yes","no","Opiates N02A ","all","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:N02A","",22),
@@ -645,7 +643,7 @@ R06AD05 Hydroxyethylpromethazine","all","","atc:A03AA07 | atc:A03AB05 | atc:A03B
 ("106","yes","no","Butylscopolamine A03BB01","","{{preselect box 1}{}}","atc:A03BB01","",28),
 ("107","yes","no","Butylscopolamine A03BB01","bijwerking","","atc:A03BB01","allergic-reaction",28),
 ("108","yes","no","Butylscopolamine A03BB01","","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:A03BB01","",28),
-("110","yes","no","Urologische middelen: spasmolytica
+("110","yes","no","Urologische middelen: spasmolytica. Overactive bladder and incontinence medications.
 G04BD10  Darifenacine
 G04BD11 Fesoterodine
 G04BD02 Flavoxaat
@@ -678,10 +676,12 @@ G04BD07 Tolterodine
 G04BD05 Terodiline
 G04BD06 Propiverine
 G04BD09 Trospium","all","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:G04BD10 | atc:G04BD11 | atc:G04BD02 | atc:G04BD12 | atc:G04BD04 | atc:G04BD08 | atc:G04BD07 | atc:G04BD05 | atc:G04BD06 | atc:G04BD09 ","",30),
-("113","yes","no","Alphablokkers G04CA Alpha-adrenoreceptor antagonists ","all","{{preselect box 1}{}}","atc:G04CA","",30),
-("113a","yes","no","Alphablokkers G04CA Alpha-adrenoreceptor antagonists except tamsulosine ","all","","atc:G04CA & ! atc:G04CA02","",30),
-("114","yes","no","Alphablokkers G04CA Alpha-adrenoreceptor antagonists ","bijwerking","","atc:G04CA","allergic-reaction",30),
-("115","yes","no","Alphablokkers G04CA Alpha-adrenoreceptor antagonists ","all","","atc:G04CA","",30),
+("113","yes","no","Alphablokkers G04CA Alpha-adrenoreceptor antagonists ","all","{{preselect box 1}{}}","atc:G04BE |atc:G04CA","",30),
+("113a","yes","no","Nonselective alphablokkers","all","","atc:G04BE | atc:G04CA","",30),
+("113b","yes","no","Nonselective alphablokkers","all","","atc:G04BE05 | atc:G04BE30","",30),
+("113","yes","no","Alphablokkers G04CA Alpha-adrenoreceptor antagonists ","all","{{preselect box 1}{}}","atc:G04BE | atc:G04CA","",30),
+("114","yes","no","Alphablokkers G04CA Alpha-adrenoreceptor antagonists ","bijwerking","","atc:G04BE | atc:G04CA","allergic-reaction",30),
+("115","yes","no","Alphablokkers G04CA Alpha-adrenoreceptor antagonists ","all","","atc:G04BE |atc:G04CA","",30),
 ("117","yes","no","Middelen bij peptische aandoeningen: H2-antagonisten, protonpompremmers
 A02BC Proton pump inhibitors 
 B01AC56 Acetylsalicylic acid, combinations with PPIs
@@ -702,6 +702,7 @@ OR A10BK
 OR A10BB
 AND NOT A10BB03
 AND NOT A10BB09) AND CONDITION()}}","atc:A10","",31),
+("121a","yes","no","Sulfonylureumderivaten (A10BB)","all","","atc:A10BB","",31),
 ("122","yes","no","Sulfonylureumderivaten (A10BB) AND NOT tolbutamide or glicazide.","all","","atc:A10BB & ! atc:A10BB03 & ! atc:A10BB09","",31),
 ("123","yes","no","gliclazide (A10BB09) or tolbutamide (A10BB03)","all","","atc:A10BB03 | atc:A10BB09","",31),
 ("124","yes","no","DPP4 remmers A10BH","all","","atc:A10BH","",31),
@@ -797,3 +798,10 @@ INSERT INTO med_rules (`medication_criteria_id`, active`,`needs_review`,`medicat
 ("12","yes", "no", "anxiolytica", "not angststoornis", "", "atc:N05B & !atc:N05BA & !atc:N05BB", "!problem:angststoornis & ! problem:slaapstoornis",5),
 ("29a","yes", "no", "Older generation antiepileptics", "all", "", "atc:N03AB02 | atc:N03AG01 | atc:N03AF01", "",10);
 */
+UPDATE med_rules SET medication_criteria = "Diuretica: C03 diuretics, C02L Antihypertensives and diuretics in combination OR C07 systemic beta-blokker (not eyedrops)", patient_group_criteria = "no concomittant ACE or AT-II (C09)", selector_logic = "(atc:C03 | atc:C02L | atc:C07 )" where medication_criteria_id = 35;
+UPDATE med_rules SET medication_criteria = "Diuretica: C03 diuretics except lisdiruetics
+C02L Antihypertensives and diuretics in combination 
+C07B Beta blocking agents and thiazides 
+C07C Beta blocking agents and other diuretics 
+C07D Beta blocking agents, thiazides and other diuretics 
+C09BA and C09DA ACEi and ARB with diuretics", selector_logic = "((atc:C03 &! C03CA &! C03CB &! C03EB) | atc:C02L | atc:C07B | atc:C07C | atc:C07D )" where medication_criteria_id = 41;
