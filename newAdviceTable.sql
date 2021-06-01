@@ -26,7 +26,7 @@ Behandel **korte-termijn gebruik voor acute slaapstoornis** bij voorkeur met nie
 - Zorg ervoor dat uw slaapkamer goed geventileerd en donker is.
 
 Bespreek het met uw dokter, als het niet lukt om deze adviezen op te volgen."),
-("6e",9,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed.."),
+("6e",9,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("6e",10,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
 ("7",1,"switch","temazepam","Bij acute slaapstoornis : vervangen door temazepam 10mg/dag (&lt;2 weken gebruik) [https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/t/temazepam] ","Vervangen door temazepam 10mg/dag (&lt;2 weken gebruik) ","Vervangen door temazepam. Volg de instructies van de apotheek. Vraag de apotheek naar de meest voorkomende bijwerkingen."),
 ("7",2,"switch","lorazepam","Bij angststoornis : vervangen door Lorazepam: begindosering 0,25 mg 2-3dd. Onderhoudsdosering 0,5 mg 2-3dd [https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/l/lorazepam] ","Vervangen door lorazepam begindosering 0,25 mg 2-3dd.","Vervangen door lorazepam. Volg de instructies van de apotheek. Vraag de apotheek naar de meest voorkomende bijwerkingen. "),
@@ -67,7 +67,7 @@ Bij **psychotische patiënten met de ziekte van Parkinson** (en Parkinson-gerelat
 ("15",NULL,"","","Bij **Parkinson en Parkinson-gerelateerde aandoeningen** zijn antipsychotica gecontra-indiceerd, behalve clozapine. Quetiapine kan overwogen worden maar wordt niet door de richtlijnen aanbevolen.(Dosis wordt (tevens) bepaald op geleide van de bloedspiegel. Controleer vóór start van de behandeling het leukocytenaantal (WBC) en het absolute neutrofielenaantal (ANC).","",""),
 ("15",1,"switch","clozapine","Vervangen door clozapine: Begindosering: max. 12,5 mg 1dd &#39;s avonds, deze in stappen van 12,5 mg 1–2×/week verhogen tot 25–37,5 mg/dag; maximaal 50 mg 1×/dag aan het einde van de tweede week.[[https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/c/clozapine](https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/c/clozapine)]","Vervangen door clozapine: Begindosering: max. 12,5 mg 1dd &#39;s avonds, deze in stappen van 12,5 mg 1–2×/week verhogen tot 25–37,5 mg/dag; maximaal 50 mg 1×/dag aan het einde van de tweede week.","Vervangen door clozapine. Volg de instructies van de apotheek. Vraag de apotheek naar de meest voorkomende bijwerkingen."),
 ("16",NULL,"","","Het risico verschil tussen de middelen is gerelateerd aan veriatie in (1) sedatief (2) anticholinergische en (3) alfa-receptor eigenschappen. Overweeg te stoppen in het geval van extrapyramidale symptomen, cardiale bijwerkingen, sedatie of tekenen van seatie, duizeligheid of wazig zien. Indien voorgeschreven voor BPSD of slaapstoornis en evenuteel als voorgeschreven voor een bipolaire stoornis.","",""),
-("16",1,"stop","","Stoppen (afbouwen niet nodig).","U kunt direct stoppen."),
+("16",1,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("16",2,"taper-stop","","Afbouwen waarna stoppen: elke 2 weken dosis verminderen met 25-50%. Schema: {{free text: pre-filled: Dosis verlagen met een kwart elke 2 weken. U hoeft daarna dit medicijn niet meer in te nemen.}}","Afbouwen volgens afbouwschema waarna stop. {{free text}}","Stoppen via een afbouwschema. {{free text}}"),
 ("16",3,"taper-reduce","","Afbouwen tot minimaal effectief dosis: elke 2 weken dosis verminderen met 25-50%. Schema: {{free text: pre-filled: Dosis verlagen met een kwart elke 2 weken.}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema. {{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
 ("16",4,"non-med","delirium","Niet medicamenteuze adviezen delier","Niet-medicamenteuze adviezen tav delier gegeven.","**Wat is een delier?** Een delier is in de meeste gevallen een tijdelijk ziektebeeld. Als de lichamelijke situatie verbetert neemt de verwardheid af. De dokter heeft u advies gegeven over hoe u om kunt gaan met de acute verwardheid (delier). Het geven van structuur kan een persoon met delier gerust stellen.
@@ -100,7 +100,7 @@ Bij **angststoornissen** gaat de voorkeur uit naar niet-medicamenteuze therapie.
 Bij een **recidief of ernstige psychotische depressie** is er een indicatie voor levenslang gebruik.
 Bij **neuropathische pijn** is een TCA aanbevolen (overweeg alternatieven).
 Bij **angststoornissen** gaat de voorkeur uit naar niet-medicamenteuze therapie. Als medicatie nodig is, is een SSRI de eerste keus waarbij de voorkeur uitgaat naar een middel met weinig interacties zoals sertraline of citalopram.","",""),
-("19b",NULL,"","","Bij **angststoornis** gaat de voorkeur uit naar niet-medicamenteuze therapie. Als medicatie nodig is, is een SSRI de eerste keus waarbij de voorkeur uitgaat naar een middel met weinig interacties zoals sertraline of citalopram..
+("19b",NULL,"","","Bij **angststoornis** gaat de voorkeur uit naar niet-medicamenteuze therapie. Als medicatie nodig is, is een SSRI de eerste keus waarbij de voorkeur uitgaat naar een middel met weinig interacties zoals sertraline of citalopram.
 Bij **eenmalige depressie** gebruik een antidepressivum voor 6 maanden daarna afbouwen. Antidepressivum kan levenslang gebruikt worden bij recidief of ernstige psychotische depressie.
 Bij **neuropathische pijn** is een TCA aanbevolen (overweeg alternatieven).","",""),
 ("19c",NULL,"","","**Deze patiënt heeft geen depressieve aandoening of angststoornis in de probleemlijst:** Controleer de indicatie voor deze medicatie. Als er geen indicatie (meer) is, is afbouwen aanbevolen. Behalve bij:
@@ -126,7 +126,7 @@ Het is mogelijk dat u ontwenningsverschijnselen voelt tijdens die periode. Dit k
 ("19f",10,"refer","other","Doorverwijzing naar andere specialist: {{free text}}","Doorverwijzing {{free text}}","Doorverwijzing naar andere specialist. Let op, u maakt zelf een afspraak. Van de dokter heeft u hier informatie over gekregen hoe dit te doen.  {{free text}}"),
 ("19f",8,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("19f",9,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
-("19f",11,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("19f",11,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("20",NULL,"","","Als een antidepressivum nodig is voor de behandeling van een **depressie** dan heeft een middel met weinig interacties zoals sertraline of citalopram. de voorkeur. Indien TCA nodig is dan heeft  nortriptyline de voorkeur. Dosering *nortriptyline*: Starten met 10 mg en elke 3-4 dagen verhogen met 25 mg, bij 75 mg een plasmaspiegel bepalen.
 
 Als medicamenteuze therapie bij een **angststoornis** nodig is dan heeft sertraline of citalopram de voorkeur.
@@ -211,7 +211,7 @@ Overweeg stoppen van diureticum en adviseer de patiënt om indien mogelijk elasti
 ("42",3,"taper-reduce","","Afbouwen tot minimaal effectief dosis: Afbouwen met 50% elk week tot de minimaal effectieve dosis bereikt is. {{free text: pre-filled: Dosis verlagen met een kwart elke 2 weken.}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema{{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
 ("42",4,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("42",5,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
-("42",7,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("42",7,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("43",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen of lagere dosering.","",""),
 ("44",1,"follow-up","","Bij afbouwen is een vervolgafspraak aanbevolen. Monitor voor verandering in bloeddruk, orthostatische hypotensie, vallen; recidiverende symptomen van decompensatio cordis, vochtretentie, hypertensie. Vervolgafspraak:{{free text: pre-filled: Dosis verlagen met een kwart elke 2 weken. U hoeft daarna dit medicijn niet meer in te nemen.}}","Monitor voor veranderingen in symptomen: verandering in bloeddruk, orthostatische hypotensie, vallen; recidiverende symptomen van decompensatio cordis, vochtretentie, hypertensie. Vervolgafspraak: {{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}"),
 ("45",NULL,"","","**Indicatie hypertensie**: Bij overweging van medicamenteuze therapie voor hypertensie, zijn de voorkeuren van de patiënt belangrijk. Ook moet de valrisico, mogelijk bijwerkingen, levensverwachting en afwezigheid van cardiovasculaire ziekten of aandoeningen meegenomen worden. Kies voor een passend antihypertensivum in relatie tot de comorbiditeit bij een (kwetsbare) oudere. Overweeg stoppen, of de bloeddruk-streefwaarden van de behandeling minder strikt te hanteren. Alleen bij patiënten met een zeer hoog  cardiovasculair risico is medicamenteuze therapie meestal aangewezen.
@@ -222,7 +222,7 @@ In verband mogelijke bijwerkingen in het kader van valrisico is het advies  te o
 ("46",2,"taper-reduce","","Afbouwen tot minimaal effectieve dosis bereikt is. Afbouwschema: {{free text}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema. {{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
 ("46",3,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("46",4,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
-("46",5,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("46",5,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("47",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen of lagere dosering. ","",""),
 ("48",NULL,"","","**Deze patiënt heeft de ziekte van Parkinson (of een Parkinson- gerelateerde aandoening) en orthostatische hypotensie**:Antihypertensiva wordt sterk ontraden.","",""),
 ("48a",1,"follow-up","","Vervolgafspraak:{{free text}}","Monitor voor veranderingen in symptomen. Vervolgafspraak {{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}"),
@@ -244,7 +244,7 @@ Anders: *digoxine*: eerste dag 0,75 mg, daarna 1 dd 0,25 mg.","",""),
 ("50",8,"refer","cardio","Doorverwijzing cardioloog {{free text}}","Doorverwijzing naar cardioloog {{free text}}","Doorverwijzing naar cardioloog. Let op, u maakt zelf een afspraak. Van de dokter heeft u hier informatie over gekregen hoe dit te doen.  {{free text}}"),
 ("50",6,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("50",7,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
-("50",8,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("50",8,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("50a",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen of lagere dosering.","",""),
 ("50b",1,"follow-up","","Vervolgafspraak:{{free text}}","Monitor voor veranderingen in symptomen. Vervolgafspraak {{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}"),
 ("51",NULL,"","","Overweeg stoppen: Indien er sprake is van hypotensie, orthostatische hypotensie of duizeligheid.","",""),
@@ -253,20 +253,20 @@ Anders: *digoxine*: eerste dag 0,75 mg, daarna 1 dd 0,25 mg.","",""),
 - Indien er sprake is van hypotensie, orthostatische hypotensie of duizeligheid.","",""),
 ("52",NULL,"","","**Deze patiënt heeft hypertensie:** Controleer de indicatie van deze medicatie. Vasodilatoren worden afgeraden als **antihypertensivum**. Afbouwen is aanbevolen.","",""),
 ("53",NULL,"","","Vasodilatoren worden ontraden. Controleer of er nog een indicatie is voor deze medicatie. Afbouwen is aanbevolen.","",""),
-("54",1,"","","Afbouwen waarna stoppen. Afbouwschema: {{free text}}","Afbouwen volgens afbouwschema waarna stop {{free text}}","Stoppen via een afbouwschema. {{free text}}"),
-("54",2,"","","Afbouwen tot minimaal effectieve dosis: {{free text}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema {{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
-("54",3,"","","Consult cardioloog {{free text}}","ICC cardioloog {{free text}}","Doorverwijzing naar een cardioloog. U hoeft hier zelf geen afspraak voor te maken. Van de dokter heeft u hier informatie over gekregen hoe dit te doen. {{free text}}"),
-("54",6,"","","Doorverwijzing cardioloog {{free text}}","Doorverwijzing naar cardioloog {{free text}}","Doorverwijzing naar cardioloog. Let op, u maakt zelf een afspraak. Van de dokter heeft u hier informatie over gekregen hoe dit te doen.  {{free text}}"),
-("54",4,"","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
-("54",5,"","","{{free text}}","{{free text}}","{{free text}}"),
-("54",7,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("54",1,"taper-stop","","Afbouwen waarna stoppen. Afbouwschema: {{free text}}","Afbouwen volgens afbouwschema waarna stop {{free text}}","Stoppen via een afbouwschema. {{free text}}"),
+("54",2,"taper-reduce","","Afbouwen tot minimaal effectieve dosis: {{free text}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema {{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
+("54",3,"consult","","Consult cardioloog {{free text}}","ICC cardioloog {{free text}}","Doorverwijzing naar een cardioloog. U hoeft hier zelf geen afspraak voor te maken. Van de dokter heeft u hier informatie over gekregen hoe dit te doen. {{free text}}"),
+("54",6,"refer","","Doorverwijzing cardioloog {{free text}}","Doorverwijzing naar cardioloog {{free text}}","Doorverwijzing naar cardioloog. Let op, u maakt zelf een afspraak. Van de dokter heeft u hier informatie over gekregen hoe dit te doen.  {{free text}}"),
+("54",4,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
+("54",5,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
+("54",7,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("54a",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen of lagere dosering.","",""),
 ("55",1,"follow-up","","Monitor voor duizeligheid, orthostatische hypotensie, vallen, angina pectoris. Vervolgafspraak: {{free text}}","Evalueer of er ontwenningsverschijnselen optreden. Monitor voor veranderingen in symptomen: duizeligheid, orthostatische hypotensie, vallen, angina pectoris. Vervolgafspraak {{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}"),
-("56",1,"","","Afbouwen waarna stoppen (b.v. uitsluipen in ongeveer 2 weken) en daarna stoppen. Afbouwschema: {{free text}}","Afbouwen volgens afbouwschema waarna stop {{free text}}","Stoppen via een afbouwschema. {{free text}}"),
-("56",2,"","","Afbouwen tot minimaal effectieve dosis bereikt is. Afbouwschema: {{free text}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema{{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
-("56",3,"","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
-("56",4,"","","{{free text}}","{{free text}}","{{free text}}"),
-("56",5,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("56",1,"taper-stop","","Afbouwen waarna stoppen (b.v. uitsluipen in ongeveer 2 weken) en daarna stoppen. Afbouwschema: {{free text}}","Afbouwen volgens afbouwschema waarna stop {{free text}}","Stoppen via een afbouwschema. {{free text}}"),
+("56",2,"taper-reduce","","Afbouwen tot minimaal effectieve dosis bereikt is. Afbouwschema: {{free text}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema{{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
+("56",3,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
+("56",4,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
+("56",5,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("57",NULL,"","","Dit is een **niet-selectieve beta-blokker**. Gebruik van niet-selectieve beta-blokkers wordt ontraden.","",""),
 ("57a",NULL,"","","**Deze patiënt heeft diabetes:** Niet-selectieve betablokkers kunnen een hypoglycaemie maskerenwaardoor deze patiënten extra risico kunnen lopen om te vallen.","",""),
 ("58",NULL,"","","**Deze patiënt heeft geen atriumfibrilleren, angina pectoris of myocardinfarct in de probleemlijst:** Controleer of er nog een indicatie is. Overweeg afbouwen en stoppen. Behalve indien **atriumfibrilleren, angina pectoris of een voorgeschiedenis met een myocardinfarct** want dan kunnen beta-blokkers geïndiceerd zijn.","",""),
@@ -280,7 +280,7 @@ Anders: *digoxine*: eerste dag 0,75 mg, daarna 1 dd 0,25 mg.","",""),
 ("63",2,"taper-reduce","","Afbouwen tot minimaal effectieve dosis bereikt is. Afbouwschema: {{free text}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema. {{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
 ("63",3,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("63",4,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
-("63",5,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("63",5,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("63a",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen of lagere dosering.","",""),
 ("63b",1,"follow-up","","Vervolgafspraak:{{free text}}","Monitor voor veranderingen in symptomen. Vervolgafspraak {{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}"),
 ("64",NULL,"","","Bij vitale ouderen met hart- en vaatziekten, stop alleen met lipidenverlagende medicatie bij onoverkomelijke bijwerkingen. Bij vitale ouderen zonder hart- en vaatziekten, statines zijn geindiceerd bij een hoog geschat risico op een vasculair event.
@@ -288,7 +288,7 @@ Anders: *digoxine*: eerste dag 0,75 mg, daarna 1 dd 0,25 mg.","",""),
 Overweeg bij kwetsbare ouderen met cardiovasculaire aandoeningen te stoppen, vooral bij (vermoedelijke) bijwerkingen, slechte therapietrouw of bij een korte geschatte levensverwachting. 
 
 Overweeg bij kwetsbare ouderen met cardiovasculaire aandoeningen te stoppen, vooral bij (vermoedelijke) bijwerkingen, slechte therapietrouw of bij een korte geschatte levensverwachting.","",""),
-("64",1,"stop","","Stoppen (afbouwen niet nodig)","Stop","U kunt direct stoppen."),
+("64",1,"stop","","Stoppen (afbouwen niet nodig).","Stop","U kunt direct stoppen."),
 ("64",2,"switch","pravastatine","Vervangen door pravastatine: Bij **dyslipidemie** 10-40 mg 1dd. Bij **cardiovasculaire preventie** 40 mg 1dd. [[https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/p/pravastatine](https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/p/pravastatine)]","Vervangen door pravastatine 10-40 mg 1dd.","Vervangen door pravastatine. Neem pravastatine in volgens de instructies van de apotheek. Vraag de apotheek naar de meest voorkomende bijwerkingen."),
 ("64",3,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("64",4,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
@@ -298,7 +298,7 @@ Overweeg bij kwetsbare ouderen met cardiovasculaire aandoeningen te stoppen, voo
 ("64a",2,"switch","other","Vervangen door andere medicatie {{free text}}","Vervangen door andere medicatie {{free text}}","Dit medicijn is vervangen voor een ander medicijn. Neem dit nieuwe medicijn in volgens de instructies van de apotheek. Vraag de apotheek naar de bijwerkingen. {{free text}}"),
 ("64a",3,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("64a",4,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
-("64a",5,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("64a",5,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 
 ("65",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen.","",""),
 ("66",1,"follow-up","","Vervolgafspraak:{{free text}}","Monitor voor veranderingen in symptomen. Vervolgafspraak {{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}"),
@@ -314,7 +314,7 @@ Overweeg stoppen/afbouwen:
 ("67",5,"switch","other","Vervangen door ander medicijn {{free text}}","Vervangen door ander medicijn: {{free text}}","Dit medicijn is vervangen voor een ander medicijn. Neem dit nieuwe medicijn in volgens de instructies van de apotheek. Vraag de apotheek naar de bijwerkingen. Als u bijwerkingen of andere gezondheisdproblemen krijgt, neemt u dan contact op met uw huisarts, het ziekenhuis of uw apotheek. {{free text}}"),
 ("67",6,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("67",7,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
-("67",9,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("67",9,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("68",NULL,"","","**Deze patiënt gebruikt een opiaat:** Controleer of er nog een indicatie is. Bij **pijn** : Stap 1: Eerste keus: Paracetamol.
 Stap 2: Bij niet-kwetsbare ouderen of bij artritis, zonder contra-indicatie (nierfunctie, leverfunctie, cardiovasculaire aandoeningen, bloeding, enz.): diclofenac, ibuprofen, meloxicam of naproxen. Let op risicoprofiel, z.n. PPI voorschrijven. Bij kwetsbare ouderen of bij contra-indicaties voor NSAIDs, overweeg andere opties.Diclofenac geeft de minste kans op gastro-intestinale bijwerkingen, maar heeft cardiovasculaire contra-indicaties.De minste kans op cardiovasculaire bijwerkingen is er bij naproxen, maar dit geeft relatief veel kans op gastro-intestinale complicaties.
 Stap 3: morfine, fentanyl en oxycodon hebben de voorkeur (+ laxans).
@@ -403,7 +403,7 @@ Vraag de apotheek naar de bijwerkingen van tramadol. Daarnaast krijgt u iets voo
 ("88",9,"switch","other","Vervangen door ander medicijn {{free text}}","Vervangen door ander medicijn: {{free text}}","Dit medicijn is vervangen voor een ander medicijn. Neem dit nieuwe medicijn in volgens de instructies van de apotheek. Vraag de apotheek naar de bijwerkingen. Als u bijwerkingen of andere gezondheisdproblemen krijgt, neemt u dan contact op met uw huisarts, het ziekenhuis of uw apotheek. {{free text}}"),
 ("88",10,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("88",11,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
-("88",13,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("88",13,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("89",NULL,"","","Controleer of er nog een indicatie is voor deze medicatie. Bij **pijn** : Stap 1: Eerste keus: Paracetamol.
 Stap 2: Bij niet-kwetsbare ouderen of bij artritis, zonder contra-indicatie (nierfunctie, leverfunctie, cardiovasculaire aandoeningen, bloeding, enz.): diclofenac, ibuprofen, meloxicam of naproxen. Let op risicoprofiel, z.n. PPI voorschrijven. Bij kwetsbare ouderen of bij contra-indicaties voor NSAIDs, overweeg andere opties.Diclofenac geeft de minste kans op gastro-intestinale bijwerkingen, maar heeft cardiovasculaire contra-indicaties.De minste kans op cardiovasculaire bijwerkingen is er bij naproxen, maar dit geeft relatief veel kans op gastro-intestinale complicaties.
 Stap 3: morfine, fentanyl en oxycodon hebben de voorkeur (+ laxans).
@@ -440,7 +440,7 @@ Bij **inflammatoire aandoeningen** , overweeg corticosteroïden.","",""),
 ("95",3,"taper-reduce","","Afbouwen tot minimaal effectief dosis. Dosering geleidelijk afbouwen gedurende minimaal 1 week tot de minimaal effectieve dosis bereikt is. Afbouwschema: {{free text}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema{{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
 ("95",4,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("95",5,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
-("95",7,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("95",7,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("96",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen of lagere dosering.","",""),
 ("97",1,"follow-up","","Vervolgafspraak:{{free text}}","Vervolgafspraak: {{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}"),
 ("99",NULL,"","","Dit is een **eerste generatie antihistamincum**. Oude generatie antihistiminica worden ontraden. Eerste generatie antihistaminica zijn sterker valrisicoverhogend dan tweede generatie antishistaminica. Dit wordt veroorzaakt door verschillen in (1) sedatieve effecten en (2) anticholinerge effectiviteit.
@@ -455,7 +455,7 @@ Als er sprake is van verwardheid, sufheid, duizeligheid of wazig zien.","",""),
 ("101",2,"switch","other","Vervangen door een ander aanbevolen antihistaminicum: {{free text}}","Vervangen door {{free text}}","Dit medicijn is vervangen voor een ander medicijn. Neem de nieuwe medicijn in volgens de instructies van de apotheek. Vraag de apotheek naar de bijwerkingen, en als u bijwerkingen of andere gezondheisdproblemen krijgt, neem u dan contact op met uw huisarts, het ziekenhuis, of uw apotheek. {{free text}}"),
 ("102",NULL,"","","**Deze patiënt heeft de ziekte van Parkinson of een Parkinson-gerelateerde aandoening**: sederende medicatie worden ontraden.","",""),
 ("103",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen of lagere dosering. ","",""),
-("104",1,"follow-up","","Monitor op terugkeer symptomen. Overweeg om te monitoren: slaapproblemen, angstklachten. Vervolgafspraak:{{free text}}","Vervolgafspraak:{{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland.. {{free text}}"),
+("104",1,"follow-up","","Monitor op terugkeer symptomen. Overweeg om te monitoren: slaapproblemen, angstklachten. Vervolgafspraak:{{free text}}","Vervolgafspraak:{{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}"),
 ("105",NULL,"","","**Deze medicatie heeft een klinisch relevant anticholinergische effect.** Medicatie met sterke anticholinerge activiteit zijn sterker valrisicoverhogend dan zwakke anticholinergica. Gebruik bij voorkeur een alternatief.","",""),
 ("105a",1,"stop","","Stoppen","Stop","U kunt direct stoppen."),
 ("105a",2,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
@@ -488,7 +488,7 @@ Overweeg stoppen
 ("113",2,"taper-reduce","","Afbouwen tot minimaal effectieve dosis bereikt is. Afbouwschema: {{free text}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema {{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
 ("113",4,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("113",5,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
-("113",6,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("113",6,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("113a",3,"switch","tamsulosine","Vervangen door tamsulosine 4mg 1dd [[https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/t/tamsulosine](https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/t/tamsulosine)]","Vervangen door tamsulosine, 4mg 1dd","Vervangen door tamsulosine. Volg de instructies van de apotheek. Vraag de apotheek naar de meest voorkomende bijwerkingen. {{free text}}"),
 ("113b",NULL,"","","Niet-selective betablokkers zijn sterker valrisicoverhogend dan selectieve.","",""),
 ("114",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen of lagere dosering. ","",""),
@@ -498,7 +498,7 @@ Overweeg stoppen
 ("117",2,"taper-reduce","","Afbouwen tot minimaal effectieve dosis bereikt is. Afbouwschema: {{free text}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema{{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
 ("117",3,"continue","","Continueren","ontinueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("117",4,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
-("117",5,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("117",5,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("118",1,"switch","pantoprazole","Vervangen door pantoprazol 20mg per dag [[https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/p/pantoprazol](https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/p/pantoprazol)]","Vervangen door pantoprazol 20mg/dag","Vervangen door pantoprazol. Neem pantoprazol in volgens de instructies van de apotheek.
 Vraag de apotheek naar de bijwerkingen van pantoprazole Als u bijwerkingen of andere gezondheidsproblemen krijgt door pantoprazol, neemt u dan contact op met uw huisarts, het ziekenhuis of uw apotheek."),
 ("119",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen of lagere dosering.","",""),
@@ -531,7 +531,7 @@ Streefwaarde HbA1c, afhankelijk van leeftijd, behandeling en ziekteduur:= **53 m
 - Meer informatie en ervaringen van anderen kunt u vinden op de website van de [Alzheimer Stichting Nederland](https://www.alzheimer-nederland.nl/)."),
 ("129",5,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("129",6,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
-("129",7,"stop","","Stoppen (afbouwen niet nodig)","Stop.","U kunt direct stoppen."),
+("129",7,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("130",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen of lagere dosering. ","",""),
 ("131",1,"follow-up","","Vervolgafspraak:{{free text}}","Vervolgafspraak:{{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}"),
 ("132",NULL,"","","Voor duizeligheidsklachten is er geen bewijs van het effect van deze medicatie en ze kunnen zelfs duizeligheid veroorzaken. Zie [Richtlijn Duizeligheid bij ouderen](https://richtlijnendatabase.nl/richtlijn/duizeligheid\_bij\_ouderen/duizeligheid\_bij\_ouderen\_-\_korte\_beschrijving.html) voor adviezen over verschillende typen duizeligheid.Bij bepaalde andere indicaties is er wel bewijs van effect.","",""),
@@ -547,4 +547,4 @@ Streefwaarde HbA1c, afhankelijk van leeftijd, behandeling en ziekteduur:= **53 m
 ("135",2,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("135",3,"free_text","","{{free text}}","{{free text}}","{{free text}}"),
 ("136",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen of lagere dosering.","",""),
-("137",1,"follow-up","","Vervolgafspraak:{{free text}}","Vervolgafspraak:{{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}")
+("137",1,"follow-up","","Vervolgafspraak:{{free text}}","Vervolgafspraak:{{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}");

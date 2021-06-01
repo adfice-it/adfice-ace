@@ -787,21 +787,21 @@ UPDATE med_rules SET selector_logic = "atc:R06A | atc:N07CA | atc:N05BB01" WHERE
 UPDATE med_rules SET selector_logic = "atc:A03AA07 |atc:A03AB05 | atc:A03BA01 | atc:A03BA03" WHERE medication_criteria_id in("105a","105b","105c");
 UPDATE med_rules SET preselect_criteria = "{preselect box 1}{}" WHERE medication_criteria_id in("110");
 UPDATE med_rules SET preselect_criteria = NULL WHERE medication_criteria_id in("128");
-* INSERT INTO med_rules (`medication_criteria_id`, active`,`needs_review`,`medication_criteria`,`patient_group_criteria`,`preselect_criteria`,`selector_logic`,`condition_logic`,`reference`) VALUES ("132a","yes","no","AVertigomedicatie
+/* INSERT INTO med_rules (`medication_criteria_id`, active`,`needs_review`,`medication_criteria`,`patient_group_criteria`,`preselect_criteria`,`selector_logic`,`condition_logic`,`reference`) VALUES ("132a","yes","no","AVertigomedicatie
 N06BX03 (piracetam)","all","","atc:N06BX03","",12); */
 UPDATE med_rules SET selector_logic = "atc:N06BX03" WHERE medication_criteria_id in("133","134");
 UPDATE med_rules SET patient_group_criteria = "medication started less than 6 months ago (or unknown) & depressie", condition_logic = "(medication.startDate > now-6-months | !medication.startDate) & problem:depressie" where medication_criteria_id = "19";
 
-UPDATE med_rules SET active = "no" where condition_logic = "allergic-reaction" and medication_criterion_id != "25";
+UPDATE med_rules SET active = "no" where condition_logic = "allergic-reaction" and medication_criteria_id != "25";
 /*
 INSERT INTO med_rules (`medication_criteria_id`, active`,`needs_review`,`medication_criteria`,`patient_group_criteria`,`preselect_criteria`,`selector_logic`,`condition_logic`,`reference`) VALUES 
 ("12","yes", "no", "anxiolytica", "not angststoornis", "", "atc:N05B & !atc:N05BA & !atc:N05BB", "!problem:angststoornis & ! problem:slaapstoornis",5),
 ("29a","yes", "no", "Older generation antiepileptics", "all", "", "atc:N03AB02 | atc:N03AG01 | atc:N03AF01", "",10);
 */
-UPDATE med_rules SET medication_criteria = "Diuretica: C03 diuretics, C02L Antihypertensives and diuretics in combination OR C07 systemic beta-blokker (not eyedrops)", patient_group_criteria = "no concomittant ACE or AT-II (C09)", selector_logic = "(atc:C03 | atc:C02L | atc:C07 )" where medication_criteria_id = 35;
+UPDATE med_rules SET medication_criteria = "Diuretica: C03 diuretics, C02L Antihypertensives and diuretics in combination OR C07 systemic beta-blokker (not eyedrops)", patient_group_criteria = "no concomittant ACE or AT-II (C09)", selector_logic = "(atc:C03 | atc:C02L | atc:C07 )" where medication_criteria_id = "35";
 UPDATE med_rules SET medication_criteria = "Diuretica: C03 diuretics except lisdiruetics
 C02L Antihypertensives and diuretics in combination 
 C07B Beta blocking agents and thiazides 
 C07C Beta blocking agents and other diuretics 
 C07D Beta blocking agents, thiazides and other diuretics 
-C09BA and C09DA ACEi and ARB with diuretics", selector_logic = "((atc:C03 &! C03CA &! C03CB &! C03EB) | atc:C02L | atc:C07B | atc:C07C | atc:C07D )" where medication_criteria_id = 41;
+C09BA and C09DA ACEi and ARB with diuretics", selector_logic = "((atc:C03 &! C03CA &! C03CB &! C03EB) | atc:C02L | atc:C07B | atc:C07C | atc:C07D )" where medication_criteria_id = "41";

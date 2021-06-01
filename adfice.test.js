@@ -17,7 +17,7 @@ test('test advice text 6e', async () => {
 
     expect(texts[5].cdss_split[0].text).toBe('Continueren');
     expect(texts[5].epic_split[0].text).toBe('Continueren');
-    let str = 'Gebruik dit medicijn zoals u tot nu toe doet.';
+    let str = 'Gebruik dit medicijn zoals u tot nu toe al deed.';
     expect(texts[5].patient_split[0].text).toBe(str);
 
     texts = await adfice.getAdviceTextsNoCheckboxes(rule_numbers);
@@ -75,14 +75,15 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
     expect(adv0['medication_name']).toBe('hydrochlorothiazide');
 
     let adviceTextsCheckboxes = adv0['adviceTextsCheckboxes'];
-    expect(adviceTextsCheckboxes.length).toBe(7);
+    expect(adviceTextsCheckboxes.length).toBe(8);
     let checkbox0 = adviceTextsCheckboxes[0];
     expect(checkbox0['medication_criteria_id']).toBe("42");
-    expect(checkbox0['selectBoxNum']).toBe(2);
-    expect(checkbox0['selectBoxCategory']).toBe('taper-stop');
+    expect(checkbox0['selectBoxNum']).toBe(7);
+    expect(checkbox0['selectBoxCategory']).toBe('stop');
 
-    expect(checkbox0['cdss_split'][0].text).toContain('Afbouwen waarna stoppen');
-    expect(checkbox0['cdss_split'].length).toBe(2);
+	let checkbox1 = adviceTextsCheckboxes[1];
+    expect(checkbox1['cdss_split'][0].text).toContain('Afbouwen waarna stoppen');
+    expect(checkbox1['cdss_split'].length).toBe(2);
 
     let adviceTextsNoCheckboxes = adv0['adviceTextsNoCheckboxes'];
     expect(adviceTextsNoCheckboxes.length).toBe(3);
@@ -146,14 +147,14 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
     expect(adv0['medication_name']).toBe('amitriptyline');
 
     let adviceTextsCheckboxes = adv0['adviceTextsCheckboxes'];
-    expect(adviceTextsCheckboxes.length).toBe(14);
+    expect(adviceTextsCheckboxes.length).toBe(15);
     let checkbox0 = adviceTextsCheckboxes[0];
     expect(checkbox0['medication_criteria_id']).toBe("19f");
-    expect(checkbox0['selectBoxNum']).toBe(1);
-    expect(checkbox0['selectBoxCategory']).toBe('taper-stop');
+    expect(checkbox0['selectBoxNum']).toBe(11);
+    expect(checkbox0['selectBoxCategory']).toBe('stop');
 
     let adviceTextsNoCheckboxes = adv0['adviceTextsNoCheckboxes'];
-    expect(adviceTextsNoCheckboxes.length).toBe(5);
+    expect(adviceTextsNoCheckboxes.length).toBe(6);
     let noCheckbox0 = adviceTextsNoCheckboxes[0];
     expect(noCheckbox0['medication_criteria_id']).toBe("19");
     expect(noCheckbox0.cdss_split[0].text).toContain("TCA");

@@ -16,7 +16,7 @@ test.page(`http://localhost:9090/patient?id=68`)
         let window1 = await t.getCurrentWindow();
 
         // initial check that patient data is rendered
-        await t.expect(selector.withText('geen decompensatio').exists).ok()
+        await t.expect(selector.withText('Indicatie hypertensie').exists).ok()
         await t.expect(selector.withText('Enalapril').exists).ok()
         await t.expect(selector.withText('Hydrochlorothiazide').exists).ok()
         await t.expect(selector.withText('ACE-remmers').exists).ok()
@@ -101,7 +101,7 @@ test.page(`http://localhost:9090/patient?id=68`)
     });
 
 test('Checkbox persistence', async t => {
-    let checkbox_id = "cb_N02AA01_72_1";
+    let checkbox_id = "cb_N02AA01_76_1";
     let checkbox_css_selector = `input#${checkbox_id}`;
     let url = 'http://localhost:9090/patient?id=78';
 
