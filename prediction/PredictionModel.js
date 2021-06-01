@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Toelichting predictiemodel voor berekening valrisico</title>
-
-<script>
 function populate(){
 // Populate the table with the specific patient data.
 // For now I've hard coded the values for Mw. Smit, but we should get the values for each patient out of the database.
@@ -169,8 +163,8 @@ var prediction = Math.round(100*(Math.exp(p1) / (1+ Math.exp(p1))));
 document.getElementById('prediction').innerHTML = prediction + "%";
 
 }
-</script>
 
+/*
 <style>
 tr.tableheader{
 background-color: #ffcc99;
@@ -330,7 +324,4 @@ Ieder item waarop de pati&euml;nt antwoord met antwoordopties 2, 3, of 4 telt al
 <li>Hoogendijk, E. O., Deeg, D. J. H., Breij, S. De, Klokgieters, S. S., & Kok, A. A. L. (2019). The Longitudinal Aging Study Amsterdam?: cohort update 2019 and additional data collections. European Journal of Epidemiology, (0123456789). https://doi.org/10.1007/s10654-019-00541-2</li>
 <li>Wijngaarden, V., Van Wijngaarden, J. P., Dhonukshe-Rutten, R. A., Van Schoor, N. M., Van Der Velde, N., Swart, K. M., Cpgm De Groot, L. (2011). Rationale and design of the B-PROOF study, a randomized controlled trial on the effect of supplemental intake of vitamin B12 and folic acid on fracture incidence Rationale and design of the B-PROOF study, a randomized controlled trial on the effect of sup. BMC Geriatrics, 11(December). https://doi.org/10.1186/1471-2318-11-80</li>
 </ul>
-
-
-</body>
-</html>
+*/
