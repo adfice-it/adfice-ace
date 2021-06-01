@@ -138,7 +138,7 @@ UPDATE patient SET age = FLOOR(DATEDIFF(NOW(), birth_date)/365.25);
 
 /* fake patients for validating rules */
 INSERT INTO patient (id,display_name,login_token,birth_date,age) VALUES
-(131,"Mr. ACEThiaz + Hartfalen","mracethiazhart",'1940-06-16'),
+(131,"Mr. ACEThiaz + Hartfalen","mracethiazhart",'1940-06-16',81),
 (132,"Mw. Cardio-NoProb","mwcardionoprob",'1940-06-16',81),
 (133,"Mr. Diuretic-noACEi","mrdiureticnoace",'1940-06-16',81),
 (134,"Mr. BBlis","mrbblis",'1940-06-16',81),
