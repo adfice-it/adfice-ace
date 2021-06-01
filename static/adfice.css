@@ -1,0 +1,180 @@
+* {
+    box-sizing: border-box;
+}
+
+input {
+    display: inline;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: small;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #999999;
+    line-height: 2;
+    text-align: center;
+    /* color: #042E64; */
+    /* font-size: 30px; */
+    font-weight: bold;
+    text-shadow: 0 1px 0 #84BAFF;
+    box-shadow: 0 0 15px #00214B
+}
+
+.button_advice_view {
+    border-radius: 8px;
+    border: 2px solid green;
+}
+
+#patient_info {
+    background: #d9d9d9;
+    width: 99%;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+}
+
+.advice_no_checkbox {
+    border: 2px solid green;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+}
+
+.freetext {
+    display: inline;
+}
+
+.advice_selection_area{
+    background: #f5f5f5;
+    margin-bottom: 2em;
+}
+
+.med_name{
+    display: inline;
+    font-size: large;
+    font-weight: bold;
+}
+
+.div_epic_box{
+    border:1px solid black;
+}
+
+div.prediction{
+    margin: auto;
+    width: 50%;
+}
+
+div.advice_header{
+    margin: auto;
+    width: 10%;
+    font-size: large
+    font-weight: bold;
+}
+
+div.whitespace{
+    height: 3cm;
+}
+
+div.refpages{
+    display:inline;
+    float: right;
+}
+
+div.spacer{
+    display: block;
+    clear: both;
+    height: 0.5em;
+}
+
+div.instruction_box{
+    display: block;
+    clear: both;
+    max-width: 95%;
+    margin-bottom: 2em;
+}
+
+div.instruction_row{
+    clear: both;
+    width: 100%;
+    margin: 5px;
+}
+
+div.sdm_left {
+    float: left;
+}
+
+div.sdm_right {
+    float: right;
+}
+
+div.sdm{
+    background: #DDDDDD;
+    text-align: left;
+    border: 2px solid black;
+    width: 48%;
+}
+
+span.instruction_step {
+    font-family: Arial, sans-serif;
+}
+
+span.instruction_heading {
+    font-weight: bold;
+}
+
+span.instruction_step {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+div.general_advice{
+    margin-bottom: 1em;
+}
+
+div.gauge_background {
+    width:80%;
+    height: 0px;
+    padding-bottom: 8%;
+    background: linear-gradient(to right, #0F0, #FF0 15%, #F00);
+    display: inline-block;
+    margin-bottom: 3ex;
+}
+
+div.gauge_line {
+    width: calc(0.4% + 1px);
+    margin-left: calc(-(0.4% / 2 + 0.5px));
+    margin-right: calc(-(0.4% / 2 + 0.5px));
+    padding-bottom: calc(10% + 1ex);
+    padding-left: 0;
+    padding-right: 0;
+    background: #000;
+    position: relative;
+    top: -0.5ex;
+    display: inline-block;
+}
+
+div.gauge_text_left {
+    position: relative;
+    top: 10px;
+    margin: 0px;
+    padding: 0px;
+    width: 0px;
+    display: inline-block;
+}
+
+div.gauge_text_right {
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    width: 0px;
+    top: 10px;
+    left: calc(100% - 3ch - 1em);
+    display: inline-block;
+}
