@@ -39,3 +39,13 @@ INSERT INTO patient_problems (patient_id, date_retrieved, problem_id, start_date
 (91,'2021-02-11',25,'2019-02-11',"dwaarslesie"),
 (96,'2021-02-11',25,'2019-02-11',"dwaarslesie"),
 (102,'2021-02-11',7,'2019-02-11',"parkinson");
+
+/* fake patients for validating rules */
+INSERT INTO patient_problems (patient_id, date_retrieved, problem_id, start_date, name) VALUES
+(131,'2021-02-11',5,'2019-02-11',"hartfalen"),
+(133,'2021-02-11',1,'2019-02-11',"hypertensie"),
+(134,'2021-02-11',1,'2019-02-11',"hypertensie"),
+(135,'2021-02-11',5,'2019-02-11',"hartfalen"),
+(139,'2021-02-11',4,'2019-02-11',"depressie"),
+(140,'2021-02-11',11,'2019-02-11',"angststoornis"),
+(141,'2021-02-11',11,'2019-02-11',"angststoornis");

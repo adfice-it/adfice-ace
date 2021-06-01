@@ -132,3 +132,24 @@ INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, ge
 (128,'2021-02-11',"atenolol, thiazides and other diuretics","atenolol, thiazides and other diuretics","C07DB01",'2019-02-11'),
 (129,'2021-02-11',"diclofenac topical","diclofenac topical","D11AX18",'2019-02-11'),
 (129,'2021-02-11',"naproxen and esomeprazol","naproxen and esomeprazol","M01AE52",'2019-02-11');
+
+/* fake patients for validating rules */
+INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
+(131,'2021-02-11',"hydrochlorothiazide","hydrochloorthiazide","C03AA03",'2019-02-11'),
+(131,'2021-02-11',"enalapril","enalapril","C09AA02",'2019-02-11'),
+(132,'2021-02-11',"verapamil","verapamil","C08DA01",'2019-02-11'),
+(132,'2021-02-11',"lisinopril","lisinopril","C09AA03",'2019-02-11'),
+(132,'2021-02-11',"Lasix","furosemide","C03CA01",'2019-02-11'),
+(133,'2021-02-11',"hydrochlorothiazide","hydrochloorthiazide","C03AA03",'2019-02-11'),
+(134,'2021-02-11',"Lasix","furosemide","C03CA01",'2019-02-11'),
+(134,'2021-02-11',"metoprolol","metoprolol","C07AB02",'2019-02-11'),
+(135,'2021-02-11',"Lasix","furosemide","C03CA01",'2019-02-11'),
+(135,'2021-02-11',"digoxine","digoxine","C01AA05",'2019-02-11'),
+(136,'2021-02-11',"simvastatine","simvastatine","C10AA01",'2019-02-11'),
+(137,'2021-02-11',"diclofenac","diclofenac","M01AB05",'2019-02-11'),
+(137,'2021-02-11',"morfine","morfine","N02AA01",'2019-02-11'),
+(138,'2021-02-11',"citolapram","citolapram","N06AB04",'2019-02-11'),
+(139,'2021-02-11',"amitriptyline","amitriptyline","N06AA09",'2019-02-11'),
+(140,'2021-02-11',"escitalopram","escitalopram","N06AB10",'2019-02-11'),
+(141,'2021-02-11',"diazepam","diazepam","N05BA01",'2021-02-12'),
+(142,'2021-02-11',"temazepam","temazepam","N05CD07",'2021-02-12');
