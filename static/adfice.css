@@ -87,38 +87,29 @@ div.refpages{
     float: right;
 }
 
-div.spacer{
-    display: block;
-    clear: both;
-    height: 0.5em;
-}
-
 div.instruction_box{
     display: block;
     clear: both;
-    max-width: 95%;
+    width: 99%;
     margin-bottom: 2em;
+    display: flex;
+    justify-content: space-between;
 }
 
-div.instruction_row{
-    clear: both;
-    width: 100%;
-    margin: 5px;
-}
-
-div.sdm_left {
-    float: left;
-}
-
-div.sdm_right {
-    float: right;
+div.instruction_column{
+    display: flex;
+    width: 48%;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 div.sdm{
     background: #DDDDDD;
     text-align: left;
     border: 2px solid black;
-    width: 48%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 span.instruction_step {
