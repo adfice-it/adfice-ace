@@ -12,6 +12,6 @@ INSERT INTO patient_labs (patient_id, date_retrieved, date_measured, lab_test_na
 
 /* fake patients for validating rules */
 INSERT INTO patient_labs (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_result, lab_test_units) VALUES
-(139,'2021-02-11','2021-02-11',"natrium",140,"mmol/l "),
-(140,'2021-02-11','2019-02-11',"natrium",140,"mmol/l "),
-(137,'2021-02-11','2020-02-11',"eGFR",35,"mL/min/1.73 m² ");
+(137,'2021-05-11','2020-05-11',"eGFR",35,"mL/min/1.73 m² "),
+(139,'2021-05-11','2021-05-11',"natrium",140,"mmol/l "),
+(140,'2021-05-11','2019-05-11',"natrium",140,"mmol/l ");

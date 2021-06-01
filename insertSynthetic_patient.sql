@@ -137,18 +137,18 @@ INSERT INTO patient (id,display_name,login_token,birth_date) VALUES
 UPDATE patient SET age = FLOOR(DATEDIFF(NOW(), birth_date)/365.25);
 
 /* fake patients for validating rules */
-INSERT INTO patient (id,display_name,login_token,birth_date) VALUES
+INSERT INTO patient (id,display_name,login_token,birth_date,age) VALUES
 (131,"Mr. ACEThiaz + Hartfalen","mracethiazhart",'1940-06-16'),
-(132,"Mw. Cardio-NoProb","mwcardionoprob",'1940-06-16'),
-(133,"Mr. Diuretic-noACEi","mrdiureticnoace",'1940-06-16'),
-(134,"Mr. BBlis","mrbblis",'1940-06-16'),
-(135,"Mw. Digoxine","mwdigoxine",'1940-06-16'),
-(136,"Mr. Statin","mrstatin",'1940-06-16'),
-(137,"Mr. Painladder","mrpainladder",'1940-06-16'),
-(138,"Mw. SSRI-NoProb","mwssrinoprob",'1940-06-16'),
-(139,"Mr. TCA-depress","mrtcadepress",'1940-06-16'),
-(140,"Mw. TCA-anxiety","mwtcaanxiety",'1940-06-16'),
-(141,"Mr. Benzo-anxiety","mrbenzoanxiety",'1940-06-16'),
-(142,"Mr. Benzo-noreason","mrbenzonoreason",'1940-06-16');
+(132,"Mw. Cardio-NoProb","mwcardionoprob",'1940-06-16',81),
+(133,"Mr. Diuretic-noACEi","mrdiureticnoace",'1940-06-16',81),
+(134,"Mr. BBlis","mrbblis",'1940-06-16',81),
+(135,"Mw. Digoxine","mwdigoxine",'1940-06-16',81),
+(136,"Mr. Statin","mrstatin",'1940-06-16',81),
+(137,"Mr. Painladder","mrpainladder",'1940-06-16',81),
+(138,"Mw. SSRI-NoProb","mwssrinoprob",'1940-06-16',81),
+(139,"Mr. TCA-depress","mrtcadepress",'1940-06-16',81),
+(140,"Mw. TCA-anxiety","mwtcaanxiety",'1940-06-16',81),
+(141,"Mr. Benzo-anxiety","mrbenzoanxiety",'1940-06-16',81),
+(142,"Mr. Benzo-noreason","mrbenzonoreason",'1940-06-16',81);
 
 

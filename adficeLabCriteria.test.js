@@ -229,3 +229,12 @@ test('old eGFR, check if normal and in date', () => {
     let result = alc.evaluateLabCriteria(labTests, labString);
     expect(result).toBe(false);
 })
+
+test('normal eGFR, check if normal', () => {
+    let labTests = {};
+    labTests["eGFR"] = normaleGFR;
+    let labString = "lab.eGFR.value > 30";
+    let result = alc.evaluateLabCriteria(labTests, labString);
+    expect(result).toBe(true);
+})
+
