@@ -329,6 +329,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
+<%= ucfirst(row.medication_name).trim() %>:
 <% //
      for (let j = 0; j < cb_advices.length; ++j ) {
          let cb_advice = cb_advices[j];
