@@ -166,7 +166,7 @@ Labs:
 
 </div><!-- instruction_box -->
 
-<div class="advice_header">Medicatiefactoren</div>
+<div class="advice_header" style="font-size: large; font-weight: bold;">Medicatiefactoren</div>
 <div id="general_advice" class="general_advice">
 In het algemeen dient een medicament gestopt of afgebouwd worden als:
 <ul>
@@ -317,18 +317,18 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 
 <div id="div_other_med_advice" class="div_other_med_advice">
 <p>Andere medicatie-gerelateerde advies:</p><!-- TODO add a free text box where the doctor can type in whatever they want. Like other free text boxes, this should be copied to the Epic and Patient text. -->
-<div class="advice_header" style="width:20%">Andere risicofactoren</div>
+<div class="advice_header" style="width:20%; font-size: large; font-weight: bold;">Andere risicofactoren</div>
 <!-- TODO add non-med advice -->
 <p>Andere advies:</p><!-- TODO add a free text box where the doctor can type in whatever they want. Like other free text boxes, this should be copied to the Epic and Patient text. -->
 </div><!-- div_other_med_advice -->
 
 <div id="div_epic_box" class="div_epic_box"><!-- not in patient view -->
+<p>Tekst om te knippen en plakken in Epic:</p>
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
 <div id="advice_epic_area_<%= i %>" class="advice_epic_area">
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
-<p>Tekst om te knippen en plakken in Epic:</p>
 <% //
      for (let j = 0; j < cb_advices.length; ++j ) {
          let cb_advice = cb_advices[j];
