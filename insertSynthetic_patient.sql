@@ -151,4 +151,8 @@ INSERT INTO patient (id,display_name,login_token,birth_date,age) VALUES
 (141,"Mr. Benzo-anxiety","mrbenzoanxiety",'1940-06-16',81),
 (142,"Mr. Benzo-noreason","mrbenzonoreason",'1940-06-16',81);
 
+/* fake patients for usability */
+INSERT INTO patient (id,display_name,login_token,birth_date,age) VALUES
+(143,"Mw. Usability","mwusability",'1940-06-16',81);
+
 
