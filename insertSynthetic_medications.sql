@@ -25,7 +25,7 @@ INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, ge
 (23,'2021-02-11',"haloperidol","haloperidol","N05AD01",'2019-02-11'),
 (24,'2021-02-11',"risperidon","risperidon","N05AX08",'2019-02-11'),
 (25,'2021-02-11',"amitriptyline","amitriptyline","N06AA09",'2019-02-11'),
-(26,'2021-02-11',"amitriptyline","amitriptyline","N06AA09",'2021-02-01'),
+(26,'2021-02-11',"amitriptyline","amitriptyline","N06AA09",(select DATE_SUB(NOW(), INTERVAL 2 MONTH))),
 (27,'2021-02-11',"amitriptyline","amitriptyline","N06AA09",'2020-08-01'),
 (28,'2021-02-11',"sertraline","sertraline","N06AB06",'2019-02-11'),
 (29,'2021-02-11',"fluoxetine","fluoxetine","N06AB03",'2019-02-11'),

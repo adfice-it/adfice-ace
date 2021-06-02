@@ -28,6 +28,8 @@ INSERT INTO patient_problems (patient_id, date_retrieved, problem_id, start_date
 (42,'2021-02-11',5,'2019-02-11',"hartfalen"),
 (43,'2021-02-11',5,'2019-02-11',"hartfalen"),
 (44,'2021-02-11',1,'2019-02-11',"hypertensie"),
+(45,'2021-02-11',16,'2019-02-11',"hyponatremia"),
+(48,'2021-02-11',16,'2019-02-11',"jicht"),
 (51,'2021-02-11',7,'2019-02-11',"parkinson"),
 (51,'2021-02-11',3,'2019-02-11',"orthostatische-hypotensie"),
 (55,'2021-02-11',1,'2019-02-11',"hypertensie"),
@@ -36,8 +38,8 @@ INSERT INTO patient_problems (patient_id, date_retrieved, problem_id, start_date
 (62,'2021-02-11',22,'2019-02-11',"atriumfibrilleren"),
 (70,'2021-02-11',7,'2019-02-11',"parkinson"),
 (70,'2021-02-11',3,'2019-02-11',"orthostatische-hypotensie"),
-(91,'2021-02-11',25,'2019-02-11',"dwaarslesie"),
-(96,'2021-02-11',25,'2019-02-11',"dwaarslesie"),
+(91,'2021-02-11',25,'2019-02-11',"dwaarslaesie"),
+(96,'2021-02-11',25,'2019-02-11',"dwaarslaesie"),
 (102,'2021-02-11',7,'2019-02-11',"parkinson");
 
 /* fake patients for validating rules */
