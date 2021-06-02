@@ -313,8 +313,8 @@ function structureLabs(labRows) {
         let lab_test_result = row.lab_test_result;
         let date_measured = row.date_measured;
         labTests[lab_test_name] = labTests[lab_test_name] || {};
-        labTests[lab_test_name][lab_test_result] = lab_test_result;
-        labTests[lab_test_name][date_measured] = date_measured;
+        labTests[lab_test_name]['lab_test_result'] = lab_test_result;
+        labTests[lab_test_name]['date_measured'] = date_measured;
     }
     return labTests;
 }

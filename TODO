@@ -2,8 +2,7 @@ High Prio:
 * styling, try to match existing mock-ups
 
 Problems found while creating validation patients:
-* Figure out why test patient 85 does not fire rule 79
-	* probably the same reason that test patient 137 does not fire rule 68
+* Figure out why test patient 137 does not fire rule 68
 * why is 19a firing for patient 138
 	* 19c is also firing (this is the correct rule for this patient)
 * 19 fires for patient 139

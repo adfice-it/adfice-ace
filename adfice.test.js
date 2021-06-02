@@ -147,14 +147,14 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
     expect(adv0['medication_name']).toBe('amitriptyline');
 
     let adviceTextsCheckboxes = adv0['adviceTextsCheckboxes'];
-    expect(adviceTextsCheckboxes.length).toBe(15);
+    expect(adviceTextsCheckboxes.length).toBe(16);
     let checkbox0 = adviceTextsCheckboxes[0];
     expect(checkbox0['medication_criteria_id']).toBe("19f");
     expect(checkbox0['selectBoxNum']).toBe(11);
     expect(checkbox0['selectBoxCategory']).toBe('stop');
 
     let adviceTextsNoCheckboxes = adv0['adviceTextsNoCheckboxes'];
-    expect(adviceTextsNoCheckboxes.length).toBe(6);
+    expect(adviceTextsNoCheckboxes.length).toBe(7);
     let noCheckbox0 = adviceTextsNoCheckboxes[0];
     expect(noCheckbox0['medication_criteria_id']).toBe("19");
     expect(noCheckbox0.cdss_split[0].text).toContain("TCA");
@@ -238,4 +238,13 @@ test('no rules fired', async () => {
     expect(await adfice.getAdviceTextsCheckboxes([])).toStrictEqual([]);
     expect(await adfice.getAdviceTextsNoCheckboxes([])).toStrictEqual([]);
     expect(await adfice.getReferenceNumbers([])).toStrictEqual([]);
+});
+
+test('getAdviceForPatient(85), normal eGFR', async () => {
+console.log("patient 85");
+    let patientNumber = 85;
+    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    let advice = patientAdvice.medication_advice;
+//TODO check for malformed patient data. In this case labTests was not being constructed correctly. Or just replace the criteria with SQL and test that insstead.
+
 });
