@@ -19,8 +19,8 @@ async function evaluateRules(meds, rules, patient_id, adfice) {
             let rule = rules[ruleCounter];
             if (matchesSelector(atc_code, rule.selector_or) &&
                 !matchesSelector(atc_code, rule.selector_not)) {
-				let isConditionTrue = await adfice.isSQLConditionTrue(patient_id,rule.medication_criteria_id);
-				  if(isConditionTrue){
+                let isConditionTrue = await adfice.isSQLConditionTrue(patient_id, rule.medication_criteria_id);
+                if (isConditionTrue) {
                     medsWithRulesToFire[atc_code].push(rule.medication_criteria_id);
                 }
             }

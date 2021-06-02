@@ -237,4 +237,3 @@ test('normal eGFR, check if normal', () => {
     let result = alc.evaluateLabCriteria(labTests, labString);
     expect(result).toBe(true);
 })
-
