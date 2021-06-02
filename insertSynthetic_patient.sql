@@ -147,7 +147,7 @@ INSERT INTO patient (id,display_name,login_token,birth_date,age) VALUES
 (137,"Mr. Painladder","mrpainladder",'1940-06-16',81),
 (138,"Mw. SSRI-NoProb","mwssrinoprob",'1940-06-16',81),
 (139,"Mr. TCA-depress","mrtcadepress",'1940-06-16',81),
-(140,"Mw. TCA-anxiety","mwtcaanxiety",'1940-06-16',81),
+(140,"Mw. TCA-anxiety","mwtcaanxiety",'1942-06-16',79),
 (141,"Mr. Benzo-anxiety","mrbenzoanxiety",'1940-06-16',81),
 (142,"Mr. Benzo-noreason","mrbenzonoreason",'1940-06-16',81);
 
