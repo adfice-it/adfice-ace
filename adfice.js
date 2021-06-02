@@ -174,10 +174,7 @@ async function getSQLCondition(ruleNumber) {
          WHERE medication_criteria_id=?
          `;
     let results = await sql_select(sql, [ruleNumber]);
-    if (results.length > 0) {
-        return results[0]['sql_condition'];
-    }
-    return null;
+    return results[0]['sql_condition'];
 }
 
 async function isSQLConditionTrue(patientIdentifier,ruleNumber) {
@@ -190,6 +187,8 @@ async function evaluateSQLCondition(patientIdentifier,ruleNumber) {
     if(sql == null){return true;} //no conditions === always true
     /* count the number of question marks in the string */
     const count = sql.match(/\?/g).length;
+    autil.assert(count > 0);
+    autil.assert(count <= 3, "Too many question marks in SQL Condition! " + sql);
     let results = null;
     if(count == 1){
 		results = await sql_select(sql, [patientIdentifier]);
@@ -200,14 +199,9 @@ async function evaluateSQLCondition(patientIdentifier,ruleNumber) {
 	if(count == 3){ //tbh I think I never have more than two
 		results = await sql_select(sql, [patientIdentifier, patientIdentifier,patientIdentifier]);
 	}
-	if(count > 3){
-		throw Error("Too many question marks in SQL Condition! " + sql);
-	}
 	if (results.length == 0){ return false;}
-	if (results[0]['TRUE'] == 1) {
-		return true;
-	}
-    return false;
+        autil.assert((results[0]['TRUE'] == 1), JSON.stringify({ patientIdentifier: patientIdentifier, ruleNumber: ruleNumber, sql: sql, results: results}, null, 4));
+	return true;
 }
 
 async function getProblemsForPatient(patientIdentifier) {
