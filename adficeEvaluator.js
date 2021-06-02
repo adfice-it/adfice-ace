@@ -5,12 +5,8 @@
 
 var fs = require('fs');
 const util = require("util");
-const alc = require('./adficeLabCriteria');
-const ac = require('./adficeAgeCriteria');
-const apc = require('./adficeProblemCriteria');
-const adc = require('./adficeDrugCriteria');
 
-async function evaluateRules(meds, rules, drugList, problemList, age, labTests, patient_id, adfice) {
+async function evaluateRules(meds, rules, patient_id, adfice) {
     let medsWithRulesToFire = {};
     let meds_with_fired = [];
     let meds_without_fired = [];
@@ -23,15 +19,8 @@ async function evaluateRules(meds, rules, drugList, problemList, age, labTests, 
             let rule = rules[ruleCounter];
             if (matchesSelector(atc_code, rule.selector_or) &&
                 !matchesSelector(atc_code, rule.selector_not)) {
-                let drugString = rule.condition_drug;
-                let problemString = rule.condition_problem;
-                let ageString = rule.condition_age;
-                let labString = rule.condition_lab;
 				let isConditionTrue = await adfice.isSQLConditionTrue(patient_id,rule.medication_criteria_id);
 				  if(isConditionTrue){
-/*                if (doesRuleFire(startDate, drugString, drugList,
-                        problemString, problemList, ageString, age,
-                        labString, labTests)) {*/
                     medsWithRulesToFire[atc_code].push(rule.medication_criteria_id);
                 }
             }
@@ -65,37 +54,6 @@ function matchesSelector(atcCode, selectorString) {
     return false;
 }
 
-function doesRuleFire(
-    startDate, drugString, drugList,
-    problemString, problemList,
-    ageString, age,
-    labString, labTests) {
-
-    // TODO return true if all strings are null
-
-    if (drugString != null &&
-        adc.evaluateDrugCriteria(drugList, drugString, startDate)) {
-        return true;
-    }
-    if (problemString != null &&
-        apc.evaluateProblemCriteria(problemList, problemString)) {
-        return true;
-    }
-    if (ageString != null && ac.evaluateAgeCriteria(age, ageString)) {
-        return true;
-    }
-    if (labString != null && alc.evaluateLabCriteria(labTests, labString)) {
-        return true;
-    }
-
-    if ((drugString == null) && (problemString == null) &&
-        (ageString == null) && (labString == null)) {
-        return true;
-    }
-
-    return false;
-}
-
 function drugsWithoutFiredRules(rulesResult) {
     let results = [];
     let keys = Object.keys(rulesResult);
@@ -111,7 +69,6 @@ function drugsWithoutFiredRules(rulesResult) {
 
 module.exports = {
     matchesSelector: matchesSelector,
-    doesRuleFire: doesRuleFire,
     drugsWithoutFiredRules: drugsWithoutFiredRules,
     evaluateRules: evaluateRules
 }
