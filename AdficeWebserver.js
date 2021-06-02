@@ -22,6 +22,17 @@ console.log('DEBUG: ', DEBUG);
 
 let render_count = 0;
 
+async function jsonAdviceForPatient(req, res) {
+    ++render_count;
+    let patient_advice = await adfice.getAdviceForPatient(req.query.id || 0);
+    patient_advice.patient_id = patient_advice.patient_id || 0;
+    patient_advice.risk_score = (patient_advice.patient_id % 101); // TODO
+    res.json({
+        viewer_id: render_count,
+        patient_advice: patient_advice
+    });
+}
+
 async function renderAdviceForPatient(req, res) {
     ++render_count;
     let patient_id = req.query.id || 0;
@@ -66,6 +77,8 @@ const server = http.createServer(app);
 server.wss = new ws.Server({
     noServer: true
 });
+
+app.get("/advice", jsonAdviceForPatient);
 
 app.set('view engine', 'ejs');
 
