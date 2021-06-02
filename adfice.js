@@ -167,6 +167,49 @@ async function getMedsForPatient(patientIdentifier) {
     return meds;
 }
 
+async function getSQLCondition(ruleNumber) {
+    var sql = `/* adfice.getSQLCondition */
+        SELECT sql_condition
+          FROM med_rules
+         WHERE medication_criteria_id=?
+         `;
+    let results = await sql_select(sql, [ruleNumber]);
+    if (results.length > 0) {
+        return results[0]['sql_condition'];
+    }
+    return null;
+}
+
+async function isSQLConditionTrue(patientIdentifier,ruleNumber) {
+	let result = await evaluateSQLCondition(patientIdentifier,ruleNumber);
+	return result;
+}
+
+async function evaluateSQLCondition(patientIdentifier,ruleNumber) {
+    var sql = await getSQLCondition(ruleNumber);
+    if(sql == null){return true;} //no conditions === always true
+    /* count the number of question marks in the string */
+    const count = sql.match(/\?/g).length;
+    let results = null;
+    if(count == 1){
+		results = await sql_select(sql, [patientIdentifier]);
+	}
+	if(count == 2){
+		results = await sql_select(sql, [patientIdentifier, patientIdentifier]);
+	}
+	if(count == 3){ //tbh I think I never have more than two
+		results = await sql_select(sql, [patientIdentifier, patientIdentifier,patientIdentifier]);
+	}
+	if(count > 3){
+		throw Error("Too many question marks in SQL Condition! " + sql);
+	}
+	if (results.length == 0){ return false;}
+	if (results[0]['TRUE'] == 1) {
+		return true;
+	}
+    return false;
+}
+
 async function getProblemsForPatient(patientIdentifier) {
     var sql = `/* adfice.getProblemsForPatient */
         SELECT name, start_date
@@ -348,7 +391,7 @@ async function getAdviceForPatient(patientIdentifier) {
     var rules = await getActiveRules();
 
     let evaluated = await ae.evaluateRules(meds, rules, drugList,
-        problemList, age, labTests);
+        problemList, age, labTests, patient_id, this);
     let medsWithRulesToFire = evaluated.medsWithRulesToFire;
     let meds_with_fired = evaluated.meds_with_fired;
     let meds_without_fired = evaluated.meds_without_fired;
@@ -477,6 +520,8 @@ module.exports = {
     getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
     getFreetextsForPatient: getFreetextsForPatient,
     getMedsForPatient: getMedsForPatient,
+    getSQLCondition: getSQLCondition,
+    isSQLConditionTrue: isSQLConditionTrue,
     getReferenceNumbers: getReferenceNumbers,
     getSelectionsForPatient: getSelectionsForPatient,
     selectionStatesToBoxStates: selectionStatesToBoxStates,

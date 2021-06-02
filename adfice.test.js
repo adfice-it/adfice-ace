@@ -154,9 +154,9 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
     expect(checkbox0['selectBoxCategory']).toBe('stop');
 
     let adviceTextsNoCheckboxes = adv0['adviceTextsNoCheckboxes'];
-    expect(adviceTextsNoCheckboxes.length).toBe(7);
+    expect(adviceTextsNoCheckboxes.length).toBe(6);
     let noCheckbox0 = adviceTextsNoCheckboxes[0];
-    expect(noCheckbox0['medication_criteria_id']).toBe("19");
+    expect(noCheckbox0['medication_criteria_id']).toBe("19a");
     expect(noCheckbox0.cdss_split[0].text).toContain("TCA");
     expect(noCheckbox0.cdss_split[0].text).toContain("SSRI");
 })
@@ -241,10 +241,85 @@ test('no rules fired', async () => {
 });
 
 test('getAdviceForPatient(85), normal eGFR', async () => {
-console.log("patient 85");
     let patientNumber = 85;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
 //TODO check for malformed patient data. In this case labTests was not being constructed correctly. Or just replace the criteria with SQL and test that insstead.
 
 });
+
+test('getSQLcondition rule 38', async () => {
+    let ruleNumber = 38;
+    let sqlCondition = await adfice.getSQLCondition(ruleNumber);
+	expect(sqlCondition).toContain("patient_problems");
+});
+
+test('isSQLConditionTrue', async () => {
+    let patientIdentifier = 44;
+    let ruleNumber = 38;
+    let isConditionTrue = await adfice.isSQLConditionTrue(patientIdentifier,ruleNumber);
+console.log(isConditionTrue);
+
+//	expect(sqlCondition).toContain("patient_problems");
+});
+/*
+test('SQL error check', async () => {
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"6");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"6a");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"6b");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"9");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"10");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"12");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"14");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"14a");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"14b");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"14c");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"14d");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"15");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"19");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"19a");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"19b");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"19c");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"21");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"22");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"23");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"24");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"25");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"26");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"26a");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"26b");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"35");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"36");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"37");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"38");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"40");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"40a");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"40b");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"40c");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"41");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"48");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"52");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"53");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"57a");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"58");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"59");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"68");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"69");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"70");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"71");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"79");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"80");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"80a");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"80b");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"81");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"82");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"83");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"86");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"87");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"89");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"90");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"91");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"92");
+let isConditionTrue = await adfice.isSQLConditionTrue(44,"102");
+});
+*/

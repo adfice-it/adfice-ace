@@ -10,7 +10,7 @@ const ac = require('./adficeAgeCriteria');
 const apc = require('./adficeProblemCriteria');
 const adc = require('./adficeDrugCriteria');
 
-function evaluateRules(meds, rules, drugList, problemList, age, labTests) {
+async function evaluateRules(meds, rules, drugList, problemList, age, labTests, patient_id, adfice) {
     let medsWithRulesToFire = {};
     let meds_with_fired = [];
     let meds_without_fired = [];
@@ -27,10 +27,11 @@ function evaluateRules(meds, rules, drugList, problemList, age, labTests) {
                 let problemString = rule.condition_problem;
                 let ageString = rule.condition_age;
                 let labString = rule.condition_lab;
-
-                if (doesRuleFire(startDate, drugString, drugList,
+				let isConditionTrue = await adfice.isSQLConditionTrue(patient_id,rule.medication_criteria_id);
+				  if(isConditionTrue){
+/*                if (doesRuleFire(startDate, drugString, drugList,
                         problemString, problemList, ageString, age,
-                        labString, labTests)) {
+                        labString, labTests)) {*/
                     medsWithRulesToFire[atc_code].push(rule.medication_criteria_id);
                 }
             }
