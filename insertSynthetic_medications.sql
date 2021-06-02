@@ -161,4 +161,4 @@ INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, ge
 (143,'2021-02-11',"pantoprazol","pantoprazol","A02BC02",'2021-02-12'),
 (143,'2021-02-11',"apixaban","apixaban","B01AF02",'2021-02-12'),
 (143,'2021-02-11',"Atorvastatine","atorvastatine","C10AA05",'2021-02-12'),
-(143,'2021-02-11',"METOPROLOL",","metoprolol","C07AB02",'2021-02-12');
+(143,'2021-02-11',"METOPROLOL","metoprolol","C07AB02",'2021-02-12');
