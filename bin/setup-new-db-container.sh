@@ -81,7 +81,6 @@ for SQL in \
 	newPreselectRulesTable.sql \
 	populateStaticPatientTables.sql \
 	populateProblemMap.sql \
-	updateRulesWithSeparatedCriteria.sql \
 	updateRulesWithSeparatedSelectors.sql \
 	updateMedRulesWithSQLConditions.sql
 do

@@ -14,11 +14,6 @@ selector_logic varchar(1000),
 condition_logic varchar(1000),
 selector_or varchar(500),
 selector_not varchar(500),
-condition_problem varchar(500),
-condition_age varchar(200),
-condition_drug varchar(500),
-condition_lab varchar(500),
-condition_allergy varchar(500),
 reference int unsigned
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
