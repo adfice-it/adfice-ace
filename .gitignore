@@ -1,5 +1,6 @@
 adfice_mariadb_root_password
 adfice_mariadb_user_password
+*.pem
 node_modules
 package-lock.json
 *.tar.gz
