@@ -215,7 +215,7 @@ async function evaluateSQLCondition(patientIdentifier, ruleNumber) {
 
 async function getProblemsForPatient(patientIdentifier) {
     var sql = `/* adfice.getProblemsForPatient */
-        SELECT name, start_date
+        SELECT name, start_date, display_name
           FROM patient_problems
          WHERE patient_id=?
            AND date_retrieved = (
