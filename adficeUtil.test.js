@@ -33,36 +33,6 @@ test('assert(false, messge)', () => {
     expect(msg).toContain("Foo bar");
 })
 
-test('compareNumbers', () => {
-    expect(autil.compareNumbers("1", ">=", "2")).toBe(false);
-    expect(autil.compareNumbers("2", ">=", "2")).toBe(true);
-    expect(autil.compareNumbers("3", ">=", "2")).toBe(true);
-
-    expect(autil.compareNumbers("1", ">", "2")).toBe(false);
-    expect(autil.compareNumbers("2", ">", "2")).toBe(false);
-    expect(autil.compareNumbers("3", ">", "2")).toBe(true);
-
-    expect(autil.compareNumbers("1", "<", "2")).toBe(true);
-    expect(autil.compareNumbers("2", "<", "2")).toBe(false);
-    expect(autil.compareNumbers("3", "<", "2")).toBe(false);
-
-    expect(autil.compareNumbers("1", "<=", "2")).toBe(true);
-    expect(autil.compareNumbers("2", "<=", "2")).toBe(true);
-    expect(autil.compareNumbers("3", "<=", "2")).toBe(false);
-
-    expect(autil.compareNumbers("1", "=", "2")).toBe(false);
-    expect(autil.compareNumbers("2", "=", "2")).toBe(true);
-
-    expect(autil.compareNumbers("1", "==", "2")).toBe(false);
-    expect(autil.compareNumbers("2", "==", "2")).toBe(true);
-
-    expect(autil.compareNumbers("1", "!=", "2")).toBe(true);
-    expect(autil.compareNumbers("2", "!=", "2")).toBe(false);
-
-    expect(autil.compareNumbers("1", "!==", "2")).toBe(true);
-    expect(autil.compareNumbers("2", "!==", "2")).toBe(false);
-})
-
 test('ucfirst', () => {
     expect(autil.ucfirst('foo bar')).toBe('Foo bar');
     expect(autil.ucfirst('FOOo')).toBe('FOOo');
