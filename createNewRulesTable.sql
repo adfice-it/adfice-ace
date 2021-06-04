@@ -42,10 +42,15 @@ preselect_lab varchar(500),
 preselect_allergy varchar(500)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE nonmed_advice_text (
+CREATE TABLE nonmed_headers (
 id int unsigned AUTO_INCREMENT PRIMARY KEY,
 category_id varchar(8),
-category_name varchar(50),
+category_name varchar(50)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE nonmed_text (
+id int unsigned AUTO_INCREMENT PRIMARY KEY,
+category_id varchar(8),
 selectBoxNum smallint unsigned,
 preselected tinyint unsigned,
 cdss varchar(3000),

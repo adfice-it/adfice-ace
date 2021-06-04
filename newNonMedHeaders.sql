@@ -1,0 +1,22 @@
+INSERT INTO nonmed_headers (category_id,category_name)
+VALUES
+('A','Standaard valpreventie advies'),
+('B','Standaard bewegingsadvies'),
+('C','Adviezen fysiotherapeut'),
+('D','Overige bewegingsadvies'),
+('E','Standaard omgevingsadvies'),
+('F','Visus'),
+('G','Schoeisel/voetproblemen'),
+('H','Cardiovasculaire aandoeningen/syncope'),
+('I','Orthostatische hypotensie'),
+('J','Vasovagale collaps'),
+('K','Duizeligheid'),
+('M','Osteoporose'),
+('N','Urge incontinentie'),
+('O','Diëtiek'),
+('P','Onderliggende ziektes/aandoeningen'),
+('Q','Psychologische interventies/verwijzingen'),
+('R','Slaapstoornis'),
+('S','Delier'),
+('T','Dementie'),
+('U','Depressie');

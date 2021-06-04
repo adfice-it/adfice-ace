@@ -79,6 +79,8 @@ for SQL in \
 	newAdviceTable.sql \
 	newRulesTable.sql \
 	newPreselectRulesTable.sql \
+	newNonMedHeaders.sql \
+	newNonMedTable.sql \
 	populateStaticPatientTables.sql \
 	populateProblemMap.sql \
 	updateRulesWithSeparatedSelectors.sql \
