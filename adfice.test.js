@@ -387,3 +387,12 @@ test('SQL error check', async () => {
     isConditionTrue = await adfice.isSQLConditionTrue(102,"102");
     expect(isConditionTrue).toBe(true); isConditionTrue = false;
 });
+
+test('Check preselect SQL', async () => {
+	let preselectRules = await adfice.getPreselectRules("42");
+	let sql = preselectRules[0]['sql_condition'].toString();
+	let result = await (adfice.evaluateSQL(sql, 1));
+	expect(result).toBe(true);
+
+
+});
