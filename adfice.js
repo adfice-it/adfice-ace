@@ -420,6 +420,7 @@ async function getAdviceForPatient(patientIdentifier) {
         adv.adviceTextsCheckboxes = advice_text;
         adv.adviceTextsNoCheckboxes = advice_text_no_box;
         adv.referenceNumbers = await getReferenceNumbers(fired);
+        adv.fired = fired;
         advice.push(adv);
     }
 
