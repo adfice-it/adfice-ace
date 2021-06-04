@@ -4,14 +4,33 @@ const props = {
   // todo: store in cookie
   sideBySide: false,
   currentStep: 'prepare',
-  initialJSON: null
+  initialJSON: null,
+  sharedData: {},
+  messages: [],
+  box_states: {},
+  field_entries: {}
 };
+const { freeze } = Object;
 const s = createStore(
   vuexSimple(
     {
       mutations: {
+        addMessage({ messages }, value) {
+          const received = new Date() * 1;
+          messages.push(freeze({ ...value, received }));
+        }
       },
       actions: {
+        async addMessage({ dispatch, commit, getters: { sharedData } }, value) {
+          await dispatch('sharedData', freeze({ ...sharedData, ...value, updated: new Date() * 1 }));
+          commit('addMessage', value);
+          const { type, kind, box_states, field_entries } = value;
+          if (kind === 'patient' && ['init', 'checkboxes'].includes(type)) {
+            console.log('patient message', value);
+            await dispatch('box_states', freeze(box_states));
+            await dispatch('field_entries', freeze(field_entries));
+          }
+        }
       },
       getters: {
         id(state, { record: { id } }) {
@@ -20,11 +39,20 @@ const s = createStore(
         age(state, { record: { age } }) {
           return age;
         },
+        viewer_id(state, { initialJSON }) {
+          return initialJSON?.viewer_id;
+        },
+        viewers(state, { record }) {
+          return record?.viewers;
+        },
         medicationAdvice(state, { record: { medication_advice } }) {
           return medication_advice;
         },
-        record(state, { initialJSON }) {
-          return { id: initialJSON?.patientId || 'no id', ...(initialJSON?.patient_advice || {}) } || {};
+        record(state, { initialJSON, sharedData }) {
+          return { id: initialJSON?.patientId || 'no id', ...(initialJSON?.patient_advice || {}), ...sharedData };
+        },
+        lastMessage({ messages }) {
+          return messages[messages.length - 1];
         },
         steps() {
           return [
