@@ -34,8 +34,8 @@ form#patient_form(:class="{ [currentStep]: true }")
           .legend 100%
     #patient-medications
       #meds-with-rules Recommended measures:&nbsp;
-        a(v-for="({ ATC_code: href, generic_name: title }, index) in medicationAdvice",
-          :href="`#${ href }`") {{ title.trim() }}
+        a(v-for="({ ATC_code: href, generic_name: title1, medication_name: title2 }, index) in medicationAdvice",
+          :href="`#${ href }`") {{ (title1 || title2).trim() }}
       #meds-without-rules Medicines without recommended measures: None
   #div-clinician-view
     //-.heading Joint decision-making model to stimulate engagement
