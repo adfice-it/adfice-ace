@@ -3,24 +3,17 @@ High Prio:
 * get HTTPS up for json requests
   * CI tests should use HTTPS too, possibly self-signed certs
 
-Problems found while creating validation patients.
-Probably the best solution is to switch to the SQL criteria and debug those instead.
-* Test patient 137 does not fire rule 68
-* why is 19a firing for patient 138
-	* 19c is also firing (this is the correct rule for this patient)
-* 19 fires for patient 139
-* 22 not firing for 140
-
-
-
 First after demo:
 * non-medication advice (same for every patient)
 * real pre-selection
-* SQL-evaluator for rule conditions
+* integrate prediction
+	* make prediction model page work
 
 Mid:
 * the "consult view" button could be renamed "Consult verneiuwen" in order to
   remove the items which have been un-checked/disabled
+  * the students suggested using a "reload" icon instead
+* copy button for Epic text (copies text in box to clipboard)
 * static content at the top
 * get prediction model color-bar or link to why no prediction
 * notification of loss of server connection, attempt to reload if lost
@@ -28,6 +21,10 @@ Mid:
 * stash the preselect checkboxes to compare what doctor ultimately chose
 * styling, e.g.: viewers in yellow, hidden when 1
 * test-cafe : get the innnerHTML out of an element
+* logging:
+  * log whether system was used at all, whether Print and Send to portal was used, which advice was (in the end) selected
+* sanity check choices of checkboxes
+* fetch data button and send to portal button should be at top (by help)
 
 Low Prio:
 * specify DB port, separate instance for local human testing, automated testing
@@ -35,3 +32,4 @@ Low Prio:
 * naming consistency thoughout the javascript
 * naming consistency thoughout the html
 * create table atc_code(id int PK, code varchar(100))
+* copy-pasteable (text only) version of patient advice

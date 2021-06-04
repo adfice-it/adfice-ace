@@ -637,7 +637,7 @@ R06AB01 Brompheniramine
 R06AB04 Chlorphenamine
 R06AD02 Promethazine
 R06AD05 Hydroxyethylpromethazine","all","","atc:A03AA07 | atc:A03AB05 | atc:A03BA01 | atc:A03BA03 | atc:A03BB01 | atc:G04BD02 | atc:G04BD04 | atc:G04BD05 | atc:G04BD06 | atc:G04BD07 | atc:G04BD08 | atc:G04BD09 | atc:G04BD10 | atc:G04BD11 | atc:M03BA03 | atc:M03BC01 | atc:N04AA01 | atc:N04AA02 | atc:N04AA04 | atc:N04AB02 | atc:N04AC01 | atc:N05AA01 | atc:N05AA03 | atc:N05AB03 | atc:N05AB06 | atc:N05AC02 | atc:N05AH03 | atc:N05AH04 | atc:N05BB01 | atc:N05CM05 | atc:N06AA | atc:N06AB05 | atc:R06AA02 | atc:R06AA04 | atc:R06AA08 | atc:R06AA09 | atc:R06AA52 | atc:R06AB01 | atc:R06AB04 | atc:R06AD02 | atc:R06AE05","",28),
-("105a","yes","no","anticholinergics not covered by other rules: A03AB05, A03BA01, A03BA03","all","{{preselect box 1}{}}","atc:A03AB05 | atc:A03BA01 | atc:A03BA03","",28),
+("105a","yes","no","anticholinergics not covered by other rules: A03AB05, A03BA01, A03BA03","all","{{preselect box 1}{}}","atc:A03AA07 | atc:A03AB05 | atc:A03BA01 | atc:A03BA03","",28),
 ("105b","yes","no","anticholinergics not covered by other rules: A03AB05, A03BA01, A03BA03","bijwerking","","atc:A03AB05 | atc:A03BA01 | atc:A03BA03","allergic-reaction",28),
 ("105c","yes","no","anticholinergics not covered by other rules: A03AB05, A03BA01, A03BA03","","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:A03AB05 | atc:A03BA01 | atc:A03BA03","",28),
 ("106","yes","no","Butylscopolamine A03BB01","","{{preselect box 1}{}}","atc:A03BB01","",28),
@@ -749,7 +749,7 @@ R01BA Nasal decongestants for systemic use: Sympathomimetics
 S01EA Sympathomimetics in glaucoma therapy
 S01FB Mydriatics and cycloplegics: Sympathomimetics excluding antiglaucoma preparations","all","","atc:R03AC | atc:R01AA | atc:R01AB | atc:R01BA  | atc:S01EA | atc:S01FB","",33);
 
-
+/* todo: make sure these updates are reflected in the table create statements instead. We don't need them to be Updates any more.*/
 UPDATE med_rules SET selector_logic = "(atc:C03 | atc:C02L | atc:C07B | atc:C07C | atc:C07D | atc:C09BA | atc:C09DA)" WHERE medication_criteria_id in("42","43","44");
 UPDATE med_rules SET preselect_criteria = "{{preselect box 1}{
 (SELECTOR() AND CONDITION(NOT
