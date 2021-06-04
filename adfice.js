@@ -76,6 +76,8 @@ function split_advice_texts_cdss_epic_patient(advice_texts) {
     for (let j = 0; j < advice_texts.length; ++j) {
         let row = advice_texts[j];
 
+        row.an_fyi = 'Flat fields "cdss", "epic", "patient" are for debugging';
+
         row.cdss_split = autil.splitFreetext(row.cdss);
         /* delete row.cdss; TODO: switch patient-validation to cdss_split */
 
@@ -125,6 +127,25 @@ async function getAdviceTextsNoCheckboxes(rule_numbers) {
         `)
       ORDER BY id`;
     let advice_text = await sql_select(sql, rule_numbers);
+    return split_advice_texts_cdss_epic_patient(advice_text);
+}
+
+async function getAdviceTextsNonMedCheckboxes() {
+    var sql = `/* adfice.getAdviceTextsNonMedCheckboxes */
+        SELECT t.category_id,
+               h.category_name,
+               t.selectBoxNum,
+               t.preselected,
+               t.cdss,
+               t.epic,
+               t.patient
+          FROM nonmed_header AS h
+          JOIN nonmed_text AS t
+            ON (h.category_id = t.category_id)
+      ORDER BY t.category_id,
+               t.selectBoxNum
+    `;
+    let advice_text = await sql_select(sql);
     return split_advice_texts_cdss_epic_patient(advice_text);
 }
 
@@ -424,7 +445,9 @@ async function getAdviceForPatient(patientIdentifier) {
         advice.push(adv);
     }
 
+    let advice_text_non_med = await getAdviceTextsNonMedCheckboxes();
     let selected_advice = await getSelectionsForPatient(patient_id);
+
 
     let patient_advice = {};
     patient_advice.patient_id = patient_id;
@@ -436,6 +459,7 @@ async function getAdviceForPatient(patientIdentifier) {
     patient_advice.problems = problems;
     patient_advice.medication_advice = advice;
     patient_advice.selected_advice = selected_advice;
+    patient_advice.advice_text_non_med = advice_text_non_med;
 
     return patient_advice;
 }
@@ -521,6 +545,7 @@ module.exports = {
     getAdviceForPatient: getAdviceForPatient,
     getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
     getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
+    getAdviceTextsNonMedCheckboxes: getAdviceTextsNonMedCheckboxes,
     getFreetextsForPatient: getFreetextsForPatient,
     getMedsForPatient: getMedsForPatient,
     getSQLCondition: getSQLCondition,
