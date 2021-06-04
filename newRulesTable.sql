@@ -748,6 +748,10 @@ R01BA Nasal decongestants for systemic use: Sympathomimetics
 S01EA Sympathomimetics in glaucoma therapy
 S01FB Mydriatics and cycloplegics: Sympathomimetics excluding antiglaucoma preparations","all","","atc:R03AC | atc:R01AA | atc:R01AB | atc:R01BA  | atc:S01EA | atc:S01FB","",33);
 
+-- deactivate allergy rules (not implemented, don't know if we will even get this data)
+UPDATE med_rules SET active = "no" where medication_criteria_id in("8","13b","17","27a","30a","43","47","50a","54a","60","63a","65","75","83a","93","96","103","105b","107","111","114","119","127","130","133","136");
+
+
 /* todo: make sure these updates are reflected in the table create statements instead. We don't need them to be Updates any more.*/
 UPDATE med_rules SET selector_logic = "(atc:C03 | atc:C02L | atc:C07B | atc:C07C | atc:C07D | atc:C09BA | atc:C09DA)" WHERE medication_criteria_id in("42","43","44");
 UPDATE med_rules SET preselect_criteria = "{{preselect box 1}{
@@ -791,7 +795,6 @@ N06BX03 (piracetam)","all","","atc:N06BX03","",12); */
 UPDATE med_rules SET selector_logic = "atc:N06BX03" WHERE medication_criteria_id in("133","134");
 UPDATE med_rules SET patient_group_criteria = "medication started less than 6 months ago (or unknown) & depressie", condition_logic = "(medication.startDate > now-6-months | !medication.startDate) & problem:depressie" where medication_criteria_id = "19";
 
-UPDATE med_rules SET active = "no" where condition_logic = "allergic-reaction" and medication_criteria_id != "25";
 /*
 INSERT INTO med_rules (`medication_criteria_id`, active`,`needs_review`,`medication_criteria`,`patient_group_criteria`,`preselect_criteria`,`selector_logic`,`condition_logic`,`reference`) VALUES 
 ("12","yes", "no", "anxiolytica", "not angststoornis", "", "atc:N05B & !atc:N05BA & !atc:N05BB", "!problem:angststoornis & ! problem:slaapstoornis",5),
