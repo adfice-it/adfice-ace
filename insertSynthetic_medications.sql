@@ -127,11 +127,10 @@ INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, ge
 (123,'2021-02-11',"piracetam","piracetam","N06BX03",'2019-02-11'),
 (124,'2021-02-11',"cinnarizine","cinnarizine","N07CA02",'2019-02-11'),
 (125,'2021-02-11',"salmeterol","salmeterol","R03AC12",'2019-02-11'),
-(126,'2021-02-11',"salmeterol","salmeterol","R03AC12",'2019-02-11'),
-(127,'2021-02-11',"enalapril and diuretics","enalapril and diuretics","C09BA02",'2019-02-11'),
-(128,'2021-02-11',"atenolol, thiazides and other diuretics","atenolol, thiazides and other diuretics","C07DB01",'2019-02-11'),
-(129,'2021-02-11',"diclofenac topical","diclofenac topical","D11AX18",'2019-02-11'),
-(130,'2021-02-11',"naproxen and esomeprazol","naproxen and esomeprazol","M01AE52",'2019-02-11');
+(126,'2021-02-11',"enalapril and diuretics","enalapril and diuretics","C09BA02",'2019-02-11'),
+(127,'2021-02-11',"atenolol, thiazides and other diuretics","atenolol, thiazides and other diuretics","C07DB01",'2019-02-11'),
+(128,'2021-02-11',"diclofenac topical","diclofenac topical","D11AX18",'2019-02-11'),
+(129,'2021-02-11',"naproxen and esomeprazol","naproxen and esomeprazol","M01AE52",'2019-02-11');
 
 /* fake patients for validating rules */
 INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES

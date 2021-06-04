@@ -148,7 +148,7 @@ C02L Antihypertensives and diuretics in combination
 C07B Beta blocking agents and thiazides 
 C07C Beta blocking agents and other diuretics 
 C07D Beta blocking agents, thiazides and other diuretics 
-C09BA and C09DA ACEi and ARB with diuretics","NOT hartfalen and NOT hypertensie","","(atc:C03 | atc:C02L | atc:C07B | atc:C07C | atc:C07D | atc:C09BA | atc:C09DA)","! problem:hartfalen & ! problem:hypertensie",13),
+C09BA and C09DA ACEi and ARB with diuretics","all","","(atc:C03 | atc:C02L | atc:C07B | atc:C07C | atc:C07D | atc:C09BA | atc:C09DA)","",13),
 ("42","yes","no","Diuretica: C03 diuretics except lisdiruetics
 C02L Antihypertensives and diuretics in combination 
 C07B Beta blocking agents and thiazides 

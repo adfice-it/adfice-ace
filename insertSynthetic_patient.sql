@@ -128,11 +128,10 @@ INSERT INTO patient (id,display_name,login_token,birth_date) VALUES
 (123,"Mr. Avertigo-NoComorbid","mravertigonocomorbid",'1940-06-09'),
 (124,"Mr. Avertigo-Allergy","mravertigoallergy",'1940-06-10'),
 (125,"Mevr. Sympathomimetic-NoComorbid","mvsympathomimeticnocomorbid",'1940-06-11'),
-(126,"Mevr. Sympathomimetic-Allergy","mvsympathomimeticallergy",'1940-06-12'),
-(127,"Mr. CombiC09BA","mrcombic09ba",'1940-06-13'),
-(128,"Mr. CombiBB","mrcombibb",'1940-06-14'),
-(129,"Mr. CombiNSAID","mrcombinsaid",'1940-06-15'),
-(130,"Mr. CombiNaproxPPI","mrcombinaproxppi",'1940-06-16');
+(126,"Mr. CombiC09BA","mrcombic09ba",'1940-06-13'),
+(127,"Mr. CombiBB","mrcombibb",'1940-06-14'),
+(128,"Mr. CombiNSAID","mrcombinsaid",'1940-06-15'),
+(129,"Mr. CombiNaproxPPI","mrcombinaproxppi",'1940-06-16');
 
 UPDATE patient SET age = FLOOR(DATEDIFF(NOW(), birth_date)/365.25);
 
