@@ -131,7 +131,7 @@ export default {
   mounted() {
     const { id, onMessage } = this;
     console.log('mounted...');
-    ws = new WebSocket(`ws://venus.freesa.org:8080/patient/${ id }`);
+    ws = new WebSocket(`wss://venus.freesa.org:443/patient/${ id }`);
     ws.onmessage = onMessage;
     console.log('...mounted');
   }
