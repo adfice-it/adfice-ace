@@ -1,4 +1,4 @@
-INSERT INTO nonmed_headers (category_id,category_name)
+INSERT INTO nonmed_header (category_id,category_name)
 VALUES
 ('A','Standaard valpreventie advies'),
 ('B','Standaard bewegingsadvies'),

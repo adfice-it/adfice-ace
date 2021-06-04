@@ -14,7 +14,8 @@ selector_logic varchar(1000),
 condition_logic varchar(1000),
 selector_or varchar(500),
 selector_not varchar(500),
-reference int unsigned
+reference int unsigned,
+UNIQUE KEY (medication_criteria_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE med_advice_text (
@@ -25,7 +26,8 @@ selectBoxCategory varchar(20),
 selectBoxDesignator varchar(20),
 cdss varchar(3000),
 epic varchar(2000),
-patient varchar(5000)
+patient varchar(5000),
+UNIQUE KEY (medication_criteria_id, selectBoxNum)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE preselect_rules (
@@ -39,13 +41,16 @@ preselect_problem varchar(500),
 preselect_age varchar(20),
 preselect_drug varchar(500),
 preselect_lab varchar(500),
-preselect_allergy varchar(500)
+preselect_allergy varchar(500),
+UNIQUE KEY (medication_criteria_id, selectBoxNum, preselectNum)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE nonmed_headers (
+CREATE TABLE nonmed_header (
 id int unsigned AUTO_INCREMENT PRIMARY KEY,
 category_id varchar(8),
-category_name varchar(50)
+category_name varchar(50),
+UNIQUE KEY (category_id),
+UNIQUE KEY (category_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE nonmed_text (
@@ -55,5 +60,6 @@ selectBoxNum smallint unsigned,
 preselected tinyint unsigned,
 cdss varchar(3000),
 epic varchar(2000),
-patient varchar(5000)
+patient varchar(5000),
+UNIQUE KEY (category_id, selectBoxNum)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
