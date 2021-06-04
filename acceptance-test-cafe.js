@@ -315,32 +315,45 @@ test('Test selecting views', async t => {
     await t.expect(epic1.visible).ok();
 });
 
+async function check_checkbox_and_freetext(id) {
+    // ensure our cb is selected
+    let cb_id = Selector('#cb_' + id);
+    if (!(await cb_id.checked)) {
+        await t.click(cb_id);
+    }
+    await t.expect(cb_id.checked).ok();
+
+    let ft_id_1 = Selector('#ft_' + id + '_1');
+    let eft_id_1 = Selector('#eft_' + id + '_1');
+    let pft_id_1 = Selector('#pft_' + id + '_1');
+
+    await t.selectText(ft_id_1);
+    await t.typeText(ft_id_1, 'foo');
+    await t.expect(ft_id_1.value).eql('foo');
+    await t.expect(eft_id_1.innerText).eql('foo');
+    await t.expect(pft_id_1.innerText).eql('foo');
+
+    await t.selectText(ft_id_1);
+    await t.typeText(ft_id_1, 'bar');
+    await t.expect(ft_id_1.value).eql('bar');
+    await t.expect(eft_id_1.innerText).eql('bar');
+    await t.expect(pft_id_1.innerText).eql('bar');
+}
+
 test('Test free text fields', async t => {
     let url = 'http://localhost:9090/patient?id=23';
     let window1 = await t.openWindow(url);
 
-    // ensure our cb is selected
-    let cb_N05AD01_16_2 = Selector('#cb_N05AD01_16_2');
-    if (!(await cb_N05AD01_16_2.checked)) {
-        await t.click(cb_N05AD01_16_2);
-    }
-    await t.expect(cb_N05AD01_16_2.checked).ok();
+    let id = 'N05AD01_16_2';
+    check_checkbox_and_freetext(id);
+});
 
-    let ft_N05AD01_16_2_1 = Selector('#ft_N05AD01_16_2_1');
-    let eft_N05AD01_16_2_1 = Selector('#eft_N05AD01_16_2_1');
-    let pft_N05AD01_16_2_1 = Selector('#pft_N05AD01_16_2_1');
+test('Test non-med free text fields', async t => {
+    let url = 'http://localhost:9090/patient?id=10';
+    let window1 = await t.openWindow(url);
 
-    await t.selectText(ft_N05AD01_16_2_1);
-    await t.typeText(ft_N05AD01_16_2_1, 'foo');
-    await t.expect(ft_N05AD01_16_2_1.value).eql('foo');
-    await t.expect(eft_N05AD01_16_2_1.innerText).eql('foo');
-    await t.expect(pft_N05AD01_16_2_1.innerText).eql('foo');
-
-    await t.selectText(ft_N05AD01_16_2_1);
-    await t.typeText(ft_N05AD01_16_2_1, 'bar');
-    await t.expect(ft_N05AD01_16_2_1.value).eql('bar');
-    await t.expect(eft_N05AD01_16_2_1.innerText).eql('bar');
-    await t.expect(pft_N05AD01_16_2_1.innerText).eql('bar');
+    let id = 'NONMED_D_1';
+    check_checkbox_and_freetext(id);
 });
 
 test('Test med lists', async t => {

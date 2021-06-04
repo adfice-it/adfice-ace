@@ -25,6 +25,11 @@ function switch_to_view(view) {
     let checkboxes = document.querySelectorAll("[id ^= cb_]");
     let checkbox_rows = document.querySelectorAll("[id ^= tr_]");
 
+    let non_med_advice_selection_area = document.getElementById(
+        "non_med_advice_selection_area");
+    let non_med_advice_patient_area = document.getElementById(
+        "non_med_advice_patient_area");
+
     let button_clinician = document.getElementById("button_clinician_view");
     let button_condensed = document.getElementById("button_condensed_view");
     let button_patient = document.getElementById("button_patient_view");
@@ -50,6 +55,8 @@ function switch_to_view(view) {
         div_patient_view.style.display = 'block';
         div_epic_box.style.display = 'none';
         set_class_display("advice_no_checkbox", 'none');
+        non_med_advice_selection_area.style.display = 'none';
+        non_med_advice_patient_area.style.display = 'block';
 
         button_patient.style.backgroundColor = 'green';
         button_patient.style.color = 'white';
@@ -68,6 +75,8 @@ function switch_to_view(view) {
             }
         }
         set_class_display("advice_no_checkbox", 'none');
+        non_med_advice_selection_area.style.display = 'block';
+        non_med_advice_patient_area.style.display = 'none';
 
         button_condensed.style.backgroundColor = 'green';
         button_condensed.style.color = 'white';
@@ -85,6 +94,8 @@ function switch_to_view(view) {
             checkbox_rows[i].style.display = 'block';
         }
         set_class_display("advice_no_checkbox", 'block');
+        non_med_advice_selection_area.style.display = 'block';
+        non_med_advice_patient_area.style.display = 'none';
 
         button_clinician.style.backgroundColor = 'green';
         button_clinician.style.color = 'white';
@@ -197,11 +208,19 @@ function process_freetexts(message) {
 
         let epic_text_id = field_id.replace(/^ft_/, 'eft_');
         var epic_field = document.getElementById(epic_text_id);
-        epic_field.innerText = value;
+        if (!epic_field) {
+            console.log('missing:', epic_text_id);
+        } else {
+            epic_field.innerText = value;
+        }
 
         let patient_text_id = field_id.replace(/^ft_/, 'pft_');
         var patient_field = document.getElementById(patient_text_id);
-        patient_field.innerText = value;
+        if (!patient_field) {
+            console.log('missing:', patient_text_id);
+        } else {
+            patient_field.innerText = value;
+        }
     });
 }
 
