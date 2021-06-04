@@ -34,80 +34,100 @@ form#patient_form(:class="{ [currentStep]: true }")
           .legend 100%
     #patient-medications
       #meds-with-rules Recommended measures:&nbsp;
-        a(v-for="({ ATC_code: href, medication_name: title }, index) in medicationAdvice",
+        a(v-for="({ ATC_code: href, generic_name: title }, index) in medicationAdvice",
           :href="`#${ href }`") {{ title.trim() }}
       #meds-without-rules Medicines without recommended measures: None
   #div-clinician-view
-    .heading Joint decision-making model to stimulate engagement
+    //-.heading Joint decision-making model to stimulate engagement
+    .heading Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren
     .steps
       .step(v-for="step in steps")
         .sub-step(v-for="subStep in step") {{ subStep }}
   #medication-section
-    .heading Medication factors
+    //-.heading Medication factors
+    .heading Medicatiefactoren
     #general-advice
-      div In general, a drug should be discontinued or reduced if:
+      //-div In general, a drug should be discontinued or reduced if:
+      div In het algemeen dient een medicament gestopt of afgebouwd worden als:
       ul
         li there is no indication (anymore)
         li a safer alternative is available
       div It is desirable to actively monitor every patient after a change of medication (by means of follow-up) for the occurrence of a (re) fall and / or complaints such as dizziness or light-headedness change upon standing up.
     #recommendations(:class="{ 'side-by-side': sideBySide }")
       .toggle(@click="sideBySide = !sideBySide", :title="`switch to ${ sideBySide && 'vertical' || 'horizontal' } view`")
-      .recommendation
-        .heading Hydrochlorothiazide
+      .recommendation(v-for="{ generic_name: title, adviceTextsNoCheckboxes: atncs, adviceTextsCheckboxes: cb_advices, ATC_code: atc, referenceNumbers } in medicationAdvice")
+        .heading {{ title }}
         .collapsable
           .advice
-            .heading Advice
-            .markdown(v-html="firstHTML")
+            //-.heading Advice
+            .heading Advies:
+            .rows
+              .row(v-for="{ cdss_split } in atncs")
+                markdowns(:items="cdss_split.map(({ text }) => text)")
           .measures
-            .heading Measures (ticked if recommended):
+            //-.heading Measures (ticked if recommended):
+            .heading Maatregelen (aangekruist indien aanbevolen):
             .items
-              .item
-                label Taper off after which stop: Taper off by 50% every week until the lowest dose is reached, then stop.
-                  input(type="checkbox")
-              .item
-                label Tapering down to minimum effective dose: Tap down by 50% every week until the minimum effective dose is reached.
-                  input(type="checkbox")
-                  input(type="text" value="Dosis verlagen met een kwart elke 2 weken. U hoeft daarna dit medicijn niet meer in te nemen.")
-              .item
-                label Tapering down to minimum effective dose: Tap down by 50% every week until the minimum effective dose is reached.
-                  input(type="checkbox")
-                  input(type="text" value="Dosis verlagen met een kwart elke 2 weken.")
-              .item
-                label Continue
-                  input(type="checkbox")
-              .item
-                label Consult another specialist
-                  input(type="checkbox")
-                  input(type="text" value="")
-              .item
-                label Referral to another specialist:
-                  input(type="checkbox")
-                  input(type="text" value="")
+              .item(:id="`pt_${ atc }_${ rulenum }_${ boxnum }`",
+                    v-for="{ medication_criteria_id: rulenum, selectBoxNum: boxnum, cdss_split: chunks } in cb_advices")
+                label
+                  markdowns(:items="chunks.map(({ text }) => text)", :replacer="html => html.replace(/\\<\\/?(?:p|br)\\>/g, '')")
+                  input(:id="`cb_${ atc }_${ rulenum }_${ boxnum }`",
+                        @input="sync(`cb_${ atc }_${ rulenum }_${ boxnum }`)",
+                        :checked="box_states[`cb_${ atc }_${ rulenum }_${ boxnum }`]", type="checkbox")
 </template>
 <script>
 import { markdown } from 'markdown';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { vuexComputed } from '@/helpers';
+import markdowns from '@/components/markdowns';
 let ws;
 export default {
   name: 'app',
-  data() {
-    return {
-      firstMarkDown: '**Deze patiënt heeft geen decompensatio cordis of hypertensie in de probleemlijst:** Controleer indicatie voor diureticum. Als er geen indicatie (meer) is, is afbouwen aanbevolen. Behalve bij: **Hypertensie** : Voorkeursmiddelen voor hypertensie zijn ACE-remmers of ATII-antagonisten. **Decompensatio cordis** : Er zijn aanwijzingen dat het veilig is om te stoppen met een lisdiureticum bij ouderen met decompensatio cordis met behoud van de ejectiefractie als er geen symptomatische decompensatio cordis meer is. **Enkeloedeem** : Overweeg stoppen van diureticum en adviseer de patiënt om indien mogelijk elastische kousen te gebruiken en voldoende te bewegen of het been in hoogstand te leggen.'
-    };
-  },
   computed: {
-    ...mapGetters(['id', 'age', 'record', 'medicationAdvice', 'steps']),
-    ...vuexComputed('sideBySide', 'currentStep'),
-    firstHTML() {
-      return markdown.toHTML(this.firstMarkDown);
-    }
+    ...mapGetters(['id', 'age', 'viewer_id', 'record', 'medicationAdvice', 'steps']),
+    ...vuexComputed('sideBySide', 'currentStep', 'box_states', 'field_entries'),
   },
   methods: {
-    onMessage(...args) {
-      console.log('onMessage', args);
+    ...mapActions(['addMessage']),
+    md(text) {
+      // todo: patient 4 strong tag?
+      return markdown.toHTML(text.replace(/\</g, '&lt;').replace(/\>/g, '&gt;'));
+    },
+    async sync(key, value) {
+      const { box_states, field_entries, id: patient_id, viewer_id } = this;
+      const group = key in box_states && box_states || field_entries;
+      if (group) {
+        const was = group[key];
+        let checkbox_id;
+        const message = {
+          viewer_id,
+          patient_id
+        };
+        if (group === box_states) {
+          message.type = 'checkboxes';
+          message.checkbox_id = key;
+          message.checkbox_checked = !was;
+          await (this.box_states = message.box_states = { ...box_states, [key]: !was });
+        } else {
+          field_entries[key] = value;
+        }
+        ws.send(JSON.stringify(message, null, 4));
+      }
+    },
+    onMessage(e) {
+      const { addMessage } = this;
+      let data;
+      try {
+        data = JSON.parse(e.data);
+        addMessage(data);
+      } catch ({ message }) {
+        console.log('socket error', message, e.data);
+      }
+      console.log('onMessage', data, e);
     }
   },
+  components: { markdowns },
   mounted() {
     const { id, onMessage } = this;
     console.log('mounted...');
@@ -219,9 +239,9 @@ body {
         .label {
           pointer-events: all;
           opacity: 1;
-          color: white;
+          color: #ccc;
           &:hover {
-            $shadow-color: black;
+            $shadow-color: transparent;
             text-shadow: 0 0 0 $shadow-color,
                          0 0 0 $shadow-color,
                          0 0 0 $shadow-color,
@@ -236,7 +256,7 @@ body {
         &.selected {
           .label {
             color: #dadada;
-            $shadow-color: black;
+            $shadow-color: #bbb;
             text-shadow: 0 0 0 $shadow-color,
                          0 0 0 $shadow-color,
                          0 0 0 $shadow-color,
@@ -310,6 +330,7 @@ body {
         opacity: 0;
         pointer-events: none;
         color: #dadada;
+        text-shadow: none;
         background-color: white;
         border-radius: 1rem;
         transform: translate3d(0, -50%, 0);
@@ -511,7 +532,7 @@ body {
           .collapsable {
             grid-template-columns: repeat(2, 1fr);
             grid-column-gap: $padding * 2;
-            max-height: 70vh;
+            max-height: 200vh;
             transition: max-height 300ms ease-in-out;
           }
           .measures {
@@ -566,16 +587,34 @@ body {
           top: -$padding * 2;
           left: 0;
           font-size: 1.75rem;
+          text-transform: capitalize;
         }
         .advice {
           margin-bottom: $padding;
           & > .heading {
             font-size: 1.3rem;
           }
-          .markdown {
+          .rows {
+            padding: $padding * 1.5;
             border-radius: $half-padding;
-            padding: $padding * 2;
             background-color: white;
+            .row {
+              padding: $half-padding;
+              margin-bottom: -$half-padding;
+              //&:first-of-type {
+              //  border-top-left-radius: $half-padding;
+              //  border-top-right-radius: $half-padding;
+              //}
+              //&:last-of-type {
+              //  border-bottom-left-radius: $half-padding;
+              //  border-bottom-right-radius: $half-padding;
+              //}
+              & + .row {
+                border-top: 1px solid #efefef;
+                margin-top: -$half-padding;
+                padding-top: 0;
+              }
+            }
           }
         }
         .measures {
@@ -591,13 +630,16 @@ body {
             .item {
               position: relative;
               padding-left: 4rem;
+              padding-top: $half-padding;
               padding-bottom: $padding;
               margin-bottom: $half-padding;
+              min-height: 2.5rem;
               border-bottom: 2px solid white;
               input[type="checkbox"] {
                 position: absolute;
                 top: 50%;
                 left: 0;
+                margin-top: 2px;
                 transform: translate3d(0, -100%, 0) scale(2);
                 transform-origin: center;
               }

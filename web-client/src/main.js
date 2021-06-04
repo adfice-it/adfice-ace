@@ -6,6 +6,7 @@ import store from './store';
   try {
     const id = /\bid\b\=([^&]+)/.exec(location.search)?.[1];
     console.log('id', id);
+    document.title += ` -- ${ id }`;
     const base = 'https://ace-api.qrl.sh';
     // const base = /localhost/.test(location.href) && 'http://localhost:3000' || 'https://ace-api.qrl.sh';
     const response = await fetch(`${ base }/api/advice?id=${ id }`  );
