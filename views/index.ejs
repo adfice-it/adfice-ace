@@ -1,35 +1,14 @@
-<html>
+<!DOCTYPE html>
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw -->
-<head></head>
+<%# see https://ejs.co/#docs -%>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adfice</title>
+</head>
 <body>
-
-<!-- patient number -->
-<table>
-<!--
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `medication_criteria_id` varchar(8) DEFAULT NULL,
-  `selectBoxNum` smallint(5) unsigned DEFAULT NULL,
-  `selectBoxCategory` varchar(20) DEFAULT NULL,
-  `selectBoxDesignator` varchar(20) DEFAULT NULL,
-  `cdss` varchar(3000) DEFAULT NULL,
-  `epic` varchar(2000) DEFAULT NULL,
-  `patient` varchar(5000) DEFAULT NULL,
--->
-<!-- name (and atc code) of medication -->
-<!-- get the advice texts with medication_criteria_id in the array -->
-<% for (var i = 0; i < advice_texts.length; ++i ) { %>
-<%      var row = advice_texts[i]; %>
-	<tr>
-	<td><%= row.medication_criteria_id %></td>
-	<td><%= row.selectBoxNum %></td>
-	<td><%= row.cdss %></td><!-- split into advice without checkboxes and advice with checkboxes -->
-	<td><%= row.epic %></td>
-	<td><%= row.patient %></td>
-	</tr>
-<% } %>
-</table>
-
-<!-- repeat for the next medication -->
+Adfice
 </body>
 </html>

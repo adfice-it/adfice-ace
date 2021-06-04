@@ -63,9 +63,14 @@ async function renderAdviceTextsCheckboxes(req, res) {
     let query_id = req.query.id || "6e";
     let rule_numbers = query_id.split(',');
     let advice_texts = await adfice.getAdviceTextsCheckboxes(rule_numbers);
-    res.render("index", {
+    res.render("checkboxes", {
+        rule_numbers: rule_numbers,
         advice_texts: advice_texts
     }); // .ejs
+}
+
+async function renderIndex(req, res) {
+    res.render("index"); //.ejs
 }
 
 process.on('exit', function() {
@@ -78,17 +83,19 @@ server.wss = new ws.Server({
     noServer: true
 });
 
-app.get("/advice", jsonAdviceForPatient);
-
+app.use("/static", express.static('static'));
 app.set('view engine', 'ejs');
 
+app.get("/", renderIndex);
+app.get("/index", renderIndex);
+app.get("/index.html", renderIndex);
+
+app.get("/advice", jsonAdviceForPatient);
 app.get("/patient", renderAdviceForPatient);
+
 app.get("/patient-validation", renderValidationAdviceForPatient);
 
-app.get("/", renderAdviceTextsCheckboxes);
-app.get("/index", renderAdviceTextsCheckboxes);
 app.get("/checkboxes", renderAdviceTextsCheckboxes);
-app.use("/static", express.static('static'));
 
 server.receivers = {};
 
@@ -136,6 +143,11 @@ server.on('upgrade', function upgrade(request, socket, head) {
         let path_parts = pathname.split('/');
         let id = path_parts.pop();
         let kind = path_parts.pop();
+
+        if (kind == 'advice') { // JSON version
+            kind = 'patient'; // EJS version
+        }
+
         if (DEBUG > 0) {
             console.log(`adding receiver[${kind}][${id}]`);
         }
