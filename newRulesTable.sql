@@ -676,10 +676,9 @@ G04BD07 Tolterodine
 G04BD05 Terodiline
 G04BD06 Propiverine
 G04BD09 Trospium","all","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:G04BD10 | atc:G04BD11 | atc:G04BD02 | atc:G04BD12 | atc:G04BD04 | atc:G04BD08 | atc:G04BD07 | atc:G04BD05 | atc:G04BD06 | atc:G04BD09 ","",30),
-("113","yes","no","Alphablokkers G04CA Alpha-adrenoreceptor antagonists ","all","{{preselect box 1}{}}","atc:G04BE |atc:G04CA","",30),
+("113","yes","no","Alphablokkers G04CA Alpha-adrenoreceptor antagonists ","all","{{preselect box 1}{}}","atc:G04BE | atc:G04CA","",30),
 ("113a","yes","no","Nonselective alphablokkers","all","","atc:G04BE | atc:G04CA","",30),
 ("113b","yes","no","Nonselective alphablokkers","all","","atc:G04BE05 | atc:G04BE30","",30),
-("113","yes","no","Alphablokkers G04CA Alpha-adrenoreceptor antagonists ","all","{{preselect box 1}{}}","atc:G04BE | atc:G04CA","",30),
 ("114","yes","no","Alphablokkers G04CA Alpha-adrenoreceptor antagonists ","bijwerking","","atc:G04BE | atc:G04CA","allergic-reaction",30),
 ("115","yes","no","Alphablokkers G04CA Alpha-adrenoreceptor antagonists ","all","","atc:G04BE |atc:G04CA","",30),
 ("117","yes","no","Middelen bij peptische aandoeningen: H2-antagonisten, protonpompremmers
