@@ -11,6 +11,26 @@ body {
     font-size: small;
 }
 
+#nav_container {
+	float: right;
+	
+}
+
+#pagina_vernieuwen{
+	background-color: #e45e14;
+	color: #ffffff;
+}
+
+#definitief{
+	background-color: #e30104;
+	color: #ffffff;
+}
+
+#help{
+	background-color: #75b94e;
+	color: #ffffff;
+}
+
 #footer {
     position: fixed;
     bottom: 0;

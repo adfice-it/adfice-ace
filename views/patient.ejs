@@ -19,13 +19,14 @@ console.log('patient_id: ', patient_id);
 <body>
 <form id="patient_form">
 <img src="static/Advice_IT_logo_small.png"
-     style="max-width: 10%; height: auto;"
+     style="max-width: 10%; height: auto; display: inline;"
      alt="Advice IT logo"
 >
-<!-- Text of the 3 buttons on the top right of the page:
-Pagina vernieuwen
-Opslaan & definitief maken
-Hoe gebruik ik dit systeem? -->
+<div id="nav_container" style="display: inline;">
+ <button type="button" class = "nav_button" id="pagina_vernieuwen">Pagina vernieuwen</button> 
+ <button type="button" class = "nav_button" id="definitief">Opslaan & definitief maken</button> 
+ <button type="button" class = "nav_button" id="help">Hoe gebruik ik dit systeem?</button> 
+</div>
 <div id="footer">
 Patient: <%= patient_id %>
 <button id="button_clinician_view" type="button" class='button_advice_view'
