@@ -54,6 +54,35 @@ function matchesSelector(atcCode, selectorString) {
     return false;
 }
 
+/*
+//This function will evaluate whether a single preselect rule is true
+// = one row from the table preselect_rules
+// if there is no row in preselect_rules, then the checkbox is never preselected.
+// if there is a row, then if the row returns true, the checkbox is preselected.
+function evaluatePreselected(preselectRule,patient_id){
+	let selector_result = true;
+	if(preselectRule['selector_or'] != null){
+		if(!matchesSelector(atcCode, preselectRule['selector_or'].toString())){
+			selector_result = false;
+		}
+	}
+	if(preselectRule['selector_not'] != null){
+		if(matchesSelector(atcCode, preselectRule['selector_not'].toString())){
+			selector_result = false;
+		}
+	}
+	let condition_result = true;
+	if(preselectRule['sql_condition'] != null){
+		if(!adfice.evaluateSQL(preselectRule['sql_condition'].toString(), patient_id)){
+			condition_result = false;
+		}
+	}
+	if(selector_result && condition_result){
+		return true;
+	} else {return false;}
+}
+*/
+
 function drugsWithoutFiredRules(rulesResult) {
     let results = [];
     let keys = Object.keys(rulesResult);
