@@ -456,7 +456,7 @@ async function getAdviceForPatient(patientIdentifier) {
         adv.adviceTextsNoCheckboxes = advice_text_no_box;
         adv.referenceNumbers = await getReferenceNumbers(fired);
         adv.fired = fired;
-//        adv.preselectedCheckboxes = await determinePreselectedCheckboxes(fired,patient_id,atc_code.trim());
+        adv.preselectedCheckboxes = await determinePreselectedCheckboxes(fired,patient_id,atc_code.trim());
         advice.push(adv);
     }
 
@@ -487,7 +487,7 @@ async function determinePreselectedCheckboxes(fired, patient_id, atc_code){
 		for (let j = 0; j < preselectRules.length; ++j) {
 			let preselectRule = preselectRules[j];
 			let box = preselectRule['selectBoxNum'];
-			if (await ae.evaluatePreselected(preselectRule,patient_id,atc_code,this)){
+			if (await ae.evaluatePreselected(preselectRule,patient_id,atc_code,evaluateSQL)){
 				let checkbox_id = `cb_${atc_code}_${rule_number}_${box}`;
 				if(preselectedCheckboxes.indexOf(checkbox_id) == -1){
 					preselectedCheckboxes.push(checkbox_id);

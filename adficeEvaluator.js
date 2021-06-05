@@ -59,7 +59,7 @@ function matchesSelector(atcCode, selectorString) {
 // = one row from the table preselect_rules
 // if there is no row in preselect_rules, then the checkbox is never preselected.
 // if there is a row, then if the row returns true, the checkbox is preselected.
-async function evaluatePreselected(preselectRule,patient_id,atcCode,adfice){
+async function evaluatePreselected(preselectRule,patient_id,atcCode,evaluateSQL){
 //console.dir(adfice);
 	let selector_result = true; //if no selector is specified, then it is true for all drugs that can fire the rule
 	if(preselectRule['preselect_or'] != null){
@@ -75,7 +75,7 @@ async function evaluatePreselected(preselectRule,patient_id,atcCode,adfice){
 	let condition_result = true; //if no condition is specified, then it is true for all patients
 	if(preselectRule['sql_condition'] != null){
 		let sql_condition = preselectRule['sql_condition'].toString();
-		let isConditionTrue = await adfice.evaluateSQL(sql_condition, patient_id);
+		let isConditionTrue = await evaluateSQL(sql_condition, patient_id);
 		if(!isConditionTrue){
 			condition_result = false;
 		}
