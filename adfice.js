@@ -428,7 +428,7 @@ async function getAdviceForPatient(patientIdentifier) {
 
     var rules = await getActiveRules();
 
-    let evaluated = await ae.evaluateRules(meds, rules, patient_id, this);
+    let evaluated = await ae.evaluateRules(meds, rules, patient_id, isSQLConditionTrue);
     let medsWithRulesToFire = evaluated.medsWithRulesToFire;
     let meds_with_fired = evaluated.meds_with_fired;
     let meds_without_fired = evaluated.meds_without_fired;

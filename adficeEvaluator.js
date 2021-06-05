@@ -6,7 +6,7 @@
 var fs = require('fs');
 const util = require("util");
 
-async function evaluateRules(meds, rules, patient_id, adfice) {
+async function evaluateRules(meds, rules, patient_id, isSQLConditionTrue) {
     let medsWithRulesToFire = {};
     let meds_with_fired = [];
     let meds_without_fired = [];
@@ -19,7 +19,7 @@ async function evaluateRules(meds, rules, patient_id, adfice) {
             let rule = rules[ruleCounter];
             if (matchesSelector(atc_code, rule.selector_or) &&
                 !matchesSelector(atc_code, rule.selector_not)) {
-                let isConditionTrue = await adfice.isSQLConditionTrue(patient_id, rule.medication_criteria_id);
+                let isConditionTrue = await isSQLConditionTrue(patient_id, rule.medication_criteria_id);
                 if (isConditionTrue) {
                     medsWithRulesToFire[atc_code].push(rule.medication_criteria_id);
                 }
