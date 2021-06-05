@@ -169,3 +169,7 @@ div.gauge_text_right {
     left: calc(100% - 3ch - 1em);
     display: inline-block;
 }
+
+.td_nm_category_name {
+    font-weight: bold;
+}

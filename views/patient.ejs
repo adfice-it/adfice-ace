@@ -22,7 +22,7 @@ console.log('patient_id: ', patient_id);
      style="max-width: 10%; height: auto;"
      alt="Advice IT logo"
 >
-<!-- Text of the 3 buttons on the top right of the page: 
+<!-- Text of the 3 buttons on the top right of the page:
 Pagina vernieuwen
 Opslaan & definitief maken
 Hoe gebruik ik dit systeem? -->
@@ -334,6 +334,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <p><strong>Maatregelen (aangekruist indien aanbevolen):</strong></p>
 <table>
 <%
+   let last_category_name = '';
    for (let i = 0; i < nm_advices.length; ++i ) {
        let nm_advice = nm_advices[i];
        let nma_prefix = "nma_" + i;
@@ -342,8 +343,16 @@ for (let i = 0; i < medication_advice.length; ++i ) {
        let nma_id_base =`NONMED_${category}_${boxnum}`;
        let checkbox_id = 'cb_' + nma_id_base;
        let row_id = 'tr_' + nma_id_base;
+       let category_display_name = '';
+       let category_name = nm_advice.category_name;
+       if (category_name != last_category_name) {
+           last_category_name = category_name;
+	   category_display_name = category_name;
+       }
 -%>
 <tr id="<%= row_id %>">
+<td id="td_nm_category_name_<%= nm_advice.category_id %>"
+    class="td_nm_category_name"><%= category_display_name %></td>
 <td>
 <span id="<%= nma_prefix %>_sbn">
 <input type="checkbox"
