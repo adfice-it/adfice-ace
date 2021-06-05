@@ -11,15 +11,15 @@ functional_limit_date_measured, FES_kleding, FES_bad, FES_stoel,
 FES_trap, FES_reiken, FES_helling, FES_sociale,
 fear_of_falls_date_measured, nr_falls_12m, nr_falls_date_measured,
 smoking, smoking_date_measured) VALUES
-(2, '2021-02-11', 160, '2021-02-11', 55, '2021-02-11', 1, '2021-02-11',
-21.5, '2021-02-11', 0.6, '2021-02-11', 140, '2021-02-11', 3, 1, 1, 1, 1,
-'2021-02-11', "Helemaal niet bezorgd" , "Erg bezorgd" , "Helemaal niet
+(2, (select NOW()), 160, (select NOW()), 55, (select NOW()), 1, (select NOW()),
+21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 3, 1, 1, 1, 1,
+(select NOW()), "Helemaal niet bezorgd" , "Erg bezorgd" , "Helemaal niet
 bezorgd" , "Helemaal niet bezorgd" , "Helemaal niet bezorgd" , "Erg
-bezorgd" , "Helemaal niet bezorgd" , '2021-02-11', 3, '2021-02-11', 1,
-'2021-02-11'),
-(3, '2021-02-11', 180, '2021-02-11', 70, '2021-02-11', 3, '2021-02-11',
-30, '2021-02-11', 1, '2021-02-11', 130, '2021-02-11', 3, 1, 2, 1, 3,
-'2021-02-11', "Helemaal niet bezorgd" , "Een beetje bezorgd", "Helemaal
+bezorgd" , "Helemaal niet bezorgd" , (select NOW()), 3, (select NOW()), 1,
+(select NOW())),
+(3, (select NOW()), 180, (select NOW()), 70, (select NOW()), 3, (select NOW()),
+30, (select NOW()), 1, (select NOW()), 130, (select NOW()), 3, 1, 2, 1, 3,
+(select NOW()), "Helemaal niet bezorgd" , "Een beetje bezorgd", "Helemaal
 niet bezorgd" , "Een beetje bezorgd", "Een beetje bezorgd", "Een beetje
-bezorgd", "Helemaal niet bezorgd" , '2021-02-11', 5, '2021-02-11', 1,
-'2021-02-11');
+bezorgd", "Helemaal niet bezorgd" , (select NOW()), 5, (select NOW()), 1,
+(select NOW()));

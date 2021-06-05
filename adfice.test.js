@@ -280,6 +280,8 @@ test('SQL error check', async () => {
     expect(isConditionTrue).toBe(true); isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(8, "9");
     expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(5, "9");
+    expect(isConditionTrue).toBe(false); isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(9, "10");
     expect(isConditionTrue).toBe(true); isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(12,"12");
@@ -389,10 +391,92 @@ test('SQL error check', async () => {
 });
 
 test('Check preselect SQL', async () => {
-	let preselectRules = await adfice.getPreselectRules("42");
+	let preselectRules = await adfice.getPreselectRules("6e");
 	let sql = preselectRules[0]['sql_condition'].toString();
-	let result = await (adfice.evaluateSQL(sql, 1));
+	let result = await (adfice.evaluateSQL(sql, 4));
 	expect(result).toBe(true);
+	sql = ""; result = null;
+	sql = preselectRules[1]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 8));
+	expect(result).toBe(true);
+	sql = ""; result = null;
+	sql = preselectRules[2]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 8));
+	expect(result).toBe(true);
+	preselectRules = null; sql = ""; result = null;
 
+	preselectRules = await adfice.getPreselectRules("19f");
+	sql = preselectRules[0]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 1));
+	expect(result).toBe(true);
+	preselectRules = null; sql = ""; result = null;
+
+	preselectRules = await adfice.getPreselectRules("42");
+	sql = preselectRules[0]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 1));
+	expect(result).toBe(true);
+	sql = ""; result = null;
+	sql = preselectRules[1]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 1));
+	expect(result).toBe(true);
+	sql = ""; result = null;
+	sql = preselectRules[2]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 48));
+	expect(result).toBe(true);
+	result = await (adfice.evaluateSQL(sql, 31));
+	expect(result).toBe(true);
+	sql = ""; result = null;
+	sql = preselectRules[3]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 51));
+	expect(result).toBe(true);
+	sql = ""; result = null;
+	sql = preselectRules[4]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 51));
+	expect(result).toBe(true);
+	preselectRules = null; sql = ""; result = null;
+
+	preselectRules = await adfice.getPreselectRules("46");
+	sql = preselectRules[0]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 51));
+	expect(result).toBe(true);
+	preselectRules = null; sql = ""; result = null;
+
+	preselectRules = await adfice.getPreselectRules("50");
+	sql = preselectRules[0]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 51));
+	expect(result).toBe(true);
+	preselectRules = null; sql = ""; result = null;
+
+	preselectRules = await adfice.getPreselectRules("56");
+	sql = preselectRules[1]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 51));
+	expect(result).toBe(true);
+	sql = ""; result = null;
+	sql = preselectRules[2]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 1));
+	expect(result).toBe(true);
+	preselectRules = null; sql = ""; result = null;
+
+	preselectRules = await adfice.getPreselectRules("63");
+	sql = preselectRules[0]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 51));
+	expect(result).toBe(true);
+	preselectRules = null; sql = ""; result = null;
+
+	preselectRules = await adfice.getPreselectRules("78");
+	sql = preselectRules[0]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 79));
+	expect(result).toBe(true);
+	sql = ""; result = null;
+	sql = preselectRules[1]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 84));
+	expect(result).toBe(true);
+	preselectRules = null; sql = ""; result = null;
+
+	preselectRules = await adfice.getPreselectRules("88");
+	sql = preselectRules[0]['sql_condition'].toString();
+	result = await (adfice.evaluateSQL(sql, 1));
+	expect(result).toBe(true);
+	preselectRules = null; sql = ""; result = null;
 
 });
