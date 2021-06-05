@@ -7,6 +7,7 @@ const adfice = require('./adfice')
 const util = require("util");
 
 test('test advice text 6e', async () => {
+//console.log('6e');
     var rule_numbers = ["6e"];
     var texts = await adfice.getAdviceTextsCheckboxes(rule_numbers);
     expect(texts.length).toBe(11);
@@ -66,6 +67,7 @@ test('selectionStatesToBoxStates', () => {
 });
 
 test('getAdviceForPatient(68), no labs, no problems', async () => {
+//console.log('68');
     let patientNumber = 68;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
@@ -95,6 +97,7 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
 });
 
 test('setAdviceForPatient(68)', async () => {
+//console.log('68 part 2');
     let patientNumber = 68;
     let viewer = 999;
     let advice = await adfice.getAdviceForPatient(patientNumber);
@@ -138,6 +141,7 @@ test('setAdviceForPatient(68)', async () => {
 })
 
 test('getAdviceForPatient(27), with labs and problems', async () => {
+//console.log('27');
     let patientNumber = 27;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
@@ -162,6 +166,7 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
 })
 
 test('getAdviceForPatient(1), no med rule advice', async () => {
+//console.log('1');
     let patientNumber = 1;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
@@ -171,6 +176,7 @@ test('getAdviceForPatient(1), no med rule advice', async () => {
 })
 
 test('getAdviceForPatient(60), sparse patient', async () => {
+//console.log('60');
     let patientNumber = 60;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
@@ -178,6 +184,7 @@ test('getAdviceForPatient(60), sparse patient', async () => {
 })
 
 test('getAdviceForPatient(9), patient with non-rule med', async () => {
+//console.log('9');
     let patientNumber = 9;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let medication_advice_atc = [];
@@ -197,6 +204,7 @@ test('getAdviceForPatient(9), patient with non-rule med', async () => {
 })
 
 test('getAdviceForPatient(null)', async () => {
+//console.log('null');
     let patientNumber = null;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
@@ -204,6 +212,7 @@ test('getAdviceForPatient(null)', async () => {
 })
 
 test('getAdviceForPatient(-1)', async () => {
+//console.log('-1');
     let patientNumber = -1;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
@@ -478,5 +487,22 @@ test('Check preselect SQL', async () => {
 	result = await (adfice.evaluateSQL(sql, 1));
 	expect(result).toBe(true);
 	preselectRules = null; sql = ""; result = null;
+
+});
+
+test('Check preselected checkbox list', async () => {
+	let list = await adfice.determinePreselectedCheckboxes(["88"], 1, "M03AC01");
+	expect(list[0]).toBe("cb_M03AC01_88_2");
+	// I don't think it is possible for 2 checkboxes to be checked with the current rules. In theory, it would be allowed.
+	list = [];
+	list = await adfice.determinePreselectedCheckboxes(["45","46","48","48a","49"], 51, "C02AA02");
+	expect(list[0]).toBe("cb_C02AA02_46_1");
+	list = [];
+	list = await adfice.determinePreselectedCheckboxes(["45","46","48","48a","49"], 51, "C02AA02");
+	expect(list[0]).toBe("cb_C02AA02_46_1");
+	list = await adfice.determinePreselectedCheckboxes(["42"], 1, "C03CA02");
+	expect(list[0]).toBe("cb_C03CA02_42_2");
+
+	//preselect-not is not actually used by any rules, is tested in adficeEvaluator.test.js
 
 });

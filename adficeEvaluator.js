@@ -54,26 +54,29 @@ function matchesSelector(atcCode, selectorString) {
     return false;
 }
 
-/*
+
 //This function will evaluate whether a single preselect rule is true
 // = one row from the table preselect_rules
 // if there is no row in preselect_rules, then the checkbox is never preselected.
 // if there is a row, then if the row returns true, the checkbox is preselected.
-function evaluatePreselected(preselectRule,patient_id){
-	let selector_result = true;
-	if(preselectRule['selector_or'] != null){
-		if(!matchesSelector(atcCode, preselectRule['selector_or'].toString())){
+async function evaluatePreselected(preselectRule,patient_id,atcCode,adfice){
+//console.dir(adfice);
+	let selector_result = true; //if no selector is specified, then it is true for all drugs that can fire the rule
+	if(preselectRule['preselect_or'] != null){
+		if(!matchesSelector(atcCode, preselectRule['preselect_or'].toString())){
 			selector_result = false;
 		}
 	}
-	if(preselectRule['selector_not'] != null){
-		if(matchesSelector(atcCode, preselectRule['selector_not'].toString())){
+	if(preselectRule['preselect_not'] != null){
+		if(matchesSelector(atcCode, preselectRule['preselect_not'].toString())){
 			selector_result = false;
 		}
 	}
-	let condition_result = true;
+	let condition_result = true; //if no condition is specified, then it is true for all patients
 	if(preselectRule['sql_condition'] != null){
-		if(!adfice.evaluateSQL(preselectRule['sql_condition'].toString(), patient_id)){
+		let sql_condition = preselectRule['sql_condition'].toString();
+		let isConditionTrue = await adfice.evaluateSQL(sql_condition, patient_id);
+		if(!isConditionTrue){
 			condition_result = false;
 		}
 	}
@@ -81,7 +84,7 @@ function evaluatePreselected(preselectRule,patient_id){
 		return true;
 	} else {return false;}
 }
-*/
+
 
 function drugsWithoutFiredRules(rulesResult) {
     let results = [];
@@ -99,5 +102,6 @@ function drugsWithoutFiredRules(rulesResult) {
 module.exports = {
     matchesSelector: matchesSelector,
     drugsWithoutFiredRules: drugsWithoutFiredRules,
-    evaluateRules: evaluateRules
+    evaluateRules: evaluateRules,
+    evaluatePreselected: evaluatePreselected
 }

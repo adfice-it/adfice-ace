@@ -16,3 +16,12 @@ test('test drugsWithoutFiredRules', () => {
     let actual = ae.drugsWithoutFiredRules(rulesResult);
     expect(actual).toStrictEqual(expected);
 });
+
+test('test drugsWithoutFiredRules', async () => {
+	let preselectRule = {"preselect_or": null, "preselect_not": "C03CA,C03CB", "sql_condition": null};
+	let result = await ae.evaluatePreselected(preselectRule,1,"C03CA02",adfice);
+	expect(result).toBe(false);
+	preselectRule = {"preselect_or": null, "preselect_not": "C03CA,C03CB", "sql_condition": null};
+	result = await ae.evaluatePreselected(preselectRule,1,"C03CD02",adfice);
+	expect(result).toBe(true);
+});

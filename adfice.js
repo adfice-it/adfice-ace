@@ -456,6 +456,7 @@ async function getAdviceForPatient(patientIdentifier) {
         adv.adviceTextsNoCheckboxes = advice_text_no_box;
         adv.referenceNumbers = await getReferenceNumbers(fired);
         adv.fired = fired;
+//        adv.preselectedCheckboxes = await determinePreselectedCheckboxes(fired,patient_id,atc_code.trim());
         advice.push(adv);
     }
 
@@ -476,6 +477,25 @@ async function getAdviceForPatient(patientIdentifier) {
     patient_advice.advice_text_non_med = advice_text_non_med;
 
     return patient_advice;
+}
+
+async function determinePreselectedCheckboxes(fired, patient_id, atc_code){
+	let preselectedCheckboxes = [];
+	for (let i = 0; i < fired.length; ++i) {
+		let rule_number = fired[i].toString();
+		let preselectRules = await getPreselectRules(rule_number);
+		for (let j = 0; j < preselectRules.length; ++j) {
+			let preselectRule = preselectRules[j];
+			let box = preselectRule['selectBoxNum'];
+			if (await ae.evaluatePreselected(preselectRule,patient_id,atc_code,this)){
+				let checkbox_id = `cb_${atc_code}_${rule_number}_${box}`;
+				if(preselectedCheckboxes.indexOf(checkbox_id) == -1){
+					preselectedCheckboxes.push(checkbox_id);
+				}
+			}
+		}
+	}
+	return preselectedCheckboxes;
 }
 
 function boxStatesToSelectionStates(patient_id, viewer_id, box_states) {
@@ -565,10 +585,11 @@ module.exports = {
     getSQLCondition: getSQLCondition,
     isSQLConditionTrue: isSQLConditionTrue,
     evaluateSQL: evaluateSQL,
-    getPreselectRules: getPreselectRules,
     getReferenceNumbers: getReferenceNumbers,
     getSelectionsForPatient: getSelectionsForPatient,
     selectionStatesToBoxStates: selectionStatesToBoxStates,
     setFreetextsForPatient: setFreetextsForPatient,
-    setSelectionsForPatient: setSelectionsForPatient
+    setSelectionsForPatient: setSelectionsForPatient,
+    getPreselectRules: getPreselectRules,
+    determinePreselectedCheckboxes: determinePreselectedCheckboxes
 }
