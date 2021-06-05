@@ -506,3 +506,8 @@ test('Check preselected checkbox list', async () => {
 	//preselect-not is not actually used by any rules, is tested in adficeEvaluator.test.js
 
 });
+
+test('Get prediction model result from DB', async () => {
+	let prediction4 = await adfice.getPredictionResult(4);
+	expect(prediction4).toBe(70);
+});

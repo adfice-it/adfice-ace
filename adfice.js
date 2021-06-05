@@ -294,6 +294,24 @@ async function getLabsForPatient(patientIdentifier) {
     return result;
 }
 
+async function getPatientMeasurements(patientIdentifier) {
+    var sql = `/* adfice.getPatientMeasurements */
+        SELECT *
+          FROM patient_measurements
+         WHERE id=?
+      ORDER BY date_retrieved DESC LIMIT 1`;
+    let results = await sql_select(sql, [patientIdentifier, patientIdentifier]);
+    if (results.length > 0) {
+        return results;
+    }
+    return null;
+}
+
+async function getPredictionResult(patientIdentifier){
+	let measurements = await getPatientMeasurements(patientIdentifier);
+	return measurements[0]['prediction_result'];
+}
+
 async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
     const patient_id = parseInt(patientIdentifier, 10);
     const viewer_id = parseInt(viewer, 10);
@@ -591,5 +609,7 @@ module.exports = {
     setFreetextsForPatient: setFreetextsForPatient,
     setSelectionsForPatient: setSelectionsForPatient,
     getPreselectRules: getPreselectRules,
-    determinePreselectedCheckboxes: determinePreselectedCheckboxes
+    determinePreselectedCheckboxes: determinePreselectedCheckboxes,
+    getPatientMeasurements: getPatientMeasurements,
+    getPredictionResult: getPredictionResult
 }
