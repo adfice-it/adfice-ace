@@ -301,10 +301,11 @@ async function getPatientMeasurements(patientIdentifier) {
          WHERE id=?
       ORDER BY date_retrieved DESC LIMIT 1`;
     let results = await sql_select(sql, [patientIdentifier, patientIdentifier]);
-    if (results.length > 0) {
+//    if (results.length > 0) {
         return results;
-    }
-    return null;
+//    }
+//TODO write test to cover this case and uncomment it
+//    return null;
 }
 
 async function getPredictionResult(patientIdentifier){
