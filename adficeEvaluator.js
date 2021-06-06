@@ -59,30 +59,32 @@ function matchesSelector(atcCode, selectorString) {
 // = one row from the table preselect_rules
 // if there is no row in preselect_rules, then the checkbox is never preselected.
 // if there is a row, then if the row returns true, the checkbox is preselected.
-async function evaluatePreselected(preselectRule,patient_id,atcCode,evaluateSQL){
-//console.dir(adfice);
-	let selector_result = true; //if no selector is specified, then it is true for all drugs that can fire the rule
-	if(preselectRule['preselect_or'] != null){
-		if(!matchesSelector(atcCode, preselectRule['preselect_or'].toString())){
-			selector_result = false;
-		}
-	}
-	if(preselectRule['preselect_not'] != null){
-		if(matchesSelector(atcCode, preselectRule['preselect_not'].toString())){
-			selector_result = false;
-		}
-	}
-	let condition_result = true; //if no condition is specified, then it is true for all patients
-	if(preselectRule['sql_condition'] != null){
-		let sql_condition = preselectRule['sql_condition'].toString();
-		let isConditionTrue = await evaluateSQL(sql_condition, patient_id);
-		if(!isConditionTrue){
-			condition_result = false;
-		}
-	}
-	if(selector_result && condition_result){
-		return true;
-	} else {return false;}
+async function evaluatePreselected(preselectRule, patient_id, atcCode, evaluateSQL) {
+    //console.dir(adfice);
+    let selector_result = true; //if no selector is specified, then it is true for all drugs that can fire the rule
+    if (preselectRule['preselect_or'] != null) {
+        if (!matchesSelector(atcCode, preselectRule['preselect_or'].toString())) {
+            selector_result = false;
+        }
+    }
+    if (preselectRule['preselect_not'] != null) {
+        if (matchesSelector(atcCode, preselectRule['preselect_not'].toString())) {
+            selector_result = false;
+        }
+    }
+    let condition_result = true; //if no condition is specified, then it is true for all patients
+    if (preselectRule['sql_condition'] != null) {
+        let sql_condition = preselectRule['sql_condition'].toString();
+        let isConditionTrue = await evaluateSQL(sql_condition, patient_id);
+        if (!isConditionTrue) {
+            condition_result = false;
+        }
+    }
+    if (selector_result && condition_result) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 

@@ -7,7 +7,7 @@ const adfice = require('./adfice')
 const util = require("util");
 
 test('test advice text 6e', async () => {
-//console.log('6e');
+    //console.log('6e');
     var rule_numbers = ["6e"];
     var texts = await adfice.getAdviceTextsCheckboxes(rule_numbers);
     expect(texts.length).toBe(11);
@@ -67,7 +67,7 @@ test('selectionStatesToBoxStates', () => {
 });
 
 test('getAdviceForPatient(68), no labs, no problems', async () => {
-//console.log('68');
+    //console.log('68');
     let patientNumber = 68;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
@@ -97,7 +97,7 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
 });
 
 test('setAdviceForPatient(68)', async () => {
-//console.log('68 part 2');
+    //console.log('68 part 2');
     let patientNumber = 68;
     let viewer = 999;
     let advice = await adfice.getAdviceForPatient(patientNumber);
@@ -141,7 +141,7 @@ test('setAdviceForPatient(68)', async () => {
 })
 
 test('getAdviceForPatient(27), with labs and problems', async () => {
-//console.log('27');
+    //console.log('27');
     let patientNumber = 27;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
@@ -166,7 +166,7 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
 })
 
 test('getAdviceForPatient(1), no med rule advice', async () => {
-//console.log('1');
+    //console.log('1');
     let patientNumber = 1;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
@@ -176,7 +176,7 @@ test('getAdviceForPatient(1), no med rule advice', async () => {
 })
 
 test('getAdviceForPatient(60), sparse patient', async () => {
-//console.log('60');
+    //console.log('60');
     let patientNumber = 60;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
@@ -184,7 +184,7 @@ test('getAdviceForPatient(60), sparse patient', async () => {
 })
 
 test('getAdviceForPatient(9), patient with non-rule med', async () => {
-//console.log('9');
+    //console.log('9');
     let patientNumber = 9;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let medication_advice_atc = [];
@@ -204,7 +204,7 @@ test('getAdviceForPatient(9), patient with non-rule med', async () => {
 })
 
 test('getAdviceForPatient(null)', async () => {
-//console.log('null');
+    //console.log('null');
     let patientNumber = null;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
@@ -212,7 +212,7 @@ test('getAdviceForPatient(null)', async () => {
 })
 
 test('getAdviceForPatient(-1)', async () => {
-//console.log('-1');
+    //console.log('-1');
     let patientNumber = -1;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
@@ -282,239 +282,323 @@ test('isSQLConditionTrue', async () => {
 
 test('SQL error check', async () => {
     let isConditionTrue = await adfice.isSQLConditionTrue(5, "6");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(6, "6a");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(4, "6b");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(8, "9");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(5, "9");
-    expect(isConditionTrue).toBe(false); isConditionTrue = false;
+    expect(isConditionTrue).toBe(false);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(9, "10");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(12,"12");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(12, "12");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(15, "14");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(15,"14a");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(15, "14a");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(16, "14b");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(17, "14c");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(18, "14d");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(18, "15");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(26, "19");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(27, "19a");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(28, "19b");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(29, "19c");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(25, "21");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(26, "22");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(26, "23");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(30,"24");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(31,"25");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(30, "24");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(31, "25");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(34, "26");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(36,"26a");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(36, "26a");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(33, "26b");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(41, "35");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(42,"36");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(43,"37");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(42, "36");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(43, "37");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(44, "38");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(45,"40");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(46,"40a");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(47,"40b");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(48,"40c");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(45, "40");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(46, "40a");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(47, "40b");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(48, "40c");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(48, "41");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(51, "48");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(55,"52");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(56,"53");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(55, "52");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(56, "53");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(60, "57a");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(60,"58");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(60, "58");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(62, "59");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(78,"68");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(79,"69");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(78, "68");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(79, "69");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(81, "70");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(80,"71");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(85,"79");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(86,"80");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(80, "71");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(85, "79");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(86, "80");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(89, "80a");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(89, "80b");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(89, "81");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(87,"82");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(87, "82");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(84, "83");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(91,"86");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(92,"87");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(92,"89");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(93,"90");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(91, "86");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(92, "87");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(92, "89");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(93, "90");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(95, "91");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(94,"92");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(102,"102");
-    expect(isConditionTrue).toBe(true); isConditionTrue = false;
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(94, "92");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
+    isConditionTrue = await adfice.isSQLConditionTrue(102, "102");
+    expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
 });
 
 test('Check preselect SQL', async () => {
-	let preselectRules = await adfice.getPreselectRules("6e");
-	let sql = preselectRules[0]['sql_condition'].toString();
-	let result = await (adfice.evaluateSQL(sql, 4));
-	expect(result).toBe(true);
-	sql = ""; result = null;
-	sql = preselectRules[1]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 8));
-	expect(result).toBe(true);
-	sql = ""; result = null;
-	sql = preselectRules[2]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 8));
-	expect(result).toBe(true);
-	preselectRules = null; sql = ""; result = null;
+    let preselectRules = await adfice.getPreselectRules("6e");
+    let sql = preselectRules[0]['sql_condition'].toString();
+    let result = await (adfice.evaluateSQL(sql, 4));
+    expect(result).toBe(true);
+    sql = "";
+    result = null;
+    sql = preselectRules[1]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 8));
+    expect(result).toBe(true);
+    sql = "";
+    result = null;
+    sql = preselectRules[2]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 8));
+    expect(result).toBe(true);
+    preselectRules = null;
+    sql = "";
+    result = null;
 
-	preselectRules = await adfice.getPreselectRules("19f");
-	sql = preselectRules[0]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 1));
-	expect(result).toBe(true);
-	preselectRules = null; sql = ""; result = null;
+    preselectRules = await adfice.getPreselectRules("19f");
+    sql = preselectRules[0]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 1));
+    expect(result).toBe(true);
+    preselectRules = null;
+    sql = "";
+    result = null;
 
-	preselectRules = await adfice.getPreselectRules("42");
-	sql = preselectRules[0]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 1));
-	expect(result).toBe(true);
-	sql = ""; result = null;
-	sql = preselectRules[1]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 1));
-	expect(result).toBe(true);
-	sql = ""; result = null;
-	sql = preselectRules[2]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 48));
-	expect(result).toBe(true);
-	result = await (adfice.evaluateSQL(sql, 31));
-	expect(result).toBe(true);
-	sql = ""; result = null;
-	sql = preselectRules[3]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 51));
-	expect(result).toBe(true);
-	sql = ""; result = null;
-	sql = preselectRules[4]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 51));
-	expect(result).toBe(true);
-	preselectRules = null; sql = ""; result = null;
+    preselectRules = await adfice.getPreselectRules("42");
+    sql = preselectRules[0]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 1));
+    expect(result).toBe(true);
+    sql = "";
+    result = null;
+    sql = preselectRules[1]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 1));
+    expect(result).toBe(true);
+    sql = "";
+    result = null;
+    sql = preselectRules[2]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 48));
+    expect(result).toBe(true);
+    result = await (adfice.evaluateSQL(sql, 31));
+    expect(result).toBe(true);
+    sql = "";
+    result = null;
+    sql = preselectRules[3]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 51));
+    expect(result).toBe(true);
+    sql = "";
+    result = null;
+    sql = preselectRules[4]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 51));
+    expect(result).toBe(true);
+    preselectRules = null;
+    sql = "";
+    result = null;
 
-	preselectRules = await adfice.getPreselectRules("46");
-	sql = preselectRules[0]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 51));
-	expect(result).toBe(true);
-	preselectRules = null; sql = ""; result = null;
+    preselectRules = await adfice.getPreselectRules("46");
+    sql = preselectRules[0]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 51));
+    expect(result).toBe(true);
+    preselectRules = null;
+    sql = "";
+    result = null;
 
-	preselectRules = await adfice.getPreselectRules("50");
-	sql = preselectRules[0]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 51));
-	expect(result).toBe(true);
-	preselectRules = null; sql = ""; result = null;
+    preselectRules = await adfice.getPreselectRules("50");
+    sql = preselectRules[0]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 51));
+    expect(result).toBe(true);
+    preselectRules = null;
+    sql = "";
+    result = null;
 
-	preselectRules = await adfice.getPreselectRules("56");
-	sql = preselectRules[1]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 51));
-	expect(result).toBe(true);
-	sql = ""; result = null;
-	sql = preselectRules[2]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 1));
-	expect(result).toBe(true);
-	preselectRules = null; sql = ""; result = null;
+    preselectRules = await adfice.getPreselectRules("56");
+    sql = preselectRules[1]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 51));
+    expect(result).toBe(true);
+    sql = "";
+    result = null;
+    sql = preselectRules[2]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 1));
+    expect(result).toBe(true);
+    preselectRules = null;
+    sql = "";
+    result = null;
 
-	preselectRules = await adfice.getPreselectRules("63");
-	sql = preselectRules[0]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 51));
-	expect(result).toBe(true);
-	preselectRules = null; sql = ""; result = null;
+    preselectRules = await adfice.getPreselectRules("63");
+    sql = preselectRules[0]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 51));
+    expect(result).toBe(true);
+    preselectRules = null;
+    sql = "";
+    result = null;
 
-	preselectRules = await adfice.getPreselectRules("78");
-	sql = preselectRules[0]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 79));
-	expect(result).toBe(true);
-	sql = ""; result = null;
-	sql = preselectRules[1]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 84));
-	expect(result).toBe(true);
-	preselectRules = null; sql = ""; result = null;
+    preselectRules = await adfice.getPreselectRules("78");
+    sql = preselectRules[0]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 79));
+    expect(result).toBe(true);
+    sql = "";
+    result = null;
+    sql = preselectRules[1]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 84));
+    expect(result).toBe(true);
+    preselectRules = null;
+    sql = "";
+    result = null;
 
-	preselectRules = await adfice.getPreselectRules("88");
-	sql = preselectRules[0]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 1));
-	expect(result).toBe(true);
-	preselectRules = null; sql = ""; result = null;
+    preselectRules = await adfice.getPreselectRules("88");
+    sql = preselectRules[0]['sql_condition'].toString();
+    result = await (adfice.evaluateSQL(sql, 1));
+    expect(result).toBe(true);
+    preselectRules = null;
+    sql = "";
+    result = null;
 
 });
 
 test('Check preselected checkbox list', async () => {
-	let list = await adfice.determinePreselectedCheckboxes(["88"], 1, "M03AC01");
-	expect(list[0]).toBe("cb_M03AC01_88_2");
-	// I don't think it is possible for 2 checkboxes to be checked with the current rules. In theory, it would be allowed.
-	list = [];
-	list = await adfice.determinePreselectedCheckboxes(["45","46","48","48a","49"], 51, "C02AA02");
-	expect(list[0]).toBe("cb_C02AA02_46_1");
-	list = [];
-	list = await adfice.determinePreselectedCheckboxes(["45","46","48","48a","49"], 51, "C02AA02");
-	expect(list[0]).toBe("cb_C02AA02_46_1");
-	list = await adfice.determinePreselectedCheckboxes(["42"], 1, "C03CA02");
-	expect(list[0]).toBe("cb_C03CA02_42_2");
+    let list = await adfice.determinePreselectedCheckboxes(["88"], 1, "M03AC01");
+    expect(list[0]).toBe("cb_M03AC01_88_2");
+    // I don't think it is possible for 2 checkboxes to be checked with the current rules. In theory, it would be allowed.
+    list = [];
+    list = await adfice.determinePreselectedCheckboxes(["45", "46", "48", "48a", "49"], 51, "C02AA02");
+    expect(list[0]).toBe("cb_C02AA02_46_1");
+    list = [];
+    list = await adfice.determinePreselectedCheckboxes(["45", "46", "48", "48a", "49"], 51, "C02AA02");
+    expect(list[0]).toBe("cb_C02AA02_46_1");
+    list = await adfice.determinePreselectedCheckboxes(["42"], 1, "C03CA02");
+    expect(list[0]).toBe("cb_C03CA02_42_2");
 
-	//preselect-not is not actually used by any rules, is tested in adficeEvaluator.test.js
+    //preselect-not is not actually used by any rules, is tested in adficeEvaluator.test.js
 
 });
 
 test('Get prediction model result from DB', async () => {
-	let prediction4 = await adfice.getPredictionResult(4);
-	expect(prediction4).toBe(29);
+    let prediction4 = await adfice.getPredictionResult(4);
+    expect(prediction4).toBe(29);
 });
 
 test('Get empty result set from measurements', async () => {
-	let mesurements = await adfice.getPatientMeasurements(1);
-	expect(mesurements).toBe(null);
-	let prediction1 = await adfice.getPredictionResult(1);
-	expect(prediction1).toBe(null);
+    let mesurements = await adfice.getPatientMeasurements(1);
+    expect(mesurements).toBe(null);
+    let prediction1 = await adfice.getPredictionResult(1);
+    expect(prediction1).toBe(null);
 });

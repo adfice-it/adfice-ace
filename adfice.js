@@ -214,32 +214,26 @@ async function evaluateSQLCondition(patientIdentifier, ruleNumber) {
         return true;
     } //no conditions === always true
     /* count the number of question marks in the string */
-	return await evaluateSQL(sql, patientIdentifier);
+    return await evaluateSQL(sql, patientIdentifier);
 }
 
-async function evaluateSQL(sql, patientIdentifier){
-	    const count = sql.match(/\?/g).length;
-	    autil.assert(count > 0);
-	    autil.assert(count <= 3, "Too many question marks in SQL Condition! " + sql);
-	    let results = null;
-	    if (count == 1) {
-	        results = await sql_select(sql, [patientIdentifier]);
-	    }
-	    if (count == 2) {
-	        results = await sql_select(sql, [patientIdentifier, patientIdentifier]);
-	    }
-	    if (count == 3) { //tbh I think I never have more than two
-	        results = await sql_select(sql, [patientIdentifier, patientIdentifier, patientIdentifier]);
-	    }
-	    if (results.length == 0) {
-	        return false;
-	    }
-	    autil.assert((results[0]['TRUE'] == 1), JSON.stringify({
-	        patientIdentifier: patientIdentifier,
-	        //ruleNumber: ruleNumber,
-	        sql: sql,
-	        results: results
-	    }, null, 4));
+async function evaluateSQL(sql, patientIdentifier) {
+    const count = sql.match(/\?/g).length;
+    autil.assert(count > 0);
+    let params = [];
+    for (let i = 0; i < count; ++i) {
+        params.push(patientIdentifier);
+    }
+    let results = await sql_select(sql, params);
+    if (results.length == 0) {
+        return false;
+    }
+    autil.assert((results[0]['TRUE'] == 1), JSON.stringify({
+        patientIdentifier: patientIdentifier,
+        //ruleNumber: ruleNumber,
+        sql: sql,
+        results: results
+    }, null, 4));
     return true;
 }
 
@@ -309,17 +303,21 @@ async function getPatientMeasurements(patientIdentifier) {
          WHERE patient_id=?
       ORDER BY date_retrieved DESC
          LIMIT 1`;
-    let results = await sql_select(sql, [patientIdentifier, patientIdentifier]);
+    let params = [patientIdentifier, patientIdentifier];
+    let results = await sql_select(sql, params);
     if (results.length > 0) {
         return results;
     }
     return null;
 }
 
-async function getPredictionResult(patientIdentifier){
-	let measurements = await getPatientMeasurements(patientIdentifier);
-	if(measurements == null){return null;}
-	else{return measurements[0]['prediction_result'];}
+async function getPredictionResult(patientIdentifier) {
+    let measurements = await getPatientMeasurements(patientIdentifier);
+    if (measurements == null) {
+        return null;
+    } else {
+        return measurements[0]['prediction_result'];
+    }
 }
 
 async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
@@ -458,7 +456,8 @@ async function getAdviceForPatient(patientIdentifier) {
 
     var rules = await getActiveRules();
 
-    let evaluated = await ae.evaluateRules(meds, rules, patient_id, isSQLConditionTrue);
+    let evaluated = await ae.evaluateRules(meds, rules, patient_id,
+        isSQLConditionTrue);
     let medsWithRulesToFire = evaluated.medsWithRulesToFire;
     let meds_with_fired = evaluated.meds_with_fired;
     let meds_without_fired = evaluated.meds_without_fired;
@@ -486,7 +485,8 @@ async function getAdviceForPatient(patientIdentifier) {
         adv.adviceTextsNoCheckboxes = advice_text_no_box;
         adv.referenceNumbers = await getReferenceNumbers(fired);
         adv.fired = fired;
-        adv.preselectedCheckboxes = await determinePreselectedCheckboxes(fired,patient_id,atc_code.trim());
+        adv.preselectedCheckboxes = await determinePreselectedCheckboxes(fired,
+            patient_id, atc_code.trim());
         advice.push(adv);
     }
 
@@ -509,23 +509,25 @@ async function getAdviceForPatient(patientIdentifier) {
     return patient_advice;
 }
 
-async function determinePreselectedCheckboxes(fired, patient_id, atc_code){
-	let preselectedCheckboxes = [];
-	for (let i = 0; i < fired.length; ++i) {
-		let rule_number = fired[i].toString();
-		let preselectRules = await getPreselectRules(rule_number);
-		for (let j = 0; j < preselectRules.length; ++j) {
-			let preselectRule = preselectRules[j];
-			let box = preselectRule['selectBoxNum'];
-			if (await ae.evaluatePreselected(preselectRule,patient_id,atc_code,evaluateSQL)){
-				let checkbox_id = `cb_${atc_code}_${rule_number}_${box}`;
-				if(preselectedCheckboxes.indexOf(checkbox_id) == -1){
-					preselectedCheckboxes.push(checkbox_id);
-				}
-			}
-		}
-	}
-	return preselectedCheckboxes;
+async function determinePreselectedCheckboxes(fired, patient_id, atc_code) {
+    let preselectedCheckboxes = [];
+    for (let i = 0; i < fired.length; ++i) {
+        let rule_number = fired[i].toString();
+        let preselectRules = await getPreselectRules(rule_number);
+        for (let j = 0; j < preselectRules.length; ++j) {
+            let preselectRule = preselectRules[j];
+            let box = preselectRule['selectBoxNum'];
+            let preselected = await ae.evaluatePreselected(preselectRule,
+                patient_id, atc_code, evaluateSQL);
+            if (preselected) {
+                let checkbox_id = `cb_${atc_code}_${rule_number}_${box}`;
+                if (preselectedCheckboxes.indexOf(checkbox_id) == -1) {
+                    preselectedCheckboxes.push(checkbox_id);
+                }
+            }
+        }
+    }
+    return preselectedCheckboxes;
 }
 
 function boxStatesToSelectionStates(patient_id, viewer_id, box_states) {
