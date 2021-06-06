@@ -26,7 +26,6 @@ async function jsonAdviceForPatient(req, res) {
     ++render_count;
     let patient_advice = await adfice.getAdviceForPatient(req.query.id || 0);
     patient_advice.patient_id = patient_advice.patient_id || 0;
-    patient_advice.risk_score = (patient_advice.patient_id % 101); // TODO
     res.json({
         viewer_id: render_count,
         patient_advice: patient_advice
@@ -37,14 +36,12 @@ async function renderAdviceForPatient(req, res) {
     ++render_count;
     let patient_id = req.query.id || 0;
     let patient_advice = await adfice.getAdviceForPatient(patient_id);
-    let risk_score = (patient_id % 101); // TODO: add to patient_advice
     res.render("patient", {
         lang: 'nl',
         md: md,
         viewer_id: render_count,
         patient_id: patient_id,
         patient_advice: patient_advice,
-        risk_score: risk_score
     }); // .ejs
 }
 

@@ -500,6 +500,8 @@ async function getAdviceForPatient(patientIdentifier) {
     let selected_advice = await getSelectionsForPatient(patient_id);
     let free_texts = await getFreetextsForPatient(patient_id);
 
+    let risk_score = await getPredictionResult(patient_id);
+
     let patient_advice = {};
     patient_advice.patient_id = patient_id;
     patient_advice.age = age;
@@ -513,6 +515,7 @@ async function getAdviceForPatient(patientIdentifier) {
     patient_advice.preselected_checkboxes = preselected_checkboxes;
     patient_advice.free_texts = free_texts;
     patient_advice.advice_text_non_med = advice_text_non_med;
+    patient_advice.risk_score = risk_score;
 
     return patient_advice;
 }
