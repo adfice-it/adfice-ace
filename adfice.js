@@ -95,12 +95,12 @@ async function getAdviceTextsCheckboxes(rule_numbers) {
         return [];
     }
     var sql = `/* adfice.getAdviceTextsCheckboxes */
-        SELECT m.medication_criteria_id,
-               m.selectBoxNum,
-               m.selectBoxCategory,
-               m.cdss,
-               m.epic,
-               m.patient
+        SELECT m.medication_criteria_id
+             , m.selectBoxNum
+             , m.selectBoxCategory
+             , m.cdss
+             , m.epic
+             , m.patient
           FROM med_advice_text m
      LEFT JOIN select_box_category_priority p
             ON (m.selectBoxCategory = p.select_box_category)
@@ -118,8 +118,8 @@ async function getAdviceTextsNoCheckboxes(rule_numbers) {
         return [];
     }
     var sql = `/* adfice.getAdviceTextsNoCheckboxes */
-        SELECT medication_criteria_id,
-               cdss
+        SELECT medication_criteria_id
+             , cdss
           FROM med_advice_text
          WHERE selectBoxNum IS NULL
            AND medication_criteria_id IN(` +
@@ -132,18 +132,18 @@ async function getAdviceTextsNoCheckboxes(rule_numbers) {
 
 async function getAdviceTextsNonMedCheckboxes() {
     var sql = `/* adfice.getAdviceTextsNonMedCheckboxes */
-        SELECT t.category_id,
-               h.category_name,
-               t.selectBoxNum,
-               t.preselected,
-               t.cdss,
-               t.epic,
-               t.patient
+        SELECT t.category_id
+             , h.category_name
+             , t.selectBoxNum
+             , t.preselected
+             , t.cdss
+             , t.epic
+             , t.patient
           FROM nonmed_header AS h
           JOIN nonmed_text AS t
             ON (h.category_id = t.category_id)
-      ORDER BY t.category_id,
-               t.selectBoxNum
+      ORDER BY t.category_id
+             , t.selectBoxNum
     `;
     let advice_text = await sql_select(sql);
     return split_advice_texts_cdss_epic_patient(advice_text);
@@ -153,28 +153,33 @@ async function getReferenceNumbers(rule_numbers) {
     if (rule_numbers == null || !rule_numbers.length) {
         return [];
     }
-    var sql = `/* getReferenceNumbers */
-        SELECT DISTINCT reference
+    var sql = `/* adfice.getReferenceNumbers */
+        SELECT reference
           FROM med_rules
          WHERE medication_criteria_id IN(` +
         question_marks(rule_numbers.length) +
         `)
-         ORDER BY id`
+      GROUP BY reference
+      ORDER BY MIN(med_rules.id) ASC`;
     return sql_select(sql, rule_numbers);
 }
 
 async function getActiveRules() {
-    var sql = "SELECT * FROM med_rules WHERE active = 'yes' ORDER BY id";
+    var sql = `/* adfice.getActiveRules */
+         SELECT *
+           FROM med_rules
+          WHERE active = 'yes'
+       ORDER BY id`;
     let rules = await sql_select(sql);
     return rules;
 }
 
 async function getMedsForPatient(patientIdentifier) {
     var sql = `/* adfice.getMedsForPatient */
-        SELECT ATC_code,
-               medication_name,
-               generic_name,
-               start_date
+        SELECT ATC_code
+             , medication_name
+             , generic_name
+             , start_date
           FROM patient_medications
          WHERE patient_id=?
            AND date_retrieved = (
@@ -250,7 +255,9 @@ async function getPreselectRules(ruleNumber) {
 
 async function getProblemsForPatient(patientIdentifier) {
     var sql = `/* adfice.getProblemsForPatient */
-        SELECT name, start_date, display_name
+        SELECT name
+             , start_date
+             , display_name
           FROM patient_problems
          WHERE patient_id=?
            AND date_retrieved = (
@@ -268,7 +275,8 @@ async function getAgeForPatient(patientIdentifier) {
         SELECT age
           FROM patient
          WHERE id=?
-      ORDER BY age DESC LIMIT 1`;
+      ORDER BY age DESC
+         LIMIT 1`;
     let results = await sql_select(sql, [patientIdentifier, patientIdentifier]);
     if (results.length > 0) {
         return results[0].age;
@@ -278,9 +286,9 @@ async function getAgeForPatient(patientIdentifier) {
 
 async function getLabsForPatient(patientIdentifier) {
     var sql = `/* adfice.getLabsForPatient */
-        SELECT lab_test_name,
-               lab_test_result,
-               date_measured
+        SELECT lab_test_name
+             , lab_test_result
+             , date_measured
           FROM patient_labs
          WHERE patient_id=?
            AND date_retrieved = (
@@ -299,7 +307,8 @@ async function getPatientMeasurements(patientIdentifier) {
         SELECT *
           FROM patient_measurements
          WHERE patient_id=?
-      ORDER BY date_retrieved DESC LIMIT 1`;
+      ORDER BY date_retrieved DESC
+         LIMIT 1`;
     let results = await sql_select(sql, [patientIdentifier, patientIdentifier]);
     if (results.length > 0) {
         return results;
@@ -325,13 +334,14 @@ async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
     sqls_and_params.push([delete_sql, patient_id]);
 
     let insert_sql = `/* adfice.setSelectionsForPatient */
- INSERT INTO patient_advice_selection (
-             patient_id,
-             viewer_id,
-             ATC_code,
-             medication_criteria_id,
-             select_box_num,
-             selected)
+ INSERT INTO patient_advice_selection
+           ( patient_id
+           , viewer_id
+           , ATC_code
+           , medication_criteria_id
+           , select_box_num
+           , selected
+           )
       VALUES (?,?,?,?,?,?)`;
     let params = boxStatesToSelectionStates(patient_id, viewer_id, cb_states);
     for (let i = 0; i < params.length; ++i) {
@@ -344,12 +354,12 @@ async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
 
 async function getSelectionsForPatient(patient_id) {
     var sql = `/* adfice.getSelectionsForPatient */
-        SELECT patient_id,
-               viewer_id,
-               ATC_code,
-               medication_criteria_id,
-               select_box_num,
-               selected
+        SELECT patient_id
+             , viewer_id
+             , ATC_code
+             , medication_criteria_id
+             , select_box_num
+             , selected
           FROM patient_advice_selection
          WHERE patient_id=?
       ORDER BY id`;
@@ -370,14 +380,15 @@ async function setFreetextsForPatient(patientIdentifier, viewer, freetexts) {
     sqls_and_params.push([delete_sql, patient_id]);
 
     let insert_sql = `/* adfice.setFreetextForPatient */
- INSERT INTO patient_advice_freetext (
-             patient_id,
-             viewer_id,
-             ATC_code,
-             medication_criteria_id,
-             select_box_num,
-             freetext_num,
-             freetext)
+ INSERT INTO patient_advice_freetext
+           ( patient_id
+           , viewer_id
+           , ATC_code
+           , medication_criteria_id
+           , select_box_num
+           , freetext_num
+           , freetext
+           )
       VALUES (?,?,?,?,?,?,?)`;
     let params = freetextsToRows(patient_id, viewer_id, freetexts);
     for (let i = 0; i < params.length; ++i) {
@@ -390,13 +401,13 @@ async function setFreetextsForPatient(patientIdentifier, viewer, freetexts) {
 
 async function getFreetextsForPatient(patient_id) {
     var sql = `/* adfice.getFreetextForPatient */
-         SELECT patient_id,
-                viewer_id,
-                ATC_code,
-                medication_criteria_id,
-                select_box_num,
-                freetext_num,
-                freetext
+         SELECT patient_id
+              , viewer_id
+              , ATC_code
+              , medication_criteria_id
+              , select_box_num
+              , freetext_num
+              , freetext
            FROM patient_advice_freetext
           WHERE patient_id=?
        ORDER BY id`;
