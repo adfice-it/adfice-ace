@@ -78,6 +78,7 @@ for SQL in \
 	createTablePatientAdviceFreetext.sql \
 	newAdviceTable.sql \
 	newRulesTable.sql \
+	newOtherMedTable.sql \
 	newPreselectRulesTable.sql \
 	newNonMedHeaders.sql \
 	newNonMedTable.sql \

@@ -30,6 +30,17 @@ patient varchar(5000),
 UNIQUE KEY (medication_criteria_id, selectBoxNum)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE med_other_text (
+id int unsigned AUTO_INCREMENT PRIMARY KEY,
+medication_criteria_id varchar(8),
+selectBoxNum smallint unsigned,
+selectBoxCategory varchar(20),
+selectBoxDesignator varchar(20),
+cdss varchar(3000),
+epic varchar(2000),
+patient varchar(5000)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE preselect_rules (
 id int unsigned AUTO_INCREMENT PRIMARY KEY,
 medication_criteria_id varchar(8),
