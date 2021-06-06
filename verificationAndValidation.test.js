@@ -500,7 +500,6 @@ test('verification2: conforms to spec', async () => {
 });
 
 test('verification3: conforms to spec', async () => {
-<<<<<<< HEAD
     let patientAdvice = await adfice.getAdviceForPatient(101);
     let fired0 = patientAdvice.medication_advice[0].fired.toString();
     expect(fired0).toBe("100,101,104");
