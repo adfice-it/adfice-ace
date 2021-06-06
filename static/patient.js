@@ -286,10 +286,24 @@ function ws_on_message(event) {
 }
 
 window.addEventListener('load', (event) => {
-    var url = new URL(document.URL);
-    var hostname = url.hostname;
-    var port = url.port;
-    ws = new WebSocket(`ws://${hostname}:${port}/patient/${patient_id}`);
+    let url = new URL(document.URL);
+    let hostname = url.hostname;
+    let port = url.port;
+    let ws_protocol = 'wss:';
+
+    // URL.protocol is not safe in older Internet Explorers
+    try {
+        let url_protocol = url.protocol;
+        if (url_protocol == 'http:') {
+            ws_protocol = 'ws:';
+        }
+    } catch (protocol_error) {
+        console.log(protocol_error);
+    }
+
+    let ws_url = `${ws_protocol}//${hostname}:${port}/patient/${patient_id}`;
+    ws = new WebSocket(ws_url);
     ws.onmessage = ws_on_message;
+
     switch_to_view("clinician");
 });
