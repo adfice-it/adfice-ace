@@ -461,13 +461,15 @@ for (let i = 0; i < medication_advice.length; ++i ) {
        let row_id = 'et_' + nma_id_base;
 -%>
 <div id="<%= row_id %>">
-<%         for (let k = 0; k < nm_advice.epic_split.length; ++k) { -%>
-<%             let chunk = nm_advice.epic_split[k]; -%>
-<%             let chunk_id = `eft_NONMED_${category}_${boxnum}_${k}`; -%>
+<%         for (let k = 0; k < nm_advice.epic_split.length; ++k) {
+               let chunk = nm_advice.epic_split[k];
+               let chunk_id = `eft_NONMED_${category}_${boxnum}_${k}`;
+               let et = md.makeHtml(chunk.text);
+               et = et.replace("<p>", "");
+               et = et.replace("</p>", "");
+-%>
 <div id="<%= chunk_id %>">
-<%             if (chunk.editable) { -%>
-<%- md.makeHtml(chunk.text) -%>
-<%             } -%>
+<%= et -%>
 </div><!-- <%= chunk_id %> -->
 <%         } -%>
 </div> <!-- <%= row_id %> -->
