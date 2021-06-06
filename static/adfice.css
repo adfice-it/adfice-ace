@@ -72,8 +72,26 @@ body {
 	font-weight: bold;
 }
 
+.td_nm_category_name{
+	display:inline-block;
+	width: 30%;
+	margin-bottom: 15px;
+}
+.nonmed_checkbox{
+	display: inline;
+	margin-bottom: 15px;
+}
+.nonmed_cdss_containter{
+  display: inline-block;
+  width: 55%;
+  margin-top: 15px;
+}
+.nonmed_cdss{
+  display: block;
+  width: 100%;
+}
 .freetext {
-    display: inline;
+    display: inline-block;
 }
 
 .div_other_advice{

@@ -332,7 +332,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <div class="advice_header clinician_view_only" id="andere_advies_header" style="width:20%;">Andere risicofactoren</div>
 <div class="patient_header patient_view_only" id="header_overige_advies">Overige adviezen</div>
 <div id="non_med_advice_selection_area" class="non_med_advice_selection_area">
-<table>
+
 <%
    let last_category_name = '';
    for (let i = 0; i < nm_advices.length; ++i ) {
@@ -350,11 +350,10 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 	   category_display_name = category_name;
        }
 -%>
-<tr id="<%= row_id %>">
-<td id="td_nm_category_name_<%= nm_advice.category_id %>_<%= boxnum %>"
-    class="td_nm_category_name"><%= category_display_name %></td>
-<td>
-<span id="<%= nma_prefix %>_sbn">
+<div id="<%= row_id %>" class="nonmed_row">
+<div id="td_nm_category_name_<%= nm_advice.category_id %>_<%= boxnum %>"
+    class="td_nm_category_name"><%= category_display_name %></div>
+<span id="<%= nma_prefix %>_sbn" class="nonmed_checkbox">
 <input type="checkbox"
         id="<%= checkbox_id %>"
         name="<%= checkbox_id %>"
@@ -362,9 +361,8 @@ for (let i = 0; i < medication_advice.length; ++i ) {
         style="visibility:hidden"
 />
 </span> <!-- <%= nma_prefix %>_sbn -->
-</td>
-<td>
-<div id="<%= nma_prefix %>_cdss">
+<div id="<%= nma_prefix %>_cdss_continer" class="nonmed_cdss_containter">
+<div id="<%= nma_prefix %>_cdss" class="nonmed_cdss">
 <%         for (let k = 0; k < nm_advice.cdss_split.length; ++k) { -%>
 <%             let chunk = nm_advice.cdss_split[k]; -%>
 <%             let chunk_id = `ft_NONMED_${category}_${boxnum}_${k}`; -%>
@@ -386,10 +384,10 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <%             } -%>
 <%         } -%>
 </div> <!-- <%= nma_prefix %>_cdss -->
-</td>
-</tr>
+</div> <!-- nonmed_cdss_container -->
+</div><!-- nonmed_row -->
 <% } -%>
-</table>
+
 </div><!-- non_med_advice_selection_area -->
 <div id="non_med_advice_patient_area" class="non_med_advice_patient_area">
 <%
