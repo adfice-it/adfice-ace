@@ -574,21 +574,31 @@ test('Check preselect SQL', async () => {
 
 });
 
-test('Check preselected checkbox list', async () => {
-    let list = await adfice.determinePreselectedCheckboxes(["88"], 1, "M03AC01");
-    expect(list[0]).toBe("cb_M03AC01_88_2");
-    // I don't think it is possible for 2 checkboxes to be checked with the current rules. In theory, it would be allowed.
-    list = [];
-    list = await adfice.determinePreselectedCheckboxes(["45", "46", "48", "48a", "49"], 51, "C02AA02");
-    expect(list[0]).toBe("cb_C02AA02_46_1");
-    list = [];
-    list = await adfice.determinePreselectedCheckboxes(["45", "46", "48", "48a", "49"], 51, "C02AA02");
-    expect(list[0]).toBe("cb_C02AA02_46_1");
-    list = await adfice.determinePreselectedCheckboxes(["42"], 1, "C03CA02");
-    expect(list[0]).toBe("cb_C03CA02_42_2");
+test('Check preselected checkbox output', async () => {
+    let output = {};
 
-    //preselect-not is not actually used by any rules, is tested in adficeEvaluator.test.js
+    let rules = ["88"];
+    let patient = 1;
+    let atc = "M03AC01";
+    output = await adfice.determinePreselectedCheckboxes(rules, patient, atc);
+    expect(output["cb_M03AC01_88_2"]).toBe("checked");
 
+    // Ace does not think it is possible for 2 checkboxes to be checked with
+    // the current rules. In theory, it would be allowed.
+    rules = ["45", "46", "48", "48a", "49"];
+    patient = 51;
+    atc = "C02AA02";
+    output = await adfice.determinePreselectedCheckboxes(rules, patient, atc);
+    expect(output["cb_C02AA02_46_1"]).toBe("checked");
+
+    rules = ["42"];
+    patient = 1;
+    atc = "C03CA02"
+    output = await adfice.determinePreselectedCheckboxes(rules, patient, atc);
+    expect(output["cb_C03CA02_42_2"]).toBe("checked");
+
+    // preselect-not is not actually used by any rules,
+    // is tested in adficeEvaluator.test.js
 });
 
 test('Get prediction model result from DB', async () => {

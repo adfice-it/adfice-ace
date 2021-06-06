@@ -369,3 +369,22 @@ test('Test med lists', async t => {
     await t.expect(meds_without_rules.withText("Zolpidem").exists).notOk();
     await t.expect(meds_without_rules.withText("Ketoconazol").exists).ok();
 });
+
+test('Checkbox preselected', async t => {
+    let url = 'http://localhost:9090/patient?id=51';
+    let window1 = await t.openWindow(url);
+
+    let unchecked_id = "cb_C02AA02_46_5";
+    let unchecked_checkbox = Selector(`input#${unchecked_id}`, {
+        timeout: 1000,
+        visibilityCheck: true
+    });
+    await t.expect(unchecked_checkbox.checked).notOk();
+
+    let checked_id = "cb_C02AA02_46_1";
+    let checked_checkbox = Selector(`input#${checked_id}`, {
+        timeout: 1000,
+        visibilityCheck: true
+    });
+    await t.expect(checked_checkbox.checked).ok();
+});

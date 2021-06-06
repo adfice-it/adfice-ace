@@ -193,6 +193,8 @@ async function getMedsForPatient(patientIdentifier) {
     return meds;
 }
 
+/* TODO refactor to make this set-based, rather than loop */
+/* (the list is not long, we should read the whole table in to RAM) */
 async function getSQLCondition(ruleNumber) {
     var sql = `/* adfice.getSQLCondition */
         SELECT sql_condition
@@ -462,6 +464,7 @@ async function getAdviceForPatient(patientIdentifier) {
     let meds_with_fired = evaluated.meds_with_fired;
     let meds_without_fired = evaluated.meds_without_fired;
 
+    let preselected_checkboxes = {};
     let advice = [];
     for (let i = 0; i < meds.length; ++i) {
         let med = meds[i];
@@ -477,6 +480,10 @@ async function getAdviceForPatient(patientIdentifier) {
 
         let advice_text_no_box = await getAdviceTextsNoCheckboxes(fired);
 
+        let atc_preselected_checkboxes = await determinePreselectedCheckboxes(
+            fired, patient_id, atc_code.trim());
+        Object.assign(preselected_checkboxes, atc_preselected_checkboxes);
+
         let adv = {};
         adv.ATC_code = atc_code.trim();
         adv.medication_name = med.medication_name.trim();
@@ -485,14 +492,13 @@ async function getAdviceForPatient(patientIdentifier) {
         adv.adviceTextsNoCheckboxes = advice_text_no_box;
         adv.referenceNumbers = await getReferenceNumbers(fired);
         adv.fired = fired;
-        adv.preselectedCheckboxes = await determinePreselectedCheckboxes(fired,
-            patient_id, atc_code.trim());
+        adv.preselectedCheckboxes = atc_preselected_checkboxes;
         advice.push(adv);
     }
 
     let advice_text_non_med = await getAdviceTextsNonMedCheckboxes();
     let selected_advice = await getSelectionsForPatient(patient_id);
-
+    let free_texts = await getFreetextsForPatient(patient_id);
 
     let patient_advice = {};
     patient_advice.patient_id = patient_id;
@@ -504,30 +510,30 @@ async function getAdviceForPatient(patientIdentifier) {
     patient_advice.problems = problems;
     patient_advice.medication_advice = advice;
     patient_advice.selected_advice = selected_advice;
+    patient_advice.preselected_checkboxes = preselected_checkboxes;
+    patient_advice.free_texts = free_texts;
     patient_advice.advice_text_non_med = advice_text_non_med;
 
     return patient_advice;
 }
 
 async function determinePreselectedCheckboxes(fired, patient_id, atc_code) {
-    let preselectedCheckboxes = [];
+    let preselected = {};
     for (let i = 0; i < fired.length; ++i) {
         let rule_number = fired[i].toString();
         let preselectRules = await getPreselectRules(rule_number);
         for (let j = 0; j < preselectRules.length; ++j) {
             let preselectRule = preselectRules[j];
             let box = preselectRule['selectBoxNum'];
-            let preselected = await ae.evaluatePreselected(preselectRule,
+            let is_preselected = await ae.evaluatePreselected(preselectRule,
                 patient_id, atc_code, evaluateSQL);
-            if (preselected) {
+            if (is_preselected) {
                 let checkbox_id = `cb_${atc_code}_${rule_number}_${box}`;
-                if (preselectedCheckboxes.indexOf(checkbox_id) == -1) {
-                    preselectedCheckboxes.push(checkbox_id);
-                }
+                preselected[checkbox_id] = 'checked';
             }
         }
     }
-    return preselectedCheckboxes;
+    return preselected;
 }
 
 function boxStatesToSelectionStates(patient_id, viewer_id, box_states) {

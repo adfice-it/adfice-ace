@@ -122,8 +122,13 @@ function hello_all(kind, id) {
 }
 
 async function init_patient_data(ws, kind, id) {
-    let freetexts = await adfice.getFreetextsForPatient(id);
-    let selections = await adfice.getSelectionsForPatient(id);
+    let patient_advice = await adfice.getAdviceForPatient(id);
+
+    let freetexts = patient_advice.free_texts;
+    let selections = patient_advice.selected_advice || {};
+    if (Object.keys(selections).length == 0) {
+        selections = patient_advice.preselected_checkboxes;
+    }
 
     let message = {};
     msg_header(message, kind, id);
@@ -134,6 +139,7 @@ async function init_patient_data(ws, kind, id) {
     message['box_states'] = selections;
 
     let msg_string = JSON.stringify(message, null, 4);
+
     ws.send(msg_string);
 }
 

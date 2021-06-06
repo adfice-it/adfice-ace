@@ -1,11 +1,8 @@
 High Prio:
 * styling, try to match existing mock-ups
-* get HTTPS up for json requests
-  * CI tests should use HTTPS too, possibly self-signed certs
+* CI tests should use HTTPS too, possibly self-signed certs
 
 First after demo:
-* non-medication advice (same for every patient)
-* real pre-selection
 * integrate prediction
 	* make prediction model page work
 
