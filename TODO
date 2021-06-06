@@ -4,7 +4,7 @@ High Prio:
 
 First after demo:
 * integrate prediction
-	* make prediction model page work
+  * make prediction model page work
 
 Mid:
 * the "consult view" button could be renamed "Consult verneiuwen" in order to
@@ -19,7 +19,10 @@ Mid:
 * styling, e.g.: viewers in yellow, hidden when 1
 * test-cafe : get the innnerHTML out of an element
 * logging:
-  * log whether system was used at all, whether Print and Send to portal was used, which advice was (in the end) selected
+  * log whether system was used at all
+  * whether Print and Send to portal was used
+  * which advice was (in the end) selected
+  * which advice had been pre-selected (and thus, was it unchecked)
 * sanity check choices of checkboxes
 * fetch data button and send to portal button should be at top (by help)
 
