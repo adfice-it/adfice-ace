@@ -23,9 +23,9 @@ console.log('patient_id: ', patient_id);
      alt="Advice IT logo"
 >
 <div id="nav_container" style="display: inline;">
- <button type="button" class = "nav_button" id="pagina_vernieuwen">Pagina vernieuwen</button> 
- <button type="button" class = "nav_button" id="definitief">Opslaan & definitief maken</button> 
- <button type="button" class = "nav_button" id="help">Hoe gebruik ik dit systeem?</button> 
+ <button type="button" class = "nav_button" id="pagina_vernieuwen">Pagina vernieuwen</button>
+ <button type="button" class = "nav_button" id="definitief">Opslaan & definitief maken</button>
+ <button type="button" class = "nav_button" id="help">Hoe gebruik ik dit systeem?</button>
 </div>
 <div id="footer">
 Patient: <%= patient_id %>
@@ -177,7 +177,7 @@ In het algemeen dient een medicament gestopt of afgebouwd worden als:
 <li>er geen indicatie (meer) is </li>
 <li>er een veiliger alternatief beschikbaar is</li>
 </ul>
-Het is wenselijk om iedere patient na een medicatiewijziging actief te monitoren (middels follow-up) op het optreden van een (hernieuwde) val en/of klachten zoals duizeligheid of licht in het hoofd bij opstaan veranderen. 
+Het is wenselijk om iedere patient na een medicatiewijziging actief te monitoren (middels follow-up) op het optreden van een (hernieuwde) val en/of klachten zoals duizeligheid of licht in het hoofd bij opstaan veranderen.
 </div><!-- general advice -->
 
 <% let medication_advice = patient_advice.medication_advice || [];
@@ -328,7 +328,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <!-- TODO add a free text box where the doctor can type in whatever they want.
      Like other free text boxes, this should be copied to the Epic and Patient
      text. -->
-</div><!-- div_other_med_advice -->     
+</div><!-- div_other_med_advice -->
 <div class="advice_header clinician_view_only" id="andere_advies_header" style="width:20%;">Andere risicofactoren</div>
 <div class="patient_header patient_view_only" id="header_overige_advies">Overige adviezen</div>
 <div id="non_med_advice_selection_area" class="non_med_advice_selection_area">
