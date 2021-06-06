@@ -43,18 +43,33 @@ test('ucfirst', () => {
 test('split freetext advice strings', () => {
 
     let example = "initial:{{free text: pre-filled: first free text}}" +
-    " some addtional text:{{free text}}";
+        " some addtional text:{{free text}}";
 
-    let expected = [
-        { id: 0, text: "initial:", editable: false },
-        { id: 1, text: "first free text", editable: true },
-        { id: 2, text: "some addtional text:", editable: false },
-        { id: 3, text: "", editable: true }
-    ];
+    let expected = [{
+        id: 0,
+        text: "initial:",
+        editable: false
+    }, {
+        id: 1,
+        text: "first free text",
+        editable: true
+    }, {
+        id: 2,
+        text: "some addtional text:",
+        editable: false
+    }, {
+        id: 3,
+        text: "",
+        editable: true
+    }];
 
     expect(autil.splitFreetext(example)).toStrictEqual(expected);
 
-    expected = [{ id: 0, text: "foo", editable: false }];
+    expected = [{
+        id: 0,
+        text: "foo",
+        editable: false
+    }];
     expect(autil.splitFreetext("foo")).toStrictEqual(expected);
     expect(autil.splitFreetext(null)).toStrictEqual([]);
 })
@@ -62,17 +77,29 @@ test('split freetext advice strings', () => {
 test('split freetext handle bad strings', () => {
 
     let example = "initial:{{free text: pre-filled: first free text}}" +
-    " some addtional text:{{free text}}";
+        " some addtional text:{{free text}}";
 
-    expect(autil.splitFreetext("{free text}}")).toStrictEqual([
-        { id: 0, text: "{free text", editable: false },
-        { id: 1, text: "BAD DATA", editable: true }
-    ]);
-    expect(autil.splitFreetext("{free text:}}")).toStrictEqual([
-        { id: 0, text: "{free text:", editable: false },
-        { id: 1, text: "BAD DATA", editable: true }
-    ]);
-    expect(autil.splitFreetext("{{free text:}")).toStrictEqual([
-        { id: 1, text: "", editable: true }
-    ]);
+    expect(autil.splitFreetext("{free text}}")).toStrictEqual([{
+        id: 0,
+        text: "{free text",
+        editable: false
+    }, {
+        id: 1,
+        text: "BAD DATA",
+        editable: true
+    }]);
+    expect(autil.splitFreetext("{free text:}}")).toStrictEqual([{
+        id: 0,
+        text: "{free text:",
+        editable: false
+    }, {
+        id: 1,
+        text: "BAD DATA",
+        editable: true
+    }]);
+    expect(autil.splitFreetext("{{free text:}")).toStrictEqual([{
+        id: 1,
+        text: "",
+        editable: true
+    }]);
 })

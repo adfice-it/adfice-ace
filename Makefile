@@ -43,4 +43,7 @@ tidy:
 		adficeEvaluator.test.js \
 		AdficeWebserver.js \
 		static/patient.js \
+		adficeUtil.js \
+		adficeUtil.test.js \
+		verificationAndValidation.test.js \
 		ping-db.js

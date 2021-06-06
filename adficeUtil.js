@@ -21,7 +21,9 @@ function ucfirst(s) {
 }
 
 function splitFreetext(str) {
-    if (str == null) { return [] };
+    if (str == null) {
+        return []
+    };
     let substrings = str.split(/{{|}}/);
     let editable = false;
     let result = [];
@@ -41,7 +43,7 @@ function splitFreetext(str) {
             result.push({
                 id: i,
                 text: text.trim(),
-                editable : editable
+                editable: editable
             });
         }
         editable = !editable;
