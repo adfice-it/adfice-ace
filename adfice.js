@@ -298,19 +298,19 @@ async function getPatientMeasurements(patientIdentifier) {
     var sql = `/* adfice.getPatientMeasurements */
         SELECT *
           FROM patient_measurements
-         WHERE id=?
+         WHERE patient_id=?
       ORDER BY date_retrieved DESC LIMIT 1`;
     let results = await sql_select(sql, [patientIdentifier, patientIdentifier]);
-//    if (results.length > 0) {
+    if (results.length > 0) {
         return results;
-//    }
-//TODO write test to cover this case and uncomment it
-//    return null;
+    }
+    return null;
 }
 
 async function getPredictionResult(patientIdentifier){
 	let measurements = await getPatientMeasurements(patientIdentifier);
-	return measurements[0]['prediction_result'];
+	if(measurements == null){return null;}
+	else{return measurements[0]['prediction_result'];}
 }
 
 async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {

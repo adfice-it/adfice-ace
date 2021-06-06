@@ -509,5 +509,12 @@ test('Check preselected checkbox list', async () => {
 
 test('Get prediction model result from DB', async () => {
 	let prediction4 = await adfice.getPredictionResult(4);
-	expect(prediction4).toBe(70);
+	expect(prediction4).toBe(29);
+});
+
+test('Get empty result set from measurements', async () => {
+	let mesurements = await adfice.getPatientMeasurements(1);
+	expect(mesurements).toBe(null);
+	let prediction1 = await adfice.getPredictionResult(1);
+	expect(prediction1).toBe(null);
 });
