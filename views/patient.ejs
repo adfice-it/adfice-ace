@@ -170,7 +170,7 @@ Geen
 
 </div><!-- instruction_box -->
 
-<div class="advice_header" style="font-size: large; font-weight: bold;">Medicatiefactoren</div>
+<div id="med_advice_header" class="advice_header clinician_view_only">Medicatiefactoren</div>
 <div id="general_advice" class="general_advice">
 In het algemeen dient een medicament gestopt of afgebouwd worden als:
 <ul>
@@ -292,12 +292,13 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <% let nm_advices = patient_advice.advice_text_non_med -%>
 
 <div id="div_patient_view" class="div_patient_view">
+<div class = "patient_header patient_view_only" id = "patient_med_advice_header">Advies over medicaties:</div>
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
 <div id="advice_patient_area_<%= i %>" class="advice_patient_area">
-<p>Patient:
+<div id="div_patient_med_name_<%= atc %>" class = "patient_med_name"><%= ucfirst(row.medication_name).trim() %></div>
 <%
      for (let j = 0; j < cb_advices.length; ++j ) {
          let cb_advice = cb_advices[j];
@@ -322,17 +323,15 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <% } -%>
 </div> <!-- div_patient_view -->
 
-<div id="div_other_med_advice" class="div_other_med_advice">
+<div id="div_other_med_advice" class="div_other_advice">
 <p>Andere medicatie-gerelateerde advies:</p>
 <!-- TODO add a free text box where the doctor can type in whatever they want.
      Like other free text boxes, this should be copied to the Epic and Patient
      text. -->
-<div class="advice_header"
-     style="width:20%; font-size: large; font-weight: bold;"
->Andere risicofactoren</div>
-
+</div><!-- div_other_med_advice -->     
+<div class="advice_header clinician_view_only" id="andere_advies_header" style="width:20%;">Andere risicofactoren</div>
+<div class="patient_header patient_view_only" id="header_overige_advies">Overige adviezen</div>
 <div id="non_med_advice_selection_area" class="non_med_advice_selection_area">
-<p><strong>Maatregelen (aangekruist indien aanbevolen):</strong></p>
 <table>
 <%
    let last_category_name = '';
@@ -414,11 +413,12 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <% } -%>
 </div><!-- "non_med_advice_patient_area" -->
 
+<div id="div_other_nonmed_advice" class="div_other_advice">
 <p>Andere advies:</p>
 <!-- TODO add a free text box where the doctor can type in whatever they want.
      Like other free text boxes, this should be copied to the Epic and Patient
      text. -->
-</div><!-- div_other_med_advice -->
+</div><!-- div_other_nonmed_advice -->
 
 <div id="div_epic_box" class="div_epic_box"><!-- not in patient view -->
 <p>Tekst om te knippen en plakken in Epic:</p>

@@ -57,6 +57,8 @@ function switch_to_view(view) {
         set_class_display("advice_no_checkbox", 'none');
         non_med_advice_selection_area.style.display = 'none';
         non_med_advice_patient_area.style.display = 'block';
+        set_class_display("clinician_view_only", 'none');
+        set_class_display("patient_view_only", 'block');
 
         button_patient.style.backgroundColor = 'green';
         button_patient.style.color = 'white';
@@ -77,6 +79,8 @@ function switch_to_view(view) {
         set_class_display("advice_no_checkbox", 'none');
         non_med_advice_selection_area.style.display = 'block';
         non_med_advice_patient_area.style.display = 'none';
+        set_class_display("clinician_view_only", 'block');
+        set_class_display("patient_view_only", 'none');
 
         button_condensed.style.backgroundColor = 'green';
         button_condensed.style.color = 'white';
@@ -96,6 +100,8 @@ function switch_to_view(view) {
         set_class_display("advice_no_checkbox", 'block');
         non_med_advice_selection_area.style.display = 'block';
         non_med_advice_patient_area.style.display = 'none';
+        set_class_display("clinician_view_only", 'block');
+        set_class_display("patient_view_only", 'none');
 
         button_clinician.style.backgroundColor = 'green';
         button_clinician.style.color = 'white';
