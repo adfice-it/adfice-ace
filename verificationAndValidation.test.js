@@ -396,7 +396,7 @@ test('verification2: conforms to spec', async () => {
     patientAdvice = null;
     patientAdvice = await adfice.getAdviceForPatient(80);
     fired0 = patientAdvice.medication_advice[0].fired.toString();
-    expect(fired0).toBe("67,71,76");
+    expect(fired0).toBe("67,70,76");
     fired0 = null;
     patientAdvice = null;
     patientAdvice = await adfice.getAdviceForPatient(81);
@@ -650,14 +650,195 @@ test('verification3: conforms to spec', async () => {
 
 /*
 test('validatation1: fake patients for clinicians to check', async () => {
-let patientAdvice = await adfice.getAdviceForPatient(127);
-let fired0=null; patientAdvice=null;
+let patientAdvice = await adfice.getAdviceForPatient(131);
+let fired0 = patientAdvice.medication_advice[0].fired.toString();
+let fired1 = patientAdvice.medication_advice[1].fired.toString();
+console.log(131);
+console.dir(fired0 + "," + fired1);
+fired0=null; fired1= null; patientAdvice=null;
 
+patientAdvice = await adfice.getAdviceForPatient(132);
+fired0 = patientAdvice.medication_advice[0].fired.toString();
+fired1 = patientAdvice.medication_advice[1].fired.toString();
+let fired2 = patientAdvice.medication_advice[2].fired.toString();
+console.log(132);
+console.dir(fired0 + "," + fired1 + "," + fired2);
+fired0=null; fired1= null; fired2= null; patientAdvice=null;
 
-patientAdvice = await adfice.getAdviceForPatient(128);
+patientAdvice = await adfice.getAdviceForPatient(133);
+fired0 = patientAdvice.medication_advice[0].fired.toString();
+console.log(133);
+console.dir(fired0);
 fired0=null; patientAdvice=null;
-patientAdvice = await adfice.getAdviceForPatient(129);
+
+patientAdvice = await adfice.getAdviceForPatient(134);
+fired0 = patientAdvice.medication_advice[0].fired.toString();
+fired1 = patientAdvice.medication_advice[1].fired.toString();
+console.log(134);
+console.dir(fired0 + "," + fired1);
+fired0=null; fired1= null; patientAdvice=null;
+
+patientAdvice = await adfice.getAdviceForPatient(135);
+fired0 = patientAdvice.medication_advice[0].fired.toString();
+fired1 = patientAdvice.medication_advice[1].fired.toString();
+console.log(135);
+console.dir(fired0 + "," + fired1);
+fired0=null; fired1= null; patientAdvice=null;
+
+patientAdvice = await adfice.getAdviceForPatient(136);
+fired0 = patientAdvice.medication_advice[0].fired.toString();
+console.log(136);
+console.dir(fired0);
 fired0=null; patientAdvice=null;
-patientAdvice = await adfice.getAdviceForPatient(130);
+
+patientAdvice = await adfice.getAdviceForPatient(137);
+fired0 = patientAdvice.medication_advice[0].fired.toString();
+fired1 = patientAdvice.medication_advice[1].fired.toString();
+console.log(137);
+console.dir(fired0 + "," + fired1);
+fired0=null; fired1= null; patientAdvice=null;
+
+patientAdvice = await adfice.getAdviceForPatient(138);
+fired0 = patientAdvice.medication_advice[0].fired.toString();
+console.log(138);
+console.dir(fired0);
+fired0=null; patientAdvice=null;
+
+patientAdvice = await adfice.getAdviceForPatient(139);
+fired0 = patientAdvice.medication_advice[0].fired.toString();
+console.log(139);
+console.dir(fired0);
+fired0=null; patientAdvice=null;
+
+patientAdvice = await adfice.getAdviceForPatient(140);
+fired0 = patientAdvice.medication_advice[0].fired.toString();
+console.log(140);
+console.dir(fired0);
+fired0=null; patientAdvice=null;
+
+patientAdvice = await adfice.getAdviceForPatient(141);
+fired0 = patientAdvice.medication_advice[0].fired.toString();
+console.log(141);
+console.dir(fired0);
+fired0=null; patientAdvice=null;
+
+patientAdvice = await adfice.getAdviceForPatient(142);
+fired0 = patientAdvice.medication_advice[0].fired.toString();
+console.log(142);
+console.dir(fired0);
 });
+// rules covered:
+// "6","6b","6e","7","11","19a","19b","19c","19d","19f","20","21","22","23","24","25a","35","36","38","41","42","44","45","50","50b","51a","53","56","58","61","63","63b","64","66","67","76","78","80b","82","84","105"
 */
+
+/*
+Deliberately excluded:
+"8","13b","17","27a","30a","43","47","50a","54a","60","63a","65","75","83a","93","96","103","105b","107","111","114","119","127","130","133","136"
+"Allergy" rules are not implemented. The allergy data looks to be free text; if it isn't free text then I'm not sure what it is. Can't implement it until we know what we're getting.
+They are currently set to "not active" in the DB.
+
+"6a": N/A: Same as 6 and 6b, only with additioanl text indicting patient has epilepsy.
+"12": Just says that no indication was found
+"19": Same text as 19a, with use <6 mos instead of > 6 months
+"37": Adds option to change to furosemide if patient is on a different loop diuretic
+"40","40a","40b","40c": Add warnings about hyponatremia, hypokalemia, hypercalcemia, and jicht if present.
+
+
+,,,,,"73","79","80","80a","81","83","86","87","88","89","90","91","92","94","95","97","99","100","101","102","104","105a","105c","106","108","110","112","113","113a","113b","115","117","118","120","121","121a","122","123","124","125","126","128","129","131","132","132a","134","135","137"
+*/
+
+test('validatation2: fake patients for clinicians to check', async () => {
+/*
+144
+N05CD01  Flurazepam
+Morbus Parkinson
+"9"
+
+"haloperidol","N05AD01"
+"15","16","18"
+
+"levodopa","N04BA01"
+"26","27","27b"
+orthostatische hypotensie
+"26a"
+
+145 - NOT park
+"zolpidem","N05CF02"
+"cobicistat","V03AX03"
+"10"
+
+delier
+"quetiapine","N05AH04"
+"14","14a"
+
+"levodopa","N04BA01"
+"26b","27","27b"
+
+146 - NOT park
+N05BC01 : Meprobamate
+"13","13a"
+
+dementie
+"haloperidol","N05AD01"
+"14","14b","16","18"
+
+"sotalol","C07AA07"
+"57"
+diabetes
+"57a"
+atriumfibrilleren
+"59"
+
+147
+schizofrenie
+"haloperidol","N05AD01"
+"14c","16","18"
+
+"nicorandil","C01DX16"
+"54","55"
+
+148 - no delier, dement, of schizo; no hypert
+"haloperidol","N05AD01"
+"14d","16","18"
+
+"prazosin","C02CA01"
+"51","53"
+
+149
+fluoxetine N06AB03
+"19e"
+orthostatische hypotensie
+"25"
+
+"reserpine","C02AA02"
+"49"
+
+150
+"carbamazepine","N03AF01"
+"28","29","29a","30","31"
+
+"amlodipine","C08CA01"
+"46","48a"
+Morbus Parkinson
+orthostatische hypotensie
+"48"
+hypertensie
+"52"
+
+151
+"rosuvastatin, amlodipine en lisinopril","C10BX07"
+"64a","66" // and probably a lot more...
+
+152
+eGFR = 40
+"morfine","N02AA01"
+"68"
+
+153
+eGFR = 20
+"morfine","N02AA01"
+"69"
+
+*/
+
+});

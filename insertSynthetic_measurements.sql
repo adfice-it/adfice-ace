@@ -166,3 +166,5 @@ INSERT INTO patient_measurements
 (141,(select now()),50),
 (142,(select now()),74),
 (143,(select now()),25);
+
+/* fake patients for validation 2 */

@@ -161,3 +161,34 @@ INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, ge
 (143,(select NOW()),"apixaban","apixaban","B01AF02",(select NOW())),
 (143,(select NOW()),"Atorvastatine","atorvastatine","C10AA05",(select NOW())),
 (143,(select NOW()),"METOPROLOL","metoprolol","C07AB02",(select NOW()));
+
+/* fake patients for validation 2 */
+INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
+(144,(select NOW()),"Flurazepam","Flurazepam","N05CD01",(select NOW())),
+(144,(select NOW()),"levodopa","levodopa","N04BA01",'2019-02-11'),
+
+(145,(select NOW()),"Zolpidem","zolpidem","N05CF02",(select NOW())),
+(145,(select NOW()),"Cobicistat","cobicistat","V03AX03",(select NOW())),
+(145,(select NOW()),"quetiapine","quetiapine","N05AH04",'2019-02-11'),
+(145,(select NOW()),"levodopa","levodopa","N04BA01",'2019-02-11'),
+
+(146,(select NOW()),"Meprobamate","Meprobamate","N05BC01",(select NOW())),
+(146,(select NOW()),"haloperidol","haloperidol","N05AD01",'2019-02-11'),
+(146,(select NOW()),"sotalol","sotalol","C07AA07",'2019-02-11'),
+
+(147,(select NOW()),"haloperidol","haloperidol","N05AD01",'2019-02-11'),
+(147,(select NOW()),"nicorandil","nicorandil","C01DX16",'2019-02-11'),
+
+(148,(select NOW()),"haloperidol","haloperidol","N05AD01",'2019-02-11'),
+(148,(select NOW()),"prazosin","prazosin","C02CA01",'2019-02-11'),
+
+(149,(select NOW()),"fluoxetine","fluoxetine","N06AB03",'2019-02-11'),
+(149,(select NOW()),"reserpine","reserpine","C02AA02",'2019-02-11'),
+
+(150,(select NOW()),"carbamazepine","carbamazepine","N03AF01",'2019-02-11'),
+(150,(select NOW()),"Amlodipine","amlodipine","C08CA01",'2019-02-11'),
+
+(151,(select NOW()),"rosuvastatin, amlodipine and lisinopril","rosuvastatin, amlodipine en lisinopril","C10BX07",'2019-02-11'),
+
+(152,(select NOW()),"morfine","morfine","N02AA01",'2019-02-11'),
+(153,(select NOW()),"morfine","morfine","N02AA01",'2019-02-11');

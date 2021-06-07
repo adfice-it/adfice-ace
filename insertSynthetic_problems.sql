@@ -52,3 +52,22 @@ INSERT INTO patient_problems (patient_id, date_retrieved, problem_id, start_date
 (139,(select NOW()),4,'2019-02-11',"depressie", "depressie"),
 (140,(select NOW()),11,'2019-02-11',"angststoornis","angststoornis"),
 (141,(select NOW()),11,'2019-02-11',"angststoornis","angststoornis");
+
+/* fake patients for validation 2 */
+INSERT INTO patient_problems (patient_id, date_retrieved, problem_id, start_date, name, display_name) VALUES
+(144,(select NOW()),7,'2019-02-11',"parkinson","Morbus Parkinson"),
+(144,(select NOW()),3,'2019-02-11',"orthostatische-hypotensie", "orthostatische hypotensie"),
+
+(145,(select NOW()),13,'2019-02-11',"delier","delier"),
+
+(146,(select NOW()),14,'2019-02-11',"dementie","dementie"),
+(146,(select NOW()),26,'2019-02-11',"diabetes","diabetes"),
+(146,(select NOW()),22,'2019-02-11',"atriumfibrilleren","atriumfibrilleren"),
+
+(147,(select NOW()),15,'2019-02-11',"schizofrenie","schizofrenie"),
+
+(149,(select NOW()),3,'2019-02-11',"orthostatische-hypotensie", "orthostatische hypotensie"),
+
+(150,(select NOW()),7,'2019-02-11',"parkinson","Morbus Parkinson"),
+(150,(select NOW()),3,'2019-02-11',"orthostatische-hypotensie", "orthostatische hypotensie"),
+(150,(select NOW()),1,'2019-02-11',"hypertensie", "hypertensie");

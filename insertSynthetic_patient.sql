@@ -154,4 +154,15 @@ INSERT INTO patient (id,display_name,login_token,birth_date,age) VALUES
 INSERT INTO patient (id,display_name,login_token,birth_date,age) VALUES
 (143,"Mw. Usability","mwusability",'1940-06-16',81);
 
-
+/* fake patients for validation 2 */
+INSERT INTO patient (id,display_name,login_token,birth_date,age) VALUES
+(144,"Mr.SedPark","valid1",'1940-06-16',81),
+(145,"Mw.AntipsyDelier","valid2",'1940-06-16',81),
+(146,"Mr.AntipsyDement","valid3",'1940-06-16',81),
+(147,"Mr.AntipsySchizo","valid4",'1940-06-16',81),
+(148,"Mr.AntipsyNoReason","valid5",'1940-06-16',81),
+(149,"Mw.Prozac","valid6",'1940-06-16',81),
+(150,"Mr.Antiep","valid7",'1940-06-16',81),
+(151,"Mr.CombiStatin","valid8",'1940-06-16',81),
+(152,"Mw.NormalRenal","valid9",'1940-06-16',81),
+(153,"Mw.LowRenal","valid10",'1940-06-16',81);

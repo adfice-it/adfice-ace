@@ -23,3 +23,8 @@ INSERT INTO patient_labs (patient_id, date_retrieved, date_measured, lab_test_na
 (137,'2021-05-11','2020-05-11',"eGFR",35,"mL/min/1.73 m² "),
 (139,'2021-05-11','2021-05-11',"natrium",140,"mmol/l "),
 (140,'2021-05-11','2019-05-11',"natrium",140,"mmol/l ");
+
+/* fake patients for validation 2 */
+INSERT INTO patient_labs (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_result, lab_test_units) VALUES
+(152,(select NOW()),(select NOW()),"eGFR",40,"mL/min/1.73 m² "),
+(153,(select NOW()),(select NOW()),"eGFR",20,"mL/min/1.73 m² ");
