@@ -23,9 +23,12 @@ console.log('patient_id: ', patient_id);
      alt="Advice IT logo"
 >
 <div id="nav_container" style="display: inline;">
- <button type="button" class = "nav_button" id="pagina_vernieuwen">Pagina vernieuwen</button>
- <button type="button" class = "nav_button" id="definitief">Opslaan & definitief maken</button>
- <button type="button" class = "nav_button" id="help">Hoe gebruik ik dit systeem?</button>
+ <button type="button" class = "nav_button" id="pagina_vernieuwen">
+	 Pagina vernieuwen</button>
+ <button type="button" class = "nav_button" id="definitief">
+	 Opslaan &amp; definitief maken</button>
+ <button type="button" class = "nav_button" id="help">
+	 Hoe gebruik ik dit systeem?</button>
 </div>
 <div id="footer">
 Patient: <%= patient_id %>
@@ -299,7 +302,8 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <% } -%>
 </div><!-- div_clinician_view -->
 
-<% let nm_advices = patient_advice.advice_text_non_med -%>
+<% let nm_advices = patient_advice.advice_text_non_med; -%>
+<% let other_advices = patient_advice.advice_other_text; -%>
 
 <div id="div_patient_view" class="div_patient_view">
 <div class = "patient_header patient_view_only" id = "patient_med_advice_header">Advies over medicaties:</div>
@@ -331,14 +335,88 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <%     } -%>
 </div> <!-- advice_patient_area_<%= i %> -->
 <% } -%>
-</div> <!-- div_patient_view -->
-
 <div id="div_other_med_advice" class="div_other_advice">
 <p>Andere medicatie-gerelateerde advies:</p>
-<!-- TODO add a free text box where the doctor can type in whatever they want.
-     Like other free text boxes, this should be copied to the Epic and Patient
-     text. -->
+<!-- A free text box where the doctor can type in whatever they want.
+     Like other free text boxes, this should be copied to the Epic and
+     Patient texts.
+     The code supports multiple boxes only so it has the same shape as
+     other nearly duplicate code, which needs to be factored together.
+-->
+<%
+ for (let i = 0; i < other_advices.length; ++i ) {
+     let other_advice = other_advices[i];
+     let poa_prefix = "poa_" + i;
+     let rulenum = other_advice.medication_criteria_id;
+     let boxnum = other_advice.selectBoxNum;
+     let advice_id_base =`OTHER_${rulenum}_${boxnum}`;
+     let checkbox_id = 'cb_' + advice_id_base;
+     let row_id = 'pt_' + advice_id_base;
+-%>
+<div id="<%= row_id %>">
+<%         for (let k = 0; k < other_advice.patient_split.length; ++k) { -%>
+<%             let chunk = other_advice.patient_split[k]; -%>
+<%             let chunk_id = `pft_OTHER_${rulenum}_${boxnum}_${k}`; -%>
+<div id="<%= chunk_id %>">
+<%- md.makeHtml(chunk.text) -%>
+</div><!-- <%= chunk_id %> -->
+<%         } -%>
+</div><!-- <%= row_id %> -->
+<% } -%>
+</div> <!-- div_div_other_med_advice -->
+</div> <!-- div_patient_view -->
+
+<div id="div_other_med_advice_area" class="div_other_advice">
+<p>Andere medicatie-gerelateerde advies:</p>
+<!-- A free text box where the doctor can type in whatever they want.
+     Like other free text boxes, this should be copied to the Epic and
+     Patient texts.
+     The code supports multiple boxes only so it has the same shape as
+     other nearly duplicate code, which needs to be factored together.
+-->
+<% for (let i = 0; i < other_advices.length; ++i ) {
+       let other_advice = other_advices[i];
+       let other_prefix = "other_" + i;
+       let category = other_advice.medication_criteria_id;
+       let boxnum = other_advice.selectBoxNum;
+       let other_id_base =`OTHER_${category}_${boxnum}`;
+       let checkbox_id = 'cb_' + other_id_base;
+       let row_id = 'tr_' + other_id_base;
+-%>
+<div id="<%= row_id %>" class="other_advice_row">
+<span id="<%= other_prefix %>_sbn" class="other_advice_checkbox">
+<input type="checkbox"
+        id="<%= checkbox_id %>"
+        name="<%= checkbox_id %>"
+        value="<%= checkbox_id %>"
+        style="visibility:hidden"
+/>
+</span> <!-- <%= other_prefix %>_sbn -->
+<div id="<%= other_prefix %>_cdss_continer" class="other_cdss_containter">
+<div id="<%= other_prefix %>_cdss" class="other_cdss">
+<%         for (let k = 0; k < other_advice.cdss_split.length; ++k) { -%>
+<%             let chunk = other_advice.cdss_split[k]; -%>
+<%             let chunk_id = `ft_OTHER_${category}_${boxnum}_${k}`; -%>
+<%             if (chunk.editable) { -%>
+<input id="<%= chunk_id %>" type="text"
+        value="<%= chunk.text %>"/>
+<%             } else { -%>
+<div id="<%= chunk_id %>" class ="freetext">
+<% //
+    let cbString = md.makeHtml(chunk.text);
+    cbString = cbString.replace("<p>", "");
+    cbString = cbString.replace("</p>", "");
+%>
+<%- cbString -%>
+</div> <!-- <%= chunk_id %> -->
+<%             } -%>
+<%         } -%>
+</div> <!-- <%= other_prefix %>_cdss -->
+</div> <!-- other_cdss_container -->
+</div><!-- <%= row_id %> -->
+<% } -%>
 </div><!-- div_other_med_advice -->
+
 <div class="advice_header clinician_view_only" id="andere_advies_header" style="width:20%;">Andere risicofactoren</div>
 <div class="patient_header patient_view_only" id="header_overige_advies">Overige adviezen</div>
 <div id="non_med_advice_selection_area" class="non_med_advice_selection_area">
@@ -421,13 +499,6 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <% } -%>
 </div><!-- "non_med_advice_patient_area" -->
 
-<div id="div_other_nonmed_advice" class="div_other_advice">
-<p>Andere advies:</p>
-<!-- TODO add a free text box where the doctor can type in whatever they want.
-     Like other free text boxes, this should be copied to the Epic and Patient
-     text. -->
-</div><!-- div_other_nonmed_advice -->
-
 <div id="div_epic_box" class="div_epic_box"><!-- not in patient view -->
 <p>Tekst om te knippen en plakken in Epic:</p>
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
@@ -460,6 +531,31 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <%     } -%>
 </div> <!-- advice_epic_area_<%= i %> -->
 <% } -%>
+<!-- Begin OTHER -->
+<% for (let i = 0; i < other_advices.length; ++i ) {
+       let other_advice = other_advices[i];
+       let other_prefix = "other_" + i;
+       let category = other_advice.medication_criteria_id;
+       let boxnum = other_advice.selectBoxNum;
+       let other_id_base =`OTHER_${category}_${boxnum}`;
+       let row_id = 'et_' + other_id_base;
+-%>
+<div id="<%= row_id %>">
+<%         for (let k = 0; k < other_advice.epic_split.length; ++k) {
+               let chunk = other_advice.epic_split[k];
+               let chunk_id = `eft_OTHER_${category}_${boxnum}_${k}`;
+               let et = md.makeHtml(chunk.text);
+               et = et.replace("<p>", "");
+               et = et.replace("</p>", "");
+-%>
+<div id="<%= chunk_id %>">
+<%= et -%>
+</div><!-- <%= chunk_id %> -->
+<%         } -%>
+</div> <!-- <%= row_id %> -->
+<% } -%>
+<!-- End OTHER -->
+<!-- Begin NonMed -->
 <%
    for (let i = 0; i < nm_advices.length; ++i ) {
        let nm_advice = nm_advices[i];
@@ -482,6 +578,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <%         } -%>
 </div> <!-- <%= row_id %> -->
 <% } -%>
+<!-- End NonMed -->
 </div> <!-- epic_box -->
 
 <div class="whitespace"></div>

@@ -113,6 +113,22 @@ async function getAdviceTextsCheckboxes(rule_numbers) {
     return split_advice_texts_cdss_epic_patient(advice_text);
 }
 
+async function getAdviceOtherTextsCheckboxes() {
+    var sql = `/* adfice.getAdviceOtherTextsCheckboxes */
+        SELECT medication_criteria_id
+             , selectBoxNum
+             , selectBoxCategory
+             , selectBoxDesignator
+             , cdss
+             , epic
+             , patient
+          FROM med_other_text
+      ORDER BY medication_criteria_id
+             , selectBoxNum`;
+    let advice_text = await sql_select(sql);
+    return split_advice_texts_cdss_epic_patient(advice_text);
+}
+
 async function getAdviceTextsNoCheckboxes(rule_numbers) {
     if (rule_numbers == null || !rule_numbers.length) {
         return [];
@@ -497,6 +513,7 @@ async function getAdviceForPatient(patientIdentifier) {
     }
 
     let advice_text_non_med = await getAdviceTextsNonMedCheckboxes();
+    let advice_other_text = await getAdviceOtherTextsCheckboxes();
     let selected_advice = await getSelectionsForPatient(patient_id);
     let free_texts = await getFreetextsForPatient(patient_id);
 
@@ -515,6 +532,7 @@ async function getAdviceForPatient(patientIdentifier) {
     patient_advice.preselected_checkboxes = preselected_checkboxes;
     patient_advice.free_texts = free_texts;
     patient_advice.advice_text_non_med = advice_text_non_med;
+    patient_advice.advice_other_text = advice_other_text;
     patient_advice.risk_score = risk_score;
 
     return patient_advice;

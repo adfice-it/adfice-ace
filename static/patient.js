@@ -29,6 +29,8 @@ function switch_to_view(view) {
         "non_med_advice_selection_area");
     let non_med_advice_patient_area = document.getElementById(
         "non_med_advice_patient_area");
+    let div_other_med_advice_area = document.getElementById(
+        "div_other_med_advice_area");
 
     let button_clinician = document.getElementById("button_clinician_view");
     let button_condensed = document.getElementById("button_condensed_view");
@@ -57,6 +59,7 @@ function switch_to_view(view) {
         set_class_display("advice_no_checkbox", 'none');
         non_med_advice_selection_area.style.display = 'none';
         non_med_advice_patient_area.style.display = 'block';
+        div_other_med_advice_area.style.display = 'none';
         set_class_display("clinician_view_only", 'none');
         set_class_display("patient_view_only", 'block');
 
@@ -79,6 +82,7 @@ function switch_to_view(view) {
         set_class_display("advice_no_checkbox", 'none');
         non_med_advice_selection_area.style.display = 'block';
         non_med_advice_patient_area.style.display = 'none';
+        div_other_med_advice_area.style.display = 'block';
         set_class_display("clinician_view_only", 'block');
         set_class_display("patient_view_only", 'none');
 
@@ -100,6 +104,7 @@ function switch_to_view(view) {
         set_class_display("advice_no_checkbox", 'block');
         non_med_advice_selection_area.style.display = 'block';
         non_med_advice_patient_area.style.display = 'none';
+        div_other_med_advice_area.style.display = 'block';
         set_class_display("clinician_view_only", 'block');
         set_class_display("patient_view_only", 'none');
 

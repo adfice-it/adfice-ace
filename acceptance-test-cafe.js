@@ -153,12 +153,19 @@ test('Test selecting views', async t => {
 
     let checkbox0 = Selector('#cb_M01AB05_80b_2');
     let checkbox1 = Selector('#cb_M01AB05_78_3');
+    let checkboxOther = Selector('#cb_OTHER_other_1');
+
     let row0 = Selector('#tr_M01AB05_80b_2');
     let row1 = Selector('#tr_M01AB05_78_3');
+    let rowOther = Selector('#tr_OTHER_other_1');
+
     let epic0 = Selector('#et_M01AB05_80b_2');
     let epic1 = Selector('#et_M01AB05_78_3');
+    let epicOther = Selector('#et_OTHER_other_1');
+
     let patient0 = Selector('#pt_M01AB05_80b_2');
     let patient1 = Selector('#pt_M01AB05_78_3');
+    let patientOther = Selector('#pt_OTHER_other_1');
 
 
     // set checkbox0 to unchecked, checkbox1 to checked
@@ -172,6 +179,12 @@ test('Test selecting views', async t => {
             await t.click(checkbox1);
         }
         await t.expect(checkbox1.checked).ok();
+
+        if (await checkboxOther.checked) {
+            await t.click(checkboxOther);
+        }
+        await t.expect(checkboxOther.checked).notOk();
+
     }
 
     // the buttons should exist
@@ -215,6 +228,7 @@ test('Test selecting views', async t => {
     await t.expect(div_epic_box.visible).ok();
     await t.expect(row0.visible).ok();
     await t.expect(row1.visible).ok();
+    await t.expect(rowOther.visible).ok();
 
     // try switching to the patient view
     await t.click(button_patient_view);
@@ -225,6 +239,7 @@ test('Test selecting views', async t => {
     // the patient texts are only visible if checked in clinician view
     await t.expect(patient0.visible).notOk();
     await t.expect(patient1.visible).ok();
+    await t.expect(patientOther.visible).notOk();
 
     // check button colors
     if (test_button_style) {
@@ -287,6 +302,7 @@ test('Test selecting views', async t => {
     await t.expect(div_epic_box.visible).ok();
     await t.expect(row0.visible).ok();
     await t.expect(row1.visible).ok();
+    await t.expect(rowOther.visible).ok();
 
     // check colors one more time.
     if (test_button_style) {
@@ -313,6 +329,7 @@ test('Test selecting views', async t => {
     // the epic texts are only ever visible if checked
     await t.expect(epic0.visible).notOk();
     await t.expect(epic1.visible).ok();
+    await t.expect(epicOther.visible).notOk();
 });
 
 async function check_checkbox_and_freetext(id) {
