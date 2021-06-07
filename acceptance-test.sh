@@ -6,18 +6,18 @@ PORT=8888
 node AdficeWebserver.js $PORT &
 CHILD_PID=%1
 sleep 1
-FILE="patient-validation?id=68"
+FILE="patient-validation_id=68.out"
 
 rm -fv "$FILE"
 URL="localhost:${PORT}/patient-validation?id=68"
-wget $URL
-WGET_EXIT_CODE=$?
+curl --silent $URL > "$FILE"
+CURL_EXIT_CODE=$?
 
 kill $CHILD_PID
 
-if [ $WGET_EXIT_CODE -ne 0 ]; then
-	echo "wget failed" 2>&2
-	exit $WGET_EXIT_CODE;
+if [ $CURL_EXIT_CODE -ne 0 ]; then
+	echo "curl failed" 2>&2
+	exit $CURL_EXIT_CODE;
 fi
 
 if [ $(grep -c '63b' "$FILE") -eq 0 ]; then
