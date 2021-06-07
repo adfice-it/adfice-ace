@@ -172,7 +172,7 @@ test('getAdviceForPatient(1), no med rule advice', async () => {
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(0);
     let non_med_advice = patientAdvice.advice_text_non_med;
-    expect(non_med_advice.length).toBe(55);
+    expect(non_med_advice.length).toBe(56);
 })
 
 test('getAdviceForPatient(60), sparse patient', async () => {
