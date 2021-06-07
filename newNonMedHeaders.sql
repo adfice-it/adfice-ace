@@ -19,4 +19,5 @@ VALUES
 ('R','Slaapstoornis'),
 ('S','Delier'),
 ('T','Dementie'),
-('U','Depressie');
+('U','Depressie'),
+('V','Andere advies');

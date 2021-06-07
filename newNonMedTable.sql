@@ -137,4 +137,5 @@ Op deze website vindt u dingen die u moet regelen als uw naaste dementie heeft: 
 - Eet gezond en matig uw alcohol gebruik.
 - Probeer te blijven bewegen, doe sporten die u leuk vindt om te doen.
 
-Op de website van het Trimbos instituut kunt u meer informatie vinden over depressie bij ouderen: [https://www.trimbos.nl/kennis/ouderenpsychiatrie-nkop/stemmingsstoornissen-ouderen](https://www.trimbos.nl/kennis/ouderenpsychiatrie-nkop/stemmingsstoornissen-ouderen)');
+Op de website van het Trimbos instituut kunt u meer informatie vinden over depressie bij ouderen: [https://www.trimbos.nl/kennis/ouderenpsychiatrie-nkop/stemmingsstoornissen-ouderen](https://www.trimbos.nl/kennis/ouderenpsychiatrie-nkop/stemmingsstoornissen-ouderen)'),
+('V',1,0,'Andere advies: {{free text}}','Andere advies: {{free text}}','Andere advies: {{free text}}');
