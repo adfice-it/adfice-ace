@@ -16,3 +16,4 @@ UPDATE preselect_rules SET sql_condition="select true where (select true from pa
 UPDATE preselect_rules SET sql_condition="select true from patient_labs where patient_labs.patient_id = ? AND lab_test_name = \'eGFR\' AND cast(lab_test_result as decimal(5,2)) <= 30 AND date_measured >= CURRENT_DATE() - INTERVAL 11 MONTH limit 1;" where id =28;
 UPDATE preselect_rules SET sql_condition="select true from patient_medications where patient_id = ? and ATC_code in(\'N02BE01\',\'N02BE51\',\'N02BE71\',\'N02AJ01\',\'N02AJ06\',\'N02AJ13\',\'N02AJ17\') limit 1;" where id =29;
 UPDATE preselect_rules SET sql_condition="select true where (select patient_id from patient_problems where patient_id = ? and name IN(\'paraplegia\',\'dwaarslaesie\') limit 1) IS NULL;" where id =30;
+UPDATE preselect_rules SET sql_condition="select true;" where id in(10,11,21,33,34,35);

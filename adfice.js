@@ -59,7 +59,12 @@ async function sql_select(sql, params) {
         conn = await pool.getConnection();
         // This version of the driver seems to always place the "meta" in
         // with the rows, no matter which calling convention we try.
-        let result_set = await conn.query(sql, params);
+        let result_set;
+        if(!params || params.length == 0){
+        	result_set = await conn.query(sql);
+		} else {
+			result_set = await conn.query(sql, params);
+		}
         // So, we will filter out anything that is not in the iterator:
         let objects = [];
         for (let i = 0; i < result_set.length; ++i) {
@@ -236,8 +241,12 @@ async function evaluateSQLCondition(patientIdentifier, ruleNumber) {
 }
 
 async function evaluateSQL(sql, patientIdentifier) {
-    const count = sql.match(/\?/g).length;
-    autil.assert(count > 0);
+    let count;
+    let matches = sql.match(/\?/g);
+    if(matches){
+	    count = matches.length;
+	} else {count = 0;}
+
     let params = [];
     for (let i = 0; i < count; ++i) {
         params.push(patientIdentifier);

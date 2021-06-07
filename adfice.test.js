@@ -410,9 +410,6 @@ test('SQL error check', async () => {
     isConditionTrue = await adfice.isSQLConditionTrue(81, "70");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(80, "71");
-    expect(isConditionTrue).toBe(true);
-    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(85, "79");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
