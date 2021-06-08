@@ -95,27 +95,56 @@ function split_advice_texts_cdss_epic_patient(advice_texts) {
     return advice_texts;
 }
 
-async function getAdviceTextsCheckboxes(rule_numbers) {
-    if ((rule_numbers == null) || (!rule_numbers.length)) {
-        return [];
-    }
-    var sql = `/* adfice.getAdviceTextsCheckboxes */
+async function getAllAdviceTextsCheckboxes() {
+    var sql = `/* adfice.getAllAdviceTextsCheckboxes */
         SELECT m.medication_criteria_id
              , m.selectBoxNum
              , m.selectBoxCategory
              , m.cdss
              , m.epic
              , m.patient
+             , p.priority
           FROM med_advice_text m
      LEFT JOIN select_box_category_priority p
             ON (m.selectBoxCategory = p.select_box_category)
          WHERE selectBoxNum IS NOT NULL
-           AND medication_criteria_id IN(` +
-        question_marks(rule_numbers.length) +
-        `)
       ORDER BY p.priority ASC, m.selectBoxNum ASC, m.id ASC`;
-    let advice_text = await sql_select(sql, rule_numbers);
-    return split_advice_texts_cdss_epic_patient(advice_text);
+    let advice_text = await sql_select(sql);
+    let list = split_advice_texts_cdss_epic_patient(advice_text);
+    let all = {};
+    for (let i = 0; i < list.length; ++i) {
+        let row = list[i];
+        let rule_num = row.medication_criteria_id;
+        all[rule_num] = all[rule_num] || [];
+        all[rule_num].push(row);
+    }
+
+    return all;
+}
+
+async function getAdviceTextsCheckboxes(rule_numbers, all) {
+    if ((rule_numbers == null) || (!rule_numbers.length)) {
+        return [];
+    }
+    if (!all) {
+        all = await getAllAdviceTextsCheckboxes();
+    }
+    let narrowed = [];
+    for (let i = 0; i < rule_numbers.length; ++i) {
+        let rule_num = rule_numbers[i];
+        let subset = all[rule_num];
+        if (subset) {
+            Array.prototype.push.apply(narrowed, subset);
+        }
+    }
+
+    narrowed.sort((a, b) => {
+        return ((a.priority - b.priority) ||
+                (a.selectBoxNum - b.selectBoxNum) ||
+                (a.id - b.id));
+    });
+
+    return narrowed;
 }
 
 async function getAdviceOtherTextsCheckboxes() {
@@ -482,6 +511,7 @@ async function getAdviceForPatient(patientIdentifier) {
     }
 
     var rules = await getActiveRules();
+    var all_cb_advice = await getAllAdviceTextsCheckboxes();
 
     let evaluated = await ae.evaluateRules(meds, rules, patient_id,
         isSQLConditionTrue);
@@ -501,7 +531,7 @@ async function getAdviceForPatient(patientIdentifier) {
             continue;
         }
 
-        let advice_text = await getAdviceTextsCheckboxes(fired);
+        let advice_text = await getAdviceTextsCheckboxes(fired, all_cb_advice);
 
         let advice_text_no_box = await getAdviceTextsNoCheckboxes(fired);
 
@@ -648,6 +678,7 @@ module.exports = {
     getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
     getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
     getAdviceTextsNonMedCheckboxes: getAdviceTextsNonMedCheckboxes,
+    getAllAdviceTextsCheckboxes: getAllAdviceTextsCheckboxes,
     getFreetextsForPatient: getFreetextsForPatient,
     getMedsForPatient: getMedsForPatient,
     getSQLCondition: getSQLCondition,
