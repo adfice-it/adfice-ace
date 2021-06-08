@@ -103,12 +103,12 @@ orthostatic hypotension","","atc:N04","(problem:parkinson | problem:lewy-bodies-
 ("27","yes","no","Anti-parkinson drugs N04","all","{{preselect box 2}{SELECTOR(N04AA01 OR N04AA02 OR N04AA04 OR N04AB02 OR N04AC01) AND CONDITION()}}","atc:N04","",9),
 ("27a","yes","no","Anti-parkinson drugs N04","bijwerking","","atc:N04","allergic-reaction",9),
 ("27b","yes","no","Anti-parkinson drugs N04","all","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:N04","",9),
-("28","yes","no","Antiepileptics N03","all","","atc:N03","",10),
-("29","yes","no","anti-epileptica except barbituates","","","atc:N03 && ! atc:N03AA","",10),
+("28","yes","no","Antiepileptics N03 not gabapentin and pregbaline","all","","atc:N03","",10),
+("29","yes","no","anti-epileptica (not gabapentin and pregbaline) except barbituates","","","atc:N03 && ! atc:N03AA","",10),
 ("29a","yes", "no","Older generation antiepileptics","all","","atc:N03AB02 | atc:N03AG01 | atc:N03AF01", "",10),
-("30","yes","no","anti-epileptica except lamotrigine or levetiracetam","","","atc:N03 & ! atc:N03AX09 & ! atc:N03AX14","",10),
-("30a","yes","no","Antiepileptics N03","","","atc:N03","allergic-reaction",10),
-("31","yes","no","Antiepileptics N03","","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:N03","",10),
+("30","yes","no","anti-epileptica (not gabapentin and pregbaline) except lamotrigine or levetiracetam","","","atc:N03 & ! atc:N03AX09 & ! atc:N03AX14","",10),
+("30a","yes","no","Antiepileptics N03 not gabapentin and pregbaline","","","atc:N03","allergic-reaction",10),
+("31","yes","no","Antiepileptics N03 not gabapentin and pregbaline","","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:N03","",10),
 ("35","yes","no","Diuretica: C03 diuretics, C02L Antihypertensives and diuretics in combination OR C07 systemic beta-blokker (not eyedrops)","no concomittant ACE or AT-II (C09)","","(atc:C03 | atc:C02L | atc:C07 )","! (atc:C09)",13),
 ("36","yes","no","Lisdiuretica:
 C03CA Sulfonamides, plain 
@@ -482,7 +482,7 @@ or ATC S01BC (ocular NSAIDs)
 or ATC S01CC (ocular combinations with NSAIDs)
 or ATC D11AX18  (diclofenac topical)","NOT low renal function","","(atc:M01A | atc:M01B | atc:S01BC | atc:S01CC | atc:D11AX18) & ! atc:M01AB05 & ! atc:M01AB55","! measurement.eGFR.value <= 30",24),
 ("80b","yes","no","NSAIDs NOT naproxen and (excl. combinations w/ opioids)
-M01A Anti-inflammatory and antirheumatic products, non-steroids 
+M01A Anti-inflammatory and antirheumatic products, non-steroids (not combinations)
 M01B Anti-inflammatory/antirheumatic agents in combination 
 or ATC S01BC (ocular NSAIDs)
 or ATC S01CC (ocular combinations with NSAIDs)

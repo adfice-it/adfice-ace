@@ -513,7 +513,6 @@ test('Check preselect SQL', async () => {
     sql = "";
     result = null;
     sql = preselectRules[4]['sql_condition'].toString();
-console.log(sql);
     result = await (adfice.evaluateSQL(sql, 51));
     expect(result).toBe(true);
     preselectRules = null;
