@@ -165,4 +165,10 @@ INSERT INTO patient (id,display_name,login_token,birth_date,age) VALUES
 (150,"Mr.Antiep","valid7",'1940-06-16',81),
 (151,"Mr.CombiStatin","valid8",'1940-06-16',81),
 (152,"Mw.NormalRenal","valid9",'1940-06-16',81),
-(153,"Mw.LowRenal","valid10",'1940-06-16',81);
+(153,"Mw.LowRenal","valid10",'1940-06-16',81),
+(154,"Mw.Neuropath","valid11",'1940-06-16',81),
+(155,"Mw.Antihist","valid12",'1940-06-16',81),
+(156,"Mr.ED","valid13",'1940-06-16',81),
+(157,"Mr.DPP4","valid14",'1940-06-16',81),
+(158,"Mr.GLP1","valid15",'1940-06-16',81),
+(159,"Mr.SGLT2","valid16",'1940-06-16',81);

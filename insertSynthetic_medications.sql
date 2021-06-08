@@ -178,6 +178,9 @@ INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, ge
 
 (147,(select NOW()),"haloperidol","haloperidol","N05AD01",'2019-02-11'),
 (147,(select NOW()),"nicorandil","nicorandil","C01DX16",'2019-02-11'),
+(147,(select NOW()),"indometacin","indometacin","M01AB01",'2019-02-11'),
+(147,(select NOW()),"paracetamol, combinations excluding psycholeptics","paracetamol, combinations excluding psycholeptics","N02BE51",'2019-02-11'),
+(147,(select NOW()),"pancuronium","pancuronium","M03AC01",'2019-02-11'),
 
 (148,(select NOW()),"haloperidol","haloperidol","N05AD01",'2019-02-11'),
 (148,(select NOW()),"prazosin","prazosin","C02CA01",'2019-02-11'),
@@ -190,5 +193,37 @@ INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, ge
 
 (151,(select NOW()),"rosuvastatin, amlodipine and lisinopril","rosuvastatin, amlodipine en lisinopril","C10BX07",'2019-02-11'),
 
-(152,(select NOW()),"morfine","morfine","N02AA01",'2019-02-11'),
-(153,(select NOW()),"morfine","morfine","N02AA01",'2019-02-11');
+(152,(select NOW()),"tramadol","tramadol","N02AX02",'2019-02-11'),
+(152,(select NOW()),"diclofenac","diclofenac","M01AB05",'2019-02-11'),
+(152,(select NOW()),"pancuronium","pancuronium","M03AC01",'2019-02-11'),
+(152,(select NOW()),"omeprazol","omeprazol","A02BC01",'2019-02-11'),
+
+(153,(select NOW()),"morfine","morfine","N02AA01",'2019-02-11'),
+(153,(select NOW()),"indometacin","indometacin","M01AB01",'2019-02-11'),
+(153,(select NOW()),"methocarbamol","methocarbamol","M03BA03",'2019-02-11'),
+
+(154,(select NOW()),"gabapentin","gabapentin","N03AX12",'2019-02-11'),
+(154,(select NOW()),"gliclazide","gliclazide","A10BB09",'2019-02-11'),
+
+(155,(select NOW()),"promethazine","promethazine","R06AD02",'2019-02-11'),
+(155,(select NOW()),"dicyclomine","dicyclomine","A03AA07",'2019-02-11'),
+(155,(select NOW()),"flavoxaat","flavoxaat","G04BD02",'2019-02-11'),
+
+(156,(select NOW()),"butylscopolamine","butylscopolamine","A03BB01",'2019-02-11'),
+(156,(select NOW()),"tamsulosin","tamsulosin","G04CA02",'2019-02-11'),
+(156,(select NOW()),"sildenafil","sildenafil","G04BE03",'2019-02-11'),
+(156,(select NOW()),"fentolamine","fentolamine","G04BE05",'2019-02-11'),
+
+(157,(select NOW()),"sitagliptin","sitagliptin","A10BH01",'2019-02-11'),
+(157,(select NOW()),"rivastigmine","rivastigmine","N06DA03",'2019-02-11'),
+
+(158,(select NOW()),"lixisenatide","lixisenatide","A10BJ03",'2019-02-11'),
+(158,(select NOW()),"piracetam","piracetam","N06BX03",'2019-02-11'),
+
+(159,(select NOW()),"dapagliflozin","dapagliflozin","A10BK01",'2019-02-11'),
+(159,(select NOW()),"salmeterol","salmeterol","R03AC12",'2019-02-11');
+
+
+
+
+

@@ -410,6 +410,9 @@ test('SQL error check', async () => {
     isConditionTrue = await adfice.isSQLConditionTrue(81, "70");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
+	isConditionTrue = await adfice.isSQLConditionTrue(80, "70");
+	expect(isConditionTrue).toBe(true);
+    isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(85, "79");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
@@ -425,8 +428,8 @@ test('SQL error check', async () => {
     isConditionTrue = await adfice.isSQLConditionTrue(89, "81");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(87, "82");
-    expect(isConditionTrue).toBe(true);
+	isConditionTrue = await adfice.isSQLConditionTrue(87, "81");
+	expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(84, "83");
     expect(isConditionTrue).toBe(true);
@@ -446,7 +449,7 @@ test('SQL error check', async () => {
     isConditionTrue = await adfice.isSQLConditionTrue(95, "91");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(94, "92");
+    isConditionTrue = await adfice.isSQLConditionTrue(94, "91");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(102, "102");

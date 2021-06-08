@@ -493,12 +493,6 @@ M01B Anti-inflammatory/antirheumatic agents in combination
 or ATC S01BC (ocular NSAIDs)
 or ATC S01CC (ocular combinations with NSAIDs)
 or ATC D11AX18  (diclofenac topical)","unknown renal function","","atc:M01A | atc:M01B | atc:S01BC | atc:S01CC | atc:D11AX18","! measurement.eGFR",24),
-("82","yes","no","NSAIDs:(excl. combinations w/ opioids)
-M01A Anti-inflammatory and antirheumatic products, non-steroids 
-M01B Anti-inflammatory/antirheumatic agents in combination 
-or ATC S01BC (ocular NSAIDs)
-or ATC S01CC (ocular combinations with NSAIDs)
-or ATC D11AX18  (diclofenac topical)","old renal function measurement","","atc:M01A | atc:M01B | atc:S01BC | atc:S01CC | atc:D11AX18","measurement.eGFR.date > now-11-months",24),
 ("83","yes","no","NSAIDs:(excl. combinations w/ opioids)
 M01A Anti-inflammatory and antirheumatic products, non-steroids 
 M01B Anti-inflammatory/antirheumatic agents in combination 
@@ -535,7 +529,6 @@ OR
 ("89","yes","no","Muscle relaxants N03","normal renal function","","atc:M03","measurement.eGFR.value > 30 && measurement.eGFR.date <= now-11-months",25),
 ("90","yes","no","Muscle relaxants N03","low renal function","","atc:M03","measurement.eGFR.value <= 30 && measurement.eGFR.date <= now-11-months",25),
 ("91","yes","no","Muscle relaxants N03","unknown renal function","","atc:M03","! measurement.eGFR",25),
-("92","yes","no","Muscle relaxants N03","old renal function measurement","","atc:M03","measurement.eGFR.date > now-11-months",25),
 ("93","yes","no","Muscle relaxants N03","bijwerking","","atc:M03","allergic-reaction",25),
 ("94","yes","no","Muscle relaxants N03","all","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:M03","",25),
 ("95","yes","no","middelen bij neuropatische pijn N03AX12 gabapentin, N03AX16 pregabalin","all","","atc:N03AX12 | atc:N03AX16","",26),

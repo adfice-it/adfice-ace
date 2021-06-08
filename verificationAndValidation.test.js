@@ -431,7 +431,7 @@ test('verification2: conforms to spec', async () => {
     patientAdvice = null;
     patientAdvice = await adfice.getAdviceForPatient(87);
     fired0 = patientAdvice.medication_advice[0].fired.toString();
-    expect(fired0).toBe("78,80b,82,84");
+    expect(fired0).toBe("78,80b,81,84");
     fired0 = null;
     patientAdvice = null;
     patientAdvice = await adfice.getAdviceForPatient(88);
@@ -466,7 +466,7 @@ test('verification2: conforms to spec', async () => {
     patientAdvice = null;
     patientAdvice = await adfice.getAdviceForPatient(94);
     fired0 = patientAdvice.medication_advice[0].fired.toString();
-    expect(fired0).toBe("87,88,92,94");
+    expect(fired0).toBe("87,88,91,94");
     fired0 = null;
     patientAdvice = null;
     patientAdvice = await adfice.getAdviceForPatient(95);
@@ -649,6 +649,7 @@ test('verification3: conforms to spec', async () => {
 });
 
 /*
+// get the list of rules that have been fired by validation patients
 test('validatation1: fake patients for clinicians to check', async () => {
 let patientAdvice = await adfice.getAdviceForPatient(131);
 let fired0 = patientAdvice.medication_advice[0].fired.toString();
@@ -728,7 +729,7 @@ console.log(142);
 console.dir(fired0);
 });
 // rules covered:
-// "6","6b","6e","7","11","19a","19b","19c","19d","19f","20","21","22","23","24","25a","35","36","38","41","42","44","45","50","50b","51a","53","56","58","61","63","63b","64","66","67","76","78","80b","82","84","105"
+// "6","6b","6e","7","11","19a","19b","19c","19d","19f","20","21","22","23","24","25a","35","36","38","41","42","44","45","50","50b","51a","53","56","58","61","63","63b","64","66","67","76","78","80b","84","105"
 */
 
 /*
@@ -741,10 +742,9 @@ They are currently set to "not active" in the DB.
 "12": Just says that no indication was found
 "19": Same text as 19a, with use <6 mos instead of > 6 months
 "37": Adds option to change to furosemide if patient is on a different loop diuretic
+"122": Same as 123, but phrased for the patient NOT taking the preferred drug
 "40","40a","40b","40c": Add warnings about hyponatremia, hypokalemia, hypercalcemia, and jicht if present.
 
-
-,,,,,"73","79","80","80a","81","83","86","87","88","89","90","91","92","94","95","97","99","100","101","102","104","105a","105c","106","108","110","112","113","113a","113b","115","117","118","120","121","121a","122","123","124","125","126","128","129","131","132","132a","134","135","137"
 */
 
 test('validatation2: fake patients for clinicians to check', async () => {
@@ -789,13 +789,20 @@ diabetes
 atriumfibrilleren
 "59"
 
-147
+147 -- no eGFR
 schizofrenie
 "haloperidol","N05AD01"
 "14c","16","18"
 
 "nicorandil","C01DX16"
 "54","55"
+
+"indometacin","M01AB01"
+"80a","81"
+"paracetamol, combinations excluding psycholeptics","N02BE51"
+"83"
+"pancuronium","M03AC01"
+"91","94"
 
 148 - no delier, dement, of schizo; no hypert
 "haloperidol","N05AD01"
@@ -827,17 +834,83 @@ hypertensie
 
 151
 "rosuvastatin, amlodipine en lisinopril","C10BX07"
-"64a","66" // and probably a lot more...
+"64a","66"
 
 152
 eGFR = 40
-"morfine","N02AA01"
-"68"
+"tramadol","N02AX02"
+"68","73"
+
+"diclofenac","M01AB05"
+"79","80a"
+
+"pancuronium","M03AC01"
+"86","87","88","89"
+
+"omeprazol","A02BC01"
+"117","118","120",
 
 153
 eGFR = 20
 "morfine","N02AA01"
 "69"
+
+"indometacin","M01AB01"
+"80"
+
+"methocarbamol","M03BA03"
+"86","87","88","90"
+
+154
+"gabapentin","N03AX12"
+"95","97"
+
+"gliclazide","A10BB09"
+"121","121a","123","128"
+
+155
+"promethazine","R06AD02"
+"99","100","101","102","104"
+
+"dicyclomine","A03AA07"
+"105a","105c"
+
+"flavoxaat","G04BD02"
+"110","112"
+
+156
+"butylscopolamine","A03BB01"
+"106","108"
+
+"tamsulosin","G04CA02"
+"113","115",
+
+"sildenafil","G04BE03"
+"113","113a","115",
+
+"fentolamine","G04BE05"
+"113","113a","113b","115",
+
+157
+"sitagliptin","A10BH01"
+"124"
+
+"rivastigmine","N06DA03"
+"129","131"
+
+158
+"lixisenatide","A10BJ03"
+"125"
+
+"piracetam","N06BX03"
+"132","132a","134"
+
+159
+"dapagliflozin","A10BK01"
+"126"
+
+"salmeterol","R03AC12"
+"135","137"
 
 */
 

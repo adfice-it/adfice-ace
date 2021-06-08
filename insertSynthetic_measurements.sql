@@ -168,3 +168,21 @@ INSERT INTO patient_measurements
 (143,(select now()),25);
 
 /* fake patients for validation 2 */
+INSERT INTO patient_measurements
+(patient_id, date_retrieved,prediction_result) VALUES
+(144,(select now()),58),
+(145,(select now()),45),
+(146,(select now()),60),
+(147,(select now()),52),
+(148,(select now()),35),
+(149,(select now()),62),
+(150,(select now()),60),
+(151,(select now()),62),
+(152,(select now()),37),
+(153,(select now()),50),
+(154,(select now()),54),
+(155,(select now()),51),
+(156,(select now()),67),
+(157,(select now()),58),
+(158,(select now()),73),
+(159,(select now()),46);
