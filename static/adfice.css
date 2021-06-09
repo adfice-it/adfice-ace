@@ -98,6 +98,20 @@ body {
 	display: block;
 }
 
+.other_checkbox{
+	display: inline;
+	margin-bottom: 15px;
+}
+.other_cdss_containter{
+  display: inline-block;
+  width: 55%;
+  margin-top: 15px;
+}
+.other_cdss{
+  display: block;
+  width: 100%;
+}
+
 
 .advice_selection_area{
     background: #f5f5f5;
