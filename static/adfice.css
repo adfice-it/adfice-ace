@@ -130,6 +130,18 @@ body {
 .patient_med_cb_text{
 	display: inline;
 }
+.patient_othermed_cb_row{
+	display: inline-block;
+}
+.patient_othermed_cb_text{
+	display: inline;
+}
+.patient_nonmed_cb_row{
+	display: inline-block;
+}
+.patient_nonmed_cb_text{
+	display: inline;
+}
 
 .advice_selection_area{
     background: #f5f5f5;
