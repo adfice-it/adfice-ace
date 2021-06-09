@@ -323,12 +323,17 @@ for (let i = 0; i < medication_advice.length; ++i ) {
          let checkbox_id = 'cb_' + advice_id_base;
          let row_id = 'pt_' + advice_id_base;
 -%>
-<div id="<%= row_id %>">
+<div id="<%= row_id %>" class="patient_med_cb_row">
 <%         for (let k = 0; k < cb_advice.patient_split.length; ++k) { -%>
 <%             let chunk = cb_advice.patient_split[k]; -%>
 <%             let chunk_id = `pft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
-<div id="<%= chunk_id %>">
-<%- md.makeHtml(chunk.text) -%>
+<% //
+	let cbString = md.makeHtml(chunk.text);
+	cbString = cbString.replace("<p>", "");
+    	cbString = cbString.replace("</p>", "");
+%>
+<div id="<%= chunk_id %>" class="patient_med_cb_text">
+<%- cbString -%>
 </div><!-- <%= chunk_id %> -->
 <%         } -%>
 </div><!-- <%= row_id %> -->
