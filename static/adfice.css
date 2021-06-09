@@ -82,6 +82,7 @@ body {
 .patient_med_name{
 	font-weight: bold;
 	color: #f28931;
+	margin-top: 15px;
 }
 
 .td_nm_category_name{
@@ -126,18 +127,24 @@ body {
 
 .patient_med_cb_row{
 	display: inline-block;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 .patient_med_cb_text{
 	display: inline;
 }
 .patient_othermed_cb_row{
 	display: inline-block;
+	margin-top: 15px;
+	margin-bottom: 15px;
 }
 .patient_othermed_cb_text{
 	display: inline;
 }
 .patient_nonmed_cb_row{
 	display: inline-block;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 .patient_nonmed_cb_text{
 	display: inline;
