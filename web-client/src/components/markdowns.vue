@@ -17,6 +17,7 @@ export default {
     // using a render function instead of a template because of the need to produce html and escape lt and gt
     const { items, replacer } = this;
     return h('div', {
+      className: 'markdowns',
       innerHTML: items.map(text => `
       <div class="markdown">
         ${ replacer(markdown.toHTML((text || '').replace(/\</g, '&lt;').replace(/\>/g, '&gt;'))) }
@@ -25,3 +26,11 @@ export default {
   }
 };
 </script>
+<style scoped lang="scss">
+.markdowns {
+  display: inline-block;
+  .markdown {
+    display: inline-block;
+  }
+}
+</style>

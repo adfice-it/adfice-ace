@@ -5,6 +5,15 @@ form#patient_form(:class="{ [currentStep]: true }")
     .step(v-for="(step, index) in ['prepare', 'consult', 'advice']",
           :class="{ selected: currentStep === step }",
           @click="currentStep = step") {{ index + 1 }}
+  .nav
+    .nav-item#reload-epic Vernieuwen
+    //-.nav-item#reload-epic Pagina vernieuwen
+    //- todo: is there a synonym for finalize that we can use?
+    .nav-item#finalize Afronden
+    //-.nav-item#finalize Opslaan &amp; definitief maken
+    //- todo: can we use a word for tutorial instead of this sentence?
+    .nav-item#help Handleiding
+    //-.nav-item#help Hoe gebruik ik dit systeem?
   #footer
     .patient-id Patient: {{ id }}
     .stepper
@@ -21,6 +30,7 @@ form#patient_form(:class="{ [currentStep]: true }")
     .row
       .label age:
       .value {{ age }}
+    //- todo: use v-if and v-else on this element and a sibling to display the prediction not available messaging when needed
     .prediction
       .description
         .value {{ id }}%
@@ -34,9 +44,20 @@ form#patient_form(:class="{ [currentStep]: true }")
           .legend 100%
     #patient-medications
       #meds-with-rules Recommended measures:&nbsp;
-        a(v-for="({ ATC_code: href,  medication_name: title1, generic_name: title2 }, index) in medicationAdvice",
+        //-a(v-for="{ ATC_code: href,  medication_name: title1, generic_name: title2 } in record && record.meds_with_rules",
+        a(v-for="{ ATC_code: href,  medication_name: title1, generic_name: title2 } in medicationAdvice",
           :href="`#${ href }`") {{ (title1 || title2).trim() }}
-      #meds-without-rules Medicines without recommended measures: None
+      //-#meds-without-rules Medicines without recommended measures:&nbsp;
+      #meds-without-rules Other medicines:&nbsp;
+        span(v-if="!record || !record.meds_without_rules || !record.meds_without_rules.length") None
+        a(v-else, v-for="{ medication_name: title1, generic_name: title2 } in record && record.meds_without_rules") {{ (title1 || title2).trim() }}
+    #problems Problemen:&nbsp;
+      span(v-if="!record || !record.problems || !record.problems.length") None
+      a(v-else, v-for="{ display_name: title } in record && record.problems") {{ title }}
+    #labs Laboratorium:&nbsp;
+      span(v-if="!record || !record.labs || !record.labs.length") None
+      a(v-else, v-for="{ lab_test_name: title, lab_test_result: result, date_measured = {} } in record && record.labs || []") {{ title }}:{{ result }}&nbsp;
+        span.date ( {{ (JSON.stringify(date_measured) || '').substring(1,11) }} )
   #div-clinician-view
     //-.heading Joint decision-making model to stimulate engagement
     .heading Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren
@@ -71,7 +92,8 @@ form#patient_form(:class="{ [currentStep]: true }")
               .item(:id="`pt_${ atc }_${ rulenum }_${ boxnum }`",
                     v-for="{ medication_criteria_id: rulenum, selectBoxNum: boxnum, cdss_split: chunks } in cb_advices")
                 label
-                  markdowns(:items="chunks.map(({ text }) => text)", :replacer="html => html.replace(/\\<\\/?(?:p|br)\\>/g, '')")
+                  markdowns(:items="chunks.filter(({ editable }) => !editable).map(({ text }) => text)", :replacer="html => html.replace(/\\<\\/?(?:p|br)\\>/g, '')")
+                  input(v-for="{ text } in chunks.filter(({ editable }) => editable)", :value="text", type="text")
                   input(:id="`cb_${ atc }_${ rulenum }_${ boxnum }`",
                         @input="sync(`cb_${ atc }_${ rulenum }_${ boxnum }`)",
                         :checked="box_states[`cb_${ atc }_${ rulenum }_${ boxnum }`]", type="checkbox")
@@ -207,9 +229,15 @@ body {
     }
   }
   form#patient_form > .stepper {
-    position: fixed;
-    top: $padding;
-    right: $padding;
+    //position: fixed;
+    //top: $padding;
+    //right: $padding;
+    position: sticky;
+    top: 0.5rem;
+    left: 100%;
+    width: 6rem;
+    transform: translate3d(-140%, 0, 0);
+    margin-bottom: -5rem;
   }
   #footer {
     position: fixed;
@@ -359,18 +387,24 @@ body {
       }
     }
     #patient-medications {
-      #meds-with-rules {
-        a {
-          &:not(&:last-of-type) {
-            &::after {
-              content: ',';
-              display: inline-block;
-              font-weight: 500;
-              margin-right: 0.25rem;
-              text-decoration: none;
-              color: black;
-            }
+    }
+    #meds-with-rules,
+    #meds-without-rules,
+    #labs,
+    #problems {
+      a {
+        &:not(&:last-of-type) {
+          &::after {
+            content: ',';
+            display: inline-block;
+            font-weight: 500;
+            margin-right: 0.25rem;
+            text-decoration: none;
+            color: black;
           }
+        }
+        span.date {
+          opacity: 0.6;
         }
       }
     }
@@ -644,7 +678,9 @@ body {
                 transform-origin: center;
               }
               input[type="text"] {
-                margin-left: $half-padding;
+                display: inline-block;
+                margin-left: $padding;
+                line-height: 1.4rem;
                 &:focus::placeholder {
                   color: black;
                 }
@@ -652,6 +688,27 @@ body {
             }
           }
         }
+      }
+    }
+  }
+  .nav {
+    position: absolute;
+    top: $padding * 2;
+    right: $padding;
+    display: flex;
+    justify-content: flex-start;
+    > .nav-item {
+      cursor: pointer;
+      margin-left: $padding;
+      white-space: nowrap;
+      border-bottom: 1px solid #ccc;
+      opacity: 0.75;
+      transition: all 250ms ease-in-out;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      &:hover {
+        opacity: 1;
+        border-bottom-color: black;
       }
     }
   }
