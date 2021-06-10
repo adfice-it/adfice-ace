@@ -34,7 +34,7 @@ module.exports = {
 
   'firefox': {
     /*
-    The globals defined here are available only when the chrome testing env is being used
+    The globals defined here are available only when the firefox testing env is being used
        i.e. when running with --env firefox
     */
     /*
