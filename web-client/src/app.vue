@@ -21,7 +21,12 @@ form#patient_form(:class="{ [currentStep]: true }")
         :class="{ selected: currentStep === step }",
         @click="currentStep = step") {{ index + 1 }}
         .label {{ step }}
-    span#viewer_count
+    .status
+      .connected(v-if="wsInitRecieved") connected
+      .connecting(v-else) connecting
+      .viewers(:class="{ hidden: !wsInitRecieved }")
+        .label &mdash; viewers:&nbsp;
+        .count {{ viewers }}
   #patient-info
     .heading patient information:
     .row
@@ -95,8 +100,10 @@ form#patient_form(:class="{ [currentStep]: true }")
                   markdowns(:items="chunks.filter(({ editable }) => !editable).map(({ text }) => text)", :replacer="html => html.replace(/\\<\\/?(?:p|br)\\>/g, '')")
                   input(v-for="{ text } in chunks.filter(({ editable }) => editable)", :value="text", type="text")
                   input(:id="`cb_${ atc }_${ rulenum }_${ boxnum }`",
+                        :class="{ 'not-ready': !wsInitRecieved }",
                         @input="sync(`cb_${ atc }_${ rulenum }_${ boxnum }`)",
-                        :checked="box_states[`cb_${ atc }_${ rulenum }_${ boxnum }`]", type="checkbox")
+                        :checked="box_states[`cb_${ atc }_${ rulenum }_${ boxnum }`]",
+                        type="checkbox")
 </template>
 <script>
 import { markdown } from 'markdown';
@@ -107,8 +114,11 @@ let ws;
 export default {
   name: 'app',
   computed: {
-    ...mapGetters(['id', 'age', 'viewer_id', 'record', 'medicationAdvice', 'steps']),
+    ...mapGetters(['id', 'age', 'viewer_id', 'record', 'medicationAdvice', 'steps', 'wsInitRecieved']),
     ...vuexComputed('sideBySide', 'currentStep', 'box_states', 'field_entries'),
+    viewers() {
+      return this.record?.viewers || '';
+    }
   },
   methods: {
     ...mapActions(['addMessage']),
@@ -298,6 +308,59 @@ body {
         }
       }
     }
+    .status {
+      position: absolute;
+      top: 50%;
+      right: $padding * 2;
+      transform: translate3d(0, -50%, 0);
+      margin-top: 0.25rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-column-gap: 0.25rem;
+      .connecting {
+        text-transform: uppercase;
+        font-size: 1.2rem;
+        transform: translate3d(100%, 0.5rem, 0);
+        -webkit-animation: pulsate 2s ease-out infinite;
+        @-webkit-keyframes pulsate {
+          0% {
+            opacity: 0.125;
+          }
+          50% {
+            opacity: 1.0;
+          }
+          100% {
+            opacity: 0;
+          }
+        }
+      }
+      .connected {
+        //color: #bbb;
+        text-align: right;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        padding-top: 0.4rem;
+      }
+      .viewers {
+        display: flex;
+        transition: opacity 250ms ease-in-out;
+        &.hidden {
+          opacity: 0;
+        }
+        .label {
+          color: #a1a1a1;
+        }
+        .count {
+          font-weight: 500;
+          box-sizing: border-box;
+          padding: 0 0.5rem;
+          border: 1px solid #ccc;
+          border-radius: 0.25rem;
+        }
+      }
+    }
+
   }
   .stepper {
     position: fixed;
@@ -676,6 +739,10 @@ body {
                 margin-top: 2px;
                 transform: translate3d(0, -100%, 0) scale(2);
                 transform-origin: center;
+                &.not-ready {
+                  opacity: 0.25;
+                  pointer-events: none;
+                }
               }
               input[type="text"] {
                 display: inline-block;

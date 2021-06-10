@@ -8,7 +8,8 @@ const props = {
   sharedData: {},
   messages: [],
   box_states: {},
-  field_entries: {}
+  field_entries: {},
+  wsInitRecieved: false
 };
 const { freeze } = Object;
 const s = createStore(
@@ -27,6 +28,9 @@ const s = createStore(
           const { type, kind, box_states, field_entries } = value;
           if (kind === 'patient' && ['init', 'checkboxes'].includes(type)) {
             console.log('patient message', value);
+            if (type === 'init') {
+              await dispatch('wsInitRecieved', true);
+            }
             await dispatch('box_states', freeze(box_states));
             await dispatch('field_entries', freeze(field_entries));
           }
