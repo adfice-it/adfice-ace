@@ -9,6 +9,7 @@
     "deploy": "yarn build && now ./dist && now alias $(pbpaste) ace.qrl.sh",
     "deploy:qa": "yarn build && now ./dist && now alias $(pbpaste) ace-qa.qrl.sh",
     "deploy:tmp": "yarn build && now ./dist && now alias $(pbpaste) ace-tmp.qrl.sh",
+    "deploy:pr": "yarn build && now ./dist && now alias $(pbpaste) ace-pr.qrl.sh",
     "deploy:api": "yarn build && now ./src/server/ && now alias $(pbpaste) ace-api.qrl.sh"
   },
   "dependencies": {
