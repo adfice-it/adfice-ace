@@ -24,7 +24,7 @@ form#patient_form(:class="{ [currentStep]: true }")
     .status
       .connected(v-if="wsInitRecieved && wsOpen") connected
       .connecting(v-else) connecting
-      .viewers(:class="{ hidden: !wsInitRecieved }")
+      .viewers(:class="{ hidden: !wsInitRecieved || !wsOpen }")
         .label &mdash; viewers:&nbsp;
         .count {{ viewers }}
   #patient-info
