@@ -24,7 +24,7 @@ console.log('patient_id: ', patient_id);
 >
 <div id="nav_container" style="display: inline;">
  <button type="button" class = "nav_button" id="page_renew">
-	 Pagina vernieuwen</button>
+	 Haal gewijzigde pati&euml;ntdata op</button>
  <button type="button" class = "nav_button" id="definitive">
 	 Opslaan &amp; definitief maken</button>
  <button type="button" class = "nav_button" id="help">
@@ -78,7 +78,7 @@ Ga direct naar medicijnen met aanbevolen maatregelen:
 </span><!-- meds_with_rules -->
 <br/>
 <span id="meds_without_rules">
-Medicijnen zonder aanbevolen maatregelen:
+<br/>Medicijnen zonder aanbevolen maatregelen:
 <%     let other_meds = patient_advice.meds_without_rules; -%>
 <% if (other_meds.length == 0) { %>
 Geen
@@ -132,6 +132,7 @@ Geen
 </span>
 <% } -%>
 </span>
+<span"><br/><br/>Ga direct naar: <a href="#andere_advies_header">Andere risicofactoren</a></span>
 </div>
 <div id="div_clinician_view" class="div_clinician_view">
 <strong>Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren</strong>
@@ -148,8 +149,9 @@ Geen
 <div id="sdm2" class ="sdm">
 <span class="instruction_heading">Stap 2: Bespreek mogelijke behandeldoelen<br/></span>
 <span class="instruction_step">Wat past wel/niet bij de pati&euml;nt?<br/></span>
-<span class="instruction_step">Waar staat voor de pati&euml;nt kwaliteit van leven foor?<br/>
+<span class="instruction_step">Waar staat voor de pati&euml;nt kwaliteit van leven voor?<br/>
 &nbsp;&nbsp;Wat draagt hier aan bij en wat staat dit in de weg?<br/></span>
+<span class="instruction_step">Vraag uitdrukkelijk na wat de wensen van de patiënt zijn.<br/></span>
 </div><!-- sdm2 -->
 
 <div id="sdm3" class ="sdm">
@@ -206,22 +208,6 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <div id="div_advice_<%= atc %>">
 <div id="div_med_name_<%= atc %>" class = "med_name"><%= ucfirst(row.medication_name).trim() %></div>
  <a href="<%= med_url %>" class="fklink" target="_blank">FK</a>
-<div id="div_refpages_<%= atc %>"
-    class="refpages">Meer informatie over het advies:
-<%
-    let referenceNumbers = row.referenceNumbers;
-        for (let k = 0; k < referenceNumbers.length; ++k ) {
-            let ref_page_num = referenceNumbers[k].reference;
-        if (k) {
--%>
-,
-<%          } -%>
-<span id="atc_ref_page_<%= atc %>_<%= ref_page_num %>" class="atc_ref_page">
-<a href="https://kik.amc.nl/falls/refpages/refpage<%= ref_page_num %>.html"
-   target="_blank"><%= ref_page_num %></a>
-</span><!-- atc_ref_page_<%= atc %>_<%= ref_page_num %> -->
-<% } -%>
-</div><!-- div_refpages_<%= atc %> -->
 <div id="advice_<%= atc %>" class="advice_no_checkbox">
 <strong>Advies:</strong>
 <%     let advices = row.adviceTextsNoCheckboxes; -%>
@@ -247,8 +233,25 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 </div>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
 <div id="advice_selection_area_<%= i %>" class="advice_selection_area">
-<p><strong>Maatregelen (aangekruist indien aanbevolen):</strong></p>
+<div class="checkbox_section_header">Maatregelen (aangekruist indien aanbevolen):</div>
+<div id="div_refpages_<%= atc %>"
+    class="refpages">Meer informatie over het advies en de aanbeveling(en):
+<%
+    let referenceNumbers = row.referenceNumbers;
+        for (let k = 0; k < referenceNumbers.length; ++k ) {
+            let ref_page_num = referenceNumbers[k].reference;
+        if (k) {
+-%>
+,
+<%          } -%>
+<span id="atc_ref_page_<%= atc %>_<%= ref_page_num %>" class="atc_ref_page">
+<a href="https://kik.amc.nl/falls/refpages/refpage<%= ref_page_num %>.html"
+   target="_blank"><%= ref_page_num %></a>
+</span><!-- atc_ref_page_<%= atc %>_<%= ref_page_num %> -->
+<% } -%>
+</div><!-- div_refpages_<%= atc %> -->
 <table>
+<tr><td>Kies een of meer maatregel(en):</td><td></td></tr>
 <%
      for (let j = 0; j < cb_advices.length; ++j ) {
          let cb_advice = cb_advices[j];
@@ -443,20 +446,21 @@ for (let i = 0; i < medication_advice.length; ++i ) {
        let category_name = nm_advice.category_name;
        if (category_name != last_category_name) {
            last_category_name = category_name;
-	   category_display_name = category_name;
-       }
+	   category_display_name = category_name; %>
+<br/>	   
+<%       }
 -%>
 <div id="<%= row_id %>" class="nonmed_row">
 <div id="td_nm_category_name_<%= nm_advice.category_id %>_<%= boxnum %>"
     class="td_nm_category_name"><%= category_display_name %></div>
-<span id="<%= nma_prefix %>_sbn" class="nonmed_checkbox">
+<div id="<%= nma_prefix %>_sbn" class="nonmed_checkbox">
 <input type="checkbox"
         id="<%= checkbox_id %>"
         name="<%= checkbox_id %>"
         value="<%= checkbox_id %>"
         style="visibility:hidden"
 />
-</span> <!-- <%= nma_prefix %>_sbn -->
+</div> <!-- <%= nma_prefix %>_sbn -->
 <div id="<%= nma_prefix %>_cdss_continer" class="nonmed_cdss_containter">
 <div id="<%= nma_prefix %>_cdss" class="nonmed_cdss">
 <%         for (let k = 0; k < nm_advice.cdss_split.length; ++k) { -%>

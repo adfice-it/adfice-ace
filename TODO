@@ -24,7 +24,7 @@ Mid:
   * which advice was (in the end) selected
   * which advice had been pre-selected (and thus, was it unchecked)
 * sanity check choices of checkboxes
-* fetch data button and send to portal button should be at top (by help)
+* try to use "deeplinken" for FK links
 
 Low Prio:
 * specify DB port, separate instance for local human testing, automated testing
@@ -33,3 +33,15 @@ Low Prio:
 * naming consistency thoughout the html
 * create table atc_code(id int PK, code varchar(100))
 * copy-pasteable (text only) version of patient advice
+
+Wish list from designers (not prioritized):
+* FK buttons are not a blue circle yet and the "open new tab" icons are missing
+* Buttons to hide advice box and non-selected checkbox rows for individual medications in clinician view
+* The designers may decide to have **placeholder text** instead of **pre-filled** text for the free text boxes. (They actually asked to do both; I veto'd this suggestion.)
+
+To-do for rules:
+* Add word "overige" to the plain free text box for each medication (also add to specification)
+* Make sure every text ends with a period. If there is a free text box, the period should come before the free text box.
+* Make sure that all texts begin with a capital letter.
+* Make sure that all texts end with a period (before the free text box if it has one).
+* Change the FK links in the Markdown to use the icon.
