@@ -93,6 +93,10 @@ form#patient_form(:class="{ [currentStep]: true }")
           .measures
             //-.heading Measures (ticked if recommended):
             .heading Maatregelen (aangekruist indien aanbevolen):
+              .ref-pages 
+                .label ace
+                .items
+                  .item(v-for="{ reference } in referenceNumbers") {{ reference }}
             .items
               .item(:id="`pt_${ atc }_${ rulenum }_${ boxnum }`",
                     v-for="{ medication_criteria_id: rulenum, selectBoxNum: boxnum, cdss_split: chunks } in cb_advices")
@@ -718,7 +722,33 @@ body {
           border-radius: $half-padding;
           background-color: #efefef;
           & > .heading {
-            font-size: 1.3rem;
+            font-size: 1.3rem;            
+            position: relative;
+            .ref-pages {
+              position: absolute;
+              top: 50%;
+              right: $padding;
+              transform: translate3d(0, -50%, 0);
+              display: flex;
+              white-space: nowrap;
+              .label {
+                margin-right: $half-padding;
+              }
+              .items {
+                display: flex;
+                justify-content: flex-start;
+                .item {
+                  &::after{
+                    content: ', ';
+                  }
+                  &:last-of-type{ 
+                    &::after { 
+                      content: '';
+                    }
+                  }
+                }
+              }
+            }
           }
           & > .items {
             border-radius: $half-padding;
