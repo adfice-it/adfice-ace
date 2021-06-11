@@ -9,7 +9,8 @@ const props = {
   messages: [],
   box_states: {},
   field_entries: {},
-  wsInitRecieved: false
+  wsInitRecieved: false,
+  wsReadyState: null
 };
 const { freeze } = Object;
 const s = createStore(
@@ -22,17 +23,24 @@ const s = createStore(
         }
       },
       actions: {
-        async addMessage({ dispatch, commit, getters: { sharedData } }, value) {
+        async addMessage({ dispatch, commit, getters: { sharedData, viewer_id } }, value) {
           await dispatch('sharedData', freeze({ ...sharedData, ...value, updated: new Date() * 1 }));
           commit('addMessage', value);
-          const { type, kind, box_states, field_entries } = value;
-          if (kind === 'patient' && ['init', 'checkboxes'].includes(type)) {
+          const { type, kind, box_states, field_entires: field_entries } = value;
+          if (kind === 'patient' && ['init', 'checkboxes', 'freetexts'].includes(type)) {
             console.log('patient message', value);
+            const differentViewer = (value.viewer_id + '') !== (viewer_id + '');
             if (type === 'init') {
               await dispatch('wsInitRecieved', true);
             }
-            await dispatch('box_states', freeze(box_states));
-            await dispatch('field_entries', freeze(field_entries));
+            if (differentViewer) {
+              if (box_states) {
+                await dispatch('box_states', freeze(box_states));
+              }
+              if (field_entries) {
+                await dispatch('field_entries', freeze(field_entries));
+              }
+            }
           }
         }
       },
@@ -52,13 +60,17 @@ const s = createStore(
         medicationAdvice(state, { record: { medication_advice } }) {
           return medication_advice;
         },
-        record(state, { initialJSON, sharedData }) {
-          return { id: initialJSON?.patientId || 'no id', ...(initialJSON?.patient_advice || {}), ...sharedData };
+        record(state, { initialJSON, sharedData, viewer_id }) {
+          return { id: initialJSON?.patientId || 'no id', ...(initialJSON?.patient_advice || {}), ...sharedData, viewer_id };
         },
         lastMessage({ messages }) {
           return messages[messages.length - 1];
         },
+        wsOpen(state, { wsReadyState }) {
+          return wsReadyState === 1;
+        },
         steps() {
+          // todo: dutch version
           return [
             [
               'Step 1:',

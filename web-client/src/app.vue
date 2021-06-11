@@ -22,7 +22,7 @@ form#patient_form(:class="{ [currentStep]: true }")
         @click="currentStep = step") {{ index + 1 }}
         .label {{ step }}
     .status
-      .connected(v-if="wsInitRecieved") connected
+      .connected(v-if="wsInitRecieved && wsOpen") connected
       .connecting(v-else) connecting
       .viewers(:class="{ hidden: !wsInitRecieved }")
         .label &mdash; viewers:&nbsp;
@@ -97,8 +97,12 @@ form#patient_form(:class="{ [currentStep]: true }")
               .item(:id="`pt_${ atc }_${ rulenum }_${ boxnum }`",
                     v-for="{ medication_criteria_id: rulenum, selectBoxNum: boxnum, cdss_split: chunks } in cb_advices")
                 label
-                  markdowns(:items="chunks.filter(({ editable }) => !editable).map(({ text }) => text)", :replacer="html => html.replace(/\\<\\/?(?:p|br)\\>/g, '')")
-                  input(v-for="{ text } in chunks.filter(({ editable }) => editable)", :value="text", type="text")
+                  markdowns(:items="separate(chunks).readOnly.map(({ text }) => text)", :replacer="html => html.replace(/\\<\\/?(?:p|br)\\>/g, '')")
+                  input(v-for="({ text }, index) in separate(chunks).readWrite",
+                        :id="`ft_${ atc }_${ rulenum }_${ boxnum }_${ separate(chunks).readOnly.length + index }`",
+                        @keyup="({ target: { id, value } }) => sync(id, value)",
+                        :value="wsInitRecieved ? field_entries[`ft_${ atc }_${ rulenum }_${ boxnum }_${ separate(chunks).readOnly.length + index }`] || '' : text",
+                        type="text")
                   input(:id="`cb_${ atc }_${ rulenum }_${ boxnum }`",
                         :class="{ 'not-ready': !wsInitRecieved }",
                         @input="sync(`cb_${ atc }_${ rulenum }_${ boxnum }`)",
@@ -110,12 +114,13 @@ import { markdown } from 'markdown';
 import { mapGetters, mapActions } from 'vuex';
 import { vuexComputed } from '@/helpers';
 import markdowns from '@/components/markdowns';
+let syncTimer;
 let ws;
 export default {
   name: 'app',
   computed: {
-    ...mapGetters(['id', 'age', 'viewer_id', 'record', 'medicationAdvice', 'steps', 'wsInitRecieved']),
-    ...vuexComputed('sideBySide', 'currentStep', 'box_states', 'field_entries'),
+    ...mapGetters(['id', 'age', 'viewer_id', 'record', 'medicationAdvice', 'steps', 'wsInitRecieved', 'wsOpen']),
+    ...vuexComputed('sideBySide', 'currentStep', 'box_states', 'field_entries', 'wsReadyState'),
     viewers() {
       return this.record?.viewers || '';
     }
@@ -126,31 +131,67 @@ export default {
       // todo: patient 4 strong tag?
       return markdown.toHTML(text.replace(/\</g, '&lt;').replace(/\>/g, '&gt;'));
     },
+    separate(chunks) {
+      return chunks.reduce((r, chunk) => {
+        r[chunk.editable && 'readWrite' || 'readOnly'].push(chunk);
+        return r;
+      }, { readWrite: [], readOnly: [] });
+    },
     async sync(key, value) {
-      const { box_states, field_entries, id: patient_id, viewer_id } = this;
-      const group = key in box_states && box_states || field_entries;
+      const { box_states, field_entries, id: patient_id, viewer_id, viewers } = this;
+      const group = key in box_states && box_states || field_entries || {};
       if (group) {
         const was = group[key];
+        let delay = 0;
         let checkbox_id;
+        let changed = true;
         const message = {
-          viewer_id,
+          viewer_id: viewer_id + '',
           patient_id
         };
+        const isBox = group === box_states;
+        const { freeze } = Object;
         if (group === box_states) {
           message.type = 'checkboxes';
           message.checkbox_id = key;
           message.checkbox_checked = !was;
-          await (this.box_states = message.box_states = { ...box_states, [key]: !was });
+          await (this.box_states = message.box_states = freeze({ ...box_states, [key]: !was }));
         } else {
-          field_entries[key] = value;
+          changed = value !== was;
+          delay = 200;
+          message.type = 'freetexts';
+          message.textfield = key;
+          // todo: fix typo in concert with ejs
+          //await (this.field_entries = message.field_entries = freeze({ ...field_entries, [key]: value }));
+          await (this.field_entries = message.field_entires = freeze({ ...field_entries, [key]: value }));
         }
-        ws.send(JSON.stringify(message, null, 4));
+        message.viewers = viewers;
+        message.kind = 'patient';
+        // for textboxes, ignore arrow keys, shift, meta, alt, control, etc.
+        if (changed) {
+          clearTimeout(syncTimer);
+          syncTimer = setTimeout(async() => {
+            try {
+              const { readyState } = ws;
+              await (this.wsReadyState = readyState);
+              if (this.wsOpen) {
+                ws.send(JSON.stringify(message, null, 4));
+              } else {
+                // todo: write code to attempt to re-establish the connection, use exponetial backoff
+                console.log('websocket not open', readyState);
+              }
+            } catch({ messsage }) {
+              console.log('ws send error', message);
+            }
+          }, delay);
+        }
       }
     },
     onMessage(e) {
       const { addMessage } = this;
       let data;
       try {
+        this.wsReadyState = ws.readyState;
         data = JSON.parse(e.data);
         addMessage(data);
       } catch ({ message }) {
@@ -248,6 +289,12 @@ body {
     width: 6rem;
     transform: translate3d(-140%, 0, 0);
     margin-bottom: -5rem;
+    &::before {
+      width: 10rem;
+    }
+    &::after {
+      width: 5rem;
+    }
   }
   #footer {
     position: fixed;
@@ -271,6 +318,13 @@ body {
       bottom: $half-padding;
       transform: translate3d(-50%, 0, 0);
       grid-column-gap: 15rem;
+      &::before {
+        right: 0;
+      }
+      &::after {
+        //first connector
+        right: 50%;
+      }
       .step {
         line-height: 1rem;
         padding-top: $padding;
@@ -374,7 +428,7 @@ body {
       position: absolute;
       top: 50%;
       left: 2rem;
-      right: 0;
+      //right: 0;
       height: 2px;
       background-color: #efefef;
       transform: translate3d(0, -50%, 0);
@@ -383,7 +437,7 @@ body {
     }
     &::after {
       //first connector
-      right: 50%;
+      //right: 50%;
     }
     > .step {
       position: relative;
