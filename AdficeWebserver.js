@@ -132,7 +132,7 @@ async function init_patient_data(ws, kind, id) {
 
     message.type = 'init';
     message.info = 'hello';
-    message['field_entires'] = freetexts;
+    message['field_entries'] = freetexts;
     message['box_states'] = selections;
 
     let msg_string = JSON.stringify(message, null, 4);
@@ -189,7 +189,7 @@ server.on('upgrade', function upgrade(request, socket, head) {
                     if (message.type == 'freetexts') {
                         let patient_id = id;
                         let viewer = message.viewer_id;
-                        let freetexts = message['field_entires'];
+                        let freetexts = message['field_entries'];
                         await adfice.setFreetextsForPatient(
                             patient_id, viewer, freetexts);
                     }

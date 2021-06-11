@@ -152,12 +152,12 @@ function freetextentered(textfield) {
     message.type = 'freetexts';
     message.textfield = textfield.id;
 
-    message['field_entires'] = {};
+    message['field_entries'] = {};
     // TODO: this will need to change if the two views contain the same
     // text fields, as they will be duplicate/conflicting
     let elementList = document.querySelectorAll("input[type='text']");
     elementList.forEach((field) => {
-        message['field_entires'][field.id] = field.value;
+        message['field_entries'][field.id] = field.value;
     });
 
     let msg_str = JSON.stringify(message, null, 4);
@@ -203,10 +203,10 @@ function process_checkboxes(message) {
 }
 
 function process_freetexts(message) {
-    if (!('field_entires' in message)) {
+    if (!('field_entries' in message)) {
         return;
     }
-    let fields = message['field_entires'];
+    let fields = message['field_entries'];
     // TODO? save cursor position of box we are currently typing in?
     const field_ids = Object.keys(fields);
     field_ids.forEach((field_id, index) => {
