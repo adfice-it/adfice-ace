@@ -410,8 +410,8 @@ test('SQL error check', async () => {
     isConditionTrue = await adfice.isSQLConditionTrue(81, "70");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-	isConditionTrue = await adfice.isSQLConditionTrue(80, "70");
-	expect(isConditionTrue).toBe(true);
+    isConditionTrue = await adfice.isSQLConditionTrue(80, "70");
+    expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(85, "79");
     expect(isConditionTrue).toBe(true);
@@ -428,8 +428,8 @@ test('SQL error check', async () => {
     isConditionTrue = await adfice.isSQLConditionTrue(89, "81");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-	isConditionTrue = await adfice.isSQLConditionTrue(87, "81");
-	expect(isConditionTrue).toBe(true);
+    isConditionTrue = await adfice.isSQLConditionTrue(87, "81");
+    expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
     isConditionTrue = await adfice.isSQLConditionTrue(84, "83");
     expect(isConditionTrue).toBe(true);
@@ -470,9 +470,9 @@ test('Check preselect SQL', async () => {
     sql = "";
     result = null;
     sql = preselectRules[2]['sql_condition'].toString();
-	result = await (adfice.evaluateSQL(sql, 8));
-	expect(result).toBe(true);
-	sql = "";
+    result = await (adfice.evaluateSQL(sql, 8));
+    expect(result).toBe(true);
+    sql = "";
     result = null;
     sql = preselectRules[3]['sql_condition'].toString();
     result = await (adfice.evaluateSQL(sql, 8));

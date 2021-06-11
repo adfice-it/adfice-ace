@@ -747,170 +747,170 @@ They are currently set to "not active" in the DB.
 */
 
 test('validatation2: fake patients for clinicians to check', async () => {
-/*
-144
-N05CD01  Flurazepam
-Morbus Parkinson
-"9"
+    /*
+    144
+    N05CD01  Flurazepam
+    Morbus Parkinson
+    "9"
 
-"haloperidol","N05AD01"
-"15","16","18"
+    "haloperidol","N05AD01"
+    "15","16","18"
 
-"levodopa","N04BA01"
-"26","27","27b"
-orthostatische hypotensie
-"26a"
+    "levodopa","N04BA01"
+    "26","27","27b"
+    orthostatische hypotensie
+    "26a"
 
-145 - NOT park
-"zolpidem","N05CF02"
-"cobicistat","V03AX03"
-"10"
+    145 - NOT park
+    "zolpidem","N05CF02"
+    "cobicistat","V03AX03"
+    "10"
 
-delier
-"quetiapine","N05AH04"
-"14","14a"
+    delier
+    "quetiapine","N05AH04"
+    "14","14a"
 
-"levodopa","N04BA01"
-"26b","27","27b"
+    "levodopa","N04BA01"
+    "26b","27","27b"
 
-146 - NOT park
-N05BC01 : Meprobamate
-"13","13a"
+    146 - NOT park
+    N05BC01 : Meprobamate
+    "13","13a"
 
-dementie
-"haloperidol","N05AD01"
-"14","14b","16","18"
+    dementie
+    "haloperidol","N05AD01"
+    "14","14b","16","18"
 
-"sotalol","C07AA07"
-"57"
-diabetes
-"57a"
-atriumfibrilleren
-"59"
+    "sotalol","C07AA07"
+    "57"
+    diabetes
+    "57a"
+    atriumfibrilleren
+    "59"
 
-147 -- no eGFR
-schizofrenie
-"haloperidol","N05AD01"
-"14c","16","18"
+    147 -- no eGFR
+    schizofrenie
+    "haloperidol","N05AD01"
+    "14c","16","18"
 
-"nicorandil","C01DX16"
-"54","55"
+    "nicorandil","C01DX16"
+    "54","55"
 
-"indometacin","M01AB01"
-"80a","81"
-"paracetamol, combinations excluding psycholeptics","N02BE51"
-"83"
-"pancuronium","M03AC01"
-"91","94"
+    "indometacin","M01AB01"
+    "80a","81"
+    "paracetamol, combinations excluding psycholeptics","N02BE51"
+    "83"
+    "pancuronium","M03AC01"
+    "91","94"
 
-148 - no delier, dement, of schizo; no hypert
-"haloperidol","N05AD01"
-"14d","16","18"
+    148 - no delier, dement, of schizo; no hypert
+    "haloperidol","N05AD01"
+    "14d","16","18"
 
-"prazosin","C02CA01"
-"51","53"
+    "prazosin","C02CA01"
+    "51","53"
 
-149
-fluoxetine N06AB03
-"19e"
-orthostatische hypotensie
-"25"
+    149
+    fluoxetine N06AB03
+    "19e"
+    orthostatische hypotensie
+    "25"
 
-"reserpine","C02AA02"
-"49"
+    "reserpine","C02AA02"
+    "49"
 
-150
-"carbamazepine","N03AF01"
-"28","29","29a","30","31"
+    150
+    "carbamazepine","N03AF01"
+    "28","29","29a","30","31"
 
-"amlodipine","C08CA01"
-"46","48a"
-Morbus Parkinson
-orthostatische hypotensie
-"48"
-hypertensie
-"52"
+    "amlodipine","C08CA01"
+    "46","48a"
+    Morbus Parkinson
+    orthostatische hypotensie
+    "48"
+    hypertensie
+    "52"
 
-151
-"rosuvastatin, amlodipine en lisinopril","C10BX07"
-"64a","66"
+    151
+    "rosuvastatin, amlodipine en lisinopril","C10BX07"
+    "64a","66"
 
-152
-eGFR = 40
-"tramadol","N02AX02"
-"68","73"
+    152
+    eGFR = 40
+    "tramadol","N02AX02"
+    "68","73"
 
-"diclofenac","M01AB05"
-"79","80a"
+    "diclofenac","M01AB05"
+    "79","80a"
 
-"pancuronium","M03AC01"
-"86","87","88","89"
+    "pancuronium","M03AC01"
+    "86","87","88","89"
 
-"omeprazol","A02BC01"
-"117","118","120",
+    "omeprazol","A02BC01"
+    "117","118","120",
 
-153
-eGFR = 20
-"morfine","N02AA01"
-"69"
+    153
+    eGFR = 20
+    "morfine","N02AA01"
+    "69"
 
-"indometacin","M01AB01"
-"80"
+    "indometacin","M01AB01"
+    "80"
 
-"methocarbamol","M03BA03"
-"86","87","88","90"
+    "methocarbamol","M03BA03"
+    "86","87","88","90"
 
-154
-"gabapentin","N03AX12"
-"95","97"
+    154
+    "gabapentin","N03AX12"
+    "95","97"
 
-"gliclazide","A10BB09"
-"121","121a","123","128"
+    "gliclazide","A10BB09"
+    "121","121a","123","128"
 
-155
-"promethazine","R06AD02"
-"99","100","101","102","104"
+    155
+    "promethazine","R06AD02"
+    "99","100","101","102","104"
 
-"dicyclomine","A03AA07"
-"105a","105c"
+    "dicyclomine","A03AA07"
+    "105a","105c"
 
-"flavoxaat","G04BD02"
-"110","112"
+    "flavoxaat","G04BD02"
+    "110","112"
 
-156
-"butylscopolamine","A03BB01"
-"106","108"
+    156
+    "butylscopolamine","A03BB01"
+    "106","108"
 
-"tamsulosin","G04CA02"
-"113","115",
+    "tamsulosin","G04CA02"
+    "113","115",
 
-"sildenafil","G04BE03"
-"113","113a","115",
+    "sildenafil","G04BE03"
+    "113","113a","115",
 
-"fentolamine","G04BE05"
-"113","113a","113b","115",
+    "fentolamine","G04BE05"
+    "113","113a","113b","115",
 
-157
-"sitagliptin","A10BH01"
-"124"
+    157
+    "sitagliptin","A10BH01"
+    "124"
 
-"rivastigmine","N06DA03"
-"129","131"
+    "rivastigmine","N06DA03"
+    "129","131"
 
-158
-"lixisenatide","A10BJ03"
-"125"
+    158
+    "lixisenatide","A10BJ03"
+    "125"
 
-"piracetam","N06BX03"
-"132","132a","134"
+    "piracetam","N06BX03"
+    "132","132a","134"
 
-159
-"dapagliflozin","A10BK01"
-"126"
+    159
+    "dapagliflozin","A10BK01"
+    "126"
 
-"salmeterol","R03AC12"
-"135","137"
+    "salmeterol","R03AC12"
+    "135","137"
 
-*/
+    */
 
 });

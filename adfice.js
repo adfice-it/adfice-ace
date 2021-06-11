@@ -60,11 +60,11 @@ async function sql_select(sql, params) {
         // This version of the driver seems to always place the "meta" in
         // with the rows, no matter which calling convention we try.
         let result_set;
-        if(!params || params.length == 0){
-        	result_set = await conn.query(sql);
-		} else {
-			result_set = await conn.query(sql, params);
-		}
+        if (!params || params.length == 0) {
+            result_set = await conn.query(sql);
+        } else {
+            result_set = await conn.query(sql, params);
+        }
         // So, we will filter out anything that is not in the iterator:
         let objects = [];
         for (let i = 0; i < result_set.length; ++i) {
@@ -140,8 +140,8 @@ async function getAdviceTextsCheckboxes(rule_numbers, all) {
 
     narrowed.sort((a, b) => {
         return ((a.priority - b.priority) ||
-                (a.selectBoxNum - b.selectBoxNum) ||
-                (a.id - b.id));
+            (a.selectBoxNum - b.selectBoxNum) ||
+            (a.id - b.id));
     });
 
     return narrowed;
@@ -272,9 +272,11 @@ async function evaluateSQLCondition(patientIdentifier, ruleNumber) {
 async function evaluateSQL(sql, patientIdentifier) {
     let count;
     let matches = sql.match(/\?/g);
-    if(matches){
-	    count = matches.length;
-	} else {count = 0;}
+    if (matches) {
+        count = matches.length;
+    } else {
+        count = 0;
+    }
 
     let params = [];
     for (let i = 0; i < count; ++i) {
