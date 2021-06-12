@@ -379,6 +379,12 @@ async function getPredictionResult(patientIdentifier) {
     }
 }
 
+async function calculateAndStorePredictionResult(patientIdentifier){
+		let prediction = null;
+		prediction = await calculatePredictionResult(patientIdentifier);
+		//TODO update table measurements, value prediction with this value
+	}
+
 async function calculatePredictionResult(patientIdentifier) {
     let prediction = null;
     let measurements = await getPatientMeasurements(patientIdentifier);
@@ -551,8 +557,6 @@ async function getAdviceForPatient(patientIdentifier) {
     let advice = [];
     for (let i = 0; i < meds.length; ++i) {
         let med = meds[i];
-        // TODO get the reference field for all rules that fired for this
-        // medication and add it to this object
         let atc_code = med.ATC_code;
         let fired = medsWithRulesToFire[atc_code];
         if (!fired || !fired.length) {
