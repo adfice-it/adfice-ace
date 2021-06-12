@@ -65,7 +65,7 @@ Leeftijd: <%= patient_advice.age %><br/>
 <div style="height: 2em;"></div>
 <span id="patient_medications">
 <span id="meds_with_rules">
-Ga direct naar medicijnen met aanbevolen maatregelen:
+Ga direct naar medicijnen met advies:
 <%     let rule_meds = patient_advice.meds_with_rules; -%>
 <% for (let i = 0; i < rule_meds.length; ++i ) { -%>
 <%     let med = rule_meds[i]; %>
@@ -78,7 +78,7 @@ Ga direct naar medicijnen met aanbevolen maatregelen:
 </span><!-- meds_with_rules -->
 <br/>
 <span id="meds_without_rules">
-<br/>Medicijnen zonder aanbevolen maatregelen:
+<br/>Gedetecteerde andere medicijnen:
 <%     let other_meds = patient_advice.meds_without_rules; -%>
 <% if (other_meds.length == 0) { %>
 Geen
@@ -151,7 +151,7 @@ Geen
 <span class="instruction_step">Wat past wel/niet bij de pati&euml;nt?<br/></span>
 <span class="instruction_step">Waar staat voor de pati&euml;nt kwaliteit van leven voor?<br/>
 &nbsp;&nbsp;Wat draagt hier aan bij en wat staat dit in de weg?<br/></span>
-<span class="instruction_step">Vraag uitdrukkelijk na wat de wensen van de patiënt zijn.<br/></span>
+<span class="instruction_step">Vraag uitdrukkelijk na wat de wensen van de pati&euml;nt zijn.<br/></span>
 </div><!-- sdm2 -->
 
 <div id="sdm3" class ="sdm">
@@ -235,7 +235,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <div id="advice_selection_area_<%= i %>" class="advice_selection_area">
 <div class="checkbox_section_header">Maatregelen (aangekruist indien aanbevolen):</div>
 <div id="div_refpages_<%= atc %>"
-    class="refpages">Meer informatie over het advies en de aanbeveling(en):
+    class="refpages">Referenties:
 <%
     let referenceNumbers = row.referenceNumbers;
         for (let k = 0; k < referenceNumbers.length; ++k ) {
