@@ -1,6 +1,5 @@
 High Prio:
 By 16 Jun:
-* Add “Kopieer tekst” button in “export voor epic” section
 * Add yellow box to Advies page
 
 * CI tests should use HTTPS too, possibly self-signed certs
