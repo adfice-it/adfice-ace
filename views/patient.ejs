@@ -520,6 +520,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 
 <div id="div_epic_box" class="div_epic_box"><!-- not in patient view -->
 <p>Tekst om te knippen en plakken in Epic:</p>
+<div id="div_all_epic_text" class="div_all_epic_text">
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
 <div id="advice_epic_area_<%= i %>" class="advice_epic_area">
 <%     let row = medication_advice[i]; -%>
@@ -598,6 +599,9 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 </div> <!-- <%= row_id %> -->
 <% } -%>
 <!-- End NonMed -->
+</div><!-- div_all_epic_text -->
+<button id="copy_epic_text" type="button" class='button_epic_text'
+        onclick="copyEpicTextToClipboard()">copy</button>
 </div> <!-- epic_box -->
 
 <div class="whitespace"></div>

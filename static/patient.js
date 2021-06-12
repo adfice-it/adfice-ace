@@ -312,3 +312,14 @@ window.addEventListener('load', (event) => {
 
     switch_to_view("clinician");
 });
+
+async function copyEpicTextToClipboard() {
+    if (!navigator.clipboard) {
+        alert("browser does not support copy");
+        return;
+    }
+
+    var allEpicText = document.getElementById("div_all_epic_text");
+    await navigator.clipboard.writeText(allEpicText.innerText);
+    return true;
+}
