@@ -619,8 +619,8 @@ test('Get empty result set from measurements', async () => {
 });
 
 test('Calculate prediction based on DB data', async () => {
-	let prediction = await adfice.calculatePredictionResult(2);
-	expect(prediction).toBe(77);
-	prediction = await adfice.calculatePredictionResult(1);
-	expect(prediction).toBe(null);
+	let measurement = await adfice.calculatePredictionResult(2);
+	expect(measurement.prediction_result).toBe(77);
+	measurement = await adfice.calculatePredictionResult(1);
+	expect(measurement).toBe(null);
 });

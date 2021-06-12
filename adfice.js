@@ -386,28 +386,28 @@ async function calculateAndStorePredictionResult(patientIdentifier){
 	}
 
 async function calculatePredictionResult(patientIdentifier) {
-    let prediction = null;
     let measurements = await getPatientMeasurements(patientIdentifier);
-    if (measurements == null) {
+    if (measurements == null || !measurements.length) {
         return null;
-    } else {
-        prediction = cp.calculatePredictionDB(
-			measurements[0]['GDS_score'],
- 			measurements[0]['grip_kg'],
- 			measurements[0]['walking_speed_m_per_s'],
- 			measurements[0]['BMI'],
-			measurements[0]['systolic_bp_mmHg'],
-			measurements[0]['number_of_limitations'],
- 			measurements[0]['nr_falls_12m'],
- 			measurements[0]['smoking'],
-			measurements[0]['has_antiepileptica'],
-			measurements[0]['has_ca_blocker'],
-			measurements[0]['has_incont_med'],
-			measurements[0]['education_hml'],
-			measurements[0]['fear1'],
-			measurements[0]['fear2']);
-		return prediction;
     }
+    let measurement = measurements[0];
+    let prediction = cp.calculatePredictionDB(
+			measurement['GDS_score'],
+ 			measurement['grip_kg'],
+ 			measurement['walking_speed_m_per_s'],
+ 			measurement['BMI'],
+			measurement['systolic_bp_mmHg'],
+			measurement['number_of_limitations'],
+ 			measurement['nr_falls_12m'],
+ 			measurement['smoking'],
+			measurement['has_antiepileptica'],
+			measurement['has_ca_blocker'],
+			measurement['has_incont_med'],
+			measurement['education_hml'],
+			measurement['fear1'],
+			measurement['fear2']);
+       measurement['prediction_result'] = prediction;
+        return measurement;
 }
 
 async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
