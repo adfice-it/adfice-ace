@@ -49,3 +49,11 @@ Wanted for 16 Jun: (items marked "change to spec" have to be done by Ace)
 * Make sure that all texts begin with a capital letter.
 * Make sure that all texts end with a period (before the free text box if it has one).
 * Change the FK links in the Markdown to use the icon.
+  * Here is info about your meds: [![farmacotherapeutischkompas](https://huisartshoeve.nl/wp-content/uploads/2017/04/Hoeve-favicon-16x16.png)](https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/s/sertraline)
+  * Seems markdown does not support target by default, we may need to add that
+    with javascript:
+    let links = document.querySelectorAll('whatever selects these links');
+    links.forEach((link) => {
+        link.setAttribute('target', '__blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+    });
