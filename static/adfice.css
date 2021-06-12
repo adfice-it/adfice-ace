@@ -86,6 +86,19 @@ body {
 	margin-top: 15px;
 }
 
+#patient_warning{
+	background-color: #ffef16;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	margin-left: 30px;
+	max-width: 50%;
+}
+.warningicon{
+	max-height: 2em;
+	float: left;
+	padding-right: 10px;
+}
+
 .nonmed_row{
 	margin-bottom: 10px;
 	position: relative;
