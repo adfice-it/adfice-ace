@@ -207,7 +207,9 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 -%>
 <div id="div_advice_<%= atc %>">
 <div id="div_med_name_<%= atc %>" class = "med_name"><%= ucfirst(row.medication_name).trim() %></div>
- <a href="<%= med_url %>" class="fklink" target="_blank">FK</a>
+ <a href="<%= med_url %>" class="fklink" target="_blank">
+<img src="static/FK_circle_with_linkout.png" alt="FK" class="fkimg"/>
+</a>
 <div id="advice_<%= atc %>" class="advice_no_checkbox">
 <strong>Advies:</strong>
 <%     let advices = row.adviceTextsNoCheckboxes; -%>
