@@ -379,17 +379,16 @@ async function getPredictionResult(patientIdentifier) {
     }
 }
 
-async function updatePredictionResult(row_id, prediction_result)
-{
+async function updatePredictionResult(row_id, prediction_result) {
     let sql = `/* adfice.calculateAndStorePredictionResult */
         UPDATE patient_measurements
            SET prediction_result = ?
          WHERE id = ?`;
-    let params = [ prediction_result, row_id ];
+    let params = [prediction_result, row_id];
     let results = await sql_select(sql, params);
 }
 
-async function calculateAndStorePredictionResult(patientIdentifier){
+async function calculateAndStorePredictionResult(patientIdentifier) {
     let measurement = await calculatePredictionResult(patientIdentifier);
     autil.assert(measurement);
     await updatePredictionResult(measurement.id, measurement.prediction_result);
@@ -402,22 +401,22 @@ async function calculatePredictionResult(patientIdentifier) {
     }
     let measurement = measurements[0];
     let prediction = cp.calculatePredictionDB(
-			measurement['GDS_score'],
- 			measurement['grip_kg'],
- 			measurement['walking_speed_m_per_s'],
- 			measurement['BMI'],
-			measurement['systolic_bp_mmHg'],
-			measurement['number_of_limitations'],
- 			measurement['nr_falls_12m'],
- 			measurement['smoking'],
-			measurement['has_antiepileptica'],
-			measurement['has_ca_blocker'],
-			measurement['has_incont_med'],
-			measurement['education_hml'],
-			measurement['fear1'],
-			measurement['fear2']);
-       measurement['prediction_result'] = prediction;
-        return measurement;
+        measurement['GDS_score'],
+        measurement['grip_kg'],
+        measurement['walking_speed_m_per_s'],
+        measurement['BMI'],
+        measurement['systolic_bp_mmHg'],
+        measurement['number_of_limitations'],
+        measurement['nr_falls_12m'],
+        measurement['smoking'],
+        measurement['has_antiepileptica'],
+        measurement['has_ca_blocker'],
+        measurement['has_incont_med'],
+        measurement['education_hml'],
+        measurement['fear1'],
+        measurement['fear2']);
+    measurement['prediction_result'] = prediction;
+    return measurement;
 }
 
 async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
