@@ -8,6 +8,7 @@ const autil = require('./adficeUtil');
 const ae = require('./adficeEvaluator');
 var dbconfig = require('./dbconfig.json');
 const mariadb = require('mariadb');
+const cp = require('./calculatePrediction');
 
 function question_marks(num) {
     return '?,'.repeat(num - 1) + '?';
@@ -378,6 +379,31 @@ async function getPredictionResult(patientIdentifier) {
     }
 }
 
+async function calculatePredictionResult(patientIdentifier) {
+    let prediction = null;
+    let measurements = await getPatientMeasurements(patientIdentifier);
+    if (measurements == null) {
+        return null;
+    } else {
+        prediction = cp.calculatePredictionDB(
+			measurements[0]['GDS_score'],
+ 			measurements[0]['grip_kg'],
+ 			measurements[0]['walking_speed_m_per_s'],
+ 			measurements[0]['BMI'],
+			measurements[0]['systolic_bp_mmHg'],
+			measurements[0]['number_of_limitations'],
+ 			measurements[0]['nr_falls_12m'],
+ 			measurements[0]['smoking'],
+			measurements[0]['has_antiepileptica'],
+			measurements[0]['has_ca_blocker'],
+			measurements[0]['has_incont_med'],
+			measurements[0]['education_hml'],
+			measurements[0]['fear1'],
+			measurements[0]['fear2']);
+		return prediction;
+    }
+}
+
 async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
     const patient_id = parseInt(patientIdentifier, 10);
     const viewer_id = parseInt(viewer, 10);
@@ -694,5 +720,6 @@ module.exports = {
     getPreselectRules: getPreselectRules,
     determinePreselectedCheckboxes: determinePreselectedCheckboxes,
     getPatientMeasurements: getPatientMeasurements,
-    getPredictionResult: getPredictionResult
+    getPredictionResult: getPredictionResult,
+    calculatePredictionResult: calculatePredictionResult
 }
