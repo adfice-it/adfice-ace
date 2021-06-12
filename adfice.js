@@ -379,11 +379,21 @@ async function getPredictionResult(patientIdentifier) {
     }
 }
 
+async function updatePredictionResult(row_id, prediction_result)
+{
+    let sql = `/* adfice.calculateAndStorePredictionResult */
+        UPDATE patient_measurements
+           SET prediction_result = ?
+         WHERE id = ?`;
+    let params = [ prediction_result, row_id ];
+    let results = await sql_select(sql, params);
+}
+
 async function calculateAndStorePredictionResult(patientIdentifier){
-		let prediction = null;
-		prediction = await calculatePredictionResult(patientIdentifier);
-		//TODO update table measurements, value prediction with this value
-	}
+    let measurement = await calculatePredictionResult(patientIdentifier);
+    autil.assert(measurement);
+    await updatePredictionResult(measurement.id, measurement.prediction_result);
+}
 
 async function calculatePredictionResult(patientIdentifier) {
     let measurements = await getPatientMeasurements(patientIdentifier);
@@ -705,6 +715,10 @@ function freetextsToRows(patient_id, viewer_id, freetexts) {
 
 module.exports = {
     boxStatesToSelectionStates: boxStatesToSelectionStates,
+    calculateAndStorePredictionResult: calculateAndStorePredictionResult,
+    calculatePredictionResult: calculatePredictionResult,
+    determinePreselectedCheckboxes: determinePreselectedCheckboxes,
+    evaluateSQL: evaluateSQL,
     getActiveRules: getActiveRules,
     getAdviceForPatient: getAdviceForPatient,
     getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
@@ -713,17 +727,15 @@ module.exports = {
     getAllAdviceTextsCheckboxes: getAllAdviceTextsCheckboxes,
     getFreetextsForPatient: getFreetextsForPatient,
     getMedsForPatient: getMedsForPatient,
-    getSQLCondition: getSQLCondition,
-    isSQLConditionTrue: isSQLConditionTrue,
-    evaluateSQL: evaluateSQL,
+    getPatientMeasurements: getPatientMeasurements,
+    getPredictionResult: getPredictionResult,
+    getPreselectRules: getPreselectRules,
     getReferenceNumbers: getReferenceNumbers,
     getSelectionsForPatient: getSelectionsForPatient,
+    getSQLCondition: getSQLCondition,
+    isSQLConditionTrue: isSQLConditionTrue,
     selectionStatesToBoxStates: selectionStatesToBoxStates,
     setFreetextsForPatient: setFreetextsForPatient,
     setSelectionsForPatient: setSelectionsForPatient,
-    getPreselectRules: getPreselectRules,
-    determinePreselectedCheckboxes: determinePreselectedCheckboxes,
-    getPatientMeasurements: getPatientMeasurements,
-    getPredictionResult: getPredictionResult,
-    calculatePredictionResult: calculatePredictionResult
+    updatePredictionResult: updatePredictionResult
 }

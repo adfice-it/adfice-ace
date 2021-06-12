@@ -620,7 +620,23 @@ test('Get empty result set from measurements', async () => {
 
 test('Calculate prediction based on DB data', async () => {
 	let measurement = await adfice.calculatePredictionResult(2);
-	expect(measurement.prediction_result).toBe(77);
+	expect(measurement.prediction_result).toBeGreaterThan(10);
 	measurement = await adfice.calculatePredictionResult(1);
 	expect(measurement).toBe(null);
+});
+
+test('Update prediction', async () => {
+    let patient = 2;
+    let before = await adfice.getPatientMeasurements(patient);
+    expect(before.length).toBeGreaterThan(0);
+    expect(before[0].prediction_result).toBe(null);
+    let row_id = before[0].id;
+    try {
+    await adfice.calculateAndStorePredictionResult(patient);
+    let after = await adfice.getPatientMeasurements(patient);
+    expect(after.length).toBeGreaterThan(0);
+    expect(after[0].prediction_result).toBeGreaterThan(10);
+    } finally {
+        adfice.updatePredictionResult(row_id, null);
+    }
 });
