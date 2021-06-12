@@ -247,7 +247,9 @@ div.gauge_background {
     width:80%;
     height: 0px;
     padding-bottom: 8%;
-    background: linear-gradient(to right, #0F0, #FF0 15%, #F00);
+    /* cheating on the linear-gradient by  repeating RED 4 times */
+    background: linear-gradient(to right,
+		#0F0, #FF0 15%, #F00, #F00, #F00, #F00);
     display: inline-block;
     margin-bottom: 3ex;
 }
