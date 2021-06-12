@@ -47,6 +47,25 @@ test('calculatePredictionDB good data', () => {
 	systolic_bp_mmHg, number_of_limitations, nr_falls_12m, smoking,
 	has_antiepileptica, has_ca_blocker, has_incont_med, education_hml, fear1, fear2);
 	expect(prediction).toBe(77);
+
+    nr_falls_12m = 0;
+    education_hml = 1;
+    prediction = cp.calculatePredictionDB(
+        GDS_score,
+        grip_kg,
+        walking_speed_m_per_s,
+        BMI,
+        systolic_bp_mmHg,
+        number_of_limitations,
+        nr_falls_12m,
+        smoking,
+        has_antiepileptica,
+        has_ca_blocker,
+        has_incont_med,
+        education_hml,
+        fear1,
+        fear2);
+    expect(prediction).toBe(38);
 })
 
 test('calculatePredictionDB bad data', () => {
