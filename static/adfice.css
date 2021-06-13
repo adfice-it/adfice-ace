@@ -92,6 +92,7 @@ body {
 	margin-bottom: 30px;
 	margin-left: 30px;
 	max-width: 50%;
+	min-height: 2em;
 }
 .warningicon{
 	max-height: 2em;
