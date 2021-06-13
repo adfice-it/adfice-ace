@@ -9,15 +9,30 @@ functional_limit_date_measured, fear0, fear1, fear2,
 fear_of_falls_date_measured, nr_falls_12m, nr_falls_date_measured,
 smoking, smoking_date_measured, has_antiepileptica, has_ca_blocker,
 has_incont_med) VALUES
+
 (2, (select NOW()), 3, 160, (select NOW()), 55, (select NOW()),  21.5,(select NOW()), 1, (select NOW()),
 21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 1,
 (select NOW()), 0, 0, 1, (select NOW()), 3, (select NOW()), 1,
 (select NOW()),0,0,1),
+
 (3, (select NOW()), 1, 180, (select NOW()), 70, (select NOW()), 21.6,(select NOW()), 3, (select NOW()),
 30, (select NOW()), 1, (select NOW()), 130, (select NOW()), 3,
 (select NOW()), 0, 1, 0, (select NOW()), 5, (select NOW()), 1,
-(select NOW()),0,0,0);
+(select NOW()),0,0,0),
 
+(142, (select NOW()), 3, 160, (select NOW()), 55, (select NOW()),  21.5,(select NOW()), 1, (select NOW()),
+21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 1,
+(select NOW()), 0, 0, 1, (select NOW()), 3, (select NOW()), 1,
+(select NOW()),0,0,1),
+
+(143, (select NOW()), 3, 160, (select NOW()), 55, (select NOW()),  21.5,(select NOW()), 1, (select NOW()),
+21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 1,
+(select NOW()), 0, 0, 1, (select NOW()), 3, (select NOW()), 1,
+(select NOW()),0,0,1);
+
+
+
+/*
 -- seeding rule test patients with completely fictional prediction results
 INSERT INTO patient_measurements
 (patient_id, date_retrieved,prediction_result) VALUES
@@ -160,8 +175,10 @@ INSERT INTO patient_measurements
 (141,(select now()),50),
 (142,(select now()),74),
 (143,(select now()),25);
+*/
 
 /* fake patients for validation 2 */
+/*
 INSERT INTO patient_measurements
 (patient_id, date_retrieved,prediction_result) VALUES
 (144,(select now()),58),
@@ -180,3 +197,4 @@ INSERT INTO patient_measurements
 (157,(select now()),58),
 (158,(select now()),73),
 (159,(select now()),46);
+*/

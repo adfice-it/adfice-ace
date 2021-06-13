@@ -394,15 +394,22 @@ async function getPatientMeasurements(patientIdentifier) {
 
 async function getPredictionResult(patientIdentifier) {
     let measurements = await getPatientMeasurements(patientIdentifier);
-    if (measurements == null) {
+
+    if (!measurements || !measurements.length) {
         return null;
-    } else {
-        return measurements[0]['prediction_result'];
     }
+
+    let measurement = measurements[0];
+
+    if (measurement.prediction_result == null) {
+        measurement = await calculateAndStorePredictionResult(patientIdentifier);
+    }
+
+    return measurement.prediction_result;
 }
 
 async function updatePredictionResult(row_id, prediction_result) {
-    let sql = `/* adfice.calculateAndStorePredictionResult */
+    let sql = `/* adfice.updatePredictionResult */
         UPDATE patient_measurements
            SET prediction_result = ?
          WHERE id = ?`;
@@ -414,6 +421,10 @@ async function calculateAndStorePredictionResult(patientIdentifier) {
     let measurement = await calculatePredictionResult(patientIdentifier);
     autil.assert(measurement);
     await updatePredictionResult(measurement.id, measurement.prediction_result);
+    let measurements = await getPatientMeasurements(patientIdentifier);
+    autil.assert(measurements);
+    autil.assert(measurements.length > 0);
+    return measurements[0];
 }
 
 async function calculatePredictionResult(patientIdentifier) {

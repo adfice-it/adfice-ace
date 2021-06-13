@@ -611,8 +611,21 @@ test('Check preselected checkbox output', async () => {
 });
 
 test('Get prediction model result from DB', async () => {
-    let prediction4 = await adfice.getPredictionResult(4);
-    expect(prediction4).toBe(29);
+    let patient = 142
+
+    // clear any saved result
+    let measurements = await adfice.getPatientMeasurements(patient);
+    let measurement = measurements[0];
+    let row_id = measurement.id;
+    adfice.updatePredictionResult(row_id, null);
+
+    // add prediction result to database on first fetch if not present
+    let prediction = await adfice.getPredictionResult(patient);
+    expect(prediction).toBe(77);
+
+    // second fetch gets the same result, but does not update the db
+    prediction = await adfice.getPredictionResult(patient);
+    expect(prediction).toBe(77);
 });
 
 test('Get empty result set from measurements', async () => {

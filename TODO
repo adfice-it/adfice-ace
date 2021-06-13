@@ -1,31 +1,42 @@
 Required for "ready to install":
 * integrate prediction
-  * prediction model explanation page should show data from DB that is being used in the prediction
-  * if there is no prediction result, show text "Geen predictie mogelijk. Lees meer over het predictiemodel."
-    if there is a prediction, show the colored bar and text "Lees meer over het predictiemodel." Link to explanation page.
+  * prediction model explanation page should show data from DB that is being
+    used in the prediction
+  * Link to explanation page.
 
-* "Opslaan..." button pushes data to a DB for the portal and makes this tool view-only
- 
+* "Opslaan..." button
+  * calls a script (which can pushes data to a DB for the portal
+  * makes this record view-only in this tool
 
 Required changes to rules (Ace will do these):
 Wanted for 16 Jun:
-* Add word "overige" to the plain free text box for each medication (also add to specification)
+* Add word "overige" to the plain free text box for each medication
+  (also add to specification)
 
-* Make sure every text ends with a period. If there is a free text box, the period should come before the free text box. (Laxans: should probably become Laxans aanbevolen.)
+* Make sure every text ends with a period. If there is a free text box,
+  the period should come before the free text box.
+  (Laxans: should probably become Laxans aanbevolen.)
 * Make sure that all texts begin with a capital letter.
 
 Wanted for usability:
-* Buttons to hide advice box and non-selected checkbox rows for individual medications in clinician view
+* Buttons to hide advice box and non-selected checkbox rows for individual
+  medications in clinician view
 
 Not required for "ready to install" but will be required for study:
-* stash the preselect checkboxes to compare what doctor ultimately chose
 * logging:
   * log whether system was used at all
   * whether Print and Send to portal was used
   * which advice was (in the end) selected
   * which advice had been pre-selected (and thus, was it unchecked)
+    to compare what doctor ultimately chose
+  * print button
+    * no need for extra printer friendliness yet
+    * but log it
+
 * create "stub" functions for linking to Epic
-  * Orange "Haal gewijzigd..." button wipes checkboxes and re-runs the rules on (new) data
+  * Orange "Haal gewijzigd..." button
+    * wipes checkboxes
+    * re-runs the rules on (new) data
   * "Hoe gebruik ik..." leads to (stub) training page
 
 Mid:
@@ -39,7 +50,8 @@ Mid:
 * test-cafe : get the innnerHTML out of an element
 * sanity check choices of checkboxes
 * try to use "deeplinken" for FK links
-* if no checkboxes are selected for a medication, display text "Geen advies." in the patient view.
+* if no checkboxes are selected for a medication, display text "Geen advies."
+  in the patient view.
 
 Low Prio:
 * allow user to fill in missing values in prediction model page
@@ -52,7 +64,10 @@ Low Prio:
 
 
 Important, but unable to do yet:
-* The designers may decide to have **placeholder text** instead of **pre-filled** text for the free text boxes. (They actually asked to do both; I veto'd this suggestion.)
-* Once we know something about how authentication will work, we may need to do something to prevent users without authentication from loading the data.
+* The designers may decide to have **placeholder text** instead of
+  **pre-filled** text for the free text boxes.
+  (They actually asked to do both; I veto'd this suggestion.)
+* Once we know something about how authentication will work, we may need to do
+  something to prevent users without authentication from loading the data.
 * Getting data out of Epic
 * Sending data to research database

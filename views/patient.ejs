@@ -46,22 +46,23 @@ Patient: <%= patient_id %><br/>
 Leeftijd: <%= patient_advice.age %><br/>
 <div class="prediction" id = "prediction">
 <% let risk_score = patient_advice.risk_score; -%>
+<% let hide_gauge = (risk_score == null || isNaN(risk_score)) -%>
 <p>Kans om te vallen binnen 12 maanden:&nbsp;
 <span style="color: red;">
-<% if (isNaN(risk_score)) { -%>
+<% if (hide_gauge) { -%>
 (onbekend)
 <% } else { -%>
 <%= risk_score -%>%
 <% } -%>
 </span> (lees meer over het predictiemodel)</p>
 <div class='gauge_background'>
-    <div class='gauge_text_left'>0%
-<% if (!isNaN(risk_score)) { -%>
-    </div><div class='gauge_line' style='left: <%= risk_score %>%'>
+<div class='gauge_text_left'>0%</div>
+<% if (!hide_gauge) { -%>
+<div class='gauge_line' style='left: <%= risk_score %>%'></div>
 <% } -%>
-    </div><div class='gauge_text_right'>100%</div>
-</div>
-</div>
+<div class='gauge_text_right'>100%</div>
+</div><!-- gauge_background -->
+</div><!-- prediction -->
 <div style="height: 2em;"></div>
 <span id="patient_medications">
 <span id="meds_with_rules">
