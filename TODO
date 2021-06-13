@@ -4,11 +4,14 @@ Required for "ready to install":
   * if there is no prediction result, show text "Geen predictie mogelijk. Lees meer over het predictiemodel."
     if there is a prediction, show the colored bar and text "Lees meer over het predictiemodel." Link to explanation page.
 
+* "Opslaan..." button pushes data to a DB for the portal and makes this tool view-only
+ 
+
 Required changes to rules (Ace will do these):
 Wanted for 16 Jun:
 * Add word "overige" to the plain free text box for each medication (also add to specification)
 
-* Make sure every text ends with a period. If there is a free text box, the period should come before the free text box.
+* Make sure every text ends with a period. If there is a free text box, the period should come before the free text box. (Laxans: should probably become Laxans aanbevolen.)
 * Make sure that all texts begin with a capital letter.
 
 Wanted for usability:
@@ -23,7 +26,6 @@ Not required for "ready to install" but will be required for study:
   * which advice had been pre-selected (and thus, was it unchecked)
 * create "stub" functions for linking to Epic
   * Orange "Haal gewijzigd..." button wipes checkboxes and re-runs the rules on (new) data
-  * "Opslaan..." button pushes data to portal and makes this tool view-only
   * "Hoe gebruik ik..." leads to (stub) training page
 
 Mid:
