@@ -432,7 +432,6 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 </div><!-- div_other_med_advice -->
 
 <div class="advice_header clinician_view_only" id="andere_advies_header" style="width:20%;">Andere risicofactoren</div>
-<div class="patient_header patient_view_only" id="header_overige_advies">Overige adviezen</div>
 <div id="non_med_advice_selection_area" class="non_med_advice_selection_area">
 
 <%
@@ -492,7 +491,10 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <% } -%>
 
 </div><!-- non_med_advice_selection_area -->
+
 <div id="non_med_advice_patient_area" class="non_med_advice_patient_area">
+<div id="non_med_advice_patient_area_text">
+<div class="patient_header patient_view_only" id="header_overige_advies">Overige adviezen</div>
 <%
    for (let i = 0; i < nm_advices.length; ++i ) {
        let nm_advice = nm_advices[i];
@@ -517,6 +519,9 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <%         } -%>
 </div> <!-- <%= row_id %> -->
 <% } -%>
+</div><!-- non_med_advice_patient_area_text -->
+<button id="copy_patient_text" type="button" class='button_patient_text'
+        onclick="copyPatientTextToClipboard()">Kopieer tekst</button>
 </div><!-- "non_med_advice_patient_area" -->
 
 <div id="div_epic_box" class="div_epic_box"><!-- not in patient view -->

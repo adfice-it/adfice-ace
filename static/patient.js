@@ -323,3 +323,16 @@ async function copyEpicTextToClipboard() {
     await navigator.clipboard.writeText(allEpicText.innerText);
     return true;
 }
+
+async function copyPatientTextToClipboard() {
+    if (!navigator.clipboard) {
+        alert("browser does not support copy");
+        return;
+    }
+
+    var dpv = document.getElementById("div_patient_view");
+    var nma = document.getElementById("non_med_advice_patient_area_text");
+    var all_text = dpv.innerText + "\n" + "\n" + nma.innerText;
+    await navigator.clipboard.writeText(all_text);
+    return true;
+}
