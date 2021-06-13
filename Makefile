@@ -37,14 +37,17 @@ check: dbsetup
 tidy:
 	js-beautify --replace --end-with-newline \
 		acceptance-test-cafe.js \
-		adfice.js \
-		adfice.test.js \
 		adficeDB.js \
 		adficeEvaluator.js \
 		adficeEvaluator.test.js \
-		AdficeWebserver.js \
-		static/patient.js \
+		adfice.js \
+		adfice.test.js \
 		adficeUtil.js \
 		adficeUtil.test.js \
-		verificationAndValidation.test.js \
-		ping-db.js
+		AdficeWebserver.js \
+		calculatePrediction.js \
+		calculatePrediction.test.js \
+		export-to-mrs.js \
+		ping-db.js \
+		static/patient.js \
+		verificationAndValidation.test.js

@@ -5,6 +5,7 @@
 
 const adfice = require('./adfice')
 const util = require("util");
+const fs = require('fs');
 
 afterAll(async () => {
     return await adfice.shutdown();
@@ -142,6 +143,9 @@ test('setAdviceForPatient(68)', async () => {
 
     advice = await adfice.getAdviceForPatient(patientNumber);
     expect(advice.selected_advice).toStrictEqual(new_advice);
+
+    let data = await adfice.getExportData(patientNumber);
+    expect(data.length).toBe(2);
 })
 
 test('getAdviceForPatient(27), with labs and problems', async () => {
@@ -656,4 +660,21 @@ test('Update prediction', async () => {
     } finally {
         adfice.updatePredictionResult(row_id, null);
     }
+});
+
+test('exportForPatient', async () => {
+    let patient = '68';
+    let file = "test-exportForPatient-68.log";
+    try {
+        fs.unlinkSync(file, (err) => {});
+    } catch (ignoreError) {}
+
+    await adfice.exportForPatient(patient, file);
+
+    const contents = fs.readFileSync(file, 'utf8');
+
+    expect(contents).toMatch(/68/);
+    expect(contents).toMatch(/C03AA03/);
+
+    fs.unlinkSync(file);
 });

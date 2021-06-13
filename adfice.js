@@ -4,6 +4,7 @@
 "use strict";
 
 var fs = require('fs');
+const child_process = require('child_process');
 const autil = require('./adficeUtil');
 const ae = require('./adficeEvaluator');
 const cp = require('./calculatePrediction');
@@ -169,6 +170,16 @@ async function getActiveRules() {
     return rules;
 }
 
+function as_id(num_or_str) {
+    let num;
+    if (typeof num_or_str == 'number') {
+        num = num_or_str;
+    } else {
+        num = parseInt(num_or_str, 10) || 0;
+    }
+    return num;
+}
+
 async function getMedsForPatient(patientIdentifier) {
     var sql = `/* adfice.getMedsForPatient */
         SELECT ATC_code
@@ -183,7 +194,8 @@ async function getMedsForPatient(patientIdentifier) {
                     WHERE patient_id=?
                )
       ORDER BY ATC_code`;
-    let params = [patientIdentifier, patientIdentifier];
+    let patient_id = as_id(patientIdentifier);
+    let params = [patient_id, patient_id];
     let meds = await sql_select(sql, params);
     return meds;
 }
@@ -201,7 +213,8 @@ async function getSQLCondition(ruleNumber) {
 }
 
 async function isSQLConditionTrue(patientIdentifier, ruleNumber) {
-    let result = await evaluateSQLCondition(patientIdentifier, ruleNumber);
+    let patient_id = as_id(patientIdentifier);
+    let result = await evaluateSQLCondition(patient_id, ruleNumber);
     return result;
 }
 
@@ -211,10 +224,12 @@ async function evaluateSQLCondition(patientIdentifier, ruleNumber) {
         return true;
     } //no conditions === always true
     /* count the number of question marks in the string */
-    return await evaluateSQL(sql, patientIdentifier);
+    let patient_id = as_id(patientIdentifier);
+    return await evaluateSQL(sql, patient_id);
 }
 
 async function evaluateSQL(sql, patientIdentifier) {
+    let patient_id = as_id(patientIdentifier);
     let count;
     let matches = sql.match(/\?/g);
     if (matches) {
@@ -225,7 +240,7 @@ async function evaluateSQL(sql, patientIdentifier) {
 
     let params = [];
     for (let i = 0; i < count; ++i) {
-        params.push(patientIdentifier);
+        params.push(patient_id);
     }
     let results = await sql_select(sql, params);
     if (results.length == 0) {
@@ -263,7 +278,9 @@ async function getProblemsForPatient(patientIdentifier) {
                     WHERE patient_id=?
                )
       ORDER BY id`;
-    let probs = await sql_select(sql, [patientIdentifier, patientIdentifier]);
+    let patient_id = as_id(patientIdentifier);
+    let params = [patient_id, patient_id];
+    let probs = await sql_select(sql, params);
     return probs;
 }
 
@@ -274,7 +291,8 @@ async function getAgeForPatient(patientIdentifier) {
          WHERE id=?
       ORDER BY age DESC
          LIMIT 1`;
-    let results = await sql_select(sql, [patientIdentifier, patientIdentifier]);
+    let patient_id = as_id(patientIdentifier);
+    let results = await sql_select(sql, [patient_id]);
     if (results.length > 0) {
         return results[0].age;
     }
@@ -294,7 +312,8 @@ async function getLabsForPatient(patientIdentifier) {
                     WHERE patient_id=?
                )
       ORDER BY id`;
-    let params = [patientIdentifier, patientIdentifier];
+    let patient_id = as_id(patientIdentifier);
+    let params = [patient_id, patient_id];
     let result = await sql_select(sql, params);
     return result;
 }
@@ -306,7 +325,8 @@ async function getPatientMeasurements(patientIdentifier) {
          WHERE patient_id=?
       ORDER BY date_retrieved DESC
          LIMIT 1`;
-    let params = [patientIdentifier, patientIdentifier];
+    let patient_id = as_id(patientIdentifier);
+    let params = [patient_id];
     let results = await sql_select(sql, params);
     if (results.length > 0) {
         return results;
@@ -315,7 +335,8 @@ async function getPatientMeasurements(patientIdentifier) {
 }
 
 async function getPredictionResult(patientIdentifier) {
-    let measurements = await getPatientMeasurements(patientIdentifier);
+    let patient_id = as_id(patientIdentifier);
+    let measurements = await getPatientMeasurements(patient_id);
 
     if (!measurements || !measurements.length) {
         return null;
@@ -324,7 +345,7 @@ async function getPredictionResult(patientIdentifier) {
     let measurement = measurements[0];
 
     if (measurement.prediction_result == null) {
-        measurement = await calculateAndStorePredictionResult(patientIdentifier);
+        measurement = await calculateAndStorePredictionResult(patient_id);
     }
 
     return measurement.prediction_result;
@@ -339,18 +360,19 @@ async function updatePredictionResult(row_id, prediction_result) {
     let results = await sql_select(sql, params);
 }
 
-async function calculateAndStorePredictionResult(patientIdentifier) {
-    let measurement = await calculatePredictionResult(patientIdentifier);
+async function calculateAndStorePredictionResult(patient_id) {
+    let measurement = await calculatePredictionResult(patient_id);
     autil.assert(measurement);
     await updatePredictionResult(measurement.id, measurement.prediction_result);
-    let measurements = await getPatientMeasurements(patientIdentifier);
+    let measurements = await getPatientMeasurements(patient_id);
     autil.assert(measurements);
     autil.assert(measurements.length > 0);
     return measurements[0];
 }
 
 async function calculatePredictionResult(patientIdentifier) {
-    let measurements = await getPatientMeasurements(patientIdentifier);
+    let patient_id = as_id(patientIdentifier);
+    let measurements = await getPatientMeasurements(patient_id);
     if (measurements == null || !measurements.length) {
         return null;
     }
@@ -375,8 +397,8 @@ async function calculatePredictionResult(patientIdentifier) {
 }
 
 async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
-    const patient_id = parseInt(patientIdentifier, 10);
-    const viewer_id = parseInt(viewer, 10);
+    const patient_id = as_id(patientIdentifier);
+    const viewer_id = as_id(viewer);
 
     let sqls_and_params = [];
 
@@ -421,8 +443,8 @@ async function getSelectionsForPatient(patient_id) {
 }
 
 async function setFreetextsForPatient(patientIdentifier, viewer, freetexts) {
-    const patient_id = parseInt(patientIdentifier, 10);
-    const viewer_id = parseInt(viewer, 10);
+    const patient_id = as_id(patientIdentifier);
+    const viewer_id = as_id(viewer);
 
     let sqls_and_params = [];
 
@@ -452,6 +474,7 @@ async function setFreetextsForPatient(patientIdentifier, viewer, freetexts) {
 }
 
 async function getFreetextsForPatient(patient_id) {
+    patient_id = as_id(patient_id);
     var sql = `/* adfice.getFreetextForPatient */
          SELECT patient_id
               , viewer_id
@@ -483,14 +506,7 @@ function structureLabs(labRows) {
 }
 
 async function getAdviceForPatient(patientIdentifier) {
-    let patient_id;
-    if (typeof patientIdentifier == 'number') {
-        patient_id = patientIdentifier;
-    } else {
-        patient_id = parseInt(patientIdentifier);
-    }
-    patient_id = patient_id || 0;
-
+    let patient_id = as_id(patientIdentifier);
     let age = await getAgeForPatient(patient_id);
 
     let labRows = await getLabsForPatient(patient_id);
@@ -667,18 +683,81 @@ function freetextsToRows(patient_id, viewer_id, freetexts) {
     return output;
 }
 
+async function getExportData(patientIdentifier) {
+    let patient_id = as_id(patientIdentifier);
+    let sql = `/* adfice.getExportData */
+    SELECT s.patient_id
+         , s.ATC_code
+         , s.medication_criteria_id
+         , s.select_box_num
+         , s.selected
+         , s.row_created AS selection_time
+         , f.row_created AS freetext_time
+         , f.freetext_num
+         , f.freetext
+      FROM patient_advice_selection s
+ LEFT JOIN patient_advice_freetext f
+        ON ((s.patient_id = f.patient_id)
+       AND  (s.ATC_code = f.ATC_code)
+       AND  (s.medication_criteria_id = f.medication_criteria_id)
+       AND  (s.select_box_num = f.select_box_num))
+     WHERE s.patient_id = ?
+       AND s.selected
+  ORDER BY s.id ASC
+         , f.id ASC`;
+    let params = [patient_id];
+    let results = await db.sql_query(sql, params);
+    return results;
+}
+
+async function exportForPatient(patient, logfile) {
+    let args = ['-i', patient];
+
+    /* istanbul ignore next */
+    if (logfile) {
+        args.push('-l');
+        args.push(logfile);
+    }
+
+    let cmd = './export-to-mrs';
+
+    let env = process.env;
+    env.path = ".:" + env.path;
+    let options = {
+        cwd: undefined,
+        env: env,
+        customFds: [-1, -1, -1],
+        setsid: false
+    };
+
+    return new Promise(function(resolve, reject) {
+        const process = child_process.spawn(cmd, args, options);
+
+        process.on('exit', function(code) {
+            resolve(code);
+        });
+
+        /* istanbul ignore next */
+        process.on('error', function(err) {
+            reject(err);
+        });
+    });
+}
+
 module.exports = {
     boxStatesToSelectionStates: boxStatesToSelectionStates,
     calculateAndStorePredictionResult: calculateAndStorePredictionResult,
     calculatePredictionResult: calculatePredictionResult,
     determinePreselectedCheckboxes: determinePreselectedCheckboxes,
     evaluateSQL: evaluateSQL,
+    exportForPatient: exportForPatient,
     getActiveRules: getActiveRules,
     getAdviceForPatient: getAdviceForPatient,
     getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
     getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
     getAdviceTextsNonMedCheckboxes: getAdviceTextsNonMedCheckboxes,
     getAllAdviceTextsCheckboxes: getAllAdviceTextsCheckboxes,
+    getExportData: getExportData,
     getFreetextsForPatient: getFreetextsForPatient,
     getMedsForPatient: getMedsForPatient,
     getPatientMeasurements: getPatientMeasurements,
