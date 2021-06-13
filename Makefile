@@ -39,6 +39,7 @@ tidy:
 		acceptance-test-cafe.js \
 		adfice.js \
 		adfice.test.js \
+		adficeDB.js \
 		adficeEvaluator.js \
 		adficeEvaluator.test.js \
 		AdficeWebserver.js \

@@ -4,32 +4,22 @@
 "use strict";
 
 var fs = require('fs');
-const mariadb = require('mariadb');
+var db = require('./adficeDB');
 
 async function main() {
 
-    var dbconfig = require('./dbconfig.json');
-    let passwd = await fs.promises.readFile('adfice_mariadb_user_password');
-    dbconfig['password'] = String(passwd).trim();
-
-    // console.log('Password: "' + passwd + '"');
-    const mariadb = require('mariadb');
-    const pool = mariadb.createPool(dbconfig);
+    await db.init();
 
     var error_code = 1;
-    let conn;
     try {
-        conn = await pool.getConnection();
-        const rows = await conn.query("SELECT 1");
+        const rows = await db.sql_query("SELECT 1");
         error_code = 0;
     } catch (error) {
-        // console.log(error);
-    } finally {
-        if (conn) {
-            conn.end();
-        }
+        console.log(error);
     }
-    pool.end();
+
+    await db.close();
+
     process.exit(error_code);
 }
 
