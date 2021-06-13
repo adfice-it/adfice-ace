@@ -6,6 +6,10 @@
 const adfice = require('./adfice')
 const util = require("util");
 
+afterAll(async () => {
+    return await adfice.shutdown();
+});
+
 test('test advice text 6e', async () => {
     //console.log('6e');
     var rule_numbers = ["6e"];

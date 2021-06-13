@@ -6,6 +6,10 @@
 const adfice = require('./adfice')
 const util = require("util");
 
+afterAll(async () => {
+    return await adfice.shutdown();
+});
+
 jest.setTimeout(10000); //seems to be needed on the desk dinosaur
 
 test('verification1: conforms to spec', async () => {

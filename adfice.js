@@ -6,40 +6,63 @@
 var fs = require('fs');
 const autil = require('./adficeUtil');
 const ae = require('./adficeEvaluator');
-var dbconfig = require('./dbconfig.json');
-const mariadb = require('mariadb');
 const cp = require('./calculatePrediction');
+
+const mariadb = require('mariadb');
+var dbconfig = require('./dbconfig.json');
+var _pool = null;
 
 function question_marks(num) {
     return '?,'.repeat(num - 1) + '?';
 }
 
-async function createPool() {
+async function shutdown() {
+    await connection_pool_close();
+}
+
+async function connection_pool_close() {
+    try {
+        await _pool.end();
+    } finally {
+        _pool = null;
+    }
+}
+
+async function connection_pool() {
+    if (_pool) {
+        return _pool;
+    }
+    /* istanbul ignore else */
     if (!dbconfig['password']) {
         let passwd = await fs.promises.readFile(dbconfig['passwordFile']);
         dbconfig['password'] = String(passwd).trim();
     }
-    const pool = mariadb.createPool(dbconfig);
-    return pool;
+    _pool = mariadb.createPool(dbconfig);
+    return _pool;
 }
 
-function endPool(conn, pool) {
+async function connection_begin() {
+    let pool = await connection_pool();
+    let conn = await pool.getConnection();
+    return conn;
+}
+
+async function connection_end(conn) {
     try {
         conn.end();
     } catch (error) {
         /* istanbul ignore next */
         console.log(error);
-    } finally {
-        pool.end();
+        /* istanbul ignore next */
+        connection_pool_close();
     }
 }
 
 async function as_sql_transaction(sqls_and_params) {
-    let pool = await createPool();
     let results = [];
     let conn;
     try {
-        conn = await pool.getConnection();
+        conn = await connection_begin();
         conn.beginTransaction();
         for (let i = 0; i < sqls_and_params.length; ++i) {
             let sql = sqls_and_params[i][0];
@@ -49,15 +72,14 @@ async function as_sql_transaction(sqls_and_params) {
         let rs = await conn.commit();
         return rs;
     } finally {
-        endPool(conn, pool);
+        await connection_end(conn);
     }
 }
 
 async function sql_select(sql, params) {
-    let pool = await createPool();
     let conn;
     try {
-        conn = await pool.getConnection();
+        conn = await connection_begin();
         // This version of the driver seems to always place the "meta" in
         // with the rows, no matter which calling convention we try.
         let result_set;
@@ -74,7 +96,7 @@ async function sql_select(sql, params) {
         }
         return objects;
     } finally {
-        endPool(conn, pool);
+        await connection_end(conn);
     }
 }
 
@@ -736,5 +758,6 @@ module.exports = {
     selectionStatesToBoxStates: selectionStatesToBoxStates,
     setFreetextsForPatient: setFreetextsForPatient,
     setSelectionsForPatient: setSelectionsForPatient,
+    shutdown: shutdown,
     updatePredictionResult: updatePredictionResult
 }
