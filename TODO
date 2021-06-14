@@ -6,7 +6,13 @@ Required for "ready to install":
 
 * "Opslaan..." button
   * calls a script (which can pushes data to a DB for the portal
+    * we have adfice.exportForPatient
   * makes this record view-only in this tool
+    * we have adfice.finalizeAdviceForPatient
+
+* "Haal gewijzigde..." button ?
+  * should this call a script ?
+  * we have adfice.clearAdviceForPatient
 
 Required changes to rules (Ace will do these):
 Wanted for 16 Jun:
