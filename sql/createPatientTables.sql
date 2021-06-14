@@ -10,6 +10,9 @@ CREATE TABLE `patient` (
   `education_level` varchar(100) ,
   `age` int unsigned,
   `is_fake` tinyint,
+  `is_final` tinyint(1),
+  `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
+  `row_updated` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_token` (`login_token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -23,6 +26,7 @@ CREATE TABLE `patient_labs` (
   `lab_test_code` varchar(15) DEFAULT NULL,
   `lab_test_result` varchar(100) DEFAULT NULL,
   `lab_test_units` varchar(15) DEFAULT NULL,
+  `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -73,6 +77,8 @@ CREATE TABLE `patient_measurements` (
   `has_ca_blocker` tinyint DEFAULT NULL,
   `has_incont_med` tinyint DEFAULT NULL,
   `prediction_result` int unsigned DEFAULT NULL,
+  `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
+  `row_updated` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `patient_id` (`patient_id`,`date_retrieved`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -86,6 +92,7 @@ CREATE TABLE `patient_medications` (
   `ATC_code` varchar(100) DEFAULT NULL,
   `start_date` datetime DEFAULT NULL,
   `dose` varchar(100) DEFAULT NULL,
+  `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `patient_id` (`patient_id`,`date_retrieved`,`medication_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -98,6 +105,7 @@ CREATE TABLE `patient_problems` (
   `start_date` datetime DEFAULT NULL,
   `name` varchar(200) DEFAULT NULL,
   `display_name` varchar(200) DEFAULT NULL,
+  `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `patient_id` (`patient_id`,`date_retrieved`,`problem_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -68,6 +68,7 @@ async function getAllAdviceTextsCheckboxes() {
     return all;
 }
 
+// called from AdficeWebserver
 async function getAdviceTextsCheckboxes(rule_numbers, all) {
     if ((rule_numbers == null) || (!rule_numbers.length)) {
         return [];
@@ -180,7 +181,7 @@ function as_id(num_or_str) {
     return num;
 }
 
-async function getMedsForPatient(patientIdentifier) {
+async function getMedsForPatient(patient_id) {
     var sql = `/* adfice.getMedsForPatient */
         SELECT ATC_code
              , medication_name
@@ -194,7 +195,6 @@ async function getMedsForPatient(patientIdentifier) {
                     WHERE patient_id=?
                )
       ORDER BY ATC_code`;
-    let patient_id = as_id(patientIdentifier);
     let params = [patient_id, patient_id];
     let meds = await sql_select(sql, params);
     return meds;
@@ -218,18 +218,16 @@ async function isSQLConditionTrue(patientIdentifier, ruleNumber) {
     return result;
 }
 
-async function evaluateSQLCondition(patientIdentifier, ruleNumber) {
+async function evaluateSQLCondition(patient_id, ruleNumber) {
     var sql = await getSQLCondition(ruleNumber);
     if (sql == null) {
         return true;
     } //no conditions === always true
     /* count the number of question marks in the string */
-    let patient_id = as_id(patientIdentifier);
     return await evaluateSQL(sql, patient_id);
 }
 
-async function evaluateSQL(sql, patientIdentifier) {
-    let patient_id = as_id(patientIdentifier);
+async function evaluateSQL(sql, patient_id) {
     let count;
     let matches = sql.match(/\?/g);
     if (matches) {
@@ -247,8 +245,7 @@ async function evaluateSQL(sql, patientIdentifier) {
         return false;
     }
     autil.assert((results[0]['TRUE'] == 1), JSON.stringify({
-        patientIdentifier: patientIdentifier,
-        //ruleNumber: ruleNumber,
+        patient_id: patient_id,
         sql: sql,
         results: results
     }, null, 4));
@@ -265,7 +262,7 @@ async function getPreselectRules(ruleNumber) {
     return results;
 }
 
-async function getProblemsForPatient(patientIdentifier) {
+async function getProblemsForPatient(patient_id) {
     var sql = `/* adfice.getProblemsForPatient */
         SELECT name
              , start_date
@@ -278,28 +275,28 @@ async function getProblemsForPatient(patientIdentifier) {
                     WHERE patient_id=?
                )
       ORDER BY id`;
-    let patient_id = as_id(patientIdentifier);
     let params = [patient_id, patient_id];
     let probs = await sql_select(sql, params);
     return probs;
 }
 
-async function getAgeForPatient(patientIdentifier) {
-    var sql = `/* adfice.getAgeForPatient */
-        SELECT age
+async function getPatientById(patient_id) {
+    var sql = `/* adfice.getPatientById */
+        SELECT *
           FROM patient
-         WHERE id=?
-      ORDER BY age DESC
-         LIMIT 1`;
-    let patient_id = as_id(patientIdentifier);
-    let results = await sql_select(sql, [patient_id]);
+         WHERE id=?`;
+    let params = [patient_id];
+    let results = await sql_select(sql, params);
+    let patient;
     if (results.length > 0) {
-        return results[0].age;
+        patient = results[0];
+    } else {
+        patient = {};
     }
-    return null;
+    return patient;
 }
 
-async function getLabsForPatient(patientIdentifier) {
+async function getLabsForPatient(patient_id) {
     var sql = `/* adfice.getLabsForPatient */
         SELECT lab_test_name
              , lab_test_result
@@ -312,20 +309,18 @@ async function getLabsForPatient(patientIdentifier) {
                     WHERE patient_id=?
                )
       ORDER BY id`;
-    let patient_id = as_id(patientIdentifier);
     let params = [patient_id, patient_id];
     let result = await sql_select(sql, params);
     return result;
 }
 
-async function getPatientMeasurements(patientIdentifier) {
+async function getPatientMeasurements(patient_id) {
     var sql = `/* adfice.getPatientMeasurements */
         SELECT *
           FROM patient_measurements
          WHERE patient_id=?
       ORDER BY date_retrieved DESC
          LIMIT 1`;
-    let patient_id = as_id(patientIdentifier);
     let params = [patient_id];
     let results = await sql_select(sql, params);
     if (results.length > 0) {
@@ -334,8 +329,7 @@ async function getPatientMeasurements(patientIdentifier) {
     return null;
 }
 
-async function getPredictionResult(patientIdentifier) {
-    let patient_id = as_id(patientIdentifier);
+async function getPredictionResult(patient_id) {
     let measurements = await getPatientMeasurements(patient_id);
 
     if (!measurements || !measurements.length) {
@@ -370,8 +364,7 @@ async function calculateAndStorePredictionResult(patient_id) {
     return measurements[0];
 }
 
-async function calculatePredictionResult(patientIdentifier) {
-    let patient_id = as_id(patientIdentifier);
+async function calculatePredictionResult(patient_id) {
     let measurements = await getPatientMeasurements(patient_id);
     if (measurements == null || !measurements.length) {
         return null;
@@ -396,6 +389,7 @@ async function calculatePredictionResult(patientIdentifier) {
     return measurement;
 }
 
+// called from AdficeWebserver
 async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
     const patient_id = as_id(patientIdentifier);
     const viewer_id = as_id(viewer);
@@ -442,6 +436,7 @@ async function getSelectionsForPatient(patient_id) {
     return selectionStatesToBoxStates(results);
 }
 
+// called from AdficeWebserver
 async function setFreetextsForPatient(patientIdentifier, viewer, freetexts) {
     const patient_id = as_id(patientIdentifier);
     const viewer_id = as_id(viewer);
@@ -474,7 +469,6 @@ async function setFreetextsForPatient(patientIdentifier, viewer, freetexts) {
 }
 
 async function getFreetextsForPatient(patient_id) {
-    patient_id = as_id(patient_id);
     var sql = `/* adfice.getFreetextForPatient */
          SELECT patient_id
               , viewer_id
@@ -505,9 +499,15 @@ function structureLabs(labRows) {
     return labTests;
 }
 
+// called from AdficeWebserver
 async function getAdviceForPatient(patientIdentifier) {
     let patient_id = as_id(patientIdentifier);
-    let age = await getAgeForPatient(patient_id);
+    let patient = await getPatientById(patient_id);
+    let age = patient.age;
+    let is_final = false;
+    if (patient.is_final) {
+        is_final = true;
+    }
 
     let labRows = await getLabsForPatient(patient_id);
     let labTests = structureLabs(labRows);
@@ -573,6 +573,7 @@ async function getAdviceForPatient(patientIdentifier) {
     let patient_advice = {};
     patient_advice.patient_id = patient_id;
     patient_advice.age = age;
+    patient_advice.is_final = is_final;
     patient_advice.labs = labRows;
     patient_advice.medications = meds;
     patient_advice.meds_without_rules = meds_without_fired;
@@ -683,6 +684,7 @@ function freetextsToRows(patient_id, viewer_id, freetexts) {
     return output;
 }
 
+// called from export-to-mrs.js
 async function getExportData(patientIdentifier) {
     let patient_id = as_id(patientIdentifier);
     let sql = `/* adfice.getExportData */
@@ -710,6 +712,7 @@ async function getExportData(patientIdentifier) {
     return results;
 }
 
+// expect to be called from external
 async function exportForPatient(patient, logfile) {
     let args = ['-i', patient];
 
@@ -744,13 +747,48 @@ async function exportForPatient(patient, logfile) {
     });
 }
 
+async function finalizeAdviceForPatient(patient_id) {
+    let sql = `/* adfice.finalizeAdviceForPatient */
+    UPDATE patient
+       SET is_final = 1
+     WHERE id = ?`
+    let params = [patient_id];
+    let result = await db.sql_query(sql, params);
+    return result;
+}
+
+async function clearAdviceForPatient(patient_id) {
+    let sqls_and_params = [];
+    let sql = `/* adfice.clearAdviceForPatient */
+        UPDATE patient
+           SET is_final = 0
+         WHERE id = ?`;
+    let params = [patient_id];
+    sqls_and_params.push([sql, params]);
+
+    sql = `/* adfice.clearAdviceForPatient */
+  DELETE FROM patient_advice_selection
+        WHERE patient_id = ?`;
+    sqls_and_params.push([sql, params]);
+
+    sql = `/* adfice.clearAdviceForPatient */
+  DELETE FROM patient_advice_freetext
+        WHERE patient_id = ?`;
+    sqls_and_params.push([sql, params]);
+
+    let rs = await db.as_sql_transaction(sqls_and_params);
+    return rs;
+}
+
 module.exports = {
     boxStatesToSelectionStates: boxStatesToSelectionStates,
     calculateAndStorePredictionResult: calculateAndStorePredictionResult,
     calculatePredictionResult: calculatePredictionResult,
+    clearAdviceForPatient: clearAdviceForPatient,
     determinePreselectedCheckboxes: determinePreselectedCheckboxes,
     evaluateSQL: evaluateSQL,
     exportForPatient: exportForPatient,
+    finalizeAdviceForPatient: finalizeAdviceForPatient,
     getActiveRules: getActiveRules,
     getAdviceForPatient: getAdviceForPatient,
     getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,

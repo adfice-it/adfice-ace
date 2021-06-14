@@ -144,8 +144,20 @@ test('setAdviceForPatient(68)', async () => {
     advice = await adfice.getAdviceForPatient(patientNumber);
     expect(advice.selected_advice).toStrictEqual(new_advice);
 
+    expect(advice.is_final).toBeFalsy();
+    await adfice.finalizeAdviceForPatient(patientNumber);
+    advice = await adfice.getAdviceForPatient(patientNumber);
+    expect(advice.is_final).toBeTruthy();
+
     let data = await adfice.getExportData(patientNumber);
     expect(data.length).toBe(2);
+
+    await adfice.clearAdviceForPatient(patientNumber);
+    advice = await adfice.getAdviceForPatient(patientNumber);
+    expect(advice.is_final).toBeFalsy();
+    expect(advice.selected_advice).toStrictEqual({});
+
+    adfice.setSelectionsForPatient(patientNumber, viewer, new_advice);
 })
 
 test('getAdviceForPatient(27), with labs and problems', async () => {
