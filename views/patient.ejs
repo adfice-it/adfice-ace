@@ -305,12 +305,12 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 </span> <!-- <%= asa_prefix %>_sbn -->
 </td>
 <td>
-<div id="<%= asa_prefix %>_cdss">
+<div id="<%= asa_prefix %>_cdss" class="med_cdss">
 <%         for (let k = 0; k < cb_advice.cdss_split.length; ++k) { -%>
 <%             let chunk = cb_advice.cdss_split[k]; -%>
 <%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
 <%             if (chunk.editable) { -%>
-<input id="<%= chunk_id %>" type="text"
+<input id="<%= chunk_id %>" type="text" class="ft_input"
         value="<%= chunk.text %>"/>
 <%             } else { -%>
 <div id="<%= chunk_id %>" class ="freetext">
@@ -440,13 +440,13 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
         style="visibility:hidden"
 />
 </span> <!-- <%= other_prefix %>_sbn -->
-<div id="<%= other_prefix %>_cdss_continer" class="other_cdss_containter">
+<div id="<%= other_prefix %>_cdss_continer" class="other_cdss_container">
 <div id="<%= other_prefix %>_cdss" class="other_cdss">
 <%         for (let k = 0; k < other_advice.cdss_split.length; ++k) { -%>
 <%             let chunk = other_advice.cdss_split[k]; -%>
 <%             let chunk_id = `ft_OTHER_${category}_${boxnum}_${k}`; -%>
 <%             if (chunk.editable) { -%>
-<input id="<%= chunk_id %>" type="text"
+<input id="<%= chunk_id %>" type="text" class="ft_input"
         value="<%= chunk.text %>"/>
 <%             } else { -%>
 <div id="<%= chunk_id %>" class ="freetext">
@@ -499,13 +499,13 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
         style="visibility:hidden"
 />
 </div> <!-- <%= nma_prefix %>_sbn -->
-<div id="<%= nma_prefix %>_cdss_continer" class="nonmed_cdss_containter">
+<div id="<%= nma_prefix %>_cdss_continer" class="nonmed_cdss_container">
 <div id="<%= nma_prefix %>_cdss" class="nonmed_cdss">
 <%         for (let k = 0; k < nm_advice.cdss_split.length; ++k) { -%>
 <%             let chunk = nm_advice.cdss_split[k]; -%>
 <%             let chunk_id = `ft_NONMED_${category}_${boxnum}_${k}`; -%>
 <%             if (chunk.editable) { -%>
-<input id="<%= chunk_id %>" type="text"
+<input id="<%= chunk_id %>" type="text" class="ft_input"
         value="<%= chunk.text %>"/>
 <%             } else { -%>
 <div id="<%= chunk_id %>" class ="freetext">

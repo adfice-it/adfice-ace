@@ -99,7 +99,9 @@ body {
 	float: left;
 	padding-right: 10px;
 }
-
+.med_cdss{
+	width: 100%;
+}
 .nonmed_row{
 	margin-bottom: 10px;
 	position: relative;
@@ -113,7 +115,7 @@ body {
 	position: absolute;
 	top: 0%;
 }
-.nonmed_cdss_containter{
+.nonmed_cdss_container{
   display: inline-block;
   width: 55%;
   padding-left: 30px;
@@ -125,7 +127,9 @@ body {
 .freetext {
     display: inline-block;
 }
-
+.ft_input {
+    width: 50em;
+}
 .div_other_advice{
 	display: block;
 }
@@ -134,7 +138,7 @@ body {
 	display: inline;
 	margin-bottom: 15px;
 }
-.other_cdss_containter{
+.other_cdss_container{
   display: inline-block;
   width: 55%;
   margin-top: 15px;
