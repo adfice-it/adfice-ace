@@ -44,17 +44,17 @@ function split_advice_texts_cdss_epic_patient(advice_texts) {
 async function getAllAdviceTextsCheckboxes() {
     var sql = `/* adfice.getAllAdviceTextsCheckboxes */
         SELECT m.medication_criteria_id
-             , m.selectBoxNum
-             , m.selectBoxCategory
+             , m.select_box_num
+             , m.select_box_category
              , m.cdss
              , m.epic
              , m.patient
              , p.priority
           FROM med_advice_text m
      LEFT JOIN select_box_category_priority p
-            ON (m.selectBoxCategory = p.select_box_category)
-         WHERE selectBoxNum IS NOT NULL
-      ORDER BY p.priority ASC, m.selectBoxNum ASC, m.id ASC`;
+            ON (m.select_box_category = p.select_box_category)
+         WHERE select_box_num IS NOT NULL
+      ORDER BY p.priority ASC, m.select_box_num ASC, m.id ASC`;
     let advice_text = await sql_select(sql);
     let list = split_advice_texts_cdss_epic_patient(advice_text);
     let all = {};
@@ -87,7 +87,7 @@ async function getAdviceTextsCheckboxes(rule_numbers, all) {
 
     narrowed.sort((a, b) => {
         return ((a.priority - b.priority) ||
-            (a.selectBoxNum - b.selectBoxNum) ||
+            (a.select_box_num - b.select_box_num) ||
             (a.id - b.id));
     });
 
@@ -97,15 +97,15 @@ async function getAdviceTextsCheckboxes(rule_numbers, all) {
 async function getAdviceOtherTextsCheckboxes() {
     var sql = `/* adfice.getAdviceOtherTextsCheckboxes */
         SELECT medication_criteria_id
-             , selectBoxNum
-             , selectBoxCategory
-             , selectBoxDesignator
+             , select_box_num
+             , select_box_category
+             , select_box_designator
              , cdss
              , epic
              , patient
           FROM med_other_text
       ORDER BY medication_criteria_id
-             , selectBoxNum`;
+             , select_box_num`;
     let advice_text = await sql_select(sql);
     return split_advice_texts_cdss_epic_patient(advice_text);
 }
@@ -118,7 +118,7 @@ async function getAdviceTextsNoCheckboxes(rule_numbers) {
         SELECT medication_criteria_id
              , cdss
           FROM med_advice_text
-         WHERE selectBoxNum IS NULL
+         WHERE select_box_num IS NULL
            AND medication_criteria_id IN(` +
         question_marks(rule_numbers.length) +
         `)
@@ -131,7 +131,7 @@ async function getAdviceTextsNonMedCheckboxes() {
     var sql = `/* adfice.getAdviceTextsNonMedCheckboxes */
         SELECT t.category_id
              , h.category_name
-             , t.selectBoxNum
+             , t.select_box_num
              , t.preselected
              , t.cdss
              , t.epic
@@ -140,7 +140,7 @@ async function getAdviceTextsNonMedCheckboxes() {
           JOIN nonmed_text AS t
             ON (h.category_id = t.category_id)
       ORDER BY t.category_id
-             , t.selectBoxNum
+             , t.select_box_num
     `;
     let advice_text = await sql_select(sql);
     return split_advice_texts_cdss_epic_patient(advice_text);
@@ -597,7 +597,7 @@ async function determinePreselectedCheckboxes(fired, patient_id, atc_code) {
         let preselectRules = await getPreselectRules(rule_number);
         for (let j = 0; j < preselectRules.length; ++j) {
             let preselectRule = preselectRules[j];
-            let box = preselectRule['selectBoxNum'];
+            let box = preselectRule['select_box_num'];
             let is_preselected = await ae.evaluatePreselected(preselectRule,
                 patient_id, atc_code, evaluateSQL);
             if (is_preselected) {

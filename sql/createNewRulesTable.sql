@@ -21,21 +21,21 @@ UNIQUE KEY (medication_criteria_id)
 CREATE TABLE med_advice_text (
 id int unsigned AUTO_INCREMENT PRIMARY KEY,
 medication_criteria_id varchar(8),
-selectBoxNum smallint unsigned,
-selectBoxCategory varchar(20),
-selectBoxDesignator varchar(20),
+select_box_num smallint unsigned,
+select_box_category varchar(20),
+select_box_designator varchar(20),
 cdss varchar(3000),
 epic varchar(2000),
 patient varchar(5000),
-UNIQUE KEY (medication_criteria_id, selectBoxNum)
+UNIQUE KEY (medication_criteria_id, select_box_num)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE med_other_text (
 id int unsigned AUTO_INCREMENT PRIMARY KEY,
 medication_criteria_id varchar(8),
-selectBoxNum smallint unsigned,
-selectBoxCategory varchar(20),
-selectBoxDesignator varchar(20),
+select_box_num smallint unsigned,
+select_box_category varchar(20),
+select_box_designator varchar(20),
 cdss varchar(3000),
 epic varchar(2000),
 patient varchar(5000)
@@ -44,8 +44,8 @@ patient varchar(5000)
 CREATE TABLE preselect_rules (
 id int unsigned AUTO_INCREMENT PRIMARY KEY,
 medication_criteria_id varchar(8),
-selectBoxNum smallint unsigned,
-preselectNum smallint unsigned,
+select_box_num smallint unsigned,
+preselect_num smallint unsigned,
 preselect_or varchar(500),
 preselect_not varchar(500),
 preselect_problem varchar(500),
@@ -53,7 +53,7 @@ preselect_age varchar(20),
 preselect_drug varchar(500),
 preselect_lab varchar(500),
 preselect_allergy varchar(500),
-UNIQUE KEY (medication_criteria_id, selectBoxNum, preselectNum)
+UNIQUE KEY (medication_criteria_id, select_box_num, preselect_num)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE nonmed_header (
@@ -67,10 +67,10 @@ UNIQUE KEY (category_name)
 CREATE TABLE nonmed_text (
 id int unsigned AUTO_INCREMENT PRIMARY KEY,
 category_id varchar(8),
-selectBoxNum smallint unsigned,
+select_box_num smallint unsigned,
 preselected tinyint unsigned,
 cdss varchar(3000),
 epic varchar(2000),
 patient varchar(5000),
-UNIQUE KEY (category_id, selectBoxNum)
+UNIQUE KEY (category_id, select_box_num)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -278,7 +278,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
          let cb_advice = cb_advices[j];
          let asa_prefix = "asa_" + i + "_" + j;
          let rulenum = cb_advice.medication_criteria_id;
-         let boxnum = cb_advice.selectBoxNum;
+         let boxnum = cb_advice.select_box_num;
          let advice_id_base =`${atc}_${rulenum}_${boxnum}`;
          let checkbox_id = 'cb_' + advice_id_base;
          let row_id = 'tr_' + advice_id_base;
@@ -344,7 +344,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
          let cb_advice = cb_advices[j];
          let paa_prefix = "paa_" + i + "_" + j;
          let rulenum = cb_advice.medication_criteria_id;
-         let boxnum = cb_advice.selectBoxNum;
+         let boxnum = cb_advice.select_box_num;
          let advice_id_base =`${atc}_${rulenum}_${boxnum}`;
          let checkbox_id = 'cb_' + advice_id_base;
          let row_id = 'pt_' + advice_id_base;
@@ -378,7 +378,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
      let other_advice = other_advices[i];
      let poa_prefix = "poa_" + i;
      let rulenum = other_advice.medication_criteria_id;
-     let boxnum = other_advice.selectBoxNum;
+     let boxnum = other_advice.select_box_num;
      let advice_id_base =`OTHER_${rulenum}_${boxnum}`;
      let checkbox_id = 'cb_' + advice_id_base;
      let row_id = 'pt_' + advice_id_base;
@@ -416,7 +416,7 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
        let other_advice = other_advices[i];
        let other_prefix = "other_" + i;
        let category = other_advice.medication_criteria_id;
-       let boxnum = other_advice.selectBoxNum;
+       let boxnum = other_advice.select_box_num;
        let other_id_base =`OTHER_${category}_${boxnum}`;
        let checkbox_id = 'cb_' + other_id_base;
        let row_id = 'tr_' + other_id_base;
@@ -466,7 +466,7 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
        let nm_advice = nm_advices[i];
        let nma_prefix = "nma_" + i;
        let category = nm_advice.category_id;
-       let boxnum = nm_advice.selectBoxNum;
+       let boxnum = nm_advice.select_box_num;
        let nma_id_base =`NONMED_${category}_${boxnum}`;
        let checkbox_id = 'cb_' + nma_id_base;
        let row_id = 'tr_' + nma_id_base;
@@ -527,7 +527,7 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
        let nm_advice = nm_advices[i];
        let nma_prefix = "nma_" + i;
        let category = nm_advice.category_id;
-       let boxnum = nm_advice.selectBoxNum;
+       let boxnum = nm_advice.select_box_num;
        let nma_id_base =`NONMED_${category}_${boxnum}`;
        let row_id = 'pt_' + nma_id_base;
 -%>
@@ -565,7 +565,7 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
          let cb_advice = cb_advices[j];
          let aea_prefix = "aea_" + i + "_" + j;
          let rulenum = cb_advice.medication_criteria_id;
-         let boxnum = cb_advice.selectBoxNum;
+         let boxnum = cb_advice.select_box_num;
          let advice_id_base =`${atc}_${rulenum}_${boxnum}`;
          let checkbox_id = 'cb_' + advice_id_base;
          let row_id = 'et_' + advice_id_base;
@@ -589,7 +589,7 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
        let other_advice = other_advices[i];
        let other_prefix = "other_" + i;
        let category = other_advice.medication_criteria_id;
-       let boxnum = other_advice.selectBoxNum;
+       let boxnum = other_advice.select_box_num;
        let other_id_base =`OTHER_${category}_${boxnum}`;
        let row_id = 'et_' + other_id_base;
 -%>
@@ -613,7 +613,7 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
    for (let i = 0; i < nm_advices.length; ++i ) {
        let nm_advice = nm_advices[i];
        let category = nm_advice.category_id;
-       let boxnum = nm_advice.selectBoxNum;
+       let boxnum = nm_advice.select_box_num;
        let nma_id_base =`NONMED_${category}_${boxnum}`;
        let row_id = 'et_' + nma_id_base;
 -%>

@@ -88,8 +88,8 @@ Leeftijd: <%= patient_advice.age %><br/>
 <%           let atcbt_prefix = "atcbt_" + i + "_" + j; -%>
 <tr id="<%= atcbt_prefix %>">
 <td id="<%= atcbt_prefix %>_mc"><%= cb_advice.medication_criteria_id %></td>
-<td id="<%= atcbt_prefix %>_sbn"><%= cb_advice.selectBoxNum %></td>
-<td id="<%= atcbt_prefix %>_sbc"><%= cb_advice.selectBoxCategory %></td>
+<td id="<%= atcbt_prefix %>_sbn"><%= cb_advice.select_box_num %></td>
+<td id="<%= atcbt_prefix %>_sbc"><%= cb_advice.select_box_category %></td>
 <td id="<%= atcbt_prefix %>_cdss"><%- md.makeHtml(cb_advice.cdss) %></td>
 <td id="<%= atcbt_prefix %>_epic"><%- md.makeHtml(cb_advice.epic) %></td>
 <td id="<%= atcbt_prefix %>_patient"><%- md.makeHtml(cb_advice.patient) %></td>

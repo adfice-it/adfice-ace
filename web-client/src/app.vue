@@ -95,7 +95,7 @@ form#patient_form(:class="{ [currentStep]: true }")
             .heading Maatregelen (aangekruist indien aanbevolen):
             .items
               .item(:id="`pt_${ atc }_${ rulenum }_${ boxnum }`",
-                    v-for="{ medication_criteria_id: rulenum, selectBoxNum: boxnum, cdss_split: chunks } in cb_advices")
+                    v-for="{ medication_criteria_id: rulenum, select_box_num: boxnum, cdss_split: chunks } in cb_advices")
                 label
                   markdowns(:items="chunks.filter(({ editable }) => !editable).map(({ text }) => text)", :replacer="html => html.replace(/\\<\\/?(?:p|br)\\>/g, '')")
                   input(v-for="{ text } in chunks.filter(({ editable }) => editable)", :value="text", type="text")

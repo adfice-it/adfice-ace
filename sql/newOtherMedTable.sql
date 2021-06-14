@@ -1,8 +1,8 @@
 INSERT INTO med_other_text (
 medication_criteria_id,
-selectBoxNum,
-selectBoxCategory,
-selectBoxDesignator,
+select_box_num,
+select_box_category,
+select_box_designator,
 cdss,
 epic,
 patient) VALUES
