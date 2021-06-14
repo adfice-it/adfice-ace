@@ -88,7 +88,7 @@ for SQL in \
 	updateMedRulesWithSQLConditions.sql \
 	updatePrecheckWithSQLConditions.sql
 do
-	docker cp $SQL adfice_mariadb:/
+	docker cp sql/$SQL adfice_mariadb:/
 	echo "sourcing $SQL"
 	docker exec adfice_mariadb mariadb \
 		--host=127.0.0.1 \
