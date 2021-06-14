@@ -33,16 +33,6 @@ console.log('patient_id: ', patient_id);
  <button type="button" class = "nav_button" id="help">
          Hoe gebruik ik dit systeem?</button>
 </div>
-<div id="footer">
-Patient: <%= patient_id %>
-<button id="button_clinician_view" type="button" class='button_advice_view'
-        onclick="switch_to_view('clinician')">Voorbereiding</button>
-<button id="button_condensed_view" type="button" class='button_advice_view'
-        onclick="switch_to_view('condensed')">Consult</button>
-<button id="button_patient_view" type="button" class='button_advice_view'
-        onclick="switch_to_view('patient')">Advies</button>
-<span id="viewer_count"></span>
-</div>
 <div id=patient_info>
 <strong>Pati&euml;ntinformatie:</strong><br/>
 Patient: <%= patient_id %><br/>
@@ -648,7 +638,16 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
 </div> <!-- epic_box -->
 
 <div class="whitespace"></div>
-
+<div id="footer">
+Patient: <%= patient_id %>
+<button id="button_clinician_view" type="button" class='button_advice_view'
+        onclick="switch_to_view('clinician')">Voorbereiding</button>
+<button id="button_condensed_view" type="button" class='button_advice_view'
+        onclick="switch_to_view('condensed')">Consult</button>
+<button id="button_patient_view" type="button" class='button_advice_view'
+        onclick="switch_to_view('patient')">Advies</button>
+<span id="viewer_count"></span>
+</div><!-- footer -->
 </form>
 </body>
 </html>
