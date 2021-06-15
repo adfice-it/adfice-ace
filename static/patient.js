@@ -290,7 +290,21 @@ function ws_on_message(event) {
     process_viewer_count(message);
 }
 
-window.addEventListener('load', (event) => {
+function ws_on_close(event) {
+    let one_second = 1000;
+    console.log('Socket closed:', event.reason, ' will try to reconnect');
+    setTimeout(function() {
+        console.log('Reconnecting....');
+        connect_web_socket();
+    }, one_second);
+}
+
+function ws_on_error(err) {
+    console.error('Socket error: ', err.message);
+    ws.close();
+};
+
+function connect_web_socket() {
     let url = new URL(document.URL);
     let hostname = url.hostname;
     let port = url.port;
@@ -309,6 +323,14 @@ window.addEventListener('load', (event) => {
     let ws_url = `${ws_protocol}//${hostname}:${port}/patient/${patient_id}`;
     ws = new WebSocket(ws_url);
     ws.onmessage = ws_on_message;
+    ws.onclose = ws_on_close;
+    ws.onerror = ws_on_error;
+
+    return ws;
+}
+
+window.addEventListener('load', (event) => {
+    connect_web_socket();
 
     switch_to_view("clinician");
 });

@@ -3,6 +3,9 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
+// TODO: make starting and stopping the AdficeWebserver much more friendly
+// for testing.
+
 let http = require('http');
 let ws = require('ws');
 let express = require('express');

@@ -45,12 +45,14 @@ Not required for "ready to install" but will be required for study:
     * re-runs the rules on (new) data
   * "Hoe gebruik ik..." leads to (stub) training page
 
-Mid:
+Mid Priority:
+* Each acceptance test should start an instance of AdficeWebserver
+* test reconnect behavior on web-socket drop or AdficeWebserver restart
+* specify DB port, separate instance for local human testing, automated testing
 * CI tests should use HTTPS too, possibly self-signed certs
 * the "consult view" button could be renamed "Consult verneiuwen" in order to
   remove the items which have been un-checked/disabled
   * the students suggested using a "reload" icon instead
-* notification of loss of server connection, attempt to reload if lost
 * record changes between views, connections and disconnects
 * styling, e.g.: viewers in yellow, hidden when 1
 * test-cafe : get the innnerHTML out of an element
@@ -59,9 +61,8 @@ Mid:
 * if no checkboxes are selected for a medication, display text "Geen advies."
   in the patient view.
 
-Low Prio:
+Low Priority:
 * allow user to fill in missing values in prediction model page
-* specify DB port, separate instance for local human testing, automated testing
 * naming consistency thoughout the javascript
 * naming consistency thoughout the html
 * create table atc_code(id int PK, code varchar(100))

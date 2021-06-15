@@ -9,96 +9,99 @@ import {
 
 fixture `Adfice`;
 
-test.page(`http://localhost:9090/patient?id=68`)
-    ('Check multiple viewers making changes', async t => {
+// TODO: make launching of the AdficeWebserver the job of the test, and
+// TODO: have each test launch a different instance on a different port
 
-        let selector = Selector('body');
-        let window1 = await t.getCurrentWindow();
+test('Check multiple viewers making changes', async t => {
+    let url = `http://localhost:9090/patient?id=68`;
+    let window1 = await t.openWindow(url);
 
-        // initial check that patient data is rendered
-        await t.expect(selector.withText('Indicatie hypertensie').exists).ok()
-        await t.expect(selector.withText('Enalapril').exists).ok()
-        await t.expect(selector.withText('Hydrochlorothiazide').exists).ok()
-        await t.expect(selector.withText('ACE-remmers').exists).ok()
+    let selector = Selector('body');
 
-        let atc = "C03AA03"; // hydrochlorothiazide
-        let rule = "42";
-        let cbn = "3";
-        let checkbox_id = `cb_${atc}_${rule}_${cbn}`;
-        let checkbox_css_selector = `input#${checkbox_id}`;
-        let freetext_id = `ft_${atc}_${rule}_${cbn}_1`;
-        let freetext_css_selector = `input#${freetext_id}`;
+    // initial check that patient data is rendered
+    await t.expect(selector.withText('Indicatie hypertensie').exists).ok()
+    await t.expect(selector.withText('Enalapril').exists).ok()
+    await t.expect(selector.withText('Hydrochlorothiazide').exists).ok()
+    await t.expect(selector.withText('ACE-remmers').exists).ok()
 
-        let ref_page_num = 14;
-        let ref_C03AA03 = Selector(`#atc_ref_page_${atc}_${ref_page_num}`);
-        await t.expect(ref_C03AA03.exists).ok();
+    let atc = "C03AA03"; // hydrochlorothiazide
+    let rule = "42";
+    let cbn = "3";
+    let checkbox_id = `cb_${atc}_${rule}_${cbn}`;
+    let checkbox_css_selector = `input#${checkbox_id}`;
+    let freetext_id = `ft_${atc}_${rule}_${cbn}_1`;
+    let freetext_css_selector = `input#${freetext_id}`;
 
-        const oldFreetext = "old";
-        const newFreetext = "foo";
+    let ref_page_num = 14;
+    let ref_C03AA03 = Selector(`#atc_ref_page_${atc}_${ref_page_num}`);
+    await t.expect(ref_C03AA03.exists).ok();
 
-        // checkbox starts invisible,
-        // but becomes visible via websocket message
-        // thus we check that we have received the message
-        let cb_selector = Selector(checkbox_css_selector);
-        await t.expect(cb_selector.visible).ok();
-        if (await cb_selector.checked) {
-            await t.click(cb_selector);
-        }
-        await t.expect(cb_selector.checked).notOk();
+    const oldFreetext = "old";
+    const newFreetext = "foo";
 
-        // type some text into the freetext field for this row.
-        let freetext_selector_1 = Selector(freetext_css_selector);
-        await t.selectText(freetext_selector_1);
-        await t.typeText(freetext_selector_1, oldFreetext);
-        await t.expect(freetext_selector_1.value).eql(oldFreetext);
+    // checkbox starts invisible,
+    // but becomes visible via websocket message
+    // thus we check that we have received the message
+    let cb_selector = Selector(checkbox_css_selector);
+    await t.expect(cb_selector.visible).ok();
+    if (await cb_selector.checked) {
+        await t.click(cb_selector);
+    }
+    await t.expect(cb_selector.checked).notOk();
 
-        let view_cnt_css_sel = "span#viewer_count";
-        await t.expect(Selector(view_cnt_css_sel).withText("1").exists).ok();
-        await t.expect(Selector(view_cnt_css_sel).withText("1").visible).notOk();
+    // type some text into the freetext field for this row.
+    let freetext_selector_1 = Selector(freetext_css_selector);
+    await t.selectText(freetext_selector_1);
+    await t.typeText(freetext_selector_1, oldFreetext);
+    await t.expect(freetext_selector_1.value).eql(oldFreetext);
 
-        // open a second window and check a box
-        let window2 = await t.openWindow('http://localhost:9090/patient?id=68');
+    let view_cnt_css_sel = "span#viewer_count";
+    await t.expect(Selector(view_cnt_css_sel).withText("1").exists).ok();
+    await t.expect(Selector(view_cnt_css_sel).withText("1").visible).notOk();
 
-        // verify that we show 2 visitors
-        let cb_selector2 = Selector(`input#${checkbox_id}`, {
-            timeout: 1000,
-            visibilityCheck: true
-        });
-        await t.expect(Selector(view_cnt_css_sel).withText("2").exists).ok();
-        await t.expect(Selector(view_cnt_css_sel).withText("2").visible).ok();
-        await t.switchToWindow(window1);
-        await t.expect(Selector(view_cnt_css_sel).withText("2").exists).ok();
-        await t.expect(Selector(view_cnt_css_sel).withText("2").visible).ok();
-        await t.switchToWindow(window2);
+    // open a second window and check a box
+    let window2 = await t.openWindow('http://localhost:9090/patient?id=68');
 
-        // click on the checkbox
-        await t.expect(cb_selector2.checked).notOk();
-        await t.click(cb_selector2);
-        await t.expect(cb_selector2.checked).ok();
-
-        // type some text into the freetext field for this row.
-        let freetext_selector_2 = Selector(freetext_css_selector);
-        await t.selectText(freetext_selector_2);
-        await t.typeText(freetext_selector_2, newFreetext);
-        await t.expect(freetext_selector_2.value).eql(newFreetext);
-
-        await t.switchToWindow(window1);
-
-        // ensure that we see the box checked in the initial window.
-        await t.expect(cb_selector.checked).ok();
-
-        // ensure the text is updated in the initial window
-        await t.expect(freetext_selector_1.value).eql(newFreetext);
-
-        // close the second window
-        await t.switchToWindow(window2);
-        await t.closeWindow(window2);
-        await t.switchToWindow(window1);
-
-        // ensure that we have one viewer after close
-        await t.expect(Selector(view_cnt_css_sel).withText("1").exists).ok();
-        await t.expect(Selector(view_cnt_css_sel).withText("1").visible).notOk();
+    // verify that we show 2 visitors
+    let cb_selector2 = Selector(`input#${checkbox_id}`, {
+        timeout: 1000,
+        visibilityCheck: true
     });
+    await t.expect(Selector(view_cnt_css_sel).withText("2").exists).ok();
+    await t.expect(Selector(view_cnt_css_sel).withText("2").visible).ok();
+    await t.switchToWindow(window1);
+    await t.expect(Selector(view_cnt_css_sel).withText("2").exists).ok();
+    await t.expect(Selector(view_cnt_css_sel).withText("2").visible).ok();
+    await t.switchToWindow(window2);
+
+    // click on the checkbox
+    await t.expect(cb_selector2.checked).notOk();
+    await t.click(cb_selector2);
+    await t.expect(cb_selector2.checked).ok();
+
+    // type some text into the freetext field for this row.
+    let freetext_selector_2 = Selector(freetext_css_selector);
+    await t.selectText(freetext_selector_2);
+    await t.typeText(freetext_selector_2, newFreetext);
+    await t.expect(freetext_selector_2.value).eql(newFreetext);
+
+    await t.switchToWindow(window1);
+
+    // ensure that we see the box checked in the initial window.
+    await t.expect(cb_selector.checked).ok();
+
+    // ensure the text is updated in the initial window
+    await t.expect(freetext_selector_1.value).eql(newFreetext);
+
+    // close the second window
+    await t.switchToWindow(window2);
+    await t.closeWindow(window2);
+    await t.switchToWindow(window1);
+
+    // ensure that we have one viewer after close
+    await t.expect(Selector(view_cnt_css_sel).withText("1").exists).ok();
+    await t.expect(Selector(view_cnt_css_sel).withText("1").visible).notOk();
+});
 
 test('Checkbox persistence', async t => {
     let checkbox_id = "cb_N02AA01_76_1";
