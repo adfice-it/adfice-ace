@@ -2,6 +2,13 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw -->
 <%# see https://ejs.co/#docs -%>
+<% function niceDate(sqldate) {
+	let year = sqldate.getFullYear();
+	let m = sqldate.getMonth() + 1;
+	let d = sqldate.getDate();
+	return d + '-' + m + '-' + year;
+   }
+-%>
 <html lang="<%= lang %>">
 <head>
 <title>Toelichting predictiemodel voor berekening valrisico</title>
@@ -35,7 +42,7 @@ This is the page where the user will be able to enter the missing data, as well,
 <table border = 1;>
 <tr class="tableheader"><td>variabel</td><td>waarde</td><td>datum gemeten</td><td>coefficient</td></tr>
 <tr><td>Intercept</td><td></td><td></td><td>-0.2047 +</td></tr>
-<tr><td>Z-score depressie (GDS)</td><td class = "patdata"><div id = "GDS_score"><%= patient_measurement.GDS_score %></div></td><td class = "patdata"><div id = "GDS_date_measured"><%= patient_measurement.GDS_date_measured %></div></td><td> 0.0778  * (GDS - 1.4401) / 1.9419 +</td></tr>
+<tr><td>Z-score depressie (GDS)</td><td class = "patdata"><div id = "GDS_score"><%= patient_measurement.GDS_score %></div></td><td class = "patdata"><div id = "GDS_date_measured"><%= niceDate(patient_measurement.GDS_date_measured) %></div></td><td> 0.0778  * (GDS - 1.4401) / 1.9419 +</td></tr>
 <tr><td>Z-score grijpkracht<sup>a</sup></td><td class = "patdata"><div id = "grip_kg"><%= patient_measurement.grip_kg %><div></td><td class = "patdata"><div id = "grip_date_measured"><%= patient_measurement.grip_date_measured %></div></td><td> -0.1678  * (kga  - 32.4838) / 10.8414 +</td></tr>
 <tr><td>Z-score loopsnelheid<sup>b</sup></td><td class = "patdata"><div id = "walking_speed_m_per_s"><%= patient_measurement.walking_speed_m_per_s %></div></td><td class = "patdata"><div id = "walking_date_measured"><%= patient_measurement.walking_date_measured %></div></td><td> 0.0997 * (m/sb - 0.9417) / 0.2760 +</td></tr>
 <tr><td>BMI </td><td class = "patdata"><div id = "BMI"><%= patient_measurement.BMI %></div></td><td class = "patdata"><div id = "BMI_date_measured"><%= patient_measurement.BMI_date_measured %></div></td><td> -0.0204 * kg/m2 +</td></tr>

@@ -358,8 +358,3 @@ async function copyPatientTextToClipboard() {
     await navigator.clipboard.writeText(all_text);
     return true;
 }
-
-function niceDate(sqldate){
-	let dateTimeParts= sqldate.split(/[- :]/)
-	return dateTimeParts[2] + "-" + dateTimeParts[1] + 1 + "-" + dateTimeParts[0];
-}
