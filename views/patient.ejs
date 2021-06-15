@@ -47,7 +47,7 @@ Leeftijd: <%= patient_advice.age %><br/>
 <% } else { -%>
 <%= risk_score -%>%
 <% } -%>
-</span> (lees meer over het predictiemodel)</p>
+</span> <a href="prediction_explanation?id=<%= patient_id %>">(lees meer over het predictiemodel)</a></p>
 <div class='gauge_background'>
 <div class='gauge_text_left'>0%</div>
 <% if (!hide_gauge) { -%>

@@ -59,6 +59,17 @@ async function renderValidationAdviceForPatient(req, res) {
     }); // .ejs
 }
 
+async function renderPredictionExplanation(req, res) {
+    let patient_id = req.query.id || 0;
+    let patient_measurements = await adfice.getPatientMeasurements(patient_id);
+    let patient_measurement = patient_measurements[0];
+    res.render("prediction_explanation", {
+        lang: 'nl',
+        patient_id: patient_id,
+        patient_measurement: patient_measurement
+    }); // .ejs
+}
+
 async function renderAdviceTextsCheckboxes(req, res) {
     let query_id = req.query.id || "6e";
     let rule_numbers = query_id.split(',');
@@ -94,6 +105,8 @@ app.get("/advice", jsonAdviceForPatient);
 app.get("/patient", renderAdviceForPatient);
 
 app.get("/patient-validation", renderValidationAdviceForPatient);
+
+app.get("/prediction_explanation", renderPredictionExplanation);
 
 app.get("/checkboxes", renderAdviceTextsCheckboxes);
 
