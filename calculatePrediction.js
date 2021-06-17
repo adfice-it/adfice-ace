@@ -13,14 +13,16 @@ function calculatePredictionDB(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
         fear1 == null || fear2 == null) {
         return null;
     }
+// Education was included as a categorical variable that denotes the highest educational attainment. R automatically applies dummy coding when modelling categorical variables so that only one of the coefficients can be ‘turned on’ and be multiplied with 1.
     var edu2 = 0;
     var edu3 = 0;
-    if (education_hml >= 2) {
+    if (education_hml == 2) {
         edu2 = 1;
     }
-    if (education_hml >= 3) {
+    if (education_hml == 3) {
         edu3 = 1;
     }
+// Note that fall history was not modelled as a categorical variable but as two distinct dichotomous variables (i.e., any fall in past year (= 1 fall) and recurrent falls (= 2 falls) in past year).
     var nrFall1 = 0;
     var nrFall2 = 0;
     if (nr_falls_12m >= 1) {
@@ -29,6 +31,7 @@ function calculatePredictionDB(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
     if (nr_falls_12m >= 2) {
         nrFall2 = 1;
     }
+// fear of falls (FES score) is categorical, thus fear0, fear1, *or* fear2 should = 1; the other two should be 0.
     return calculatePrediction(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
         systolic_bp_mmHg, number_of_limitations, nrFall1, nrFall2, smoking,
         has_antiepileptica, has_ca_blocker, has_incont_med, edu2, edu3, fear1, fear2);

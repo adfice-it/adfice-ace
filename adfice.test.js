@@ -637,11 +637,11 @@ test('Get prediction model result from DB', async () => {
 
     // add prediction result to database on first fetch if not present
     let prediction = await adfice.getPredictionResult(patient);
-    expect(prediction).toBe(77);
+    expect(prediction).toBe(74);
 
     // second fetch gets the same result, but does not update the db
     prediction = await adfice.getPredictionResult(patient);
-    expect(prediction).toBe(77);
+    expect(prediction).toBe(74);
 });
 
 test('Get empty result set from measurements', async () => {

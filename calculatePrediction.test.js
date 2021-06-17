@@ -19,13 +19,13 @@ test('calculatePrediction', () => {
     let has_ca_blocker = 0;
     let has_incont_med = 1;
     let edu2 = 1;
-    let edu3 = 1;
+    let edu3 = 0;
     let fear1 = 0;
     let fear2 = 1;
     let prediction = cp.calculatePrediction(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
         systolic_bp_mmHg, number_of_limitations, nrFall1, nrFall2, smoking,
         has_antiepileptica, has_ca_blocker, has_incont_med, edu2, edu3, fear1, fear2);
-    expect(prediction).toBe(77);
+    expect(prediction).toBe(70);
 })
 
 test('calculatePredictionDB good data', () => {
@@ -46,7 +46,7 @@ test('calculatePredictionDB good data', () => {
     let prediction = cp.calculatePredictionDB(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
         systolic_bp_mmHg, number_of_limitations, nr_falls_12m, smoking,
         has_antiepileptica, has_ca_blocker, has_incont_med, education_hml, fear1, fear2);
-    expect(prediction).toBe(77);
+    expect(prediction).toBe(74);
 
     nr_falls_12m = 0;
     education_hml = 1;
@@ -66,6 +66,25 @@ test('calculatePredictionDB good data', () => {
         fear1,
         fear2);
     expect(prediction).toBe(38);
+
+    nr_falls_12m = 1;
+    education_hml = 2;
+    prediction = cp.calculatePredictionDB(
+        GDS_score,
+        grip_kg,
+        walking_speed_m_per_s,
+        BMI,
+        systolic_bp_mmHg,
+        number_of_limitations,
+        nr_falls_12m,
+        smoking,
+        has_antiepileptica,
+        has_ca_blocker,
+        has_incont_med,
+        education_hml,
+        fear1,
+        fear2);
+    expect(prediction).toBe(55);
 })
 
 test('calculatePredictionDB bad data', () => {
