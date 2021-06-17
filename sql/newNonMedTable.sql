@@ -65,7 +65,8 @@ Op deze website vindt u meer informatie over de valtraining &quot;In Balans&quot
 - pijn in schouders en nek; 
 - klachten van andere spieren. Afhankelijk van de oorzaak kunnen er ook nog andere specifiekere klachten ontstaan.
 De klachten treden op wanneer er (tijdelijk) te weinig bloed beschikbaar is om naar het hoofd te pompen, zoals: 
-- bij te snel opstaan; ?na de maaltijd (het bloed gaat vooral naar de darmen); 
+- bij te snel opstaan; 
+- na de maaltijd (het bloed gaat vooral naar de darmen); 
 - bij gebruik van bepaalde medicijnen waardoor meer vocht wordt uitgescheiden (bv. plaspillen); 
 - na een warm bad (de bloedvaten van de huid staan wijd open); 
 - na lichamelijke inspanning (de bloedvaten van de spieren staan dan wijd open); 
