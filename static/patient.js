@@ -25,6 +25,9 @@ function switch_to_view(view) {
     let checkboxes = document.querySelectorAll("[id ^= cb_]");
     let checkbox_rows = document.querySelectorAll("[id ^= tr_]");
 
+    let nm_category_headings_additional = document.querySelectorAll(
+        ".nm_category_entry_additional");
+
     let non_med_advice_selection_area = document.getElementById(
         "non_med_advice_selection_area");
     let non_med_advice_patient_area = document.getElementById(
@@ -79,6 +82,9 @@ function switch_to_view(view) {
                 checkbox_rows[i].style.display = 'none';
             }
         }
+        for (let i = 0; i < nm_category_headings_additional.length; ++i) {
+            nm_category_headings_additional[i].style.color = 'black';
+        }
         set_class_display("advice_no_checkbox", 'none');
         non_med_advice_selection_area.style.display = 'block';
         non_med_advice_patient_area.style.display = 'none';
@@ -100,6 +106,9 @@ function switch_to_view(view) {
         div_epic_box.style.display = 'block';
         for (let i = 0; i < checkbox_rows.length; ++i) {
             checkbox_rows[i].style.display = 'block';
+        }
+        for (let i = 0; i < nm_category_headings_additional.length; ++i) {
+            nm_category_headings_additional[i].style.color = 'white';
         }
         set_class_display("advice_no_checkbox", 'block');
         non_med_advice_selection_area.style.display = 'block';

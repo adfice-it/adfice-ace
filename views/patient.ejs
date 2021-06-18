@@ -470,17 +470,18 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
        let nma_id_base =`NONMED_${category}_${boxnum}`;
        let checkbox_id = 'cb_' + nma_id_base;
        let row_id = 'tr_' + nma_id_base;
-       let category_display_name = '';
        let category_name = nm_advice.category_name;
+       let category_name_class = "nm_category_entry_additional";
        if (category_name != last_category_name) {
            last_category_name = category_name;
-           category_display_name = category_name; %>
-<br/>
-<%       }
+           category_name_class = "nm_category_entry_first";
+       }
 -%>
 <div id="<%= row_id %>" class="nonmed_row">
 <div id="td_nm_category_name_<%= nm_advice.category_id %>_<%= boxnum %>"
-    class="td_nm_category_name"><%= category_display_name %></div>
+     class="td_nm_category_name <%= category_name_class %>">
+     <%= category_name %>
+</div>
 <div id="<%= nma_prefix %>_sbn" class="nonmed_checkbox">
 <input type="checkbox"
         id="<%= checkbox_id %>"
