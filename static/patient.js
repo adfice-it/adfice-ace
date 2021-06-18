@@ -245,10 +245,14 @@ function process_freetexts(message) {
 }
 
 function process_viewer_count(message) {
+    let element = document.getElementById("viewer_count");
+    element.style.visibility = 'visible';
+    element.style.color = 'black';
+
     if (!('viewers' in message)) {
         return;
     }
-    let element = document.getElementById("viewer_count");
+
     element.innerHTML = `Viewers: ${message.viewers}`
     if (message.viewers > 1) {
         element.style.visibility = 'visible';
@@ -266,6 +270,7 @@ function first_incoming_message(event) {
         };
         process_checkbox(checkbox, false)
     })
+
     elementList = document.querySelectorAll("input[type='text']");
     elementList.forEach((textfield) => {
         textfield.style.visibility = "visible";
@@ -300,6 +305,11 @@ function ws_on_message(event) {
 }
 
 function ws_on_close(event) {
+    let element = document.getElementById("viewer_count");
+    element.innerHTML = 'Connecting ...';
+    element.style.visibility = 'visible';
+    element.style.color = 'red';
+
     let one_second = 1000;
     console.log('Socket closed:', event.reason, ' will try to reconnect');
     setTimeout(function() {
