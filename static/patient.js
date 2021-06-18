@@ -130,6 +130,13 @@ function ucfirst(s) {
 }
 
 function boxclicked(checkbox) {
+    if (!ws) {
+        checkbox.checked = !checkbox.checked;
+        console.error('got a check event for', checkbox,
+            'but websocket is null');
+        ++weirdness;
+        return;
+    }
     if (DEBUG > 0) {
         console.log('Checkbox ' + checkbox.id + ' clicked' +
             ' and is now ' + checkbox.checked);
@@ -155,6 +162,12 @@ function boxclicked(checkbox) {
 }
 
 function freetextentered(textfield) {
+    if (!ws) {
+        console.error('got a freetext event for ', textfield,
+            'but websocket is null');
+        ++weirdness;
+        return;
+    }
     let message = {};
     message.viewer_id = viewer_id;
     message.patient_id = patient_id;
@@ -302,6 +315,15 @@ function ws_on_message(event) {
     process_freetexts(message);
 
     process_viewer_count(message);
+
+    if (message['is_final']) {
+        is_final = true;
+    }
+
+    let elementList = document.querySelectorAll("input");
+    elementList.forEach((input) => {
+        input.disabled = is_final;
+    });
 }
 
 function ws_on_close(event) {
@@ -309,6 +331,14 @@ function ws_on_close(event) {
     element.innerHTML = 'Connecting ...';
     element.style.visibility = 'visible';
     element.style.color = 'red';
+
+    let elementList = document.querySelectorAll("input");
+    elementList.forEach((input) => {
+        input.disabled = true;
+    });
+
+    ws = null;
+    messages_received = 0;
 
     let one_second = 1000;
     console.log('Socket closed:', event.reason, ' will try to reconnect');

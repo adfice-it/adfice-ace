@@ -3,7 +3,6 @@ Required for "ready to install":
   * prediction model explanation page should show data from DB that is being
     used in the prediction
   * Link to explanation page.
-  * inform user if web socket is lost and lock page until it is back
 
 * "Opslaan..." button
   * calls a script (which can pushes data to a DB for the portal
