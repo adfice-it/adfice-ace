@@ -23,13 +23,15 @@ test('test drugsWithoutFiredRules', async () => {
         "preselect_not": "C03CA,C03CB",
         "sql_condition": null
     };
-    let result = await ae.evaluatePreselected(preselectRule, 1, "C03CA02", adfice.isSQLConditionTrue);
+    let result = await ae.evaluatePreselected(preselectRule, 1, "C03CA02",
+        adfice.isSQLConditionTrue);
     expect(result).toBe(false);
     preselectRule = {
         "preselect_or": null,
         "preselect_not": "C03CA,C03CB",
         "sql_condition": null
     };
-    result = await ae.evaluatePreselected(preselectRule, 1, "C03CD02", adfice.isSQLConditionTrue);
+    result = await ae.evaluatePreselected(preselectRule, 1, "C03CD02",
+        adfice.isSQLConditionTrue);
     expect(result).toBe(true);
 });

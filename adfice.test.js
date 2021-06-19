@@ -282,7 +282,9 @@ test('getAdviceForPatient(85), normal eGFR', async () => {
     let patientNumber = 85;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
-    //TODO check for malformed patient data. In this case labTests was not being constructed correctly. Or just replace the criteria with SQL and test that insstead.
+    // TODO check for malformed patient data. In this case labTests was not
+    // being constructed correctly. Or just replace the criteria with SQL and
+    // test that insstead.
 
 });
 
@@ -295,7 +297,8 @@ test('getSQLcondition rule 38', async () => {
 test('isSQLConditionTrue', async () => {
     let patientIdentifier = 44;
     let ruleNumber = 38;
-    let isConditionTrue = await adfice.isSQLConditionTrue(patientIdentifier, ruleNumber);
+    let isConditionTrue = await adfice.isSQLConditionTrue(patientIdentifier,
+        ruleNumber);
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
 });

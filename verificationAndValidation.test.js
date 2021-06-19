@@ -645,7 +645,8 @@ test('verification3: conforms to spec', async () => {
     fired0 = null;
     patientAdvice = null;
 
-    //TODO check for other combi drugs that aren't handled correctly, as well as ATCs that appear in >1 vervolg rule
+    // TODO check for other combi drugs that aren't handled correctly,
+    // as well as ATCs that appear in >1 vervolg rule
     patientAdvice = await adfice.getAdviceForPatient(129);
     fired0 = patientAdvice.medication_advice[0].fired.toString();
     expect(fired0).toBe("80a,80b,81,117,118,120");

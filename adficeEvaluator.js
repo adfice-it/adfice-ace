@@ -19,9 +19,11 @@ async function evaluateRules(meds, rules, patient_id, isSQLConditionTrue) {
             let rule = rules[ruleCounter];
             if (matchesSelector(atc_code, rule.selector_or) &&
                 !matchesSelector(atc_code, rule.selector_not)) {
-                let isConditionTrue = await isSQLConditionTrue(patient_id, rule.medication_criteria_id);
+                let isConditionTrue = await isSQLConditionTrue(patient_id,
+                    rule.medication_criteria_id);
                 if (isConditionTrue) {
-                    medsWithRulesToFire[atc_code].push(rule.medication_criteria_id);
+                    medsWithRulesToFire[atc_code].push(
+                        rule.medication_criteria_id);
                 }
             }
         }
@@ -55,24 +57,31 @@ function matchesSelector(atcCode, selectorString) {
 }
 
 
-//This function will evaluate whether a single preselect rule is true
+// This function will evaluate whether a single preselect rule is true
 // = one row from the table preselect_rules
 // if there is no row in preselect_rules, then the checkbox is never preselected.
 // if there is a row, then if the row returns true, the checkbox is preselected.
-async function evaluatePreselected(preselectRule, patient_id, atcCode, evaluateSQL) {
+async function evaluatePreselected(preselectRule, patient_id, atcCode,
+    evaluateSQL) {
     //console.dir(adfice);
-    let selector_result = true; //if no selector is specified, then it is true for all drugs that can fire the rule
+    // if no selector is specified, then
+    // it is true for all drugs that can fire the rule
+    let selector_result = true;
     if (preselectRule['preselect_or'] != null) {
-        if (!matchesSelector(atcCode, preselectRule['preselect_or'].toString())) {
+        let selectorString = preselectRule['preselect_or'].toString();
+        if (!matchesSelector(atcCode, selectorString)) {
             selector_result = false;
         }
     }
     if (preselectRule['preselect_not'] != null) {
-        if (matchesSelector(atcCode, preselectRule['preselect_not'].toString())) {
+        let letselectorString = preselectRule['preselect_not'].toString();
+        if (matchesSelector(atcCode, letselectorString)) {
             selector_result = false;
         }
     }
-    let condition_result = true; //if no condition is specified, then it is true for all patients
+    // if no condition is specified, then
+    // it is true for all patients
+    let condition_result = true;
     if (preselectRule['sql_condition'] != null) {
         let sql_condition = preselectRule['sql_condition'].toString();
         let isConditionTrue = await evaluateSQL(sql_condition, patient_id);
