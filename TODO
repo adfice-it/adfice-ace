@@ -1,8 +1,5 @@
 Required for "ready to install":
-* integrate prediction
-  * prediction model explanation page should show data from DB that is being
-    used in the prediction
-  * Link to explanation page.
+* add color-bar to prediction explanation page
 
 * "Opslaan..." button
   * calls a script (which can pushes data to a DB for the portal
@@ -15,10 +12,6 @@ Required for "ready to install":
   * we have adfice.clearAdviceForPatient
 
 Required changes to rules (Ace will do these):
-Wanted for 16 Jun:
-* Add word "overige" to the plain free text box for each medication
-  (also add to specification)
-
 * Make sure every text ends with a period. If there is a free text box,
   the period should come before the free text box.
   (Laxans: should probably become Laxans aanbevolen.)
@@ -29,6 +22,7 @@ Wanted for usability:
   medications in clinician view
 
 Not required for "ready to install" but will be required for study:
+* Build a CENTOS/RHEL vm, with everything -- no containers
 * logging:
   * log whether system was used at all
   * whether Print and Send to portal was used
@@ -39,10 +33,7 @@ Not required for "ready to install" but will be required for study:
     * no need for extra printer friendliness yet
     * but log it
 
-* create "stub" functions for linking to Epic
-  * Orange "Haal gewijzigd..." button
-    * wipes checkboxes
-    * re-runs the rules on (new) data
+* create "stub" function:
   * "Hoe gebruik ik..." leads to (stub) training page
 
 Mid Priority:
