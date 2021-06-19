@@ -29,6 +29,9 @@ Not required for "ready to install" but will be required for study:
   * which advice was (in the end) selected
   * which advice had been pre-selected (and thus, was it unchecked)
     to compare what doctor ultimately chose
+  * reconstruct the information displayed to the user about the patient
+    (for example, DELETEs from databases could TRIGGER an INSERT in to
+     an archive table)
   * print button
     * no need for extra printer friendliness yet
     * but log it
