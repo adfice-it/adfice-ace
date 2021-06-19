@@ -408,3 +408,20 @@ test('Checkbox preselected', async t => {
     });
     await t.expect(checked_checkbox.checked).ok();
 });
+
+test('Test finalize for patient', async t => {
+    let url = 'http://localhost:9090/patient?id=161';
+    let window1 = await t.openWindow(url);
+
+    let button_definitive = Selector('button#definitive');
+    await t.expect(button_definitive.exists).ok();
+
+    let checkbox_id="cb_NONMED_V_1";
+    let checkbox_css_selector = `input#${checkbox_id}`;
+    let cb_selector = Selector(checkbox_css_selector);
+    await t.expect(cb_selector.hasAttribute('disabled')).notOk();
+
+    await t.click(button_definitive);
+
+    await t.expect(cb_selector.hasAttribute('disabled')).ok();
+});

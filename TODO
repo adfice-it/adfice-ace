@@ -1,5 +1,6 @@
 Required for "ready to install":
 * add color-bar to prediction explanation page
+* preselection on non-medication
 
 * "Opslaan..." button
   * calls a script (which can pushes data to a DB for the portal
@@ -22,6 +23,7 @@ Wanted for usability:
   medications in clinician view
 
 Not required for "ready to install" but will be required for study:
+* browser caching? detect back button, return to page?
 * Build a CENTOS/RHEL vm, with everything -- no containers
 * logging:
   * log whether system was used at all

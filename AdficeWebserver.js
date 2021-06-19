@@ -139,7 +139,7 @@ function hello_all(kind, id) {
     send_all(kind, id, message);
 }
 
-async function init_patient_data(ws, kind, id) {
+async function patient_advice_message(id, kind) {
     let patient_advice = await adfice.getAdviceForPatient(id);
 
     let freetexts = patient_advice.free_texts;
@@ -155,9 +155,13 @@ async function init_patient_data(ws, kind, id) {
     message.info = 'hello';
     message['field_entries'] = freetexts;
     message['box_states'] = selections;
+    message['is_final'] = patient_advice.is_final;
+    return message;
+}
 
+async function init_patient_data(ws, kind, id) {
+    let message = await patient_advice_message(id, kind);
     let msg_string = JSON.stringify(message, null, 4);
-
     ws.send(msg_string);
 }
 
@@ -214,7 +218,13 @@ server.on('upgrade', function upgrade(request, socket, head) {
                         await adfice.setFreetextsForPatient(
                             patient_id, viewer, freetexts);
                     }
-                    send_all(kind, id, message);
+                    if (message.type == 'definitive') {
+                        await adfice.finalizeAndExport(id);
+                        let new_msg = await patient_advice_message(id, kind);
+                        send_all(kind, id, new_msg);
+                    } else {
+                        send_all(kind, id, message);
+                    }
                 }
             } catch (error) {
                 console.log(error);

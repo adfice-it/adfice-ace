@@ -306,6 +306,7 @@ function ws_on_message(event) {
     if ((!('patient_id' in message)) || (message.patient_id != patient_id)) {
         console.log(`expected patient_id of '${patient_id}'`);
         console.log(`               but was '${message.patient_id}'`);
+        console.log(JSON.stringify({message: message}, null, 4));
         ++weirdness;
         return;
     }
@@ -405,5 +406,19 @@ async function copyPatientTextToClipboard() {
     var nma = document.getElementById("non_med_advice_patient_area_text");
     var all_text = dpv.innerText + "\n" + "\n" + nma.innerText;
     await navigator.clipboard.writeText(all_text);
+    return true;
+}
+
+async function makeDefinitive() {
+    let message = {};
+    message.viewer_id = viewer_id;
+    message.patient_id = patient_id;
+    message.type = 'definitive';
+
+    let msg_str = JSON.stringify(message, null, 4);
+    if (DEBUG > 0) {
+        console.log('sending:', msg_str);
+    }
+    ws.send(msg_str);
     return true;
 }
