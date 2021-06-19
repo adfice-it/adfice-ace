@@ -693,3 +693,17 @@ test('exportForPatient', async () => {
 
     fs.unlinkSync(file);
 });
+
+test('finalize_export API', async () => {
+    let patient = '68';
+    let file = "test-exportForPatient-68-2.log";
+    try {
+        fs.unlinkSync(file, (err) => {});
+    } catch (ignoreError) {}
+    await adfice.clearAdviceForPatient(patient);
+    await adfice.finalizeAndExport(patient, file);
+    let patientAdvice = await adfice.getAdviceForPatient(patient);
+    expect(patientAdvice.is_final).toBeTruthy();
+    fs.unlinkSync(file);
+    await adfice.clearAdviceForPatient(patient);
+});

@@ -757,6 +757,11 @@ async function finalizeAdviceForPatient(patient_id) {
     return result;
 }
 
+async function finalizeAndExport(patient_id, logfile) {
+    await finalizeAdviceForPatient(patient_id);
+    await exportForPatient(patient_id, logfile);
+}
+
 async function clearAdviceForPatient(patient_id) {
     let sqls_and_params = [];
     let sql = `/* adfice.clearAdviceForPatient */
@@ -789,6 +794,7 @@ module.exports = {
     evaluateSQL: evaluateSQL,
     exportForPatient: exportForPatient,
     finalizeAdviceForPatient: finalizeAdviceForPatient,
+    finalizeAndExport: finalizeAndExport,
     getActiveRules: getActiveRules,
     getAdviceForPatient: getAdviceForPatient,
     getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
