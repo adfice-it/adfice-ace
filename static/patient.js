@@ -83,7 +83,7 @@ function switch_to_view(view) {
             }
         }
         for (let i = 0; i < nm_category_headings_additional.length; ++i) {
-            nm_category_headings_additional[i].style.color = 'black';
+            nm_category_headings_additional[i].style.visibility = 'visible';
         }
         set_class_display("advice_no_checkbox", 'none');
         non_med_advice_selection_area.style.display = 'block';
@@ -108,7 +108,7 @@ function switch_to_view(view) {
             checkbox_rows[i].style.display = 'block';
         }
         for (let i = 0; i < nm_category_headings_additional.length; ++i) {
-            nm_category_headings_additional[i].style.color = 'white';
+            nm_category_headings_additional[i].style.visibility = 'hidden';
         }
         set_class_display("advice_no_checkbox", 'block');
         non_med_advice_selection_area.style.display = 'block';
