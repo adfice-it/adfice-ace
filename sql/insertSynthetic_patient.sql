@@ -172,3 +172,16 @@ INSERT INTO patient (id,display_name,login_token,birth_date,age) VALUES
 (157,"Mr.DPP4","valid14",'1940-06-16',81),
 (158,"Mr.GLP1","valid15",'1940-06-16',81),
 (159,"Mr.SGLT2","valid16",'1940-06-16',81);
+
+/* fake patients for automated tests */
+INSERT INTO patient (id,display_name,login_token,birth_date,age) VALUES
+(160,"Mr.Test0","ltoken0",'1940-06-16',81),
+(161,"Mw.Test1","ltoken1",'1940-06-16',81),
+(162,"Mr.Test2","ltoken2",'1940-06-16',81),
+(163,"Mw.Test3","ltoken3",'1940-06-16',81),
+(164,"Mw.Test4","ltoken4",'1940-06-16',81),
+(165,"Mw.Test5","ltoken5",'1940-06-16',81),
+(166,"Mw.Test6","ltoken6",'1940-06-16',81),
+(167,"Mw.Test7","ltoken7",'1940-06-16',81),
+(168,"Mw.Test8","ltoken8",'1940-06-16',81),
+(169,"Mw.Test9","ltoken9",'1940-06-16',81);

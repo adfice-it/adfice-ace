@@ -785,6 +785,34 @@ async function clearAdviceForPatient(patient_id) {
     return rs;
 }
 
+async function reloadPatientData(patient) {
+    let cmd = 'bin/reload-synthetic-data.sh';
+
+    let env = process.env;
+    env.path = ".:" + env.path;
+    let options = {
+        cwd: undefined,
+        env: env,
+        customFds: [-1, -1, -1],
+        setsid: false
+    };
+
+    let args = [patient];
+
+    return new Promise(function(resolve, reject) {
+        const process = child_process.spawn(cmd, args, options);
+
+        process.on('exit', function(code) {
+            resolve(code);
+        });
+
+        /* istanbul ignore next */
+        process.on('error', function(err) {
+            reject(err);
+        });
+    });
+}
+
 module.exports = {
     boxStatesToSelectionStates: boxStatesToSelectionStates,
     calculateAndStorePredictionResult: calculateAndStorePredictionResult,
@@ -811,9 +839,11 @@ module.exports = {
     getSelectionsForPatient: getSelectionsForPatient,
     getSQLCondition: getSQLCondition,
     isSQLConditionTrue: isSQLConditionTrue,
+    reloadPatientData: reloadPatientData,
     selectionStatesToBoxStates: selectionStatesToBoxStates,
     setFreetextsForPatient: setFreetextsForPatient,
     setSelectionsForPatient: setSelectionsForPatient,
     shutdown: shutdown,
+    sql_select: sql_select,
     updatePredictionResult: updatePredictionResult
 }

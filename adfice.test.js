@@ -707,3 +707,15 @@ test('finalize_export API', async () => {
     fs.unlinkSync(file);
     await adfice.clearAdviceForPatient(patient);
 });
+
+test('reload from MRS', async () => {
+    let patient = '160';
+    let sql = "UPDATE patient SET birth_date='1940-06-16', age=81 WHERE id=?";
+    await adfice.sql_select(sql, [patient]);
+    let patientAdvice = await adfice.getAdviceForPatient(patient);
+    expect(patientAdvice.age).toBe(81);
+
+    await adfice.reloadPatientData(patient);
+    patientAdvice = await adfice.getAdviceForPatient(patient);
+    expect(patientAdvice.age).toBe(80);
+});
