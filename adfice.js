@@ -300,11 +300,11 @@ async function getLabsForPatient(patient_id) {
         SELECT lab_test_name
              , lab_test_result
              , date_measured
-          FROM patient_labs
+          FROM patient_lab
          WHERE patient_id=?
            AND date_retrieved = (
                    SELECT MAX(date_retrieved)
-                     FROM patient_labs
+                     FROM patient_lab
                     WHERE patient_id=?
                )
       ORDER BY id`;

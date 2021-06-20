@@ -17,7 +17,7 @@ CREATE TABLE `patient` (
   UNIQUE KEY `login_token` (`login_token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `patient_labs` (
+CREATE TABLE `patient_lab` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `patient_id` int unsigned DEFAULT NULL,
   `date_retrieved` datetime DEFAULT NULL,
