@@ -2,16 +2,6 @@ Required for "ready to install":
 * add color-bar to prediction explanation page
 * preselection on non-medication
 
-* "Opslaan..." button
-  * calls a script (which can pushes data to a DB for the portal
-    * we have adfice.exportForPatient
-  * makes this record view-only in this tool
-    * we have adfice.finalizeAdviceForPatient
-
-* "Haal gewijzigde..." button ?
-  * should this call a script ?
-  * we have adfice.clearAdviceForPatient
-
 Required changes to rules (Ace will do these):
 * Make sure every text ends with a period. If there is a free text box,
   the period should come before the free text box.
@@ -31,9 +21,6 @@ Not required for "ready to install" but will be required for study:
   * which advice was (in the end) selected
   * which advice had been pre-selected (and thus, was it unchecked)
     to compare what doctor ultimately chose
-  * reconstruct the information displayed to the user about the patient
-    (for example, DELETEs from databases could TRIGGER an INSERT in to
-     an archive table)
   * print button
     * no need for extra printer friendliness yet
     * but log it
@@ -56,6 +43,7 @@ Mid Priority:
 * try to use "deeplinken" for FK links
 * if no checkboxes are selected for a medication, display text "Geen advies."
   in the patient view.
+* write a log archival script
 
 Low Priority:
 * allow user to fill in missing values in prediction model page
