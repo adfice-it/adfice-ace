@@ -33,7 +33,9 @@ CREATE TABLE `log_patient` (
   `is_final` tinyint(1),
   `row_created` timestamp NOT NULL,
   `row_updated` timestamp NOT NULL,
-  PRIMARY KEY (`log_id`)
+  PRIMARY KEY (`log_id`),
+  INDEX (log_row_created),
+  INDEX (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TRIGGER log_patient_insert
@@ -109,7 +111,9 @@ CREATE TABLE `patient_lab` (
   `lab_test_result` varchar(100) DEFAULT NULL,
   `lab_test_units` varchar(15) DEFAULT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (patient_id, lab_test_name),
+  KEY (patient_id, id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `log_patient_lab` (
@@ -125,7 +129,10 @@ CREATE TABLE `log_patient_lab` (
   `lab_test_result` varchar(100) DEFAULT NULL,
   `lab_test_units` varchar(15) DEFAULT NULL,
   `row_created` timestamp NOT NULL,
-  PRIMARY KEY (`log_id`)
+  PRIMARY KEY (`log_id`),
+  INDEX (log_row_created),
+  INDEX (id),
+  INDEX (patient_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TRIGGER log_patient_lab_insert
@@ -238,7 +245,7 @@ CREATE TABLE `patient_measurement` (
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `row_updated` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `patient_id` (`patient_id`,`date_retrieved`)
+  UNIQUE KEY `patient_id` (`patient_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `log_patient_measurement` (
@@ -293,7 +300,10 @@ CREATE TABLE `log_patient_measurement` (
   `prediction_result` int unsigned DEFAULT NULL,
   `row_created` timestamp NOT NULL,
   `row_updated` timestamp NOT NULL,
-  PRIMARY KEY (`log_id`)
+  PRIMARY KEY (`log_id`),
+  INDEX (log_row_created),
+  INDEX (id),
+  INDEX (patient_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TRIGGER log_patient_measurement_insert
@@ -484,7 +494,8 @@ CREATE TABLE `patient_medication` (
   `dose` varchar(100) DEFAULT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `patient_id` (`patient_id`,`date_retrieved`,`medication_name`)
+  UNIQUE KEY `patient_id` (`patient_id`,`medication_name`),
+  INDEX (`patient_id`, `ATC_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `log_patient_medication` (
@@ -500,7 +511,10 @@ CREATE TABLE `log_patient_medication` (
   `start_date` datetime DEFAULT NULL,
   `dose` varchar(100) DEFAULT NULL,
   `row_created` timestamp NULL,
-  PRIMARY KEY (`log_id`)
+  PRIMARY KEY (`log_id`),
+  INDEX (log_row_created),
+  INDEX (id),
+  INDEX (patient_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TRIGGER log_patient_medication_insert
@@ -573,7 +587,8 @@ CREATE TABLE `patient_problem` (
   `display_name` varchar(200) DEFAULT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `patient_id` (`patient_id`,`date_retrieved`,`problem_id`)
+  UNIQUE KEY `patient_id` (`patient_id`,`date_retrieved`,`problem_id`),
+  INDEX (`patient_id`, `id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `log_patient_problem` (
@@ -588,7 +603,10 @@ CREATE TABLE `log_patient_problem` (
   `name` varchar(200) DEFAULT NULL,
   `display_name` varchar(200) DEFAULT NULL,
   `row_created` timestamp NOT NULL,
-  PRIMARY KEY (`log_id`)
+  PRIMARY KEY (`log_id`),
+  INDEX (log_row_created),
+  INDEX (id),
+  INDEX (patient_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TRIGGER log_patient_problem_insert
@@ -673,7 +691,10 @@ CREATE TABLE log_patient_advice_selection (
   select_box_num smallint unsigned NOT NULL,
   selected tinyint(1) NOT NULL,
   row_created timestamp NOT NULL,
-  PRIMARY KEY (log_id)
+  PRIMARY KEY (log_id),
+  INDEX (log_row_created),
+  INDEX (id),
+  INDEX (patient_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TRIGGER log_patient_advice_selection_insert
@@ -760,7 +781,10 @@ CREATE TABLE log_patient_advice_freetext (
   freetext_num smallint unsigned NOT NULL,
   freetext varchar(1000) NOT NULL,
   row_created timestamp NOT NULL,
-  PRIMARY KEY (log_id)
+  PRIMARY KEY (log_id),
+  INDEX (log_row_created),
+  INDEX (id),
+  INDEX (patient_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TRIGGER log_patient_advice_freetext_insert

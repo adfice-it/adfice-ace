@@ -15,7 +15,9 @@ condition_logic varchar(1000),
 selector_or varchar(500),
 selector_not varchar(500),
 reference int unsigned,
-UNIQUE KEY (medication_criteria_id)
+UNIQUE KEY (medication_criteria_id),
+INDEX (active, id),
+INDEX (medication_criteria_id, reference, id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE med_advice_text (
