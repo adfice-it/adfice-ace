@@ -42,10 +42,10 @@ CREATE TRIGGER log_patient_insert
   AFTER INSERT ON patient
       FOR EACH ROW
         INSERT INTO log_patient
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  0,
+          NULL,
+          0,
           NEW.id,
           NEW.display_name,
           NEW.login_token,
@@ -62,10 +62,10 @@ CREATE TRIGGER log_patient_update
   AFTER UPDATE ON patient
       FOR EACH ROW
         INSERT INTO log_patient
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  1,
+          NULL,
+          1,
           OLD.id,
           OLD.display_name,
           OLD.login_token,
@@ -82,10 +82,10 @@ CREATE TRIGGER log_patient_delete
   AFTER DELETE ON patient
       FOR EACH ROW
         INSERT INTO log_patient
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  2,
+          NULL,
+          2,
           OLD.id,
           OLD.display_name,
           OLD.login_token,
@@ -139,10 +139,10 @@ CREATE TRIGGER log_patient_lab_insert
   AFTER INSERT ON patient_lab
       FOR EACH ROW
         INSERT INTO log_patient_lab
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  0,
+          NULL,
+          0,
           NEW.id,
           NEW.patient_id,
           NEW.date_retrieved,
@@ -158,10 +158,10 @@ CREATE TRIGGER log_patient_lab_update
   AFTER UPDATE ON patient_lab
       FOR EACH ROW
         INSERT INTO log_patient_lab
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  1,
+          NULL,
+          1,
           OLD.id,
           OLD.patient_id,
           OLD.date_retrieved,
@@ -177,10 +177,10 @@ CREATE TRIGGER log_patient_lab_delete
   AFTER DELETE ON patient_lab
       FOR EACH ROW
         INSERT INTO log_patient_lab
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  2,
+          NULL,
+          2,
           OLD.id,
           OLD.patient_id,
           OLD.date_retrieved,
@@ -310,10 +310,10 @@ CREATE TRIGGER log_patient_measurement_insert
   AFTER INSERT ON patient_measurement
       FOR EACH ROW
         INSERT INTO log_patient_measurement
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  0,
+          NULL,
+          0,
           NEW.id,
           NEW.patient_id,
           NEW.date_retrieved,
@@ -368,10 +368,10 @@ CREATE TRIGGER log_patient_measurement_update
   AFTER UPDATE ON patient_measurement
       FOR EACH ROW
         INSERT INTO log_patient_measurement
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  1,
+          NULL,
+          1,
           OLD.id,
           OLD.patient_id,
           OLD.date_retrieved,
@@ -426,10 +426,10 @@ CREATE TRIGGER log_patient_measurement_delete
   AFTER DELETE ON patient_measurement
       FOR EACH ROW
         INSERT INTO log_patient_measurement
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  2,
+          NULL,
+          2,
           OLD.id,
           OLD.patient_id,
           OLD.date_retrieved,
@@ -521,10 +521,10 @@ CREATE TRIGGER log_patient_medication_insert
   AFTER INSERT ON patient_medication
       FOR EACH ROW
         INSERT INTO log_patient_medication
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  0,
+          NULL,
+          0,
           NEW.id,
           NEW.patient_id,
           NEW.date_retrieved,
@@ -540,10 +540,10 @@ CREATE TRIGGER log_patient_medication_update
   AFTER UPDATE ON patient_medication
       FOR EACH ROW
         INSERT INTO log_patient_medication
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  1,
+          NULL,
+          1,
           OLD.id,
           OLD.patient_id,
           OLD.date_retrieved,
@@ -559,10 +559,10 @@ CREATE TRIGGER log_patient_medication_delete
   AFTER DELETE ON patient_medication
       FOR EACH ROW
         INSERT INTO log_patient_medication
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  2,
+          NULL,
+          2,
           OLD.id,
           OLD.patient_id,
           OLD.date_retrieved,
@@ -613,10 +613,10 @@ CREATE TRIGGER log_patient_problem_insert
   AFTER INSERT ON patient_problem
       FOR EACH ROW
         INSERT INTO log_patient_problem
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  0,
+          NULL,
+          0,
           NEW.id,
           NEW.patient_id,
           NEW.date_retrieved,
@@ -631,10 +631,10 @@ CREATE TRIGGER log_patient_problem_update
   AFTER UPDATE ON patient_problem
       FOR EACH ROW
         INSERT INTO log_patient_problem
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  1,
+          NULL,
+          1,
           OLD.id,
           OLD.patient_id,
           OLD.date_retrieved,
@@ -649,10 +649,10 @@ CREATE TRIGGER log_patient_problem_delete
   AFTER DELETE ON patient_problem
       FOR EACH ROW
         INSERT INTO log_patient_problem
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  2,
+          NULL,
+          2,
           OLD.id,
           OLD.patient_id,
           OLD.date_retrieved,
@@ -701,13 +701,13 @@ CREATE TRIGGER log_patient_advice_selection_insert
   AFTER INSERT ON patient_advice_selection
       FOR EACH ROW
         INSERT INTO log_patient_advice_selection
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  0,
+          NULL,
+          0,
           NEW.id,
           NEW.viewer_id,
-	  NEW.patient_id,
+          NEW.patient_id,
           NEW.ATC_code,
           NEW.medication_criteria_id,
           NEW.select_box_num,
@@ -719,13 +719,13 @@ CREATE TRIGGER log_patient_advice_selection_update
   AFTER UPDATE ON patient_advice_selection
       FOR EACH ROW
         INSERT INTO log_patient_advice_selection
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  1,
+          NULL,
+          1,
           OLD.id,
           OLD.viewer_id,
-	  OLD.patient_id,
+          OLD.patient_id,
           OLD.ATC_code,
           OLD.medication_criteria_id,
           OLD.select_box_num,
@@ -737,13 +737,13 @@ CREATE TRIGGER log_patient_advice_selection_delete
   AFTER DELETE ON patient_advice_selection
       FOR EACH ROW
         INSERT INTO log_patient_advice_selection
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  2,
+          NULL,
+          2,
           OLD.id,
           OLD.viewer_id,
-	  OLD.patient_id,
+          OLD.patient_id,
           OLD.ATC_code,
           OLD.medication_criteria_id,
           OLD.select_box_num,
@@ -791,18 +791,18 @@ CREATE TRIGGER log_patient_advice_freetext_insert
   AFTER INSERT ON patient_advice_freetext
       FOR EACH ROW
         INSERT INTO log_patient_advice_freetext
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  0,
+          NULL,
+          0,
           NEW.id,
           NEW.viewer_id,
-	  NEW.patient_id,
+          NEW.patient_id,
           NEW.ATC_code,
           NEW.medication_criteria_id,
           NEW.select_box_num,
           NEW.freetext_num,
-	  NEW.freetext,
+          NEW.freetext,
           NEW.row_created
         );
 
@@ -813,18 +813,18 @@ CREATE TRIGGER log_patient_advice_freetext_update
       BEGIN
        IF OLD.freetext != NEW.freetext THEN
         INSERT INTO log_patient_advice_freetext
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  1,
+          NULL,
+          1,
           OLD.id,
           OLD.viewer_id,
-	  OLD.patient_id,
+          OLD.patient_id,
           OLD.ATC_code,
           OLD.medication_criteria_id,
           OLD.select_box_num,
           OLD.freetext_num,
-	  OLD.freetext,
+          OLD.freetext,
           OLD.row_created
         );
        END IF;
@@ -835,18 +835,18 @@ CREATE TRIGGER log_patient_advice_freetext_delete
   AFTER DELETE ON patient_advice_freetext
       FOR EACH ROW
         INSERT INTO log_patient_advice_freetext
-	VALUES (
+        VALUES (
           NULL,
-	  NULL,
-	  2,
+          NULL,
+          2,
           OLD.id,
           OLD.viewer_id,
-	  OLD.patient_id,
+          OLD.patient_id,
           OLD.ATC_code,
           OLD.medication_criteria_id,
           OLD.select_box_num,
           OLD.freetext_num,
-	  OLD.freetext,
+          OLD.freetext,
           OLD.row_created
         );
 
