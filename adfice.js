@@ -188,11 +188,6 @@ async function getMedsForPatient(patient_id) {
              , start_date
           FROM patient_medication
          WHERE patient_id=?
-           AND date_retrieved = (
-                   SELECT MAX(date_retrieved)
-                     FROM patient_medication
-                    WHERE patient_id=?
-               )
       ORDER BY ATC_code`;
     let params = [patient_id, patient_id];
     let meds = await sql_select(sql, params);
@@ -268,11 +263,6 @@ async function getProblemsForPatient(patient_id) {
              , display_name
           FROM patient_problem
          WHERE patient_id=?
-           AND date_retrieved = (
-                   SELECT MAX(date_retrieved)
-                     FROM patient_problem
-                    WHERE patient_id=?
-               )
       ORDER BY id`;
     let params = [patient_id, patient_id];
     let probs = await sql_select(sql, params);
@@ -302,11 +292,6 @@ async function getLabsForPatient(patient_id) {
              , date_measured
           FROM patient_lab
          WHERE patient_id=?
-           AND date_retrieved = (
-                   SELECT MAX(date_retrieved)
-                     FROM patient_lab
-                    WHERE patient_id=?
-               )
       ORDER BY id`;
     let params = [patient_id, patient_id];
     let result = await sql_select(sql, params);
@@ -317,9 +302,7 @@ async function getPatientMeasurements(patient_id) {
     var sql = `/* adfice.getPatientMeasurements */
         SELECT *
           FROM patient_measurement
-         WHERE patient_id=?
-      ORDER BY date_retrieved DESC
-         LIMIT 1`;
+         WHERE patient_id=?`
     let params = [patient_id];
     let results = await sql_select(sql, params);
     if (results.length > 0) {
