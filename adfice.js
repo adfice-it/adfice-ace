@@ -316,7 +316,7 @@ async function getLabsForPatient(patient_id) {
 async function getPatientMeasurements(patient_id) {
     var sql = `/* adfice.getPatientMeasurements */
         SELECT *
-          FROM patient_measurements
+          FROM patient_measurement
          WHERE patient_id=?
       ORDER BY date_retrieved DESC
          LIMIT 1`;
@@ -346,7 +346,7 @@ async function getPredictionResult(patient_id) {
 
 async function updatePredictionResult(row_id, prediction_result) {
     let sql = `/* adfice.updatePredictionResult */
-        UPDATE patient_measurements
+        UPDATE patient_measurement
            SET prediction_result = ?
          WHERE id = ?`;
     let params = [prediction_result, row_id];

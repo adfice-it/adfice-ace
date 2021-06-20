@@ -30,7 +30,7 @@ CREATE TABLE `patient_lab` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `patient_measurements` (
+CREATE TABLE `patient_measurement` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `patient_id` int unsigned NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,

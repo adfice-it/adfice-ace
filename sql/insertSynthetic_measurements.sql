@@ -1,6 +1,6 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
 -- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
-INSERT INTO patient_measurements
+INSERT INTO patient_measurement
 (patient_id, date_retrieved, education_hml, height_cm, height_date_measured, weight_kg,
 weight_date_measured, BMI, BMI_date_measured, GDS_score, GDS_date_measured, grip_kg,
 grip_date_measured, walking_speed_m_per_s, walking_date_measured,
@@ -34,7 +34,7 @@ has_incont_med) VALUES
 
 /*
 -- seeding rule test patients with completely fictional prediction results
-INSERT INTO patient_measurements
+INSERT INTO patient_measurement
 (patient_id, date_retrieved,prediction_result) VALUES
 (4,(select now()),29),
 (5,(select now()),70),
@@ -179,7 +179,7 @@ INSERT INTO patient_measurements
 
 /* fake patients for validation 2 */
 /*
-INSERT INTO patient_measurements
+INSERT INTO patient_measurement
 (patient_id, date_retrieved,prediction_result) VALUES
 (144,(select now()),58),
 (145,(select now()),45),
