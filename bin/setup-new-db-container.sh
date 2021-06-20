@@ -71,16 +71,16 @@ echo 'load schema and test data'
 # insertSynthetic_allergies.sql \
 
 for SQL in \
-	createNewRulesTable.sql \
+	createRulesTable.sql \
 	createPatientTables.sql \
-	createPriority.sql \
+	createETLTables.sql \
 	newAdviceTable.sql \
 	newRulesTable.sql \
 	newOtherMedTable.sql \
 	newPreselectRulesTable.sql \
 	newNonMedHeaders.sql \
 	newNonMedTable.sql \
-	populateStaticPatientTables.sql \
+	populateETLTables.sql \
 	populateProblemMap.sql \
 	updateRulesWithSeparatedSelectors.sql \
 	updateMedRulesWithSQLConditions.sql \

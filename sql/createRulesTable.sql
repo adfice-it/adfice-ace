@@ -74,3 +74,10 @@ epic varchar(2000),
 patient varchar(5000),
 UNIQUE KEY (category_id, select_box_num)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `select_box_category_priority` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `priority` int(10) unsigned NOT NULL,
+  `select_box_category` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

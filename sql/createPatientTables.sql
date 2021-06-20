@@ -110,30 +110,6 @@ CREATE TABLE `patient_problem` (
   UNIQUE KEY `patient_id` (`patient_id`,`date_retrieved`,`problem_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `problems` (
-  `id` smallint unsigned NOT NULL AUTO_INCREMENT,
-  `problem_name` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE `education_levels` (
-  `id` smallint unsigned NOT NULL AUTO_INCREMENT,
-  `coded_level` tinyint NOT NULL DEFAULT '0',
-  `level` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `coded_level` (`coded_level`,`level`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE `problem_map` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `amc_icd_id` int unsigned,
-  `adfice_nr` smallint unsigned,
-  `problem_name` varchar(100),
-  `icd_10` varchar(10),
-  `icd_name` varchar(256),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 CREATE TABLE patient_advice_selection (
   id int unsigned NOT NULL AUTO_INCREMENT,
   viewer_id int unsigned NOT NULL,

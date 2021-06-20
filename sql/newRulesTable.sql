@@ -799,3 +799,21 @@ C07B Beta blocking agents and thiazides
 C07C Beta blocking agents and other diuretics 
 C07D Beta blocking agents, thiazides and other diuretics 
 C09BA and C09DA ACEi and ARB with diuretics", selector_logic = "((atc:C03 &! C03CA &! C03CB &! C03EB) | atc:C02L | atc:C07B | atc:C07C | atc:C07D )" where medication_criteria_id = "41";
+
+INSERT INTO select_box_category_priority (priority, select_box_category) VALUES
+(100, 'stop'),
+(200, 'taper-stop'),
+(300, 'taper-reduce'),
+(400, 'switch'),
+(500, 'continue'),
+(600, 'consult'),
+(700, 'refer'),
+(800, 'discuss'),
+(900, 'measure'),
+(1000, 'examine'),
+(1100, 'inform'),
+(1200, 'non-med'),
+(1300, ''),
+(1400, NULL),
+(1500, 'follow-up'),
+(1600, 'free_text');
