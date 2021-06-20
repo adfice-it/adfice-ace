@@ -139,7 +139,7 @@ function hello_all(kind, id) {
     send_all(kind, id, message);
 }
 
-async function patient_advice_message(id, kind) {
+async function patient_advice_message(kind, id) {
     let patient_advice = await adfice.getAdviceForPatient(id);
 
     let freetexts = patient_advice.free_texts;
@@ -160,7 +160,7 @@ async function patient_advice_message(id, kind) {
 }
 
 async function init_patient_data(ws, kind, id) {
-    let message = await patient_advice_message(id, kind);
+    let message = await patient_advice_message(kind, id);
     let msg_string = JSON.stringify(message, null, 4);
     ws.send(msg_string);
 }
@@ -220,7 +220,11 @@ server.on('upgrade', function upgrade(request, socket, head) {
                     }
                     if (message.type == 'definitive') {
                         await adfice.finalizeAndExport(id);
-                        let new_msg = await patient_advice_message(id, kind);
+                        let new_msg = await patient_advice_message(kind, id);
+                        send_all(kind, id, new_msg);
+                    } else if (message.type == 'patient_renew') {
+                        await adfice.reloadPatientData(id);
+                        let new_msg = await patient_advice_message(kind, id);
                         send_all(kind, id, new_msg);
                     } else {
                         send_all(kind, id, message);

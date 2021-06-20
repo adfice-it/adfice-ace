@@ -306,7 +306,9 @@ function ws_on_message(event) {
     if ((!('patient_id' in message)) || (message.patient_id != patient_id)) {
         console.log(`expected patient_id of '${patient_id}'`);
         console.log(`               but was '${message.patient_id}'`);
-        console.log(JSON.stringify({message: message}, null, 4));
+        console.log(JSON.stringify({
+            message: message
+        }, null, 4));
         ++weirdness;
         return;
     }
@@ -317,8 +319,8 @@ function ws_on_message(event) {
 
     process_viewer_count(message);
 
-    if (message['is_final']) {
-        is_final = true;
+    if ('is_final' in message) {
+        is_final = message['is_final'];
     }
 
     let elementList = document.querySelectorAll("input");
@@ -414,6 +416,20 @@ async function makeDefinitive() {
     message.viewer_id = viewer_id;
     message.patient_id = patient_id;
     message.type = 'definitive';
+
+    let msg_str = JSON.stringify(message, null, 4);
+    if (DEBUG > 0) {
+        console.log('sending:', msg_str);
+    }
+    ws.send(msg_str);
+    return true;
+}
+
+async function patientRenew() {
+    let message = {};
+    message.viewer_id = viewer_id;
+    message.patient_id = patient_id;
+    message.type = 'patient_renew';
 
     let msg_str = JSON.stringify(message, null, 4);
     if (DEBUG > 0) {

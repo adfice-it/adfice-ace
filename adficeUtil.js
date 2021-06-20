@@ -4,6 +4,7 @@
 "use strict";
 
 const util = require("util");
+const child_process = require('child_process');
 
 function assert(condition, message) {
     if (condition) {
@@ -52,8 +53,40 @@ function splitFreetext(str) {
     return result;
 }
 
+function child_process_spawn(cmd, args) {
+    let env = process.env;
+    env.path = ".:" + env.path;
+    let options = {
+        cwd: undefined,
+        env: env,
+        customFds: [-1, -1, -1],
+        setsid: false
+    };
+
+    let promise = new Promise(function(resolve, reject) {
+        const process = child_process.spawn(cmd, args, options);
+
+        process.on('exit', function(code) {
+            resolve(code);
+        });
+
+        /* istanbul ignore next */
+        process.on('error', function(err) {
+            console.err("Error:", JSON.stringify({
+                err: err,
+                cmd: cmd,
+                args: args,
+                options: options
+            }, null, 4));
+            reject(err);
+        });
+    });
+    return promise;
+}
+
 module.exports = {
     assert: assert,
+    child_process_spawn: child_process_spawn,
     splitFreetext: splitFreetext,
     ucfirst: ucfirst
 }

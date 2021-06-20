@@ -4,7 +4,6 @@
 "use strict";
 
 var fs = require('fs');
-const child_process = require('child_process');
 const autil = require('./adficeUtil');
 const ae = require('./adficeEvaluator');
 const cp = require('./calculatePrediction');
@@ -724,27 +723,7 @@ async function exportForPatient(patient, logfile) {
 
     let cmd = './export-to-mrs';
 
-    let env = process.env;
-    env.path = ".:" + env.path;
-    let options = {
-        cwd: undefined,
-        env: env,
-        customFds: [-1, -1, -1],
-        setsid: false
-    };
-
-    return new Promise(function(resolve, reject) {
-        const process = child_process.spawn(cmd, args, options);
-
-        process.on('exit', function(code) {
-            resolve(code);
-        });
-
-        /* istanbul ignore next */
-        process.on('error', function(err) {
-            reject(err);
-        });
-    });
+    return autil.child_process_spawn(cmd, args);
 }
 
 async function finalizeAdviceForPatient(patient_id) {
@@ -786,31 +765,13 @@ async function clearAdviceForPatient(patient_id) {
 }
 
 async function reloadPatientData(patient) {
+    let patient_id = as_id(patient);
+    await clearAdviceForPatient(patient_id);
     let cmd = 'bin/reload-synthetic-data.sh';
-
-    let env = process.env;
-    env.path = ".:" + env.path;
-    let options = {
-        cwd: undefined,
-        env: env,
-        customFds: [-1, -1, -1],
-        setsid: false
-    };
 
     let args = [patient];
 
-    return new Promise(function(resolve, reject) {
-        const process = child_process.spawn(cmd, args, options);
-
-        process.on('exit', function(code) {
-            resolve(code);
-        });
-
-        /* istanbul ignore next */
-        process.on('error', function(err) {
-            reject(err);
-        });
-    });
+    return autil.child_process_spawn(cmd, args);
 }
 
 module.exports = {
