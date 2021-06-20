@@ -156,6 +156,9 @@ async function patient_advice_message(kind, id) {
     message['field_entries'] = freetexts;
     message['box_states'] = selections;
     message['is_final'] = patient_advice.is_final;
+    if ('debug_info' in patient_advice) {
+        message['debug_info'] = patient_advice.debug_info;
+    }
     return message;
 }
 

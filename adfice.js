@@ -40,6 +40,19 @@ function split_advice_texts_cdss_epic_patient(advice_texts) {
     return advice_texts;
 }
 
+async function getTableSizes() {
+    let params = [await db.schema_name()];
+    let sql = `/* adfice.getTableSizes */
+        SELECT table_name
+             , table_rows
+             , ROUND((data_length + index_length)/POWER(1024,2),1) AS size_mb
+             , (data_length + index_length) AS size_bytes
+          FROM information_schema.tables
+         WHERE table_schema=?
+      ORDER BY size_bytes DESC`;
+    return await sql_select(sql, params);
+}
+
 async function getAllAdviceTextsCheckboxes() {
     var sql = `/* adfice.getAllAdviceTextsCheckboxes */
         SELECT m.medication_criteria_id
@@ -552,6 +565,10 @@ async function getAdviceForPatient(patientIdentifier) {
 
     let risk_score = await getPredictionResult(patient_id);
 
+    let debug_info = {
+        data_sizes: await getTableSizes()
+    };
+
     let patient_advice = {};
     patient_advice.patient_id = patient_id;
     patient_advice.age = age;
@@ -568,6 +585,7 @@ async function getAdviceForPatient(patientIdentifier) {
     patient_advice.advice_text_non_med = advice_text_non_med;
     patient_advice.advice_other_text = advice_other_text;
     patient_advice.risk_score = risk_score;
+    patient_advice.debug_info = debug_info;
 
     return patient_advice;
 }

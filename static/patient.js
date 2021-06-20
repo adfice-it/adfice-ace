@@ -327,6 +327,12 @@ function ws_on_message(event) {
     elementList.forEach((input) => {
         input.disabled = is_final;
     });
+
+    if ('debug_info' in message) {
+        console.log(JSON.stringify({
+            debug_info: message.debug_info
+        }, null, 4));
+    }
 }
 
 function ws_on_close(event) {

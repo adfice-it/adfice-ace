@@ -43,7 +43,19 @@ Mid Priority:
 * try to use "deeplinken" for FK links
 * if no checkboxes are selected for a medication, display text "Geen advies."
   in the patient view.
+* change checkbox and freetext update from DELETE,INSERT to
+  INSERT ON DUPLICATE KEY UPDATE
+* change row logging to only log if something changed
 * write a log archival script
+  raise priority if this looks like it is growing too fast:
+
+      SELECT table_name
+           , table_rows
+           , ROUND((data_length + index_length)/POWER(1024,2),1) AS size_mb
+           , (data_length + index_length) AS size_bytes
+        FROM information_schema.tables
+       WHERE table_schema='adfice'
+    ORDER BY size_bytes DESC;
 
 Low Priority:
 * allow user to fill in missing values in prediction model page

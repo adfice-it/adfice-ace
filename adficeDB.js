@@ -159,9 +159,14 @@ async function sql_query(sql, params) {
     return objects;
 }
 
+async function schema_name() {
+    return dbconfig.database;
+}
+
 module.exports = {
     init: init,
     close: close,
     as_sql_transaction: as_sql_transaction,
-    sql_query: sql_query
+    sql_query: sql_query,
+    schema_name: schema_name
 }
