@@ -1,6 +1,6 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
 -- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
-INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
+INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
 (2,(select NOW()),"darifenacin","darifenacin","G04BD10",'2019-02-11'),
 (4,(select NOW()),"diazepam","diazepam","N05BA01",(select NOW())),
 (5,(select NOW()),"diazepam","diazepam","N05BA01",'2019-02-11'),
@@ -133,7 +133,7 @@ INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, ge
 (129,(select NOW()),"naproxen and esomeprazol","naproxen and esomeprazol","M01AE52",'2019-02-11');
 
 /* fake patients for validating rules */
-INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
+INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
 (131,(select NOW()),"hydrochlorothiazide","hydrochloorthiazide","C03AA03",'2019-02-11'),
 (131,(select NOW()),"enalapril","enalapril","C09AA02",'2019-02-11'),
 (132,(select NOW()),"verapamil","verapamil","C08DA01",'2019-02-11'),
@@ -154,7 +154,7 @@ INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, ge
 (142,(select NOW()),"temazepam","temazepam","N05CD07",(select NOW()));
 
 /* fake patients for usability */
-INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
+INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
 (143,(select NOW()),"metFORMINE","metformine","A10BA02",(select NOW())),
 (143,(select NOW()),"TemaZEPAM","TemaZEPAM","N05CD07",(select NOW())),
 (143,(select NOW()),"pantoprazol","pantoprazol","A02BC02",(select NOW())),
@@ -163,7 +163,7 @@ INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, ge
 (143,(select NOW()),"METOPROLOL","metoprolol","C07AB02",(select NOW()));
 
 /* fake patients for validation 2 */
-INSERT INTO patient_medications (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
+INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
 (144,(select NOW()),"Flurazepam","Flurazepam","N05CD01",(select NOW())),
 (144,(select NOW()),"levodopa","levodopa","N04BA01",'2019-02-11'),
 

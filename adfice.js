@@ -186,11 +186,11 @@ async function getMedsForPatient(patient_id) {
              , medication_name
              , generic_name
              , start_date
-          FROM patient_medications
+          FROM patient_medication
          WHERE patient_id=?
            AND date_retrieved = (
                    SELECT MAX(date_retrieved)
-                     FROM patient_medications
+                     FROM patient_medication
                     WHERE patient_id=?
                )
       ORDER BY ATC_code`;
