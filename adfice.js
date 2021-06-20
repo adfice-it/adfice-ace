@@ -764,10 +764,12 @@ async function clearAdviceForPatient(patient_id) {
     return rs;
 }
 
-async function reloadPatientData(patient) {
+async function reloadPatientData(patient, cmd) {
     let patient_id = as_id(patient);
     await clearAdviceForPatient(patient_id);
-    let cmd = 'bin/reload-synthetic-data.sh';
+    if (!cmd) {
+        cmd = 'bin/reload-patient-data.sh';
+    }
 
     let args = [patient];
 

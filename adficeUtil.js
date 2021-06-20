@@ -72,7 +72,7 @@ function child_process_spawn(cmd, args) {
 
         /* istanbul ignore next */
         process.on('error', function(err) {
-            console.err("Error:", JSON.stringify({
+            console.error("Error:", JSON.stringify({
                 err: err,
                 cmd: cmd,
                 args: args,

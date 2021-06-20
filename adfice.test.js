@@ -715,7 +715,12 @@ test('reload from MRS', async () => {
     let patientAdvice = await adfice.getAdviceForPatient(patient);
     expect(patientAdvice.age).toBe(81);
 
-    await adfice.reloadPatientData(patient);
+    let cmd = 'bin/reload-synthetic-data.sh';
+    await adfice.reloadPatientData(patient, cmd);
     patientAdvice = await adfice.getAdviceForPatient(patient);
     expect(patientAdvice.age).toBe(80);
+
+    // test default no-op reload script
+    patient = '169';
+    await adfice.reloadPatientData(patient);
 });
