@@ -97,7 +97,7 @@ CREATE TABLE `patient_medication` (
   UNIQUE KEY `patient_id` (`patient_id`,`date_retrieved`,`medication_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `patient_problems` (
+CREATE TABLE `patient_problem` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `patient_id` int unsigned NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,

@@ -1,6 +1,6 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
 -- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
-INSERT INTO patient_problems (patient_id, date_retrieved, problem_id, start_date, name, display_name) VALUES
+INSERT INTO patient_problem (patient_id, date_retrieved, problem_id, start_date, name, display_name) VALUES
 (5,(select NOW()),11,'2019-02-11',"angststoornis","angststoornis"),
 (6,(select NOW()),12,'2019-02-11',"epilepsy","epilepsy"),
 (8,(select NOW()),7,'2019-02-11',"parkinson","Morbus Parkinson"),
@@ -44,7 +44,7 @@ INSERT INTO patient_problems (patient_id, date_retrieved, problem_id, start_date
 (102,(select NOW()),7,'2019-02-11',"parkinson","Morbus Parkinson");
 
 /* fake patients for validating rules */
-INSERT INTO patient_problems (patient_id, date_retrieved, problem_id, start_date, name, display_name) VALUES
+INSERT INTO patient_problem (patient_id, date_retrieved, problem_id, start_date, name, display_name) VALUES
 (131,(select NOW()),5,'2019-02-11',"hartfalen", "decompensatio cordis"),
 (133,(select NOW()),1,'2019-02-11',"hypertensie", "hypertensie"),
 (134,(select NOW()),1,'2019-02-11',"hypertensie", "hypertensie"),
@@ -54,7 +54,7 @@ INSERT INTO patient_problems (patient_id, date_retrieved, problem_id, start_date
 (141,(select NOW()),11,'2019-02-11',"angststoornis","angststoornis");
 
 /* fake patients for validation 2 */
-INSERT INTO patient_problems (patient_id, date_retrieved, problem_id, start_date, name, display_name) VALUES
+INSERT INTO patient_problem (patient_id, date_retrieved, problem_id, start_date, name, display_name) VALUES
 (144,(select NOW()),7,'2019-02-11',"parkinson","Morbus Parkinson"),
 (144,(select NOW()),3,'2019-02-11',"orthostatische-hypotensie", "orthostatische hypotensie"),
 

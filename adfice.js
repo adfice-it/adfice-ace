@@ -266,11 +266,11 @@ async function getProblemsForPatient(patient_id) {
         SELECT name
              , start_date
              , display_name
-          FROM patient_problems
+          FROM patient_problem
          WHERE patient_id=?
            AND date_retrieved = (
                    SELECT MAX(date_retrieved)
-                     FROM patient_problems
+                     FROM patient_problem
                     WHERE patient_id=?
                )
       ORDER BY id`;

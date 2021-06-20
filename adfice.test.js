@@ -291,7 +291,7 @@ test('getAdviceForPatient(85), normal eGFR', async () => {
 test('getSQLcondition rule 38', async () => {
     let ruleNumber = 38;
     let sqlCondition = await adfice.getSQLCondition(ruleNumber);
-    expect(sqlCondition).toContain("patient_problems");
+    expect(sqlCondition).toContain("patient_problem");
 });
 
 test('isSQLConditionTrue', async () => {
