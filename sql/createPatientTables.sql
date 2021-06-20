@@ -806,9 +806,12 @@ CREATE TRIGGER log_patient_advice_freetext_insert
           NEW.row_created
         );
 
+DELIMITER PLEASE
 CREATE TRIGGER log_patient_advice_freetext_update
   AFTER UPDATE ON patient_advice_freetext
-      FOR EACH ROW
+    FOR EACH ROW
+      BEGIN
+       IF OLD.freetext != NEW.freetext THEN
         INSERT INTO log_patient_advice_freetext
 	VALUES (
           NULL,
@@ -824,6 +827,9 @@ CREATE TRIGGER log_patient_advice_freetext_update
 	  OLD.freetext,
           OLD.row_created
         );
+       END IF;
+      END; PLEASE
+DELIMITER ;
 
 CREATE TRIGGER log_patient_advice_freetext_delete
   AFTER DELETE ON patient_advice_freetext
