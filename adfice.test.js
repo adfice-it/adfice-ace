@@ -193,6 +193,10 @@ test('getAdviceForPatient(1), no med rule advice', async () => {
     expect(advice.length).toBe(0);
     let non_med_advice = patientAdvice.advice_text_non_med;
     expect(non_med_advice.length).toBe(56);
+
+    let preselected_checkboxes = patientAdvice.preselected_checkboxes;
+    expect(preselected_checkboxes['cb_NONMED_A_1']).toBe('checked');
+    expect(preselected_checkboxes['cb_NONMED_C_1']).toBeUndefined();
 })
 
 test('getAdviceForPatient(60), sparse patient', async () => {

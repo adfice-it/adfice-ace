@@ -1,5 +1,4 @@
 Required for "ready to install":
-* preselection on non-medication
 
 Required changes to rules (Ace will do these):
 * Make sure every text ends with a period. If there is a free text box,

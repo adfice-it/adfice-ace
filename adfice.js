@@ -557,6 +557,15 @@ async function getAdviceForPatient(patientIdentifier) {
     }
 
     let advice_text_non_med = await getAdviceTextsNonMedCheckboxes();
+    for (let i = 0; i < advice_text_non_med.length; ++i) {
+        let nm_adv = advice_text_non_med[i];
+        if (nm_adv.preselected) {
+            let category = nm_adv.category_id;
+            let box = nm_adv.select_box_num;
+            let checkbox_id = `cb_NONMED_${category}_${box}`;
+            preselected_checkboxes[checkbox_id] = 'checked';
+        }
+    }
     let advice_other_text = await getAdviceOtherTextsCheckboxes();
     let selected_advice = await getSelectionsForPatient(patient_id);
     let free_texts = await getFreetextsForPatient(patient_id);
