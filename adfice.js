@@ -391,11 +391,6 @@ async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
 
     let sqls_and_params = [];
 
-    let delete_sql = `/* adfice.setSelectionsForPatient */
- DELETE FROM patient_advice_selection
-  WHERE patient_id = ?`;
-    sqls_and_params.push([delete_sql, patient_id]);
-
     let insert_sql = `/* adfice.setSelectionsForPatient */
  INSERT INTO patient_advice_selection
            ( patient_id
@@ -405,7 +400,11 @@ async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
            , select_box_num
            , selected
            )
-      VALUES (?,?,?,?,?,?)`;
+      VALUES (?,?,?,?,?,?)
+ ON DUPLICATE KEY
+      UPDATE viewer_id=VALUES(viewer_id)
+           , selected=VALUES(selected)
+`;
     let params = boxStatesToSelectionStates(patient_id, viewer_id, cb_states);
     for (let i = 0; i < params.length; ++i) {
         sqls_and_params.push([insert_sql, params[i]]);
@@ -438,11 +437,6 @@ async function setFreetextsForPatient(patientIdentifier, viewer, freetexts) {
 
     let sqls_and_params = [];
 
-    let delete_sql = `/* adfice.setFreetextsForPatient */
- DELETE FROM patient_advice_freetext
-  WHERE patient_id = ?`;
-    sqls_and_params.push([delete_sql, patient_id]);
-
     let insert_sql = `/* adfice.setFreetextForPatient */
  INSERT INTO patient_advice_freetext
            ( patient_id
@@ -453,7 +447,11 @@ async function setFreetextsForPatient(patientIdentifier, viewer, freetexts) {
            , freetext_num
            , freetext
            )
-      VALUES (?,?,?,?,?,?,?)`;
+      VALUES (?,?,?,?,?,?,?)
+ ON DUPLICATE KEY
+      UPDATE viewer_id=VALUES(viewer_id)
+           , freetext=VALUES(freetext)
+`;
     let params = freetextsToRows(patient_id, viewer_id, freetexts);
     for (let i = 0; i < params.length; ++i) {
         sqls_and_params.push([insert_sql, params[i]]);

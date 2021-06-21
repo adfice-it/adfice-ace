@@ -19,7 +19,7 @@ CREATE TABLE `patient` (
   UNIQUE KEY `login_token` (`login_token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `log_patient` (
+CREATE TABLE `patient_history` (
   `log_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `log_row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `log_op` tinyint NOT NULL,
@@ -38,10 +38,10 @@ CREATE TABLE `log_patient` (
   INDEX (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TRIGGER log_patient_insert
+CREATE TRIGGER patient_history_insert
   AFTER INSERT ON patient
       FOR EACH ROW
-        INSERT INTO log_patient
+        INSERT INTO patient_history
         VALUES (
           NULL,
           NULL,
@@ -58,10 +58,10 @@ CREATE TRIGGER log_patient_insert
           NEW.row_updated
         );
 
-CREATE TRIGGER log_patient_update
+CREATE TRIGGER patient_history_update
   AFTER UPDATE ON patient
       FOR EACH ROW
-        INSERT INTO log_patient
+        INSERT INTO patient_history
         VALUES (
           NULL,
           NULL,
@@ -78,10 +78,10 @@ CREATE TRIGGER log_patient_update
           OLD.row_updated
         );
 
-CREATE TRIGGER log_patient_delete
+CREATE TRIGGER patient_history_delete
   AFTER DELETE ON patient
       FOR EACH ROW
-        INSERT INTO log_patient
+        INSERT INTO patient_history
         VALUES (
           NULL,
           NULL,
@@ -116,7 +116,7 @@ CREATE TABLE `patient_lab` (
   KEY (patient_id, id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `log_patient_lab` (
+CREATE TABLE `patient_lab_history` (
   `log_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `log_row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `log_op` tinyint NOT NULL,
@@ -135,10 +135,10 @@ CREATE TABLE `log_patient_lab` (
   INDEX (patient_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TRIGGER log_patient_lab_insert
+CREATE TRIGGER patient_lab_history_insert
   AFTER INSERT ON patient_lab
       FOR EACH ROW
-        INSERT INTO log_patient_lab
+        INSERT INTO patient_lab_history
         VALUES (
           NULL,
           NULL,
@@ -154,10 +154,10 @@ CREATE TRIGGER log_patient_lab_insert
           NEW.row_created
         );
 
-CREATE TRIGGER log_patient_lab_update
+CREATE TRIGGER patient_lab_history_update
   AFTER UPDATE ON patient_lab
       FOR EACH ROW
-        INSERT INTO log_patient_lab
+        INSERT INTO patient_lab_history
         VALUES (
           NULL,
           NULL,
@@ -173,10 +173,10 @@ CREATE TRIGGER log_patient_lab_update
           OLD.row_created
         );
 
-CREATE TRIGGER log_patient_lab_delete
+CREATE TRIGGER patient_lab_history_delete
   AFTER DELETE ON patient_lab
       FOR EACH ROW
-        INSERT INTO log_patient_lab
+        INSERT INTO patient_lab_history
         VALUES (
           NULL,
           NULL,
@@ -248,7 +248,7 @@ CREATE TABLE `patient_measurement` (
   UNIQUE KEY `patient_id` (`patient_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `log_patient_measurement` (
+CREATE TABLE `patient_measurement_history` (
   `log_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `log_row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `log_op` tinyint NOT NULL,
@@ -306,10 +306,10 @@ CREATE TABLE `log_patient_measurement` (
   INDEX (patient_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TRIGGER log_patient_measurement_insert
+CREATE TRIGGER patient_measurement_history_insert
   AFTER INSERT ON patient_measurement
       FOR EACH ROW
-        INSERT INTO log_patient_measurement
+        INSERT INTO patient_measurement_history
         VALUES (
           NULL,
           NULL,
@@ -364,10 +364,10 @@ CREATE TRIGGER log_patient_measurement_insert
           NEW.row_updated
         );
 
-CREATE TRIGGER log_patient_measurement_update
+CREATE TRIGGER patient_measurement_history_update
   AFTER UPDATE ON patient_measurement
       FOR EACH ROW
-        INSERT INTO log_patient_measurement
+        INSERT INTO patient_measurement_history
         VALUES (
           NULL,
           NULL,
@@ -422,10 +422,10 @@ CREATE TRIGGER log_patient_measurement_update
           OLD.row_updated
         );
 
-CREATE TRIGGER log_patient_measurement_delete
+CREATE TRIGGER patient_measurement_history_delete
   AFTER DELETE ON patient_measurement
       FOR EACH ROW
-        INSERT INTO log_patient_measurement
+        INSERT INTO patient_measurement_history
         VALUES (
           NULL,
           NULL,
@@ -498,7 +498,7 @@ CREATE TABLE `patient_medication` (
   INDEX (`patient_id`, `ATC_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `log_patient_medication` (
+CREATE TABLE `patient_medication_history` (
   `log_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `log_row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `log_op` tinyint NOT NULL,
@@ -517,10 +517,10 @@ CREATE TABLE `log_patient_medication` (
   INDEX (patient_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TRIGGER log_patient_medication_insert
+CREATE TRIGGER patient_medication_history_insert
   AFTER INSERT ON patient_medication
       FOR EACH ROW
-        INSERT INTO log_patient_medication
+        INSERT INTO patient_medication_history
         VALUES (
           NULL,
           NULL,
@@ -536,10 +536,10 @@ CREATE TRIGGER log_patient_medication_insert
           NEW.row_created
         );
 
-CREATE TRIGGER log_patient_medication_update
+CREATE TRIGGER patient_medication_history_update
   AFTER UPDATE ON patient_medication
       FOR EACH ROW
-        INSERT INTO log_patient_medication
+        INSERT INTO patient_medication_history
         VALUES (
           NULL,
           NULL,
@@ -555,10 +555,10 @@ CREATE TRIGGER log_patient_medication_update
           OLD.row_created
         );
 
-CREATE TRIGGER log_patient_medication_delete
+CREATE TRIGGER patient_medication_history_delete
   AFTER DELETE ON patient_medication
       FOR EACH ROW
-        INSERT INTO log_patient_medication
+        INSERT INTO patient_medication_history
         VALUES (
           NULL,
           NULL,
@@ -591,7 +591,7 @@ CREATE TABLE `patient_problem` (
   INDEX (`patient_id`, `id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `log_patient_problem` (
+CREATE TABLE `patient_problem_history` (
   `log_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `log_row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `log_op` tinyint NOT NULL,
@@ -609,10 +609,10 @@ CREATE TABLE `log_patient_problem` (
   INDEX (patient_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TRIGGER log_patient_problem_insert
+CREATE TRIGGER patient_problem_history_insert
   AFTER INSERT ON patient_problem
       FOR EACH ROW
-        INSERT INTO log_patient_problem
+        INSERT INTO patient_problem_history
         VALUES (
           NULL,
           NULL,
@@ -627,10 +627,10 @@ CREATE TRIGGER log_patient_problem_insert
           NEW.row_created
         );
 
-CREATE TRIGGER log_patient_problem_update
+CREATE TRIGGER patient_problem_history_update
   AFTER UPDATE ON patient_problem
       FOR EACH ROW
-        INSERT INTO log_patient_problem
+        INSERT INTO patient_problem_history
         VALUES (
           NULL,
           NULL,
@@ -645,10 +645,10 @@ CREATE TRIGGER log_patient_problem_update
           OLD.row_created
         );
 
-CREATE TRIGGER log_patient_problem_delete
+CREATE TRIGGER patient_problem_history_delete
   AFTER DELETE ON patient_problem
       FOR EACH ROW
-        INSERT INTO log_patient_problem
+        INSERT INTO patient_problem_history
         VALUES (
           NULL,
           NULL,
@@ -679,7 +679,7 @@ CREATE TABLE patient_advice_selection (
   UNIQUE KEY (patient_id, ATC_code, medication_criteria_id, select_box_num)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE log_patient_advice_selection (
+CREATE TABLE patient_advice_selection_history (
   log_id bigint unsigned NOT NULL AUTO_INCREMENT,
   log_row_created timestamp DEFAULT CURRENT_TIMESTAMP,
   log_op tinyint NOT NULL,
@@ -697,10 +697,10 @@ CREATE TABLE log_patient_advice_selection (
   INDEX (patient_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TRIGGER log_patient_advice_selection_insert
+CREATE TRIGGER patient_advice_selection_history_insert
   AFTER INSERT ON patient_advice_selection
       FOR EACH ROW
-        INSERT INTO log_patient_advice_selection
+        INSERT INTO patient_advice_selection_history
         VALUES (
           NULL,
           NULL,
@@ -715,10 +715,12 @@ CREATE TRIGGER log_patient_advice_selection_insert
           NEW.row_created
         );
 
-CREATE TRIGGER log_patient_advice_selection_update
+DELIMITER PLEASE
+CREATE TRIGGER patient_advice_selection_history_update
   AFTER UPDATE ON patient_advice_selection
-      FOR EACH ROW
-        INSERT INTO log_patient_advice_selection
+    FOR EACH ROW
+      IF OLD.selected != NEW.selected THEN
+        INSERT INTO patient_advice_selection_history
         VALUES (
           NULL,
           NULL,
@@ -732,11 +734,14 @@ CREATE TRIGGER log_patient_advice_selection_update
           OLD.selected,
           OLD.row_created
         );
+      END IF;
+    PLEASE
+DELIMITER ;
 
-CREATE TRIGGER log_patient_advice_selection_delete
+CREATE TRIGGER patient_advice_selection_history_delete
   AFTER DELETE ON patient_advice_selection
       FOR EACH ROW
-        INSERT INTO log_patient_advice_selection
+        INSERT INTO patient_advice_selection_history
         VALUES (
           NULL,
           NULL,
@@ -768,7 +773,7 @@ CREATE TABLE patient_advice_freetext (
   UNIQUE KEY (patient_id, ATC_code, medication_criteria_id, select_box_num, freetext_num)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE log_patient_advice_freetext (
+CREATE TABLE patient_advice_freetext_history (
   log_id bigint unsigned NOT NULL AUTO_INCREMENT,
   log_row_created timestamp DEFAULT CURRENT_TIMESTAMP,
   log_op tinyint NOT NULL,
@@ -787,10 +792,10 @@ CREATE TABLE log_patient_advice_freetext (
   INDEX (patient_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TRIGGER log_patient_advice_freetext_insert
+CREATE TRIGGER patient_advice_freetext_history_insert
   AFTER INSERT ON patient_advice_freetext
       FOR EACH ROW
-        INSERT INTO log_patient_advice_freetext
+        INSERT INTO patient_advice_freetext_history
         VALUES (
           NULL,
           NULL,
@@ -807,11 +812,11 @@ CREATE TRIGGER log_patient_advice_freetext_insert
         );
 
 DELIMITER PLEASE
-CREATE TRIGGER log_patient_advice_freetext_update
+CREATE TRIGGER patient_advice_freetext_history_update
   AFTER UPDATE ON patient_advice_freetext
     FOR EACH ROW
       IF OLD.freetext != NEW.freetext THEN
-        INSERT INTO log_patient_advice_freetext
+        INSERT INTO patient_advice_freetext_history
         VALUES (
           NULL,
           NULL,
@@ -830,10 +835,10 @@ CREATE TRIGGER log_patient_advice_freetext_update
     PLEASE
 DELIMITER ;
 
-CREATE TRIGGER log_patient_advice_freetext_delete
+CREATE TRIGGER patient_advice_freetext_history_delete
   AFTER DELETE ON patient_advice_freetext
       FOR EACH ROW
-        INSERT INTO log_patient_advice_freetext
+        INSERT INTO patient_advice_freetext_history
         VALUES (
           NULL,
           NULL,
