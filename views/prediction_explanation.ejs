@@ -28,12 +28,16 @@ function getMeas(meas){
 <head>
 <title>Toelichting predictiemodel voor berekening valrisico</title>
 
+<link rel="stylesheet" type="text/css" href="static/adfice.css">
 <style>
 tr.tableheader{
 background-color: #ffcc99;
 }
 td.patdata{
 background-color: #fff2e6;
+}
+.prediction_container{
+	background-color: #dddddd;
 }
 </style>
 
@@ -43,8 +47,27 @@ background-color: #fff2e6;
 <!-- Consider using the nice gradient bar -->
 
 Patient: <%= patient_id %><br/>
-Risk score: <%= getMeas('prediction_result') %><br/>
-
+<div class="prediction_container">
+<div class="prediction" id = "prediction">
+<% let risk_score = getMeas('prediction_result'); -%>
+<% let hide_gauge = (risk_score == null || isNaN(risk_score)) -%>
+<p>Kans om te vallen binnen 12 maanden:&nbsp;
+<span style="color: red;">
+<% if (hide_gauge) { -%>
+(onbekend)
+<% } else { -%>
+<%= risk_score -%>%
+<% } -%>
+</span> </p>
+<div class='gauge_background'>
+<div class='gauge_text_left'>0%</div>
+<% if (!hide_gauge) { -%>
+<div class='gauge_line' style='left: <%= risk_score %>%'></div>
+<% } -%>
+<div class='gauge_text_right'>100%</div>
+</div><!-- gauge_background -->
+</div><!-- prediction -->
+</div><!-- prediction_container -->
 
 <h2>Berekening</h2>
 <p>Tabel: model voor berekening van de kans dat een pati&euml;nt van 65 jaar of ouder &eacute;&eacute;n of meer keer vallen binnen de komende 12 maanden:</p>
