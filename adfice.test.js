@@ -15,16 +15,16 @@ test('test advice text 6e', async () => {
     //console.log('6e');
     var rule_numbers = ["6e"];
     var texts = await adfice.getAdviceTextsCheckboxes(rule_numbers);
-    expect(texts.length).toBe(11);
+    expect(texts.length).toBe(12);
     expect(texts[0].select_box_category).toBe('stop');
     expect(texts[1].select_box_category).toBe('taper-stop');
     expect(texts[2].select_box_category).toBe('taper-reduce');
-    expect(texts[10].select_box_category).toBe('free_text');
+    expect(texts[11].select_box_category).toBe('free_text');
 
-    expect(texts[5].cdss_split[0].text).toBe('Continueren');
-    expect(texts[5].epic_split[0].text).toBe('Continueren');
+    expect(texts[6].cdss_split[0].text).toBe('Continueren');
+    expect(texts[6].epic_split[0].text).toBe('Continueren');
     let str = 'Gebruik dit medicijn zoals u tot nu toe al deed.';
-    expect(texts[5].patient_split[0].text).toBe(str);
+    expect(texts[6].patient_split[0].text).toBe(str);
 
     texts = await adfice.getAdviceTextsNoCheckboxes(rule_numbers);
     expect(texts.length).toBe(1);
@@ -171,7 +171,7 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
     expect(adv0['medication_name']).toBe('amitriptyline');
 
     let adviceTextsCheckboxes = adv0['adviceTextsCheckboxes'];
-    expect(adviceTextsCheckboxes.length).toBe(15);
+    expect(adviceTextsCheckboxes.length).toBe(16);
     let checkbox0 = adviceTextsCheckboxes[0];
     expect(checkbox0['medication_criteria_id']).toBe("19f");
     expect(checkbox0['select_box_num']).toBe(11);
