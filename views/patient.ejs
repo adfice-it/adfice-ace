@@ -531,6 +531,7 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
        let nm_advice = nm_advices[i];
        let nma_prefix = "nma_" + i;
        let category = nm_advice.category_id;
+       let category_name = nm_advice.category_name;
        let boxnum = nm_advice.select_box_num;
        let nma_id_base =`NONMED_${category}_${boxnum}`;
        let row_id = 'pt_' + nma_id_base;

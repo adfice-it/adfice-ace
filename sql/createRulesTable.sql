@@ -73,7 +73,7 @@ select_box_num smallint unsigned,
 preselected tinyint unsigned,
 cdss varchar(3000),
 epic varchar(2000),
-patient varchar(5000),
+patient varchar(5100),
 UNIQUE KEY (category_id, select_box_num)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

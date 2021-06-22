@@ -85,6 +85,10 @@ body {
 	color: #f28931;
 	margin-top: 15px;
 }
+.patient_nonmed_category{
+	font-weight: bold;
+	color: #f28931;
+}
 
 #patient_warning{
 	background-color: #ffef16;
