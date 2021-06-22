@@ -147,7 +147,7 @@ INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, gen
 (136,(select NOW()),"simvastatine","simvastatine","C10AA01",'2019-02-11'),
 (137,(select NOW()),"diclofenac","diclofenac","M01AB05",'2019-02-11'),
 (137,(select NOW()),"morfine","morfine","N02AA01",'2019-02-11'),
-(138,(select NOW()),"citolapram","citolapram","N06AB04",'2019-02-11'),
+(138,(select NOW()),"citalopram","citalopram","N06AB04",'2019-02-11'),
 (139,(select NOW()),"amitriptyline","amitriptyline","N06AA09",'2019-02-11'),
 (140,(select NOW()),"escitalopram","escitalopram","N06AB10",'2019-02-11'),
 (141,(select NOW()),"diazepam","diazepam","N05BA01",(select NOW())),
