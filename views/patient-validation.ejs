@@ -67,7 +67,7 @@ Leeftijd: <%= patient_advice.age %><br/>
 <%	     if(k < referenceNumbers.length-1){referenceString += ",";} -%>
 <% } -%>
 <div class="refpages">Referenties:<%- referenceString %></div>
-<table id="adviceTextsNoCheckboxesTable_<%= i %>">
+<table id="adviceTextsNoCheckboxesTable_<%= i %>" style="border: 2px solid green; width: 80%; margin-left: 10%;" >
 <tr><th>criterion</th><th>cdss</th></tr>
 <%     let advices = row.adviceTextsNoCheckboxes; -%>
 <%     for (let j = 0; j < advices.length; ++j ) { -%>
@@ -90,9 +90,9 @@ Leeftijd: <%= patient_advice.age %><br/>
 <td id="<%= atcbt_prefix %>_mc"><%= cb_advice.medication_criteria_id %></td>
 <td id="<%= atcbt_prefix %>_sbn"><%= cb_advice.select_box_num %></td>
 <td id="<%= atcbt_prefix %>_sbc"><%= cb_advice.select_box_category %></td>
-<td id="<%= atcbt_prefix %>_cdss"><%- md.makeHtml(cb_advice.cdss) %></td>
-<td id="<%= atcbt_prefix %>_epic"><%- md.makeHtml(cb_advice.epic) %></td>
-<td id="<%= atcbt_prefix %>_patient"><%- md.makeHtml(cb_advice.patient) %></td>
+<td id="<%= atcbt_prefix %>_cdss" style="border: 1px solid black;"><%- md.makeHtml(cb_advice.cdss) %></td>
+<td id="<%= atcbt_prefix %>_epic" style="border: 1px solid black;"><%- md.makeHtml(cb_advice.epic) %></td>
+<td id="<%= atcbt_prefix %>_patient" style="border: 1px solid black;"><%- md.makeHtml(cb_advice.patient) %></td>
 </tr>
 <%     } -%>
 </table>
