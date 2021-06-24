@@ -178,7 +178,7 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
     expect(checkbox0['select_box_category']).toBe('stop');
 
     let adviceTextsNoCheckboxes = adv0['adviceTextsNoCheckboxes'];
-    expect(adviceTextsNoCheckboxes.length).toBe(5);
+    expect(adviceTextsNoCheckboxes.length).toBe(4);
     let noCheckbox0 = adviceTextsNoCheckboxes[0];
     expect(noCheckbox0['medication_criteria_id']).toBe("19a");
     expect(noCheckbox0.cdss_split[0].text).toContain("TCA");

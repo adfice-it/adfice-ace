@@ -28,7 +28,7 @@ INSERT INTO preselect_rules (medication_criteria_id, select_box_num, preselect_n
 ("56",1,3,NULL,NULL,"!atriumfibrilleren &! angina-pectoris &! myocardinfarct",NULL,NULL,NULL,NULL),
 ("63",1,1,NULL,NULL,"(parkinson | lewy-bodies-dementia | multiple-system-atrophy | progressive-supranuclear-palsy) & orthostatische-hypotensie",NULL,NULL,NULL,NULL),
 ("64",1,1,"C10BX03,C10BX07,C10BX09,C10BX11,C10BX14",NULL,NULL,NULL,NULL,NULL,NULL),
-("67",2,1,"!N02AX02 &!N02AA01 &!N02AA05 &!N02AB03",NULL,NULL,NULL,NULL,NULL,NULL),
+("67",2,1,NULL,"N02AA01,N02AA05,N02AB03",NULL,NULL,NULL,NULL,NULL),
 ("78",2,1,NULL,NULL,NULL,NULL,NULL,"measurement.eGFR.value <= 30",NULL),
 ("78",2,2,NULL,NULL,NULL,NULL,"N02BE01,N02BE51,N02BE71,N02AJ01,N02AJ06,N02AJ13,N02AJ17",NULL,NULL),
 ("88",2,1,NULL,NULL,"!paraplegia &!dwarslesie",NULL,NULL,NULL,NULL),
