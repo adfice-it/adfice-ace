@@ -181,8 +181,7 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
     expect(adviceTextsNoCheckboxes.length).toBe(4);
     let noCheckbox0 = adviceTextsNoCheckboxes[0];
     expect(noCheckbox0['medication_criteria_id']).toBe("19a");
-    expect(noCheckbox0.cdss_split[0].text).toContain("TCA");
-    expect(noCheckbox0.cdss_split[0].text).toContain("SSRI");
+    expect(noCheckbox0.cdss_split[0].text).toContain("depressie");
 })
 
 test('getAdviceForPatient(1), no med rule advice', async () => {
