@@ -460,15 +460,12 @@ Overweeg stoppen:
 ("113",5,"free_text","","Overige: {{free text}}","Overige: {{free text}}","Overige opmerkingen: {{free text}}"),
 ("113",6,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("113",7,"switch","other","Vervangen door andere medicatie (afhankelijk van het bijwerkingsprofiel en patiëntkarakteristieken) {{free text}}","Vervangen door andere medicatie. {{free text}}","Dit medicijn is vervangen voor een ander medicijn. Neem dit nieuwe medicijn in volgens de instructies van de apotheek. Vraag de apotheek naar de bijwerkingen. {{free text}}"),
-("113a",3,"switch","tamsulosine","Vervangen door tamsulosine <a href=\"https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/t/tamsulosine\" target=\"_blank\"><img class=\"fkimg\" src=\"/static/FK_circle_with_linkout.png\"></a> 4mg 1dd.","Vervangen door tamsulosine, 4mg 1dd","Vervangen door tamsulosine. Volg de instructies van de apotheek. Vraag de apotheek naar de meest voorkomende bijwerkingen. {{free text}}"),
 ("113b",NULL,"","","Dit middlel kan hypotensie, orthostatische hypotensie, of duizeligheid veroorzaken. Overweeg stoppen en adviseer gebruik van niet-medicamenteuze maatregelen.","",""),
 ("113c",NULL,"","","De klinische relevantie van het effect van alfa-blokkers op BPH is beperkt. Overweeg afbouwen en stoppen.
 
 Overweeg stoppen: Indien hypotensive, orthostatische hypotensive of duizeligheid.
 
-Niet-selective alfablokkers zijn sterker valrisicoverhogend dan selectieve.
-
-Tamsulosine wordt door Ephor als mogelijke behandeling van benigne prostaathyperplasie (BPH) geadviseerd en is vergelijkbaar met andere alfablokkers.","",""),
+Niet-selective alfablokkers zijn sterker valrisicoverhogend dan selectieve.","",""),
 ("114",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen of lagere dosering. ","",""),
 ("115",1,"follow-up","","Monitor op terugkeer van symptomen. Vervolgafspraak:{{free text}}","Monitor voor veranderingen in symptomen.Vervolgafspraak: {{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}"),
 
