@@ -551,12 +551,12 @@ test('verification3: conforms to spec', async () => {
     patientAdvice = null;
     patientAdvice = await adfice.getAdviceForPatient(110);
     fired0 = patientAdvice.medication_advice[0].fired.toString();
-    expect(fired0).toBe("113,115");
+    expect(fired0).toBe("113,113c,115");
     fired0 = null;
     patientAdvice = null;
     patientAdvice = await adfice.getAdviceForPatient(111);
     fired0 = patientAdvice.medication_advice[0].fired.toString();
-    expect(fired0).toBe("113,113a,115");
+    expect(fired0).toBe("113,113a,113c,115");
     fired0 = null;
     patientAdvice = null;
     patientAdvice = await adfice.getAdviceForPatient(112);
