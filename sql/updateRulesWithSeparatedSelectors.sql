@@ -73,9 +73,9 @@ UPDATE med_rules SET selector_or = "C02CA", selector_not = NULL WHERE medication
 UPDATE med_rules SET selector_or = "C04,C07E,C08,C02DA,C02DB,C02DC,C02DG01,C02DD01,C01DX16,C01DA,C01EA01,C10BX03,C10BX07,C10BX09,C10BX11,C10BX14", selector_not = NULL WHERE medication_criteria_id = "51a";
 UPDATE med_rules SET selector_or = "C04, C07E, C08, C02CA, C02DA, C02DB, C02DC, C02DG01, C02DD01, C01DX16, C01DA, C01EA01, C10BX03, C10BX07, C10BX09, C10BX11, C10BX14", selector_not = NULL WHERE medication_criteria_id = "52";
 UPDATE med_rules SET selector_or = "C04,C07E,C08,C02CA,C02DA,C02DB,C02DC,C02DG01,C02DD01,C01DX16,C01DA,C01EA01,C10BX03,C10BX07,C10BX09,C10BX11,C10BX14", selector_not = NULL WHERE medication_criteria_id = "53";
-UPDATE med_rules SET selector_or = "C01DX16,C01EA01", selector_not = NULL WHERE medication_criteria_id = "54";
-UPDATE med_rules SET selector_or = "C01DX16,C01EA01", selector_not = NULL WHERE medication_criteria_id = "54a";
-UPDATE med_rules SET selector_or = "C01DX16,C01EA01", selector_not = NULL WHERE medication_criteria_id = "55";
+UPDATE med_rules SET selector_or = "C01DA,C01DX16,C01EA01", selector_not = NULL WHERE medication_criteria_id = "54";
+UPDATE med_rules SET selector_or = "C01DA,C01DX16,C01EA01", selector_not = NULL WHERE medication_criteria_id = "54a";
+UPDATE med_rules SET selector_or = "C01DA,C01DX16,C01EA01", selector_not = NULL WHERE medication_criteria_id = "55";
 UPDATE med_rules SET selector_or = "C07,S01ED", selector_not = "C07B,C07C,C07D" WHERE medication_criteria_id = "56";
 UPDATE med_rules SET selector_or = "C07AA, C07AG, C07BA, C07BG, C07CA, C07CG, C07DA, C07EA, C07FX01, C07FX02, C07FX06, C07FA05, S01ED01, S01ED03, S01ED04, S01ED05", selector_not = NULL WHERE medication_criteria_id = "57";
 UPDATE med_rules SET selector_or = "C07AA, C07AG, C07BA, C07BG, C07CA, C07CG, C07DA, C07EA, C07FX01, C07FX02, C07FX06, C07FA05, S01ED01, S01ED03, S01ED04, S01ED05", selector_not = NULL WHERE medication_criteria_id = "57a";
@@ -136,7 +136,6 @@ UPDATE med_rules SET selector_or = "G04BD10,G04BD11,G04BD02,G04BD12,G04BD04,G04B
 UPDATE med_rules SET selector_or = "G04BD10,G04BD11,G04BD02,G04BD12,G04BD04,G04BD08,G04BD07,G04BD05,G04BD06,G04BD09", selector_not = NULL WHERE medication_criteria_id = "111";
 UPDATE med_rules SET selector_or = "G04BD10,G04BD11,G04BD02,G04BD12,G04BD04,G04BD08,G04BD07,G04BD05,G04BD06,G04BD09", selector_not = NULL WHERE medication_criteria_id = "112";
 UPDATE med_rules SET selector_or = "G04BE,G04CA", selector_not = NULL WHERE medication_criteria_id = "113";
-UPDATE med_rules SET selector_or = "G04CA", selector_not = "G04CA02" WHERE medication_criteria_id = "113a";
 UPDATE med_rules SET selector_or = "G04BE" WHERE medication_criteria_id = "113b";
 UPDATE med_rules SET selector_or = "G04CA" WHERE medication_criteria_id = "113c";
 UPDATE med_rules SET selector_or = "G04BE,G04CA", selector_not = NULL WHERE medication_criteria_id = "114";

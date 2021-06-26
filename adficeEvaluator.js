@@ -12,27 +12,32 @@ async function evaluateRules(meds, rules, patient_id, isSQLConditionTrue) {
     let meds_without_fired = [];
     for (let i = 0; i < meds.length; ++i) {
         let med = meds[i];
-        let atc_code = med.ATC_code.trim();
-        let startDate = med.start_date;
-        medsWithRulesToFire[atc_code] = medsWithRulesToFire[atc_code] || [];
-        for (let ruleCounter = 0; ruleCounter < rules.length; ++ruleCounter) {
-            let rule = rules[ruleCounter];
-            if (matchesSelector(atc_code, rule.selector_or) &&
-                !matchesSelector(atc_code, rule.selector_not)) {
-                let isConditionTrue = await isSQLConditionTrue(patient_id,
-                    rule.medication_criteria_id);
-                if (isConditionTrue) {
-                    medsWithRulesToFire[atc_code].push(
-                        rule.medication_criteria_id);
-                }
-            }
-        }
-        if (medsWithRulesToFire[atc_code].length > 0) {
-            meds_with_fired.push(med);
-        } else {
-            meds_without_fired.push(med);
-            delete medsWithRulesToFire[atc_code];
-        }
+		let atc_code = null;
+		let startDate = med.start_date;
+        if(med.ATC_code != null) {
+			atc_code = med.ATC_code.trim();
+			medsWithRulesToFire[atc_code] = medsWithRulesToFire[atc_code] || [];
+			for (let ruleCounter = 0; ruleCounter < rules.length; ++ruleCounter) {
+				let rule = rules[ruleCounter];
+				if (matchesSelector(atc_code, rule.selector_or) &&
+					!matchesSelector(atc_code, rule.selector_not)) {
+					let isConditionTrue = await isSQLConditionTrue(patient_id,
+						rule.medication_criteria_id);
+					if (isConditionTrue) {
+						medsWithRulesToFire[atc_code].push(
+							rule.medication_criteria_id);
+					}
+				}
+			}
+		}
+		if(atc_code != null){
+			if (medsWithRulesToFire[atc_code].length > 0) {
+				meds_with_fired.push(med);
+			} else {
+				meds_without_fired.push(med);
+				delete medsWithRulesToFire[atc_code];
+			}
+		} else meds_without_fired.push(med);
     }
     let rv = {
         medsWithRulesToFire: medsWithRulesToFire,

@@ -303,7 +303,7 @@ vasodilantia in FK:
 C02DB02 hydralazine
 C02DC01 minoxidil
 C01EA01 alprostae ","NOT hypertensie","","(atc:C04 | atc:C07E | atc:C08 | atc:C02CA | atc:C02DA | atc:C02DB | atc:C02DC | atc:C02DG01 | atc:C02DD01 | atc:C01DX16 | atc:C01DA | atc:C01EA01 | atc:C10BX03 | atc:C10BX07 | atc:C10BX09 | atc:C10BX11 | atc:C10BX14)","! problem:hypertensie",17),
-("54","yes","no","vasodilators not covered elsewhere: C01DX16
+("54","yes","no","vasodilators not covered elsewhere: C01DA or C01DX16
 or C01EA01","all","{{preselect box 1}{}}}","(atc:C01DX16 | atc:C01EA01)","",17),
 ("54a","yes","no","vasodilators not covered elsewhere: C01DX16
 or C01EA01","bijwerking","","(atc:C01DX16 | atc:C01EA01)","allergic-reaction",17),
