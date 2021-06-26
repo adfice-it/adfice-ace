@@ -35,3 +35,37 @@ test('test drugsWithoutFiredRules', async () => {
         adfice.isSQLConditionTrue);
     expect(result).toBe(true);
 });
+
+test('test evaluateRules as it is called in getAdviceForPatient', async () =>{
+    let meds = [];
+    let rules = await adfice.getActiveRules();
+    let patient_id = 160;
+    let evaluated = await ae.evaluateRules(meds, rules, patient_id,
+        adfice.isSQLConditionTrue);
+    let expected = {
+        "medsWithRulesToFire": {},
+        "meds_with_fired": [],
+        "meds_without_fired": []
+    };
+    expect(evaluated).toStrictEqual(expected);
+});
+
+test('test evaluateRules with med lacking ATC code', async () =>{
+    let garlic = {
+            ATC_code: null,
+            medication_name: 'garlic',
+            generic_name: 'allium sativum',
+            start_date: '1999-12-31'
+        }
+    let meds = [ garlic ];
+    let rules = await adfice.getActiveRules();
+    let patient_id = 160;
+    let evaluated = await ae.evaluateRules(meds, rules, patient_id,
+        adfice.isSQLConditionTrue);
+    let expected = {
+        "medsWithRulesToFire": {},
+        "meds_with_fired": [],
+        "meds_without_fired": [garlic]
+    };
+    expect(evaluated).toStrictEqual(expected);
+});
