@@ -6,6 +6,10 @@
 const adfice = require('./adfice')
 const ae = require('./adficeEvaluator');
 
+afterAll(async () => {
+    return await adfice.shutdown();
+});
+
 test('test drugsWithoutFiredRules', () => {
     let rulesResult = {
         C09AA01: ["one", "two"],
