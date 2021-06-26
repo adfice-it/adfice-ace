@@ -444,3 +444,8 @@ async function patientRenew() {
     ws.send(msg_str);
     return true;
 }
+
+async function windowPrint() {
+    window.print();
+    return true;
+}
