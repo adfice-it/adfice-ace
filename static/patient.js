@@ -396,7 +396,7 @@ window.addEventListener('load', (event) => {
 async function copyEpicTextToClipboard() {
     if (!navigator.clipboard) {
         alert("browser does not support copy");
-        return;
+        return true;
     }
 
     var allEpicText = document.getElementById("div_all_epic_text");
@@ -407,7 +407,7 @@ async function copyEpicTextToClipboard() {
 async function copyPatientTextToClipboard() {
     if (!navigator.clipboard) {
         alert("browser does not support copy");
-        return;
+        return true;
     }
 
     var dpv = document.getElementById("div_patient_view");
