@@ -33,8 +33,8 @@ console.log('patient_id: ', patient_id);
  <button type="button" class = "nav_button" id="definitive"
          onclick="makeDefinitive()">
          Opslaan &amp; definitief maken</button>
- <button type="button" class = "nav_button" id="help">
-         Hoe gebruik ik dit systeem?</button>
+ <a href = "static/HoeGebruikIkDitSysteem.html" target="_blank"><button type="button" class = "nav_button" id="help">
+         Hoe gebruik ik dit systeem?</button></a>
 </div>
 <div id=patient_info>
 <strong>Pati&euml;ntinformatie:</strong><br/>
@@ -551,7 +551,7 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
 </div><!-- non_med_advice_patient_area_text -->
 <button id="copy_patient_text" type="button" class='button_patient_text'
         onclick="copyPatientTextToClipboard()">Kopieer tekst</button>
-<button onclick="window.print()">Afdrukken</button>
+<!-- <button onclick="window.print()">Afdrukken</button> -->
 </div><!-- "non_med_advice_patient_area" -->
 
 <div id="div_epic_box" class="div_epic_box"><!-- not in patient view -->
