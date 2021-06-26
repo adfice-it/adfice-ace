@@ -5,12 +5,23 @@
 
 function calculatePredictionDB(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
     systolic_bp_mmHg, number_of_limitations, nr_falls_12m, smoking,
-    has_antiepileptica, has_ca_blocker, has_incont_med, education_hml, fear1, fear2) {
+    has_antiepileptica, has_ca_blocker, has_incont_med, education_hml, fear1,
+    fear2) {
 
-    if (GDS_score == null || grip_kg == null || walking_speed_m_per_s == null || BMI == null ||
-        systolic_bp_mmHg == null || number_of_limitations == null || nr_falls_12m == null || smoking == null ||
-        has_antiepileptica == null || has_ca_blocker == null || has_incont_med == null || education_hml == null ||
-        fear1 == null || fear2 == null) {
+    if (GDS_score == null ||
+        grip_kg == null ||
+        walking_speed_m_per_s == null ||
+        BMI == null ||
+        systolic_bp_mmHg == null ||
+        number_of_limitations == null ||
+        nr_falls_12m == null ||
+        smoking == null ||
+        has_antiepileptica == null ||
+        has_ca_blocker == null ||
+        has_incont_med == null ||
+        education_hml == null ||
+        fear1 == null ||
+        fear2 == null) {
         return null;
     }
     // Education was included as a categorical variable that denotes the
@@ -38,9 +49,22 @@ function calculatePredictionDB(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
     }
     // fear of falls (FES score) is categorical, thus fear0, fear1, *or*
     // fear2 should = 1; the other two should be 0.
-    return calculatePrediction(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
-        systolic_bp_mmHg, number_of_limitations, nrFall1, nrFall2, smoking,
-        has_antiepileptica, has_ca_blocker, has_incont_med, edu2, edu3, fear1,
+    return calculatePrediction(
+        GDS_score,
+        grip_kg,
+        walking_speed_m_per_s,
+        BMI,
+        systolic_bp_mmHg,
+        number_of_limitations,
+        nrFall1,
+        nrFall2,
+        smoking,
+        has_antiepileptica,
+        has_ca_blocker,
+        has_incont_med,
+        edu2,
+        edu3,
+        fear1,
         fear2);
 }
 

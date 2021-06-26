@@ -36,7 +36,7 @@ test('test drugsWithoutFiredRules', async () => {
     expect(result).toBe(true);
 });
 
-test('test evaluateRules as it is called in getAdviceForPatient', async () =>{
+test('test evaluateRules as it is called in getAdviceForPatient', async () => {
     let meds = [];
     let rules = await adfice.getActiveRules();
     let patient_id = 160;
@@ -50,14 +50,14 @@ test('test evaluateRules as it is called in getAdviceForPatient', async () =>{
     expect(evaluated).toStrictEqual(expected);
 });
 
-test('test evaluateRules with med lacking ATC code', async () =>{
+test('test evaluateRules with med lacking ATC code', async () => {
     let garlic = {
-            ATC_code: null,
-            medication_name: 'garlic',
-            generic_name: 'allium sativum',
-            start_date: '1999-12-31'
-        }
-    let meds = [ garlic ];
+        ATC_code: null,
+        medication_name: 'garlic',
+        generic_name: 'allium sativum',
+        start_date: '1999-12-31'
+    }
+    let meds = [garlic];
     let rules = await adfice.getActiveRules();
     let patient_id = 160;
     let evaluated = await ae.evaluateRules(meds, rules, patient_id,

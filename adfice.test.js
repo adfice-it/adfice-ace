@@ -89,7 +89,8 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
     expect(checkbox0['select_box_category']).toBe('stop');
 
     let checkbox1 = adviceTextsCheckboxes[1];
-    expect(checkbox1['cdss_split'][0].text).toContain('Afbouwen waarna stoppen');
+    expect(checkbox1['cdss_split'][0].text)
+        .toContain('Afbouwen waarna stoppen');
     expect(checkbox1['cdss_split'].length).toBe(2);
 
     let adviceTextsNoCheckboxes = adv0['adviceTextsNoCheckboxes'];
