@@ -30,6 +30,9 @@ Mid Priority:
 * Each acceptance test should start an instance of AdficeWebserver
 * test reconnect behavior on web-socket drop or AdficeWebserver restart
 * specify DB port, separate instance for local human testing, automated testing
+* specify DB per-test, or otherwise ensure:
+  * tests can be run in parallel
+  * data mutations in one test do not impact a different test
 * CI tests should use HTTPS too, possibly self-signed certs
 * the "consult view" button could be renamed "Consult verneiuwen" in order to
   remove the items which have been un-checked/disabled
@@ -62,7 +65,7 @@ Requested (not required) changes to rules:
 * Rule 50: Split to personalize by age
 * Rule 45: Split to personalize by +/- OH.
 * Rule 45: Split into using enalapril/something else
-* See if there is sufficient evidence to suggest mirabegron as alternative for G04BD 
+* See if there is sufficient evidence to suggest mirabegron as alternative for G04BD
 * See if there is sufficient evidence to suggest testerosterone 5 aplha reductase inhibitors (dutasteride) as alternative for G04CA
 
 Important, but unable to do yet:
