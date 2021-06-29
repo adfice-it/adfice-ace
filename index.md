@@ -1,5 +1,5 @@
 # adfice-ace
-<img style="height: 300px;" src = "/static/Advice_IT_logo_small.png">
+<img style="height: 300px;" src = "static/Advice_IT_logo_small.png">
 
 The purpose of the system is to evaluate patient data using guideline-based rules and produce a summary of guideline recommendations for medications relating to falls.
 
