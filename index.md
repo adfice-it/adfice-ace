@@ -35,7 +35,9 @@ The next item on the page is a list of the patient's medications, with advice fo
 
 <img src = "static/screenshot_checkboxes.png">
 
-Following the advice box, there are a series of checkbox options listing possible follow-up actions that the clinician could take for this medication. There is always a free text box at the bottom, so the clinician can give instructions that are not included among the checkboxes. Note the control bar at the bottom - this allows the clinician to navigate between views. The "consult" view is a condensed view, showing only the checkbox options that were selected. The "Advies" view gives a patient-friendly version of the follow-up actions selected by the clinician (see the last figure). This bar floats at the bottom of the window, so the clinician can easily switch between views.
+Following the advice box, there are links to the references used in formulating the advice. These give the actual quotations from the guidelines that were the basis of the advice.
+
+Then there are a series of checkbox options listing possible follow-up actions that the clinician could take for this medication. There is always a free text box at the bottom, so the clinician can give instructions that are not included among the checkboxes. Note the control bar at the bottom - this allows the clinician to navigate between views. The "consult" view is a condensed view, showing only the checkbox options that were selected. The "Advies" view gives a patient-friendly version of the follow-up actions selected by the clinician (see the last figure). This bar floats at the bottom of the window, so the clinician can easily switch between views.
 
 <img src = "static/screenshot_nonmed.png">
 
