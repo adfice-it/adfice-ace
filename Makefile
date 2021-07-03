@@ -53,6 +53,8 @@ adfice-ace.tar.gz: \
 		bin/make-self-signed-cert.sh \
 		bin/reload-patient-data.sh \
 		bin/setup-new-db-container.sh \
+		bin/rhel83-root-setup.sh \
+		bin/rhel83-user-setup.sh \
 		calculatePrediction.js \
 		calculatePrediction.test.js \
 		connect-container.sh \
@@ -152,6 +154,12 @@ vm-init: adfice-ace.tar.gz
 	echo "this would be an 'scp' command"
 	cd setup-vm && vagrant upload ../adfice-ace.tar.gz \
 		adfice-ace.tar.gz adfice-vm
+	cd setup-vm && vagrant ssh adfice-vm --command \
+		"tar xvf adfice-ace.tar.gz"
+	cd setup-vm && vagrant ssh adfice-vm --command \
+		"sudo adfice-$(ADFICE_VERSION)/bin/rhel83-root-setup.sh"
+	cd setup-vm && vagrant ssh adfice-vm --command \
+		"adfice-$(ADFICE_VERSION)/bin/rhel83-user-setup.sh"
 
 vm-check: vm-init
 	cd setup-vm && vagrant ssh adfice-vm --command \
