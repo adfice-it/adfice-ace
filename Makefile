@@ -15,6 +15,7 @@
 #       https://www.gnu.org/software/make/manual/html_node/Text-Functions.html
 
 SHELL=/bin/bash
+ADFICE_VERSION=0.0.0
 
 default: check
 
@@ -139,7 +140,9 @@ adfice-ace.tar.gz: \
 		views/prediction_explanation.ejs \
 		views/patient.ejs \
 		views/patient-validation.ejs
-	tar cvzf $@ $^
+	tar --transform='s@^@adfice-$(ADFICE_VERSION)/@' \
+		--gzip --create --verbose \
+		--file=$@ $^
 
 tar: adfice-ace.tar.gz
 
@@ -147,7 +150,8 @@ vm-init: adfice-ace.tar.gz
 	-(cd setup-vm && vagrant destroy -f)
 	cd setup-vm && vagrant up
 	echo "this would be an 'scp' command"
-	cd setup-vm && vagrant upload ../adfice-ace.tar.gz adfice-vm
+	cd setup-vm && vagrant upload ../adfice-ace.tar.gz \
+		adfice-ace.tar.gz adfice-vm
 
 vm-check: vm-init
 	cd setup-vm && vagrant ssh adfice-vm --command \
