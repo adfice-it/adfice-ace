@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Helpful guide:
 # https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-centos-8
@@ -10,6 +11,9 @@ fi
 
 echo "# Installing MariaDB Server"
 dnf install -y mariadb-server
+
+echo "# Installing NodeJS"
+dnf install -y nodejs
 
 systemctl start mariadb
 
@@ -44,9 +48,32 @@ cat /dev/urandom \
 	| head --lines=1 \
 	> $ADFICE_INSTALL_DIR/mariadb_user_password
 chmod -v 600 $ADFICE_INSTALL_DIR/mariadb_user_password
-chown -v $ADFICE_USER_NAME $ADFICE_INSTALL_DIR/mariadb_user_password
-ls -l $ADFICE_INSTALL_DIR/mariadb_user_password
 DB_USER_PASSWORD=`cat $ADFICE_INSTALL_DIR/mariadb_user_password | xargs`
+
+echo '# generating adfice.my.cnf for the db commandline client'
+touch $ADFICE_INSTALL_DIR/adfice.my.cnf
+chmod -v 600 $ADFICE_INSTALL_DIR/adfice.my.cnf
+cat > $ADFICE_INSTALL_DIR/adfice.my.cnf << EOF
+# for use with:
+# mysql --defaults-file=$ADFICE_INSTALL_DIR/adfice.my.cnf
+[client]
+user=adfice
+password=$DB_USER_PASSWORD
+EOF
+
+echo '# generating dbconfig.env for the application db connection'
+touch $ADFICE_INSTALL_DIR/dbconfig.env
+chmod -v 600 $ADFICE_INSTALL_DIR/dbconfig.env
+cat > $ADFICE_INSTALL_DIR/dbconfig.env << EOF
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USER=adfice
+DB_NAME=adfice
+DB_PW_FILE=$ADFICE_INSTALL_DIR/mariadb_user_password
+EOF
+
+chown -vR $ADFICE_USER_NAME $ADFICE_INSTALL_DIR
+ls -l $ADFICE_INSTALL_DIR
 
 mysql -u root << END_OF_SQL
 --
