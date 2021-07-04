@@ -3,10 +3,11 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-const adfice = require('./adfice')
+const adfice_factory = require('./adfice');
 const util = require("util");
 const fs = require('fs');
 
+var adfice = adfice_factory.adfice_init();
 afterAll(async () => {
     return await adfice.shutdown();
 });

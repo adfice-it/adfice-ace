@@ -12,7 +12,9 @@ let express = require('express');
 let ejs = require('ejs');
 let util = require('util');
 let showdown = require('showdown');
-let adfice = require('./adfice.js');
+let adfice_factory = require('./adfice.js');
+
+let adfice = adfice_factory.adfice_init();
 
 let md = new showdown.Converter();
 

@@ -9,20 +9,21 @@ const ae = require('./adficeEvaluator');
 const cp = require('./calculatePrediction');
 const adb = require('./adficeDB');
 
-var _db = null;
-
 async function db_init() {
-    if (!_db) {
-        _db = await adb.init();
+    if (!this.db) {
+        this.db = await adb.init();
     }
-    return _db;
+    return this.db;
 }
 
 async function shutdown() {
     try {
-        await _db.close();
+        /* istanbul ignore else */
+        if (this.db) {
+            await this.db.close();
+        }
     } finally {
-        _db = null;
+        this.db = null;
     }
 }
 
@@ -31,7 +32,7 @@ function question_marks(num) {
 }
 
 async function sql_select(sql, params) {
-    let db = await db_init();
+    let db = await this.db_init();
     return await db.sql_query(sql, params);
 }
 
@@ -54,7 +55,7 @@ function split_advice_texts_cdss_epic_patient(advice_texts) {
 }
 
 async function getTableSizes() {
-    let db = await db_init();
+    let db = await this.db_init();
     let params = [await db.schema_name()];
     let sql = `/* adfice.getTableSizes */
         SELECT table_name
@@ -64,7 +65,7 @@ async function getTableSizes() {
           FROM information_schema.tables
          WHERE table_schema=?
       ORDER BY size_bytes DESC`;
-    return await sql_select(sql, params);
+    return await this.sql_select(sql, params);
 }
 
 async function getAllAdviceTextsCheckboxes() {
@@ -81,7 +82,7 @@ async function getAllAdviceTextsCheckboxes() {
             ON (m.select_box_category = p.select_box_category)
          WHERE select_box_num IS NOT NULL
       ORDER BY p.priority ASC, m.select_box_num ASC, m.id ASC`;
-    let advice_text = await sql_select(sql);
+    let advice_text = await this.sql_select(sql);
     let list = split_advice_texts_cdss_epic_patient(advice_text);
     let all = {};
     for (let i = 0; i < list.length; ++i) {
@@ -100,7 +101,7 @@ async function getAdviceTextsCheckboxes(rule_numbers, all) {
         return [];
     }
     if (!all) {
-        all = await getAllAdviceTextsCheckboxes();
+        all = await this.getAllAdviceTextsCheckboxes();
     }
     let narrowed = [];
     for (let i = 0; i < rule_numbers.length; ++i) {
@@ -132,7 +133,7 @@ async function getAdviceOtherTextsCheckboxes() {
           FROM med_other_text
       ORDER BY medication_criteria_id
              , select_box_num`;
-    let advice_text = await sql_select(sql);
+    let advice_text = await this.sql_select(sql);
     return split_advice_texts_cdss_epic_patient(advice_text);
 }
 
@@ -149,7 +150,7 @@ async function getAdviceTextsNoCheckboxes(rule_numbers) {
         question_marks(rule_numbers.length) +
         `)
       ORDER BY id`;
-    let advice_text = await sql_select(sql, rule_numbers);
+    let advice_text = await this.sql_select(sql, rule_numbers);
     return split_advice_texts_cdss_epic_patient(advice_text);
 }
 
@@ -168,7 +169,7 @@ async function getAdviceTextsNonMedCheckboxes() {
       ORDER BY t.category_id
              , t.select_box_num
     `;
-    let advice_text = await sql_select(sql);
+    let advice_text = await this.sql_select(sql);
     return split_advice_texts_cdss_epic_patient(advice_text);
 }
 
@@ -184,7 +185,7 @@ async function getReferenceNumbers(rule_numbers) {
         `)
       GROUP BY reference
       ORDER BY MIN(med_rules.id) ASC`;
-    return sql_select(sql, rule_numbers);
+    return await this.sql_select(sql, rule_numbers);
 }
 
 async function getActiveRules() {
@@ -193,7 +194,7 @@ async function getActiveRules() {
            FROM med_rules
           WHERE active = 'yes'
        ORDER BY id`;
-    let rules = await sql_select(sql);
+    let rules = await this.sql_select(sql);
     return rules;
 }
 
@@ -217,7 +218,7 @@ async function getMedsForPatient(patient_id) {
          WHERE patient_id=?
       ORDER BY ATC_code`;
     let params = [patient_id, patient_id];
-    let meds = await sql_select(sql, params);
+    let meds = await this.sql_select(sql, params);
     return meds;
 }
 
@@ -229,23 +230,23 @@ async function getSQLCondition(ruleNumber) {
           FROM med_rules
          WHERE medication_criteria_id=?
          `;
-    let results = await sql_select(sql, [ruleNumber]);
+    let results = await this.sql_select(sql, [ruleNumber]);
     return results[0]['sql_condition'];
 }
 
 async function isSQLConditionTrue(patientIdentifier, ruleNumber) {
     let patient_id = as_id(patientIdentifier);
-    let result = await evaluateSQLCondition(patient_id, ruleNumber);
+    let result = await this.evaluateSQLCondition(patient_id, ruleNumber);
     return result;
 }
 
 async function evaluateSQLCondition(patient_id, ruleNumber) {
-    var sql = await getSQLCondition(ruleNumber);
+    var sql = await this.getSQLCondition(ruleNumber);
     if (sql == null) {
         return true;
     } //no conditions === always true
     /* count the number of question marks in the string */
-    return await evaluateSQL(sql, patient_id);
+    return await this.evaluateSQL(sql, patient_id);
 }
 
 async function evaluateSQL(sql, patient_id) {
@@ -261,7 +262,7 @@ async function evaluateSQL(sql, patient_id) {
     for (let i = 0; i < count; ++i) {
         params.push(patient_id);
     }
-    let results = await sql_select(sql, params);
+    let results = await this.sql_select(sql, params);
     if (results.length == 0) {
         return false;
     }
@@ -279,7 +280,7 @@ async function getPreselectRules(ruleNumber) {
           FROM preselect_rules
          WHERE medication_criteria_id=?
          `;
-    let results = await sql_select(sql, [ruleNumber]);
+    let results = await this.sql_select(sql, [ruleNumber]);
     return results;
 }
 
@@ -292,7 +293,7 @@ async function getProblemsForPatient(patient_id) {
          WHERE patient_id=?
       ORDER BY id`;
     let params = [patient_id, patient_id];
-    let probs = await sql_select(sql, params);
+    let probs = await this.sql_select(sql, params);
     return probs;
 }
 
@@ -302,7 +303,7 @@ async function getPatientById(patient_id) {
           FROM patient
          WHERE id=?`;
     let params = [patient_id];
-    let results = await sql_select(sql, params);
+    let results = await this.sql_select(sql, params);
     let patient;
     if (results.length > 0) {
         patient = results[0];
@@ -321,7 +322,7 @@ async function getLabsForPatient(patient_id) {
          WHERE patient_id=?
       ORDER BY id`;
     let params = [patient_id, patient_id];
-    let result = await sql_select(sql, params);
+    let result = await this.sql_select(sql, params);
     return result;
 }
 
@@ -331,7 +332,7 @@ async function getPatientMeasurements(patient_id) {
           FROM patient_measurement
          WHERE patient_id=?`
     let params = [patient_id];
-    let results = await sql_select(sql, params);
+    let results = await this.sql_select(sql, params);
     if (results.length > 0) {
         return results;
     }
@@ -339,7 +340,7 @@ async function getPatientMeasurements(patient_id) {
 }
 
 async function getPredictionResult(patient_id) {
-    let measurements = await getPatientMeasurements(patient_id);
+    let measurements = await this.getPatientMeasurements(patient_id);
 
     if (!measurements || !measurements.length) {
         return null;
@@ -348,7 +349,7 @@ async function getPredictionResult(patient_id) {
     let measurement = measurements[0];
 
     if (measurement.prediction_result == null) {
-        measurement = await calculateAndStorePredictionResult(patient_id);
+        measurement = await this.calculateAndStorePredictionResult(patient_id);
     }
 
     return measurement.prediction_result;
@@ -360,21 +361,23 @@ async function updatePredictionResult(row_id, prediction_result) {
            SET prediction_result = ?
          WHERE id = ?`;
     let params = [prediction_result, row_id];
-    let results = await sql_select(sql, params);
+    let results = await this.sql_select(sql, params);
 }
 
 async function calculateAndStorePredictionResult(patient_id) {
-    let measurement = await calculatePredictionResult(patient_id);
+    let measurement = await this.calculatePredictionResult(patient_id);
     autil.assert(measurement);
-    await updatePredictionResult(measurement.id, measurement.prediction_result);
-    let measurements = await getPatientMeasurements(patient_id);
+    await this.updatePredictionResult(
+        measurement.id,
+        measurement.prediction_result);
+    let measurements = await this.getPatientMeasurements(patient_id);
     autil.assert(measurements);
     autil.assert(measurements.length > 0);
     return measurements[0];
 }
 
 async function calculatePredictionResult(patient_id) {
-    let measurements = await getPatientMeasurements(patient_id);
+    let measurements = await this.getPatientMeasurements(patient_id);
     if (measurements == null || !measurements.length) {
         return null;
     }
@@ -424,7 +427,7 @@ async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
         sqls_and_params.push([insert_sql, params[i]]);
     }
 
-    let db = await db_init();
+    let db = await this.db_init();
     let rs = await db.as_sql_transaction(sqls_and_params);
     return rs;
 }
@@ -441,7 +444,7 @@ async function getSelectionsForPatient(patient_id) {
          WHERE patient_id=?
       ORDER BY id`;
     let params = [patient_id];
-    let results = await sql_select(sql, params);
+    let results = await this.sql_select(sql, params);
     return selectionStatesToBoxStates(results);
 }
 
@@ -472,7 +475,7 @@ async function setFreetextsForPatient(patientIdentifier, viewer, freetexts) {
         sqls_and_params.push([insert_sql, params[i]]);
     }
 
-    let db = await db_init();
+    let db = await this.db_init();
     let rs = await db.as_sql_transaction(sqls_and_params);
     return rs;
 }
@@ -490,7 +493,7 @@ async function getFreetextsForPatient(patient_id) {
           WHERE patient_id=?
        ORDER BY id`;
     let params = [patient_id];
-    let results = await sql_select(sql, params);
+    let results = await this.sql_select(sql, params);
     return rowsToFreetexts(results);
 }
 
@@ -511,37 +514,39 @@ function structureLabs(labRows) {
 // called from AdficeWebserver
 async function getAdviceForPatient(patientIdentifier) {
     let patient_id = as_id(patientIdentifier);
-    let patient = await getPatientById(patient_id);
+    let patient = await this.getPatientById(patient_id);
     let age = patient.age;
     let is_final = false;
     if (patient.is_final) {
         is_final = true;
     }
 
-    let labRows = await getLabsForPatient(patient_id);
+    let labRows = await this.getLabsForPatient(patient_id);
     let labTests = structureLabs(labRows);
 
-    let problems = await getProblemsForPatient(patient_id);
+    let problems = await this.getProblemsForPatient(patient_id);
     let problemList = [];
     for (let i = 0; i < problems.length; ++i) {
         problemList.push(problems[i].name);
     }
 
-    var meds = await getMedsForPatient(patient_id);
+    var meds = await this.getMedsForPatient(patient_id);
     let drugList = [];
     for (let i = 0; i < meds.length; ++i) {
         drugList.push(meds[i].ATC_code);
     }
 
-    var rules = await getActiveRules();
-    var all_cb_advice = await getAllAdviceTextsCheckboxes();
+    var rules = await this.getActiveRules();
+    var all_cb_advice = await this.getAllAdviceTextsCheckboxes();
 
     let evaluated = await ae.evaluateRules(meds, rules, patient_id,
-        isSQLConditionTrue);
+        async (pId, ruleNum) => {
+            return await this.isSQLConditionTrue(pId, ruleNum);
+        }
+    );
     let medsWithRulesToFire = evaluated.medsWithRulesToFire;
     let meds_with_fired = evaluated.meds_with_fired;
     let meds_without_fired = evaluated.meds_without_fired;
-
     let preselected_checkboxes = {};
     let advice = [];
     for (let i = 0; i < meds.length; ++i) {
@@ -552,12 +557,14 @@ async function getAdviceForPatient(patientIdentifier) {
             continue;
         }
 
-        let advice_text = await getAdviceTextsCheckboxes(fired, all_cb_advice);
+        let advice_text = await this.getAdviceTextsCheckboxes(fired,
+            all_cb_advice);
 
-        let advice_text_no_box = await getAdviceTextsNoCheckboxes(fired);
+        let advice_text_no_box = await this.getAdviceTextsNoCheckboxes(fired);
 
-        let atc_preselected_checkboxes = await determinePreselectedCheckboxes(
-            fired, patient_id, atc_code.trim());
+        let atc_preselected_checkboxes =
+            await this.determinePreselectedCheckboxes(fired, patient_id,
+                atc_code.trim());
         Object.assign(preselected_checkboxes, atc_preselected_checkboxes);
 
         let adv = {};
@@ -566,13 +573,13 @@ async function getAdviceForPatient(patientIdentifier) {
         adv.generic_name = med.generic_name.trim();
         adv.adviceTextsCheckboxes = advice_text;
         adv.adviceTextsNoCheckboxes = advice_text_no_box;
-        adv.referenceNumbers = await getReferenceNumbers(fired);
+        adv.referenceNumbers = await this.getReferenceNumbers(fired);
         adv.fired = fired;
         adv.preselectedCheckboxes = atc_preselected_checkboxes;
         advice.push(adv);
     }
 
-    let advice_text_non_med = await getAdviceTextsNonMedCheckboxes();
+    let advice_text_non_med = await this.getAdviceTextsNonMedCheckboxes();
     for (let i = 0; i < advice_text_non_med.length; ++i) {
         let nm_adv = advice_text_non_med[i];
         if (nm_adv.preselected) {
@@ -582,14 +589,14 @@ async function getAdviceForPatient(patientIdentifier) {
             preselected_checkboxes[checkbox_id] = 'checked';
         }
     }
-    let advice_other_text = await getAdviceOtherTextsCheckboxes();
-    let selected_advice = await getSelectionsForPatient(patient_id);
-    let free_texts = await getFreetextsForPatient(patient_id);
+    let advice_other_text = await this.getAdviceOtherTextsCheckboxes();
+    let selected_advice = await this.getSelectionsForPatient(patient_id);
+    let free_texts = await this.getFreetextsForPatient(patient_id);
 
-    let risk_score = await getPredictionResult(patient_id);
+    let risk_score = await this.getPredictionResult(patient_id);
 
     let debug_info = {
-        data_sizes: await getTableSizes()
+        data_sizes: await this.getTableSizes()
     };
 
     let patient_advice = {};
@@ -617,12 +624,15 @@ async function determinePreselectedCheckboxes(fired, patient_id, atc_code) {
     let preselected = {};
     for (let i = 0; i < fired.length; ++i) {
         let rule_number = fired[i].toString();
-        let preselectRules = await getPreselectRules(rule_number);
+        let preselectRules = await this.getPreselectRules(rule_number);
         for (let j = 0; j < preselectRules.length; ++j) {
             let preselectRule = preselectRules[j];
             let box = preselectRule['select_box_num'];
             let is_preselected = await ae.evaluatePreselected(preselectRule,
-                patient_id, atc_code, evaluateSQL);
+                patient_id, atc_code, async (sql, pId) => {
+                    return await this.evaluateSQL(sql, pId);
+                }
+            );
             if (is_preselected) {
                 let checkbox_id = `cb_${atc_code}_${rule_number}_${box}`;
                 preselected[checkbox_id] = 'checked';
@@ -731,7 +741,7 @@ async function getExportData(patientIdentifier) {
   ORDER BY s.id ASC
          , f.id ASC`;
     let params = [patient_id];
-    let db = await db_init();
+    let db = await this.db_init();
     let results = await db.sql_query(sql, params);
     return results;
 }
@@ -757,14 +767,14 @@ async function finalizeAdviceForPatient(patient_id) {
        SET is_final = 1
      WHERE id = ?`
     let params = [patient_id];
-    let db = await db_init();
+    let db = await this.db_init();
     let result = await db.sql_query(sql, params);
     return result;
 }
 
 async function finalizeAndExport(patient_id, logfile) {
-    await finalizeAdviceForPatient(patient_id);
-    await exportForPatient(patient_id, logfile);
+    await this.finalizeAdviceForPatient(patient_id);
+    await this.exportForPatient(patient_id, logfile);
 }
 
 async function clearAdviceForPatient(patient_id) {
@@ -786,14 +796,14 @@ async function clearAdviceForPatient(patient_id) {
         WHERE patient_id = ?`;
     sqls_and_params.push([sql, params]);
 
-    let db = await db_init();
+    let db = await this.db_init();
     let rs = await db.as_sql_transaction(sqls_and_params);
     return rs;
 }
 
 async function reloadPatientData(patient, cmd) {
     let patient_id = as_id(patient);
-    await clearAdviceForPatient(patient_id);
+    await this.clearAdviceForPatient(patient_id);
     if (!cmd) {
         cmd = 'bin/reload-patient-data.sh';
     }
@@ -803,37 +813,57 @@ async function reloadPatientData(patient, cmd) {
     return autil.child_process_spawn(cmd, args);
 }
 
-module.exports = {
-    boxStatesToSelectionStates: boxStatesToSelectionStates,
-    calculateAndStorePredictionResult: calculateAndStorePredictionResult,
-    calculatePredictionResult: calculatePredictionResult,
-    clearAdviceForPatient: clearAdviceForPatient,
-    determinePreselectedCheckboxes: determinePreselectedCheckboxes,
-    evaluateSQL: evaluateSQL,
-    exportForPatient: exportForPatient,
-    finalizeAdviceForPatient: finalizeAdviceForPatient,
-    finalizeAndExport: finalizeAndExport,
-    getActiveRules: getActiveRules,
-    getAdviceForPatient: getAdviceForPatient,
-    getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
-    getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
-    getAdviceTextsNonMedCheckboxes: getAdviceTextsNonMedCheckboxes,
-    getAllAdviceTextsCheckboxes: getAllAdviceTextsCheckboxes,
-    getExportData: getExportData,
-    getFreetextsForPatient: getFreetextsForPatient,
-    getMedsForPatient: getMedsForPatient,
-    getPatientMeasurements: getPatientMeasurements,
-    getPredictionResult: getPredictionResult,
-    getPreselectRules: getPreselectRules,
-    getReferenceNumbers: getReferenceNumbers,
-    getSelectionsForPatient: getSelectionsForPatient,
-    getSQLCondition: getSQLCondition,
-    isSQLConditionTrue: isSQLConditionTrue,
-    reloadPatientData: reloadPatientData,
-    selectionStatesToBoxStates: selectionStatesToBoxStates,
-    setFreetextsForPatient: setFreetextsForPatient,
-    setSelectionsForPatient: setSelectionsForPatient,
-    shutdown: shutdown,
-    sql_select: sql_select,
-    updatePredictionResult: updatePredictionResult
+function adfice_init(db) {
+    let adfice = {
+        /* private variables */
+        db: db,
+
+        /* "private" and "friend" member functions */
+        boxStatesToSelectionStates: boxStatesToSelectionStates,
+        calculateAndStorePredictionResult: calculateAndStorePredictionResult,
+        calculatePredictionResult: calculatePredictionResult,
+        clearAdviceForPatient: clearAdviceForPatient,
+        db_init: db_init,
+        determinePreselectedCheckboxes: determinePreselectedCheckboxes,
+        evaluateSQL: evaluateSQL,
+        evaluateSQLCondition: evaluateSQLCondition,
+        exportForPatient: exportForPatient,
+        finalizeAdviceForPatient: finalizeAdviceForPatient,
+        getActiveRules: getActiveRules,
+        getAdviceOtherTextsCheckboxes: getAdviceOtherTextsCheckboxes,
+        getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
+        getAdviceTextsNonMedCheckboxes: getAdviceTextsNonMedCheckboxes,
+        getAllAdviceTextsCheckboxes: getAllAdviceTextsCheckboxes,
+        getExportData: getExportData,
+        getFreetextsForPatient: getFreetextsForPatient,
+        getLabsForPatient: getLabsForPatient,
+        getMedsForPatient: getMedsForPatient,
+        getPatientById: getPatientById,
+        getPredictionResult: getPredictionResult,
+        getPreselectRules: getPreselectRules,
+        getProblemsForPatient: getProblemsForPatient,
+        getReferenceNumbers: getReferenceNumbers,
+        getSelectionsForPatient: getSelectionsForPatient,
+        getSQLCondition: getSQLCondition,
+        getTableSizes: getTableSizes,
+        isSQLConditionTrue: isSQLConditionTrue,
+        selectionStatesToBoxStates: selectionStatesToBoxStates,
+        sql_select: sql_select,
+        updatePredictionResult: updatePredictionResult,
+
+        /* public API methods */
+        finalizeAndExport: finalizeAndExport,
+        getAdviceForPatient: getAdviceForPatient,
+        getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
+        getPatientMeasurements: getPatientMeasurements,
+        reloadPatientData: reloadPatientData,
+        setFreetextsForPatient: setFreetextsForPatient,
+        setSelectionsForPatient: setSelectionsForPatient,
+        shutdown: shutdown,
+    };
+    return adfice;
 }
+
+module.exports = {
+    adfice_init: adfice_init,
+};
