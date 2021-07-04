@@ -9,6 +9,8 @@ coverage/
 *.swp
 adfice-export.log
 
+adfice.my.cnf
+root.my.cnf
 adfice-user.env
 .vagrant
 
