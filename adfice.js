@@ -3,22 +3,35 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-var fs = require('fs');
+const fs = require('fs');
 const autil = require('./adficeUtil');
 const ae = require('./adficeEvaluator');
 const cp = require('./calculatePrediction');
+const adb = require('./adficeDB');
 
-var db = require('./adficeDB');
+var _db = null;
+
+async function db_init() {
+    if (!_db) {
+        _db = await adb.init();
+    }
+    return _db;
+}
+
+async function shutdown() {
+    try {
+        await _db.close();
+    } finally {
+        _db = null;
+    }
+}
 
 function question_marks(num) {
     return '?,'.repeat(num - 1) + '?';
 }
 
-async function shutdown() {
-    await db.close();
-}
-
 async function sql_select(sql, params) {
+    let db = await db_init();
     return await db.sql_query(sql, params);
 }
 
@@ -41,6 +54,7 @@ function split_advice_texts_cdss_epic_patient(advice_texts) {
 }
 
 async function getTableSizes() {
+    let db = await db_init();
     let params = [await db.schema_name()];
     let sql = `/* adfice.getTableSizes */
         SELECT table_name
@@ -410,6 +424,7 @@ async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
         sqls_and_params.push([insert_sql, params[i]]);
     }
 
+    let db = await db_init();
     let rs = await db.as_sql_transaction(sqls_and_params);
     return rs;
 }
@@ -457,6 +472,7 @@ async function setFreetextsForPatient(patientIdentifier, viewer, freetexts) {
         sqls_and_params.push([insert_sql, params[i]]);
     }
 
+    let db = await db_init();
     let rs = await db.as_sql_transaction(sqls_and_params);
     return rs;
 }
@@ -715,6 +731,7 @@ async function getExportData(patientIdentifier) {
   ORDER BY s.id ASC
          , f.id ASC`;
     let params = [patient_id];
+    let db = await db_init();
     let results = await db.sql_query(sql, params);
     return results;
 }
@@ -740,6 +757,7 @@ async function finalizeAdviceForPatient(patient_id) {
        SET is_final = 1
      WHERE id = ?`
     let params = [patient_id];
+    let db = await db_init();
     let result = await db.sql_query(sql, params);
     return result;
 }
@@ -768,6 +786,7 @@ async function clearAdviceForPatient(patient_id) {
         WHERE patient_id = ?`;
     sqls_and_params.push([sql, params]);
 
+    let db = await db_init();
     let rs = await db.as_sql_transaction(sqls_and_params);
     return rs;
 }

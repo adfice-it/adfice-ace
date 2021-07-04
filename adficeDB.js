@@ -7,12 +7,9 @@ const fs = require('fs');
 const dotenv = require('dotenv');
 const mariadb = require('mariadb');
 
-var pool = null;
-var dbconfig = null;
-
 /* istanbul ignore next */
 async function init(config, env_file_path) {
-    dbconfig = dbconfig || {};
+    let dbconfig = {};
     config = config || {};
     env_file_path = env_file_path || 'dbconfig.env';
 
@@ -64,42 +61,54 @@ async function init(config, env_file_path) {
         dbconfig.password = String(passwd).trim();
     }
 
-    return dbconfig;
+    let db = {
+        /* private member variables */
+        pool: null,
+        dbconfig: dbconfig,
+
+        /* "private" member functions */
+        connection_begin: connection_begin,
+        connection_end: connection_end,
+        connection_pool_close: connection_pool_close,
+        connection_pool: connection_pool,
+
+        /* public member functions */
+        schema_name: schema_name,
+        sql_query: sql_query,
+        as_sql_transaction: as_sql_transaction,
+        close: close,
+    }
+
+    return db;
 }
 
 async function close() {
-    await connection_pool_close();
-    dbconfig = null;
+    await this.connection_pool_close();
 }
 
 async function connection_pool_close() {
     try {
         /* istanbul ignore else */
-        if (pool) {
-            await pool.end();
+        if (this.pool) {
+            await this.pool.end();
         }
     } finally {
-        pool = null;
+        this.pool = null;
     }
 }
 
 async function connection_pool() {
-    if (pool) {
-        return pool;
+    if (this.pool) {
+        return this.pool;
     }
 
-    /* istanbul ignore else */
-    if (!dbconfig) {
-        await init();
-    }
-
-    pool = mariadb.createPool(dbconfig);
-    return pool;
+    this.pool = mariadb.createPool(this.dbconfig);
+    return this.pool;
 }
 
 async function connection_begin() {
-    let _pool = await connection_pool();
-    let conn = await _pool.getConnection();
+    let pool = await this.connection_pool();
+    let conn = await pool.getConnection();
     return conn;
 }
 
@@ -111,7 +120,7 @@ async function connection_end(conn) {
         }
     } catch (error) {
         /* istanbul ignore next */
-        connection_pool_close();
+        this.connection_pool_close();
         /* istanbul ignore next */
         throw error;
     }
@@ -121,7 +130,7 @@ async function as_sql_transaction(sqls_and_params) {
     let rs;
     let conn;
     try {
-        conn = await connection_begin();
+        conn = await this.connection_begin();
         conn.beginTransaction();
         for (let i = 0; i < sqls_and_params.length; ++i) {
             let sql = sqls_and_params[i][0];
@@ -139,7 +148,7 @@ async function sql_query(sql, params) {
     let objects = [];
     let conn;
     try {
-        conn = await connection_begin();
+        conn = await this.connection_begin();
         // This version of the driver seems to always place the "meta" in
         // with the rows, no matter which calling convention we try.
         let result_set;
@@ -154,19 +163,15 @@ async function sql_query(sql, params) {
             objects.push(row);
         }
     } finally {
-        await connection_end(conn);
+        await this.connection_end(conn);
     }
     return objects;
 }
 
 async function schema_name() {
-    return dbconfig.database;
+    return this.dbconfig.database;
 }
 
 module.exports = {
     init: init,
-    close: close,
-    as_sql_transaction: as_sql_transaction,
-    sql_query: sql_query,
-    schema_name: schema_name
 }

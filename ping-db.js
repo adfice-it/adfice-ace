@@ -3,12 +3,12 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-var fs = require('fs');
-var db = require('./adficeDB');
+const fs = require('fs');
+const adb = require('./adficeDB');
 
 async function main() {
 
-    await db.init();
+    var db = await adb.init()
 
     var error_code = 1;
     try {
