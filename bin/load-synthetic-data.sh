@@ -2,6 +2,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 
+set -e
+# set -x
+
+source db-create-tables.env
+
 i=0
 while [ $i -lt 10 ]; do
 	echo "waiting for db $i"
@@ -13,9 +18,7 @@ while [ $i -lt 10 ]; do
 	fi
 done
 
-MYSQL_PASSWORD=`cat adfice_mariadb_user_password | xargs`
-
-echo 'load test data'
+echo '# load test data'
 for SQL in \
 	insertSynthetic_labs.sql \
 	insertSynthetic_patient.sql \
@@ -23,13 +26,6 @@ for SQL in \
 	insertSynthetic_problems.sql \
 	insertSynthetic_measurements.sql
 do
-	docker cp sql/$SQL adfice_mariadb:/
-	echo "sourcing $SQL"
-	docker exec adfice_mariadb mariadb \
-		--host=127.0.0.1 \
-		--port=3306 \
-		--user=adfice \
-		--password="$MYSQL_PASSWORD" \
-		adfice \
-		-e "source /$SQL"
+	echo "# sourcing $SQL"
+	$RUN_SQL -e "source ${DB_SQL_SCRIPTS_DIR}/$SQL"
 done

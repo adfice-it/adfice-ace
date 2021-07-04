@@ -19,12 +19,23 @@ ADFICE_VERSION=0.0.0
 
 default: check
 
-npmsetup:
+
+node_modules/ws/lib/websocket-server.js:
 	npm install
 	@echo "$@ complete"
 
-dbsetup: npmsetup
+update:
+	npm update
+
+npmsetup: node_modules/ws/lib/websocket-server.js
+	@echo "$@ complete"
+
+db-create-tables.env:
+	ln -sv docker.db-create-tables.env db-create-tables.env
+
+dbsetup: npmsetup db-create-tables.env
 	bin/setup-new-db-container.sh
+	bin/db-create-tables.sh
 	bin/load-synthetic-data.sh
 	@echo "$@ complete"
 

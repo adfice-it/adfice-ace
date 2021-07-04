@@ -85,8 +85,14 @@ docker run -d \
 	--rm \
 	mariadb:10.5
 
+echo '# copy DB config files to contianer'
 docker cp adfice.my.cnf adfice_mariadb:/etc/
 docker cp root.my.cnf adfice_mariadb:/etc/
+echo '# copy SQL configuration scripts to contianer'
+for SQL_FILE in sql/*sql; do
+	docker cp $SQL_FILE adfice_mariadb:/
+done
+echo "# done copying configuration scripts"
 
 i=0
 while [ $i -lt 10 ]; do
@@ -120,35 +126,6 @@ docker exec adfice_mariadb mariadb \
 	--port=3306 \
 	adfice \
 	-e "SHOW GRANTS;"
-
-echo '# load schema and test data'
-# insertSynthetic_allergies.sql \
-
-for SQL in \
-	createRulesTable.sql \
-	createPatientTables.sql \
-	createETLTables.sql \
-	newAdviceTable.sql \
-	newRulesTable.sql \
-	newOtherMedTable.sql \
-	newPreselectRulesTable.sql \
-	newNonMedHeaders.sql \
-	newNonMedTable.sql \
-	populateETLTables.sql \
-	populateProblemMap.sql \
-	updateRulesWithSeparatedSelectors.sql \
-	updateMedRulesWithSQLConditions.sql \
-	updatePrecheckWithSQLConditions.sql
-do
-	docker cp sql/$SQL adfice_mariadb:/
-	echo "# sourcing $SQL"
-	docker exec adfice_mariadb mariadb \
-		--defaults-file=/etc/adfice.my.cnf \
-		--host=127.0.0.1 \
-		--port=3306 \
-		adfice \
-		-e "source /$SQL"
-done
 
 echo '# db container is up and running'
 echo '# stop the instance with:'
