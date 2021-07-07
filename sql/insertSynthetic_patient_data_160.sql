@@ -1,4 +1,4 @@
-SET CHARACTER SET 'utf8mb4'; -- enable unicode support in older clients
+SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
 BEGIN;
 
 DELETE FROM patient WHERE id = 160;

@@ -1,6 +1,6 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
 -- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
-SET CHARACTER SET 'utf8mb4'; -- enable unicode support in older clients
+SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
 INSERT INTO preselect_rules (medication_criteria_id, select_box_num, preselect_num, preselect_or, preselect_not, preselect_problem, preselect_age, preselect_drug, preselect_lab, preselect_allergy) VALUES
 ("6e",1,1,NULL,NULL,"!angststoornis &!epilepsy",NULL,"&medication.startDate >= now-2-weeks",NULL,NULL), 
 ("6e",1,2,NULL,NULL,"parkinson | lewy-bodies-dementia | multiple-system-atrophy | progressive-supranuclear-palsy & med started < 2 weeks ago",NULL,NULL,NULL,NULL),

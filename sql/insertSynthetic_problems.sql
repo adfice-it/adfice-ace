@@ -1,6 +1,6 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
 -- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
-SET CHARACTER SET 'utf8mb4'; -- enable unicode support in older clients
+SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
 INSERT INTO patient_problem (patient_id, date_retrieved, problem_id, start_date, name, display_name) VALUES
 (5,(select NOW()),11,'2019-02-11',"angststoornis","angststoornis"),
 (6,(select NOW()),12,'2019-02-11',"epilepsy","epilepsy"),

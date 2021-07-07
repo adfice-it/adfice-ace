@@ -1,6 +1,6 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
 -- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
-SET CHARACTER SET 'utf8mb4'; -- enable unicode support in older clients
+SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
 INSERT INTO `problem_map`
 (`amc_icd_id`,
 `adfice_nr`,
