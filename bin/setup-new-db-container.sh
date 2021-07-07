@@ -72,7 +72,7 @@ else
 fi
 
 echo '# ensure db container is not already running'
-docker stop adfice_mariadb
+docker stop adfice_mariadb || true
 
 echo '# start db container'
 docker run -d \
