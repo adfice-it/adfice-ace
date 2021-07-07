@@ -109,6 +109,7 @@ test('setAdviceForPatient(68)', async () => {
     let viewer = 999;
     let advice = await adfice.getAdviceForPatient(patientNumber);
 
+    await adfice.reloadPatientData(patientNumber, '/bin/true');
     let old_advice = {
         "cb_C03AA03_42_2": false,
         "cb_C03AA03_42_3": true,
