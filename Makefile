@@ -63,6 +63,7 @@ adfice-ace.tar.gz: \
 		bin/load-synthetic-data.sh \
 		bin/make-self-signed-cert.sh \
 		bin/reload-patient-data.sh \
+		bin/db-create-tables.sh \
 		bin/setup-new-db-container.sh \
 		bin/rhel83-root-setup.sh \
 		bin/rhel83-user-setup.sh \
@@ -78,6 +79,7 @@ adfice-ace.tar.gz: \
 		package.json \
 		ping-db.js \
 		prediction \
+		system.db-create-tables.env \
 		README.md \
 		sql/createPriority.sql \
 		sql/createETLTables.sql \

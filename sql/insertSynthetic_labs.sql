@@ -1,5 +1,6 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
 -- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+SET CHARACTER SET 'utf8mb4'; -- enable unicode support in older clients
 INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_result, lab_test_units) VALUES
 (27,(select NOW()),(select NOW()),"natrium",140,"mmol/l "),
 (30,(select NOW()),'2019-02-11',"natrium",140,"mmol/l "),

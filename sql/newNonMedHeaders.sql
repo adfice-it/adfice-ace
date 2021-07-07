@@ -1,3 +1,4 @@
+SET CHARACTER SET 'utf8mb4'; -- enable unicode support in older clients
 INSERT INTO nonmed_header (category_id,category_name)
 VALUES
 ('A','Valpreventie advies'),
