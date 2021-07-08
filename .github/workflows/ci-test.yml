@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: apt-get deps
-        run: sudo apt-get install -y build-essential docker-compose firefox mysql-client
+        run: sudo apt-get install -y build-essential docker-compose firefox mariadb-client-10.3
       - uses: actions/setup-node@v1
         with:
           node-version: '12'

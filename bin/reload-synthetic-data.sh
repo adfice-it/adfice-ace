@@ -24,4 +24,4 @@ done
 
 cat adfice.my.cnf
 echo "sourcing $SQL"
-mysql --defaults-file=adfice.my.cnf adfice --port 13306 < $FILE
+mariadb --defaults-file=adfice.my.cnf adfice --port 13306 < $FILE
