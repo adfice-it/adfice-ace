@@ -23,4 +23,4 @@ while [ $i -lt 10 ]; do
 done
 
 echo "sourcing $SQL"
-mariadb --defaults-file=adfice.my.cnf adfice < $FILE
+mysql --defaults-file=adfice.my.cnf adfice < $FILE
