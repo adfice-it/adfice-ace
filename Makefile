@@ -180,11 +180,13 @@ vm-init: adfice-ace.tar.gz adfice-user.env
 		"sudo adfice-$(ADFICE_VERSION)/bin/rhel83-root-setup.sh"
 	cd setup-vm && vagrant ssh adfice-vm --command \
 		"adfice-$(ADFICE_VERSION)/bin/rhel83-user-setup.sh"
+	touch $@
 
 vm-check: vm-init
+	-(cd setup-vm && vagrant up)
 	cd setup-vm && vagrant ssh adfice-vm --command \
-		"echo TODO: run test scripts"
-	cd setup-vm && vagrant destroy -f
+		"bash -c 'cd /data/webapps/adfice; npm test'"
+	cd setup-vm && vagrant halt
 
 tidy:
 	js-beautify --replace --end-with-newline \
