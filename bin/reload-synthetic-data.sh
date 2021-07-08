@@ -22,6 +22,5 @@ while [ $i -lt 10 ]; do
 	fi
 done
 
-cat adfice.my.cnf
 echo "sourcing $SQL"
-mariadb --defaults-file=adfice.my.cnf adfice --port 13306 < $FILE
+mariadb --defaults-file=adfice.my.cnf adfice < $FILE
