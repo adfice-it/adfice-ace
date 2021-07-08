@@ -52,6 +52,15 @@ echo "# reading adfice user variables"
 source adfice-user.env
 echo "ADFICE_INSTALL_DIR=$ADFICE_INSTALL_DIR"
 echo "ADFICE_USER_NAME=$ADFICE_USER_NAME"
+echo "ADFICE_HTTP_PORT=$ADFICE_HTTP_PORT"
+
+echo
+echo "# allow the adfice user to create long-running user services"
+loginctl enable-linger $ADFICE_USER_NAME
+
+echo
+echo "# allow machines on the local network to connect to the adfice service"
+firewall-cmd --zone=public --add-port=$ADFICE_HTTP_PORT/tcp --permanent
 
 mkdir -pv $ADFICE_INSTALL_DIR
 chown -Rv $ADFICE_USER_NAME:$ADFICE_USER_NAME $ADFICE_INSTALL_DIR

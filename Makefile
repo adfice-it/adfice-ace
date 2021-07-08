@@ -165,6 +165,7 @@ adfice-user.env:
 	echo 'ADFICE_USER_NAME=vagrant' >> $@
 	echo 'ADFICE_INSTALL_DIR=/data/webapps/adfice' >> $@
 	echo 'ADFICE_TAR_FILE=/home/vagrant/adfice-ace.tar.gz' >> $@
+	echo 'ADFICE_HTTP_PORT=8081' >> $@
 
 .vm-init: adfice-ace.tar.gz adfice-user.env
 	-(cd setup-vm && vagrant destroy -f)
@@ -180,14 +181,16 @@ adfice-user.env:
 		"sudo adfice-$(ADFICE_VERSION)/bin/rhel83-root-setup.sh"
 	cd setup-vm && vagrant ssh adfice-vm --command \
 		"adfice-$(ADFICE_VERSION)/bin/rhel83-user-setup.sh"
+	cd setup-vm && vagrant halt
 	touch $@
 
 vm-init: .vm-init
 
 vm-check: vm-init
-	-(cd setup-vm && vagrant up)
+	cd setup-vm && vagrant up
 	cd setup-vm && vagrant ssh adfice-vm --command \
 		"bash -c 'cd /data/webapps/adfice; npm test'"
+	./node_modules/.bin/testcafe "firefox:headless" acceptance-test-cafe.js
 	cd setup-vm && vagrant halt
 
 tidy:
