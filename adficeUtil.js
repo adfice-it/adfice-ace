@@ -59,7 +59,7 @@ function child_process_spawn(cmd, args) {
     let options = {
         cwd: undefined,
         env: env,
-        customFds: [-1, -1, -1],
+        stdio: 'ignore',
         setsid: false
     };
 
