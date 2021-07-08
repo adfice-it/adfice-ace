@@ -9,6 +9,22 @@ if [ $(id -u) != '0' ]; then
 	exit 1
 fi
 
+echo "# Add the official MariaDB repository (We need MariaDB version >= 10.5,"
+echo "# but the repositories seem to only have version 10.3)"
+# Note: for Red Hat Enterprise Linux 8, replace
+#     baseurl = http://yum.mariadb.org/10.5/centos8-amd64
+# with
+#     baseurl = http://yum.mariadb.org/10.5/rhel8-amd64
+tee /etc/yum.repos.d/mariadb.repo << END_OF_FILE
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.5/centos8-amd64
+module_hotfixes=1
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+END_OF_FILE
+yum makecache
+
 echo "# Installing MariaDB Server"
 dnf install -y mariadb-server
 
@@ -81,19 +97,31 @@ mysql -u root << END_OF_SQL
 --
 -- set root password
 --
-UPDATE mysql.user
-   SET Password=PASSWORD('$DB_ROOT_PASSWORD')
- WHERE User='root';
+UPDATE mysql.global_priv
+    SET priv=json_set(priv,
+        '$.plugin', 'mysql_native_password',
+        '$.authentication_string', PASSWORD('$esc_pass'))
+      WHERE User='root';
+-- Pre MariaDB 10.4 syntax
+--    UPDATE mysql.user
+--        SET Password=PASSWORD('$DB_ROOT_PASSWORD')
+--      WHERE User='root';
 --
 -- remove root remote login access
 --
-DELETE FROM mysql.user
+DELETE FROM mysql.global_priv
       WHERE User='root'
         AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+-- Pre MariaDB 10.4 syntax
+-- DELETE FROM mysql.user
+--      WHERE User='root'
+--        AND Host NOT IN ('localhost', '127.0.0.1', '::1');
 --
 -- remove anonymous users:
 --
-DELETE FROM mysql.user WHERE User='';
+DELETE FROM mysql.global_priv WHERE User='';
+-- Pre MariaDB 10.4 syntax
+-- DELETE FROM mysql.user WHERE User='';
 --
 --
 -- create the adfice user
