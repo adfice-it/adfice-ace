@@ -19,4 +19,5 @@ jobs:
           node-version: '12'
       - run: echo 'foo' > adfice_mariadb_root_password
       - run: echo 'foo' > adfice_mariadb_user_password
+      - run: bash -c "make dbsetup && bin/reload-synthetic-data.sh 160"
       - run: make check
