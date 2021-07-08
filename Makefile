@@ -166,7 +166,7 @@ adfice-user.env:
 	echo 'ADFICE_INSTALL_DIR=/data/webapps/adfice' >> $@
 	echo 'ADFICE_TAR_FILE=/home/vagrant/adfice-ace.tar.gz' >> $@
 
-vm-init: adfice-ace.tar.gz adfice-user.env
+.vm-init: adfice-ace.tar.gz adfice-user.env
 	-(cd setup-vm && vagrant destroy -f)
 	cd setup-vm && vagrant up
 	echo "this would be an 'scp' command"
@@ -181,6 +181,8 @@ vm-init: adfice-ace.tar.gz adfice-user.env
 	cd setup-vm && vagrant ssh adfice-vm --command \
 		"adfice-$(ADFICE_VERSION)/bin/rhel83-user-setup.sh"
 	touch $@
+
+vm-init: .vm-init
 
 vm-check: vm-init
 	-(cd setup-vm && vagrant up)
