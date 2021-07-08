@@ -22,5 +22,6 @@ while [ $i -lt 10 ]; do
 	fi
 done
 
+cat adfice.my.cnf
 echo "sourcing $SQL"
 mysql --defaults-file=adfice.my.cnf adfice < $FILE
