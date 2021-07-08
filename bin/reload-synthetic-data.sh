@@ -22,14 +22,5 @@ while [ $i -lt 10 ]; do
 	fi
 done
 
-MYSQL_PASSWORD=`cat adfice_mariadb_user_password | xargs`
-
-docker cp $FILE adfice_mariadb:/
 echo "sourcing $SQL"
-docker exec adfice_mariadb mariadb \
-	--host=127.0.0.1 \
-	--port=3306 \
-	--user=adfice \
-	--password="$MYSQL_PASSWORD" \
-	adfice \
-	-e "source /$SQL"
+mariadb --defaults-file=adfice.my.cnf adfice < $FILE

@@ -25,6 +25,10 @@ else
 	cat > adfice.my.cnf << EOF
 # for use with:
 # mysql --defaults-file=./adfice.my.cnf
+[client-server]
+host=127.0.0.1
+port=13306
+
 [client]
 user=adfice
 password=$DB_USER_PASSWORD
@@ -85,10 +89,10 @@ docker run -d \
 	--rm \
 	mariadb:10.5
 
-echo '# copy DB config files to contianer'
+echo '# copy DB config files to container'
 docker cp adfice.my.cnf adfice_mariadb:/etc/
 docker cp root.my.cnf adfice_mariadb:/etc/
-echo '# copy SQL configuration scripts to contianer'
+echo '# copy SQL configuration scripts to container'
 for SQL_FILE in sql/*sql; do
 	docker cp $SQL_FILE adfice_mariadb:/
 done
