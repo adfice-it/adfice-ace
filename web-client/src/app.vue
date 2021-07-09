@@ -84,6 +84,9 @@ form#patient_form(:class="{ [currentStep]: true }")
       .toggle(@click="sideBySide = !sideBySide", :title="`switch to ${ sideBySide && 'vertical' || 'horizontal' } view`")
       .recommendation(v-for="{ generic_name: title, adviceTextsNoCheckboxes: atncs, adviceTextsCheckboxes: cb_advices, ATC_code: atc, referenceNumbers } in medicationAdvice")
         .heading {{ title }}
+          a.fk-link(:href="`https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/e/${ title.toLowerCase() }`",
+                    :title="`farmacotherapeutischkompas.nl/bladeren/preparaatteksten/e/${ title.toLowerCase() }`",
+                    target="_blank")
         .collapsable
           .advice
             //-.heading Advice
@@ -100,6 +103,7 @@ form#patient_form(:class="{ [currentStep]: true }")
                   a.item(v-for="{ reference } in referenceNumbers",
                          :href="`/ref-pages/refpage${ reference }.html`",
                          target="_blank") {{ reference }}
+            .sub-heading Kies een of meer maatregel(en):
             .items
               .item(:id="`pt_${ atc }_${ rulenum }_${ boxnum }`",
                     v-for="{ medication_criteria_id: rulenum, select_box_num: boxnum, cdss_split: chunks } in cb_advices")
@@ -736,6 +740,7 @@ body {
         border-radius: $half-padding;
         padding: $padding * 2;
         background-color: #efefef;
+        margin-bottom: $padding * 3;
         .collapsable {
           display: grid;
           overflow: hidden;
@@ -746,6 +751,18 @@ body {
           left: 0;
           font-size: 1.75rem;
           text-transform: capitalize;
+          & > a.fk-link {
+            display: inline-block;
+            width: 1.75rem;
+            height: 1.75rem;
+            background: center no-repeat url('/fk.png');
+            background-size: contain;
+            margin-left: $half-padding;
+            transition: transform 250ms ease-in-out;
+            &:hover {
+              transform: scale(1.4);
+            }
+          }
         }
         .advice {
           margin-bottom: $padding;
@@ -827,9 +844,16 @@ body {
               }
             }
           }
+          & > .sub-heading {
+            position: relative;
+            top: $padding * 2.5;
+            left: $padding * 2;
+            margin-top: -$padding * 1.4;
+          }
           & > .items {
             border-radius: $half-padding;
             padding: $padding * 2;
+            padding-top: $padding * 3;
             background-color: #ddd;
             .item {
               position: relative;
