@@ -11,28 +11,20 @@ Wanted for usability:
   medications in clinician view
 
 Not required for "ready to install" but will be required for study:
-* browser caching? detect back button, return to page?
-* Build a CENTOS/RHEL vm, with everything -- no containers
 * logging:
-  * log whether system was used at all
-  * whether Print and Send to portal was used
-  * which advice was (in the end) selected
   * which advice had been pre-selected (and thus, was it unchecked)
     to compare what doctor ultimately chose
   * print button
-    * no need for extra printer friendliness yet
-    * but log it
-
-* create "stub" function:
-  * "Hoe gebruik ik..." leads to (stub) training page
+* Add NginX to centos vm for logging --Eric
 
 Mid Priority:
 * Each acceptance test should start an instance of AdficeWebserver
-* test reconnect behavior on web-socket drop or AdficeWebserver restart
+* automate test reconnect behavior on web-socket drop or AdficeWebserver restart
 * specify DB port, separate instance for local human testing, automated testing
 * specify DB per-test, or otherwise ensure:
   * tests can be run in parallel
   * data mutations in one test do not impact a different test
+  * ensure each test operates on separate data
 * CI tests should use HTTPS too, possibly self-signed certs
 * the "consult view" button could be renamed "Consult verneiuwen" in order to
   remove the items which have been un-checked/disabled
@@ -41,7 +33,9 @@ Mid Priority:
 * styling, e.g.: viewers in yellow, hidden when 1
 * test-cafe : get the innnerHTML out of an element
 * sanity check choices of checkboxes
+  * e.g.: "stop medication A" && "continue medication A"
 * try to use "deeplinken" for FK links
+  * cache known good links? direct access to search page?
 * if no checkboxes are selected for a medication, display text "Geen advies."
   in the patient view.
 * write a log archival script
@@ -54,12 +48,12 @@ Mid Priority:
         FROM information_schema.tables
        WHERE table_schema='adfice'
     ORDER BY size_bytes DESC;
+* make black-and-white printer-friendly css (wait until vue/client-ejs)
 
 Low Priority:
 * allow user to fill in missing values in prediction model page
 * naming consistency thoughout the javascript
 * naming consistency thoughout the html
-* Alter tables with ATC codes, from varchar(100) to varchar(10)
 
 Requested (not required) changes to rules:
 * Rule 50: Split to personalize by age
@@ -74,5 +68,8 @@ Important, but unable to do yet:
   (They actually asked to do both; I veto'd this suggestion.)
 * Once we know something about how authentication will work, we may need to do
   something to prevent users without authentication from loading the data.
+  * session expiration? browser caching? detect back button, return to page?
 * Getting data out of Epic
+  * log whether system was used at all -- depends upon EHR connection
+    (EHR will provide data, the presence of the data indicates system was used)
 * Sending data to research database
