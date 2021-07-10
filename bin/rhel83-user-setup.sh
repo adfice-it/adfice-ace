@@ -17,7 +17,7 @@ npm install
 node ping-db.js && echo "DB is up"
 
 echo "# initializing database tables"
-ln -sv system.db-create-tables.env db-create-tables.env
+ln -sv system.db-scripts.env db-scripts.env
 source bin/db-create-tables.sh
 source bin/load-synthetic-data.sh
 

@@ -12,6 +12,7 @@ adfice-export.log
 
 adfice.my.cnf
 root.my.cnf
+db-scripts.env
 db-create-tables.env
 adfice-user.env
 .vagrant

@@ -5,7 +5,7 @@
 set -e
 # set -x
 
-source db-create-tables.env
+source db-scripts.env
 
 i=0
 while [ $i -lt 10 ]; do

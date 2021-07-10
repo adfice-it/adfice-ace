@@ -30,10 +30,10 @@ update:
 npmsetup: node_modules/ws/lib/websocket-server.js
 	@echo "$@ complete"
 
-db-create-tables.env:
-	ln -sv docker.db-create-tables.env db-create-tables.env
+db-scripts.env:
+	ln -sv docker.db-scripts.env db-scripts.env
 
-dbsetup: npmsetup db-create-tables.env
+dbsetup: npmsetup db-scripts.env
 	bin/setup-new-db-container.sh
 	bin/db-create-tables.sh
 	bin/load-synthetic-data.sh
@@ -79,7 +79,7 @@ adfice-ace.tar.gz: \
 		package.json \
 		ping-db.js \
 		prediction \
-		system.db-create-tables.env \
+		system.db-scripts.env \
 		README.md \
 		sql/createPriority.sql \
 		sql/createETLTables.sql \
