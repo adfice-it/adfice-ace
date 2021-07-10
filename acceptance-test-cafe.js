@@ -3,6 +3,15 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
+/*
+  '/usr/bin/node',
+  '/home/ace/src/adfice-ace/node_modules/testcafe/lib/cli',
+  'firefox:headless',
+  'acceptance-test-cafe.js',
+  'http://127.0.0.1:9090'
+*/
+let BASE_URL = process.argv[4];
+
 import {
     Selector
 } from 'testcafe';
@@ -13,7 +22,7 @@ fixture `Adfice`;
 // TODO: have each test launch a different instance on a different port
 
 test('Check multiple viewers making changes', async t => {
-    let url = `http://localhost:9090/patient?id=68`;
+    let url = `${BASE_URL}/patient?id=68`;
     let window1 = await t.openWindow(url);
 
     let selector = Selector('body');
@@ -60,7 +69,7 @@ test('Check multiple viewers making changes', async t => {
     await t.expect(Selector(view_cnt_css_sel).withText("1").visible).notOk();
 
     // open a second window and check a box
-    let window2 = await t.openWindow('http://localhost:9090/patient?id=68');
+    let window2 = await t.openWindow(`${BASE_URL}/patient?id=68`);
 
     // verify that we show 2 visitors
     let cb_selector2 = Selector(`input#${checkbox_id}`, {
@@ -106,7 +115,7 @@ test('Check multiple viewers making changes', async t => {
 test('Checkbox persistence', async t => {
     let checkbox_id = "cb_N02AA01_76_1";
     let checkbox_css_selector = `input#${checkbox_id}`;
-    let url = 'http://localhost:9090/patient?id=78';
+    let url = `${BASE_URL}/patient?id=78`;
 
     // Open the patient window, uncheck the box if needed
     let window1 = await t.openWindow(url);
@@ -141,7 +150,7 @@ test('Checkbox persistence', async t => {
 });
 
 test('Test selecting views', async t => {
-    let url = 'http://localhost:9090/patient?id=85';
+    let url = `${BASE_URL}/patient?id=85`;
     let window1 = await t.openWindow(url);
 
     let button_clinician_view = Selector('button#button_clinician_view');
@@ -361,7 +370,7 @@ async function check_checkbox_and_freetext(id) {
 }
 
 test('Test free text fields', async t => {
-    let url = 'http://localhost:9090/patient?id=23';
+    let url = `${BASE_URL}/patient?id=23`;
     let window1 = await t.openWindow(url);
 
     let id = 'N05AD01_16_2';
@@ -369,7 +378,7 @@ test('Test free text fields', async t => {
 });
 
 test('Test non-med free text fields', async t => {
-    let url = 'http://localhost:9090/patient?id=10';
+    let url = `${BASE_URL}/patient?id=10`;
     let window1 = await t.openWindow(url);
 
     let id = 'NONMED_D_1';
@@ -377,7 +386,7 @@ test('Test non-med free text fields', async t => {
 });
 
 test('Test med lists', async t => {
-    let url = 'http://localhost:9090/patient?id=9';
+    let url = `${BASE_URL}/patient?id=9`;
     let window1 = await t.openWindow(url);
 
     // ensure our cb is selected
@@ -391,7 +400,7 @@ test('Test med lists', async t => {
 });
 
 test('Checkbox preselected', async t => {
-    let url = 'http://localhost:9090/patient?id=51';
+    let url = `${BASE_URL}/patient?id=51`;
     let window1 = await t.openWindow(url);
 
     let unchecked_id = "cb_C02AA02_46_5";
@@ -410,7 +419,7 @@ test('Checkbox preselected', async t => {
 });
 
 test('Test finalize and renew', async t => {
-    let url = 'http://localhost:9090/patient?id=161';
+    let url = `${BASE_URL}/patient?id=161`;
     let window1 = await t.openWindow(url);
 
     let button_definitive = Selector('button#definitive');
