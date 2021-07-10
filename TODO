@@ -17,6 +17,7 @@ Not required for "ready to install" but will be required for study:
   * print button
 
 Mid Priority:
+* change reference from 'epic' to 'ehr' (system is not epic specific)
 * Each acceptance test should start an instance of AdficeWebserver
 * automate test reconnect behavior on web-socket drop or AdficeWebserver restart
 * specify DB port, separate instance for local human testing, automated testing
