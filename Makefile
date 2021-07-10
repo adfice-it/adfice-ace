@@ -67,10 +67,12 @@ adfice-ace.tar.gz: \
 		bin/setup-new-db-container.sh \
 		bin/connect-container.sh \
 		bin/rhel83-root-setup.sh \
+		bin/rhel83-root-setup-nginx.sh \
 		bin/rhel83-user-setup.sh \
 		calculatePrediction.js \
 		calculatePrediction.test.js \
 		COPYING \
+		example.nginx.conf \
 		export-to-mrs \
 		export-to-mrs.js \
 		INSTALL.md \
@@ -180,6 +182,8 @@ adfice-user.env:
 	cd setup-vm && vagrant ssh adfice-vm --command \
 		"sudo adfice-$(ADFICE_VERSION)/bin/rhel83-root-setup.sh"
 	cd setup-vm && vagrant ssh adfice-vm --command \
+		"sudo adfice-$(ADFICE_VERSION)/bin/rhel83-root-setup-nginx.sh"
+	cd setup-vm && vagrant ssh adfice-vm --command \
 		"adfice-$(ADFICE_VERSION)/bin/rhel83-user-setup.sh"
 	touch $@
 
@@ -188,11 +192,13 @@ vm-check: .vm-init
 	cd setup-vm && vagrant ssh adfice-vm --command \
 		"bash -c 'cd /data/webapps/adfice; npm test'"
 	# Make sure it works before a restart
-	./node_modules/.bin/testcafe "firefox:headless" acceptance-test-cafe.js
+	./node_modules/.bin/testcafe "firefox:headless" \
+		acceptance-test-cafe.js https://127.0.0.1:8443
 	# Make sure it works after a restart
-	cd setup-vm && vagrant halt
+	cd setup-vm && vagrant halt && sleep 2
 	cd setup-vm && vagrant up
-	./node_modules/.bin/testcafe "firefox:headless" acceptance-test-cafe.js
+	./node_modules/.bin/testcafe "firefox:headless" \
+		acceptance-test-cafe.js https://127.0.0.1:8443
 	# Make sure it automatically restarts if the service crashes
 	cd setup-vm && vagrant ssh adfice-vm --command \
 		"bash -c 'ps aux | grep -e Adfice[W]ebserver'"
@@ -202,7 +208,8 @@ vm-check: .vm-init
 	sleep 5
 	cd setup-vm && vagrant ssh adfice-vm --command \
 		"bash -c 'ps aux | grep -e Adfice[W]ebserver'"
-	./node_modules/.bin/testcafe "firefox:headless" acceptance-test-cafe.js
+	./node_modules/.bin/testcafe "firefox:headless" \
+		acceptance-test-cafe.js https://127.0.0.1:8443
 	cd setup-vm && vagrant halt
 
 tidy:

@@ -15,7 +15,6 @@ Not required for "ready to install" but will be required for study:
   * which advice had been pre-selected (and thus, was it unchecked)
     to compare what doctor ultimately chose
   * print button
-* Add NginX to centos vm for logging --Eric
 
 Mid Priority:
 * Each acceptance test should start an instance of AdficeWebserver
