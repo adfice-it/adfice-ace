@@ -4,6 +4,10 @@
 
 ID=$1
 
+if [ -e ~/adfice-user.env ]; then
+	source ~/adfice-user.env
+fi
+
 source db-scripts.env
 
 SQL_FILE=insertSynthetic_patient_data_$1.sql
