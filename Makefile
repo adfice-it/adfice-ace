@@ -65,11 +65,11 @@ adfice-ace.tar.gz: \
 		bin/reload-patient-data.sh \
 		bin/db-create-tables.sh \
 		bin/setup-new-db-container.sh \
+		bin/connect-container.sh \
 		bin/rhel83-root-setup.sh \
 		bin/rhel83-user-setup.sh \
 		calculatePrediction.js \
 		calculatePrediction.test.js \
-		connect-container.sh \
 		COPYING \
 		export-to-mrs \
 		export-to-mrs.js \
