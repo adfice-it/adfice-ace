@@ -642,7 +642,7 @@ test('Get prediction model result from DB', async () => {
     let measurements = await adfice.getPatientMeasurements(patient);
     let measurement = measurements[0];
     let row_id = measurement.id;
-    adfice.updatePredictionResult(row_id, null);
+    await adfice.updatePredictionResult(row_id, null);
 
     // add prediction result to database on first fetch if not present
     let prediction = await adfice.getPredictionResult(patient);

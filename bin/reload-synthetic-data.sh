@@ -4,12 +4,15 @@
 
 ID=$1
 
-SQL=insertSynthetic_patient_data_$1.sql
-FILE=sql/$SQL
+source db-scripts.env
+
+SQL_FILE=insertSynthetic_patient_data_$1.sql
+FILE=sql/$SQL_FILE
 if [ ! -e $FILE ]; then
 	echo "no file $FILE"
 	exit 1
 fi
+SQL=`cat $FILE`
 
 i=0
 while [ $i -lt 10 ]; do
@@ -22,5 +25,6 @@ while [ $i -lt 10 ]; do
 	fi
 done
 
-echo "sourcing $SQL"
-mariadb --defaults-file=adfice.my.cnf adfice < $FILE
+echo "FROM: $FILE"
+echo "executing: $SQL"
+$RUN_SQL -e "$SQL"
