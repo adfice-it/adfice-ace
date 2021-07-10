@@ -27,4 +27,4 @@ done
 
 echo "FROM: $FILE"
 echo "executing: $SQL"
-$RUN_SQL -e "$SQL"
+$RUN_SQL "$SQL"

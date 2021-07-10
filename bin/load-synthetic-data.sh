@@ -27,5 +27,5 @@ for SQL in \
 	insertSynthetic_measurements.sql
 do
 	echo "# sourcing $SQL"
-	$RUN_SQL -e "source ${DB_SQL_SCRIPTS_DIR}/$SQL"
+	$RUN_SQL "source ${DB_SQL_SCRIPTS_DIR}/$SQL"
 done
