@@ -268,9 +268,8 @@ div.gauge_background {
     width:80%;
     height: 0px;
     padding-bottom: 8%;
-    /* cheating on the linear-gradient by  repeating RED 4 times */
-    background: linear-gradient(to right,
-		#0F0, #FF0 15%, #F00, #F00, #F00, #F00);
+    /* set "good", "warn", and "critical" thresholds specifically */
+    background: linear-gradient(to right, #0F0 5%, #FF0 10%, #F00 30%);
     display: inline-block;
     margin-bottom: 3ex;
 }
