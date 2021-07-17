@@ -684,18 +684,31 @@ test('Update prediction', async () => {
 });
 
 test('exportForPatient', async () => {
-    let patient = '68';
-    let file = "test-exportForPatient-68.log";
+    let patient = '168';
+    let file = "test-exportForPatient-168.log";
     try {
         fs.unlinkSync(file, (err) => {});
     } catch (ignoreError) {}
 
+    await adfice.reloadPatientData(patient, '/bin/true');
+    let new_advice = {
+        "cb_M03BA03_88_2": true,
+        "cb_OTHER_other_1": true,
+        "cb_NONMED_A_1": true
+    };
+    let viewer = 999;
+    adfice.setSelectionsForPatient(patient, viewer, new_advice);
+
+    // essentially calling adfice.finalizeAndExport(id), but with a file
+    await adfice.finalizeAdviceForPatient(patient);
     await adfice.exportForPatient(patient, file);
 
     const contents = fs.readFileSync(file, 'utf8');
 
-    expect(contents).toMatch(/68/);
-    expect(contents).toMatch(/C03AA03/);
+    expect(contents).toMatch(/168/);
+    expect(contents).toMatch(/metho/);
+    expect(contents).toMatch(/Stoppen/);
+    expect(contents).toMatch(/Valpre/);
 
     fs.unlinkSync(file);
 });
@@ -706,6 +719,7 @@ test('finalize_export API', async () => {
     try {
         fs.unlinkSync(file, (err) => {});
     } catch (ignoreError) {}
+
     await adfice.clearAdviceForPatient(patient);
     await adfice.finalizeAndExport(patient, file);
     let patientAdvice = await adfice.getAdviceForPatient(patient);
