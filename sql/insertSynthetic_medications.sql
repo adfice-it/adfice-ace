@@ -1,6 +1,5 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
 -- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
-SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
 INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
 (2,(select NOW()),"darifenacin","darifenacin","G04BD10",'2019-02-11'),
 (4,(select NOW()),"diazepam","diazepam","N05BA01",(select NOW())),
@@ -224,6 +223,7 @@ INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, gen
 (159,(select NOW()),"dapagliflozin","dapagliflozin","A10BK01",'2019-02-11'),
 (159,(select NOW()),"salmeterol","salmeterol","R03AC12",'2019-02-11');
 
+(168,(select NOW()),"methocarbamol","methocarbamol","M03BA03",'2019-02-11'),
 
 
 
