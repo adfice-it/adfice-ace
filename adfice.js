@@ -722,7 +722,7 @@ async function getExportData(patientIdentifier) {
     let patient_id = as_id(patientIdentifier);
     let sql = `/* adfice.getExportData */
     SELECT s.patient_id
-		 , COALESCE(pm.medication_name, nmh.category_name) AS medcat_name
+         , COALESCE(pm.medication_name, nmh.category_name) AS medcat_name
          , s.ATC_code
          , s.medication_criteria_id
          , s.select_box_num
