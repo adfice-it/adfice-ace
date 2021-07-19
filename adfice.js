@@ -722,7 +722,7 @@ async function getExportData(patientIdentifier) {
     let patient_id = as_id(patientIdentifier);
     let sql = `/* adfice.getExportData */
     SELECT s.patient_id
-         , pm.medication_name
+		 , COALESCE(pm.medication_name, nmh.category_name) AS medcat_name
          , s.ATC_code
          , s.medication_criteria_id
          , s.select_box_num
@@ -742,6 +742,8 @@ async function getExportData(patientIdentifier) {
  LEFT JOIN nonmed_text n
         ON ((s.medication_criteria_id = n.category_id)
        AND  (s.select_box_num = n.select_box_num))
+ LEFT JOIN nonmed_header nmh
+        ON (n.category_id = nmh.category_id)
  LEFT JOIN patient_advice_freetext f
         ON ((s.patient_id = f.patient_id)
        AND  (s.ATC_code = f.ATC_code)
