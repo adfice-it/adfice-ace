@@ -13,7 +13,7 @@ VALUES
 ('K','Duizeligheid'),
 ('M','Osteoporose'),
 ('N','Urineverlies'),
-('O','Diëtiek'),
+('O','DiÃ«tiek'),
 ('P','Andere aandoeningen'),
 ('Q','Geestelijk gezondheid'),
 ('R','Slaapstoornis'),
