@@ -110,7 +110,7 @@ orthostatic hypotension","","atc:N04","(problem:parkinson | problem:lewy-bodies-
 ("30","yes","no","anti-epileptica (not gabapentin and pregbaline) except lamotrigine or levetiracetam","","","atc:N03 & ! atc:N03AX09 & ! atc:N03AX14","",10),
 ("30a","yes","no","Antiepileptics N03 not gabapentin and pregbaline","","","atc:N03","allergic-reaction",10),
 ("31","yes","no","Antiepileptics N03 not gabapentin and pregbaline","","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:N03","",10),
-("35","yes","no","Diuretica: C03 diuretics, C02L Antihypertensives and diuretics in combination OR C07 systemic beta-blokker (not eyedrops)","no concomittant ACE or AT-II (C09)","","(atc:C03 | atc:C02L | atc:C07 )","! (atc:C09)",13),
+("35","yes","no","Diuretica: C03 diuretics, C02L Antihypertensives and diuretics in combination OR C07 systemic beta-blokker (not eyedrops) (not diuretics with ACEi or diuretics with Ca+ blockers)","no concomittant ACE or AT-II (C09)","","(atc:C03 | atc:C02L | atc:C07 )","! (atc:C09 or atc: C08)",13),
 ("36","yes","no","Lisdiuretica:
 C03CA Sulfonamides, plain 
 and C03CB Sulfonamides and potassium in combination 
