@@ -5,48 +5,61 @@
 echo "# Exit immediately if a command exits with a non-zero status."
 set -e
 
-echo '# establishing adfice_mariadb_user_password'
-if [ -f adfice_mariadb_user_password ]; then
-	echo "#    adfice_mariadb_user_password file exists"
+
+if [ "_${DB_SCHEMA_NAME}_" == "__" ]; then
+	source docker.db-scripts.env
+fi
+if [ "_${DB_SCHEMA_NAME}_" == "__" ]; then
+	echo "must set DB_SCHEMA_NAME, check docker.db-scripts.env"
+	exit 1
+fi
+if [ "_${DB_PORT_EXTERNAL}_" == "__" ]; then
+	echo "must set DB_PORT_EXTERNAL, check docker.db-scripts.env"
+	exit 1
+fi
+
+echo "# establishing ${DB_SCHEMA_NAME}_mariadb_user_password"
+if [ -f ${DB_SCHEMA_NAME}_mariadb_user_password ]; then
+	echo "#    ${DB_SCHEMA_NAME}_mariadb_user_password file exists"
 else
 	echo "#    creating new password from /dev/urandom"
 	cat /dev/urandom \
 		| tr --delete --complement 'a-zA-Z0-9' \
 		| fold --width=32 \
 		| head --lines=1 \
-		> adfice_mariadb_user_password
+		> ${DB_SCHEMA_NAME}_mariadb_user_password
 fi
-DB_USER_PASSWORD=`cat adfice_mariadb_user_password | xargs`
+DB_USER_PASSWORD=`cat ${DB_SCHEMA_NAME}_mariadb_user_password | xargs`
 
-if [ -f adfice.my.cnf ]; then
-	echo "#    adfice.my.cnf file exists"
+if [ -f ${DB_SCHEMA_NAME}.my.cnf ]; then
+	echo "#    ${DB_SCHEMA_NAME}.my.cnf file exists"
 else
-	echo "#    creating adfice.my.cnf"
-	cat > adfice.my.cnf << EOF
+	echo "#    creating ${DB_SCHEMA_NAME}.my.cnf"
+	cat > ${DB_SCHEMA_NAME}.my.cnf << EOF
 # for use with:
-# mysql --defaults-file=./adfice.my.cnf
+# mysql --defaults-file=./${DB_SCHEMA_NAME}.my.cnf
 [client-server]
 host=127.0.0.1
-port=13306
+port=${DB_PORT_EXTERNAL}
 
 [client]
-user=adfice
+user=$DB_SCHEMA_NAME
 password=$DB_USER_PASSWORD
 EOF
 fi
 
-echo '# establishing adfice_mariadb_root_password'
-if [ -f adfice_mariadb_root_password ]; then
-	echo "#    adfice_mariadb_root_password file exists"
+echo "# establishing ${DB_SCHEMA_NAME}_mariadb_root_password"
+if [ -f ${DB_SCHEMA_NAME}_mariadb_root_password ]; then
+	echo "#    ${DB_SCHEMA_NAME}_mariadb_root_password file exists"
 else
 	echo "#    creating new password from /dev/urandom"
 	cat /dev/urandom \
 		| tr --delete --complement 'a-zA-Z0-9' \
 		| fold --width=32 \
 		| head --lines=1 \
-		> adfice_mariadb_root_password
+		> ${DB_SCHEMA_NAME}_mariadb_root_password
 fi
-DB_ROOT_PASSWORD=`cat adfice_mariadb_root_password | xargs`
+DB_ROOT_PASSWORD=`cat ${DB_SCHEMA_NAME}_mariadb_root_password | xargs`
 
 if [ -f root.my.cnf ]; then
 	echo "#    root.my.cnf file exists"
@@ -76,25 +89,29 @@ else
 fi
 
 echo '# ensure db container is not already running'
-docker stop adfice_mariadb || true
+docker stop ${DB_SCHEMA_NAME}_mariadb || true
 
 echo '# start db container'
 docker run -d \
-	-p 127.0.0.1:13306:3306 \
-	--name adfice_mariadb \
-	--env MYSQL_DATABASE=adfice \
-	--env MYSQL_USER=adfice \
+	-p 127.0.0.1:${DB_PORT_EXTERNAL}:3306 \
+	--name ${DB_SCHEMA_NAME}_mariadb \
+	--env MYSQL_DATABASE=${DB_SCHEMA_NAME} \
+	--env MYSQL_USER=${DB_SCHEMA_NAME} \
 	--env MYSQL_PASSWORD=$DB_USER_PASSWORD \
 	--env MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
 	--rm \
 	mariadb:10.5
 
 echo '# copy DB config files to container'
-docker cp adfice.my.cnf adfice_mariadb:/etc/
-docker cp root.my.cnf adfice_mariadb:/etc/
+cp -v ./${DB_SCHEMA_NAME}.my.cnf ./temp.${DB_SCHEMA_NAME}.my.cnf
+sed -i -e"s/port=${DB_PORT_EXTERNAL}/port=3306/" ./temp.${DB_SCHEMA_NAME}.my.cnf
+docker cp ./temp.${DB_SCHEMA_NAME}.my.cnf \
+	${DB_SCHEMA_NAME}_mariadb:$DB_DEFAULTS_FILE
+rm -v ./temp.${DB_SCHEMA_NAME}.my.cnf
+docker cp root.my.cnf ${DB_SCHEMA_NAME}_mariadb:/etc/
 echo '# copy SQL configuration scripts to container'
 for SQL_FILE in sql/*sql; do
-	docker cp $SQL_FILE adfice_mariadb:/
+	docker cp $SQL_FILE ${DB_SCHEMA_NAME}_mariadb:$DB_SQL_SCRIPTS_DIR
 done
 echo "# done copying configuration scripts"
 
@@ -110,27 +127,32 @@ while [ $i -lt 10 ]; do
 done
 
 echo "# Ensure DB Grants"
-docker exec adfice_mariadb mariadb \
+docker exec ${DB_SCHEMA_NAME}_mariadb mariadb \
 	--defaults-file=/etc/root.my.cnf \
 	--host=127.0.0.1 \
 	--port=3306 \
 	mysql \
-	-e "/* ensure adfice db user grants */
-GRANT ALL PRIVILEGES ON \`adfice\`.* TO \`adfice\`@\`%\`;
-GRANT ALL PRIVILEGES ON \`adfice_portal\`.* TO \`adfice\`@\`%\`;
-GRANT ALL PRIVILEGES ON \`adfice_test_%\`.* TO \`adfice\`@\`%\`;
+	-e "/* ensure ${DB_SCHEMA_NAME} db user grants */
+GRANT ALL PRIVILEGES
+   ON \`${DB_SCHEMA_NAME}\`.*
+   TO \`${DB_SCHEMA_NAME}\`@\`%\`
+;
+GRANT ALL PRIVILEGES
+   ON \`${DB_SCHEMA_NAME}_%\`.*
+   TO \`${DB_SCHEMA_NAME}\`@\`%\`
+;
 /* save the changes */
 FLUSH PRIVILEGES;
 "
 
 echo "# Show DB Grants"
-docker exec adfice_mariadb mariadb \
-	--defaults-file=/etc/adfice.my.cnf \
+docker exec ${DB_SCHEMA_NAME}_mariadb mariadb \
+	--defaults-file=/etc/${DB_SCHEMA_NAME}.my.cnf \
 	--host=127.0.0.1 \
 	--port=3306 \
-	adfice \
+	${DB_SCHEMA_NAME} \
 	-e "SHOW GRANTS;"
 
 echo '# db container is up and running'
 echo '# stop the instance with:'
-echo '    docker stop adfice_mariadb'
+echo "    docker stop ${DB_SCHEMA_NAME}_mariadb"
