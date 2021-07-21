@@ -15,4 +15,4 @@ To connect to the db as the '$DB_SCHEMA_NAME' user type:
 mariadb --defaults-file=$DB_DEFAULTS_FILE $DB_SCHEMA_NAME
 
 END_OF_MSG
-docker exec -it adfice_mariadb bash
+docker exec -it ${DB_SCHEMA_NAME}_mariadb bash
