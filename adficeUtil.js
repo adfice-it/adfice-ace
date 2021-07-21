@@ -54,6 +54,10 @@ function splitFreetext(str) {
 }
 
 function child_process_spawn(cmd, args) {
+    // if (process.platform == "win32") {
+    //     args.unshift('/c', cmd);
+    //     cmd = process.env.comspec;
+    // }
     let env = process.env;
     env.path = ".:" + env.path;
     let options = {
