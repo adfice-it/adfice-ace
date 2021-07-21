@@ -751,7 +751,9 @@ async function getExportData(patientIdentifier) {
        AND  (s.select_box_num = f.select_box_num))
      WHERE s.patient_id = ?
        AND s.selected
-  ORDER BY s.id ASC
+  ORDER BY s.ATC_code
+  		 , n.category_id
+  		 , s.id ASC
          , f.id ASC`;
     let params = [patient_id];
     let db = await this.db_init();
