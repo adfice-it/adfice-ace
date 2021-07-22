@@ -590,9 +590,9 @@ and N07CA antivertigo antihistamine
 and N05BB01 hydroxyzine","","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:R06A | atc:N07CA | atc:N05BB","",27),
 ("105","yes","no","anticholinergics 
 A03AA07 Dicycloverine
-A03AB01 Benzilone
-A03AB03 Oxyphenonium
 A03AB05 Propantheline
+A03BA01 Atropine
+A03BA03 Hyoscyamine
 A03BB01 Butylscopolamine
 G04BD02 Flavoxate
 G04BD04 Oxybutynin
@@ -678,6 +678,9 @@ G04BD09 Trospium","all","{{preselect box 1 if a stop-, afbouw-, or vervangen- op
 A02BC Proton pump inhibitors 
 B01AC56 Acetylsalicylic acid, combinations with PPIs
 M01AE52 Naproxen and esomeprazole","all","","atc:A02BC | atc:B01AC56 | atc:M01AE52","",32),
+("117a","yes","no","Middelen bij peptische aandoeningen: H2-antagonisten, protonpompremmers
+A02BC Proton pump inhibitors 
+B01AC56 Acetylsalicylic acid, combinations with PPIs","all","","atc:A02BC | atc:B01AC56","",32),
 ("118","yes","no","Middelen bij peptische aandoeningen except pantoprazole A02BC02","","","(atc:A02BC | atc:B01AC56 | atc:M01AE52) & ! atc:A02BC02","",32),
 ("119","yes","no","Middelen bij peptische aandoeningen: H2-antagonisten, protonpompremmers
 A02BC Proton pump inhibitors 
