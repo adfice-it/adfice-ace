@@ -1,4 +1,11 @@
-Required for "ready to install":
+Important:
+* testing of the static/ served javascript files
+* record initial state for any view
+* make the export push data to valportaal db
+* make a "build valportaal vm" script
+* host both VMs working together on venus somehow
+* prediction model needs to be added to the valportaal page
+* some static content needs to be added as well
 
 Required changes to rules (Ace will do these):
 * Make sure every text ends with a period. If there is a free text box,
@@ -26,7 +33,7 @@ Mid Priority:
   * data mutations in one test do not impact a different test
   * ensure each test operates on separate data
 * CI tests should use HTTPS too, possibly self-signed certs
-* the "consult view" button could be renamed "Consult verneiuwen" in order to
+* the "consult view" button could be renamed "Consult vernieuwen" in order to
   remove the items which have been un-checked/disabled
   * the students suggested using a "reload" icon instead
 * record changes between views, connections and disconnects
