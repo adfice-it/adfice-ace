@@ -158,7 +158,7 @@ test('setAdviceForPatient(68)', async () => {
     await adfice.clearAdviceForPatient(patientNumber);
     advice = await adfice.getAdviceForPatient(patientNumber);
     expect(advice.is_final).toBeFalsy();
-    expect(advice.selected_advice).toStrictEqual({});
+    expect(advice.selected_advice).not.toStrictEqual(new_advice);
 
     adfice.setSelectionsForPatient(patientNumber, viewer, new_advice);
 })
@@ -188,7 +188,6 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
 })
 
 test('getAdviceForPatient(1), no med rule advice', async () => {
-    //console.log('1');
     let patientNumber = 1;
     let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
     let advice = patientAdvice.medication_advice;
@@ -196,9 +195,10 @@ test('getAdviceForPatient(1), no med rule advice', async () => {
     let non_med_advice = patientAdvice.advice_text_non_med;
     expect(non_med_advice.length).toBe(56);
 
-    let preselected_checkboxes = patientAdvice.preselected_checkboxes;
-    expect(preselected_checkboxes['cb_NONMED_A_1']).toBe('checked');
-    expect(preselected_checkboxes['cb_NONMED_C_1']).toBeUndefined();
+    expect(patientAdvice.selected_advice['cb_NONMED_A_1']).toBe(true);
+    expect(patientAdvice.selected_advice['cb_NONMED_C_1']).toBeUndefined();
+    let preselected_checkbox_count = 4
+    expect(Object.keys(patientAdvice.selected_advice).length).toBe(4);
 })
 
 test('getAdviceForPatient(60), sparse patient', async () => {

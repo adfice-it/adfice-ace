@@ -1,6 +1,5 @@
 Important:
 * testing of the static/ served javascript files
-* record initial state for any view
 * make the export push data to valportaal db
 * make a "build valportaal vm" script
 * host both VMs working together on venus somehow

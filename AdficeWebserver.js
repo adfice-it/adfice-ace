@@ -146,9 +146,6 @@ async function patient_advice_message(kind, id) {
 
     let freetexts = patient_advice.free_texts;
     let selections = patient_advice.selected_advice || {};
-    if (Object.keys(selections).length == 0) {
-        selections = patient_advice.preselected_checkboxes;
-    }
 
     let message = {};
     msg_header(message, kind, id);

@@ -591,6 +591,14 @@ async function getAdviceForPatient(patientIdentifier) {
     }
     let advice_other_text = await this.getAdviceOtherTextsCheckboxes();
     let selected_advice = await this.getSelectionsForPatient(patient_id);
+
+    let cb_states = [];
+    if (Object.keys(selected_advice).length == 0 && patient.id !== undefined) {
+        cb_states = preselected_checkboxes;
+        await this.setSelectionsForPatient(patientIdentifier, 0, cb_states);
+        selected_advice = await this.getSelectionsForPatient(patient_id);
+    }
+
     let free_texts = await this.getFreetextsForPatient(patient_id);
 
     let risk_score = await this.getPredictionResult(patient_id);
@@ -610,7 +618,6 @@ async function getAdviceForPatient(patientIdentifier) {
     patient_advice.problems = problems;
     patient_advice.medication_advice = advice;
     patient_advice.selected_advice = selected_advice;
-    patient_advice.preselected_checkboxes = preselected_checkboxes;
     patient_advice.free_texts = free_texts;
     patient_advice.advice_text_non_med = advice_text_non_med;
     patient_advice.advice_other_text = advice_other_text;
