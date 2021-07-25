@@ -119,11 +119,11 @@ docker cp ./temp.${DB_SCHEMA_NAME}.my.cnf \
 rm -v ./temp.${DB_SCHEMA_NAME}.my.cnf
 
 echo "# ${DB_SCHEMA_NAME}_mariadb:/etc/root.my.cnf"
-docker cp ./$ROOT_MY_CNF ${DB_SCHEMA_NAME}_mariadb:/etc/root.my.cnf
+docker cp -L ./$ROOT_MY_CNF ${DB_SCHEMA_NAME}_mariadb:/etc/root.my.cnf
 
 echo '# copy SQL configuration scripts to container'
 for SQL_FILE in sql/*sql; do
-	docker cp $SQL_FILE ${DB_SCHEMA_NAME}_mariadb:$DB_SQL_SCRIPTS_DIR
+	docker cp -L $SQL_FILE ${DB_SCHEMA_NAME}_mariadb:$DB_SQL_SCRIPTS_DIR
 done
 echo "# done copying configuration scripts"
 
