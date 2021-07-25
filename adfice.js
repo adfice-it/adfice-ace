@@ -740,6 +740,7 @@ async function getExportData(patientIdentifier) {
          , COALESCE(m.patient, n.patient) AS advice
          , f.freetext
          , meas.prediction_result
+		 , patient.row_updated as time_finalized
       FROM patient_advice_selection s
  LEFT JOIN patient_medication pm
         ON ((s.patient_id = pm.patient_id)
@@ -759,6 +760,8 @@ async function getExportData(patientIdentifier) {
        AND  (s.select_box_num = f.select_box_num))
  LEFT JOIN patient_measurement as meas
         ON (s.patient_id = meas.patient_id)
+ LEFT JOIN patient
+        ON (s.patient_id = patient.id)
      WHERE s.patient_id = ?
        AND s.selected
   ORDER BY s.ATC_code
