@@ -3,7 +3,13 @@
 # Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 
 if [ "_${DB_SCHEMA_NAME}_" == "__" ]; then
-	source docker.db-scripts.env
+	if [ "_${1}_" != "__" ]; then
+		echo "sourcing $1"
+		source $1
+	else
+		echo "sourcing docker.db-scripts.env"
+		source docker.db-scripts.env
+	fi
 fi
 
 cat <<END_OF_MSG

@@ -5,7 +5,13 @@
 set -e
 # set -x
 
-source db-scripts.env
+if [ "_${1}_" != "__" ]; then
+	echo "# sourcing $1"
+	source $1
+else
+	echo "# sourcing db-scripts.env"
+	source db-scripts.env
+fi
 
 i=0
 while [ $i -lt 10 ]; do
