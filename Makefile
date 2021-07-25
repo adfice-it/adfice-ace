@@ -90,6 +90,7 @@ adfice-ace.tar.gz: \
 		notes \
 		package.json \
 		ping-db.js \
+		portal-export.js \
 		prediction \
 		system.db-scripts.env \
 		README.md \
@@ -237,5 +238,6 @@ tidy:
 		calculatePrediction.test.js \
 		export-to-mrs.js \
 		ping-db.js \
+		portal-export.js \
 		static/patient.js \
 		verificationAndValidation.test.js
