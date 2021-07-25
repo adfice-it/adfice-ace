@@ -5,6 +5,7 @@ Important:
 * host both VMs working together on venus somehow
 * prediction model needs to be added to the valportaal page
 * some static content needs to be added as well
+* eject vagrant, consider https://github.com/ericherman/centos-vm
 
 Required changes to rules (Ace will do these):
 * Make sure every text ends with a period. If there is a free text box,

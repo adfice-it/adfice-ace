@@ -101,6 +101,27 @@ DB_NAME=adfice
 DB_PW_FILE=$ADFICE_INSTALL_DIR/mariadb_user_password
 EOF
 
+echo '# generating random password for valportaal database user'
+touch $ADFICE_INSTALL_DIR/mariadb_valportaal_password
+cat /dev/urandom \
+	| tr --delete --complement 'a-zA-Z0-9' \
+	| fold --width=32 \
+	| head --lines=1 \
+	> $ADFICE_INSTALL_DIR/mariadb_valportaal_password
+chmod -v 600 $ADFICE_INSTALL_DIR/mariadb_valportaal_password
+DB_PORTAL_PASSWORD=`cat $ADFICE_INSTALL_DIR/mariadb_valportaal_password | xargs`
+
+echo '# generating valportaal.my.cnf for the db commandline client'
+touch $ADFICE_INSTALL_DIR/valportaal.my.cnf
+chmod -v 600 $ADFICE_INSTALL_DIR/valportaal.my.cnf
+cat > $ADFICE_INSTALL_DIR/valportaal.my.cnf << EOF
+# for use with:
+# mysql --defaults-file=$ADFICE_INSTALL_DIR/valportaal.my.cnf
+[client]
+user=valportaal
+password=$DB_PORTAL_PASSWORD
+EOF
+
 chown -vR $ADFICE_USER_NAME $ADFICE_INSTALL_DIR
 ls -l $ADFICE_INSTALL_DIR
 
@@ -142,8 +163,14 @@ DELETE FROM mysql.global_priv WHERE User='';
 --
 CREATE USER adfice IDENTIFIED BY '$DB_USER_PASSWORD';
 GRANT ALL PRIVILEGES ON \`adfice\`.* TO \`adfice\`@\`%\`;
-GRANT ALL PRIVILEGES ON \`adfice_portal\`.* TO \`adfice\`@\`%\`;
-GRANT ALL PRIVILEGES ON \`adfice_test_%\`.* TO \`adfice\`@\`%\`;
+GRANT ALL PRIVILEGES ON \`adfice_%\`.* TO \`adfice\`@\`%\`;
+GRANT ALL PRIVILEGES ON \`valportaal\`.* TO \`adfice\`@\`%\`;
+GRANT ALL PRIVILEGES ON \`valportaal_%\`.* TO \`adfice\`@\`%\`;
+--
+-- create the adfice user
+--
+CREATE USER valportaal IDENTIFIED BY '$DB_PORTAL_PASSWORD';
+GRANT SELECT ON \`valportaal\`.* TO \`valportaal\`@\`%\`;
 --
 -- save the changes
 FLUSH PRIVILEGES;

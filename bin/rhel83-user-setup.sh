@@ -8,6 +8,10 @@ echo "ADFICE_TAR_FILE=$ADFICE_TAR_FILE"
 echo "# create the 'adfice' database schema"
 mysql --defaults-file=$ADFICE_INSTALL_DIR/adfice.my.cnf \
   --execute="CREATE DATABASE adfice;"
+echo
+echo "# create the 'valportaal' database schema"
+mysql --defaults-file=$ADFICE_INSTALL_DIR/adfice.my.cnf \
+  --execute="CREATE DATABASE valportaal;"
 
 echo
 echo "# install application files"
