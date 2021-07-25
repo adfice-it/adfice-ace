@@ -7,8 +7,15 @@ const fs = require('fs');
 const adb = require('./adficeDB');
 
 async function main() {
+    let config = {
+        host: process.argv[2],
+        port: process.argv[3],
+        user: process.argv[4],
+        database: process.argv[5],
+        passwordFile: process.argv[6],
+    };
 
-    var db = await adb.init()
+    var db = await adb.init(config);
 
     var error_code = 1;
     try {
