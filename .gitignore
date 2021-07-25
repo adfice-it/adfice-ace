@@ -11,6 +11,7 @@ coverage/
 adfice-export.log
 
 adfice.my.cnf
+root.adfice.my.cnf
 root.my.cnf
 db-scripts.env
 db-create-tables.env
