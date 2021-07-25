@@ -40,12 +40,12 @@ async function init(config, env_file_path) {
         envfile.DB_NAME ||
         'adfice';
 
-    dbconfig.password = config.passowrd ||
+    dbconfig.password = config.password ||
         process.env.DB_PASSWORD ||
         envfile.DB_PASSWORD ||
         null;
 
-    dbconfig.passwordFile = config.passowrd ||
+    dbconfig.passwordFile = config.passwordFile ||
         process.env.DB_PW_FILE ||
         envfile.DB_PW_FILE ||
         'adfice_mariadb_user_password';
