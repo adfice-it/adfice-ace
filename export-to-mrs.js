@@ -4,18 +4,23 @@
 "use strict";
 
 const adfice_factory = require('./adfice');
+const exporter = require('./portal-export');
 
 async function main() {
     let patient = process.argv[2];
+    let portal_db_env_path = process.argv[3] || './portal-dbconfig.env';
     var error_code = 1;
     var adfice = adfice_factory.adfice_init();
+
     try {
         let data = await adfice.getExportData(patient);
 
         console.log(JSON.stringify({
-            'faux exporting for patient id': patient,
+            'patient_id': patient,
             'data': data
         }, null, 4));
+
+        await exporter.export_to_portal_db(portal_db_env_path, patient, data);
 
         error_code = 0;
     } catch (error) {

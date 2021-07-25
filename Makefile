@@ -33,11 +33,21 @@ npmsetup: node_modules/ws/lib/websocket-server.js
 db-scripts.env:
 	ln -sv docker.db-scripts.env db-scripts.env
 
-dbsetup: npmsetup db-scripts.env
-	bin/setup-new-db-container.sh
-	bin/db-create-tables.sh
-	bin/load-synthetic-data.sh
+portal-db-scripts.env:
+	ln -sv docker.portal-db-scripts.env portal-db-scripts.env
+
+adfice-dbsetup: npmsetup db-scripts.env
+	bin/setup-new-db-container.sh docker.db-scripts.env
+	bin/db-create-tables.sh db-scripts.env
+	bin/load-synthetic-data.sh db-scripts.env
 	@echo "$@ complete"
+
+portal-dbsetup: npmsetup portal-db-scripts.env
+	bin/setup-new-db-container.sh docker.portal-db-scripts.env
+	bin/db-create-portal-tables.sh portal-db-scripts.env
+	@echo "$@ complete"
+
+dbsetup: adfice-dbsetup portal-dbsetup
 
 check: dbsetup
 	npm test adfice

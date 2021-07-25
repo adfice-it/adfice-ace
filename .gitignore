@@ -16,6 +16,13 @@ root.my.cnf
 db-scripts.env
 db-create-tables.env
 adfice-user.env
+
+portal-db-scripts.env
+root.valportaal.my.cnf
+valportaal.my.cnf
+valportaal_mariadb_root_password
+valportaal_mariadb_user_password
+
 .vagrant
 
 /.idea/inspectionProfiles/Project_Default.xml
