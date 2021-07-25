@@ -33,12 +33,12 @@ async function init(config, env_file_path) {
     dbconfig.user = config.user ||
         process.env.DB_USER ||
         envfile.DB_USER ||
-        'adfice';
+        null;
 
     dbconfig.database = config.database ||
         process.env.DB_NAME ||
         envfile.DB_NAME ||
-        'adfice';
+        null;
 
     dbconfig.password = config.password ||
         process.env.DB_PASSWORD ||
@@ -48,7 +48,7 @@ async function init(config, env_file_path) {
     dbconfig.passwordFile = config.passwordFile ||
         process.env.DB_PW_FILE ||
         envfile.DB_PW_FILE ||
-        'adfice_mariadb_user_password';
+        null;
 
     dbconfig.connectionLimit = config.connectionLimit ||
         process.env.DB_CONNECTION_LIMIT ||
