@@ -69,7 +69,7 @@ Important, but unable to do yet:
 * Once we know something about how authentication will work, we may need to do
   something to prevent users without authentication from loading the data.
   * session expiration? browser caching? detect back button, return to page?
-* Getting data out of Epic
+* Getting data out of EHR
   * log whether system was used at all -- depends upon EHR connection
     (EHR will provide data, the presence of the data indicates system was used)
 * Sending data to research database

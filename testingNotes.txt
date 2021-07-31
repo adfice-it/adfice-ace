@@ -24,7 +24,7 @@ If we are lucky, if an allergy is a drug allergy we will get an ATC code for the
 The table med_rules also contains the column reference; this gives the number of the page of references associated with this rule. The references pages are in the repo in the folder refpages. Links to the refpages for rules that fired will appear in the UI.
 
 ---- Table med_advice_text ----
-This table contains that advice that should appear, checkboxes, and text that appears with the checkboxes in the cdss (doctor view), Epic text (text for copy-pasting into the EHR), and patient text (advice that can be printed for the patient and will appear in the portal).
+This table contains that advice that should appear, checkboxes, and text that appears with the checkboxes in the cdss (doctor view), EHR text (text for copy-pasting into the EHR), and patient text (advice that can be printed for the patient and will appear in the portal).
 Text is formatted with Markdown.
 
 Checkboxes have a "category" and should appear in the UI in the following order:
@@ -64,7 +64,7 @@ There will also be a list of checkboxes for non-medication advice at the bottom 
 
 Eventully we will want to record the state, so if the user quits in the middle they can pick up again where they left off. We should assume that the state belongs to the patient and is the same for all users.
 
-There will be a "reload" button which will allow the user to reload new data from Epic. This will be useful if there was a mistake in the data (e.g. an order that was never discontinued in Epic). The system should keep the selections that were made for medications that haven't changed.
+There will be a "reload" button which will allow the user to reload new data from EHR. This will be useful if there was a mistake in the data (e.g. an order that was never discontinued in EHR). The system should keep the selections that were made for medications that haven't changed.
 
 There will be a button to "finalize" the decisions and release the result for the patient portal. This will make the system "read only". We've decided not to let the user go back from this, because otherwise that could create aa weird discrepiency between the information the patient saw and what is now in the system. Of course *we* can change it but an admin will have to do it. This should also log everything that the user (ultimately) selected.
 

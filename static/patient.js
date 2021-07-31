@@ -416,14 +416,14 @@ window.addEventListener('load', (event) => {
     switch_to_view("clinician");
 });
 
-async function copyEpicTextToClipboard() {
+async function copyEHRTextToClipboard() {
     if (!navigator.clipboard) {
         alert("browser does not support copy");
         return true;
     }
 
-    var allEpicText = document.getElementById("div_all_ehr_text");
-    await navigator.clipboard.writeText(allEpicText.innerText);
+    var allEHRText = document.getElementById("div_all_ehr_text");
+    await navigator.clipboard.writeText(allEHRText.innerText);
     return true;
 }
 
