@@ -27,7 +27,7 @@ select_box_num smallint unsigned,
 select_box_category varchar(20),
 select_box_designator varchar(20),
 cdss varchar(3000),
-epic varchar(2000),
+ehr varchar(2000),
 patient varchar(5000),
 UNIQUE KEY (medication_criteria_id, select_box_num)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -39,7 +39,7 @@ select_box_num smallint unsigned,
 select_box_category varchar(20),
 select_box_designator varchar(20),
 cdss varchar(3000),
-epic varchar(2000),
+ehr varchar(2000),
 patient varchar(5000)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -72,7 +72,7 @@ category_id varchar(8),
 select_box_num smallint unsigned,
 preselected tinyint unsigned,
 cdss varchar(3000),
-epic varchar(2000),
+ehr varchar(2000),
 patient varchar(5100),
 UNIQUE KEY (category_id, select_box_num)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

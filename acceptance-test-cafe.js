@@ -160,7 +160,7 @@ test('Test selecting views', async t => {
     let div_clinician_view = Selector('div#div_clinician_view');
     let div_condensed_view = Selector('div#div_condensed_view');
     let div_patient_view = Selector('div#div_patient_view');
-    let div_epic_box = Selector('div#div_epic_box');
+    let div_ehr_box = Selector('div#div_ehr_box');
     let div_advice_M01AB05 = Selector('div#advice_M01AB05');
 
     let checkbox0 = Selector('#cb_M01AB05_80b_2');
@@ -171,9 +171,9 @@ test('Test selecting views', async t => {
     let row1 = Selector('#tr_M01AB05_78_3');
     let rowOther = Selector('#tr_OTHER_other_1');
 
-    let epic0 = Selector('#et_M01AB05_80b_2');
-    let epic1 = Selector('#et_M01AB05_78_3');
-    let epicOther = Selector('#et_OTHER_other_1');
+    let ehr0 = Selector('#et_M01AB05_80b_2');
+    let ehr1 = Selector('#et_M01AB05_78_3');
+    let ehrOther = Selector('#et_OTHER_other_1');
 
     let patient0 = Selector('#pt_M01AB05_80b_2');
     let patient1 = Selector('#pt_M01AB05_78_3');
@@ -237,7 +237,7 @@ test('Test selecting views', async t => {
     await t.expect(div_clinician_view.visible).ok();
     await t.expect(div_advice_M01AB05.visible).ok();
     await t.expect(div_patient_view.visible).notOk();
-    await t.expect(div_epic_box.visible).ok();
+    await t.expect(div_ehr_box.visible).ok();
     await t.expect(row0.visible).ok();
     await t.expect(row1.visible).ok();
     await t.expect(rowOther.visible).ok();
@@ -247,7 +247,7 @@ test('Test selecting views', async t => {
     await t.expect(div_clinician_view.visible).notOk();
     await t.expect(div_advice_M01AB05.visible).notOk();
     await t.expect(div_patient_view.visible).ok();
-    await t.expect(div_epic_box.visible).notOk();
+    await t.expect(div_ehr_box.visible).notOk();
     // the patient texts are only visible if checked in clinician view
     await t.expect(patient0.visible).notOk();
     await t.expect(patient1.visible).ok();
@@ -280,7 +280,7 @@ test('Test selecting views', async t => {
     await t.expect(div_clinician_view.visible).ok();
     await t.expect(div_advice_M01AB05.visible).notOk();
     await t.expect(div_patient_view.visible).notOk();
-    await t.expect(div_epic_box.visible).ok();
+    await t.expect(div_ehr_box.visible).ok();
     await t.expect(row0.visible).notOk();
     await t.expect(row1.visible).ok();
 
@@ -311,7 +311,7 @@ test('Test selecting views', async t => {
     await t.expect(div_clinician_view.visible).ok();
     await t.expect(div_advice_M01AB05.visible).ok();
     await t.expect(div_patient_view.visible).notOk();
-    await t.expect(div_epic_box.visible).ok();
+    await t.expect(div_ehr_box.visible).ok();
     await t.expect(row0.visible).ok();
     await t.expect(row1.visible).ok();
     await t.expect(rowOther.visible).ok();
@@ -338,10 +338,10 @@ test('Test selecting views', async t => {
         });
     }
 
-    // the epic texts are only ever visible if checked
-    await t.expect(epic0.visible).notOk();
-    await t.expect(epic1.visible).ok();
-    await t.expect(epicOther.visible).notOk();
+    // the ehr texts are only ever visible if checked
+    await t.expect(ehr0.visible).notOk();
+    await t.expect(ehr1.visible).ok();
+    await t.expect(ehrOther.visible).notOk();
 });
 
 async function check_checkbox_and_freetext(id) {

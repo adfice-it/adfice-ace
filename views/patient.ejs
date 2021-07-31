@@ -554,11 +554,11 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
 <button onclick="windowPrint()">Afdrukken</button>
 </div><!-- "non_med_advice_patient_area" -->
 
-<div id="div_epic_box" class="div_epic_box"><!-- not in patient view -->
+<div id="div_ehr_box" class="div_ehr_box"><!-- not in patient view -->
 <p>Tekst om te knippen en plakken in Epic:</p>
-<div id="div_all_epic_text" class="div_all_epic_text">
+<div id="div_all_ehr_text" class="div_all_ehr_text">
 <% for (let i = 0; i < medication_advice.length; ++i ) { -%>
-<div id="advice_epic_area_<%= i %>" class="advice_epic_area">
+<div id="advice_ehr_area_<%= i %>" class="advice_ehr_area">
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
@@ -574,8 +574,8 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
          let row_id = 'et_' + advice_id_base;
 -%>
 <div id="<%= row_id %>">
-<%         for (let k = 0; k < cb_advice.epic_split.length; ++k) { -%>
-<%             let chunk = cb_advice.epic_split[k]; -%>
+<%         for (let k = 0; k < cb_advice.ehr_split.length; ++k) { -%>
+<%             let chunk = cb_advice.ehr_split[k]; -%>
 <%             let chunk_id = `eft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
 <div id="<%= chunk_id %>">
 <%             if (!chunk.editable) { -%>
@@ -585,7 +585,7 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
 <%         } -%>
 </div><!-- <%= row_id %> -->
 <%     } -%>
-</div> <!-- advice_epic_area_<%= i %> -->
+</div> <!-- advice_ehr_area_<%= i %> -->
 <% } -%>
 <!-- Begin OTHER -->
 <% for (let i = 0; i < other_advices.length; ++i ) {
@@ -597,8 +597,8 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
        let row_id = 'et_' + other_id_base;
 -%>
 <div id="<%= row_id %>">
-<%         for (let k = 0; k < other_advice.epic_split.length; ++k) {
-               let chunk = other_advice.epic_split[k];
+<%         for (let k = 0; k < other_advice.ehr_split.length; ++k) {
+               let chunk = other_advice.ehr_split[k];
                let chunk_id = `eft_OTHER_${category}_${boxnum}_${k}`;
                let et = md.makeHtml(chunk.text);
                et = et.replace("<p>", "");
@@ -621,8 +621,8 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
        let row_id = 'et_' + nma_id_base;
 -%>
 <div id="<%= row_id %>">
-<%         for (let k = 0; k < nm_advice.epic_split.length; ++k) {
-               let chunk = nm_advice.epic_split[k];
+<%         for (let k = 0; k < nm_advice.ehr_split.length; ++k) {
+               let chunk = nm_advice.ehr_split[k];
                let chunk_id = `eft_NONMED_${category}_${boxnum}_${k}`;
                let et = md.makeHtml(chunk.text);
                et = et.replace("<p>", "");
@@ -635,10 +635,10 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
 </div> <!-- <%= row_id %> -->
 <% } -%>
 <!-- End NonMed -->
-</div><!-- div_all_epic_text -->
-<button id="copy_epic_text" type="button" class='button_epic_text'
+</div><!-- div_all_ehr_text -->
+<button id="copy_ehr_text" type="button" class='button_ehr_text'
         onclick="copyEpicTextToClipboard()">Kopieer tekst</button>
-</div> <!-- epic_box -->
+</div> <!-- ehr_box -->
 
 <div class="whitespace"></div>
 <div id="footer">

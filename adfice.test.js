@@ -23,7 +23,7 @@ test('test advice text 6e', async () => {
     expect(texts[11].select_box_category).toBe('free_text');
 
     expect(texts[6].cdss_split[0].text).toBe('Continueren');
-    expect(texts[6].epic_split[0].text).toBe('Continueren');
+    expect(texts[6].ehr_split[0].text).toBe('Continueren');
     let str = 'Gebruik dit medicijn zoals u tot nu toe al deed.';
     expect(texts[6].patient_split[0].text).toBe(str);
 

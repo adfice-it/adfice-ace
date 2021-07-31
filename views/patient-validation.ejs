@@ -81,7 +81,7 @@ Leeftijd: <%= patient_advice.age %><br/>
 </table>
 <table id="adviceTextsCheckboxesTable_<%= i %>">
 <tr><th>criterion</th><th>box</th><th>category</th>
-<th>cdss</th><th>epic</th><th>patient</th></tr>
+<th>cdss</th><th>ehr</th><th>patient</th></tr>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
 <%     for (let j = 0; j < cb_advices.length; ++j ) { -%>
 <%         let cb_advice = cb_advices[j]; -%>
@@ -91,7 +91,7 @@ Leeftijd: <%= patient_advice.age %><br/>
 <td id="<%= atcbt_prefix %>_sbn"><%= cb_advice.select_box_num %></td>
 <td id="<%= atcbt_prefix %>_sbc"><%= cb_advice.select_box_category %></td>
 <td id="<%= atcbt_prefix %>_cdss" style="border: 1px solid black;"><%- md.makeHtml(cb_advice.cdss) %></td>
-<td id="<%= atcbt_prefix %>_epic" style="border: 1px solid black;"><%- md.makeHtml(cb_advice.epic) %></td>
+<td id="<%= atcbt_prefix %>_ehr" style="border: 1px solid black;"><%- md.makeHtml(cb_advice.ehr) %></td>
 <td id="<%= atcbt_prefix %>_patient" style="border: 1px solid black;"><%- md.makeHtml(cb_advice.patient) %></td>
 </tr>
 <%     } -%>

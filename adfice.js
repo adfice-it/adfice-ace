@@ -36,17 +36,17 @@ async function sql_select(sql, params) {
     return await db.sql_query(sql, params);
 }
 
-function split_advice_texts_cdss_epic_patient(advice_texts) {
+function split_advice_texts_cdss_ehr_patient(advice_texts) {
     for (let j = 0; j < advice_texts.length; ++j) {
         let row = advice_texts[j];
 
-        row.an_fyi = 'Flat fields "cdss", "epic", "patient" are for debugging';
+        row.an_fyi = 'Flat fields "cdss", "ehr", "patient" are for debugging';
 
         row.cdss_split = autil.splitFreetext(row.cdss);
         /* delete row.cdss; TODO: switch patient-validation to cdss_split */
 
-        row.epic_split = autil.splitFreetext(row.epic);
-        /* delete row.epic */
+        row.ehr_split = autil.splitFreetext(row.ehr);
+        /* delete row.ehr */
 
         row.patient_split = autil.splitFreetext(row.patient);
         /* delete row.patient */
@@ -74,7 +74,7 @@ async function getAllAdviceTextsCheckboxes() {
              , m.select_box_num
              , m.select_box_category
              , m.cdss
-             , m.epic
+             , m.ehr
              , m.patient
              , p.priority
           FROM med_advice_text m
@@ -83,7 +83,7 @@ async function getAllAdviceTextsCheckboxes() {
          WHERE select_box_num IS NOT NULL
       ORDER BY p.priority ASC, m.select_box_num ASC, m.id ASC`;
     let advice_text = await this.sql_select(sql);
-    let list = split_advice_texts_cdss_epic_patient(advice_text);
+    let list = split_advice_texts_cdss_ehr_patient(advice_text);
     let all = {};
     for (let i = 0; i < list.length; ++i) {
         let row = list[i];
@@ -128,13 +128,13 @@ async function getAdviceOtherTextsCheckboxes() {
              , select_box_category
              , select_box_designator
              , cdss
-             , epic
+             , ehr
              , patient
           FROM med_other_text
       ORDER BY medication_criteria_id
              , select_box_num`;
     let advice_text = await this.sql_select(sql);
-    return split_advice_texts_cdss_epic_patient(advice_text);
+    return split_advice_texts_cdss_ehr_patient(advice_text);
 }
 
 async function getAdviceTextsNoCheckboxes(rule_numbers) {
@@ -151,7 +151,7 @@ async function getAdviceTextsNoCheckboxes(rule_numbers) {
         `)
       ORDER BY id`;
     let advice_text = await this.sql_select(sql, rule_numbers);
-    return split_advice_texts_cdss_epic_patient(advice_text);
+    return split_advice_texts_cdss_ehr_patient(advice_text);
 }
 
 async function getAdviceTextsNonMedCheckboxes() {
@@ -161,7 +161,7 @@ async function getAdviceTextsNonMedCheckboxes() {
              , t.select_box_num
              , t.preselected
              , t.cdss
-             , t.epic
+             , t.ehr
              , t.patient
           FROM nonmed_header AS h
           JOIN nonmed_text AS t
@@ -170,7 +170,7 @@ async function getAdviceTextsNonMedCheckboxes() {
              , t.select_box_num
     `;
     let advice_text = await this.sql_select(sql);
-    return split_advice_texts_cdss_epic_patient(advice_text);
+    return split_advice_texts_cdss_ehr_patient(advice_text);
 }
 
 async function getReferenceNumbers(rule_numbers) {

@@ -1,5 +1,5 @@
 SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
-INSERT INTO nonmed_text (category_id,select_box_num,preselected,cdss,epic,patient)
+INSERT INTO nonmed_text (category_id,select_box_num,preselected,cdss,ehr,patient)
 VALUES
 ('A',1,1,'Standaard valpreventie advies','Standaard valpreventie advies','<span class="patient_nonmed_category">Valpreventie advies:</span>
 

@@ -21,7 +21,7 @@ function set_class_display(class_name, val) {
 function switch_to_view(view) {
     let div_clinician_view = document.getElementById("div_clinician_view");
     let div_patient_view = document.getElementById("div_patient_view");
-    let div_epic_box = document.getElementById("div_epic_box");
+    let div_ehr_box = document.getElementById("div_ehr_box");
     let checkboxes = document.querySelectorAll("[id ^= cb_]");
     let checkbox_rows = document.querySelectorAll("[id ^= tr_]");
 
@@ -58,7 +58,7 @@ function switch_to_view(view) {
     if (view === "patient") {
         div_clinician_view.style.display = 'none';
         div_patient_view.style.display = 'block';
-        div_epic_box.style.display = 'none';
+        div_ehr_box.style.display = 'none';
         set_class_display("advice_no_checkbox", 'none');
         non_med_advice_selection_area.style.display = 'none';
         non_med_advice_patient_area.style.display = 'block';
@@ -72,7 +72,7 @@ function switch_to_view(view) {
     } else if (view === "condensed") {
         div_clinician_view.style.display = 'block';
         div_patient_view.style.display = 'none';
-        div_epic_box.style.display = 'block';
+        div_ehr_box.style.display = 'block';
         for (let i = 0; i < checkbox_rows.length; ++i) {
             // Note: nodes should be returned in document order, which should
             // pair the checkboxes and rows.
@@ -103,7 +103,7 @@ function switch_to_view(view) {
         }
         div_clinician_view.style.display = 'block';
         div_patient_view.style.display = 'none';
-        div_epic_box.style.display = 'block';
+        div_ehr_box.style.display = 'block';
         for (let i = 0; i < checkbox_rows.length; ++i) {
             checkbox_rows[i].style.display = 'block';
         }
@@ -194,12 +194,12 @@ function process_checkbox(checkbox, checked) {
 
     let checkbox_id = checkbox.id;
 
-    let epic_row_id = checkbox_id.replace(/^cb_/, 'et_');
-    let epic_row = document.getElementById(epic_row_id);
+    let ehr_row_id = checkbox_id.replace(/^cb_/, 'et_');
+    let ehr_row = document.getElementById(ehr_row_id);
     if (checked) {
-        epic_row.style.display = 'block';
+        ehr_row.style.display = 'block';
     } else {
-        epic_row.style.display = 'none';
+        ehr_row.style.display = 'none';
     }
 
     let patient_row_id = checkbox_id.replace(/^cb_/, 'pt_');
@@ -239,12 +239,12 @@ function process_freetexts(message) {
             field.value = value;
         }
 
-        let epic_text_id = field_id.replace(/^ft_/, 'eft_');
-        var epic_field = document.getElementById(epic_text_id);
-        if (!epic_field) {
-            console.log('missing:', epic_text_id);
+        let ehr_text_id = field_id.replace(/^ft_/, 'eft_');
+        var ehr_field = document.getElementById(ehr_text_id);
+        if (!ehr_field) {
+            console.log('missing:', ehr_text_id);
         } else {
-            epic_field.innerText = value;
+            ehr_field.innerText = value;
         }
 
         let patient_text_id = field_id.replace(/^ft_/, 'pft_');
@@ -399,7 +399,7 @@ async function copyEpicTextToClipboard() {
         return true;
     }
 
-    var allEpicText = document.getElementById("div_all_epic_text");
+    var allEpicText = document.getElementById("div_all_ehr_text");
     await navigator.clipboard.writeText(allEpicText.innerText);
     return true;
 }

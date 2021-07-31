@@ -44,7 +44,7 @@ Checkboxes also have a "designator"; this is because a rule can have more than o
 Within these categories, the order doesn't matter much, although "in the order that they appeara in the table" is good.
 The advice is also phrased so that it can appear in any order, but the order that it appears in the table is preferred.
 
-{{free text}} in the cdss column indicates a free text box to be filled by the user. {{free text}} in the epic or patient column indicates that the free text that is filled by the user appears in the epic or patient text, respectively. 
+{{free text}} in the cdss column indicates a free text box to be filled by the user. {{free text}} in the ehr or patient column indicates that the free text that is filled by the user appears in the ehr or patient text, respectively. 
 
 {{free text: pre-filled: ...}} indicates that the free text box should be pre-filled with some suggested text. IMO this is a convenience feature and I am not even sure it's a good idea, so we can just ignore it.
 
@@ -58,7 +58,7 @@ There is one other "preselect" rule: if a stop, taper-stop, taper-reduce, or swi
 
 ---- Non-medication advice ----
 
-There will also be a list of checkboxes for non-medication advice at the bottom of the screen, but this is the same for all patients so it should be trivial to implement. It also has cdss, epic, and patient text. A couple of the boxes are pre-selected, but they are also the same for all patients.
+There will also be a list of checkboxes for non-medication advice at the bottom of the screen, but this is the same for all patients so it should be trivial to implement. It also has cdss, ehr, and patient text. A couple of the boxes are pre-selected, but they are also the same for all patients.
 
 ---- Persistance ----
 

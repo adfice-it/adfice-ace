@@ -18,7 +18,7 @@
   `select_box_category` varchar(20) DEFAULT NULL,
   `select_box_designator` varchar(20) DEFAULT NULL,
   `cdss` varchar(3000) DEFAULT NULL,
-  `epic` varchar(2000) DEFAULT NULL,
+  `ehr` varchar(2000) DEFAULT NULL,
   `patient` varchar(5000) DEFAULT NULL,
 -->
 <!-- name (and atc code) of medication -->
@@ -29,7 +29,7 @@
 	<td><%= row.medication_criteria_id %></td>
 	<td><%= row.select_box_num %></td>
 	<td><%= row.cdss %></td><!-- split into advice without checkboxes and advice with checkboxes -->
-	<td><%= row.epic %></td>
+	<td><%= row.ehr %></td>
 	<td><%= row.patient %></td>
 	</tr>
 <% } %>

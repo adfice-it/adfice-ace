@@ -6,8 +6,8 @@ form#patient_form(:class="{ [currentStep]: true }")
           :class="{ selected: currentStep === step }",
           @click="currentStep = step") {{ index + 1 }}
   .nav
-    .nav-item#reload-epic Vernieuwen
-    //-.nav-item#reload-epic Pagina vernieuwen
+    .nav-item#reload-ehr Vernieuwen
+    //-.nav-item#reload-ehr Pagina vernieuwen
     //- todo: is there a synonym for finalize that we can use?
     .nav-item#finalize Afronden
     //-.nav-item#finalize Opslaan &amp; definitief maken
