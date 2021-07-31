@@ -1,10 +1,7 @@
 Important:
 * testing of the static/ served javascript files
-* make the export push data to valportaal db
 * make a "build valportaal vm" script
 * host both VMs working together on venus somehow
-* prediction model needs to be added to the valportaal page
-* some static content needs to be added as well
 * eject vagrant, consider https://github.com/ericherman/centos-vm
 
 Required changes to rules (Ace will do these):
@@ -19,8 +16,6 @@ Wanted for usability:
 
 Not required for "ready to install" but will be required for study:
 * logging:
-  * which advice had been pre-selected (and thus, was it unchecked)
-    to compare what doctor ultimately chose
   * print button
 
 Mid Priority:
