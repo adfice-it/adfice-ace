@@ -72,7 +72,7 @@ INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, gen
 (69,(select NOW()),"amlodipine","amlodipine","C08CA01",'2019-02-11'),
 (70,(select NOW()),"hydrochlorothiazide","hydrochloorthiazide","C03AA03",'2019-02-11'),
 (71,(select NOW()),"buphenine","buphenine","C04AA02",'2019-02-11'),
-(72,(select NOW()),"metoprolol and thiazides","metoprolol and thiazides","C07BB02",'2019-02-11'),
+(72,(select NOW()),"metoprolol and thiazides","METOPROLOL/HYDROCHLOORTHIAZIDE TAB MGA 100/12,5MG","C07BB02",'2019-02-11'),
 (73,(select NOW()),"metoprolol and other diuretics","metoprolol and other diuretics","C07CB02",'2019-02-11'),
 (74,(select NOW()),"atorvastatin and amlodipine","atorvastatin and amlodipine","C10BX03",'2019-02-11'),
 (75,(select NOW()),"rosuvastatin, amlodipine and lisinopril ","rosuvastatin, amlodipine and lisinopril ","C10BX07",'2019-02-11'),
@@ -85,7 +85,7 @@ INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, gen
 (82,(select NOW()),"oxycodon","oxycodon","N02AA05",'2019-02-11'),
 (83,(select NOW()),"diclofenac","diclofenac","M01AB05",'2019-02-11'),
 (84,(select NOW()),"diclofenac","diclofenac","M01AB05",'2019-02-11'),
-(84,(select NOW()),"paracetamol, combinations excluding psycholeptics","paracetamol, combinations excluding psycholeptics","N02BE51",'2019-02-11'),
+(84,(select NOW()),"paracetamol, combinations excluding psycholeptics",NULL,"N02BE51",'2019-02-11'),
 (85,(select NOW()),"diclofenac","diclofenac","M01AB05",'2019-02-11'),
 (86,(select NOW()),"diclofenac","diclofenac","M01AB05",'2019-02-11'),
 (87,(select NOW()),"diclofenac","diclofenac","M01AB05",'2019-02-11'),
@@ -127,10 +127,10 @@ INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, gen
 (123,(select NOW()),"piracetam","piracetam","N06BX03",'2019-02-11'),
 (124,(select NOW()),"cinnarizine","cinnarizine","N07CA02",'2019-02-11'),
 (125,(select NOW()),"salmeterol","salmeterol","R03AC12",'2019-02-11'),
-(126,(select NOW()),"enalapril and diuretics","enalapril and diuretics","C09BA02",'2019-02-11'),
+(126,(select NOW()),"ENALAPRIL/HYDROCHLOORTHIAZIDE TABLET 20/12,5MG","ENALAPRIL/HYDROCHLOORTHIAZIDE TABLET 20/12,5MG","C09BA02",'2019-02-11'),
 (127,(select NOW()),"atenolol, thiazides and other diuretics","atenolol, thiazides and other diuretics","C07DB01",'2019-02-11'),
 (128,(select NOW()),"diclofenac topical","diclofenac topical","D11AX18",'2019-02-11'),
-(129,(select NOW()),"naproxen and esomeprazol","naproxen and esomeprazol","M01AE52",'2019-02-11');
+(129,(select NOW()),"naproxen and esomeprazol","NAPROXEN/ESOMEPRAZOL TABLET MGA 500/20MG","M01AE52",'2019-02-11');
 
 /* fake patients for validating rules */
 INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
@@ -179,7 +179,7 @@ INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, gen
 (147,(select NOW()),"haloperidol","haloperidol","N05AD01",'2019-02-11'),
 (147,(select NOW()),"nicorandil","nicorandil","C01DX16",'2019-02-11'),
 (147,(select NOW()),"indometacin","indometacin","M01AB01",'2019-02-11'),
-(147,(select NOW()),"paracetamol, combinations excluding psycholeptics","paracetamol, combinations excluding psycholeptics","N02BE51",'2019-02-11'),
+(147,(select NOW()),"paracetamol, combinations excluding psycholeptics",NULL,"N02BE51",'2019-02-11'),
 (147,(select NOW()),"pancuronium","pancuronium","M03AC01",'2019-02-11'),
 
 (148,(select NOW()),"haloperidol","haloperidol","N05AD01",'2019-02-11'),
