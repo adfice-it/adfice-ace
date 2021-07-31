@@ -444,3 +444,32 @@ test('Test finalize and renew', async t => {
 
     await t.expect(cb_selector.hasAttribute('disabled')).notOk();
 });
+
+test('Check "Geen advies"', async t => {
+    let url = `${BASE_URL}/patient?id=162`;
+    let window1 = await t.openWindow(url);
+
+    // levodopa has no advice pre-checked
+    // (we could verify they are un-selected)
+
+    // switch to the advies view
+    let button_patient_view = Selector('button#button_patient_view');
+    await t.click(button_patient_view);
+
+    // locate the "Geen advies" text
+    let ga_selector = Selector("div#geen_advies_N04BA01");
+    await t.expect(ga_selector.visible).ok();
+
+    // go to doctor view
+    let button_clinician_view = Selector('button#button_clinician_view');
+    await t.click(button_clinician_view);
+
+    // check some advice
+    let checkbox_selector = Selector(`input#cb_N04BA01_27_2`);
+    await t.click(checkbox_selector);
+    await t.expect(checkbox_selector.checked).ok();
+
+    // go to patient view
+    await t.click(button_patient_view);
+    await t.expect(ga_selector.visible).notOk();
+});

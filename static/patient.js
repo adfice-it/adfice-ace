@@ -217,11 +217,34 @@ function process_checkboxes(message) {
     }
     let box_states = message['box_states'];
     const checkbox_ids = Object.keys(box_states);
+    let atcs = {};
     checkbox_ids.forEach((checkbox_id, index) => {
+        let atc = checkbox_id.split('_')[1];
+        if (atcs[atc] === undefined) {
+            atcs[atc] = 0;
+        }
         let checked = box_states[checkbox_id];
+        if (checked) {
+            atcs[atc] += 1;
+        }
         var checkbox = document.getElementById(checkbox_id);
         process_checkbox(checkbox, checked);
     });
+
+    let atcs_keys = Object.keys(atcs);
+    for (let i = 0; i < atcs_keys.length; ++i) {
+        let atc = atcs_keys[i];
+        let num_checked = atcs[atc];
+        let geen_advies_id = `geen_advies_${atc}`;
+        let geen_advies_div = document.getElementById(geen_advies_id);
+        if (geen_advies_div) {
+            if (num_checked > 0) {
+                geen_advies_div.style.display = 'none';
+            } else {
+                geen_advies_div.style.display = 'block';
+            }
+        }
+    }
 }
 
 function process_freetexts(message) {

@@ -16,7 +16,7 @@ Wanted for usability:
 
 Not required for "ready to install" but will be required for study:
 * logging:
-  * print button
+  * print button (make it a generic event log)
 
 Mid Priority:
 * Each acceptance test should start an instance of AdficeWebserver
@@ -37,8 +37,6 @@ Mid Priority:
   * e.g.: "stop medication A" && "continue medication A"
 * try to use "deeplinken" for FK links
   * cache known good links? direct access to search page?
-* if no checkboxes are selected for a medication, display text "Geen advies."
-  in the patient view.
 * write a log archival script
   raise priority if this looks like it is growing too fast:
 
@@ -53,6 +51,7 @@ Mid Priority:
 
 Low Priority:
 * allow user to fill in missing values in prediction model page
+* naming consistency thoughout the css
 * naming consistency thoughout the javascript
 * naming consistency thoughout the html
 

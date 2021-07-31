@@ -336,7 +336,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <%     let row = medication_advice[i]; -%>
 <%     let atc = row.ATC_code; -%>
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
-<div id="advice_patient_area_<%= i %>" class="advice_patient_area">
+<div id="advice_patient_area_<%= atc %>" class="advice_patient_area">
 <div id="div_patient_med_name_<%= atc %>"
      class="patient_med_name"><%= ucfirst(row.medication_name).trim() %></div>
 <%
@@ -364,6 +364,9 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <%         } -%>
 </div><!-- <%= row_id %> -->
 <%     } -%>
+<div id="geen_advies_<%= atc %>" class="geen_advies">
+Geen advies.
+</div>
 </div> <!-- advice_patient_area_<%= i %> -->
 <% } -%>
 <div id="div_other_med_advice" class="div_other_advice">
