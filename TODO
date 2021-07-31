@@ -16,7 +16,7 @@ Wanted for usability:
 
 Not required for "ready to install" but will be required for study:
 * logging:
-  * print button (make it a generic event log)
+  * print button (make it call addLogPrintEvent, test with jest js dom mocking)
 
 Mid Priority:
 * Each acceptance test should start an instance of AdficeWebserver
