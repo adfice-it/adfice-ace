@@ -35,8 +35,6 @@ Mid Priority:
 * test-cafe : get the innnerHTML out of an element
 * sanity check choices of checkboxes
   * e.g.: "stop medication A" && "continue medication A"
-* try to use "deeplinken" for FK links
-  * cache known good links? direct access to search page?
 * write a log archival script
   raise priority if this looks like it is growing too fast:
 

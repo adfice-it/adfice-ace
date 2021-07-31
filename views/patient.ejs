@@ -219,8 +219,8 @@ for (let i = 0; i < medication_advice.length; ++i ) {
      let generic_name = row.generic_name;
      let d = generic_name[0];
      let med_url = "https://www.farmacotherapeutischkompas.nl" +
-            "/bladeren/preparaatteksten" +
-            "/" + generic_name[0] + "/" + generic_name;
+            "/bladeren/preparaatteksten/atc/" +
+            atc;
 -%>
 <div id="div_advice_<%= atc %>">
 <div id="div_med_name_<%= atc %>" class = "med_name">
