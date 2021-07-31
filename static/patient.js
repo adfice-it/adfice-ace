@@ -129,6 +129,23 @@ function ucfirst(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+function send_message(message_type, apply) {
+    let message = {};
+    message.viewer_id = viewer_id;
+    message.patient_id = patient_id;
+    message.type = message_type;
+
+    if (apply) {
+        apply(message);
+    }
+
+    let msg_str = JSON.stringify(message, null, 4);
+    if (DEBUG > 0) {
+        console.log('sending:', msg_str);
+    }
+    ws.send(msg_str);
+}
+
 function boxclicked(checkbox) {
     if (!ws) {
         checkbox.checked = !checkbox.checked;
@@ -141,24 +158,17 @@ function boxclicked(checkbox) {
         console.log('Checkbox ' + checkbox.id + ' clicked' +
             ' and is now ' + checkbox.checked);
     }
-    let message = {};
-    message.viewer_id = viewer_id;
-    message.patient_id = patient_id;
-    message.type = 'checkboxes';
-    message.checkbox_id = checkbox.id;
-    message.checkbox_checked = checkbox.checked;
 
-    message['box_states'] = {};
-    let elementList = document.querySelectorAll("input[type='checkbox']");
-    elementList.forEach((checkbox) => {
-        message['box_states'][checkbox.id] = checkbox.checked;
+    send_message('checkboxes', (message) => {
+        message.checkbox_id = checkbox.id;
+        message.checkbox_checked = checkbox.checked;
+
+        message['box_states'] = {};
+        let elementList = document.querySelectorAll("input[type='checkbox']");
+        elementList.forEach((checkbox) => {
+            message['box_states'][checkbox.id] = checkbox.checked;
+        });
     });
-
-    let msg_str = JSON.stringify(message, null, 4);
-    if (DEBUG > 0) {
-        console.log('sending:', msg_str);
-    }
-    ws.send(msg_str);
 }
 
 function freetextentered(textfield) {
@@ -168,25 +178,16 @@ function freetextentered(textfield) {
         ++weirdness;
         return;
     }
-    let message = {};
-    message.viewer_id = viewer_id;
-    message.patient_id = patient_id;
-    message.type = 'freetexts';
-    message.textfield = textfield.id;
 
-    message['field_entries'] = {};
-    // TODO: this will need to change if the two views contain the same
-    // text fields, as they will be duplicate/conflicting
-    let elementList = document.querySelectorAll("input[type='text']");
-    elementList.forEach((field) => {
-        message['field_entries'][field.id] = field.value;
+    send_message('freetexts', (message) => {
+        message.textfield = textfield.id;
+
+        message['field_entries'] = {};
+        let elementList = document.querySelectorAll("input[type='text']");
+        elementList.forEach((field) => {
+            message['field_entries'][field.id] = field.value;
+        });
     });
-
-    let msg_str = JSON.stringify(message, null, 4);
-    if (DEBUG > 0) {
-        console.log('sending:', msg_str);
-    }
-    ws.send(msg_str);
 }
 
 function process_checkbox(checkbox, checked) {
@@ -441,30 +442,12 @@ async function copyPatientTextToClipboard() {
 }
 
 async function makeDefinitive() {
-    let message = {};
-    message.viewer_id = viewer_id;
-    message.patient_id = patient_id;
-    message.type = 'definitive';
-
-    let msg_str = JSON.stringify(message, null, 4);
-    if (DEBUG > 0) {
-        console.log('sending:', msg_str);
-    }
-    ws.send(msg_str);
+    send_message('definitive');
     return true;
 }
 
 async function patientRenew() {
-    let message = {};
-    message.viewer_id = viewer_id;
-    message.patient_id = patient_id;
-    message.type = 'patient_renew';
-
-    let msg_str = JSON.stringify(message, null, 4);
-    if (DEBUG > 0) {
-        console.log('sending:', msg_str);
-    }
-    ws.send(msg_str);
+    send_message('patient_renew');
     return true;
 }
 
