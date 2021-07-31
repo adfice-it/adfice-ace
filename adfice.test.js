@@ -744,3 +744,23 @@ test('reload from MRS', async () => {
     patient = '169';
     await adfice.reloadPatientData(patient);
 });
+
+test('log print event', async () => {
+    let viewer = '2';
+    let patient = '166';
+    let sql = "SELECT COUNT(*) AS cnt FROM logged_events WHERE patient_id = ?";
+    let results = await adfice.sql_select(sql, [patient]);
+    let cnt = 0;
+    if (results.length > 0) {
+        cnt = results[0].cnt;
+    }
+
+    await adfice.addLogPrintEvent(viewer, patient);
+
+    let results2 = await adfice.sql_select(sql, [patient]);
+    let cnt2 = 0;
+    if (results2.length > 0) {
+        cnt2 = results2[0].cnt;
+    }
+    expect(cnt2).toBe(cnt + 1);
+});

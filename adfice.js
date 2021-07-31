@@ -838,6 +838,20 @@ async function reloadPatientData(patient, cmd) {
     return autil.child_process_spawn(cmd, args);
 }
 
+async function addLogPrintEvent(viewer_id, patient_id) {
+    let sql = `/* adfice.addLogPrintEvent */
+ INSERT INTO logged_events
+           ( viewer_id
+           , patient_id
+           , event_type
+           )
+      VALUES (?,?,?)
+`;
+    const event_type_print = 1;
+    let params = [as_id(viewer_id), as_id(patient_id), event_type_print];
+    return await this.sql_select(sql, params);
+}
+
 function adfice_init(db) {
     let adfice = {
         /* private variables */
@@ -877,6 +891,7 @@ function adfice_init(db) {
         updatePredictionResult: updatePredictionResult,
 
         /* public API methods */
+        addLogPrintEvent: addLogPrintEvent,
         finalizeAndExport: finalizeAndExport,
         getAdviceForPatient: getAdviceForPatient,
         getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
