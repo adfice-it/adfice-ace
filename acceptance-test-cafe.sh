@@ -1,7 +1,7 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
-PORT=9090
+PORT=8090
 BASE_URL="http://127.0.0.1:$PORT"
 node AdficeWebserver.js $PORT &
 CHILD_PID=%1

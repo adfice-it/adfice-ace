@@ -8,7 +8,7 @@
   '/home/ace/src/adfice-ace/node_modules/testcafe/lib/cli',
   'firefox:headless',
   'acceptance-test-cafe.js',
-  'http://127.0.0.1:9090'
+  'http://127.0.0.1:8090'
 */
 let BASE_URL = process.argv[4];
 
