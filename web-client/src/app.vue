@@ -215,7 +215,7 @@ export default {
   mounted() {
     const { id, onMessage } = this;
     console.log('mounted...');
-    ws = new WebSocket(`wss://venus.freesa.org:443/patient/${ id }`);
+    ws = new WebSocket(`wss://adfice.openelectronicslab.org/patient/${ id }`);
     ws.onmessage = onMessage;
     console.log('...mounted');
   }
