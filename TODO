@@ -1,7 +1,4 @@
 Important:
-* get valportaal up on venus
-  * can take down the adfice cdss for a while
-  * host both working together on venus somehow
 * tests for CI pipeline
 * enlarge button for valportaal
   * is this ctrl-shift-plus ? Then maybe do both for cross-browser:
@@ -11,7 +8,6 @@ Important:
 * search button for valportaal
   * static content only?
   * https://www.plainlight.com/duckduckgo-search.html#custom-search ?
-* investigate dependabot vulnerabilities
 * testing of the static/ served javascript files
 * make a "build valportaal vm" script
 * eject vagrant, consider https://github.com/ericherman/centos-vm
