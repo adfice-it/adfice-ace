@@ -4,7 +4,10 @@ Important:
   * host both working together on venus somehow
 * tests for CI pipeline
 * enlarge button for valportaal
-  * is this ctrl-shift-plus ?
+  * is this ctrl-shift-plus ? Then maybe do both for cross-browser:
+    * document.body.style.MozTransform = 'scale(400%)'
+    * document.body.style.zoom = '400%'
+    * (be sure to check footer positioning if there is a footer)
 * search button for valportaal
   * static content only?
   * https://www.plainlight.com/duckduckgo-search.html#custom-search ?
