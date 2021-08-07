@@ -230,6 +230,13 @@ server.on('upgrade', function upgrade(request, socket, head) {
                         send_all(kind, patient_id, new_msg);
                     } else if (message.type == 'was_printed') {
                         await adfice.addLogPrintEvent(viewer_id, patient_id);
+                    } else if (message.type == 'ping') {
+                        let pong = {};
+                        pong.type = 'pong';
+                        pong.sent = message.sent;
+                        pong.recv = Date.now();
+                        msg_header(pong, kind, patient_id)
+                        ws.send(JSON.stringify(pong, null, 4));
                     } else {
                         send_all(kind, patient_id, message);
                     }

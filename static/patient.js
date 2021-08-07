@@ -414,6 +414,16 @@ function connect_web_socket() {
 window.addEventListener('load', (event) => {
     connect_web_socket();
 
+    let one_second = 1000;
+    let ping_interval = 10 * one_second;
+    setInterval(function() {
+        if (ws) {
+            send_message("ping", (msg) => {
+                msg.sent = Date.now();
+            });
+        }
+    }, ping_interval);
+
     switch_to_view("clinician");
 });
 

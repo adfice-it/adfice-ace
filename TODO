@@ -1,5 +1,5 @@
 Important:
-* tests for CI pipeline
+* valportaal: links to apotheek.nl
 * enlarge button for valportaal
   * is this ctrl-shift-plus ? Then maybe do both for cross-browser:
     * document.body.style.MozTransform = 'scale(400%)'
@@ -25,11 +25,12 @@ Waiting for decision on front-end:
 
 Not required for "ready to install" but will be required for study:
 * logging:
-  * print button (make it call addLogPrintEvent, test with jest js dom mocking)
   * log in the same table that send to portal was done
 
 Mid Priority:
 * Each acceptance test should start an instance of AdficeWebserver
+  * refactor AdficeWebserver to be more testable
+  * refactor the client js (static/patient.js) to be more testable
 * automate test reconnect behavior on web-socket drop or AdficeWebserver restart
 * specify DB port, separate instance for local human testing, automated testing
 * specify DB per-test, or otherwise ensure:
