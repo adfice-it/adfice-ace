@@ -63,7 +63,7 @@ function child_process_spawn(cmd, args) {
     let options = {
         cwd: undefined,
         env: env,
-        stdio: 'ignore',
+        stdio: 'inherit',
         setsid: false
     };
 
