@@ -1,7 +1,16 @@
 Important:
+* get valportaal up on venus
+  * can take down the adfice cdss for a while
+  * host both working together on venus somehow
+* tests for CI pipeline
+* enlarge button for valportaal
+  * is this ctrl-shift-plus ?
+* search button for valportaal
+  * static content only?
+  * https://www.plainlight.com/duckduckgo-search.html#custom-search ?
+* investigate dependabot vulnerabilities
 * testing of the static/ served javascript files
 * make a "build valportaal vm" script
-* host both VMs working together on venus somehow
 * eject vagrant, consider https://github.com/ericherman/centos-vm
 
 Required changes to rules (Ace will do these):
@@ -10,13 +19,15 @@ Required changes to rules (Ace will do these):
   (Laxans: should probably become Laxans aanbevolen.)
 * Make sure that all texts begin with a capital letter.
 
-Wanted for usability:
+Waiting for decision on front-end:
+* some sort of UI indication that the file is locked (sent to portal)
 * Buttons to hide advice box and non-selected checkbox rows for individual
   medications in clinician view
 
 Not required for "ready to install" but will be required for study:
 * logging:
   * print button (make it call addLogPrintEvent, test with jest js dom mocking)
+  * log in the same table that send to portal was done
 
 Mid Priority:
 * Each acceptance test should start an instance of AdficeWebserver
@@ -31,6 +42,7 @@ Mid Priority:
   remove the items which have been un-checked/disabled
   * the students suggested using a "reload" icon instead
 * record changes between views, connections and disconnects
+  * see print logging
 * styling, e.g.: viewers in yellow, hidden when 1
 * test-cafe : get the innnerHTML out of an element
 * sanity check choices of checkboxes
