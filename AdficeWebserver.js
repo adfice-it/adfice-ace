@@ -206,30 +206,30 @@ server.on('upgrade', function upgrade(request, socket, head) {
                 message.viewers = server.receivers[kind][id].size;
                 let id_key = `${kind}_id`;
                 if (message[id_key] == id) {
+                    let patient_id = id;
+                    let viewer_id = message.viewer_id;
                     if ('box_states' in message) {
-                        let patient_id = id;
-                        let viewer = message.viewer_id;
                         let selections = message['box_states'];
                         await adfice.setSelectionsForPatient(
-                            patient_id, viewer, selections);
+                            patient_id, viewer_id, selections);
                     }
                     if ('field_entries' in message) {
-                        let patient_id = id;
-                        let viewer = message.viewer_id;
                         let freetexts = message['field_entries'];
                         await adfice.setFreetextsForPatient(
-                            patient_id, viewer, freetexts);
+                            patient_id, viewer_id, freetexts);
                     }
                     if (message.type == 'definitive') {
-                        await adfice.finalizeAndExport(id);
-                        let new_msg = await patient_advice_message(kind, id);
-                        send_all(kind, id, new_msg);
+                        await adfice.finalizeAndExport(patient_id);
+                        let new_msg = await patient_advice_message(kind,
+                            patient_id);
+                        send_all(kind, patient_id, new_msg);
                     } else if (message.type == 'patient_renew') {
-                        await adfice.reloadPatientData(id);
-                        let new_msg = await patient_advice_message(kind, id);
-                        send_all(kind, id, new_msg);
+                        await adfice.reloadPatientData(patient_id);
+                        let new_msg = await patient_advice_message(kind,
+                            patient_id);
+                        send_all(kind, patient_id, new_msg);
                     } else {
-                        send_all(kind, id, message);
+                        send_all(kind, patient_id, message);
                     }
                 }
             } catch (error) {
