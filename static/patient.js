@@ -453,5 +453,6 @@ async function patientRenew() {
 
 async function windowPrint() {
     window.print();
+    await send_message('was_printed');
     return true;
 }
