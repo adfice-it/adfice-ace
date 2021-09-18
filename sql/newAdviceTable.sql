@@ -149,6 +149,7 @@ Het is mogelijk dat u ontwenningsverschijnselen voelt tijdens die periode. Dit k
 ("27",3,"taper-reduce","","Afbouwen tot minimaal effectieve dosis: {{free text}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema {{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
 ("27",4,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al deed."),
 ("27",5,"free_text","","Overige: {{free text}}","Overige: {{free text}}","Overige opmerkingen: {{free text}}"),
+("27",6,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("27a",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Afbouwen is aanbevolen.","",""),
 ("27b",1,"follow-up","","Vervolgafspraak:{{free text}}","Monitor voor veranderingen in symptomen. Vervolgafspraak {{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}"),
 ("28",NULL,"","","Overweeg afbouwen: 
