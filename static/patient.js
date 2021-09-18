@@ -386,22 +386,29 @@ function ws_on_error(err) {
 };
 
 function connect_web_socket() {
-    let url = new URL(document.URL);
-    let hostname = url.hostname;
-    let port = url.port;
+
     let ws_protocol = 'wss:';
 
     // URL.protocol is not safe in older Internet Explorers
-    try {
-        let url_protocol = url.protocol;
-        if (url_protocol == 'http:') {
-            ws_protocol = 'ws:';
+
+    const url_regex = /^([^:]*):\/\/([^:/]*)(:([0-9]+))?/
+    let matches = document.URL.match(url_regex);
+    let url_protocol = matches[1];
+    let url_hostname = matches[2];
+    let url_port = matches[4];
+
+    if (url_protocol === 'http') {
+        ws_protocol = 'ws:';
+        if (!url_port) {
+            url_port = 80;
         }
-    } catch (protocol_error) {
-        console.log(protocol_error);
+    } else {
+        if (!url_port) {
+            url_port = 443;
+        }
     }
 
-    let ws_url = ws_protocol + '//' + hostname + ':' + port + '/patient/' + patient_id;
+    let ws_url = ws_protocol + '//' + url_hostname + ':' + url_port + '/patient/' + patient_id;
     ws = new WebSocket(ws_url);
     ws.onmessage = ws_on_message;
     ws.onclose = ws_on_close;
