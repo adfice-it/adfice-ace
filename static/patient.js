@@ -41,9 +41,8 @@ function switch_to_view(view) {
 
     if (checkboxes.length !== checkbox_rows.length) {
         ++weirdness;
-        console.log(`Found ${checkboxes.length} checkboxes but`,
-            `${checkbox_rows.length} checkboxes so aborted switch`,
-            `to '${view}'`);
+        console.log('Found', checkboxes.length, 'checkboxes but',
+            checkbox_rows.length, 'checkboxes so aborted switch to', view);
         return;
     }
 
@@ -98,8 +97,8 @@ function switch_to_view(view) {
     } else {
         if (view !== "clinician") {
             ++weirdness;
-            console.log(`attempt to switch to view with unexpected` +
-                ` name' ${view}'`);
+            console.log('attempt to switch to view with unexpected name:',
+                view);
         }
         div_clinician_view.style.display = 'block';
         div_patient_view.style.display = 'none';
@@ -159,13 +158,13 @@ function boxclicked(checkbox) {
             ' and is now ' + checkbox.checked);
     }
 
-    send_message('checkboxes', (message) => {
+    send_message('checkboxes', function(message) {
         message.checkbox_id = checkbox.id;
         message.checkbox_checked = checkbox.checked;
 
         message['box_states'] = {};
         let elementList = document.querySelectorAll("input[type='checkbox']");
-        elementList.forEach((checkbox) => {
+        elementList.forEach(function(checkbox) {
             message['box_states'][checkbox.id] = checkbox.checked;
         });
     });
@@ -179,12 +178,12 @@ function freetextentered(textfield) {
         return;
     }
 
-    send_message('freetexts', (message) => {
+    send_message('freetexts', function(message) {
         message.textfield = textfield.id;
 
         message['field_entries'] = {};
         let elementList = document.querySelectorAll("input[type='text']");
-        elementList.forEach((field) => {
+        elementList.forEach(function(field) {
             message['field_entries'][field.id] = field.value;
         });
     });
@@ -219,7 +218,7 @@ function process_checkboxes(message) {
     let box_states = message['box_states'];
     const checkbox_ids = Object.keys(box_states);
     let atcs = {};
-    checkbox_ids.forEach((checkbox_id, index) => {
+    checkbox_ids.forEach(function(checkbox_id, index) {
         let atc = checkbox_id.split('_')[1];
         if (atcs[atc] === undefined) {
             atcs[atc] = 0;
@@ -236,7 +235,7 @@ function process_checkboxes(message) {
     for (let i = 0; i < atcs_keys.length; ++i) {
         let atc = atcs_keys[i];
         let num_checked = atcs[atc];
-        let geen_advies_id = `geen_advies_${atc}`;
+        let geen_advies_id = 'geen_advies_' + atc;
         let geen_advies_div = document.getElementById(geen_advies_id);
         if (geen_advies_div) {
             if (num_checked > 0) {
@@ -255,7 +254,7 @@ function process_freetexts(message) {
     let fields = message['field_entries'];
     // TODO? save cursor position of box we are currently typing in?
     const field_ids = Object.keys(fields);
-    field_ids.forEach((field_id, index) => {
+    field_ids.forEach(function(field_id, index) {
         let value = fields[field_id];
         var field = document.getElementById(field_id);
         // only what changed AND from some other source
@@ -290,7 +289,7 @@ function process_viewer_count(message) {
         return;
     }
 
-    element.innerHTML = `Viewers: ${message.viewers}`
+    element.innerHTML = 'Viewers: ' + message.viewers;
     if (message.viewers > 1) {
         element.style.visibility = 'visible';
     } else {
@@ -300,18 +299,18 @@ function process_viewer_count(message) {
 
 function first_incoming_message(event) {
     let elementList = document.querySelectorAll("input[type='checkbox']");
-    elementList.forEach((checkbox) => {
+    elementList.forEach(function(checkbox) {
         checkbox.style.visibility = "visible";
-        checkbox.onclick = () => {
+        checkbox.onclick = function() {
             boxclicked(checkbox)
         };
         process_checkbox(checkbox, false)
     })
 
     elementList = document.querySelectorAll("input[type='text']");
-    elementList.forEach((textfield) => {
+    elementList.forEach(function(textfield) {
         textfield.style.visibility = "visible";
-        textfield.onkeyup = () => {
+        textfield.onkeyup = function() {
             freetextentered(textfield)
         };
     })
@@ -328,8 +327,8 @@ function ws_on_message(event) {
 
     const message = JSON.parse(event.data);
     if ((!('patient_id' in message)) || (message.patient_id != patient_id)) {
-        console.log(`expected patient_id of '${patient_id}'`);
-        console.log(`               but was '${message.patient_id}'`);
+        console.log('expected patient_id of:', patient_id);
+        console.log('               but was:', message.patient_id);
         console.log(JSON.stringify({
             message: message
         }, null, 4));
@@ -348,7 +347,7 @@ function ws_on_message(event) {
     }
 
     let elementList = document.querySelectorAll("input");
-    elementList.forEach((input) => {
+    elementList.forEach(function(input) {
         input.disabled = is_final;
     });
 
@@ -366,7 +365,7 @@ function ws_on_close(event) {
     element.style.color = 'red';
 
     let elementList = document.querySelectorAll("input");
-    elementList.forEach((input) => {
+    elementList.forEach(function(input) {
         input.disabled = true;
     });
 
@@ -402,7 +401,7 @@ function connect_web_socket() {
         console.log(protocol_error);
     }
 
-    let ws_url = `${ws_protocol}//${hostname}:${port}/patient/${patient_id}`;
+    let ws_url = ws_protocol + '//' + hostname + ':' + port + '/patient/' + patient_id;
     ws = new WebSocket(ws_url);
     ws.onmessage = ws_on_message;
     ws.onclose = ws_on_close;
@@ -411,14 +410,14 @@ function connect_web_socket() {
     return ws;
 }
 
-window.addEventListener('load', (event) => {
+window.addEventListener('load', function(event) {
     connect_web_socket();
 
     let one_second = 1000;
     let ping_interval = 10 * one_second;
     setInterval(function() {
         if (ws) {
-            send_message("ping", (msg) => {
+            send_message("ping", function(msg) {
                 msg.sent = Date.now();
             });
         }
