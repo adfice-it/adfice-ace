@@ -1,4 +1,6 @@
 Important:
+* make CDSS work on IE11
+
 adfice: from usability
 * Change for 3 views to 5 pages: see mockup
 * patient information in first screen also reports negatives: e.g. no cardiac disease
