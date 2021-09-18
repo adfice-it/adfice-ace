@@ -12,7 +12,7 @@
 # https://www.gnu.org/software/make/manual/html_node/Target_002dspecific.html
 #
 # patsubst : $(patsubst pattern,replacement,text)
-#       https://www.gnu.org/software/make/manual/html_node/Text-Functions.html
+#	https://www.gnu.org/software/make/manual/html_node/Text-Functions.html
 
 SHELL=/bin/bash
 ADFICE_VERSION=0.0.0
@@ -49,7 +49,16 @@ portal-dbsetup: npmsetup portal-db-scripts.env
 
 dbsetup: adfice-dbsetup portal-dbsetup
 
-check: dbsetup
+IE_BADWORDS_RE='await\|async\|forEach\|=>\|'\`
+
+grep-ie-bad-words: static/patient.js
+	# expect two: one for lines, one for functions
+	if [ $$(grep -c $(IE_BADWORDS_RE) $^ ) -eq 0 ]; \
+		then true; else \
+		grep $(IE_BADWORDS_RE) $^; false; fi
+	@echo "$@ complete"
+
+check: dbsetup grep-ie-bad-words
 	npm test adfice
 	@echo
 	./acceptance-test.sh
