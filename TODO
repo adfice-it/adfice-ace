@@ -1,4 +1,30 @@
 Important:
+adfice: from usability
+* Change for 3 views to 5 pages: see mockup
+* patient information in first screen also reports negatives: e.g. no cardiac disease
+* shared decision-making steps move to first screen
+* look & text of Hoe Gebruik Ik knop has moved
+* content has been added for Hoe gebruik ik... (we may want to improve this content)
+* Add "back" button to prediction model page
+* Add "close this tab" button to each refpage that closes the tab (I don't actually know if this is possible)
+* New placement and formatting for print button. Add icon to button.
+* Add text "richtlijnen" before ref numbers
+* Change "Andere risicofactoren" to "andere adviezen"
+* Change "Gedetecteerde relevante problemen" to "Gedetecteerde aandoeningen of co-morbiditeit"
+* Change "Haal gewijzigde patientendata" to "Vernieuwen". Add some sort of warning that this will delete all changes.
+* Change display of fall risk on patient page to match patient portal
+* Change Advies page so that grey header does not display; make it more like portal view. (we probably want to keep the patient identifier at the top)
+* Change "lees meer over het predictiemodel" to "open het predictiemodel"
+* add "back to top" link at the bottom or in the floating toolbar
+* replace prefill text with placeholder text "Specificeer hier..."
+* side-by-side layout
+* replace gradient with gradient as shown in mockup (with pictures)
+* change FK icon to green
+* some sort of UI indication that the file is locked (sent to portal)
+* check refpages (last corrections were done by Bob)
+
+
+Valportaal
 * valportaal: links to apotheek.nl
 * enlarge button for valportaal
   * is this ctrl-shift-plus ? Then maybe do both for cross-browser:
@@ -11,6 +37,8 @@ Important:
 * testing of the static/ served javascript files
 * make a "build valportaal vm" script
 * eject vagrant, consider https://github.com/ericherman/centos-vm
+* small textual changes and links provided in spreadsheet "valportaal broken links etc.xlsx"
+
 
 Required changes to rules (Ace will do these):
 * Make sure every text ends with a period. If there is a free text box,
@@ -18,10 +46,7 @@ Required changes to rules (Ace will do these):
   (Laxans: should probably become Laxans aanbevolen.)
 * Make sure that all texts begin with a capital letter.
 
-Waiting for decision on front-end:
-* some sort of UI indication that the file is locked (sent to portal)
-* Buttons to hide advice box and non-selected checkbox rows for individual
-  medications in clinician view
+
 
 Not required for "ready to install" but will be required for study:
 * logging:
@@ -73,9 +98,6 @@ Requested (not required) changes to rules:
 * See if there is sufficient evidence to suggest testerosterone 5 aplha reductase inhibitors (dutasteride) as alternative for G04CA
 
 Important, but unable to do yet:
-* The designers may decide to have **placeholder text** instead of
-  **pre-filled** text for the free text boxes.
-  (They actually asked to do both; I veto'd this suggestion.)
 * Once we know something about how authentication will work, we may need to do
   something to prevent users without authentication from loading the data.
   * session expiration? browser caching? detect back button, return to page?
