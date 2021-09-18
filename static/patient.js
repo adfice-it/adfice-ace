@@ -164,9 +164,10 @@ function boxclicked(checkbox) {
 
         message['box_states'] = {};
         let elementList = document.querySelectorAll("input[type='checkbox']");
-        elementList.forEach(function(checkbox) {
+        for (let i = 0; i < elementList.length; ++i) {
+            let checkbox = elementList[i];
             message['box_states'][checkbox.id] = checkbox.checked;
-        });
+        }
     });
 }
 
@@ -183,9 +184,10 @@ function freetextentered(textfield) {
 
         message['field_entries'] = {};
         let elementList = document.querySelectorAll("input[type='text']");
-        elementList.forEach(function(field) {
+        for (let i = 0; i < elementList.length; ++i) {
+            let field = elementList[i];
             message['field_entries'][field.id] = field.value;
-        });
+        }
     });
 }
 
@@ -218,7 +220,8 @@ function process_checkboxes(message) {
     let box_states = message['box_states'];
     const checkbox_ids = Object.keys(box_states);
     let atcs = {};
-    checkbox_ids.forEach(function(checkbox_id, index) {
+    for (let i = 0; i < checkbox_ids.length; ++i) {
+        let checkbox_id = checkbox_ids[i];
         let atc = checkbox_id.split('_')[1];
         if (atcs[atc] === undefined) {
             atcs[atc] = 0;
@@ -229,7 +232,7 @@ function process_checkboxes(message) {
         }
         var checkbox = document.getElementById(checkbox_id);
         process_checkbox(checkbox, checked);
-    });
+    }
 
     let atcs_keys = Object.keys(atcs);
     for (let i = 0; i < atcs_keys.length; ++i) {
@@ -254,7 +257,8 @@ function process_freetexts(message) {
     let fields = message['field_entries'];
     // TODO? save cursor position of box we are currently typing in?
     const field_ids = Object.keys(fields);
-    field_ids.forEach(function(field_id, index) {
+    for (let i = 0; i < field_ids.length; ++i) {
+        let field_id = field_ids[i];
         let value = fields[field_id];
         var field = document.getElementById(field_id);
         // only what changed AND from some other source
@@ -277,7 +281,7 @@ function process_freetexts(message) {
         } else {
             patient_field.innerText = value;
         }
-    });
+    };
 }
 
 function process_viewer_count(message) {
@@ -299,21 +303,23 @@ function process_viewer_count(message) {
 
 function first_incoming_message(event) {
     let elementList = document.querySelectorAll("input[type='checkbox']");
-    elementList.forEach(function(checkbox) {
+    for (let i = 0; i < elementList.length; ++i) {
+        var checkbox = elementList[i];
         checkbox.style.visibility = "visible";
         checkbox.onclick = function() {
             boxclicked(checkbox)
         };
         process_checkbox(checkbox, false)
-    })
+    }
 
     elementList = document.querySelectorAll("input[type='text']");
-    elementList.forEach(function(textfield) {
+    for (let i = 0; i < elementList.length; ++i) {
+        let textfield = elementList[i];
         textfield.style.visibility = "visible";
         textfield.onkeyup = function() {
             freetextentered(textfield)
         };
-    })
+    }
 }
 
 function ws_on_message(event) {
@@ -347,9 +353,10 @@ function ws_on_message(event) {
     }
 
     let elementList = document.querySelectorAll("input");
-    elementList.forEach(function(input) {
+    for (let i = 0; i < elementList.length; ++i) {
+        let input = elementList[i];
         input.disabled = is_final;
-    });
+    }
 
     if ('debug_info' in message) {
         console.log(JSON.stringify({
@@ -365,9 +372,10 @@ function ws_on_close(event) {
     element.style.color = 'red';
 
     let elementList = document.querySelectorAll("input");
-    elementList.forEach(function(input) {
+    for (let i = 0; i < elementList.length; ++i) {
+        let input = elementList[i];
         input.disabled = true;
-    });
+    };
 
     ws = null;
     messages_received = 0;
