@@ -458,18 +458,18 @@ function copyPatientTextToClipboard() {
     return copyTextToClipboard(all_text);
 }
 
-async function makeDefinitive() {
+function makeDefinitive() {
     send_message('definitive');
     return true;
 }
 
-async function patientRenew() {
+function patientRenew() {
     send_message('patient_renew');
     return true;
 }
 
-async function windowPrint() {
+function windowPrint() {
     window.print();
-    await send_message('was_printed');
+    send_message('was_printed');
     return true;
 }
