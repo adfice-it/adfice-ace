@@ -433,28 +433,29 @@ window.addEventListener('load', function(event) {
     switch_to_view("clinician");
 });
 
-async function copyEHRTextToClipboard() {
-    if (!navigator.clipboard) {
+function copyTextToClipboard(text) {
+    if (navigator.clipboard != undefined) {
+        navigator.clipboard.writeText(text);
+    } else if (window.clipboardData) {
+        // Internet Explorer
+        window.clipboardData.setData("Text", text);
+    } else {
         alert("browser does not support copy");
-        return true;
     }
 
-    var allEHRText = document.getElementById("div_all_ehr_text");
-    await navigator.clipboard.writeText(allEHRText.innerText);
     return true;
 }
 
-async function copyPatientTextToClipboard() {
-    if (!navigator.clipboard) {
-        alert("browser does not support copy");
-        return true;
-    }
+function copyEHRTextToClipboard() {
+    var allEHRText = document.getElementById("div_all_ehr_text");
+    return copyTextToClipboard(allEHRText.innerText);
+}
 
+function copyPatientTextToClipboard() {
     var dpv = document.getElementById("div_patient_view");
     var nma = document.getElementById("non_med_advice_patient_area_text");
     var all_text = dpv.innerText + "\n" + "\n" + nma.innerText;
-    await navigator.clipboard.writeText(all_text);
-    return true;
+    return copyTextToClipboard(all_text);
 }
 
 async function makeDefinitive() {
