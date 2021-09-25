@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw -->
+<html lang="nl_nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient</title>
+<link rel="stylesheet" type="text/css" href="assets/adfice.css">
+<script src="start.js"></script>
+</script>
+</head>
+<body>
+<form id="patient_form">
+<img src="assets/Advice_IT_logo_small.png"
+     style="max-width: 10%; height: auto; display: inline;"
+     alt="Advice IT logo"
+>
+<a href="assets/HoeGebruikIkDitSysteem.html" target="_blank"
+><button type="button" class = "nav_button" id="help"
+>Handleiding</button></a>
+
+<!--
+ <button type="button" class = "nav_button" id="page_renew"
+	 onclick="patientRenew()">
+         Haal gewijzigde pati&euml;ntdata op</button>
+-->
+
+<div id=patient-info>
+<strong>Pati&euml;ntinformatie:</strong><br/>
+Patient: <span id="patient-info-id"></span><br/>
+Leeftijd: <span id="patient-info-age"></span><br/>
+<div style="height: 2em;"></div><br/>
+Gedetecteerde relevante problemen:<span id="patient-problems"></span>
+Lab-waarden: <span id="patient-labs"></span>
+Gedetecteerde relevante medicijnen:<span id="meds-with-rules"></span>
+Gedetecteerde andere medicijnen:<span id="meds-without-rules"></span>
+
+<div class="prediction" id="prediction">
+<p>Kans om te vallen binnen 12 maanden:&nbsp;
+<span id="prediction-chance"></span>
+<span style="color: red;">(onbekend)</span>
+<a href="prediction_explanation?id=<%= patient_id %>">(lees meer over het predictiemodel)</a></p>
+<div class='gauge_background'>
+<div class='gauge_text_left'>0%</div>
+<div id="gague-line" class='gauge_line' style='display:none'></div>
+<div class='gauge_text_right'>100%</div>
+</div><!-- gauge_background -->
+</div><!-- prediction -->
+
+
+Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren</strong>
+(<a href="https://www.sciencedirect.com/science/article/pii/S0738399115301658"
+>Lees meer</a>)
+
+<div class="instruction_box">
+
+<div id="sdm1" class ="sdm">
+<span class="instruction_heading">Stap 1: Voorbereiding</span><br/>
+<span class="instruction_step"
+>Heeft de pati&euml;nt beperkingen op het gebied van horen/ziel/taal/cognitie?
+<br/></span>
+<span class="instruction_step">Heeft de pati&euml;nt (een) naaste(n) mee?
+<br/></span>
+</div><!-- sdm1 -->
+
+<div id="sdm2" class ="sdm">
+<span class="instruction_heading"
+>Stap 2: Bespreek mogelijke behandeldoelen <br/></span>
+<span class="instruction_step">Wat past wel/niet bij de pati&euml;nt?
+<br/></span>
+<span class="instruction_step">Waar staat voor de pati&euml;nt kwaliteit van
+leven voor?<br/>
+&nbsp;&nbsp;Wat draagt hier aan bij en wat staat dit in de weg?<br/></span>
+<span class="instruction_step"
+>Vraag uitdrukkelijk na wat de wensen van de pati&euml;nt zijn.<br/></span>
+</div><!-- sdm2 -->
+
+<div id="sdm3" class ="sdm">
+<span class="instruction_heading"
+>Stap 3: Kies (een) behandeldoel(en)<br/></span>
+<span class="instruction_step"
+>Wat zijn de behandeldoelen van de pati&euml;nt?</span>
+</div><!-- sdm3 -->
+
+<div id="sdm4" class ="sdm">
+<span class="instruction_heading"
+>Stap 4: Bespreek de behandelopties<br/></span>
+<span class="instruction_step"
+><em>Gebruik hier de "Consult" weergave voor</em><br/></span>
+<span class="instruction_step"
+>Bespreek de voor- en nadelen van de verschillende behandelopties<br/></span>
+</div><!-- sdm4 -->
+
+<div id="sdm5" class ="sdm">
+<span class="instruction_heading">Stap 5: Besluitvorming<br/></span>
+<span class="instruction_step"
+>Sluit het besluit aan bij de normen en waarden van de pati&euml;nt?<br/></span>
+</div><!-- sdm5 -->
+
+<div id="sdm6" class ="sdm">
+<span class="instruction_heading">Stap 6: Evalueren<br/></span>
+<span class="instruction_step"
+>Gebruik hier de "Advies" weergave voor<br/></span>
+<span class="instruction_step"
+>Zijn de pati&euml;nt en eventuele mantelzorgers(s) tevreden met het besluit?
+<br/></span>
+<span class="instruction_step">Stel een behandelplan op<br/></span>
+</div><!-- sdm6 -->
+
+</div><!-- instruction_box -->
+
+<div class="whitespace"></div>
+<div id="footer">
+Patient: <span id="footer-patient-id"></span>
+<button id="button_clinician_view" type="button" class='button_advice_view'
+        onclick="switch_to_view('clinician')">Voorbereiding</button>
+<button id="button_condensed_view" type="button" class='button_advice_view'
+        onclick="switch_to_view('condensed')">Consult</button>
+<button id="button_patient_view" type="button" class='button_advice_view'
+        onclick="switch_to_view('patient')">Advies</button>
+<span id="viewer_count">connecting ...</span>
+</div><!-- footer -->
+</form>
+<!--
+<%= JSON.stringify({ debug_info: patient_advice.debug_info }, null, 4) %>
+-->
+</body>
+</html>
