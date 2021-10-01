@@ -1,10 +1,19 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 // vim: set sts=4 shiftwidth=4 expandtab :
-"use strict";
 
-var patient_id = null;
-var patient_data = {};
+// starting WITHOUT "use strict" in order to try to use the same .js file
+// from .html and also from .ejs which defines the variables patient_id and
+// patient_data
+if (typeof patient_id == 'undefined') {
+    patient_id = null;
+}
+
+if (typeof patient_data == 'undefined') {
+    patient_data = {};
+}
+
+"use strict";
 var xhttp;
 
 if (navigator.userAgent.includes("Node.js") ||

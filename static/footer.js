@@ -8,12 +8,10 @@ if (DEBUG > 0) {
     console.log("hello world, from footer.js");
 }
 
-function get_url(view, id) {
-
+function get_base_url() {
+    // URL.protocol is not safe in Internet Explorer,
+    // thus we shall use regex
     let protocol = 'https:';
-
-    // URL.protocol is not safe in older Internet Explorers
-
     const url_regex = /^([^:]*):\/\/([^:/]*)(:([0-9]+))?/
     let matches = document.URL.match(url_regex);
     let url_protocol = matches[1];
@@ -31,32 +29,15 @@ function get_url(view, id) {
         }
     }
 
-    let url = protocol + '//' + url_hostname + ':' + url_port + '/' + view;
-    url = url + '?id=' + id;
-    return url;
+    return protocol + '//' + url_hostname + ':' + url_port + '/';
 }
 
-function switch_view(view, id) {
-    let url = get_url(view, id);
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", url);
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            console.log(xhr.status);
-            console.log(xhr.responseText);
-        }
-    };
+function switch_view(view) {
+    let params = new URLSearchParams(window.location.search)
+    patient_id = params.get('id');
 
-    var data = '{' +
-        '"patient_id": ' + id + ',' +
-        '"viewer_id": ' + '0' +
-        '}';
-
-    xhr.send(data);
-
-    alert('TODO: switch_view(' + view + ', ' + id + ')');
-
+    let base_url = get_base_url();
+    let new_url = base_url + view + '?id=' + patient_id;
+    window.location = new_url;
     return true;
 }

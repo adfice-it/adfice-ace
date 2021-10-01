@@ -7,8 +7,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patient</title>
 <link rel="stylesheet" type="text/css" href="assets/adfice.css">
-<script src="assets/start.js"></script>
+<script>
+let patient_id;
+let viewer_id;
 </script>
+<script src="assets/five-pages.js"></script>
 </head>
 <body>
 <form id="patient_form">
@@ -16,9 +19,17 @@
      style="max-width: 10%; height: auto; display: inline;"
      alt="Advice IT logo"
 >
-<a href="assets/HoeGebruikIkDitSysteem.html" target="_blank"
-><button type="button" class = "nav_button" id="help"
->Handleiding</button></a>
+<div id="nav_container" style="display: inline;">
+ <button type="button" class = "nav_button" id="page_renew"
+	 onclick="patientRenew()">
+         Haal gewijzigde pati&euml;ntdata op</button>
+ <a href = "static/HoeGebruikIkDitSysteem.html"
+    target="_blank"><button type="button"
+			    class = "nav_button"
+			    id="help">Handleiding</button></a>
+</div><!-- nav_container -->
+
+<div id=patient_info>
 
 <!--
  <button type="button" class = "nav_button" id="page_renew"

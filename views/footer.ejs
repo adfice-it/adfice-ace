@@ -8,27 +8,27 @@
 <div class="whitespace"></div>
 <div id="footer" class="footer">
 <span id="footer-patient-label">Patient:</span>
-<span id="footer-patient-id"><%= patient_id %></span>
+<span id="footer-patient-id"></span>
 <button id="button-start-view"
 	type="button"
 	class="button-footer-switch-view"
-        onclick="switch_view('start', <%= patient_id %>)">Start</button>
+        onclick="switch_view('start')">Start</button>
 <button id="button-prep-view"
 	type="button"
 	class="button-footer-switch-view"
-        onclick="switch_view('prep', <%= patient_id %>)">Voorbereiding</button>
+        onclick="switch_view('prep')">Voorbereiding</button>
 <button id="button-consult-view"
 	type="button"
 	class="button-footer-switch-view"
-        onclick="switch_view('consult', <%= patient_id %>)">Consult</button>
+        onclick="switch_view('consult')">Consult</button>
 <button id="button-advise-view"
 	type="button"
 	class="button-footer-switch-view"
-        onclick="switch_view('patient', <%= patient_id %>)">Advies</button>
+        onclick="switch_view('advise')">Advies</button>
 <button id="button-finalize-view"
 	type="button"
 	class="button-footer-switch-view"
-	onclick="switch_view('finalize', <%= patient_id %>)">Afronded</button>
+	onclick="switch_view('finalize')">Afronded</button>
 <span id="viewer-count"
 	class="footer-viewer-count">connecting ...</span>
 </div><!-- footer -->

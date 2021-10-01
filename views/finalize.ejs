@@ -12,13 +12,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patient <%= patient_id %></title>
 <link rel="stylesheet" type="text/css" href="static/adfice.css">
-<script src="static/finalize.js"></script>
 <script>
 let patient_id = "<%= patient_id %>";
 let viewer_id = "<%= viewer_id %>";
 let is_final = <%= patient_advice.is_final %>;
 console.log('patient_id: ', patient_id);
 </script>
+<script src="assets/five-pages.js"></script>
 </head>
 <body>
 <form id="patient_form">
@@ -27,15 +27,14 @@ console.log('patient_id: ', patient_id);
      alt="Advice IT logo"
 >
 <div id="nav_container" style="display: inline;">
- <button type="button" class = "nav_button" id="page_renew"
-	 onclick="patientRenew()">
-         Haal gewijzigde pati&euml;ntdata op</button>
  <button type="button" class = "nav_button" id="definitive"
          onclick="makeDefinitive()">
          Opslaan &amp; definitief maken</button>
- <a href = "static/HoeGebruikIkDitSysteem.html" target="_blank"><button type="button" class = "nav_button" id="help">
-         Hoe gebruik ik dit systeem?</button></a>
-</div>
+ <a href = "static/HoeGebruikIkDitSysteem.html"
+    target="_blank"><button type="button"
+			    class = "nav_button"
+			    id="help">Handleiding</button></a>
+</div><!-- nav_container -->
 <div id=patient_info>
 <strong>Pati&euml;ntinformatie:</strong><br/>
 Patient: <%= patient_id %><br/>
