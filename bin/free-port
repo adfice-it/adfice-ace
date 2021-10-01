@@ -1,4 +1,6 @@
 #!/bin/bash
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) E. K. Herman
 
 if [ "_${FROM_PORT}_" == "__" ]; then
 	FROM_PORT=50000

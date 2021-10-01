@@ -243,6 +243,7 @@ tidy:
 		adficeUtil.js \
 		adficeUtil.test.js \
 		AdficeWebserver.js \
+		bin/free-port.js \
 		calculatePrediction.js \
 		calculatePrediction.test.js \
 		export-to-mrs.js \
