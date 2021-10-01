@@ -50,6 +50,17 @@ async function renderAdviceForPatient(req, res) {
     }); // .ejs
 }
 
+async function renderStart(req, res) {
+    let patient_id = req.query.id || 0;
+    let patient_advice = await adfice.getAdviceForPatient(patient_id);
+    res.render("start", {
+        lang: 'nl',
+        md: md,
+        patient_id: patient_id,
+        patient_advice: patient_advice,
+    }); // .ejs
+}
+
 async function renderValidationAdviceForPatient(req, res) {
     let patient_id = req.query.id || 0;
     let patient_advice = await adfice.getAdviceForPatient(patient_id);
@@ -102,6 +113,7 @@ server.wss = new ws.Server({
 });
 
 app.use("/static", express.static('static'));
+app.use("/assets", express.static('static'));
 app.set('view engine', 'ejs');
 
 app.get("/", renderIndex);
@@ -110,6 +122,8 @@ app.get("/index.html", renderIndex);
 
 app.get("/advice", jsonAdviceForPatient);
 app.get("/patient", renderAdviceForPatient);
+
+app.get("/start", renderStart);
 
 app.get("/patient-validation", renderValidationAdviceForPatient);
 
