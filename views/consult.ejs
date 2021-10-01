@@ -12,7 +12,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patient <%= patient_id %></title>
 <link rel="stylesheet" type="text/css" href="static/adfice.css">
-<script src="static/patient.js"></script>
+<script src="static/consult.js"></script>
 <script>
 let patient_id = "<%= patient_id %>";
 let viewer_id = "<%= viewer_id %>";
@@ -495,17 +495,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
         onclick="copyEHRTextToClipboard()">Kopieer tekst</button>
 </div> <!-- ehr_box -->
 
-<div class="whitespace"></div>
-<div id="footer">
-Patient: <%= patient_id %>
-<button id="button_clinician_view" type="button" class='button_advice_view'
-        onclick="switch_to_view('clinician')">Voorbereiding</button>
-<button id="button_condensed_view" type="button" class='button_advice_view'
-        onclick="switch_to_view('condensed')">Consult</button>
-<button id="button_patient_view" type="button" class='button_advice_view'
-        onclick="switch_to_view('patient')">Advies</button>
-<span id="viewer_count">connecting ...</span>
-</div><!-- footer -->
+<%- include('footer.ejs') %>
 </form>
 <!--
 <%= JSON.stringify({ debug_info: patient_advice.debug_info }, null, 4) %>

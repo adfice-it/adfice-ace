@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patient</title>
 <link rel="stylesheet" type="text/css" href="assets/adfice.css">
-<script src="start.js"></script>
+<script src="assets/start.js"></script>
 </script>
 </head>
 <body>
@@ -110,17 +110,7 @@ leven voor?<br/>
 
 </div><!-- instruction_box -->
 
-<div class="whitespace"></div>
-<div id="footer">
-Patient: <span id="footer-patient-id"></span>
-<button id="button_clinician_view" type="button" class='button_advice_view'
-        onclick="switch_to_view('clinician')">Voorbereiding</button>
-<button id="button_condensed_view" type="button" class='button_advice_view'
-        onclick="switch_to_view('condensed')">Consult</button>
-<button id="button_patient_view" type="button" class='button_advice_view'
-        onclick="switch_to_view('patient')">Advies</button>
-<span id="viewer_count">connecting ...</span>
-</div><!-- footer -->
+<%- include('footer.ejs') %>
 </form>
 <!--
 <%= JSON.stringify({ debug_info: patient_advice.debug_info }, null, 4) %>

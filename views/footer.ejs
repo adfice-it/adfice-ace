@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw -->
+<script src="assets/footer.js"></script>
+<link rel="stylesheet"
+	type="text/css"
+	href="assets/footer.css">
+<div class="whitespace"></div>
+<div id="footer" class="footer">
+<span id="footer-patient-label">Patient:</span>
+<span id="footer-patient-id"><%= patient_id %></span>
+<button id="button-start-view"
+	type="button"
+	class="button-footer-switch-view"
+        onclick="switch_view('start', <%= patient_id %>)">Start</button>
+<button id="button-prep-view"
+	type="button"
+	class="button-footer-switch-view"
+        onclick="switch_view('prep', <%= patient_id %>)">Voorbereiding</button>
+<button id="button-consult-view"
+	type="button"
+	class="button-footer-switch-view"
+        onclick="switch_view('consult', <%= patient_id %>)">Consult</button>
+<button id="button-advise-view"
+	type="button"
+	class="button-footer-switch-view"
+        onclick="switch_view('patient', <%= patient_id %>)">Advies</button>
+<button id="button-finalize-view"
+	type="button"
+	class="button-footer-switch-view"
+	onclick="switch_view('finalize', <%= patient_id %>)">Afronded</button>
+<span id="viewer-count"
+	class="footer-viewer-count">connecting ...</span>
+</div><!-- footer -->

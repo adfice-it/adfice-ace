@@ -249,5 +249,5 @@ tidy:
 		export-to-mrs.js \
 		ping-db.js \
 		portal-export.js \
-		static/patient.js \
+		static/*.js \
 		verificationAndValidation.test.js

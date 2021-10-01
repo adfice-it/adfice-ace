@@ -1,0 +1,25 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+/* Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw */
+
+div.whitespace{
+    height: 3cm;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #999999;
+    line-height: 2;
+    text-align: center;
+    /* color: #042E64; */
+    /* font-size: 30px; */
+    font-weight: bold;
+    text-shadow: 0 1px 0 #84BAFF;
+    box-shadow: 0 0 15px #00214B
+}
+
+.button-footer-switch-view {
+    border-radius: 8px;
+    border: 2px solid green;
+}

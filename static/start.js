@@ -14,7 +14,7 @@ if (navigator.userAgent.includes("Node.js") ||
 
 function havePatientJSON() {
     if (this.readyState == 4 && this.status == 200) {
-       patient_data = JSON.parse(xhttp.responseText);
+        patient_data = JSON.parse(xhttp.responseText);
     }
 }
 
