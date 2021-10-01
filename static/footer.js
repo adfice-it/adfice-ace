@@ -38,6 +38,9 @@ function switch_view(view) {
 
     let base_url = get_base_url();
     let new_url = base_url + view + '?id=' + patient_id;
+
+    // sort of surprising that this is all it takes:
     window.location = new_url;
+
     return true;
 }
