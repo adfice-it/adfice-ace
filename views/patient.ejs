@@ -12,13 +12,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patient <%= patient_id %></title>
 <link rel="stylesheet" type="text/css" href="static/adfice.css">
-<script src="static/patient.js"></script>
 <script>
 let patient_id = "<%= patient_id %>";
 let viewer_id = "<%= viewer_id %>";
 let is_final = <%= patient_advice.is_final %>;
 console.log('patient_id: ', patient_id);
 </script>
+<script src="static/common.js"></script>
+<script src="static/patient.js"></script>
 </head>
 <body>
 <form id="patient_form">
@@ -129,7 +130,7 @@ Geen
 </span>
 <% } -%>
 </span>
-<span"><br/><br/>Ga direct naar:
+<span><br/><br/>Ga direct naar:
 <a href="#andere_advies_header">Andere risicofactoren</a></span>
 </div>
 <div id="div_clinician_view" class="div_clinician_view"><strong>
@@ -652,7 +653,7 @@ Patient: <%= patient_id %>
         onclick="switch_to_view('condensed')">Consult</button>
 <button id="button_patient_view" type="button" class='button_advice_view'
         onclick="switch_to_view('patient')">Advies</button>
-<span id="viewer_count">connecting ...</span>
+<span id="viewer-count">connecting ...</span>
 </div><!-- footer -->
 </form>
 <!--

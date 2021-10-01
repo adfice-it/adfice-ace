@@ -64,7 +64,7 @@ test('Check multiple viewers making changes', async t => {
     await t.typeText(freetext_selector_1, oldFreetext);
     await t.expect(freetext_selector_1.value).eql(oldFreetext);
 
-    let view_cnt_css_sel = "span#viewer_count";
+    let view_cnt_css_sel = "span#viewer-count";
     await t.expect(Selector(view_cnt_css_sel).withText("1").exists).ok();
     await t.expect(Selector(view_cnt_css_sel).withText("1").visible).notOk();
 

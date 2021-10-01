@@ -18,6 +18,7 @@ let viewer_id = "<%= viewer_id %>";
 let is_final = <%= patient_advice.is_final %>;
 console.log('patient_id: ', patient_id);
 </script>
+<script src="static/common.js"></script>
 <script src="assets/five-pages.js"></script>
 </head>
 <body>
@@ -371,125 +372,6 @@ for (let i = 0; i < medication_advice.length; ++i ) {
 <% } -%>
 
 </div><!-- non_med_advice_selection_area -->
-
-<div id="non_med_advice_patient_area" class="non_med_advice_patient_area">
-<div id="non_med_advice_patient_area_text">
-<%
-   for (let i = 0; i < nm_advices.length; ++i ) {
-       let nm_advice = nm_advices[i];
-       let nma_prefix = "nma_" + i;
-       let category = nm_advice.category_id;
-       let category_name = nm_advice.category_name;
-       let boxnum = nm_advice.select_box_num;
-       let nma_id_base =`NONMED_${category}_${boxnum}`;
-       let row_id = 'pt_' + nma_id_base;
--%>
-<div id="<%= row_id %>" class="patient_nonmed_cb_row">
-<%         for (let k = 0; k < nm_advice.patient_split.length; ++k) { -%>
-<%             let chunk = nm_advice.patient_split[k]; -%>
-<%             let chunk_id = `pft_NONMED_${category}_${boxnum}_${k}`; -%>
-<% //
-        let cbString = md.makeHtml(chunk.text);
-        cbString = cbString.replace("<p>", "");
-        cbString = cbString.replace("</p>", "");
-%>
-<div id="<%= chunk_id %>" class="patient_nonmed_cb_text">
-<%- cbString -%>
-</div><!-- <%= chunk_id %> -->
-<%         } -%>
-</div> <!-- <%= row_id %> -->
-<% } -%>
-</div><!-- non_med_advice_patient_area_text -->
-<button id="copy_patient_text" type="button" class='button_patient_text'
-        onclick="copyPatientTextToClipboard()">Kopieer tekst</button>
-<button id="print_button" onclick="windowPrint()">Afdrukken</button>
-</div><!-- "non_med_advice_patient_area" -->
-
-<div id="div_ehr_box" class="div_ehr_box"><!-- not in patient view -->
-<p>Tekst om te knippen en plakken in Epic:</p>
-<div id="div_all_ehr_text" class="div_all_ehr_text">
-<% for (let i = 0; i < medication_advice.length; ++i ) { -%>
-<div id="advice_ehr_area_<%= i %>" class="advice_ehr_area">
-<%     let row = medication_advice[i]; -%>
-<%     let atc = row.ATC_code; -%>
-<%     let cb_advices = row.adviceTextsCheckboxes; -%>
-<%= ucfirst(row.medication_name).trim() %>:
-<% //
-     for (let j = 0; j < cb_advices.length; ++j ) {
-         let cb_advice = cb_advices[j];
-         let aea_prefix = "aea_" + i + "_" + j;
-         let rulenum = cb_advice.medication_criteria_id;
-         let boxnum = cb_advice.select_box_num;
-         let advice_id_base =`${atc}_${rulenum}_${boxnum}`;
-         let checkbox_id = 'cb_' + advice_id_base;
-         let row_id = 'et_' + advice_id_base;
--%>
-<div id="<%= row_id %>">
-<%         for (let k = 0; k < cb_advice.ehr_split.length; ++k) { -%>
-<%             let chunk = cb_advice.ehr_split[k]; -%>
-<%             let chunk_id = `eft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
-<div id="<%= chunk_id %>">
-<%             if (!chunk.editable) { -%>
-<%- md.makeHtml(chunk.text) -%>
-<%             } -%>
-</div><!-- <%= chunk_id %> -->
-<%         } -%>
-</div><!-- <%= row_id %> -->
-<%     } -%>
-</div> <!-- advice_ehr_area_<%= i %> -->
-<% } -%>
-<!-- Begin OTHER -->
-<% for (let i = 0; i < other_advices.length; ++i ) {
-       let other_advice = other_advices[i];
-       let other_prefix = "other_" + i;
-       let category = other_advice.medication_criteria_id;
-       let boxnum = other_advice.select_box_num;
-       let other_id_base =`OTHER_${category}_${boxnum}`;
-       let row_id = 'et_' + other_id_base;
--%>
-<div id="<%= row_id %>">
-<%         for (let k = 0; k < other_advice.ehr_split.length; ++k) {
-               let chunk = other_advice.ehr_split[k];
-               let chunk_id = `eft_OTHER_${category}_${boxnum}_${k}`;
-               let et = md.makeHtml(chunk.text);
-               et = et.replace("<p>", "");
-               et = et.replace("</p>", "");
--%>
-<div id="<%= chunk_id %>">
-<%= et -%>
-</div><!-- <%= chunk_id %> -->
-<%         } -%>
-</div> <!-- <%= row_id %> -->
-<% } -%>
-<!-- End OTHER -->
-<!-- Begin NonMed -->
-<%
-   for (let i = 0; i < nm_advices.length; ++i ) {
-       let nm_advice = nm_advices[i];
-       let category = nm_advice.category_id;
-       let boxnum = nm_advice.select_box_num;
-       let nma_id_base =`NONMED_${category}_${boxnum}`;
-       let row_id = 'et_' + nma_id_base;
--%>
-<div id="<%= row_id %>">
-<%         for (let k = 0; k < nm_advice.ehr_split.length; ++k) {
-               let chunk = nm_advice.ehr_split[k];
-               let chunk_id = `eft_NONMED_${category}_${boxnum}_${k}`;
-               let et = md.makeHtml(chunk.text);
-               et = et.replace("<p>", "");
-               et = et.replace("</p>", "");
--%>
-<div id="<%= chunk_id %>">
-<%= et -%>
-</div><!-- <%= chunk_id %> -->
-<%         } -%>
-</div> <!-- <%= row_id %> -->
-<% } -%>
-<!-- End NonMed -->
-</div><!-- div_all_ehr_text -->
-<button id="copy_ehr_text" type="button" class='button_ehr_text'
-        onclick="copyEHRTextToClipboard()">Kopieer tekst</button>
-</div> <!-- ehr_box -->
 
 <%- include('footer.ejs') %>
 </form>
