@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw -->
+<%# see https://ejs.co/#docs -%>
+<% function ucfirst(s) {
+       if (typeof s !== 'string') { return s; }
+       return s.charAt(0).toUpperCase() + s.slice(1);
+   } -%>
+<html lang="<%= lang %>">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient <%= patient_id %></title>
+<link rel="stylesheet" type="text/css" href="static/adfice.css">
+<script src="static/patient.js"></script>
+<script>
+let patient_id = "<%= patient_id %>";
+let viewer_id = "<%= viewer_id %>";
+let is_final = <%= patient_advice.is_final %>;
+console.log('patient_id: ', patient_id);
+</script>
+</head>
+<body>
+<form id="patient_form">
+<img src="static/Advice_IT_logo_small.png"
+     style="max-width: 10%; height: auto; display: inline;"
+     alt="Advice IT logo"
+>
+<div id="nav_container" style="display: inline;">
+ <button type="button" class = "nav_button" id="page_renew"
+	 onclick="patientRenew()">
+         Haal gewijzigde pati&euml;ntdata op</button>
+ <button type="button" class = "nav_button" id="definitive"
+         onclick="makeDefinitive()">
+         Opslaan &amp; definitief maken</button>
+ <a href = "static/HoeGebruikIkDitSysteem.html" target="_blank"><button type="button" class = "nav_button" id="help">
+         Hoe gebruik ik dit systeem?</button></a>
+</div>
+<div id=patient_info>
+<strong>Pati&euml;ntinformatie:</strong><br/>
+Patient: <%= patient_id %><br/>
+Leeftijd: <%= patient_advice.age %><br/>
+<div class="prediction" id = "prediction">
+<% let risk_score = patient_advice.risk_score; -%>
+<% let hide_gauge = (risk_score == null || isNaN(risk_score)) -%>
+<p>Kans om te vallen binnen 12 maanden:&nbsp;
+<span style="color: red;">
+<% if (hide_gauge) { -%>
+(onbekend)
+<% } else { -%>
+<%= risk_score -%>%
+<% } -%>
+</span> <a href="prediction_explanation?id=<%= patient_id %>">(lees meer over het predictiemodel)</a></p>
+<div class='gauge_background'>
+<div class='gauge_text_left'>0%</div>
+<% if (!hide_gauge) { -%>
+<div class='gauge_line' style='left: <%= risk_score %>%'></div>
+<% } -%>
+<div class='gauge_text_right'>100%</div>
+</div><!-- gauge_background -->
+</div><!-- prediction -->
+<div style="height: 2em;"></div>
+<span id="patient_medications">
+<span id="meds_with_rules">
+Ga direct naar medicijnen met advies:
+<%     let rule_meds = patient_advice.meds_with_rules; -%>
+<% for (let i = 0; i < rule_meds.length; ++i ) { -%>
+<%     let med = rule_meds[i]; %>
+<%     if (i) { -%>
+,
+<%     } -%>
+<a href="#div_advice_<%= med.ATC_code %>" title="<%= med.medication_name %>">
+<%= ucfirst(med.medication_name).trim() %></a>
+<% } -%>
+</span><!-- meds_with_rules -->
+<br/>
+<span id="meds_without_rules">
+<br/>Gedetecteerde andere medicijnen:
+<%     let other_meds = patient_advice.meds_without_rules; -%>
+<% if (other_meds.length == 0) { %>
+Geen
+<% } else { %>
+<%     for (let i = 0; i < other_meds.length; ++i ) { -%>
+<%         let med = other_meds[i]; %>
+<%         if (i) { -%>
+,
+<%         } -%>
+<%= ucfirst(med.medication_name).trim() %>
+<%     } -%>
+<% } -%>
+</span><!-- meds_without_rules -->
+</span><!-- patient_medications -->
+<span id="patient_problems">
+<br/>Gedetecteerde relevante problemen:
+<%     let problems = patient_advice.problems; -%>
+<%     if ( problems.length ) { -%>
+<% for (let i = 0; i < problems.length; ++i ) { -%>
+<%     let problem = problems[i]; -%>
+<%     if (i) { %>
+,
+<%     } -%>
+<span id="prob_<%= i %>">
+<%= problem.display_name %>
+</span><!-- prob_<%= i %> -->
+<% } -%>
+<% } else { -%>
+Geen
+<% } -%>
+</span><!-- patient_problems -->
+<%     let labs = patient_advice.labs; -%>
+<span id="patient_labs">
+<br />Gedetecteerde relevante laboratorium waardes:
+<%     if ( !labs.length ) { -%>
+Geen
+<%     } -%>
+<% for (let i = 0; i < labs.length; ++i ) { -%>
+<%     let lab = labs[i]; -%>
+<%     let lab_prefix = "lab_" + i; -%>
+<%     if (i) { -%>
+,
+<%     } -%>
+<span id="<%= lab_prefix %>">
+<span id="<%= lab_prefix %>_name"><%= lab.lab_test_name %></span>:
+<span id="<%= lab_prefix %>_result"><%= lab.lab_test_result %></span>
+(
+<span id="<%= lab_prefix %>_date">
+        <%= JSON.stringify(lab.date_measured).substring(1,11) %></span>
+)
+</span>
+<% } -%>
+</span>
+<span"><br/><br/>Ga direct naar:
+<a href="#andere_advies_header">Andere risicofactoren</a></span>
+</div>
+<div id="div_clinician_view" class="div_clinician_view">
+
+<div id="med_advice_header"
+     class="advice_header clinician_view_only">Medicatiefactoren</div>
+<div id="general_advice" class="general_advice">
+In het algemeen dient een medicament gestopt of afgebouwd worden als:
+<ul>
+<li>er geen indicatie (meer) is </li>
+<li>er een veiliger alternatief beschikbaar is</li>
+</ul>
+Het is wenselijk om iedere patient na een medicatiewijziging actief te monitoren (middels follow-up) op het optreden van een (hernieuwde) val en/of veranderen van klachten zoals duizeligheid of licht in het hoofd bij opstaan. Bij alle beslissingen, zijn de voorkeuren van de pati&euml;nt belangrijk. Ook moet de individuele valrisico, mogelijk bijwerkingen, levensverwachting en comorbiditeiten meegenomen worden. Het advies hieronder gaat over het effect van medicijnen op valrisico, maar gaat niet over andere redenen om de medicatie te stoppen of continueren.
+</div><!-- general advice -->
+
+<% let medication_advice = patient_advice.medication_advice || [];
+for (let i = 0; i < medication_advice.length; ++i ) {
+     let row = medication_advice[i];
+     let atc = row.ATC_code;
+     let generic_name = row.generic_name;
+     let d = generic_name[0];
+     let med_url = "https://www.farmacotherapeutischkompas.nl" +
+            "/bladeren/preparaatteksten/atc/" +
+            atc;
+-%>
+<div id="div_advice_<%= atc %>">
+<div id="div_med_name_<%= atc %>" class = "med_name">
+<%= ucfirst(row.medication_name).trim() %></div>
+ <a href="<%= med_url %>" class="fklink" target="_blank">
+<img src="static/FK_circle_with_linkout.png" alt="FK" class="fkimg"/>
+</a>
+<div id="advice_<%= atc %>" class="advice_no_checkbox">
+<strong>Advies:</strong>
+<%     let advices = row.adviceTextsNoCheckboxes; -%>
+<%     for (let j = 0; j < advices.length; ++j ) { -%>
+<%         let advice = advices[j]; -%>
+<%         let att_prefix = "att_" + i + "_" + j; -%>
+<%         let bogus_rule = "NonCB"; -%>
+<div id="<%= att_prefix %>_cdss">
+<%         for (let k = 0; k < advice.cdss_split.length; ++k) { -%>
+<%             let chunk = advice.cdss_split[k]; -%>
+<%             let chunk_id = `ft_${atc}_${bogus_rule}_${j}_${k}`; -%>
+<%             if (chunk.editable) { -%>
+<input id="<%= chunk_id %>" type="text"
+        value="<%= chunk.text %>"/>
+<%             } else { -%>
+<div id="<%= chunk_id %>">
+<%- md.makeHtml(chunk.text) -%>
+</div> <!-- <%= chunk_id %> -->
+<%             } -%>
+<%         } -%>
+</div> <!-- <%= att_prefix %>_cdss -->
+<%     } -%>
+</div>
+<%     let cb_advices = row.adviceTextsCheckboxes; -%>
+<div id="advice_selection_area_<%= i %>" class="advice_selection_area">
+<div class="checkbox_section_header"
+>Maatregelen (aangekruist indien aanbevolen):</div>
+<div id="div_refpages_<%= atc %>"
+    class="refpages">Referenties:
+<%
+    let referenceNumbers = row.referenceNumbers;
+        for (let k = 0; k < referenceNumbers.length; ++k ) {
+            let ref_page_num = referenceNumbers[k].reference;
+        if (k) {
+-%>
+,
+<%          } -%>
+<span id="atc_ref_page_<%= atc %>_<%= ref_page_num %>" class="atc_ref_page">
+<a href="static/refpages/refpage<%= ref_page_num %>.html"
+   target="_blank"><%= ref_page_num %></a>
+</span><!-- atc_ref_page_<%= atc %>_<%= ref_page_num %> -->
+<% } -%>
+</div><!-- div_refpages_<%= atc %> -->
+<table>
+<tr><td>Kies een of meer maatregel(en):</td><td></td></tr>
+<%
+     for (let j = 0; j < cb_advices.length; ++j ) {
+         let cb_advice = cb_advices[j];
+         let asa_prefix = "asa_" + i + "_" + j;
+         let rulenum = cb_advice.medication_criteria_id;
+         let boxnum = cb_advice.select_box_num;
+         let advice_id_base =`${atc}_${rulenum}_${boxnum}`;
+         let checkbox_id = 'cb_' + advice_id_base;
+         let row_id = 'tr_' + advice_id_base;
+-%>
+<tr id="<%= row_id %>">
+<td>
+<span id="<%= asa_prefix %>_sbn">
+<input type="checkbox"
+        id="<%= checkbox_id %>"
+        name="<%= checkbox_id %>"
+        value="<%= checkbox_id %>"
+        style="visibility:hidden"
+/>
+</span> <!-- <%= asa_prefix %>_sbn -->
+</td>
+<td>
+<div id="<%= asa_prefix %>_cdss" class="med_cdss">
+<%         for (let k = 0; k < cb_advice.cdss_split.length; ++k) { -%>
+<%             let chunk = cb_advice.cdss_split[k]; -%>
+<%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
+<%             if (chunk.editable) { -%>
+<input id="<%= chunk_id %>" type="text" class="ft_input"
+        value="<%= chunk.text %>"/>
+<%             } else { -%>
+<div id="<%= chunk_id %>" class ="freetext">
+<% //
+    let cbString = md.makeHtml(chunk.text);
+    // Select Box texts do not contain legit paragraphs.
+    // It is already in a span so this does not need to be replaced,
+    // just destroyed.
+    cbString = cbString.replace("<p>", "");
+    cbString = cbString.replace("</p>", "");
+%>
+<%- cbString -%>
+</div> <!-- <%= chunk_id %> -->
+<%             } -%>
+<%         } -%>
+</div> <!-- <%= asa_prefix %>_cdss -->
+</td>
+</tr>
+<%     } -%>
+</table>
+</div><!-- advice_selection_area_<%= i %> -->
+</div><!-- div_advice_<%= atc %> -->
+<% } -%>
+</div><!-- div_clinician_view -->
+
+<% let nm_advices = patient_advice.advice_text_non_med; -%>
+<% let other_advices = patient_advice.advice_other_text; -%>
+
+<div id="div_other_med_advice_area" class="div_other_advice">
+<!-- A free text box where the doctor can type in whatever they want.
+     Like other free text boxes, this should be copied to the EHR and
+     Patient texts.
+     The code supports multiple boxes only so it has the same shape as
+     other nearly duplicate code, which needs to be factored together.
+-->
+<% for (let i = 0; i < other_advices.length; ++i ) {
+       let other_advice = other_advices[i];
+       let other_prefix = "other_" + i;
+       let category = other_advice.medication_criteria_id;
+       let boxnum = other_advice.select_box_num;
+       let other_id_base =`OTHER_${category}_${boxnum}`;
+       let checkbox_id = 'cb_' + other_id_base;
+       let row_id = 'tr_' + other_id_base;
+-%>
+<div id="<%= row_id %>" class="other_advice_row">
+<span id="<%= other_prefix %>_sbn" class="other_advice_checkbox">
+<input type="checkbox"
+        id="<%= checkbox_id %>"
+        name="<%= checkbox_id %>"
+        value="<%= checkbox_id %>"
+        style="visibility:hidden"
+/>
+</span> <!-- <%= other_prefix %>_sbn -->
+<div id="<%= other_prefix %>_cdss_continer" class="other_cdss_container">
+<div id="<%= other_prefix %>_cdss" class="other_cdss">
+<%         for (let k = 0; k < other_advice.cdss_split.length; ++k) { -%>
+<%             let chunk = other_advice.cdss_split[k]; -%>
+<%             let chunk_id = `ft_OTHER_${category}_${boxnum}_${k}`; -%>
+<%             if (chunk.editable) { -%>
+<input id="<%= chunk_id %>" type="text" class="ft_input"
+        value="<%= chunk.text %>"/>
+<%             } else { -%>
+<div id="<%= chunk_id %>" class ="freetext">
+<% //
+    let cbString = md.makeHtml(chunk.text);
+    cbString = cbString.replace("<p>", "");
+    cbString = cbString.replace("</p>", "");
+%>
+<%- cbString -%>
+</div> <!-- <%= chunk_id %> -->
+<%             } -%>
+<%         } -%>
+</div> <!-- <%= other_prefix %>_cdss -->
+</div> <!-- other_cdss_container -->
+</div><!-- <%= row_id %> -->
+<% } -%>
+</div><!-- div_other_med_advice -->
+
+<div class="advice_header clinician_view_only"
+     id="andere_advies_header"
+     style="width:20%;">Andere risicofactoren</div>
+<div id="non_med_advice_selection_area" class="non_med_advice_selection_area">
+
+<%
+   let last_category_name = '';
+   for (let i = 0; i < nm_advices.length; ++i ) {
+       let nm_advice = nm_advices[i];
+       let nma_prefix = "nma_" + i;
+       let category = nm_advice.category_id;
+       let boxnum = nm_advice.select_box_num;
+       let nma_id_base =`NONMED_${category}_${boxnum}`;
+       let checkbox_id = 'cb_' + nma_id_base;
+       let row_id = 'tr_' + nma_id_base;
+       let category_name = nm_advice.category_name;
+       let category_name_class = "nm_category_entry_additional";
+       if (category_name != last_category_name) {
+           last_category_name = category_name;
+           category_name_class = "nm_category_entry_first";
+       }
+-%>
+<div id="<%= row_id %>" class="nonmed_row">
+<div id="td_nm_category_name_<%= nm_advice.category_id %>_<%= boxnum %>"
+     class="td_nm_category_name <%= category_name_class %>">
+     <%= category_name %>
+</div>
+<div id="<%= nma_prefix %>_sbn" class="nonmed_checkbox">
+<input type="checkbox"
+        id="<%= checkbox_id %>"
+        name="<%= checkbox_id %>"
+        value="<%= checkbox_id %>"
+        style="visibility:hidden"
+/>
+</div> <!-- <%= nma_prefix %>_sbn -->
+<div id="<%= nma_prefix %>_cdss_continer" class="nonmed_cdss_container">
+<div id="<%= nma_prefix %>_cdss" class="nonmed_cdss">
+<%         for (let k = 0; k < nm_advice.cdss_split.length; ++k) { -%>
+<%             let chunk = nm_advice.cdss_split[k]; -%>
+<%             let chunk_id = `ft_NONMED_${category}_${boxnum}_${k}`; -%>
+<%             if (chunk.editable) { -%>
+<input id="<%= chunk_id %>" type="text" class="ft_input"
+        value="<%= chunk.text %>"/>
+<%             } else { -%>
+<div id="<%= chunk_id %>" class ="freetext">
+<% //
+    let cbString = md.makeHtml(chunk.text);
+    // Select Box texts do not contain legit paragraphs.
+    // It is already in a span so this does not need to be replaced,
+    // just destroyed.
+    cbString = cbString.replace("<p>", "");
+    cbString = cbString.replace("</p>", "");
+%>
+<%- cbString -%>
+</div> <!-- <%= chunk_id %> -->
+<%             } -%>
+<%         } -%>
+</div> <!-- <%= nma_prefix %>_cdss -->
+</div> <!-- nonmed_cdss_container -->
+</div><!-- nonmed_row -->
+<% } -%>
+
+</div><!-- non_med_advice_selection_area -->
+
+<div id="non_med_advice_patient_area" class="non_med_advice_patient_area">
+<div id="non_med_advice_patient_area_text">
+<%
+   for (let i = 0; i < nm_advices.length; ++i ) {
+       let nm_advice = nm_advices[i];
+       let nma_prefix = "nma_" + i;
+       let category = nm_advice.category_id;
+       let category_name = nm_advice.category_name;
+       let boxnum = nm_advice.select_box_num;
+       let nma_id_base =`NONMED_${category}_${boxnum}`;
+       let row_id = 'pt_' + nma_id_base;
+-%>
+<div id="<%= row_id %>" class="patient_nonmed_cb_row">
+<%         for (let k = 0; k < nm_advice.patient_split.length; ++k) { -%>
+<%             let chunk = nm_advice.patient_split[k]; -%>
+<%             let chunk_id = `pft_NONMED_${category}_${boxnum}_${k}`; -%>
+<% //
+        let cbString = md.makeHtml(chunk.text);
+        cbString = cbString.replace("<p>", "");
+        cbString = cbString.replace("</p>", "");
+%>
+<div id="<%= chunk_id %>" class="patient_nonmed_cb_text">
+<%- cbString -%>
+</div><!-- <%= chunk_id %> -->
+<%         } -%>
+</div> <!-- <%= row_id %> -->
+<% } -%>
+</div><!-- non_med_advice_patient_area_text -->
+<button id="copy_patient_text" type="button" class='button_patient_text'
+        onclick="copyPatientTextToClipboard()">Kopieer tekst</button>
+<button id="print_button" onclick="windowPrint()">Afdrukken</button>
+</div><!-- "non_med_advice_patient_area" -->
+
+<div id="div_ehr_box" class="div_ehr_box"><!-- not in patient view -->
+<p>Tekst om te knippen en plakken in Epic:</p>
+<div id="div_all_ehr_text" class="div_all_ehr_text">
+<% for (let i = 0; i < medication_advice.length; ++i ) { -%>
+<div id="advice_ehr_area_<%= i %>" class="advice_ehr_area">
+<%     let row = medication_advice[i]; -%>
+<%     let atc = row.ATC_code; -%>
+<%     let cb_advices = row.adviceTextsCheckboxes; -%>
+<%= ucfirst(row.medication_name).trim() %>:
+<% //
+     for (let j = 0; j < cb_advices.length; ++j ) {
+         let cb_advice = cb_advices[j];
+         let aea_prefix = "aea_" + i + "_" + j;
+         let rulenum = cb_advice.medication_criteria_id;
+         let boxnum = cb_advice.select_box_num;
+         let advice_id_base =`${atc}_${rulenum}_${boxnum}`;
+         let checkbox_id = 'cb_' + advice_id_base;
+         let row_id = 'et_' + advice_id_base;
+-%>
+<div id="<%= row_id %>">
+<%         for (let k = 0; k < cb_advice.ehr_split.length; ++k) { -%>
+<%             let chunk = cb_advice.ehr_split[k]; -%>
+<%             let chunk_id = `eft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
+<div id="<%= chunk_id %>">
+<%             if (!chunk.editable) { -%>
+<%- md.makeHtml(chunk.text) -%>
+<%             } -%>
+</div><!-- <%= chunk_id %> -->
+<%         } -%>
+</div><!-- <%= row_id %> -->
+<%     } -%>
+</div> <!-- advice_ehr_area_<%= i %> -->
+<% } -%>
+<!-- Begin OTHER -->
+<% for (let i = 0; i < other_advices.length; ++i ) {
+       let other_advice = other_advices[i];
+       let other_prefix = "other_" + i;
+       let category = other_advice.medication_criteria_id;
+       let boxnum = other_advice.select_box_num;
+       let other_id_base =`OTHER_${category}_${boxnum}`;
+       let row_id = 'et_' + other_id_base;
+-%>
+<div id="<%= row_id %>">
+<%         for (let k = 0; k < other_advice.ehr_split.length; ++k) {
+               let chunk = other_advice.ehr_split[k];
+               let chunk_id = `eft_OTHER_${category}_${boxnum}_${k}`;
+               let et = md.makeHtml(chunk.text);
+               et = et.replace("<p>", "");
+               et = et.replace("</p>", "");
+-%>
+<div id="<%= chunk_id %>">
+<%= et -%>
+</div><!-- <%= chunk_id %> -->
+<%         } -%>
+</div> <!-- <%= row_id %> -->
+<% } -%>
+<!-- End OTHER -->
+<!-- Begin NonMed -->
+<%
+   for (let i = 0; i < nm_advices.length; ++i ) {
+       let nm_advice = nm_advices[i];
+       let category = nm_advice.category_id;
+       let boxnum = nm_advice.select_box_num;
+       let nma_id_base =`NONMED_${category}_${boxnum}`;
+       let row_id = 'et_' + nma_id_base;
+-%>
+<div id="<%= row_id %>">
+<%         for (let k = 0; k < nm_advice.ehr_split.length; ++k) {
+               let chunk = nm_advice.ehr_split[k];
+               let chunk_id = `eft_NONMED_${category}_${boxnum}_${k}`;
+               let et = md.makeHtml(chunk.text);
+               et = et.replace("<p>", "");
+               et = et.replace("</p>", "");
+-%>
+<div id="<%= chunk_id %>">
+<%= et -%>
+</div><!-- <%= chunk_id %> -->
+<%         } -%>
+</div> <!-- <%= row_id %> -->
+<% } -%>
+<!-- End NonMed -->
+</div><!-- div_all_ehr_text -->
+<button id="copy_ehr_text" type="button" class='button_ehr_text'
+        onclick="copyEHRTextToClipboard()">Kopieer tekst</button>
+</div> <!-- ehr_box -->
+
+<div class="whitespace"></div>
+<div id="footer">
+Patient: <%= patient_id %>
+<button id="button_clinician_view" type="button" class='button_advice_view'
+        onclick="switch_to_view('clinician')">Voorbereiding</button>
+<button id="button_condensed_view" type="button" class='button_advice_view'
+        onclick="switch_to_view('condensed')">Consult</button>
+<button id="button_patient_view" type="button" class='button_advice_view'
+        onclick="switch_to_view('patient')">Advies</button>
+<span id="viewer_count">connecting ...</span>
+</div><!-- footer -->
+</form>
+<!--
+<%= JSON.stringify({ debug_info: patient_advice.debug_info }, null, 4) %>
+-->
+</body>
+</html>

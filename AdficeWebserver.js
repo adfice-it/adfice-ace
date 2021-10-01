@@ -27,49 +27,55 @@ console.log('DEBUG: ', DEBUG);
 
 let render_count = 0;
 
-async function jsonAdviceForPatient(req, res) {
+async function getDataForPatient(req, res) {
     ++render_count;
-    let patient_advice = await adfice.getAdviceForPatient(req.query.id || 0);
-    patient_advice.patient_id = patient_advice.patient_id || 0;
-    res.json({
-        viewer_id: render_count,
-        patient_advice: patient_advice
-    });
-}
-
-async function renderAdviceForPatient(req, res) {
-    ++render_count;
-    let patient_id = req.query.id || 0;
+    let patient_id = req.query.id || req.query.patient || 0;
+    let viewer_id = render_count; /* viewer_id should come from the session */
     let patient_advice = await adfice.getAdviceForPatient(patient_id);
-    res.render("patient", {
+    let data = {
         lang: 'nl',
         md: md,
-        viewer_id: render_count,
+        viewer_id: viewer_id,
         patient_id: patient_id,
         patient_advice: patient_advice,
-    }); // .ejs
+    };
+    return data;
+}
+
+async function renderIndex(req, res) {
+    res.render("index"); //.ejs
+}
+
+async function jsonAdviceForPatient(req, res) {
+    res.json(await getDataForPatient(req, res));
 }
 
 async function renderStart(req, res) {
-    let patient_id = req.query.id || 0;
-    let patient_advice = await adfice.getAdviceForPatient(patient_id);
-    res.render("start", {
-        lang: 'nl',
-        md: md,
-        patient_id: patient_id,
-        patient_advice: patient_advice,
-    }); // .ejs
+    res.render("start" /* .ejs */ , await getDataForPatient(req, res));
+}
+
+async function renderPrep(req, res) {
+    res.render("prep" /* .ejs */ , await getDataForPatient(req, res));
+}
+
+async function renderConsult(req, res) {
+    res.render("consult" /* .ejs */ , await getDataForPatient(req, res));
+}
+
+async function renderAdvise(req, res) {
+    res.render("advise" /* .ejs */ , await getDataForPatient(req, res));
+}
+
+async function renderFinalize(req, res) {
+    res.render("finalize" /* .ejs */ , await getDataForPatient(req, res));
+}
+
+async function renderAdviceForPatient(req, res) {
+    res.render("patient" /* .ejs */ , await getDataForPatient(req, res));
 }
 
 async function renderValidationAdviceForPatient(req, res) {
-    let patient_id = req.query.id || 0;
-    let patient_advice = await adfice.getAdviceForPatient(patient_id);
-    res.render("patient-validation", {
-        lang: 'nl',
-        md: md,
-        patient_id: patient_id,
-        patient_advice: patient_advice
-    }); // .ejs
+    res.render("patient-validation", await getDataForPatient(req, res)); // .ejs
 }
 
 async function renderPredictionExplanation(req, res) {
@@ -81,6 +87,7 @@ async function renderPredictionExplanation(req, res) {
     } else {
         patient_measurement = patient_measurements[0];
     }
+
     res.render("prediction_explanation", {
         lang: 'nl',
         patient_id: patient_id,
@@ -98,9 +105,6 @@ async function renderAdviceTextsCheckboxes(req, res) {
     }); // .ejs
 }
 
-async function renderIndex(req, res) {
-    res.render("index"); //.ejs
-}
 
 process.on('exit', function() {
     console.log('server is not listening on ' + PORT);
@@ -121,9 +125,14 @@ app.get("/index", renderIndex);
 app.get("/index.html", renderIndex);
 
 app.get("/advice", jsonAdviceForPatient);
-app.get("/patient", renderAdviceForPatient);
 
 app.get("/start", renderStart);
+app.get("/prep", renderPrep);
+app.get("/consult", renderConsult);
+app.get("/advise", renderAdvise);
+app.get("/finalize", renderFinalize);
+
+app.get("/patient", renderAdviceForPatient);
 
 app.get("/patient-validation", renderValidationAdviceForPatient);
 
