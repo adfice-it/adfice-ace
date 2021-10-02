@@ -3,11 +3,6 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-var DEBUG = 0;
-if (DEBUG > 0) {
-    console.log("hello world, from footer.js");
-}
-
 function get_base_url() {
     // URL.protocol is not safe in Internet Explorer,
     // thus we shall use regex
