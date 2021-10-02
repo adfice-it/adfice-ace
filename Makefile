@@ -63,6 +63,7 @@ check: dbsetup grep-ie-bad-words
 	@echo
 	./acceptance-test.sh
 	./acceptance-test-cafe.sh
+	./acceptance-test-cafe-new.sh
 	@echo "SUCCESS $@"
 
 
@@ -235,6 +236,7 @@ vm-check: .vm-init
 tidy:
 	js-beautify --replace --end-with-newline \
 		acceptance-test-cafe.js \
+		acceptance-test-cafe-new.js \
 		adficeDB.js \
 		adficeEvaluator.js \
 		adficeEvaluator.test.js \

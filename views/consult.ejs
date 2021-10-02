@@ -12,6 +12,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patient <%= patient_id %></title>
 <link rel="stylesheet" type="text/css" href="static/adfice.css">
+<style>
+#button-consult-view {
+    background-color: #008000;
+    color: #FFFFFF;
+}
+.checkbox-checked {
+    display: block;
+}
+.checkbox-unchecked {
+    display: none;
+}
+</style>
 <script>
 let patient_id = "<%= patient_id %>";
 let viewer_id = "<%= viewer_id %>";
@@ -158,29 +170,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
  <a href="<%= med_url %>" class="fklink" target="_blank">
 <img src="static/FK_circle_with_linkout.png" alt="FK" class="fkimg"/>
 </a>
-<div id="advice_<%= atc %>" class="advice_no_checkbox">
-<strong>Advies:</strong>
-<%     let advices = row.adviceTextsNoCheckboxes; -%>
-<%     for (let j = 0; j < advices.length; ++j ) { -%>
-<%         let advice = advices[j]; -%>
-<%         let att_prefix = "att_" + i + "_" + j; -%>
-<%         let bogus_rule = "NonCB"; -%>
-<div id="<%= att_prefix %>_cdss">
-<%         for (let k = 0; k < advice.cdss_split.length; ++k) { -%>
-<%             let chunk = advice.cdss_split[k]; -%>
-<%             let chunk_id = `ft_${atc}_${bogus_rule}_${j}_${k}`; -%>
-<%             if (chunk.editable) { -%>
-<input id="<%= chunk_id %>" type="text"
-        value="<%= chunk.text %>"/>
-<%             } else { -%>
-<div id="<%= chunk_id %>">
-<%- md.makeHtml(chunk.text) -%>
-</div> <!-- <%= chunk_id %> -->
-<%             } -%>
-<%         } -%>
-</div> <!-- <%= att_prefix %>_cdss -->
-<%     } -%>
-</div>
+
 <%     let cb_advices = row.adviceTextsCheckboxes; -%>
 <div id="advice_selection_area_<%= i %>" class="advice_selection_area">
 <div class="checkbox_section_header"
@@ -213,7 +203,7 @@ for (let i = 0; i < medication_advice.length; ++i ) {
          let checkbox_id = 'cb_' + advice_id_base;
          let row_id = 'tr_' + advice_id_base;
 -%>
-<tr id="<%= row_id %>">
+<tr id="<%= row_id %>" class="checkbox-row">
 <td>
 <span id="<%= asa_prefix %>_sbn">
 <input type="checkbox"

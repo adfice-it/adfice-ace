@@ -22,4 +22,6 @@ div.whitespace{
 .button-footer-switch-view {
     border-radius: 8px;
     border: 2px solid green;
+    background-color: #FFFFFF;
+    color: #008000;
 }

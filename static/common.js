@@ -80,12 +80,28 @@ function process_checkbox(checkbox_id, checked) {
         checkbox.checked = checked;
     }
 
+    let tr_row_id = checkbox_id.replace(/^cb_/, 'tr_');
+    let tr_row = document.getElementById(tr_row_id);
+    if (tr_row) {
+        if (checked) {
+            tr_row.classList.add("checkbox-checked");
+            tr_row.classList.remove("checkbox-unchecked");
+        } else {
+            tr_row.classList.add("checkbox-unchecked");
+            tr_row.classList.remove("checkbox-checked");
+        }
+    }
+
     let ehr_row_id = checkbox_id.replace(/^cb_/, 'et_');
     let ehr_row = document.getElementById(ehr_row_id);
     if (ehr_row) {
         if (checked) {
+            // ehr_row.classList.add("checkbox-checked");
+            // ehr_row.classList.remove("checkbox-unchecked");
             ehr_row.style.display = 'block';
         } else {
+            // ehr_row.classList.add("checkbox-unchecked");
+            // ehr_row.classList.remove("checkbox-checked");
             ehr_row.style.display = 'none';
         }
     }
@@ -94,8 +110,12 @@ function process_checkbox(checkbox_id, checked) {
     let patient_row = document.getElementById(patient_row_id);
     if (patient_row) {
         if (checked) {
+            // patient_row.classList.add("checkbox-checked");
+            // patient_row.classList.remove("checkbox-unchecked");
             patient_row.style.display = 'block';
         } else {
+            // patient_row.classList.add("checkbox-unchecked");
+            // patient_row.classList.remove("checkbox-checked");
             patient_row.style.display = 'none';
         }
     }
@@ -129,8 +149,12 @@ function process_checkboxes(message) {
         let geen_advies_div = document.getElementById(geen_advies_id);
         if (geen_advies_div) {
             if (num_checked > 0) {
+                // geen_advies_div.classList.add('no-advice-some-checked');
+                // geen_advies_div.classList.remove('no-advice-none-checked');
                 geen_advies_div.style.display = 'none';
             } else {
+                // geen_advies_div.classList.add('no-advice-none-checked');
+                // geen_advies_div.classList.remove('no-advice-some-checked');
                 geen_advies_div.style.display = 'block';
             }
         }
@@ -185,6 +209,9 @@ function process_viewer_count(message) {
 }
 
 function first_incoming_message(event) {
+    if (DEBUG > 0) {
+        console.log('first_incoming_message');
+    }
     let elementList = document.querySelectorAll("input[type='checkbox']");
     for (let i = 0; i < elementList.length; ++i) {
         var checkbox = elementList[i];
@@ -304,6 +331,10 @@ function connect_web_socket() {
     ws.onmessage = ws_on_message;
     ws.onclose = ws_on_close;
     ws.onerror = ws_on_error;
+
+    if (DEBUG > 0) {
+        console.log('creating websocket with url:', ws_url);
+    }
 
     return ws;
 }

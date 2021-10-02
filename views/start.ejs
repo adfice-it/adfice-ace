@@ -7,9 +7,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patient</title>
 <link rel="stylesheet" type="text/css" href="assets/adfice.css">
+<style>
+#button-start-view {
+    background-color: #008000;
+    color: #FFFFFF;
+}
+</style>
 <script>
-let patient_id;
-let viewer_id;
+let patient_id = "<%= patient_id %>";
+let viewer_id = "<%= viewer_id %>";
+let is_final = <%= patient_advice.is_final %>;
 </script>
 <script src="static/common.js"></script>
 <script src="assets/five-pages.js"></script>
