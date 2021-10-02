@@ -50,12 +50,23 @@ portal-dbsetup: npmsetup portal-db-scripts.env
 dbsetup: adfice-dbsetup portal-dbsetup
 
 IE_BADWORDS_RE='await\|async\|forEach\|=>\|'\`
+BROWSER_JS=\
+ static/basic-utils.js \
+ static/common.js \
+ static/five-pages.js \
+ static/footer.js \
+ static/patient.js
 
-grep-ie-bad-words: static/patient.js
-	# expect two: one for lines, one for functions
-	if [ $$(grep -c $(IE_BADWORDS_RE) $^ ) -eq 0 ]; \
-		then true; else \
-		grep $(IE_BADWORDS_RE) $^; false; fi
+grep-ie-bad-words: $(BROWSER_JS)
+	for FILE in $(BROWSER_JS); do \
+		if [ $$(grep -c $(IE_BADWORDS_RE) $$FILE ) -eq 0 ]; then \
+			true; \
+		else \
+			echo $$FILE; \
+			grep $(IE_BADWORDS_RE) $$FILE; \
+			exit 1; \
+		fi; \
+	done
 	@echo "$@ complete"
 
 check: dbsetup grep-ie-bad-words
