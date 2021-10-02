@@ -3,7 +3,7 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-var DEBUG = 1;
+var DEBUG = 0;
 if (DEBUG > 0) {
     console.log("hello world, from footer.js");
 }

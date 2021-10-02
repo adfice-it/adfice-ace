@@ -13,10 +13,26 @@
     color: #FFFFFF;
 }
 </style>
+<script src="assets/basic-utils.js"></script>
 <script>
-let patient_id = "<%= patient_id %>";
-let viewer_id = "<%= viewer_id %>";
-let is_final = <%= patient_advice.is_final %>;
+let params = new URLSearchParams(window.location.search)
+var patient_id = params.get('id');
+let link = document.getElementById('href-prediction-explanation');
+
+let viewer_id;
+let is_final;
+let data;
+let json_url = get_base_url() + 'advice?id=' + patient_id;
+get_JSON(json_url, function(err, json_data) {
+    if (err) {
+	console.log("url:", json_url, "error:", err);
+    }
+    data = json_data;
+    is_final = data.patient_advice.is_final;
+    console.log('is_final:', is_final);
+    viewer_id = data.viewer_id;
+    console.log('viewer_id:', viewer_id);
+});
 </script>
 <script src="static/common.js"></script>
 <script src="assets/five-pages.js"></script>
@@ -59,7 +75,12 @@ Gedetecteerde andere medicijnen:<span id="meds-without-rules"></span>
 <p>Kans om te vallen binnen 12 maanden:&nbsp;
 <span id="prediction-chance"></span>
 <span style="color: red;">(onbekend)</span>
-<a href="prediction_explanation?id=<%= patient_id %>">(lees meer over het predictiemodel)</a></p>
+<script>
+var prediction_url = 'prediction_explanation?id=' + patient_id;
+document.write('<a href="' + prediction_url +
+'">(lees meer over het predictiemodel)</a>');
+</script>
+</p>
 <div class='gauge_background'>
 <div class='gauge_text_left'>0%</div>
 <div id="gague-line" class='gauge_line' style='display:none'></div>
@@ -131,8 +152,5 @@ leven voor?<br/>
 
 <%- include('footer.ejs') %>
 </form>
-<!--
-<%= JSON.stringify({ debug_info: patient_advice.debug_info }, null, 4) %>
--->
 </body>
 </html>

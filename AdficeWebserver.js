@@ -51,7 +51,7 @@ async function jsonAdviceForPatient(req, res) {
 }
 
 async function renderStart(req, res) {
-    res.render("start" /* .ejs */ , await getDataForPatient(req, res));
+    res.render("start" /* .ejs */);
 }
 
 async function renderPrep(req, res) {
