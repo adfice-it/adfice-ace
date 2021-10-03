@@ -1,0 +1,3 @@
+[submodule "centos-vm"]
+	path = centos-vm
+	url = https://github.com/ericherman/centos-vm.git

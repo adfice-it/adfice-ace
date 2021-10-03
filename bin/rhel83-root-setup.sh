@@ -56,6 +56,9 @@ source adfice-user.env
 echo "ADFICE_INSTALL_DIR=$ADFICE_INSTALL_DIR"
 echo "ADFICE_USER_NAME=$ADFICE_USER_NAME"
 echo "ADFICE_HTTP_PORT=$ADFICE_HTTP_PORT"
+if [ "_${ADFICE_INSTALL_DIR}_" == "__" ]; then exit 1; fi
+if [ "_${ADFICE_USER_NAME}_" == "__" ]; then exit 1; fi
+if [ "_${ADFICE_HTTP_PORT}_" == "__" ]; then exit 1; fi
 
 echo
 echo "# allow the adfice user launch the Adfice service"

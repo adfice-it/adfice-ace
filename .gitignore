@@ -9,6 +9,9 @@ coverage/
 ./index.html
 *.swp
 adfice-export.log
+*.qcow2
+*.log
+qemu.pid
 
 adfice.my.cnf
 root.adfice.my.cnf

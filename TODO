@@ -39,7 +39,6 @@ Valportaal
   * https://www.plainlight.com/duckduckgo-search.html#custom-search ?
 * testing of the static/ served javascript files
 * make a "build valportaal vm" script
-* eject vagrant, consider https://github.com/ericherman/centos-vm
 * small textual changes and links provided in spreadsheet "valportaal broken links etc.xlsx"
 
 
