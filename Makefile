@@ -213,6 +213,7 @@ adfice-ace.tar.gz: \
 	tar --transform='s@^@adfice-$(ADFICE_VERSION)/@' \
 		--gzip --create --verbose \
 		--file=$@ $^
+	ls -l $@
 
 tar: adfice-ace.tar.gz
 
@@ -338,6 +339,14 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 	#./node_modules/.bin/testcafe "firefox:headless" \
 	#	acceptance-test-cafe.js https://127.0.0.1:8443
 	#cd setup-vm && vagrant halt
+	ssh -p$(VM_PORT_SSH) \
+		-oNoHostAuthenticationForLocalhost=yes \
+		root@127.0.0.1 \
+		-i ./centos-vm/id_rsa_tmp \
+		'shutdown -h -t 2 now & exit'
+	{ while kill -0 `cat qemu.pid`; do \
+		echo "wating for `cat qemu.pid`"; sleep 1; done }
+	sleep 2
 	@echo "SUCCESS $@"
 
 
