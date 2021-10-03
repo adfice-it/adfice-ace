@@ -101,7 +101,11 @@ adfice-ace.tar.gz: \
 		adficeUtil.test.js \
 		AdficeWebserver.js \
 		bin/connect-container.sh \
+		bin/db-create-portal-tables.sh \
 		bin/db-create-tables.sh \
+		bin/free-port \
+		bin/free-port.js \
+		bin/launch-mariadbd \
 		bin/load-synthetic-data.sh \
 		bin/make-self-signed-cert.sh \
 		bin/reload-patient-data.sh \
@@ -110,6 +114,7 @@ adfice-ace.tar.gz: \
 		bin/rhel83-root-setup.sh \
 		bin/rhel83-user-setup.sh \
 		bin/setup-new-db-container.sh \
+		bin/vm-init.sh \
 		calculatePrediction.js \
 		calculatePrediction.test.js \
 		COPYING \
