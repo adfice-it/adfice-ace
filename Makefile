@@ -148,56 +148,68 @@ adfice-ace.tar.gz: \
 		sql/insertSynthetic_allergies.sql \
 		sql/newNonMedHeaders.sql \
 		sql/updatePrecheckWithSQLConditions.sql \
-		static/HoeGebruikIkDitSysteem.html \
-		static/WarningRW_openClipArt.png \
-		static/FK_circle_with_linkout.png \
-		static/refpages/refpage18.html \
-		static/refpages/refpage0.html \
-		static/refpages/refpage4.html \
-		static/refpages/refpage28.html \
-		static/refpages/refpage15.html \
-		static/refpages/refpage33.html \
-		static/refpages/refpage2.html \
-		static/refpages/refpage10.html \
-		static/refpages/refpage26.html \
-		static/refpages/refpage32.html \
-		static/refpages/refpage22.html \
-		static/refpages/refpage8.html \
-		static/refpages/refpage20.html \
-		static/refpages/refpage11.html \
-		static/refpages/refpage12.html \
-		static/refpages/refpage30.html \
-		static/refpages/refpage16.html \
-		static/refpages/refpage25.html \
-		static/refpages/refpage1.html \
-		static/refpages/refpage21.html \
-		static/refpages/refpage7.html \
-		static/refpages/refpage5.html \
-		static/refpages/refpage31.html \
-		static/refpages/refpage29.html \
-		static/refpages/refPageCurrentMax.txt \
-		static/refpages/refpage13.html \
-		static/refpages/refstyle.css \
-		static/refpages/refpage17.html \
-		static/refpages/refpage27.html \
-		static/refpages/refpage3.html \
-		static/refpages/refpage9.html \
-		static/refpages/refpage6.html \
-		static/refpages/refpage24.html \
-		static/refpages/refpage14.html \
-		static/refpages/refpage19.html \
-		static/riskScale70.png \
-		static/patient.js \
 		static/adfice.css \
 		static/Advice_IT_logo_small.png \
+		static/basic-utils.js \
+		static/common.js \
+		static/five-pages.js \
+		static/FK_circle_with_linkout.png \
+		static/footer.css \
+		static/footer.include.html \
+		static/footer.js \
+		static/HoeGebruikIkDitSysteem.html \
+		static/patient-header.js \
+		static/patient.js \
+		static/refpages/refpage0.html \
+		static/refpages/refpage10.html \
+		static/refpages/refpage11.html \
+		static/refpages/refpage12.html \
+		static/refpages/refpage13.html \
+		static/refpages/refpage14.html \
+		static/refpages/refpage15.html \
+		static/refpages/refpage16.html \
+		static/refpages/refpage17.html \
+		static/refpages/refpage18.html \
+		static/refpages/refpage19.html \
+		static/refpages/refpage1.html \
+		static/refpages/refpage20.html \
+		static/refpages/refpage21.html \
+		static/refpages/refpage22.html \
+		static/refpages/refpage24.html \
+		static/refpages/refpage25.html \
+		static/refpages/refpage26.html \
+		static/refpages/refpage27.html \
+		static/refpages/refpage28.html \
+		static/refpages/refpage29.html \
+		static/refpages/refpage2.html \
+		static/refpages/refpage30.html \
+		static/refpages/refpage31.html \
+		static/refpages/refpage32.html \
+		static/refpages/refpage33.html \
+		static/refpages/refpage3.html \
+		static/refpages/refpage4.html \
+		static/refpages/refpage5.html \
+		static/refpages/refpage6.html \
+		static/refpages/refpage7.html \
+		static/refpages/refpage8.html \
+		static/refpages/refpage9.html \
+		static/refpages/refPageCurrentMax.txt \
+		static/refpages/refstyle.css \
+		static/riskScale70.png \
+		static/WarningRW_openClipArt.png \
 		testingNotes.txt \
 		TODO \
 		verificationAndValidation.test.js \
+		views/advise.ejs \
 		views/checkboxes.ejs \
+		views/consult.ejs \
+		views/finalize.ejs \
 		views/index.ejs \
-		views/prediction_explanation.ejs \
 		views/patient.ejs \
-		views/patient-validation.ejs
+		views/patient-validation.ejs \
+		views/prediction_explanation.ejs \
+		views/prep.ejs \
+		views/start.ejs
 	tar --transform='s@^@adfice-$(ADFICE_VERSION)/@' \
 		--gzip --create --verbose \
 		--file=$@ $^
@@ -284,10 +296,10 @@ vm-check: adfice-centos-8.3-vm.qcow2
 	{ lsof -i:$(VM_PORT_HTTPS); if [ $$? -eq 0 ]; then \
 		echo "VM_PORT_HTTPS $(VM_PORT_HTTPS) not free"; false; fi; }
 	qemu-img create -f qcow2 -F qcow2 \
-		-b basic-centos-8.3-vm.qcow2 \
-		tmp-x-vm.qcow2
+		-b adfice-centos-8.3-vm.qcow2 \
+		test-adfice-centos-8.3-vm.qcow2
 	@echo 'launching tmp-x-vm.qcow2'
-	{ qemu-system-x86_64 -hda tmp-x-vm.qcow2 \
+	{ qemu-system-x86_64 -hda test-adfice-centos-8.3-vm.qcow2 \
 		-m $(KVM_RAM) -smp $(KVM_CORES) -machine type=pc,accel=kvm \
 		-display none \
 		-nic user,\
