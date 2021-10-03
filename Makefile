@@ -100,16 +100,16 @@ adfice-ace.tar.gz: \
 		adficeUtil.js \
 		adficeUtil.test.js \
 		AdficeWebserver.js \
-		bin/reload-synthetic-data.sh \
+		bin/connect-container.sh \
+		bin/db-create-tables.sh \
 		bin/load-synthetic-data.sh \
 		bin/make-self-signed-cert.sh \
 		bin/reload-patient-data.sh \
-		bin/db-create-tables.sh \
-		bin/setup-new-db-container.sh \
-		bin/connect-container.sh \
-		bin/rhel83-root-setup.sh \
+		bin/reload-synthetic-data.sh \
 		bin/rhel83-root-setup-nginx.sh \
+		bin/rhel83-root-setup.sh \
 		bin/rhel83-user-setup.sh \
+		bin/setup-new-db-container.sh \
 		calculatePrediction.js \
 		calculatePrediction.test.js \
 		COPYING \
@@ -123,31 +123,30 @@ adfice-ace.tar.gz: \
 		ping-db.js \
 		portal-export.js \
 		prediction \
-		system.db-scripts.env \
 		README.md \
-		sql/createPriority.sql \
 		sql/createETLTables.sql \
-		sql/insertSynthetic_problems.sql \
+		sql/createPatientTables.sql \
+		sql/createPriority.sql \
+		sql/createRulesTable.sql \
+		sql/insertSynthetic_allergies.sql \
+		sql/insertSynthetic_labs.sql \
 		sql/insertSynthetic_measurements.sql \
+		sql/insertSynthetic_medications.sql \
+		sql/insertSynthetic_patient_data_160.sql \
+		sql/insertSynthetic_patient_data_161.sql \
+		sql/insertSynthetic_patient.sql \
+		sql/insertSynthetic_problems.sql \
+		sql/newAdviceTable.sql \
+		sql/newNonMedHeaders.sql \
+		sql/newNonMedTable.sql \
+		sql/newOtherMedTable.sql \
+		sql/newPreselectRulesTable.sql \
 		sql/newRulesTable.sql \
 		sql/populateETLTables.sql \
-		sql/insertSynthetic_patient_data_161.sql \
 		sql/populateProblemMap.sql \
-		sql/insertSynthetic_medications.sql \
-		sql/newNonMedTable.sql \
-		sql/createPatientTables.sql \
-		sql/updateRulesWithSeparatedSelectors.sql \
-		sql/newAdviceTable.sql \
-		sql/newOtherMedTable.sql \
-		sql/insertSynthetic_patient_data_160.sql \
-		sql/newPreselectRulesTable.sql \
-		sql/insertSynthetic_patient.sql \
-		sql/createRulesTable.sql \
 		sql/updateMedRulesWithSQLConditions.sql \
-		sql/insertSynthetic_labs.sql \
-		sql/insertSynthetic_allergies.sql \
-		sql/newNonMedHeaders.sql \
 		sql/updatePrecheckWithSQLConditions.sql \
+		sql/updateRulesWithSeparatedSelectors.sql \
 		static/adfice.css \
 		static/Advice_IT_logo_small.png \
 		static/basic-utils.js \
@@ -197,6 +196,7 @@ adfice-ace.tar.gz: \
 		static/refpages/refstyle.css \
 		static/riskScale70.png \
 		static/WarningRW_openClipArt.png \
+		system.db-scripts.env \
 		testingNotes.txt \
 		TODO \
 		verificationAndValidation.test.js \
