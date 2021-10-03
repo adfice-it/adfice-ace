@@ -34,8 +34,9 @@ get_JSON(json_url, function(err, json_data) {
     console.log('viewer_id:', viewer_id);
 });
 </script>
-<script src="static/common.js"></script>
+<script src="assets/common.js"></script>
 <script src="assets/five-pages.js"></script>
+<script src="assets/footer.js"></script>
 </head>
 <body>
 <form id="patient_form">
@@ -150,7 +151,8 @@ leven voor?<br/>
 
 </div><!-- instruction_box -->
 
-<%- include('footer.ejs') %>
+<div id="div-footer-id"></div><!-- footer -->
+<script>load_footer(patient_id);</script>
 </form>
 </body>
 </html>

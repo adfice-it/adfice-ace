@@ -27,10 +27,10 @@ function get_base_url() {
     return protocol + '//' + url_hostname + ':' + url_port + '/';
 }
 
-var get_JSON = function(url, callback) {
+function get_content(url, type, callback) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
-    xhr.responseType = 'json';
+    xhr.responseType = type;
     xhr.onload = function() {
         var status = xhr.status;
         if (status === 200) {
@@ -41,3 +41,11 @@ var get_JSON = function(url, callback) {
     };
     xhr.send();
 };
+
+function get_JSON(url, callback) {
+    get_content(url, 'json', callback);
+}
+
+function get_text(url, callback) {
+    get_content(url, 'text', callback);
+}

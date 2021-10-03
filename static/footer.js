@@ -3,28 +3,23 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-function get_base_url() {
-    // URL.protocol is not safe in Internet Explorer,
-    // thus we shall use regex
-    let protocol = 'https:';
-    const url_regex = /^([^:]*):\/\/([^:/]*)(:([0-9]+))?/
-    let matches = document.URL.match(url_regex);
-    let url_protocol = matches[1];
-    let url_hostname = matches[2];
-    let url_port = matches[4];
-
-    if (url_protocol === 'http') {
-        protocol = 'http:';
-        if (!url_port) {
-            url_port = 80;
+function load_footer(patient_id_text) {
+    let footer_url = get_base_url() + 'assets/footer.include.html';
+    get_text(footer_url, function(err, footer_include_html) {
+        if (err) {
+            console.log("url:", footer_url, "error:", err);
         }
-    } else {
-        if (!url_port) {
-            url_port = 443;
-        }
-    }
 
-    return protocol + '//' + url_hostname + ':' + url_port + '/';
+        let footer = document.getElementById('div-footer-id');
+        footer.innerHTML = footer_include_html;
+
+        let footer_patient_id = document.getElementById('footer-patient-id');
+        if (footer_patient_id) {
+            footer_patient_id.innerText = patient_id_text;
+        } else {
+            console.log('ERROR! no element footer-patient-id?');
+        }
+    });
 }
 
 function switch_view(view) {

@@ -193,6 +193,9 @@ function process_freetexts(message) {
 
 function process_viewer_count(message) {
     let element = document.getElementById("viewer-count");
+    if (!element) {
+        return;
+    }
     element.style.visibility = 'visible';
     element.style.color = 'black';
 
