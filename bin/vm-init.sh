@@ -1,3 +1,6 @@
+#!/bin/bash
+set -x
+set -e
 adduser -U tester
 cp -rv /root/.ssh /home/tester
 mv -v /root/adfice-user.env /home/tester

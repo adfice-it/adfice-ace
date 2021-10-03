@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 set -e
 
 if [ $(id -u) != '0' ]; then
@@ -28,6 +29,9 @@ cp -v /etc/nginx/nginx.conf /etc/nginx/nginx.conf.orig
 cp -v /home/$ADFICE_USER_NAME/adfice-*/example.nginx.conf /etc/nginx/nginx.conf
 
 echo
+echo "# firewall may not be running, allow firewall commands to error"
+set +e
+echo
 echo "# allow connection to the adfice service over https"
 firewall-cmd --zone=public --add-service=https --permanent
 echo "# allow http to https redirect"
@@ -35,6 +39,8 @@ firewall-cmd --zone=public --add-service=http --permanent
 
 echo "# close the non-https ADFICE PORT"
 firewall-cmd --zone=public --remove-port=$ADFICE_HTTP_PORT/tcp --permanent
+echo "# done with firewall-cmd, return to exit on failure mode"
+set -e
 
 echo "# allow nginx to proxy"
 setsebool -P httpd_can_network_relay 1
@@ -45,4 +51,4 @@ systemctl start nginx
 echo "# ensure that NginX starts at boot"
 systemctl enable nginx
 
-echo "# done"
+echo "# done rhel83-root-setup-nginx.sh"

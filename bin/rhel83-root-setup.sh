@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 set -e
 
 # Helpful guide:
@@ -66,7 +67,8 @@ loginctl enable-linger $ADFICE_USER_NAME
 
 echo
 echo "# allow machines on the local network to connect to the adfice service"
-firewall-cmd --zone=public --add-port=$ADFICE_HTTP_PORT/tcp --permanent
+firewall-cmd --zone=public --add-port=$ADFICE_HTTP_PORT/tcp --permanent \
+ || echo "firewall probably not running"
 # above firewall-cmd will likely change to 443 if we add NginX
 
 mkdir -pv $ADFICE_INSTALL_DIR
@@ -179,4 +181,4 @@ GRANT SELECT ON \`valportaal\`.* TO \`valportaal\`@\`%\`;
 FLUSH PRIVILEGES;
 END_OF_SQL
 
-echo "done"
+echo "done rhel83-root-setup"

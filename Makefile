@@ -225,7 +225,7 @@ basic-centos-8.3-vm.qcow2: centos-vm/basic-centos-8.3-vm.qcow2
 	@echo "SUCCESS $@"
 
 adfice-centos-8.3-vm.qcow2: basic-centos-8.3-vm.qcow2 \
-		vm-init.sh \
+		bin/vm-init.sh \
 		adfice-ace.tar.gz \
 		adfice-user.env
 	@echo "VM_PORT_SSH: $(VM_PORT_SSH)"
@@ -257,7 +257,7 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 	scp -P$(VM_PORT_SSH) \
 		-oNoHostAuthenticationForLocalhost=yes \
 		-i ./centos-vm/id_rsa_tmp \
-		vm-init.sh \
+		bin/vm-init.sh \
 		adfice-ace.tar.gz \
 		adfice-user.env \
 		root@127.0.0.1:/root/
@@ -273,6 +273,7 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 		'shutdown -h -t 2 now & exit'
 	{ while kill -0 `cat qemu.pid`; do \
 		echo "wating for `cat qemu.pid`"; sleep 1; done }
+	sleep 2
 	mv -v tmp-x-vm.qcow2 $@
 
 vm-check: adfice-centos-8.3-vm.qcow2

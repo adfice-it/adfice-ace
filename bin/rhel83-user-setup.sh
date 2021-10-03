@@ -1,5 +1,13 @@
 #!/bin/bash
+set -x
 set -e
+
+if [ "_${DBUS_SESSION_BUS_ADDRESS}_" == "__" ]; then
+	if [ "_${UID}_" == "__" ]; then
+		UID=`id | cut -d'=' -f2 | cut -d'(' -f1 | xargs`
+	fi
+	export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$UID/bus
+fi
 
 source adfice-user.env
 echo "ADFICE_INSTALL_DIR=$ADFICE_INSTALL_DIR"
@@ -48,6 +56,15 @@ RestartSec=5
 [Install]
 WantedBy=default.target
 END_OF_FILE
+
+cat ~/.config/systemd/user/adfice.service
+
+echo
+echo "attempt to create a user daemon"
+set +e
 systemctl --user daemon-reload
 systemctl --user enable adfice.service
 systemctl --user start adfice.service
+set -e
+
+echo "# done rhel83-user-setup.sh"
