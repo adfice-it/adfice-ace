@@ -59,77 +59,7 @@ Leeftijd: <%= patient_advice.age %><br/>
 </div><!-- gauge_background -->
 </div><!-- prediction -->
 <div style="height: 2em;"></div>
-<span id="patient_medications">
-<span id="meds_with_rules">
-Ga direct naar medicijnen met advies:
-<%     let rule_meds = patient_advice.meds_with_rules; -%>
-<% for (let i = 0; i < rule_meds.length; ++i ) { -%>
-<%     let med = rule_meds[i]; %>
-<%     if (i) { -%>
-,
-<%     } -%>
-<a href="#div_advice_<%= med.ATC_code %>" title="<%= med.medication_name %>">
-<%= ucfirst(med.medication_name).trim() %></a>
-<% } -%>
-</span><!-- meds_with_rules -->
-<br/>
-<span id="meds_without_rules">
-<br/>Gedetecteerde andere medicijnen:
-<%     let other_meds = patient_advice.meds_without_rules; -%>
-<% if (other_meds.length == 0) { %>
-Geen
-<% } else { %>
-<%     for (let i = 0; i < other_meds.length; ++i ) { -%>
-<%         let med = other_meds[i]; %>
-<%         if (i) { -%>
-,
-<%         } -%>
-<%= ucfirst(med.medication_name).trim() %>
-<%     } -%>
-<% } -%>
-</span><!-- meds_without_rules -->
-</span><!-- patient_medications -->
-<span id="patient_problems">
-<br/>Gedetecteerde relevante problemen:
-<%     let problems = patient_advice.problems; -%>
-<%     if ( problems.length ) { -%>
-<% for (let i = 0; i < problems.length; ++i ) { -%>
-<%     let problem = problems[i]; -%>
-<%     if (i) { %>
-,
-<%     } -%>
-<span id="prob_<%= i %>">
-<%= problem.display_name %>
-</span><!-- prob_<%= i %> -->
-<% } -%>
-<% } else { -%>
-Geen
-<% } -%>
-</span><!-- patient_problems -->
-<%     let labs = patient_advice.labs; -%>
-<span id="patient_labs">
-<br />Gedetecteerde relevante laboratorium waardes:
-<%     if ( !labs.length ) { -%>
-Geen
-<%     } -%>
-<% for (let i = 0; i < labs.length; ++i ) { -%>
-<%     let lab = labs[i]; -%>
-<%     let lab_prefix = "lab_" + i; -%>
-<%     if (i) { -%>
-,
-<%     } -%>
-<span id="<%= lab_prefix %>">
-<span id="<%= lab_prefix %>_name"><%= lab.lab_test_name %></span>:
-<span id="<%= lab_prefix %>_result"><%= lab.lab_test_result %></span>
-(
-<span id="<%= lab_prefix %>_date">
-        <%= JSON.stringify(lab.date_measured).substring(1,11) %></span>
-)
-</span>
-<% } -%>
-</span>
-<span>
-</div>
+</div><!-- id=patient_info -->
 
 <% let medication_advice = patient_advice.medication_advice || []; -%>
 <% let nm_advices = patient_advice.advice_text_non_med; -%>

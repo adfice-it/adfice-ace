@@ -20,6 +20,7 @@
 </style>
 <script src="assets/basic-utils.js"></script>
 <script>
+var data;
 let patient_id = "<%= patient_id %>";
 let viewer_id = "<%= viewer_id %>";
 let is_final = <%= patient_advice.is_final %>;
@@ -27,7 +28,19 @@ console.log('patient_id: ', patient_id);
 </script>
 <script src="assets/common.js"></script>
 <script src="assets/five-pages.js"></script>
+<script src="assets/patient-header.js"></script>
 <script src="assets/footer.js"></script>
+<script>
+let json_url = get_base_url() + 'advice?id=' + patient_id;
+get_JSON(json_url, function(err, json_data) {
+    if (err) {
+        console.log("url:", json_url, "error:", err);
+    }
+    data = json_data;
+    document.getElementById('meds-with-rules-list').innerHTML =
+	meds_with_rules_as_html(data.patient_advice.meds_with_rules);
+});
+</script>
 </head>
 <body>
 <form id="patient_form">
@@ -68,15 +81,7 @@ Leeftijd: <%= patient_advice.age %><br/>
 <span id="patient_medications">
 <span id="meds_with_rules">
 Ga direct naar medicijnen met advies:
-<%     let rule_meds = patient_advice.meds_with_rules; -%>
-<% for (let i = 0; i < rule_meds.length; ++i ) { -%>
-<%     let med = rule_meds[i]; %>
-<%     if (i) { -%>
-,
-<%     } -%>
-<a href="#div_advice_<%= med.ATC_code %>" title="<%= med.medication_name %>">
-<%= ucfirst(med.medication_name).trim() %></a>
-<% } -%>
+<span id="meds-with-rules-list"></span>
 </span><!-- meds_with_rules -->
 <br/>
 <span id="meds_without_rules">

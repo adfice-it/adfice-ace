@@ -55,6 +55,7 @@ BROWSER_JS=\
  static/common.js \
  static/five-pages.js \
  static/footer.js \
+ static/patient-header.js \
  static/patient.js
 
 grep-ie-bad-words: $(BROWSER_JS)
