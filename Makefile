@@ -32,10 +32,17 @@ default: check
 
 node_modules/ws/lib/websocket-server.js:
 	npm install
+	ls -l node_modules/ws/lib/websocket-server.js
+	@echo "$@ complete"
+
+node_modules/.bin/testcafe:
+	npm install
+	ls -l node_modules/.bin/testcafe
 	@echo "$@ complete"
 
 update:
 	npm update
+	@echo "$@ complete"
 
 npmsetup: node_modules/ws/lib/websocket-server.js
 	@echo "$@ complete"
@@ -229,7 +236,7 @@ adfice-user.env:
 	echo 'ADFICE_TAR_FILE=/home/tester/adfice-ace.tar.gz' >> $@
 	echo 'ADFICE_HTTP_PORT=8081' >> $@
 
-centos-vm/basic-centos-8.3-vm.qcow2:
+centos-vm/basic-centos-8.3-vm.qcow2: centos-vm/Makefile
 	@echo "begin $@"
 	pushd centos-vm \
 		&& make basic-centos-8.3-vm.qcow2 \
@@ -294,7 +301,7 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 	sleep 2
 	mv -v tmp-x-vm.qcow2 $@
 
-vm-check: adfice-centos-8.3-vm.qcow2
+vm-check: adfice-centos-8.3-vm.qcow2 node_modules/.bin/testcafe
 	{ lsof -i:$(VM_PORT_SSH); if [ $$? -eq 0 ]; then \
 		echo "VM_PORT_SSH $(VM_PORT_SSH) not free"; false; fi; }
 	{ lsof -i:$(VM_PORT_HTTP); if [ $$? -eq 0 ]; then \
@@ -354,9 +361,13 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 	sleep 2
 	@echo "SUCCESS $@"
 
-
 submodules-update:
 	git submodule update --init --recursive
+	@echo "SUCCESS $@"
+
+centos-vm/Makefile: submodules-update
+	ls -l centos-vm/Makefile
+	@echo "SUCCESS $@"
 
 tidy:
 	js-beautify --replace --end-with-newline \
