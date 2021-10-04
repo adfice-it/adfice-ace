@@ -311,7 +311,7 @@ vm-check: adfice-centos-8.3-vm.qcow2 node_modules/.bin/testcafe
 	qemu-img create -f qcow2 -F qcow2 \
 		-b adfice-centos-8.3-vm.qcow2 \
 		test-adfice-centos-8.3-vm.qcow2
-	@echo 'launching tmp-x-vm.qcow2'
+	@echo 'launching test-adfice-centos-8.3-vm.qcow2'
 	{ qemu-system-x86_64 -hda test-adfice-centos-8.3-vm.qcow2 \
 		-m $(KVM_RAM) -smp $(KVM_CORES) -machine type=pc,accel=kvm \
 		-display none \
@@ -331,26 +331,57 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 		tester@127.0.0.1 \
 		-i ./centos-vm/id_rsa_tmp \
 		"bash -c 'cd /data/webapps/adfice; npm test'"
-	# Make sure it works before a restart
+	@echo "Make sure it works before a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
-	## Make sure it works after a restart
-	#cd setup-vm && vagrant halt && sleep 2
-	#cd setup-vm && vagrant up
-	#./node_modules/.bin/testcafe "firefox:headless" \
-	#	acceptance-test-cafe.js https://127.0.0.1:8443
-	## Make sure it automatically restarts if the service crashes
-	#cd setup-vm && vagrant ssh adfice-vm --command \
-	#	"bash -c 'ps aux | grep -e Adfice[W]ebserver'"
-	#cd setup-vm && vagrant ssh adfice-vm --command "bash -c \"\
-	#	kill \$$(ps -aux | grep -e Adfice[W]ebserver | tr -s ' ' \
-	#	| cut -d ' ' -f 2)\""
-	#sleep 5
-	#cd setup-vm && vagrant ssh adfice-vm --command \
-	#	"bash -c 'ps aux | grep -e Adfice[W]ebserver'"
-	#./node_modules/.bin/testcafe "firefox:headless" \
-	#	acceptance-test-cafe.js https://127.0.0.1:8443
-	#cd setup-vm && vagrant halt
+	@echo "shutting down, to Make sure it works after a restart"
+	ssh -p$(VM_PORT_SSH) \
+		-oNoHostAuthenticationForLocalhost=yes \
+		root@127.0.0.1 \
+		-i ./centos-vm/id_rsa_tmp \
+		'shutdown -h -t 2 now & exit'
+	{ while kill -0 `cat qemu.pid`; do \
+		echo "wating for `cat qemu.pid`"; sleep 1; done }
+	sleep 2
+	@echo 'launching #2 test-adfice-centos-8.3-vm.qcow2'
+	{ qemu-system-x86_64 -hda test-adfice-centos-8.3-vm.qcow2 \
+		-m $(KVM_RAM) -smp $(KVM_CORES) -machine type=pc,accel=kvm \
+		-display none \
+		-nic user,\
+hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTPS)-:443,\
+hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTP)-:80,\
+hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
+		echo "$$!" > 'qemu.pid' ; }
+	./centos-vm/retry.sh $(RETRIES) $(DELAY) \
+		ssh -p$(VM_PORT_SSH) \
+			-oNoHostAuthenticationForLocalhost=yes \
+			root@127.0.0.1 \
+			-i ./centos-vm/id_rsa_tmp \
+			'/bin/true'
+	@echo "Make sure it works after a restart"
+	./node_modules/.bin/testcafe "firefox:headless" \
+		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
+	@echo "Make sure it automatically restarts if the service crashes"
+	ssh -p$(VM_PORT_SSH) \
+		-oNoHostAuthenticationForLocalhost=yes \
+		root@127.0.0.1 \
+		-i ./centos-vm/id_rsa_tmp \
+		"bash -c 'ps aux | grep -e Adfice[W]ebserver'"
+	ssh -p$(VM_PORT_SSH) \
+		-oNoHostAuthenticationForLocalhost=yes \
+		root@127.0.0.1 \
+		-i ./centos-vm/id_rsa_tmp \
+		"bash -c \"\
+		kill \$$(ps -aux | grep -e Adfice[W]ebserver | tr -s ' ' \
+		| cut -d ' ' -f 2)\""
+	sleep 5
+	ssh -p$(VM_PORT_SSH) \
+		-oNoHostAuthenticationForLocalhost=yes \
+		root@127.0.0.1 \
+		-i ./centos-vm/id_rsa_tmp \
+		"bash -c 'ps aux | grep -e Adfice[W]ebserver'"
+	./node_modules/.bin/testcafe "firefox:headless" \
+		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
 	ssh -p$(VM_PORT_SSH) \
 		-oNoHostAuthenticationForLocalhost=yes \
 		root@127.0.0.1 \
