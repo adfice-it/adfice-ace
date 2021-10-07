@@ -1,13 +1,15 @@
 #!/bin/bash
 set -x
 set -e
-adduser -U tester
-cp -rv /root/.ssh /home/tester
-mv -v /root/adfice-user.env /home/tester
-mv -v /root/adfice-ace.tar.gz /home/tester
-cd /home/tester
+source /root/adfice-user.env
+adduser -U $ADFICE_USER_NAME
+cp -rv /root/.ssh /home/$ADFICE_USER_NAME
+mv -v /root/adfice-user.env /home/$ADFICE_USER_NAME
+mv -v /root/adfice-ace.tar.gz /home/$ADFICE_USER_NAME
+cd /home/$ADFICE_USER_NAME
 tar xvf adfice-ace.tar.gz
-chown -Rv tester:tester /home/tester
+chown -Rv $ADFICE_USER_NAME:$ADFICE_USER_NAME /home/$ADFICE_USER_NAME
 adfice-0.0.0/bin/rhel83-root-setup.sh
 adfice-0.0.0/bin/rhel83-root-setup-nginx.sh
-su - tester -c /home/tester/adfice-0.0.0/bin/rhel83-user-setup.sh
+su - $ADFICE_USER_NAME \
+	-c /home/$ADFICE_USER_NAME/adfice-0.0.0/bin/rhel83-user-setup.sh
