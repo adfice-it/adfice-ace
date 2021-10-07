@@ -297,7 +297,6 @@ adfice-centos-8.3-vm.qcow2: basic-centos-8.3-vm.qcow2 \
 		bin/vm-init.sh \
 		adfice-ace.tar.gz \
 		adfice-user.env
-	@echo "VM_PORT_SSH: $(VM_PORT_SSH)"
 	qemu-img create -f qcow2 -F qcow2 \
 		-b basic-centos-8.3-vm.qcow2 \
 		tmp-x-vm.qcow2
