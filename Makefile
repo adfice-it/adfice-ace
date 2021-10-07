@@ -21,10 +21,16 @@ VM_PORT_SSH := $(shell bin/free-port)
 VM_PORT_HTTP := $(shell bin/free-port)
 VM_PORT_HTTPS := $(shell bin/free-port)
 
-VM_SSH=ssh -p$(VM_PORT_SSH) \
-	-oNoHostAuthenticationForLocalhost=yes \
-	root@127.0.0.1 \
-	-i ./centos-vm/id_rsa_tmp
+define vm-ssh
+	ssh -p$(VM_PORT_SSH) \
+		-oNoHostAuthenticationForLocalhost=yes \
+		-i ./centos-vm/id_rsa_tmp \
+		$(1)@127.0.0.1
+endef
+
+VM_SSH=$(call vm-ssh,root)
+
+VM_SSH_TESTER=$(call vm-ssh,tester)
 
 VM_SCP=scp -P$(VM_PORT_SSH) \
 	-oNoHostAuthenticationForLocalhost=yes \
@@ -35,6 +41,35 @@ DELAY=0.1
 RETRIES=$(shell echo "$(SSH_MAX_INIT_SECONDS)/$(DELAY)" | bc)
 KVM_RAM=1G
 KVM_CORES=1
+
+VM_NIC=-nic user,hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTPS)-:443,hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTP)-:80,hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22
+
+define vm-launch
+	{ lsof -i:$(VM_PORT_SSH); if [ $$? -eq 0 ]; then \
+		echo "VM_PORT_SSH $(VM_PORT_SSH) not free"; false; fi; }
+	{ lsof -i:$(VM_PORT_HTTP); if [ $$? -eq 0 ]; then \
+		echo "VM_PORT_HTTP $(VM_PORT_HTTP) not free"; false; fi; }
+	{ lsof -i:$(VM_PORT_HTTPS); if [ $$? -eq 0 ]; then \
+		echo "VM_PORT_HTTPS $(VM_PORT_HTTPS) not free"; false; fi; }
+	@echo 'launching $(1)'
+	{ qemu-system-x86_64 -hda $(1) \
+		-m $(KVM_RAM) \
+		-smp $(KVM_CORES) \
+		-machine type=pc,accel=kvm \
+		-display none \
+		$(VM_NIC) & \
+		echo "$$!" > 'qemu.pid' ; }
+	./centos-vm/retry.sh $(RETRIES) $(DELAY) \
+		$(VM_SSH) '/bin/true'
+	@echo '$(1) running'
+endef
+
+define vm-shutdown
+	$(VM_SSH) 'shutdown -h -t 2 now & exit'
+	{ while kill -0 `cat qemu.pid`; do \
+		echo "wating for `cat qemu.pid`"; sleep 1; done }
+	sleep 2
+endef
 
 default: check
 
@@ -263,20 +298,10 @@ adfice-centos-8.3-vm.qcow2: basic-centos-8.3-vm.qcow2 \
 		adfice-ace.tar.gz \
 		adfice-user.env
 	@echo "VM_PORT_SSH: $(VM_PORT_SSH)"
-	{ lsof -i:$(VM_PORT_SSH); if [ $$? -eq 0 ]; then \
-		echo "VM_PORT_SSH $(VM_PORT_SSH) not free"; false; fi; }
 	qemu-img create -f qcow2 -F qcow2 \
 		-b basic-centos-8.3-vm.qcow2 \
 		tmp-x-vm.qcow2
-	@echo 'launching tmp-x-vm.qcow2'
-	{ qemu-system-x86_64 -hda tmp-x-vm.qcow2 \
-		-m $(KVM_RAM) -smp $(KVM_CORES) -machine type=pc,accel=kvm \
-		-display none \
-		-nic user,\
-hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
-		echo "$$!" > 'qemu.pid' ; }
-	./centos-vm/retry.sh $(RETRIES) $(DELAY) \
-		$(VM_SSH) '/bin/true'
+	$(call vm-launch,tmp-x-vm.qcow2)
 	ssh-keyscan -p$(VM_PORT_SSH) 127.0.0.1 \
                 | grep `cat ./centos-vm/id_rsa_host_tmp.pub | cut -f2 -d' '`
 	$(VM_SSH) '/bin/true'
@@ -285,57 +310,24 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 		adfice-user.env \
 		root@127.0.0.1:/root/
 	$(VM_SSH) 'bash /root/vm-init.sh'
-	$(VM_SSH) 'shutdown -h -t 2 now & exit'
-	{ while kill -0 `cat qemu.pid`; do \
-		echo "wating for `cat qemu.pid`"; sleep 1; done }
-	sleep 2
+	$(call vm-shutdown)
 	mv -v tmp-x-vm.qcow2 $@
 
 vm-check: adfice-centos-8.3-vm.qcow2 node_modules/.bin/testcafe
-	{ lsof -i:$(VM_PORT_SSH); if [ $$? -eq 0 ]; then \
-		echo "VM_PORT_SSH $(VM_PORT_SSH) not free"; false; fi; }
-	{ lsof -i:$(VM_PORT_HTTP); if [ $$? -eq 0 ]; then \
-		echo "VM_PORT_HTTP $(VM_PORT_HTTP) not free"; false; fi; }
-	{ lsof -i:$(VM_PORT_HTTPS); if [ $$? -eq 0 ]; then \
-		echo "VM_PORT_HTTPS $(VM_PORT_HTTPS) not free"; false; fi; }
 	qemu-img create -f qcow2 -F qcow2 \
 		-b adfice-centos-8.3-vm.qcow2 \
 		test-adfice-centos-8.3-vm.qcow2
-	@echo 'launching test-adfice-centos-8.3-vm.qcow2'
-	{ qemu-system-x86_64 -hda test-adfice-centos-8.3-vm.qcow2 \
-		-m $(KVM_RAM) -smp $(KVM_CORES) -machine type=pc,accel=kvm \
-		-display none \
-		-nic user,\
-hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTPS)-:443,\
-hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTP)-:80,\
-hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
-		echo "$$!" > 'qemu.pid' ; }
-	./centos-vm/retry.sh $(RETRIES) $(DELAY) \
-		$(VM_SSH) '/bin/true'
-	ssh -p$(VM_PORT_SSH) \
-		-oNoHostAuthenticationForLocalhost=yes \
-		tester@127.0.0.1 \
-		-i ./centos-vm/id_rsa_tmp \
-		"bash -c 'cd /data/webapps/adfice; npm test'"
+	$(call vm-launch,test-adfice-centos-8.3-vm.qcow2)
+	$(VM_SSH_TESTER) "bash -c 'cd /data/webapps/adfice; npm test'"
 	@echo "Make sure it works before a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
 	@echo "shutting down, to Make sure it works after a restart"
-	$(VM_SSH) 'shutdown -h -t 2 now & exit'
-	{ while kill -0 `cat qemu.pid`; do \
-		echo "wating for `cat qemu.pid`"; sleep 1; done }
-	sleep 2
-	@echo 'launching #2 test-adfice-centos-8.3-vm.qcow2'
-	{ qemu-system-x86_64 -hda test-adfice-centos-8.3-vm.qcow2 \
-		-m $(KVM_RAM) -smp $(KVM_CORES) -machine type=pc,accel=kvm \
-		-display none \
-		-nic user,\
-hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTPS)-:443,\
-hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTP)-:80,\
-hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
-		echo "$$!" > 'qemu.pid' ; }
-	./centos-vm/retry.sh $(RETRIES) $(DELAY) \
-		$(VM_SSH) '/bin/true'
+	$(call vm-shutdown)
+	@echo
+	@echo 'launch #2 test-adfice-centos-8.3-vm.qcow2'
+	@echo
+	$(call vm-launch,test-adfice-centos-8.3-vm.qcow2)
 	@echo "Make sure it works after a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
@@ -348,10 +340,7 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 	$(VM_SSH) "bash -c 'ps aux | grep -e Adfice[W]ebserver'"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
-	$(VM_SSH) 'shutdown -h -t 2 now & exit'
-	{ while kill -0 `cat qemu.pid`; do \
-		echo "wating for `cat qemu.pid`"; sleep 1; done }
-	sleep 2
+	$(call vm-shutdown)
 	@echo "SUCCESS $@"
 
 submodules-update:
