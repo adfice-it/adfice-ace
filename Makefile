@@ -26,6 +26,9 @@ VM_SSH=ssh -p$(VM_PORT_SSH) \
 	root@127.0.0.1 \
 	-i ./centos-vm/id_rsa_tmp
 
+VM_SCP=scp -P$(VM_PORT_SSH) \
+	-oNoHostAuthenticationForLocalhost=yes \
+	-i ./centos-vm/id_rsa_tmp
 
 SSH_MAX_INIT_SECONDS=60
 DELAY=0.1
@@ -277,10 +280,7 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 	ssh-keyscan -p$(VM_PORT_SSH) 127.0.0.1 \
                 | grep `cat ./centos-vm/id_rsa_host_tmp.pub | cut -f2 -d' '`
 	$(VM_SSH) '/bin/true'
-	scp -P$(VM_PORT_SSH) \
-		-oNoHostAuthenticationForLocalhost=yes \
-		-i ./centos-vm/id_rsa_tmp \
-		bin/vm-init.sh \
+	$(VM_SCP) bin/vm-init.sh \
 		adfice-ace.tar.gz \
 		adfice-user.env \
 		root@127.0.0.1:/root/
