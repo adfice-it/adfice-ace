@@ -13,6 +13,10 @@
 #
 # patsubst : $(patsubst pattern,replacement,text)
 #	https://www.gnu.org/software/make/manual/html_node/Text-Functions.html
+# call : $(call func,param1,param2,...)
+#	https://www.gnu.org/software/make/manual/html_node/Call-Function.html
+# define :
+#	https://www.gnu.org/software/make/manual/html_node/Multi_002dLine.html
 
 SHELL=/bin/bash
 ADFICE_VERSION=0.0.0
