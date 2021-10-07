@@ -25,20 +25,18 @@ VM_PORT_SSH := $(shell bin/free-port)
 VM_PORT_HTTP := $(shell bin/free-port)
 VM_PORT_HTTPS := $(shell bin/free-port)
 
+SSH_PARAMS=-oNoHostAuthenticationForLocalhost=yes \
+	   -i ./centos-vm/id_rsa_tmp
+
 define vm-ssh
-	ssh -p$(VM_PORT_SSH) \
-		-oNoHostAuthenticationForLocalhost=yes \
-		-i ./centos-vm/id_rsa_tmp \
-		$(1)@127.0.0.1
+	ssh -p$(VM_PORT_SSH) $(SSH_PARAMS) $(1)@127.0.0.1
 endef
 
 VM_SSH=$(call vm-ssh,root)
 
 VM_SSH_TESTER=$(call vm-ssh,tester)
 
-VM_SCP=scp -P$(VM_PORT_SSH) \
-	-oNoHostAuthenticationForLocalhost=yes \
-	-i ./centos-vm/id_rsa_tmp
+VM_SCP=scp -P$(VM_PORT_SSH) $(SSH_PARAMS)
 
 SSH_MAX_INIT_SECONDS=60
 DELAY=0.1
@@ -46,7 +44,11 @@ RETRIES=$(shell echo "$(SSH_MAX_INIT_SECONDS)/$(DELAY)" | bc)
 KVM_RAM=1G
 KVM_CORES=1
 
-VM_NIC=-nic user,hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTPS)-:443,hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTP)-:80,hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22
+VM_NIC=$(shell echo 'user \
+	hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTPS)-:443 \
+	hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTP)-:80 \
+	hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22' \
+	| sed -e's/\s\s*/,/g')
 
 define vm-launch
 	{ lsof -i:$(VM_PORT_SSH); if [ $$? -eq 0 ]; then \
@@ -61,11 +63,13 @@ define vm-launch
 		-smp $(KVM_CORES) \
 		-machine type=pc,accel=kvm \
 		-display none \
-		$(VM_NIC) & \
+		-nic $(VM_NIC) & \
 		echo "$$!" > 'qemu.pid' ; }
 	./centos-vm/retry.sh $(RETRIES) $(DELAY) \
 		$(VM_SSH) '/bin/true'
-	@echo '$(1) running'
+	ssh-keyscan -p$(VM_PORT_SSH) 127.0.0.1 \
+                | grep `cat ./centos-vm/id_rsa_host_tmp.pub | cut -f2 -d' '`
+	@echo '$(1) running PID: $(shell cat qemu.pid)'
 endef
 
 define vm-shutdown
@@ -305,9 +309,6 @@ adfice-centos-8.3-vm.qcow2: basic-centos-8.3-vm.qcow2 \
 		-b basic-centos-8.3-vm.qcow2 \
 		tmp-x-vm.qcow2
 	$(call vm-launch,tmp-x-vm.qcow2)
-	ssh-keyscan -p$(VM_PORT_SSH) 127.0.0.1 \
-                | grep `cat ./centos-vm/id_rsa_host_tmp.pub | cut -f2 -d' '`
-	$(VM_SSH) '/bin/true'
 	$(VM_SCP) bin/vm-init.sh \
 		adfice-ace.tar.gz \
 		adfice-user.env \
