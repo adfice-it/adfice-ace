@@ -21,6 +21,12 @@ VM_PORT_SSH := $(shell bin/free-port)
 VM_PORT_HTTP := $(shell bin/free-port)
 VM_PORT_HTTPS := $(shell bin/free-port)
 
+VM_SSH=ssh -p$(VM_PORT_SSH) \
+	-oNoHostAuthenticationForLocalhost=yes \
+	root@127.0.0.1 \
+	-i ./centos-vm/id_rsa_tmp
+
+
 SSH_MAX_INIT_SECONDS=60
 DELAY=0.1
 RETRIES=$(shell echo "$(SSH_MAX_INIT_SECONDS)/$(DELAY)" | bc)
@@ -267,18 +273,10 @@ adfice-centos-8.3-vm.qcow2: basic-centos-8.3-vm.qcow2 \
 hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 		echo "$$!" > 'qemu.pid' ; }
 	./centos-vm/retry.sh $(RETRIES) $(DELAY) \
-		ssh -p$(VM_PORT_SSH) \
-			-oNoHostAuthenticationForLocalhost=yes \
-			root@127.0.0.1 \
-			-i ./centos-vm/id_rsa_tmp \
-			'/bin/true'
+		$(VM_SSH) '/bin/true'
 	ssh-keyscan -p$(VM_PORT_SSH) 127.0.0.1 \
                 | grep `cat ./centos-vm/id_rsa_host_tmp.pub | cut -f2 -d' '`
-	ssh -p$(VM_PORT_SSH) \
-		-oNoHostAuthenticationForLocalhost=yes \
-		root@127.0.0.1 \
-		-i ./centos-vm/id_rsa_tmp \
-		'/bin/true'
+	$(VM_SSH) '/bin/true'
 	scp -P$(VM_PORT_SSH) \
 		-oNoHostAuthenticationForLocalhost=yes \
 		-i ./centos-vm/id_rsa_tmp \
@@ -286,16 +284,8 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 		adfice-ace.tar.gz \
 		adfice-user.env \
 		root@127.0.0.1:/root/
-	ssh -p$(VM_PORT_SSH) \
-		-oNoHostAuthenticationForLocalhost=yes \
-		root@127.0.0.1 \
-		-i ./centos-vm/id_rsa_tmp \
-		'bash /root/vm-init.sh'
-	ssh -p$(VM_PORT_SSH) \
-		-oNoHostAuthenticationForLocalhost=yes \
-		root@127.0.0.1 \
-		-i ./centos-vm/id_rsa_tmp \
-		'shutdown -h -t 2 now & exit'
+	$(VM_SSH) 'bash /root/vm-init.sh'
+	$(VM_SSH) 'shutdown -h -t 2 now & exit'
 	{ while kill -0 `cat qemu.pid`; do \
 		echo "wating for `cat qemu.pid`"; sleep 1; done }
 	sleep 2
@@ -321,11 +311,7 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTP)-:80,\
 hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 		echo "$$!" > 'qemu.pid' ; }
 	./centos-vm/retry.sh $(RETRIES) $(DELAY) \
-		ssh -p$(VM_PORT_SSH) \
-			-oNoHostAuthenticationForLocalhost=yes \
-			root@127.0.0.1 \
-			-i ./centos-vm/id_rsa_tmp \
-			'/bin/true'
+		$(VM_SSH) '/bin/true'
 	ssh -p$(VM_PORT_SSH) \
 		-oNoHostAuthenticationForLocalhost=yes \
 		tester@127.0.0.1 \
@@ -335,11 +321,7 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
 	@echo "shutting down, to Make sure it works after a restart"
-	ssh -p$(VM_PORT_SSH) \
-		-oNoHostAuthenticationForLocalhost=yes \
-		root@127.0.0.1 \
-		-i ./centos-vm/id_rsa_tmp \
-		'shutdown -h -t 2 now & exit'
+	$(VM_SSH) 'shutdown -h -t 2 now & exit'
 	{ while kill -0 `cat qemu.pid`; do \
 		echo "wating for `cat qemu.pid`"; sleep 1; done }
 	sleep 2
@@ -353,40 +335,20 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTP)-:80,\
 hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 		echo "$$!" > 'qemu.pid' ; }
 	./centos-vm/retry.sh $(RETRIES) $(DELAY) \
-		ssh -p$(VM_PORT_SSH) \
-			-oNoHostAuthenticationForLocalhost=yes \
-			root@127.0.0.1 \
-			-i ./centos-vm/id_rsa_tmp \
-			'/bin/true'
+		$(VM_SSH) '/bin/true'
 	@echo "Make sure it works after a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
 	@echo "Make sure it automatically restarts if the service crashes"
-	ssh -p$(VM_PORT_SSH) \
-		-oNoHostAuthenticationForLocalhost=yes \
-		root@127.0.0.1 \
-		-i ./centos-vm/id_rsa_tmp \
-		"bash -c 'ps aux | grep -e Adfice[W]ebserver'"
-	ssh -p$(VM_PORT_SSH) \
-		-oNoHostAuthenticationForLocalhost=yes \
-		root@127.0.0.1 \
-		-i ./centos-vm/id_rsa_tmp \
-		"bash -c \"\
+	$(VM_SSH) "bash -c 'ps aux | grep -e Adfice[W]ebserver'"
+	$(VM_SSH) "bash -c \"\
 		kill \$$(ps -aux | grep -e Adfice[W]ebserver | tr -s ' ' \
 		| cut -d ' ' -f 2)\""
 	sleep 5
-	ssh -p$(VM_PORT_SSH) \
-		-oNoHostAuthenticationForLocalhost=yes \
-		root@127.0.0.1 \
-		-i ./centos-vm/id_rsa_tmp \
-		"bash -c 'ps aux | grep -e Adfice[W]ebserver'"
+	$(VM_SSH) "bash -c 'ps aux | grep -e Adfice[W]ebserver'"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
-	ssh -p$(VM_PORT_SSH) \
-		-oNoHostAuthenticationForLocalhost=yes \
-		root@127.0.0.1 \
-		-i ./centos-vm/id_rsa_tmp \
-		'shutdown -h -t 2 now & exit'
+	$(VM_SSH) 'shutdown -h -t 2 now & exit'
 	{ while kill -0 `cat qemu.pid`; do \
 		echo "wating for `cat qemu.pid`"; sleep 1; done }
 	sleep 2
