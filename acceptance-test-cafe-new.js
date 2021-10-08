@@ -103,7 +103,9 @@ test('Check multiple viewers making changes', async t => {
     await t.expect(cb_selector.checked).ok();
 
     // ensure the text is updated in the initial window
-    await t.expect(freetext_selector_1.value).eql(newFreetext);
+    await t.expect(freetext_selector_1.value).eql(newFreetext, {
+        timeout: 10000
+    });
 
     // close the second window
     await t.switchToWindow(window2);
