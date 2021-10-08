@@ -64,18 +64,24 @@ define vm-launch
 		-machine type=pc,accel=kvm \
 		-display none \
 		-nic $(VM_NIC) & \
-		echo "$$!" > 'qemu.pid' ; }
+		echo "$$!" > '$(1).pid' ; }
+	echo "$(VM_NIC)" > '$(1).nic'
 	./centos-vm/retry.sh $(RETRIES) $(DELAY) \
 		$(VM_SSH) '/bin/true'
+	echo "$(VM_SSH)" > '$(1).ssh'
 	ssh-keyscan -p$(VM_PORT_SSH) 127.0.0.1 \
                 | grep `cat ./centos-vm/id_rsa_host_tmp.pub | cut -f2 -d' '`
-	@echo '$(1) running PID: $(shell cat qemu.pid)'
+	@echo "$(1).nic: $(shell cat $(1).nic)"
+	@echo '$(1) running, PID: $(shell cat $(1).pid)'
+	@echo '$(1) ssh via: $(shell cat $(1).ssh)'
 endef
 
 define vm-shutdown
 	$(VM_SSH) 'shutdown -h -t 2 now & exit'
-	{ while kill -0 `cat qemu.pid`; do \
-		echo "wating for `cat qemu.pid`"; sleep 1; done }
+	{ while kill -0 `cat $(1).pid`; do \
+		echo "wating for $(1) pid `cat $(1).pid` to terminate"; \
+		sleep 1; done }
+	rm -v $(1).nic $(1).ssh $(1).pid
 	sleep 2
 endef
 
@@ -119,13 +125,7 @@ portal-dbsetup: npmsetup portal-db-scripts.env
 dbsetup: adfice-dbsetup portal-dbsetup
 
 IE_BADWORDS_RE='await\|async\|forEach\|=>\|'\`
-BROWSER_JS=\
- static/basic-utils.js \
- static/common.js \
- static/five-pages.js \
- static/footer.js \
- static/patient-header.js \
- static/patient.js
+BROWSER_JS := $(shell ls static/*js)
 
 grep-ie-bad-words: $(BROWSER_JS)
 	for FILE in $(BROWSER_JS); do \
@@ -147,133 +147,21 @@ check: dbsetup grep-ie-bad-words
 	./acceptance-test-cafe-new.sh
 	@echo "SUCCESS $@"
 
-adfice-ace.tar.gz: \
-		acceptance-test-cafe.js \
-		acceptance-test-cafe.sh \
-		acceptance-test.sh \
-		adficeDB.js \
-		adficeEvaluator.js \
-		adficeEvaluator.test.js \
-		adfice.js \
-		adfice.test.js \
-		adficeUtil.js \
-		adficeUtil.test.js \
-		AdficeWebserver.js \
-		bin/connect-container.sh \
-		bin/db-create-portal-tables.sh \
-		bin/db-create-tables.sh \
-		bin/free-port \
-		bin/free-port.js \
-		bin/launch-mariadbd \
-		bin/load-synthetic-data.sh \
-		bin/make-self-signed-cert.sh \
-		bin/reload-patient-data.sh \
-		bin/reload-synthetic-data.sh \
-		bin/rhel83-root-setup-nginx.sh \
-		bin/rhel83-root-setup.sh \
-		bin/rhel83-user-setup.sh \
-		bin/setup-new-db-container.sh \
-		bin/vm-init.sh \
-		calculatePrediction.js \
-		calculatePrediction.test.js \
-		COPYING \
+ADFICE_TAR_CONTENTS=COPYING \
+		$(shell ls *.js *.sh) \
 		example.nginx.conf \
 		export-to-mrs \
-		export-to-mrs.js \
 		INSTALL.md \
 		Makefile \
 		notes \
 		package.json \
-		ping-db.js \
-		portal-export.js \
-		prediction \
 		README.md \
-		sql/createETLTables.sql \
-		sql/createPatientTables.sql \
-		sql/createPriority.sql \
-		sql/createRulesTable.sql \
-		sql/insertSynthetic_allergies.sql \
-		sql/insertSynthetic_labs.sql \
-		sql/insertSynthetic_measurements.sql \
-		sql/insertSynthetic_medications.sql \
-		sql/insertSynthetic_patient_data_160.sql \
-		sql/insertSynthetic_patient_data_161.sql \
-		sql/insertSynthetic_patient.sql \
-		sql/insertSynthetic_problems.sql \
-		sql/newAdviceTable.sql \
-		sql/newNonMedHeaders.sql \
-		sql/newNonMedTable.sql \
-		sql/newOtherMedTable.sql \
-		sql/newPreselectRulesTable.sql \
-		sql/newRulesTable.sql \
-		sql/populateETLTables.sql \
-		sql/populateProblemMap.sql \
-		sql/updateMedRulesWithSQLConditions.sql \
-		sql/updatePrecheckWithSQLConditions.sql \
-		sql/updateRulesWithSeparatedSelectors.sql \
-		static/adfice.css \
-		static/Advice_IT_logo_small.png \
-		static/basic-utils.js \
-		static/common.js \
-		static/five-pages.js \
-		static/FK_circle_with_linkout.png \
-		static/footer.css \
-		static/footer.include.html \
-		static/footer.js \
-		static/HoeGebruikIkDitSysteem.html \
-		static/patient-header.js \
-		static/patient.js \
-		static/refpages/refpage0.html \
-		static/refpages/refpage10.html \
-		static/refpages/refpage11.html \
-		static/refpages/refpage12.html \
-		static/refpages/refpage13.html \
-		static/refpages/refpage14.html \
-		static/refpages/refpage15.html \
-		static/refpages/refpage16.html \
-		static/refpages/refpage17.html \
-		static/refpages/refpage18.html \
-		static/refpages/refpage19.html \
-		static/refpages/refpage1.html \
-		static/refpages/refpage20.html \
-		static/refpages/refpage21.html \
-		static/refpages/refpage22.html \
-		static/refpages/refpage24.html \
-		static/refpages/refpage25.html \
-		static/refpages/refpage26.html \
-		static/refpages/refpage27.html \
-		static/refpages/refpage28.html \
-		static/refpages/refpage29.html \
-		static/refpages/refpage2.html \
-		static/refpages/refpage30.html \
-		static/refpages/refpage31.html \
-		static/refpages/refpage32.html \
-		static/refpages/refpage33.html \
-		static/refpages/refpage3.html \
-		static/refpages/refpage4.html \
-		static/refpages/refpage5.html \
-		static/refpages/refpage6.html \
-		static/refpages/refpage7.html \
-		static/refpages/refpage8.html \
-		static/refpages/refpage9.html \
-		static/refpages/refPageCurrentMax.txt \
-		static/refpages/refstyle.css \
-		static/riskScale70.png \
-		static/WarningRW_openClipArt.png \
+		$(shell find bin prediction sql static views -type f) \
 		system.db-scripts.env \
 		testingNotes.txt \
-		TODO \
-		verificationAndValidation.test.js \
-		views/advise.ejs \
-		views/checkboxes.ejs \
-		views/consult.ejs \
-		views/finalize.ejs \
-		views/index.ejs \
-		views/patient.ejs \
-		views/patient-validation.ejs \
-		views/prediction_explanation.ejs \
-		views/prep.ejs \
-		views/start.ejs
+		TODO
+
+adfice-ace.tar.gz: $(ADFICE_TAR_CONTENTS)
 	tar --transform='s@^@adfice-$(ADFICE_VERSION)/@' \
 		--gzip --create --verbose \
 		--file=$@ $^
@@ -314,7 +202,7 @@ adfice-centos-8.3-vm.qcow2: basic-centos-8.3-vm.qcow2 \
 		adfice-user.env \
 		root@127.0.0.1:/root/
 	$(VM_SSH) 'bash /root/vm-init.sh'
-	$(call vm-shutdown)
+	$(call vm-shutdown,tmp-x-vm.qcow2)
 	mv -v tmp-x-vm.qcow2 $@
 
 vm-check: adfice-centos-8.3-vm.qcow2 node_modules/.bin/testcafe
@@ -326,8 +214,9 @@ vm-check: adfice-centos-8.3-vm.qcow2 node_modules/.bin/testcafe
 	@echo "Make sure it works before a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
+	@echo
 	@echo "shutting down, to Make sure it works after a restart"
-	$(call vm-shutdown)
+	$(call vm-shutdown,test-adfice-centos-8.3-vm.qcow2)
 	@echo
 	@echo 'launch #2 test-adfice-centos-8.3-vm.qcow2'
 	@echo
@@ -335,6 +224,7 @@ vm-check: adfice-centos-8.3-vm.qcow2 node_modules/.bin/testcafe
 	@echo "Make sure it works after a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
+	@echo
 	@echo "Make sure it automatically restarts if the service crashes"
 	$(VM_SSH) "bash -c 'ps aux | grep -e Adfice[W]ebserver'"
 	$(VM_SSH) "bash -c \"\
@@ -344,7 +234,7 @@ vm-check: adfice-centos-8.3-vm.qcow2 node_modules/.bin/testcafe
 	$(VM_SSH) "bash -c 'ps aux | grep -e Adfice[W]ebserver'"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
-	$(call vm-shutdown)
+	$(call vm-shutdown,test-adfice-centos-8.3-vm.qcow2)
 	@echo "SUCCESS $@"
 
 submodules-update:
