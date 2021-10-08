@@ -357,21 +357,6 @@ centos-vm/Makefile: submodules-update
 
 tidy:
 	js-beautify --replace --end-with-newline \
-		acceptance-test-cafe.js \
-		acceptance-test-cafe-new.js \
-		adficeDB.js \
-		adficeEvaluator.js \
-		adficeEvaluator.test.js \
-		adfice.js \
-		adfice.test.js \
-		adficeUtil.js \
-		adficeUtil.test.js \
-		AdficeWebserver.js \
-		bin/free-port.js \
-		calculatePrediction.js \
-		calculatePrediction.test.js \
-		export-to-mrs.js \
-		ping-db.js \
-		portal-export.js \
-		static/*.js \
-		verificationAndValidation.test.js
+		*.js \
+		bin/*.js \
+		static/*.js
