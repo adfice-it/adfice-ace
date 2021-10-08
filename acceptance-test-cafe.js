@@ -344,9 +344,9 @@ test('Test selecting views', async t => {
     await t.expect(ehrOther.visible).notOk();
 });
 
-async function check_checkbox_and_freetext(id) {
+async function check_checkbox_and_freetext(t, id) {
     // ensure our cb is selected
-    let cb_id = Selector('#cb_' + id);
+    let cb_id = await Selector('#cb_' + id);
     if (!(await cb_id.checked)) {
         await t.click(cb_id);
     }
@@ -374,7 +374,7 @@ test('Test free text fields', async t => {
     let window1 = await t.openWindow(url);
 
     let id = 'N05AD01_16_2';
-    check_checkbox_and_freetext(id);
+    check_checkbox_and_freetext(t, id);
 });
 
 test('Test non-med free text fields', async t => {
@@ -382,7 +382,7 @@ test('Test non-med free text fields', async t => {
     let window1 = await t.openWindow(url);
 
     let id = 'NONMED_D_1';
-    check_checkbox_and_freetext(id);
+    check_checkbox_and_freetext(t, id);
 });
 
 test('Test med lists', async t => {
