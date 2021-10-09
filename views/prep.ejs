@@ -60,6 +60,7 @@ document.write('<a href="' + prediction_url +
 </div><!-- gauge_background -->
 </div><!-- prediction -->
 <div style="height: 2em;"></div>
+
 <span id="patient_medications">
 <span id="meds_with_rules">
 Ga direct naar medicijnen met advies:
@@ -68,19 +69,9 @@ Ga direct naar medicijnen met advies:
 <br/>
 <span id="meds_without_rules">
 <br/>Gedetecteerde andere medicijnen:
-<%     let other_meds = patient_advice.meds_without_rules; -%>
-<% if (other_meds.length == 0) { %>
-Geen
-<% } else { %>
-<%     for (let i = 0; i < other_meds.length; ++i ) { -%>
-<%         let med = other_meds[i]; %>
-<%         if (i) { -%>
-,
-<%         } -%>
-<%= ucfirst(med.medication_name).trim() %>
-<%     } -%>
-<% } -%>
+<span id="meds-without-rules-list">Geen</span>
 </span><!-- meds_without_rules -->
+
 </span><!-- patient_medications -->
 <span id="patient_problems">
 <br/>Gedetecteerde relevante problemen:
@@ -99,6 +90,7 @@ Geen
 Geen
 <% } -%>
 </span><!-- patient_problems -->
+
 <%     let labs = patient_advice.labs; -%>
 <span id="patient_labs">
 <br />Gedetecteerde relevante laboratorium waardes:
