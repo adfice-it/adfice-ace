@@ -3,7 +3,12 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-function load_footer(patient_id_text) {
+function get_patient_id_param() {
+    let params = new URLSearchParams(window.location.search)
+    return params.get('id');
+}
+
+function load_footer() {
     let footer_url = get_base_url() + 'assets/footer.include.html';
     get_text(footer_url, function(err, footer_include_html) {
         if (err) {
@@ -15,7 +20,7 @@ function load_footer(patient_id_text) {
 
         let footer_patient_id = document.getElementById('footer-patient-id');
         if (footer_patient_id) {
-            footer_patient_id.innerText = patient_id_text;
+            footer_patient_id.innerText = get_patient_id_param();
         } else {
             console.log('ERROR! no element footer-patient-id?');
         }
@@ -23,11 +28,8 @@ function load_footer(patient_id_text) {
 }
 
 function switch_view(view) {
-    let params = new URLSearchParams(window.location.search)
-    patient_id = params.get('id');
-
     let base_url = get_base_url();
-    let new_url = base_url + view + '?id=' + patient_id;
+    let new_url = base_url + view + '?id=' + get_patient_id_param();
 
     // sort of surprising that this is all it takes:
     window.location = new_url;
