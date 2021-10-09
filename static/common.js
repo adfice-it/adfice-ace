@@ -5,6 +5,9 @@
 
 /* global data used by these functions */
 var common_js = {
+    patient_id: null,
+    viewer_id: null,
+    is_final: null,
     ws: null,
     weirdness: 0,
     messages_received: 0,
@@ -14,8 +17,8 @@ var common_js = {
 
 function send_message(message_type, apply) {
     let message = {};
-    message.viewer_id = viewer_id;
-    message.patient_id = patient_id;
+    message.viewer_id = common_js.viewer_id;
+    message.patient_id = common_js.patient_id;
     message.type = message_type;
 
     if (apply) {
@@ -174,7 +177,8 @@ function process_freetexts(message) {
         let value = fields[field_id];
         var field = document.getElementById(field_id);
         // only what changed AND from some other source
-        if (field && field.value != value && message.viewer_id != viewer_id) {
+        if (field && field.value != value &&
+            message.viewer_id != common_js.viewer_id) {
             field.value = value;
         }
 
@@ -246,8 +250,15 @@ function ws_on_message(event) {
     }
 
     const message = JSON.parse(event.data);
-    if ((!('patient_id' in message)) || (message.patient_id != patient_id)) {
-        common_js.logger.log('expected patient_id of:', patient_id);
+
+    if (message.type == 'init' && !common_js.viewer_id) {
+        /* viewer_id should come from the session */
+        common_js.viewer_id = message.viewer_id;
+    }
+
+    if ((!('patient_id' in message)) ||
+        (message.patient_id != common_js.patient_id)) {
+        common_js.logger.log('expected patient_id of:', common_js.patient_id);
         common_js.logger.log('               but was:', message.patient_id);
         common_js.logger.log(JSON.stringify({
             message: message
@@ -263,13 +274,13 @@ function ws_on_message(event) {
     process_viewer_count(message);
 
     if ('is_final' in message) {
-        is_final = message['is_final'];
+        common_js.is_final = message['is_final'];
     }
 
     let elementList = document.querySelectorAll("input");
     for (let i = 0; i < elementList.length; ++i) {
         let input = elementList[i];
-        input.disabled = is_final;
+        input.disabled = common_js.is_final;
     }
 
     if ('debug_info' in message) {
@@ -330,8 +341,12 @@ function connect_web_socket() {
             url_port = 443;
         }
     }
+
+    let params = new URLSearchParams(window.location.search);
+    common_js.patient_id = params.get('id');
+
     let base_url = ws_protocol + '//' + url_hostname + ':' + url_port;
-    let ws_url = base_url + '/patient/' + patient_id;
+    let ws_url = base_url + '/patient/' + common_js.patient_id;
     common_js.ws = new WebSocket(ws_url);
     common_js.ws.onmessage = ws_on_message;
     common_js.ws.onclose = ws_on_close;

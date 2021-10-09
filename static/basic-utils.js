@@ -28,7 +28,7 @@ function get_base_url() {
 }
 
 function get_content(url, type, callback) {
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
     xhr.responseType = type;
     xhr.onload = function() {

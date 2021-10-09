@@ -25,17 +25,12 @@ const DEBUG = ((process.env.DEBUG !== undefined) &&
     (process.env.DEBUG !== "0"));
 console.log('DEBUG: ', DEBUG);
 
-let render_count = 0;
-
 async function getDataForPatient(req, res) {
-    ++render_count;
     let patient_id = req.query.id || req.query.patient || 0;
-    let viewer_id = render_count; /* viewer_id should come from the session */
     let patient_advice = await adfice.getAdviceForPatient(patient_id);
     let data = {
         lang: 'nl',
         md: md,
-        viewer_id: viewer_id,
         patient_id: patient_id,
         patient_advice: patient_advice,
     };
@@ -164,7 +159,11 @@ function hello_all(kind, id) {
     send_all(kind, id, message);
 }
 
+var global_patient_advice_message_count = 0;
 async function patient_advice_message(kind, id) {
+    ++global_patient_advice_message_count;
+    /* viewer_id should come from the session */
+    let viewer_id = global_patient_advice_message_count;
     let patient_advice = await adfice.getAdviceForPatient(id);
 
     let freetexts = patient_advice.free_texts;
@@ -175,6 +174,7 @@ async function patient_advice_message(kind, id) {
 
     message.type = 'init';
     message.info = 'hello';
+    message.viewer_id = viewer_id;
     message['field_entries'] = freetexts;
     message['box_states'] = selections;
     message['is_final'] = patient_advice.is_final;
