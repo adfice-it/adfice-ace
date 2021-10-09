@@ -27,14 +27,11 @@ function get_patient_advice() {
     return five_pages.data.patient_advice;
 }
 
-function start_page_set_from_json() {
-    let el_pi_age = document.getElementById('patient-info-age');
-    el_pi_age.innerText = get_patient_advice().age;
-}
-
 function page_load(before_socket) {
     let params = new URLSearchParams(window.location.search)
     five_pages.patient_id = params.get('id');
+
+    document.title = 'Patient ' + five_pages.patient_id;
 
     let el_pi_id = document.getElementById('patient-info-id');
     el_pi_id.innerText = five_pages.patient_id;
@@ -58,14 +55,96 @@ function page_load(before_socket) {
     });
 }
 
+function meds_with_rules_as_html(rule_meds) {
+    let html = '';
+    for (let i = 0; i < rule_meds.length; ++i) {
+        let med = rule_meds[i];
+        if (i) {
+            html += ', '
+        }
+        html += '<a href="#div_advice_' + med.ATC_code + '"';
+        html += ' title="' + med.medication_name + '">';
+        html += ucfirst(med.medication_name).trim();
+        html += '</a>';
+    }
+    return html;
+}
+
+function patient_info_age() {
+    let advice = get_patient_advice();
+    let elem = document.getElementById('patient-info-age');
+    if (elem) {
+        elem.innerText = advice.age;
+    }
+}
+
+function patient_info_meds_with_rules() {
+    let advice = get_patient_advice();
+    let elem = document.getElementById('meds-with-rules-list');
+    if (elem) {
+        elem.innerHTML = meds_with_rules_as_html(advice.meds_with_rules);
+    }
+}
+
+// the following functions specify the needed elements which vary
+// between pages and need to be populated on load
+// and see: function page_load(before_socket)
+
+function start_page_setup() {
+    patient_info_age();
+}
+
+function prep_page_setup() {
+    patient_info_age();
+    patient_info_meds_with_rules();
+}
+
+function consult_page_setup() {
+    patient_info_age();
+    patient_info_meds_with_rules();
+}
+
+function advise_page_setup() {
+    patient_info_age();
+}
+
+function finalize_page_setup() {
+    patient_info_age(); // is this needed?
+}
+
+// These functions will be called from the web page, e.g.:
+// <script>
+// window.addEventListener('load', function(event) { start_page_load(); });
+// </script>
+
 function start_page_load() {
-    page_load(start_page_set_from_json);
+    page_load(start_page_setup);
+}
+
+function prep_page_load() {
+    page_load(prep_page_setup);
+}
+
+function consult_page_load() {
+    page_load(consult_page_setup);
+}
+
+function advise_page_load() {
+    page_load(advise_page_setup);
+}
+
+function finalize_page_load() {
+    page_load(finalize_page_setup);
 }
 
 // export modules for unit testing ?
 if (typeof module !== 'undefined') {
     module.exports = {
         start_page_load: start_page_load,
+        prep_page_load: prep_page_load,
+        consult_page_load: consult_page_load,
+        advise_page_load: advise_page_load,
+        finalize_page_load: finalize_page_load,
         get_five_pages: get_five_pages
     }
 }

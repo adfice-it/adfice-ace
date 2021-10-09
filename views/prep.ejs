@@ -6,11 +6,11 @@
        if (typeof s !== 'string') { return s; }
        return s.charAt(0).toUpperCase() + s.slice(1);
    } -%>
-<html lang="<%= lang %>">
+<html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Patient <%= patient_id %></title>
+<title>Patient</title>
 <link rel="stylesheet" type="text/css" href="static/adfice.css">
 <style>
 #button-prep-view {
@@ -19,31 +19,11 @@
 }
 </style>
 <script src="assets/basic-utils.js"></script>
-<script>
-var data;
-let patient_id = "<%= patient_id %>";
-let is_final = <%= patient_advice.is_final %>;
-console.log('patient_id: ', patient_id);
-</script>
 <script src="assets/common.js"></script>
 <script src="assets/five-pages.js"></script>
-<script src="assets/patient-header.js"></script>
 <script src="assets/footer.js"></script>
 <script>
-let json_url = get_base_url() + 'advice?id=' + patient_id;
-get_JSON(json_url, function(err, json_data) {
-    if (err) {
-        console.log("url:", json_url, "error:", err);
-    }
-    data = json_data;
-    document.getElementById('meds-with-rules-list').innerHTML =
-	meds_with_rules_as_html(data.patient_advice.meds_with_rules);
-});
-</script>
-<script>
-window.addEventListener('load', function(event) {
-    connect_web_socket_and_keep_alive();
-});
+window.addEventListener('load', function(event) { prep_page_load(); });
 </script>
 </head>
 <body>
@@ -60,8 +40,8 @@ window.addEventListener('load', function(event) {
 </div><!-- nav_container -->
 <div id=patient_info>
 <strong>Pati&euml;ntinformatie:</strong><br/>
-Patient: <%= patient_id %><br/>
-Leeftijd: <%= patient_advice.age %><br/>
+Patient: <span id="patient-info-id"></span><br/>
+Leeftijd: <span id="patient-info-age"></span><br/>
 <div class="prediction" id = "prediction">
 <% let risk_score = patient_advice.risk_score; -%>
 <% let hide_gauge = (risk_score == null || isNaN(risk_score)) -%>
@@ -72,7 +52,15 @@ Leeftijd: <%= patient_advice.age %><br/>
 <% } else { -%>
 <%= risk_score -%>%
 <% } -%>
-</span> <a href="prediction_explanation?id=<%= patient_id %>">(lees meer over het predictiemodel)</a></p>
+</span>
+<script>
+let params = new URLSearchParams(window.location.search)
+var patient_id = params.get('id');
+var prediction_url = 'prediction_explanation?id=' + patient_id;
+document.write('<a href="' + prediction_url +
+'">(lees meer over het predictiemodel)</a>');
+</script>
+</p>
 <div class='gauge_background'>
 <div class='gauge_text_left'>0%</div>
 <% if (!hide_gauge) { -%>
