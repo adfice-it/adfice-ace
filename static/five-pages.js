@@ -86,26 +86,53 @@ function patient_info_meds_with_rules() {
     }
 }
 
+function gauge_risk_score() {
+    let advice = get_patient_advice();
+    let risk_score = advice.risk_score;
+    let risk_known;
+    if ((risk_score == null) || (isNaN(risk_score))) {
+        risk_known = 0;
+    } else {
+        risk_known = 1;
+    }
+
+    let elem_rs = document.getElementById('gauge-risk-score');
+    if (elem_rs) {
+        if (risk_known) {
+            elem_rs.innerHTML = risk_score;
+        }
+    }
+    let elem_gl = document.getElementById('gauge-line');
+    if (elem_gl && risk_known) {
+        elem_gl.classList.add("gauge_line");
+        elem_gl.style.left = risk_score + "%";
+    }
+}
+
 // the following functions specify the needed elements which vary
 // between pages and need to be populated on load
 // and see: function page_load(before_socket)
 
 function start_page_setup() {
     patient_info_age();
+    gauge_risk_score();
 }
 
 function prep_page_setup() {
     patient_info_age();
     patient_info_meds_with_rules();
+    gauge_risk_score();
 }
 
 function consult_page_setup() {
     patient_info_age();
     patient_info_meds_with_rules();
+    gauge_risk_score();
 }
 
 function advise_page_setup() {
     patient_info_age();
+    gauge_risk_score();
 }
 
 function finalize_page_setup() {

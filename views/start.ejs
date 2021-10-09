@@ -58,7 +58,7 @@ Gedetecteerde andere medicijnen:<span id="meds-without-rules"></span>
 <div class="prediction" id="prediction">
 <p>Kans om te vallen binnen 12 maanden:&nbsp;
 <span id="prediction-chance"></span>
-<span style="color: red;">(onbekend)</span>
+<span id="gauge-risk-score" style="color: red;">(onbekend)</span>
 <script>
 let params = new URLSearchParams(window.location.search)
 var patient_id = params.get('id');
@@ -69,7 +69,7 @@ document.write('<a href="' + prediction_url +
 </p>
 <div class='gauge_background'>
 <div class='gauge_text_left'>0%</div>
-<div id="gague-line" class='gauge_line' style='display:none'></div>
+<div id="gauge-line"></div>
 <div class='gauge_text_right'>100%</div>
 </div><!-- gauge_background -->
 </div><!-- prediction -->

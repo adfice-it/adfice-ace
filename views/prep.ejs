@@ -43,16 +43,8 @@ window.addEventListener('load', function(event) { prep_page_load(); });
 Patient: <span id="patient-info-id"></span><br/>
 Leeftijd: <span id="patient-info-age"></span><br/>
 <div class="prediction" id = "prediction">
-<% let risk_score = patient_advice.risk_score; -%>
-<% let hide_gauge = (risk_score == null || isNaN(risk_score)) -%>
 <p>Kans om te vallen binnen 12 maanden:&nbsp;
-<span style="color: red;">
-<% if (hide_gauge) { -%>
-(onbekend)
-<% } else { -%>
-<%= risk_score -%>%
-<% } -%>
-</span>
+<span id="gauge-risk-score" style="color: red;">(onbekend)</span>
 <script>
 let params = new URLSearchParams(window.location.search)
 var patient_id = params.get('id');
@@ -63,9 +55,7 @@ document.write('<a href="' + prediction_url +
 </p>
 <div class='gauge_background'>
 <div class='gauge_text_left'>0%</div>
-<% if (!hide_gauge) { -%>
-<div class='gauge_line' style='left: <%= risk_score %>%'></div>
-<% } -%>
+<div id="gauge-line"></div>
 <div class='gauge_text_right'>100%</div>
 </div><!-- gauge_background -->
 </div><!-- prediction -->
