@@ -82,6 +82,46 @@ function meds_without_rules_as_html(other_meds) {
     return html;
 }
 
+function patient_problems_as_html(problems) {
+    let html = '';
+    for (let i = 0; i < problems.length; ++i) {
+        let problem = problems[i];
+        if (i) {
+            html += ', '
+        }
+        html += '<span id="prob-' + i + '">';
+        html += problem.display_name;
+        html += '</span>';
+    }
+    return html;
+}
+
+function patient_labs_as_html(labs) {
+    let html = '';
+    for (let i = 0; i < labs.length; ++i) {
+        let lab = labs[i];
+        let lab_prefix = "lab_" + i;
+        if (i) {
+            html += ', '
+        }
+        html += '<span id="' + lab_prefix + '">';
+
+        html += '<span id="' + lab_prefix + '_name">';
+        html += lab.lab_test_name + '</span>: ';
+
+        html += '<span id="' + lab_prefix + '_result">';
+        html += lab.lab_test_result + '</span> ';
+
+        html += '<span id="' + lab_prefix + '_date">';
+        html += '(' + JSON.stringify(lab.date_measured).substring(1, 11) + ')';
+        html += '</span>';
+
+        html += '</span>'
+    }
+    return html;
+}
+
+
 function patient_info_age() {
     let advice = get_patient_advice();
     let elem = document.getElementById('patient-info-age');
@@ -90,29 +130,40 @@ function patient_info_age() {
     }
 }
 
-function patient_info_meds_with_rules() {
-    let advice = get_patient_advice();
-    let meds = advice.meds_with_rules;
-    if (meds.length == 0) {
+function replace_if_exists(elem_id, to_html_func, objs) {
+    if (objs.length == 0) {
         return;
     }
-    let elem = document.getElementById('meds-with-rules-list');
+    let elem = document.getElementById(elem_id);
     if (elem) {
-        elem.innerHTML = meds_with_rules_as_html(meds);
+        elem.innerHTML = to_html_func(objs);
     }
 }
 
-function patient_info_meds_without_rules() {
-    let advice = get_patient_advice();
-    let other_meds = advice.meds_without_rules;
-    if (other_meds.length == 0) {
-        return;
-    }
-    let elem = document.getElementById('meds-without-rules-list');
-    if (elem) {
-        elem.innerHTML = meds_without_rules_as_html(other_meds);
-    }
+function patient_info_meds_with_rules() {
+    replace_if_exists('meds-with-rules-list',
+        meds_with_rules_as_html,
+        get_patient_advice().meds_with_rules);
 }
+
+function patient_info_meds_without_rules() {
+    replace_if_exists('meds-without-rules-list',
+        meds_without_rules_as_html,
+        get_patient_advice().meds_without_rules);
+}
+
+function patient_info_problems() {
+    replace_if_exists('patient-problems-list',
+        patient_problems_as_html,
+        get_patient_advice().problems);
+}
+
+function patient_info_labs() {
+    replace_if_exists('patient-labs-list',
+        patient_labs_as_html,
+        get_patient_advice().labs);
+}
+
 
 function gauge_risk_score() {
     let advice = get_patient_advice();
@@ -150,6 +201,8 @@ function prep_page_setup() {
     patient_info_age();
     patient_info_meds_with_rules();
     patient_info_meds_without_rules();
+    patient_info_problems();
+    patient_info_labs();
     gauge_risk_score();
 }
 
@@ -157,6 +210,8 @@ function consult_page_setup() {
     patient_info_age();
     patient_info_meds_with_rules();
     patient_info_meds_without_rules();
+    patient_info_problems();
+    patient_info_labs();
     gauge_risk_score();
 }
 

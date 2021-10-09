@@ -71,49 +71,17 @@ Ga direct naar medicijnen met advies:
 <br/>Gedetecteerde andere medicijnen:
 <span id="meds-without-rules-list">Geen</span>
 </span><!-- meds_without_rules -->
-
 </span><!-- patient_medications -->
+
 <span id="patient_problems">
 <br/>Gedetecteerde relevante problemen:
-<%     let problems = patient_advice.problems; -%>
-<%     if ( problems.length ) { -%>
-<% for (let i = 0; i < problems.length; ++i ) { -%>
-<%     let problem = problems[i]; -%>
-<%     if (i) { %>
-,
-<%     } -%>
-<span id="prob_<%= i %>">
-<%= problem.display_name %>
-</span><!-- prob_<%= i %> -->
-<% } -%>
-<% } else { -%>
-Geen
-<% } -%>
+<span id="patient-problems-list">Geen</span>
 </span><!-- patient_problems -->
-
-<%     let labs = patient_advice.labs; -%>
 <span id="patient_labs">
 <br />Gedetecteerde relevante laboratorium waardes:
-<%     if ( !labs.length ) { -%>
-Geen
-<%     } -%>
-<% for (let i = 0; i < labs.length; ++i ) { -%>
-<%     let lab = labs[i]; -%>
-<%     let lab_prefix = "lab_" + i; -%>
-<%     if (i) { -%>
-,
-<%     } -%>
-<span id="<%= lab_prefix %>">
-<span id="<%= lab_prefix %>_name"><%= lab.lab_test_name %></span>:
-<span id="<%= lab_prefix %>_result"><%= lab.lab_test_result %></span>
-(
-<span id="<%= lab_prefix %>_date">
-        <%= JSON.stringify(lab.date_measured).substring(1,11) %></span>
-)
-</span>
-<% } -%>
-</span>
-<span"><br/><br/>Ga direct naar:
+<span id="patient-labs-list">Geen</span>
+</span><!-- patient_labs -->
+<span><br/><br/>Ga direct naar:
 <a href="#andere_advies_header">Andere risicofactoren</a></span>
 </div>
 <div id="div_clinician_view" class="div_clinician_view">
@@ -126,7 +94,15 @@ In het algemeen dient een medicament gestopt of afgebouwd worden als:
 <li>er geen indicatie (meer) is </li>
 <li>er een veiliger alternatief beschikbaar is</li>
 </ul>
-Het is wenselijk om iedere patient na een medicatiewijziging actief te monitoren (middels follow-up) op het optreden van een (hernieuwde) val en/of veranderen van klachten zoals duizeligheid of licht in het hoofd bij opstaan. Bij alle beslissingen, zijn de voorkeuren van de pati&euml;nt belangrijk. Ook moet de individuele valrisico, mogelijk bijwerkingen, levensverwachting en comorbiditeiten meegenomen worden. Het advies hieronder gaat over het effect van medicijnen op valrisico, maar gaat niet over andere redenen om de medicatie te stoppen of continueren.
+Het is wenselijk om iedere patient na een medicatiewijziging actief te
+monitoren (middels follow-up) op het optreden van een (hernieuwde) val
+en/of veranderen van klachten zoals duizeligheid of licht in het hoofd
+bij opstaan. Bij alle beslissingen, zijn de voorkeuren van de
+pati&euml;nt belangrijk. Ook moet de individuele valrisico, mogelijk
+bijwerkingen, levensverwachting en comorbiditeiten meegenomen worden.
+Het advies hieronder gaat over het effect van medicijnen op valrisico,
+maar gaat niet over andere redenen om de medicatie te stoppen of
+continueren.
 </div><!-- general advice -->
 
 <% let medication_advice = patient_advice.medication_advice || [];
