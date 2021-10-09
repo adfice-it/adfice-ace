@@ -755,12 +755,14 @@ test('log print event', async () => {
         cnt = results[0].cnt;
     }
 
-    await adfice.addLogPrintEvent(viewer, patient);
+    await adfice.addLogEventPrint(viewer, patient);
+    await adfice.addLogEventCopyPatientText(viewer, patient);
+    await adfice.addLogEventCopyEHRText(viewer, patient);
 
     let results2 = await adfice.sql_select(sql, [patient]);
     let cnt2 = 0;
     if (results2.length > 0) {
         cnt2 = results2[0].cnt;
     }
-    expect(cnt2).toBe(cnt + 1);
+    expect(cnt2).toBe(cnt + 3);
 });

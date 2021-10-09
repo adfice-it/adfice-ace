@@ -356,7 +356,7 @@ function connect_web_socket_and_keep_alive() {
     }, ping_interval);
 }
 
-function copyTextToClipboard(text) {
+function copyTextToClipboard(text, type) {
     if (navigator.clipboard != undefined) {
         navigator.clipboard.writeText(text);
     } else if (window.clipboardData) {
@@ -366,19 +366,21 @@ function copyTextToClipboard(text) {
         alert("browser does not support copy");
     }
 
+    send_message(type);
+
     return true;
 }
 
 function copyEHRTextToClipboard() {
     var allEHRText = document.getElementById("div_all_ehr_text");
-    return copyTextToClipboard(allEHRText.innerText);
+    return copyTextToClipboard(allEHRText.innerText, 'was_copied_ehr');
 }
 
 function copyPatientTextToClipboard() {
     var dpv = document.getElementById("div_patient_view");
     var nma = document.getElementById("non_med_advice_patient_area_text");
     var all_text = dpv.innerText + "\n" + "\n" + nma.innerText;
-    return copyTextToClipboard(all_text);
+    return copyTextToClipboard(all_text, 'was_copied_patient');
 }
 
 function makeDefinitive() {

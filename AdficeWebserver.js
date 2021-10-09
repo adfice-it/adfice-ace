@@ -252,7 +252,13 @@ server.on('upgrade', function upgrade(request, socket, head) {
                             patient_id);
                         send_all(kind, patient_id, new_msg);
                     } else if (message.type == 'was_printed') {
-                        await adfice.addLogPrintEvent(viewer_id, patient_id);
+                        await adfice.addLogEventPrint(viewer_id, patient_id);
+                    } else if (message.type == 'was_copied_patient') {
+                        await adfice.addLogEventCopyPatientText(viewer_id,
+                            patient_id);
+                    } else if (message.type == 'was_copied_ehr') {
+                        await adfice.addLogEventCopyEHRText(viewer_id,
+                            patient_id);
                     } else if (message.type == 'ping') {
                         let pong = {};
                         pong.type = 'pong';

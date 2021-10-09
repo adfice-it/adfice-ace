@@ -838,8 +838,8 @@ async function reloadPatientData(patient, cmd) {
     return autil.child_process_spawn(cmd, args);
 }
 
-async function addLogPrintEvent(viewer_id, patient_id) {
-    let sql = `/* adfice.addLogPrintEvent */
+async function addLogEvent(viewer_id, patient_id, event_type) {
+    let sql = `/* adfice.addLogEvent */
  INSERT INTO logged_events
            ( viewer_id
            , patient_id
@@ -847,9 +847,24 @@ async function addLogPrintEvent(viewer_id, patient_id) {
            )
       VALUES (?,?,?)
 `;
-    const event_type_print = 1;
-    let params = [as_id(viewer_id), as_id(patient_id), event_type_print];
+    let params = [
+        as_id(viewer_id),
+        as_id(patient_id),
+        as_id(event_type)
+    ];
     return await this.sql_select(sql, params);
+}
+
+async function addLogEventPrint(viewer_id, patient_id) {
+    return await this.addLogEvent(viewer_id, patient_id, 1);
+}
+
+async function addLogEventCopyPatientText(viewer_id, patient_id) {
+    return await this.addLogEvent(viewer_id, patient_id, 2);
+}
+
+async function addLogEventCopyEHRText(viewer_id, patient_id) {
+    return await this.addLogEvent(viewer_id, patient_id, 3);
 }
 
 function adfice_init(db) {
@@ -858,6 +873,7 @@ function adfice_init(db) {
         db: db,
 
         /* "private" and "friend" member functions */
+        addLogEvent: addLogEvent,
         boxStatesToSelectionStates: boxStatesToSelectionStates,
         calculateAndStorePredictionResult: calculateAndStorePredictionResult,
         calculatePredictionResult: calculatePredictionResult,
@@ -891,7 +907,9 @@ function adfice_init(db) {
         updatePredictionResult: updatePredictionResult,
 
         /* public API methods */
-        addLogPrintEvent: addLogPrintEvent,
+        addLogEventPrint: addLogEventPrint,
+        addLogEventCopyPatientText: addLogEventCopyPatientText,
+        addLogEventCopyEHRText: addLogEventCopyEHRText,
         finalizeAndExport: finalizeAndExport,
         getAdviceForPatient: getAdviceForPatient,
         getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
