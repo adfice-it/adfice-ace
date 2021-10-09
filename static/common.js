@@ -342,7 +342,7 @@ function connect_web_socket() {
     return ws;
 }
 
-window.addEventListener('load', function(event) {
+function connect_web_socket_and_keep_alive() {
     connect_web_socket();
 
     let one_second = 1000;
@@ -354,7 +354,7 @@ window.addEventListener('load', function(event) {
             });
         }
     }, ping_interval);
-});
+}
 
 function copyTextToClipboard(text) {
     if (navigator.clipboard != undefined) {

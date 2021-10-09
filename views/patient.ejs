@@ -20,6 +20,11 @@ console.log('patient_id: ', patient_id);
 </script>
 <script src="static/common.js"></script>
 <script src="static/patient.js"></script>
+<script>
+window.addEventListener('load', function(event) {
+    connect_web_socket_and_keep_alive();
+});
+</script>
 </head>
 <body>
 <form id="patient_form">
