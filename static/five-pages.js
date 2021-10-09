@@ -2,50 +2,64 @@
 // Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 // vim: set sts=4 shiftwidth=4 expandtab :
 
-// starting WITHOUT "use strict" in order to try to use the same .js file
-// from .html and also from .ejs which defines the variables patient_id and
-// patient_data
-if (typeof patient_id == 'undefined') {
-    patient_id = null;
-}
-
-if (typeof patient_data == 'undefined') {
-    patient_data = {};
-}
-
 "use strict";
-var xhttp;
 
-if (navigator.userAgent.includes("Node.js") ||
-    navigator.userAgent.includes("jsdom")) {} else {
-    window.addEventListener('load', startPageLoad);
+// static/basic-utils.js defines:
+//     function get_base_url()
+//     function get_content(url, type, callback)
+//     function get_JSON(url, callback)
+//     function get_text(url, callback)
+//     function ucfirst(str)
+
+var five_pages = {
+    patient_id: null,
+    data: {},
+    xhttp: null,
+    debug: 0,
+    logger: console
+};
+
+function get_five_pages() {
+    return five_pages;
 }
 
-function havePatientJSON() {
-    if (this.readyState == 4 && this.status == 200) {
-        patient_data = JSON.parse(xhttp.responseText);
-    }
+function get_patient_advice() {
+    return five_pages.data.patient_advice;
 }
 
-function startPageLoad() {
+function start_page_set_from_json() {
+    let el_pi_age = document.getElementById('patient-info-age');
+    el_pi_age.innerText = get_patient_advice().age;
+}
+
+function start_page_load() {
     let params = new URLSearchParams(window.location.search)
-    patient_id = params.get('id');
+    five_pages.patient_id = params.get('id');
 
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = havePatientJSON;
-    xhttp.open("GET", "advice?id=" + patient_id, true);
-    xhttp.send();
+    let el_pi_id = document.getElementById('patient-info-id');
+    el_pi_id.innerText = five_pages.patient_id;
+
+    let json_url = get_base_url() + 'advice?id=' + patient_id;
+    get_JSON(json_url, function(err, json_data) {
+        if (err) {
+            console.log("url:", json_url, "error:", err);
+        }
+        five_pages.data = json_data;
+        console.log(JSON.stringify({
+            five_pages: five_pages
+        }, null, 4));
+
+        start_page_set_from_json();
+
+        // common.js defines connect_web_socket_and_keep_alive()
+        connect_web_socket_and_keep_alive();
+    });
 }
 
 // export modules for unit testing ?
-
-function getPatientData() {
-    return patient_data;
-}
-
 if (typeof module !== 'undefined') {
     module.exports = {
-        startPageLoad: startPageLoad,
-        getPatientData: getPatientData,
+        start_page_load: start_page_load,
+        get_five_pages: get_five_pages
     }
 }

@@ -14,33 +14,11 @@
 }
 </style>
 <script src="assets/basic-utils.js"></script>
-<script>
-let params = new URLSearchParams(window.location.search)
-var patient_id = params.get('id');
-let link = document.getElementById('href-prediction-explanation');
-
-let viewer_id;
-let is_final;
-let data;
-let json_url = get_base_url() + 'advice?id=' + patient_id;
-get_JSON(json_url, function(err, json_data) {
-    if (err) {
-	console.log("url:", json_url, "error:", err);
-    }
-    data = json_data;
-    is_final = data.patient_advice.is_final;
-    console.log('is_final:', is_final);
-    viewer_id = data.viewer_id;
-    console.log('viewer_id:', viewer_id);
-});
-</script>
 <script src="assets/common.js"></script>
 <script src="assets/five-pages.js"></script>
 <script src="assets/footer.js"></script>
 <script>
-window.addEventListener('load', function(event) {
-    connect_web_socket_and_keep_alive();
-});
+window.addEventListener('load', function(event) { start_page_load(); });
 </script>
 </head>
 <body>
@@ -82,6 +60,8 @@ Gedetecteerde andere medicijnen:<span id="meds-without-rules"></span>
 <span id="prediction-chance"></span>
 <span style="color: red;">(onbekend)</span>
 <script>
+let params = new URLSearchParams(window.location.search)
+var patient_id = params.get('id');
 var prediction_url = 'prediction_explanation?id=' + patient_id;
 document.write('<a href="' + prediction_url +
 '">(lees meer over het predictiemodel)</a>');
