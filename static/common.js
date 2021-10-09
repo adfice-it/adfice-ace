@@ -3,13 +3,14 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-var DEBUG = 0;
-if (DEBUG > 0) {
-    console.log("hello world!");
-}
-var ws;
-var weirdness = 0;
-var messages_received = 0;
+/* global data used by these functions */
+var common_js = {
+    ws: null,
+    weirdness: 0,
+    messages_received: 0,
+    debug: 0,
+    logger: console
+};
 
 function send_message(message_type, apply) {
     let message = {};
@@ -22,22 +23,22 @@ function send_message(message_type, apply) {
     }
 
     let msg_str = JSON.stringify(message, null, 4);
-    if (DEBUG > 0) {
-        console.log('sending:', msg_str);
+    if (common_js.debug > 0) {
+        common_js.logger.log('sending:', msg_str);
     }
-    ws.send(msg_str);
+    common_js.ws.send(msg_str);
 }
 
 function boxclicked(checkbox) {
-    if (!ws) {
+    if (!common_js.ws) {
         checkbox.checked = !checkbox.checked;
-        console.error('got a check event for', checkbox,
+        common_js.logger.error('got a check event for', checkbox,
             'but websocket is null');
-        ++weirdness;
+        ++common_js.weirdness;
         return;
     }
-    if (DEBUG > 0) {
-        console.log('Checkbox ' + checkbox.id + ' clicked' +
+    if (common_js.debug > 0) {
+        common_js.logger.log('Checkbox ' + checkbox.id + ' clicked' +
             ' and is now ' + checkbox.checked);
     }
 
@@ -55,10 +56,10 @@ function boxclicked(checkbox) {
 }
 
 function freetextentered(textfield) {
-    if (!ws) {
-        console.error('got a freetext event for ', textfield,
+    if (!common_js.ws) {
+        common_js.logger.error('got a freetext event for ', textfield,
             'but websocket is null');
-        ++weirdness;
+        ++common_js.weirdness;
         return;
     }
 
@@ -212,8 +213,8 @@ function process_viewer_count(message) {
 }
 
 function first_incoming_message(event) {
-    if (DEBUG > 0) {
-        console.log('first_incoming_message');
+    if (common_js.debug > 0) {
+        common_js.logger.log('first_incoming_message');
     }
     let elementList = document.querySelectorAll("input[type='checkbox']");
     for (let i = 0; i < elementList.length; ++i) {
@@ -236,22 +237,22 @@ function first_incoming_message(event) {
 }
 
 function ws_on_message(event) {
-    if (messages_received == 0) {
+    if (common_js.messages_received == 0) {
         first_incoming_message(event);
     }
-    ++messages_received;
-    if (DEBUG > 0) {
-        console.log('received: ', event.data);
+    ++common_js.messages_received;
+    if (common_js.debug > 0) {
+        common_js.logger.log('received: ', event.data);
     }
 
     const message = JSON.parse(event.data);
     if ((!('patient_id' in message)) || (message.patient_id != patient_id)) {
-        console.log('expected patient_id of:', patient_id);
-        console.log('               but was:', message.patient_id);
-        console.log(JSON.stringify({
+        common_js.logger.log('expected patient_id of:', patient_id);
+        common_js.logger.log('               but was:', message.patient_id);
+        common_js.logger.log(JSON.stringify({
             message: message
         }, null, 4));
-        ++weirdness;
+        ++common_js.weirdness;
         return;
     }
 
@@ -272,7 +273,7 @@ function ws_on_message(event) {
     }
 
     if ('debug_info' in message) {
-        console.log(JSON.stringify({
+        common_js.logger.log(JSON.stringify({
             debug_info: message.debug_info
         }, null, 4));
     }
@@ -290,20 +291,21 @@ function ws_on_close(event) {
         input.disabled = true;
     };
 
-    ws = null;
-    messages_received = 0;
+    common_js.ws = null;
+    common_js.messages_received = 0;
 
     let one_second = 1000;
-    console.log('Socket closed:', event.reason, ' will try to reconnect');
+    common_js.logger.log('Socket closed:', event.reason,
+        ' will try to reconnect');
     setTimeout(function() {
-        console.log('Reconnecting....');
+        common_js.logger.log('Reconnecting....');
         connect_web_socket();
     }, one_second);
 }
 
 function ws_on_error(err) {
-    console.error('Socket error: ', err.message);
-    ws.close();
+    common_js.logger.error('Socket error: ', err.message);
+    common_js.ws.close();
 };
 
 function connect_web_socket() {
@@ -330,16 +332,16 @@ function connect_web_socket() {
     }
     let base_url = ws_protocol + '//' + url_hostname + ':' + url_port;
     let ws_url = base_url + '/patient/' + patient_id;
-    ws = new WebSocket(ws_url);
-    ws.onmessage = ws_on_message;
-    ws.onclose = ws_on_close;
-    ws.onerror = ws_on_error;
+    common_js.ws = new WebSocket(ws_url);
+    common_js.ws.onmessage = ws_on_message;
+    common_js.ws.onclose = ws_on_close;
+    common_js.ws.onerror = ws_on_error;
 
-    if (DEBUG > 0) {
-        console.log('creating websocket with url:', ws_url);
+    if (common_js.debug > 0) {
+        common_js.logger.log('creating websocket with url:', ws_url);
     }
 
-    return ws;
+    return common_js.ws;
 }
 
 function connect_web_socket_and_keep_alive() {
@@ -348,7 +350,7 @@ function connect_web_socket_and_keep_alive() {
     let one_second = 1000;
     let ping_interval = 10 * one_second;
     setInterval(function() {
-        if (ws) {
+        if (common_js.ws) {
             send_message("ping", function(msg) {
                 msg.sent = Date.now();
             });
