@@ -32,7 +32,7 @@ function start_page_set_from_json() {
     el_pi_age.innerText = get_patient_advice().age;
 }
 
-function start_page_load() {
+function page_load(before_socket) {
     let params = new URLSearchParams(window.location.search)
     five_pages.patient_id = params.get('id');
 
@@ -45,15 +45,21 @@ function start_page_load() {
             console.log("url:", json_url, "error:", err);
         }
         five_pages.data = json_data;
-        console.log(JSON.stringify({
-            five_pages: five_pages
-        }, null, 4));
+        if (five_pages.debug > 0) {
+            five_pages.logger.log(JSON.stringify({
+                five_pages: five_pages
+            }, null, 4));
+        }
 
-        start_page_set_from_json();
+        before_socket();
 
         // common.js defines connect_web_socket_and_keep_alive()
         connect_web_socket_and_keep_alive();
     });
+}
+
+function start_page_load() {
+    page_load(start_page_set_from_json);
 }
 
 // export modules for unit testing ?
