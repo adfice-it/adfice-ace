@@ -42,40 +42,15 @@ Leeftijd: <span id="patient-info-age"></span><br/>
 <div style="height: 2em;"></div>
 </div><!-- id=patient_info -->
 
-<% let nm_advices = patient_advice.advice_text_non_med; -%>
-<% let other_advices = patient_advice.advice_other_text; -%>
-
 <div id="div_patient_view" class="div_patient_view">
 <div class="patient_header patient_view_only"
      id="patient_med_advice_header">Advies over medicaties:</div>
-<div id='patient-medication-advice-list'>loading ...</div>
+<div id='patient-medication-advice-list'>
+loading ...
+</div><!-- patient-medication-advice-list -->
 <div id="div_other_med_advice" class="div_other_advice">
-<%
- for (let i = 0; i < other_advices.length; ++i ) {
-     let other_advice = other_advices[i];
-     let poa_prefix = "poa_" + i;
-     let rulenum = other_advice.medication_criteria_id;
-     let boxnum = other_advice.select_box_num;
-     let advice_id_base =`OTHER_${rulenum}_${boxnum}`;
-     let checkbox_id = 'cb_' + advice_id_base;
-     let row_id = 'pt_' + advice_id_base;
--%>
-<div id="<%= row_id %>" class="patient_othermed_cb_row">
-<%         for (let k = 0; k < other_advice.patient_split.length; ++k) { -%>
-<%             let chunk = other_advice.patient_split[k]; -%>
-<%             let chunk_id = `pft_OTHER_${rulenum}_${boxnum}_${k}`; -%>
-<% //
-        let cbString = md.makeHtml(chunk.text);
-        cbString = cbString.replace("<p>", "");
-            cbString = cbString.replace("</p>", "");
-%>
-<div id="<%= chunk_id %>" class="patient_othermed_cb_text">
-<%- cbString -%>
-</div><!-- <%= chunk_id %> -->
-<%         } -%>
-</div><!-- <%= row_id %> -->
-<% } -%>
-</div> <!-- div_div_other_med_advice -->
+loading ...
+</div><!-- div_div_other_med_advice -->
 <div id="patient_warning">
 <img src="/static/WarningRW_openClipArt.png" class="warningicon">
 Als u bijwerkingen of andere gezondheidsproblemen krijgt, neem dan contact op
@@ -86,6 +61,7 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
 <div id="non_med_advice_patient_area_text">
 <div class="patient_header patient_view_only"
 	id="header_overige_advies">Overige adviezen</div>
+<% let nm_advices = patient_advice.advice_text_non_med; -%>
 <%
    for (let i = 0; i < nm_advices.length; ++i ) {
        let nm_advice = nm_advices[i];

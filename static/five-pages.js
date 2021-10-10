@@ -180,17 +180,17 @@ function set_element_inner(id, html) {
     }
 }
 
-function cdss_freetext_inner(cdss_split, allow_edit, divclass, prefix,
+function cdss_freetext(cdss_split, allow_edit, ftdivclass, ftprefix,
     atc, rulenum, boxnum) {
     let html = '';
     for (let k = 0; k < cdss_split.length; ++k) {
         let chunk = cdss_split[k];
-        let chunk_id = [prefix, atc, rulenum, boxnum, k].join('_');
+        let chunk_id = [ftprefix, atc, rulenum, boxnum, k].join('_');
         if (allow_edit && chunk.editable) {
             html += '<input id="' + chunk_id + '" type="text"';
             html += ' class="ft_input" value="' + chunk.text + '"/>\n';
         } else {
-            html += '<div id="' + chunk_id + '" class ="' + divclass + '">\n';
+            html += '<div id="' + chunk_id + '" class ="' + ftdivclass + '">\n';
             let cbString = get_converter().makeHtml(chunk.text);
             // Select Box texts do not contain legit paragraphs.
             // It is already in a span so this does not need to be
@@ -201,12 +201,6 @@ function cdss_freetext_inner(cdss_split, allow_edit, divclass, prefix,
         }
     }
     return html;
-}
-
-function cdss_freetext(cdss_split, atc, rulenum, boxnum) {
-    let allow_edit = 1;
-    return cdss_freetext_inner(cdss_split, allow_edit, 'freetext', 'ft',
-        atc, rulenum, boxnum);
 }
 
 function input_checkbox(checkbox_id) {
@@ -247,8 +241,10 @@ function big_nested_medicine_advice_table(include_no_checkbox_advice) {
                 let advice = advices[j];
                 let att_prefix = "att_" + i + "_" + j;
                 let bogus_rule = "NonCB";
+                let allow_edit = 1;
                 html += '<div id="' + att_prefix + '_cdss">';
-                html += cdss_freetext(advice.cdss_split, atc, bogus_rule, j);
+                html += cdss_freetext(advice.cdss_split, allow_edit,
+                    'freetext', 'ft', atc, bogus_rule, j);
                 html += '</div><!-- ' + att_prefix + '_cdss -->' + "\n";
             }
             html += '</div><!-- ' + div_advice_atc_id + ' -->' + "\n";
@@ -299,7 +295,9 @@ function big_nested_medicine_advice_table(include_no_checkbox_advice) {
             html += '<td>';
             let asa_cdss_id = asa_prefix + '_cdss';
             html += '<div id="' + asa_prefix + '_cdss" class="med_cdss">';
-            html += cdss_freetext(cb_advice.cdss_split, atc, rulenum, boxnum);
+            let allow_edit = 1;
+            html += cdss_freetext(cb_advice.cdss_split, allow_edit, 'freetext',
+                'ft', atc, rulenum, boxnum);
             html += '</div> <!-- ' + asa_cdss_id + ' --></td>\n';
             html += '</tr>\n';
         }
@@ -313,7 +311,6 @@ function big_nested_medicine_advice_table(include_no_checkbox_advice) {
 
 function patient_medicine_advice_table() {
     let html = '';
-    let allow_edit = 0;
     let medication_advice = get_patient_advice().medication_advice || [];
     for (let i = 0; i < medication_advice.length; ++i) {
         let row = medication_advice[i];
@@ -333,11 +330,10 @@ function patient_medicine_advice_table() {
             let advice_id_base = [atc, rulenum, boxnum].join('_');
             let checkbox_id = 'cb_' + advice_id_base;
             let row_id = 'pt_' + advice_id_base;
-
             html += '<div id="' + row_id + '" class="patient_med_cb_row">';
-            html += cdss_freetext_inner(cb_advice.patient_split, allow_edit,
+            let allow_edit = 0;
+            html += cdss_freetext(cb_advice.patient_split, allow_edit,
                 'patient_med_cb_text', 'pft', atc, rulenum, boxnum);
-
             html += '</div><!-- ' + row_id + ' -->';
         }
         // TODO: is this better done as if (cb_advices.length == 0) ?
@@ -356,15 +352,19 @@ function other_med_advice_area() {
      */
     let other_advices = get_patient_advice().advice_other_text;
     let html = '';
+    let pre_pre = 'other';
+    let row_pre = 'tr';
+    let row_class = 'other_advice_row';
+    let allow_edit = 0;
     for (let i = 0; i < other_advices.length; ++i) {
         let other_advice = other_advices[i];
-        let other_prefix = "other_" + i;
+        let other_prefix = pre_pre + '_' + i;
         let category = other_advice.medication_criteria_id;
         let boxnum = other_advice.select_box_num;
         let other_id_base = ['OTHER', category, boxnum].join('_');
         let checkbox_id = 'cb_' + other_id_base;
-        let row_id = 'tr_' + other_id_base;
-        html += '<div id="' + row_id + '" class="other_advice_row">';
+        let row_id = row_pre + '_' + other_id_base;
+        html += '<div id="' + row_id + '" class="' + row_class + '">';
         html += '<span id="' + other_prefix + 'sbn"';
         html += ' class="other_advice_checkbox">\n';
         html += input_checkbox(checkbox_id);
@@ -372,13 +372,39 @@ function other_med_advice_area() {
         html += '<div id="' + other_prefix + 'cdss_continer"';
         html += ' class="other_cdss_container">\n';
         html += '<div id="' + other_prefix + 'cdss" class="other_cdss">\n';
-        html += cdss_freetext(other_advice.cdss_split, 'OTHER', category,
-            boxnum);
+        let allow_edit = 1;
+        html += cdss_freetext(other_advice.cdss_split, allow_edit, 'freetext',
+            'ft', 'OTHER', category, boxnum);
         html += '</div> <!-- ' + other_prefix + 'cdss -->\n';
         html += '</div> <!-- other_cdss_container -->\n';
         html += '</div><!-- ' + row_id + ' -->\n';
     }
     set_element_inner('div_other_med_advice_area', html);
+}
+
+function patient_other_med_advice_area() {
+    let other_advices = get_patient_advice().advice_other_text;
+    let html = '';
+    let pre_pre = 'poa';
+    let row_pre = 'pt';
+    let atc = 'OTHER';
+    let row_class = 'patient_othermed_cb_row';
+    for (let i = 0; i < other_advices.length; ++i) {
+        let other_advice = other_advices[i];
+        let other_prefix = pre_pre + '_' + i;
+        let rulenum = other_advice.medication_criteria_id;
+        let boxnum = other_advice.select_box_num;
+        let other_id_base = ['OTHER', rulenum, boxnum].join('_');
+        let checkbox_id = 'cb_' + other_id_base;
+        let row_id = row_pre + '_' + other_id_base;
+
+        html += '<div id="' + row_id + '" class="' + row_class + '">';
+        let allow_edit = 0;
+        html += cdss_freetext(other_advice.patient_split, allow_edit,
+            'patient_othermed_cb_text', 'pft', atc, rulenum, boxnum);
+        html += '</div><!-- ' + row_id + ' -->\n'
+    }
+    set_element_inner('div_other_med_advice', html);
 }
 
 // TODO: This is mostly duplicate code
@@ -418,13 +444,14 @@ function non_med_advice_area(hide_additional) {
         html += '<div id="' + nma_prefix + '_cdss_continer"';
         html += ' class="nonmed_cdss_container">\n';
         html += '<div id="' + nma_prefix + '_cdss" class="nonmed_cdss">\n';
-        html += cdss_freetext(nm_advice.cdss_split, 'NONMED', category, boxnum);
+        let allow_edit = 1;
+        html += cdss_freetext(nm_advice.cdss_split, allow_edit, 'freetext',
+            'ft', 'NONMED', category, boxnum);
         html += '</div> <!-- ' + nma_prefix + '_cdss -->\n';
         html += '</div> <!-- nonmed_cdss_container -->\n';
         html += '</div><!-- nonmed_row -->\n';
     }
     set_element_inner('non_med_advice_selection_area', html);
-
 }
 
 function gauge_risk_score() {
@@ -490,6 +517,7 @@ function advise_page_setup() {
     patient_info_age();
     gauge_risk_score();
     patient_medicine_advice_table();
+    patient_other_med_advice_area();
 }
 
 function finalize_page_setup() {
