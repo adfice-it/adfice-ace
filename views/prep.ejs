@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw -->
-<%# see https://ejs.co/#docs -%>
-<% function ucfirst(s) {
-       if (typeof s !== 'string') { return s; }
-       return s.charAt(0).toUpperCase() + s.slice(1);
-   } -%>
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
@@ -94,7 +89,7 @@ Ga direct naar medicijnen met advies:
 <span id="patient-labs-list">Geen</span>
 </span><!-- patient_labs -->
 <span><br/><br/>Ga direct naar:
-<a href="#andere_advies_header">Andere risicofactoren</a></span>
+<a href="#other-advice">Andere risicofactoren</a></span>
 </div>
 <div id="div_clinician_view" class="div_clinician_view">
 
@@ -127,7 +122,7 @@ continueren.
 </div><!-- div_other_med_advice -->
 
 <div class="advice_header clinician_view_only"
-     id="andere_advies_header"
+     id="other-advice"
      style="width:20%;">Andere risicofactoren</div>
 <div id="non_med_advice_selection_area" class="non_med_advice_selection_area">
 
