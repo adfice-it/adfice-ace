@@ -181,6 +181,28 @@ function set_element_inner(id, html) {
     }
 }
 
+function cdss_freetext(cdss_split, atc, rulenum, boxnum) {
+    let html = '';
+    for (let k = 0; k < cdss_split.length; ++k) {
+        let chunk = cdss_split[k];
+        let chunk_id = ['ft', atc, rulenum, boxnum, k].join('_');
+        if (chunk.editable) {
+            html += '<input id="' + chunk_id + '" type="text"';
+            html += ' class="ft_input" value="' + chunk.text + '"/>\n';
+        } else {
+            html += '<div id="' + chunk_id + '" class ="freetext">\n';
+            let cbString = get_converter().makeHtml(chunk.text);
+            // Select Box texts do not contain legit paragraphs.
+            // It is already in a span so this does not need to be
+            // replaced, just destroyed.
+            cbString = cbString.replace("<p>", "");
+            cbString = cbString.replace("</p>", "");
+            html += cbString + '</div><!-- ' + chunk_id + ' -->\n';
+        }
+    }
+    return html;
+}
+
 // TODO: break this into smaller functions, perhaps at each level of nesting
 function big_nested_medicine_advice_table() {
     let medication_advice = get_patient_advice().medication_advice || [];
@@ -211,18 +233,7 @@ function big_nested_medicine_advice_table() {
             let att_prefix = "att_" + i + "_" + j;
             let bogus_rule = "NonCB";
             html += '<div id="' + att_prefix + '_cdss">';
-            for (let k = 0; k < advice.cdss_split.length; ++k) {
-                let chunk = advice.cdss_split[k];
-                let chunk_id = 'ft_' + atc + '_' + bogus_rule + '_' + j + '_' + k;
-                if (chunk.editable) {
-                    html += '<input id="' + chunk_id + '" type="text"';
-                    html += ' value="' + chunk.text + '"/>';
-                } else {
-                    html += '<div id="' + chunk_id + '">';
-                    html += get_converter().makeHtml(chunk.text);
-                    html += '</div> <!-- ' + chunk_id + ' -->';
-                }
-            }
+            html += cdss_freetext(advice.cdss_split, atc, bogus_rule, j);
             html += '</div><!-- ' + att_prefix + '_cdss -->' + "\n";
         }
         html += '</div><!-- ' + div_advice_atc_id + ' -->' + "\n";
@@ -275,24 +286,7 @@ function big_nested_medicine_advice_table() {
             html += '<td>';
             let asa_cdss_id = asa_prefix + '_cdss';
             html += '<div id="' + asa_prefix + '_cdss" class="med_cdss">';
-            for (let k = 0; k < cb_advice.cdss_split.length; ++k) {
-                let chunk = cb_advice.cdss_split[k];
-                let chunk_id = ['ft', atc, rulenum, boxnum, k].join('_');
-                if (chunk.editable) {
-                    html += '<input id="' + chunk_id + '" type="text"';
-                    html += ' class="ft_input" value="' + chunk.text + '"/>\n';
-                } else {
-                    html += '<div id="' + chunk_id + '" class ="freetext">\n';
-                    let cbString = get_converter().makeHtml(chunk.text);
-                    // Select Box texts do not contain legit paragraphs.
-                    // It is already in a span so this does not need to be replaced,
-                    // just destroyed.
-                    cbString = cbString.replace("<p>", "");
-                    cbString = cbString.replace("</p>", "");
-                    html += cbString;
-                    html += '</div> <!-- ' + chunk_id + '" -->\n';
-                }
-            }
+            html += cdss_freetext(cb_advice.cdss_split, atc, rulenum, boxnum);
             html += '</div> <!-- ' + asa_cdss_id + ' --></td>\n';
             html += '</tr>\n';
         }
@@ -333,21 +327,8 @@ function other_med_advice_area() {
         html += '<div id="' + other_prefix + 'cdss_continer"';
         html += ' class="other_cdss_container">\n';
         html += '<div id="' + other_prefix + 'cdss" class="other_cdss">\n';
-        for (let k = 0; k < other_advice.cdss_split.length; ++k) {
-            let chunk = other_advice.cdss_split[k];
-            let chunk_id = ['ft', 'OTHER', category, boxnum, k].join('_');
-            if (chunk.editable) {
-                html += '<input id="' + chunk_id + '" type="text"';
-                html += ' class="ft_input" value="' + chunk.text + '"/>\n';
-            } else {
-                html += '<div id="' + chunk_id + '" class ="freetext">\n';
-                let cbString = get_converter().makeHtml(chunk.text);
-                cbString = cbString.replace("<p>", "");
-                cbString = cbString.replace("</p>", "");
-                html += cbString;
-                html += '</div> <!-- ' + chunk_id + ' -->\n';
-            }
-        }
+        html += cdss_freetext(other_advice.cdss_split,
+            'OTHER', category, boxnum);
         html += '</div> <!-- ' + other_prefix + 'cdss -->\n';
         html += '</div> <!-- other_cdss_container -->\n';
         html += '</div><!-- ' + row_id + ' -->\n';
@@ -397,24 +378,8 @@ function non_med_advice_area(hide_additional) {
         html += '<div id="' + nma_prefix + '_cdss_continer"';
         html += ' class="nonmed_cdss_container">\n';
         html += '<div id="' + nma_prefix + '_cdss" class="nonmed_cdss">\n';
-        for (let k = 0; k < nm_advice.cdss_split.length; ++k) {
-            let chunk = nm_advice.cdss_split[k];
-            let chunk_id = ['ft', 'NONMED', category, boxnum, k].join('_');
-            if (chunk.editable) {
-                html += '<input id="' + chunk_id + '"';
-                html += ' type="text" class="ft_input"';
-                html += ' value="' + chunk.text + '"/>\n';
-            } else {
-                html += '<div id="' + chunk_id + '" class ="freetext">\n';
-                let cbString = get_converter().makeHtml(chunk.text);
-                // Select Box texts do not contain legit paragraphs.
-                // It is already in a span so this does not need to be replaced,
-                // just destroyed.
-                cbString = cbString.replace("<p>", "");
-                cbString = cbString.replace("</p>", "");
-                html += cbString + '</div><!-- ' + chunk_id + ' -->\n';
-            }
-        }
+        html += cdss_freetext(nm_advice.cdss_split,
+            'NONMED', category, boxnum);
         html += '</div> <!-- ' + nma_prefix + '_cdss -->\n';
         html += '</div> <!-- nonmed_cdss_container -->\n';
         html += '</div><!-- nonmed_row -->\n';
