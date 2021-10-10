@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw -->
-<%# see https://ejs.co/#docs -%>
-<% function ucfirst(s) {
-       if (typeof s !== 'string') { return s; }
-       return s.charAt(0).toUpperCase() + s.slice(1);
-   } -%>
-<html lang="<%= lang %>">
+<html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,18 +13,14 @@
     color: #FFFFFF;
 }
 </style>
+</style>
+<script src="assets/thirdparty/showdown.min.js"></script>
 <script src="assets/basic-utils.js"></script>
-<script>
-let patient_id = "<%= patient_id %>";
-console.log('patient_id: ', patient_id);
-</script>
 <script src="assets/common.js"></script>
 <script src="assets/five-pages.js"></script>
 <script src="assets/footer.js"></script>
 <script>
-window.addEventListener('load', function(event) {
-    connect_web_socket_and_keep_alive();
-});
+window.addEventListener('load', function(event) { finalize_page_load(); });
 </script>
 </head>
 <body>
@@ -42,6 +33,9 @@ window.addEventListener('load', function(event) {
  <button type="button" class = "nav_button" id="definitive"
          onclick="makeDefinitive()">
          Opslaan &amp; definitief maken</button>
+ <!-- This is not valid HTML according to https://validator.w3.org -->
+ <!-- Error: The element button must not appear as a descendant of the
+	     a element. -->
  <a href = "static/HoeGebruikIkDitSysteem.html"
     target="_blank"><button type="button"
 			    class = "nav_button"
@@ -49,186 +43,25 @@ window.addEventListener('load', function(event) {
 </div><!-- nav_container -->
 <div id=patient_info>
 <strong>Pati&euml;ntinformatie:</strong><br/>
-Patient: <%= patient_id %><br/>
-Leeftijd: <%= patient_advice.age %><br/>
+Patient: <span id="patient-info-id"></span><br/>
+Leeftijd: <span id="patient-info-age"></span><br/>
 <div class="prediction" id = "prediction">
-<% let risk_score = patient_advice.risk_score; -%>
-<% let hide_gauge = (risk_score == null || isNaN(risk_score)) -%>
 <p>Kans om te vallen binnen 12 maanden:&nbsp;
-<span style="color: red;">
-<% if (hide_gauge) { -%>
-(onbekend)
-<% } else { -%>
-<%= risk_score -%>%
-<% } -%>
-</span> <a href="prediction_explanation?id=<%= patient_id %>">(lees meer over het predictiemodel)</a></p>
+<span id="gauge-risk-score" style="color: red;">(onbekend)</span>
+</p>
 <div class='gauge_background'>
 <div class='gauge_text_left'>0%</div>
-<% if (!hide_gauge) { -%>
-<div class='gauge_line' style='left: <%= risk_score %>%'></div>
-<% } -%>
+<div id="gauge-line"></div>
 <div class='gauge_text_right'>100%</div>
 </div><!-- gauge_background -->
 </div><!-- prediction -->
 <div style="height: 2em;"></div>
-<span id="patient_medications">
-<span id="meds_with_rules">
-Ga direct naar medicijnen met advies:
-<%     let rule_meds = patient_advice.meds_with_rules; -%>
-<% for (let i = 0; i < rule_meds.length; ++i ) { -%>
-<%     let med = rule_meds[i]; %>
-<%     if (i) { -%>
-,
-<%     } -%>
-<a href="#div_advice_<%= med.ATC_code %>" title="<%= med.medication_name %>">
-<%= ucfirst(med.medication_name).trim() %></a>
-<% } -%>
-</span><!-- meds_with_rules -->
-<br/>
-<span id="meds_without_rules">
-<br/>Gedetecteerde andere medicijnen:
-<%     let other_meds = patient_advice.meds_without_rules; -%>
-<% if (other_meds.length == 0) { %>
-Geen
-<% } else { %>
-<%     for (let i = 0; i < other_meds.length; ++i ) { -%>
-<%         let med = other_meds[i]; %>
-<%         if (i) { -%>
-,
-<%         } -%>
-<%= ucfirst(med.medication_name).trim() %>
-<%     } -%>
-<% } -%>
-</span><!-- meds_without_rules -->
-</span><!-- patient_medications -->
-<span id="patient_problems">
-<br/>Gedetecteerde relevante problemen:
-<%     let problems = patient_advice.problems; -%>
-<%     if ( problems.length ) { -%>
-<% for (let i = 0; i < problems.length; ++i ) { -%>
-<%     let problem = problems[i]; -%>
-<%     if (i) { %>
-,
-<%     } -%>
-<span id="prob_<%= i %>">
-<%= problem.display_name %>
-</span><!-- prob_<%= i %> -->
-<% } -%>
-<% } else { -%>
-Geen
-<% } -%>
-</span><!-- patient_problems -->
-<%     let labs = patient_advice.labs; -%>
-<span id="patient_labs">
-<br />Gedetecteerde relevante laboratorium waardes:
-<%     if ( !labs.length ) { -%>
-Geen
-<%     } -%>
-<% for (let i = 0; i < labs.length; ++i ) { -%>
-<%     let lab = labs[i]; -%>
-<%     let lab_prefix = "lab_" + i; -%>
-<%     if (i) { -%>
-,
-<%     } -%>
-<span id="<%= lab_prefix %>">
-<span id="<%= lab_prefix %>_name"><%= lab.lab_test_name %></span>:
-<span id="<%= lab_prefix %>_result"><%= lab.lab_test_result %></span>
-(
-<span id="<%= lab_prefix %>_date">
-        <%= JSON.stringify(lab.date_measured).substring(1,11) %></span>
-)
-</span>
-<% } -%>
-</span>
-<span><br/><br/>Ga direct naar:
-<a href="#other-advice">Andere risicofactoren</a></span>
 </div>
-
-<% let medication_advice = patient_advice.medication_advice || []; -%>
-<% let nm_advices = patient_advice.advice_text_non_med; -%>
-<% let other_advices = patient_advice.advice_other_text; -%>
 
 <div id="div_ehr_box" class="div_ehr_box"><!-- not in patient view -->
 <p>Tekst om te knippen en plakken in Epic:</p>
 <div id="div_all_ehr_text" class="div_all_ehr_text">
-<% for (let i = 0; i < medication_advice.length; ++i ) { -%>
-<div id="advice_ehr_area_<%= i %>" class="advice_ehr_area">
-<%     let row = medication_advice[i]; -%>
-<%     let atc = row.ATC_code; -%>
-<%     let cb_advices = row.adviceTextsCheckboxes; -%>
-<%= ucfirst(row.medication_name).trim() %>:
-<% //
-     for (let j = 0; j < cb_advices.length; ++j ) {
-         let cb_advice = cb_advices[j];
-         let aea_prefix = "aea_" + i + "_" + j;
-         let rulenum = cb_advice.medication_criteria_id;
-         let boxnum = cb_advice.select_box_num;
-         let advice_id_base =`${atc}_${rulenum}_${boxnum}`;
-         let checkbox_id = 'cb_' + advice_id_base;
-         let row_id = 'et_' + advice_id_base;
--%>
-<div id="<%= row_id %>">
-<%         for (let k = 0; k < cb_advice.ehr_split.length; ++k) { -%>
-<%             let chunk = cb_advice.ehr_split[k]; -%>
-<%             let chunk_id = `eft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
-<div id="<%= chunk_id %>">
-<%             if (!chunk.editable) { -%>
-<%- md.makeHtml(chunk.text) -%>
-<%             } -%>
-</div><!-- <%= chunk_id %> -->
-<%         } -%>
-</div><!-- <%= row_id %> -->
-<%     } -%>
-</div> <!-- advice_ehr_area_<%= i %> -->
-<% } -%>
-<!-- Begin OTHER -->
-<% for (let i = 0; i < other_advices.length; ++i ) {
-       let other_advice = other_advices[i];
-       let other_prefix = "other_" + i;
-       let category = other_advice.medication_criteria_id;
-       let boxnum = other_advice.select_box_num;
-       let other_id_base =`OTHER_${category}_${boxnum}`;
-       let row_id = 'et_' + other_id_base;
--%>
-<div id="<%= row_id %>">
-<%         for (let k = 0; k < other_advice.ehr_split.length; ++k) {
-               let chunk = other_advice.ehr_split[k];
-               let chunk_id = `eft_OTHER_${category}_${boxnum}_${k}`;
-               let et = md.makeHtml(chunk.text);
-               et = et.replace("<p>", "");
-               et = et.replace("</p>", "");
--%>
-<div id="<%= chunk_id %>">
-<%= et -%>
-</div><!-- <%= chunk_id %> -->
-<%         } -%>
-</div> <!-- <%= row_id %> -->
-<% } -%>
-<!-- End OTHER -->
-<!-- Begin NonMed -->
-<%
-   for (let i = 0; i < nm_advices.length; ++i ) {
-       let nm_advice = nm_advices[i];
-       let category = nm_advice.category_id;
-       let boxnum = nm_advice.select_box_num;
-       let nma_id_base =`NONMED_${category}_${boxnum}`;
-       let row_id = 'et_' + nma_id_base;
--%>
-<div id="<%= row_id %>">
-<%         for (let k = 0; k < nm_advice.ehr_split.length; ++k) {
-               let chunk = nm_advice.ehr_split[k];
-               let chunk_id = `eft_NONMED_${category}_${boxnum}_${k}`;
-               let et = md.makeHtml(chunk.text);
-               et = et.replace("<p>", "");
-               et = et.replace("</p>", "");
--%>
-<div id="<%= chunk_id %>">
-<%= et -%>
-</div><!-- <%= chunk_id %> -->
-<%         } -%>
-</div> <!-- <%= row_id %> -->
-<% } -%>
-<!-- End NonMed -->
+loading ...
 </div><!-- div_all_ehr_text -->
 <button id="copy_ehr_text" type="button" class='button_ehr_text'
         onclick="copyEHRTextToClipboard()">Kopieer tekst</button>

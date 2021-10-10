@@ -457,22 +457,84 @@ function non_med_advice_area(hide_additional) {
 function patient_non_med_advice() {
     let html = '';
     let nm_advices = get_patient_advice().advice_text_non_med;
-    for (let i = 0; i < nm_advices.length; ++i ) {
+    for (let i = 0; i < nm_advices.length; ++i) {
         let nm_advice = nm_advices[i];
         let nma_prefix = "nma_" + i;
         let category = nm_advice.category_id;
         let category_name = nm_advice.category_name;
         let boxnum = nm_advice.select_box_num;
-        let nma_id_base =`NONMED_${category}_${boxnum}`;
+        let nma_id_base = ['NONMED', category, boxnum].join('_');
         let row_id = 'pt_' + nma_id_base;
 
         html += '<div id="' + row_id + '" class="patient_nonmed_cb_row">\n';
         let allow_edit = 0;
         html += cdss_freetext(nm_advice.patient_split, allow_edit,
-            "patient_nonmed_cb_text", 'NONMED', category, boxnum);
+            "patient_nonmed_cb_text", 'pft', 'NONMED', category, boxnum);
         html += '</div> <!-- ' + row_id + ' -->\n';
     }
     set_element_inner('patient-non-med-advice-list', html);
+}
+
+// TODO: lots of duplication here, too
+function div_all_ehr_text() {
+    // <div id="div_all_ehr_text" class="div_all_ehr_text">
+    let html = '';
+    let medication_advice = get_patient_advice().medication_advice || [];
+    for (let i = 0; i < medication_advice.length; ++i) {
+        html += '<div id="advice_ehr_area_' + i + '" class="advice_ehr_area">';
+        let row = medication_advice[i];
+        let atc = row.ATC_code;
+        let cb_advices = row.adviceTextsCheckboxes;
+        html += ucfirst(row.medication_name).trim() + ':\n';
+        for (let j = 0; j < cb_advices.length; ++j) {
+            let cb_advice = cb_advices[j];
+            let aea_prefix = "aea_" + i + "_" + j;
+            let rulenum = cb_advice.medication_criteria_id;
+            let boxnum = cb_advice.select_box_num;
+            let advice_id_base = [atc, rulenum, boxnum].join('_');
+            let checkbox_id = 'cb_' + advice_id_base;
+            let row_id = 'et_' + advice_id_base;
+            html += '<div id="' + row_id + '">\n';
+            let allow_edit = 0;
+            html += cdss_freetext(cb_advice.ehr_split, allow_edit, 'efreetext',
+                'eft', atc, rulenum, boxnum);
+            html += '</div><!-- ' + row_id + ' -->\n';
+        }
+        html += '</div> <!-- advice_ehr_area_' + i + ' -->\n';
+    }
+    html += '<!-- Begin OTHER -->\n';
+    let other_advices = get_patient_advice().advice_other_text || [];
+    for (let i = 0; i < other_advices.length; ++i) {
+        let other_advice = other_advices[i];
+        let other_prefix = "other_" + i;
+        let category = other_advice.medication_criteria_id;
+        let boxnum = other_advice.select_box_num;
+        let other_id_base = ['OTHER', category, boxnum].join('_');
+        let row_id = 'et_' + other_id_base;
+        html += '<div id="' + row_id + '">\n';
+        let allow_edit = 0;
+        html += cdss_freetext(other_advice.ehr_split, allow_edit, 'efreetext',
+            'eft', 'OTHER', category, boxnum);
+        html += '</div> <!-- ' + row_id + ' -->\n';
+    }
+    html += '<!-- End OTHER -->\n';
+
+    html += '<!-- Begin NonMed -->\n';
+    let nm_advices = get_patient_advice.advice_text_non_med || [];
+    for (let i = 0; i < nm_advices.length; ++i) {
+        let nm_advice = nm_advices[i];
+        let category = nm_advice.category_id;
+        let boxnum = nm_advice.select_box_num;
+        let nma_id_base = ['NONMED', category, boxnum].join('_');
+        let row_id = 'et_' + nma_id_base;
+        html += '<div id="' + row_id + '">\n';
+        let allow_edit = 0;
+        html += cdss_freetext(nm_advice.ehr_split, allow_edit, 'efreetext',
+            'eft', 'NONMED', category, boxnum);
+        html += '</div> <!-- ' + row_id + ' -->\n';
+    }
+    html += '<!-- End NonMed -->\n';
+    set_element_inner('div_all_ehr_text', html);
 }
 
 function gauge_risk_score() {
@@ -544,6 +606,8 @@ function advise_page_setup() {
 
 function finalize_page_setup() {
     patient_info_age(); // is this needed?
+    gauge_risk_score();
+    div_all_ehr_text();
 }
 
 // These functions will be called from the web page, e.g.:
