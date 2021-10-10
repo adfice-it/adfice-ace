@@ -172,6 +172,15 @@ function patient_info_labs() {
         get_patient_advice().labs);
 }
 
+function set_element_inner(id, html) {
+    let elem = document.getElementById(id);
+    if (elem) {
+        elem.innerHTML = html;
+    } else {
+        five_pages.logger.error('no "' + id + '" element?');
+    }
+}
+
 // TODO: break this into smaller functions, perhaps at each level of nesting
 function big_nested_medicine_advice_table() {
     let medication_advice = get_patient_advice().medication_advice || [];
@@ -292,12 +301,58 @@ function big_nested_medicine_advice_table() {
         html += '</div><!-- div_advice_' + atc + ' -->\n';
     }
 
-    let elem = document.getElementById('medication-advice-list');
-    if (elem) {
-        elem.innerHTML = html;
-    } else {
-        five_pages.logger.error('no "medication-advice-list" element?');
+    set_element_inner('medication-advice-list', html);
+}
+
+function other_med_advice_area() {
+    /*
+     * TODO: this is 95% duplicate code
+     * The code supports multiple boxes only so it has the same shape as
+     * other nearly duplicate code, which needs to be factored together.
+     */
+    let other_advices = get_patient_advice().advice_other_text;
+    let html = '';
+    for (let i = 0; i < other_advices.length; ++i) {
+        let other_advice = other_advices[i];
+        let other_prefix = "other_" + i;
+        let category = other_advice.medication_criteria_id;
+        let boxnum = other_advice.select_box_num;
+        let other_id_base = [ 'OTHER', category, boxnum ].join('_');
+        let checkbox_id = 'cb_' + other_id_base;
+        let row_id = 'tr_' + other_id_base;
+        html += '<div id="' + row_id + '" class="other_advice_row">';
+        html += '<span id="' + other_prefix + 'sbn"';
+        html += ' class="other_advice_checkbox">\n';
+        html += '<input type="checkbox"\n';
+        html += '    id="' + checkbox_id + '"\n';
+        html += '    name="' + checkbox_id + '"\n';
+        html += '    value="' + checkbox_id + '"\n';
+        html += '    style="visibility:hidden"\n';
+        html += '/>\n';
+        html += '</span> <!-- ' + other_prefix + 'sbn -->\n';
+        html += '<div id="' + other_prefix + 'cdss_continer"';
+        html += ' class="other_cdss_container">\n';
+        html += '<div id="' + other_prefix + 'cdss" class="other_cdss">\n';
+        for (let k = 0; k < other_advice.cdss_split.length; ++k) {
+            let chunk = other_advice.cdss_split[k];
+            let chunk_id = ['ft', 'OTHER', category, boxnum, k].join('_');
+            if (chunk.editable) {
+                html += '<input id="' + chunk_id + '" type="text"';
+                html += ' class="ft_input" value="' + chunk.text + '"/>\n';
+            } else {
+                html += '<div id="' + chunk_id + '" class ="freetext">\n';
+                let cbString = get_converter().makeHtml(chunk.text);
+                cbString = cbString.replace("<p>", "");
+                cbString = cbString.replace("</p>", "");
+                html += cbString;
+                html += '</div> <!-- ' + chunk_id + ' -->\n';
+            }
+        }
+        html += '</div> <!-- ' + other_prefix + 'cdss -->\n';
+        html += '</div> <!-- other_cdss_container -->\n';
+        html += '</div><!-- ' + row_id + ' -->\n';
     }
+    set_element_inner('div_other_med_advice_area', html);
 }
 
 function gauge_risk_score() {
@@ -340,6 +395,7 @@ function prep_page_setup() {
     patient_info_labs();
     gauge_risk_score();
     big_nested_medicine_advice_table();
+    other_med_advice_area();
 }
 
 function consult_page_setup() {

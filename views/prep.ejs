@@ -119,63 +119,19 @@ continueren.
 <div id="medication-advice-list">loading ...</div>
 </div><!-- div_clinician_view -->
 
-<% let nm_advices = patient_advice.advice_text_non_med; -%>
-<% let other_advices = patient_advice.advice_other_text; -%>
-
 <div id="div_other_med_advice_area" class="div_other_advice">
 <!-- A free text box where the doctor can type in whatever they want.
      Like other free text boxes, this should be copied to the EHR and
      Patient texts.
-     The code supports multiple boxes only so it has the same shape as
-     other nearly duplicate code, which needs to be factored together.
 -->
-<% for (let i = 0; i < other_advices.length; ++i ) {
-       let other_advice = other_advices[i];
-       let other_prefix = "other_" + i;
-       let category = other_advice.medication_criteria_id;
-       let boxnum = other_advice.select_box_num;
-       let other_id_base =`OTHER_${category}_${boxnum}`;
-       let checkbox_id = 'cb_' + other_id_base;
-       let row_id = 'tr_' + other_id_base;
--%>
-<div id="<%= row_id %>" class="other_advice_row">
-<span id="<%= other_prefix %>_sbn" class="other_advice_checkbox">
-<input type="checkbox"
-        id="<%= checkbox_id %>"
-        name="<%= checkbox_id %>"
-        value="<%= checkbox_id %>"
-        style="visibility:hidden"
-/>
-</span> <!-- <%= other_prefix %>_sbn -->
-<div id="<%= other_prefix %>_cdss_continer" class="other_cdss_container">
-<div id="<%= other_prefix %>_cdss" class="other_cdss">
-<%         for (let k = 0; k < other_advice.cdss_split.length; ++k) { -%>
-<%             let chunk = other_advice.cdss_split[k]; -%>
-<%             let chunk_id = `ft_OTHER_${category}_${boxnum}_${k}`; -%>
-<%             if (chunk.editable) { -%>
-<input id="<%= chunk_id %>" type="text" class="ft_input"
-        value="<%= chunk.text %>"/>
-<%             } else { -%>
-<div id="<%= chunk_id %>" class ="freetext">
-<% //
-    let cbString = md.makeHtml(chunk.text);
-    cbString = cbString.replace("<p>", "");
-    cbString = cbString.replace("</p>", "");
-%>
-<%- cbString -%>
-</div> <!-- <%= chunk_id %> -->
-<%             } -%>
-<%         } -%>
-</div> <!-- <%= other_prefix %>_cdss -->
-</div> <!-- other_cdss_container -->
-</div><!-- <%= row_id %> -->
-<% } -%>
 </div><!-- div_other_med_advice -->
 
 <div class="advice_header clinician_view_only"
      id="andere_advies_header"
      style="width:20%;">Andere risicofactoren</div>
 <div id="non_med_advice_selection_area" class="non_med_advice_selection_area">
+
+<% let nm_advices = patient_advice.advice_text_non_med; -%>
 
 <%
    let last_category_name = '';
@@ -239,8 +195,5 @@ continueren.
 <div id="div-footer-id"></div><!-- footer -->
 <script>load_footer();</script>
 </form>
-<!--
-<%= JSON.stringify({ debug_info: patient_advice.debug_info }, null, 4) %>
--->
 </body>
 </html>
