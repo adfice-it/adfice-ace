@@ -8,9 +8,15 @@
 <title>Patient</title>
 <link rel="stylesheet" type="text/css" href="static/adfice.css">
 <style>
-#button-prep-view {
+#button-consult-view {
     background-color: #008000;
     color: #FFFFFF;
+}
+.checkbox-checked {
+    display: block;
+}
+.checkbox-unchecked {
+    display: none;
 }
 </style>
 <script src="assets/thirdparty/showdown.min.js"></script>
@@ -19,7 +25,8 @@
 <script src="assets/five-pages.js"></script>
 <script src="assets/footer.js"></script>
 <script>
-window.addEventListener('load', function(event) { prep_page_load(); });
+load_footer();
+window.addEventListener('load', function(event) { consult_page_load(); });
 </script>
 </head>
 <body>
@@ -122,7 +129,6 @@ loading ...
 </div><!-- non_med_advice_selection_area -->
 
 <div id="div-footer-id"></div><!-- footer -->
-<script>load_footer();</script>
 </form>
 </body>
 </html>

@@ -45,26 +45,6 @@ async function jsonAdviceForPatient(req, res) {
     res.json(await getDataForPatient(req, res));
 }
 
-async function renderStart(req, res) {
-    res.render("start" /* .ejs */ );
-}
-
-async function renderPrep(req, res) {
-    res.render("prep" /* .ejs */ , await getDataForPatient(req, res));
-}
-
-async function renderConsult(req, res) {
-    res.render("consult" /* .ejs */ , await getDataForPatient(req, res));
-}
-
-async function renderAdvise(req, res) {
-    res.render("advise" /* .ejs */ , await getDataForPatient(req, res));
-}
-
-async function renderFinalize(req, res) {
-    res.render("finalize" /* .ejs */ , await getDataForPatient(req, res));
-}
-
 async function renderAdviceForPatient(req, res) {
     res.render("patient" /* .ejs */ , await getDataForPatient(req, res));
 }
@@ -113,19 +93,19 @@ server.wss = new ws.Server({
 
 app.use("/static", express.static('static'));
 app.use("/assets", express.static('static'));
+
+app.use("/start", express.static('static/start.html'));
+app.use("/prep", express.static('static/prep.html'));
+app.use("/consult", express.static('static/consult.html'));
+app.use("/advise", express.static('static/advise.html'));
+app.use("/finalize", express.static('static/finalize.html'));
+
 app.set('view engine', 'ejs');
+app.get("/advice", jsonAdviceForPatient);
 
 app.get("/", renderIndex);
 app.get("/index", renderIndex);
 app.get("/index.html", renderIndex);
-
-app.get("/advice", jsonAdviceForPatient);
-
-app.get("/start", renderStart);
-app.get("/prep", renderPrep);
-app.get("/consult", renderConsult);
-app.get("/advise", renderAdvise);
-app.get("/finalize", renderFinalize);
 
 app.get("/patient", renderAdviceForPatient);
 
