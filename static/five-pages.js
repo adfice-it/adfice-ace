@@ -454,6 +454,27 @@ function non_med_advice_area(hide_additional) {
     set_element_inner('non_med_advice_selection_area', html);
 }
 
+function patient_non_med_advice() {
+    let html = '';
+    let nm_advices = get_patient_advice().advice_text_non_med;
+    for (let i = 0; i < nm_advices.length; ++i ) {
+        let nm_advice = nm_advices[i];
+        let nma_prefix = "nma_" + i;
+        let category = nm_advice.category_id;
+        let category_name = nm_advice.category_name;
+        let boxnum = nm_advice.select_box_num;
+        let nma_id_base =`NONMED_${category}_${boxnum}`;
+        let row_id = 'pt_' + nma_id_base;
+
+        html += '<div id="' + row_id + '" class="patient_nonmed_cb_row">\n';
+        let allow_edit = 0;
+        html += cdss_freetext(nm_advice.patient_split, allow_edit,
+            "patient_nonmed_cb_text", 'NONMED', category, boxnum);
+        html += '</div> <!-- ' + row_id + ' -->\n';
+    }
+    set_element_inner('patient-non-med-advice-list', html);
+}
+
 function gauge_risk_score() {
     let advice = get_patient_advice();
     let risk_score = advice.risk_score;
@@ -518,6 +539,7 @@ function advise_page_setup() {
     gauge_risk_score();
     patient_medicine_advice_table();
     patient_other_med_advice_area();
+    patient_non_med_advice();
 }
 
 function finalize_page_setup() {

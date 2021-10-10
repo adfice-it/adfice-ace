@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw -->
-<html lang="<%= lang %>">
+<html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,32 +61,9 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
 <div id="non_med_advice_patient_area_text">
 <div class="patient_header patient_view_only"
 	id="header_overige_advies">Overige adviezen</div>
-<% let nm_advices = patient_advice.advice_text_non_med; -%>
-<%
-   for (let i = 0; i < nm_advices.length; ++i ) {
-       let nm_advice = nm_advices[i];
-       let nma_prefix = "nma_" + i;
-       let category = nm_advice.category_id;
-       let category_name = nm_advice.category_name;
-       let boxnum = nm_advice.select_box_num;
-       let nma_id_base =`NONMED_${category}_${boxnum}`;
-       let row_id = 'pt_' + nma_id_base;
--%>
-<div id="<%= row_id %>" class="patient_nonmed_cb_row">
-<%         for (let k = 0; k < nm_advice.patient_split.length; ++k) { -%>
-<%             let chunk = nm_advice.patient_split[k]; -%>
-<%             let chunk_id = `pft_NONMED_${category}_${boxnum}_${k}`; -%>
-<% //
-        let cbString = md.makeHtml(chunk.text);
-        cbString = cbString.replace("<p>", "");
-        cbString = cbString.replace("</p>", "");
-%>
-<div id="<%= chunk_id %>" class="patient_nonmed_cb_text">
-<%- cbString -%>
-</div><!-- <%= chunk_id %> -->
-<%         } -%>
-</div> <!-- <%= row_id %> -->
-<% } -%>
+<div id="patient-non-med-advice-list">
+loading ...
+</div><!-- patient-non-med-advice-list -->
 </div><!-- non_med_advice_patient_area_text -->
 <button id="copy_patient_text" type="button" class='button_patient_text'
         onclick="copyPatientTextToClipboard()">Kopieer tekst</button>
