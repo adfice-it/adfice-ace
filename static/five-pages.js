@@ -203,6 +203,14 @@ function cdss_freetext(cdss_split, atc, rulenum, boxnum) {
     return html;
 }
 
+function input_checkbox(checkbox_id) {
+    return '<input type="checkbox"' +
+        ' id="' + checkbox_id + '"' +
+        ' name="' + checkbox_id + '"' +
+        ' value="' + checkbox_id + '"' +
+        ' style="visibility:hidden" />';
+}
+
 // TODO: break this into smaller functions, perhaps at each level of nesting
 function big_nested_medicine_advice_table() {
     let medication_advice = get_patient_advice().medication_advice || [];
@@ -277,10 +285,7 @@ function big_nested_medicine_advice_table() {
             html += '<tr id="' + row_id + '">\n';
             html += '<td>';
             html += '<span id="' + asa_prefix + '_sbn">';
-            html += '<input type="checkbox" id="' + checkbox_id + '"';
-            html += ' name="' + checkbox_id + '"';
-            html += ' value="' + checkbox_id + '"';
-            html += ' style="visibility:hidden" />';
+            html += input_checkbox(checkbox_id);
             html += '</span> <!-- ' + asa_prefix + '_sbn -->';
             html += '</td>\n';
             html += '<td>';
@@ -317,18 +322,13 @@ function other_med_advice_area() {
         html += '<div id="' + row_id + '" class="other_advice_row">';
         html += '<span id="' + other_prefix + 'sbn"';
         html += ' class="other_advice_checkbox">\n';
-        html += '<input type="checkbox"\n';
-        html += '    id="' + checkbox_id + '"\n';
-        html += '    name="' + checkbox_id + '"\n';
-        html += '    value="' + checkbox_id + '"\n';
-        html += '    style="visibility:hidden"\n';
-        html += '/>\n';
+        html += input_checkbox(checkbox_id);
         html += '</span> <!-- ' + other_prefix + 'sbn -->\n';
         html += '<div id="' + other_prefix + 'cdss_continer"';
         html += ' class="other_cdss_container">\n';
         html += '<div id="' + other_prefix + 'cdss" class="other_cdss">\n';
-        html += cdss_freetext(other_advice.cdss_split,
-            'OTHER', category, boxnum);
+        html += cdss_freetext(other_advice.cdss_split, 'OTHER', category,
+            boxnum);
         html += '</div> <!-- ' + other_prefix + 'cdss -->\n';
         html += '</div> <!-- other_cdss_container -->\n';
         html += '</div><!-- ' + row_id + ' -->\n';
@@ -368,18 +368,12 @@ function non_med_advice_area(hide_additional) {
         html += '>';
         html += category_name + '</div>\n';
         html += '<div id="' + nma_prefix + '_sbn" class="nonmed_checkbox">\n';
-        html += '<input type="checkbox"\n';
-        html += '    id="' + checkbox_id + '"\n';
-        html += '    name="' + checkbox_id + '"\n';
-        html += '    value="' + checkbox_id + '"\n';
-        html += '    style="visibility:hidden"\n';
-        html += '/>\n';
+        html += input_checkbox(checkbox_id);
         html += '</div> <!-- ' + nma_prefix + '_sbn -->\n';
         html += '<div id="' + nma_prefix + '_cdss_continer"';
         html += ' class="nonmed_cdss_container">\n';
         html += '<div id="' + nma_prefix + '_cdss" class="nonmed_cdss">\n';
-        html += cdss_freetext(nm_advice.cdss_split,
-            'NONMED', category, boxnum);
+        html += cdss_freetext(nm_advice.cdss_split, 'NONMED', category, boxnum);
         html += '</div> <!-- ' + nma_prefix + '_cdss -->\n';
         html += '</div> <!-- nonmed_cdss_container -->\n';
         html += '</div><!-- nonmed_row -->\n';
