@@ -44,7 +44,7 @@ function page_load(before_socket) {
     let el_pi_id = document.getElementById('patient-info-id');
     el_pi_id.innerText = five_pages.patient_id;
 
-    let json_url = get_base_url() + 'advice?id=' + patient_id;
+    let json_url = get_base_url() + 'advice?id=' + five_pages.patient_id;
     get_JSON(json_url, function(err, json_data) {
         if (err) {
             console.log("url:", json_url, "error:", err);
@@ -129,7 +129,6 @@ function patient_labs_as_html(labs) {
     return html;
 }
 
-
 function patient_info_age() {
     let advice = get_patient_advice();
     let elem = document.getElementById('patient-info-age');
@@ -181,16 +180,17 @@ function set_element_inner(id, html) {
     }
 }
 
-function cdss_freetext(cdss_split, atc, rulenum, boxnum) {
+function cdss_freetext_inner(cdss_split, allow_edit, divclass, prefix,
+    atc, rulenum, boxnum) {
     let html = '';
     for (let k = 0; k < cdss_split.length; ++k) {
         let chunk = cdss_split[k];
-        let chunk_id = ['ft', atc, rulenum, boxnum, k].join('_');
-        if (chunk.editable) {
+        let chunk_id = [prefix, atc, rulenum, boxnum, k].join('_');
+        if (allow_edit && chunk.editable) {
             html += '<input id="' + chunk_id + '" type="text"';
             html += ' class="ft_input" value="' + chunk.text + '"/>\n';
         } else {
-            html += '<div id="' + chunk_id + '" class ="freetext">\n';
+            html += '<div id="' + chunk_id + '" class ="' + divclass + '">\n';
             let cbString = get_converter().makeHtml(chunk.text);
             // Select Box texts do not contain legit paragraphs.
             // It is already in a span so this does not need to be
@@ -201,6 +201,12 @@ function cdss_freetext(cdss_split, atc, rulenum, boxnum) {
         }
     }
     return html;
+}
+
+function cdss_freetext(cdss_split, atc, rulenum, boxnum) {
+    let allow_edit = 1;
+    return cdss_freetext_inner(cdss_split, allow_edit, 'freetext', 'ft',
+        atc, rulenum, boxnum);
 }
 
 function input_checkbox(checkbox_id) {
@@ -303,6 +309,43 @@ function big_nested_medicine_advice_table(include_no_checkbox_advice) {
     }
 
     set_element_inner('medication-advice-list', html);
+}
+
+function patient_medicine_advice_table() {
+    let html = '';
+    let allow_edit = 0;
+    let medication_advice = get_patient_advice().medication_advice || [];
+    for (let i = 0; i < medication_advice.length; ++i) {
+        let row = medication_advice[i];
+        let atc = row.ATC_code;
+        let cb_advices = row.adviceTextsCheckboxes;
+        html += '<div id="advice_patient_area_' + atc + '"';
+        html += ' class="advice_patient_area">\n';
+        html += '<div id="div_patient_med_name_' + atc + '"';
+        html += ' class="patient_med_name">';
+        html += ucfirst(row.medication_name).trim() + '</div>\n';
+
+        for (let j = 0; j < cb_advices.length; ++j) {
+            let cb_advice = cb_advices[j];
+            let paa_prefix = "paa_" + i + "_" + j;
+            let rulenum = cb_advice.medication_criteria_id;
+            let boxnum = cb_advice.select_box_num;
+            let advice_id_base = [atc, rulenum, boxnum].join('_');
+            let checkbox_id = 'cb_' + advice_id_base;
+            let row_id = 'pt_' + advice_id_base;
+
+            html += '<div id="' + row_id + '" class="patient_med_cb_row">';
+            html += cdss_freetext_inner(cb_advice.patient_split, allow_edit,
+                'patient_med_cb_text', 'pft', atc, rulenum, boxnum);
+
+            html += '</div><!-- ' + row_id + ' -->';
+        }
+        // TODO: is this better done as if (cb_advices.length == 0) ?
+        html += '<div id="geen_advies_' + atc + '" class="geen_advies">';
+        html += 'Geen advies.</div>';
+        html += '</div> <!-- advice_patient_area_' + i + ' -->\n';
+    }
+    set_element_inner('patient-medication-advice-list', html);
 }
 
 function other_med_advice_area() {
@@ -446,6 +489,7 @@ function consult_page_setup() {
 function advise_page_setup() {
     patient_info_age();
     gauge_risk_score();
+    patient_medicine_advice_table();
 }
 
 function finalize_page_setup() {

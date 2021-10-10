@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw -->
-<%# see https://ejs.co/#docs -%>
-<% function ucfirst(s) {
-       if (typeof s !== 'string') { return s; }
-       return s.charAt(0).toUpperCase() + s.slice(1);
-   } -%>
 <html lang="<%= lang %>">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Patient <%= patient_id %></title>
+<title>Patient</title>
 <link rel="stylesheet" type="text/css" href="static/adfice.css">
 <style>
 #button-advise-view {
@@ -18,18 +13,13 @@
     color: #FFFFFF;
 }
 </style>
+<script src="assets/thirdparty/showdown.min.js"></script>
 <script src="assets/basic-utils.js"></script>
-<script>
-let patient_id = "<%= patient_id %>";
-console.log('patient_id: ', patient_id);
-</script>
 <script src="assets/common.js"></script>
 <script src="assets/five-pages.js"></script>
 <script src="assets/footer.js"></script>
 <script>
-window.addEventListener('load', function(event) {
-    connect_web_socket_and_keep_alive();
-});
+window.addEventListener('load', function(event) { advise_page_load(); });
 </script>
 </head>
 <body>
@@ -40,81 +30,26 @@ window.addEventListener('load', function(event) {
 >
 <div id=patient_info>
 <strong>Pati&euml;ntinformatie:</strong><br/>
-Patient: <%= patient_id %><br/>
-Leeftijd: <%= patient_advice.age %><br/>
+Patient: <span id="patient-info-id"></span><br/>
+Leeftijd: <span id="patient-info-age"></span><br/>
 <div class="prediction" id = "prediction">
-<% let risk_score = patient_advice.risk_score; -%>
-<% let hide_gauge = (risk_score == null || isNaN(risk_score)) -%>
-<p>Kans om te vallen binnen 12 maanden:&nbsp;
-<span style="color: red;">
-<% if (hide_gauge) { -%>
-(onbekend)
-<% } else { -%>
-<%= risk_score -%>%
-<% } -%>
-</span> <a href="prediction_explanation?id=<%= patient_id %>">(lees meer over het predictiemodel)</a></p>
 <div class='gauge_background'>
-<div class='gauge_text_left'>0%</div>
-<% if (!hide_gauge) { -%>
-<div class='gauge_line' style='left: <%= risk_score %>%'></div>
-<% } -%>
-<div class='gauge_text_right'>100%</div>
+<div class='gauge_text_left'>laag</div>
+<div id="gauge-line"></div>
+<div class='gauge_text_right'>hoog</div>
 </div><!-- gauge_background -->
 </div><!-- prediction -->
 <div style="height: 2em;"></div>
 </div><!-- id=patient_info -->
 
-<% let medication_advice = patient_advice.medication_advice || []; -%>
 <% let nm_advices = patient_advice.advice_text_non_med; -%>
 <% let other_advices = patient_advice.advice_other_text; -%>
 
 <div id="div_patient_view" class="div_patient_view">
 <div class="patient_header patient_view_only"
      id="patient_med_advice_header">Advies over medicaties:</div>
-<% for (let i = 0; i < medication_advice.length; ++i ) { -%>
-<%     let row = medication_advice[i]; -%>
-<%     let atc = row.ATC_code; -%>
-<%     let cb_advices = row.adviceTextsCheckboxes; -%>
-<div id="advice_patient_area_<%= atc %>" class="advice_patient_area">
-<div id="div_patient_med_name_<%= atc %>"
-     class="patient_med_name"><%= ucfirst(row.medication_name).trim() %></div>
-<%
-     for (let j = 0; j < cb_advices.length; ++j ) {
-         let cb_advice = cb_advices[j];
-         let paa_prefix = "paa_" + i + "_" + j;
-         let rulenum = cb_advice.medication_criteria_id;
-         let boxnum = cb_advice.select_box_num;
-         let advice_id_base =`${atc}_${rulenum}_${boxnum}`;
-         let checkbox_id = 'cb_' + advice_id_base;
-         let row_id = 'pt_' + advice_id_base;
--%>
-<div id="<%= row_id %>" class="patient_med_cb_row">
-<%         for (let k = 0; k < cb_advice.patient_split.length; ++k) { -%>
-<%             let chunk = cb_advice.patient_split[k]; -%>
-<%             let chunk_id = `pft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
-<% //
-        let cbString = md.makeHtml(chunk.text);
-        cbString = cbString.replace("<p>", "");
-        cbString = cbString.replace("</p>", "");
-%>
-<div id="<%= chunk_id %>" class="patient_med_cb_text">
-<%- cbString -%>
-</div><!-- <%= chunk_id %> -->
-<%         } -%>
-</div><!-- <%= row_id %> -->
-<%     } -%>
-<div id="geen_advies_<%= atc %>" class="geen_advies">
-Geen advies.
-</div>
-</div> <!-- advice_patient_area_<%= i %> -->
-<% } -%>
+<div id='patient-medication-advice-list'>loading ...</div>
 <div id="div_other_med_advice" class="div_other_advice">
-<!-- A free text box where the doctor can type in whatever they want.
-     Like other free text boxes, this is copied to the EHR and
-     Patient texts.
-     The code supports multiple boxes only so it has the same shape as
-     other nearly duplicate code, which needs to be factored together.
--->
 <%
  for (let i = 0; i < other_advices.length; ++i ) {
      let other_advice = other_advices[i];
