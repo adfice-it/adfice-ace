@@ -212,7 +212,7 @@ function input_checkbox(checkbox_id) {
 }
 
 // TODO: break this into smaller functions, perhaps at each level of nesting
-function big_nested_medicine_advice_table() {
+function big_nested_medicine_advice_table(include_no_checkbox_advice) {
     let medication_advice = get_patient_advice().medication_advice || [];
     let html = '';
     for (let i = 0; i < medication_advice.length; ++i) {
@@ -232,19 +232,21 @@ function big_nested_medicine_advice_table() {
         html += '<img src="static/FK_circle_with_linkout.png"';
         html += ' alt="FK" class="fkimg"/></a>' + "\n";
 
-        let div_advice_atc_id = 'advice_' + atc;
-        html += '<div id="' + div_advice_atc_id + '" class="advice_no_checkbox">';
-        html += '<strong>Advies:</strong>';
-        let advices = row.adviceTextsNoCheckboxes;
-        for (let j = 0; j < advices.length; ++j) {
-            let advice = advices[j];
-            let att_prefix = "att_" + i + "_" + j;
-            let bogus_rule = "NonCB";
-            html += '<div id="' + att_prefix + '_cdss">';
-            html += cdss_freetext(advice.cdss_split, atc, bogus_rule, j);
-            html += '</div><!-- ' + att_prefix + '_cdss -->' + "\n";
+        if (include_no_checkbox_advice) {
+            let div_advice_atc_id = 'advice_' + atc;
+            html += '<div id="' + div_advice_atc_id + '" class="advice_no_checkbox">';
+            html += '<strong>Advies:</strong>';
+            let advices = row.adviceTextsNoCheckboxes;
+            for (let j = 0; j < advices.length; ++j) {
+                let advice = advices[j];
+                let att_prefix = "att_" + i + "_" + j;
+                let bogus_rule = "NonCB";
+                html += '<div id="' + att_prefix + '_cdss">';
+                html += cdss_freetext(advice.cdss_split, atc, bogus_rule, j);
+                html += '</div><!-- ' + att_prefix + '_cdss -->' + "\n";
+            }
+            html += '</div><!-- ' + div_advice_atc_id + ' -->' + "\n";
         }
-        html += '</div><!-- ' + div_advice_atc_id + ' -->' + "\n";
 
         let cb_advices = row.adviceTextsCheckboxes;
         let div_advice_selection_area_id = 'advice_selection_area_' + i;
@@ -421,7 +423,8 @@ function prep_page_setup() {
     patient_info_problems();
     patient_info_labs();
     gauge_risk_score();
-    big_nested_medicine_advice_table();
+    let include_no_checkbox_advice = 1;
+    big_nested_medicine_advice_table(include_no_checkbox_advice);
     other_med_advice_area();
     let hide_additional = 1;
     non_med_advice_area(hide_additional);
@@ -434,6 +437,10 @@ function consult_page_setup() {
     patient_info_problems();
     patient_info_labs();
     gauge_risk_score();
+    let include_no_checkbox_advice = 0;
+    big_nested_medicine_advice_table(include_no_checkbox_advice);
+    let hide_additional = 0;
+    non_med_advice_area(hide_additional);
 }
 
 function advise_page_setup() {
