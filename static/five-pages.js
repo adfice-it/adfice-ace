@@ -15,6 +15,7 @@ var five_pages = {
     patient_id: null,
     data: {},
     xhttp: null,
+    converter: null,
     debug: 0,
     logger: console
 };
@@ -25,6 +26,13 @@ function get_five_pages() {
 
 function get_patient_advice() {
     return five_pages.data.patient_advice;
+}
+
+function get_converter() {
+    if (five_pages.converter == null) {
+        five_pages.converter = new showdown.Converter();
+    }
+    return five_pages.converter;
 }
 
 function page_load(before_socket) {
@@ -164,6 +172,133 @@ function patient_info_labs() {
         get_patient_advice().labs);
 }
 
+// TODO: break this into smaller functions, perhaps at each level of nesting
+function big_nested_medicine_advice_table() {
+    let medication_advice = get_patient_advice().medication_advice || [];
+    let html = '';
+    for (let i = 0; i < medication_advice.length; ++i) {
+        let row = medication_advice[i];
+        let atc = row.ATC_code;
+        let generic_name = row.generic_name;
+        let d = generic_name[0];
+        let med_url = "https://www.farmacotherapeutischkompas.nl" +
+            "/bladeren/preparaatteksten/atc/" +
+            atc;
+        html += '<div id="div_advice_' + atc + '">';
+
+        html += '<div id="div_med_name_' + atc + '" class="med_name">';
+        html += ucfirst(row.medication_name).trim() + '</div>';
+
+        html += '<a href="' + med_url + '" class="fklink" target="_blank">';
+        html += '<img src="static/FK_circle_with_linkout.png"';
+        html += ' alt="FK" class="fkimg"/></a>' + "\n";
+
+        let div_advice_atc_id = 'advice_' + atc;
+        html += '<div id="' + div_advice_atc_id + '" class="advice_no_checkbox">';
+        html += '<strong>Advies:</strong>';
+        let advices = row.adviceTextsNoCheckboxes;
+        for (let j = 0; j < advices.length; ++j) {
+            let advice = advices[j];
+            let att_prefix = "att_" + i + "_" + j;
+            let bogus_rule = "NonCB";
+            html += '<div id="' + att_prefix + '_cdss">';
+            for (let k = 0; k < advice.cdss_split.length; ++k) {
+                let chunk = advice.cdss_split[k];
+                let chunk_id = 'ft_' + atc + '_' + bogus_rule + '_' + j + '_' + k;
+                if (chunk.editable) {
+                    html += '<input id="' + chunk_id + '" type="text"';
+                    html += ' value="' + chunk.text + '"/>';
+                } else {
+                    html += '<div id="' + chunk_id + '">';
+                    html += get_converter().makeHtml(chunk.text);
+                    html += '</div> <!-- ' + chunk_id + ' -->';
+                }
+            }
+            html += '</div><!-- ' + att_prefix + '_cdss -->' + "\n";
+        }
+        html += '</div><!-- ' + div_advice_atc_id + ' -->' + "\n";
+
+        let cb_advices = row.adviceTextsCheckboxes;
+        let div_advice_selection_area_id = 'advice_selection_area_' + i;
+        html += '<div id="' + div_advice_selection_area_id + '"';
+        html += ' class="advice_selection_area">';
+        html += '<div class="checkbox_section_header"';
+        html += '>Maatregelen (aangekruist indien aanbevolen):</div>';
+        let div_ref_page_atc_id = 'div_refpages_' + atc;
+        html += '<div id="' + div_ref_page_atc_id + '"';
+        html += ' class="refpages">Referenties:';
+        let referenceNumbers = row.referenceNumbers;
+        for (let k = 0; k < referenceNumbers.length; ++k) {
+            let ref_page_num = referenceNumbers[k].reference;
+            if (k) {
+                html += ', ';
+            }
+            let ref_page_id = 'atc_ref_page_' + atc + '_' + ref_page_num;
+            html += '<span id="' + ref_page_id + '" class="atc_ref_page">';
+            let ref_url = 'static/refpages/refpage' + ref_page_num + '.html';
+            html += '<a href="' + ref_url + '" target="_blank ">';
+            html += ref_page_num + '</a>';
+            html += '</span><!-- ref_page_id -->\n';
+        }
+        html += '</div><!-- ' + div_ref_page_atc_id + ' -->';
+
+        // TODO: factor out this loop
+        // TODO: extract into checkbox-table.include.html
+        html += '<table>\n';
+        html += '<tr><td>Kies een of meer maatregel(en):</td><td></td></tr>\n'
+        for (let j = 0; j < cb_advices.length; ++j) {
+            let cb_advice = cb_advices[j];
+            let asa_prefix = "asa_" + i + "_" + j;
+            let rulenum = cb_advice.medication_criteria_id;
+            let boxnum = cb_advice.select_box_num;
+            let advice_id_base = [atc, rulenum, boxnum].join('_');
+            let checkbox_id = 'cb_' + advice_id_base;
+            let row_id = 'tr_' + advice_id_base;
+            html += '<tr id="' + row_id + '">\n';
+            html += '<td>';
+            html += '<span id="' + asa_prefix + '_sbn">';
+            html += '<input type="checkbox" id="' + checkbox_id + '"';
+            html += ' name="' + checkbox_id + '"';
+            html += ' value="' + checkbox_id + '"';
+            html += ' style="visibility:hidden" />';
+            html += '</span> <!-- ' + asa_prefix + '_sbn -->';
+            html += '</td>\n';
+            html += '<td>';
+            let asa_cdss_id = asa_prefix + '_cdss';
+            html += '<div id="' + asa_prefix + '_cdss" class="med_cdss">';
+            for (let k = 0; k < cb_advice.cdss_split.length; ++k) {
+                let chunk = cb_advice.cdss_split[k];
+                let chunk_id = ['ft', atc, rulenum, boxnum, k].join('_');
+                if (chunk.editable) {
+                    html += '<input id="' + chunk_id + '" type="text"';
+                    html += ' class="ft_input" value="' + chunk.text + '"/>\n';
+                } else {
+                    html += '<div id="' + chunk_id + '" class ="freetext">\n';
+                    let cbString = get_converter().makeHtml(chunk.text);
+                    // Select Box texts do not contain legit paragraphs.
+                    // It is already in a span so this does not need to be replaced,
+                    // just destroyed.
+                    cbString = cbString.replace("<p>", "");
+                    cbString = cbString.replace("</p>", "");
+                    html += cbString;
+                    html += '</div> <!-- ' + chunk_id + '" -->\n';
+                }
+            }
+            html += '</div> <!-- ' + asa_cdss_id + ' --></td>\n';
+            html += '</tr>\n';
+        }
+        html += '</table>\n';
+        html += '</div><!-- advice_selection_area_' + i + ' -->\n';
+        html += '</div><!-- div_advice_' + atc + ' -->\n';
+    }
+
+    let elem = document.getElementById('medication-advice-list');
+    if (elem) {
+        elem.innerHTML = html;
+    } else {
+        five_pages.logger.error('no "medication-advice-list" element?');
+    }
+}
 
 function gauge_risk_score() {
     let advice = get_patient_advice();
@@ -204,6 +339,7 @@ function prep_page_setup() {
     patient_info_problems();
     patient_info_labs();
     gauge_risk_score();
+    big_nested_medicine_advice_table();
 }
 
 function consult_page_setup() {

@@ -18,6 +18,15 @@
     color: #FFFFFF;
 }
 </style>
+<script src="assets/thirdparty/showdown.min.js"></script>
+<!--
+<script>
+	var converter	= new showdown.Converter();
+	var text	= '# hello, markdown!';
+	var html	= converter.makeHtml(text);
+	console.log('html:', html);
+</script>
+-->
 <script src="assets/basic-utils.js"></script>
 <script src="assets/common.js"></script>
 <script src="assets/five-pages.js"></script>
@@ -33,6 +42,9 @@ window.addEventListener('load', function(event) { prep_page_load(); });
      alt="Advice IT logo"
 >
 <div id="nav_container" style="display: inline;">
+ <!-- This is not valid HTML according to https://validator.w3.org -->
+ <!-- Error: The element button must not appear as a descendant of the
+	     a element. -->
  <a href = "static/HoeGebruikIkDitSysteem.html"
     target="_blank"><button type="button"
 			    class = "nav_button"
@@ -104,119 +116,7 @@ Het advies hieronder gaat over het effect van medicijnen op valrisico,
 maar gaat niet over andere redenen om de medicatie te stoppen of
 continueren.
 </div><!-- general advice -->
-
-<% let medication_advice = patient_advice.medication_advice || [];
-for (let i = 0; i < medication_advice.length; ++i ) {
-     let row = medication_advice[i];
-     let atc = row.ATC_code;
-     let generic_name = row.generic_name;
-     let d = generic_name[0];
-     let med_url = "https://www.farmacotherapeutischkompas.nl" +
-            "/bladeren/preparaatteksten/atc/" +
-            atc;
--%>
-<div id="div_advice_<%= atc %>">
-<div id="div_med_name_<%= atc %>" class = "med_name">
-<%= ucfirst(row.medication_name).trim() %></div>
- <a href="<%= med_url %>" class="fklink" target="_blank">
-<img src="static/FK_circle_with_linkout.png" alt="FK" class="fkimg"/>
-</a>
-<div id="advice_<%= atc %>" class="advice_no_checkbox">
-<strong>Advies:</strong>
-<%     let advices = row.adviceTextsNoCheckboxes; -%>
-<%     for (let j = 0; j < advices.length; ++j ) { -%>
-<%         let advice = advices[j]; -%>
-<%         let att_prefix = "att_" + i + "_" + j; -%>
-<%         let bogus_rule = "NonCB"; -%>
-<div id="<%= att_prefix %>_cdss">
-<%         for (let k = 0; k < advice.cdss_split.length; ++k) { -%>
-<%             let chunk = advice.cdss_split[k]; -%>
-<%             let chunk_id = `ft_${atc}_${bogus_rule}_${j}_${k}`; -%>
-<%             if (chunk.editable) { -%>
-<input id="<%= chunk_id %>" type="text"
-        value="<%= chunk.text %>"/>
-<%             } else { -%>
-<div id="<%= chunk_id %>">
-<%- md.makeHtml(chunk.text) -%>
-</div> <!-- <%= chunk_id %> -->
-<%             } -%>
-<%         } -%>
-</div> <!-- <%= att_prefix %>_cdss -->
-<%     } -%>
-</div>
-<%     let cb_advices = row.adviceTextsCheckboxes; -%>
-<div id="advice_selection_area_<%= i %>" class="advice_selection_area">
-<div class="checkbox_section_header"
->Maatregelen (aangekruist indien aanbevolen):</div>
-<div id="div_refpages_<%= atc %>"
-    class="refpages">Referenties:
-<%
-    let referenceNumbers = row.referenceNumbers;
-        for (let k = 0; k < referenceNumbers.length; ++k ) {
-            let ref_page_num = referenceNumbers[k].reference;
-        if (k) {
--%>
-,
-<%          } -%>
-<span id="atc_ref_page_<%= atc %>_<%= ref_page_num %>" class="atc_ref_page">
-<a href="static/refpages/refpage<%= ref_page_num %>.html"
-   target="_blank"><%= ref_page_num %></a>
-</span><!-- atc_ref_page_<%= atc %>_<%= ref_page_num %> -->
-<% } -%>
-</div><!-- div_refpages_<%= atc %> -->
-<table>
-<tr><td>Kies een of meer maatregel(en):</td><td></td></tr>
-<%
-     for (let j = 0; j < cb_advices.length; ++j ) {
-         let cb_advice = cb_advices[j];
-         let asa_prefix = "asa_" + i + "_" + j;
-         let rulenum = cb_advice.medication_criteria_id;
-         let boxnum = cb_advice.select_box_num;
-         let advice_id_base =`${atc}_${rulenum}_${boxnum}`;
-         let checkbox_id = 'cb_' + advice_id_base;
-         let row_id = 'tr_' + advice_id_base;
--%>
-<tr id="<%= row_id %>">
-<td>
-<span id="<%= asa_prefix %>_sbn">
-<input type="checkbox"
-        id="<%= checkbox_id %>"
-        name="<%= checkbox_id %>"
-        value="<%= checkbox_id %>"
-        style="visibility:hidden"
-/>
-</span> <!-- <%= asa_prefix %>_sbn -->
-</td>
-<td>
-<div id="<%= asa_prefix %>_cdss" class="med_cdss">
-<%         for (let k = 0; k < cb_advice.cdss_split.length; ++k) { -%>
-<%             let chunk = cb_advice.cdss_split[k]; -%>
-<%             let chunk_id = `ft_${atc}_${rulenum}_${boxnum}_${k}`; -%>
-<%             if (chunk.editable) { -%>
-<input id="<%= chunk_id %>" type="text" class="ft_input"
-        value="<%= chunk.text %>"/>
-<%             } else { -%>
-<div id="<%= chunk_id %>" class ="freetext">
-<% //
-    let cbString = md.makeHtml(chunk.text);
-    // Select Box texts do not contain legit paragraphs.
-    // It is already in a span so this does not need to be replaced,
-    // just destroyed.
-    cbString = cbString.replace("<p>", "");
-    cbString = cbString.replace("</p>", "");
-%>
-<%- cbString -%>
-</div> <!-- <%= chunk_id %> -->
-<%             } -%>
-<%         } -%>
-</div> <!-- <%= asa_prefix %>_cdss -->
-</td>
-</tr>
-<%     } -%>
-</table>
-</div><!-- advice_selection_area_<%= i %> -->
-</div><!-- div_advice_<%= atc %> -->
-<% } -%>
+<div id="medication-advice-list">loading ...</div>
 </div><!-- div_clinician_view -->
 
 <% let nm_advices = patient_advice.advice_text_non_med; -%>

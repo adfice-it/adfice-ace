@@ -12,6 +12,9 @@ adfice-export.log
 *.qcow2
 *.log
 qemu.pid
+*.qcow2.nic
+*.qcow2.pid
+*.qcow2.ssh
 
 adfice.my.cnf
 root.adfice.my.cnf

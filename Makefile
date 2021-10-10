@@ -69,6 +69,7 @@ define vm-launch
 	./centos-vm/retry.sh $(RETRIES) $(DELAY) \
 		$(VM_SSH) '/bin/true'
 	echo "$(VM_SSH)" > '$(1).ssh'
+	chmod +x '$(1).ssh'
 	ssh-keyscan -p$(VM_PORT_SSH) 127.0.0.1 \
                 | grep `cat ./centos-vm/id_rsa_host_tmp.pub | cut -f2 -d' '`
 	@echo "$(1).nic: $(shell cat $(1).nic)"
@@ -157,10 +158,13 @@ ADFICE_TAR_CONTENTS=COPYING \
 		package.json \
 		README.md \
 		$(shell find bin prediction sql static views -type f) \
+		$(shell find static views -type l) \
 		system.db-scripts.env \
 		testingNotes.txt \
 		TODO
 
+# transform fails to do something sensible with symbolic links
+# for the moment, hack around this with bin/vm-init
 adfice-ace.tar.gz: $(ADFICE_TAR_CONTENTS)
 	tar --transform='s@^@adfice-$(ADFICE_VERSION)/@' \
 		--gzip --create --verbose \
