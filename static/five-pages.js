@@ -317,7 +317,7 @@ function other_med_advice_area() {
         let other_prefix = "other_" + i;
         let category = other_advice.medication_criteria_id;
         let boxnum = other_advice.select_box_num;
-        let other_id_base = [ 'OTHER', category, boxnum ].join('_');
+        let other_id_base = ['OTHER', category, boxnum].join('_');
         let checkbox_id = 'cb_' + other_id_base;
         let row_id = 'tr_' + other_id_base;
         html += '<div id="' + row_id + '" class="other_advice_row">';
@@ -353,6 +353,74 @@ function other_med_advice_area() {
         html += '</div><!-- ' + row_id + ' -->\n';
     }
     set_element_inner('div_other_med_advice_area', html);
+}
+
+// TODO: This is mostly duplicate code
+function non_med_advice_area(hide_additional) {
+    let html = '';
+    let nm_advices = get_patient_advice().advice_text_non_med;
+    let last_category_name = '';
+    for (let i = 0; i < nm_advices.length; ++i) {
+        let nm_advice = nm_advices[i];
+        let nma_prefix = "nma_" + i;
+        let category = nm_advice.category_id;
+        let boxnum = nm_advice.select_box_num;
+        let nma_id_base = ['NONMED', category, boxnum].join('_');
+        let checkbox_id = 'cb_' + nma_id_base;
+        let row_id = 'tr_' + nma_id_base;
+        let category_name = nm_advice.category_name;
+        let category_name_class = "nm_category_entry_additional";
+        if (category_name != last_category_name) {
+            last_category_name = category_name;
+            category_name_class = "nm_category_entry_first";
+        }
+        html += '<div id="' + row_id + '" class="nonmed_row">\n';
+        let td_nm_cat_id = ['td', 'nm', 'category', 'name',
+            nm_advice.category_id, boxnum
+        ].join('_');
+        html += '<div id="' + td_nm_cat_id + '"';
+        html += ' class="td_nm_category_name ' + category_name_class + '"';
+        if (hide_additional &&
+            category_name_class == "nm_category_entry_additional") {
+            html += ' style="visibility:hidden"';
+        }
+        html += '>';
+        html += category_name + '</div>\n';
+        html += '<div id="' + nma_prefix + '_sbn" class="nonmed_checkbox">\n';
+        html += '<input type="checkbox"\n';
+        html += '    id="' + checkbox_id + '"\n';
+        html += '    name="' + checkbox_id + '"\n';
+        html += '    value="' + checkbox_id + '"\n';
+        html += '    style="visibility:hidden"\n';
+        html += '/>\n';
+        html += '</div> <!-- ' + nma_prefix + '_sbn -->\n';
+        html += '<div id="' + nma_prefix + '_cdss_continer"';
+        html += ' class="nonmed_cdss_container">\n';
+        html += '<div id="' + nma_prefix + '_cdss" class="nonmed_cdss">\n';
+        for (let k = 0; k < nm_advice.cdss_split.length; ++k) {
+            let chunk = nm_advice.cdss_split[k];
+            let chunk_id = ['ft', 'NONMED', category, boxnum, k].join('_');
+            if (chunk.editable) {
+                html += '<input id="' + chunk_id + '"';
+                html += ' type="text" class="ft_input"';
+                html += ' value="' + chunk.text + '"/>\n';
+            } else {
+                html += '<div id="' + chunk_id + '" class ="freetext">\n';
+                let cbString = get_converter().makeHtml(chunk.text);
+                // Select Box texts do not contain legit paragraphs.
+                // It is already in a span so this does not need to be replaced,
+                // just destroyed.
+                cbString = cbString.replace("<p>", "");
+                cbString = cbString.replace("</p>", "");
+                html += cbString + '</div><!-- ' + chunk_id + ' -->\n';
+            }
+        }
+        html += '</div> <!-- ' + nma_prefix + '_cdss -->\n';
+        html += '</div> <!-- nonmed_cdss_container -->\n';
+        html += '</div><!-- nonmed_row -->\n';
+    }
+    set_element_inner('non_med_advice_selection_area', html);
+
 }
 
 function gauge_risk_score() {
@@ -396,6 +464,8 @@ function prep_page_setup() {
     gauge_risk_score();
     big_nested_medicine_advice_table();
     other_med_advice_area();
+    let hide_additional = 1;
+    non_med_advice_area(hide_additional);
 }
 
 function consult_page_setup() {
