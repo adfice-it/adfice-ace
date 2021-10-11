@@ -25,7 +25,7 @@ function get_five_pages() {
 }
 
 function get_patient_advice() {
-	return five_pages.data.patient_advice;
+    return five_pages.data.patient_advice;
 }
 
 function get_converter() {
@@ -45,8 +45,8 @@ function page_load(before_socket) {
     el_pi_id.innerText = five_pages.patient_id;
 
     let json_url = get_base_url() + 'advice?id=' + five_pages.patient_id;
-	get_JSON(json_url, function(err, json_data) {
-console.log(json_data);
+    get_JSON(json_url, function(err, json_data) {
+        console.log(json_data);
         if (err) {
             console.log("url:", json_url, "error:", err);
         }

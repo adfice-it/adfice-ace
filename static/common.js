@@ -351,7 +351,7 @@ function connect_web_socket() {
         }
     }
 
-	// URLSearchParams does not work in IE
+    // URLSearchParams does not work in IE
     // let params = new URLSearchParams(window.location.search);
     common_js.patient_id = urlParam('id');
 
@@ -369,13 +369,12 @@ function connect_web_socket() {
     return common_js.ws;
 }
 
-function urlParam(parName){
+function urlParam(parName) {
     var results = new RegExp('[\?&]' + parName + '=([^&#]*)').exec(window.location.href);
-    if (results == null){
-       return null;
-    }
-    else {
-       return decodeURI(results[1]) || 0;
+    if (results == null) {
+        return null;
+    } else {
+        return decodeURI(results[1]) || 0;
     }
 }
 
