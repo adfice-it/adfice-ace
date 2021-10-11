@@ -31,16 +31,17 @@ function get_content(url, type, callback) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
     xhr.responseType = type;
-// this does not seem to fix IE JSON compatability
-//	if (type == "json"){
-//	xhr.json = true;
-//	}
     xhr.onload = function() {
         var status = xhr.status;
+		// workaround for IE bug: https://github.com/naugtur/xhr/issues/123
+		var response = xhr.response;
+		if (type == 'json' && typeof(response) == 'string'){
+			response = JSON.parse(response);
+		}
         if (status === 200) {
-            callback(null, xhr.response);
+            callback(null, response);
         } else {
-            callback(status, xhr.response);
+            callback(status, response);
         }
     };
     xhr.send();

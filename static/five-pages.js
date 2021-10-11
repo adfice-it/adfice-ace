@@ -25,12 +25,7 @@ function get_five_pages() {
 }
 
 function get_patient_advice() {
-    return five_pages.data.patient_advice;
-	// does not work on IE. IE regards the JSON as an ordinary string.
-	// The code below works on IE but not on Firefox.
-	// this might help: https://github.com/naugtur/xhr/issues/123
-	// let jfdata = JSON.parse(five_pages.data);
-    // return jfdata.patient_advice;
+	return five_pages.data.patient_advice;
 }
 
 function get_converter() {
