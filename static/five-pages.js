@@ -331,7 +331,8 @@ function patient_medicine_advice_table() {
             let advice_id_base = [atc, rulenum, boxnum].join('_');
             let checkbox_id = 'cb_' + advice_id_base;
             let row_id = 'pt_' + advice_id_base;
-            html += '<div id="' + row_id + '" class="patient_med_cb_row">';
+            html += '<div id="' + row_id + '" class="patient_med_cb_row"';
+            html += ' style="display:none">';
             let allow_edit = 0;
             html += cdss_freetext(cb_advice.patient_split, allow_edit,
                 'patient_med_cb_text', 'pft', atc, rulenum, boxnum);
@@ -399,7 +400,8 @@ function patient_other_med_advice_area() {
         let checkbox_id = 'cb_' + other_id_base;
         let row_id = row_pre + '_' + other_id_base;
 
-        html += '<div id="' + row_id + '" class="' + row_class + '">';
+        html += '<div id="' + row_id + '" class="' + row_class + '"';
+        html += ' style="display:none">';
         let allow_edit = 0;
         html += cdss_freetext(other_advice.patient_split, allow_edit,
             'patient_othermed_cb_text', 'pft', atc, rulenum, boxnum);
@@ -467,7 +469,8 @@ function patient_non_med_advice() {
         let nma_id_base = ['NONMED', category, boxnum].join('_');
         let row_id = 'pt_' + nma_id_base;
 
-        html += '<div id="' + row_id + '" class="patient_nonmed_cb_row">\n';
+        html += '<div id="' + row_id + '" class="patient_nonmed_cb_row"';
+        html += ' style="display:none">\n';
         let allow_edit = 0;
         html += cdss_freetext(nm_advice.patient_split, allow_edit,
             "patient_nonmed_cb_text", 'pft', 'NONMED', category, boxnum);
@@ -495,7 +498,8 @@ function div_all_ehr_text() {
             let advice_id_base = [atc, rulenum, boxnum].join('_');
             let checkbox_id = 'cb_' + advice_id_base;
             let row_id = 'et_' + advice_id_base;
-            html += '<div id="' + row_id + '">\n';
+            html += '<div id="' + row_id + '"';
+            html += ' style="display:none">\n';
             let allow_edit = 0;
             html += cdss_freetext(cb_advice.ehr_split, allow_edit, 'efreetext',
                 'eft', atc, rulenum, boxnum);
@@ -512,7 +516,8 @@ function div_all_ehr_text() {
         let boxnum = other_advice.select_box_num;
         let other_id_base = ['OTHER', category, boxnum].join('_');
         let row_id = 'et_' + other_id_base;
-        html += '<div id="' + row_id + '">\n';
+        html += '<div id="' + row_id + '"';
+        html += ' style="display:none">\n';
         let allow_edit = 0;
         html += cdss_freetext(other_advice.ehr_split, allow_edit, 'efreetext',
             'eft', 'OTHER', category, boxnum);
@@ -528,7 +533,8 @@ function div_all_ehr_text() {
         let boxnum = nm_advice.select_box_num;
         let nma_id_base = ['NONMED', category, boxnum].join('_');
         let row_id = 'et_' + nma_id_base;
-        html += '<div id="' + row_id + '">\n';
+        html += '<div id="' + row_id + '">';
+        html += ' style="display:none">\n';
         let allow_edit = 0;
         html += cdss_freetext(nm_advice.ehr_split, allow_edit, 'efreetext',
             'eft', 'NONMED', category, boxnum);
