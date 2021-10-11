@@ -399,6 +399,7 @@ function copyTextToClipboard(text, type) {
     return true;
 }
 
+//TODO does not work in IE. Copies the text from both the selected AND NONSELECTED options.
 function copyEHRTextToClipboard() {
     var allEHRText = document.getElementById("div_all_ehr_text");
     return copyTextToClipboard(allEHRText.innerText, 'was_copied_ehr');

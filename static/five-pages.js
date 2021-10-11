@@ -26,6 +26,11 @@ function get_five_pages() {
 
 function get_patient_advice() {
     return five_pages.data.patient_advice;
+	// does not work on IE. IE regards the JSON as an ordinary string.
+	// The code below works on IE but not on Firefox.
+	// this might help: https://github.com/naugtur/xhr/issues/123
+	// let jfdata = JSON.parse(five_pages.data);
+    // return jfdata.patient_advice;
 }
 
 function get_converter() {
@@ -45,7 +50,8 @@ function page_load(before_socket) {
     el_pi_id.innerText = five_pages.patient_id;
 
     let json_url = get_base_url() + 'advice?id=' + five_pages.patient_id;
-    get_JSON(json_url, function(err, json_data) {
+	get_JSON(json_url, function(err, json_data) {
+console.log(json_data);
         if (err) {
             console.log("url:", json_url, "error:", err);
         }
