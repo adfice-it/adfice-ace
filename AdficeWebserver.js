@@ -127,6 +127,9 @@ function msg_header(message, kind, id) {
 function send_all(kind, id, message) {
     msg_header(message, kind, id);
     let msg_string = JSON.stringify(message, null, 4);
+    if (DEBUG > 0) {
+        console.log('sending all:\n', msg_string);
+    }
     server.receivers[kind][id].forEach((rws) => {
         rws.send(msg_string);
     });
@@ -167,6 +170,9 @@ async function patient_advice_message(kind, id) {
 async function init_patient_data(ws, kind, id) {
     let message = await patient_advice_message(kind, id);
     let msg_string = JSON.stringify(message, null, 4);
+    if (DEBUG > 0) {
+        console.log('sending init:\n', msg_string);
+    }
     ws.send(msg_string);
 }
 
@@ -201,11 +207,14 @@ server.on('upgrade', function upgrade(request, socket, head) {
         });
 
         ws.on('message', async function incoming(data) {
-            if (DEBUG > 0) {
+            if (DEBUG > 2) {
                 console.log('received: ', data);
             }
             try {
                 let message = JSON.parse(data);
+                if (DEBUG > 0 && message.type != 'ping') {
+                    console.log('received: ', data);
+                }
                 message.viewers = server.receivers[kind][id].size;
                 let id_key = `${kind}_id`;
                 if (message[id_key] == id) {
@@ -244,8 +253,12 @@ server.on('upgrade', function upgrade(request, socket, head) {
                         pong.type = 'pong';
                         pong.sent = message.sent;
                         pong.recv = Date.now();
-                        msg_header(pong, kind, patient_id)
-                        ws.send(JSON.stringify(pong, null, 4));
+                        msg_header(pong, kind, patient_id);
+                        let msg_string = JSON.stringify(pong, null, 4);
+                        if (DEBUG > 2) {
+                            console.log('sending reply:\n', msg_string);
+                        }
+                        ws.send(msg_string);
                     } else {
                         send_all(kind, patient_id, message);
                     }
