@@ -29,7 +29,13 @@ function send_message(message_type, apply) {
     if (common_js.debug > 0) {
         common_js.logger.log('sending:', msg_str);
     }
-    common_js.ws.send(msg_str);
+    try {
+        common_js.ws.send(msg_str);
+    } catch (err) {
+        common_js.logger.log(err, 'could not send:', msg_str);
+        ++common_js.weirdness;
+        common_js.ws = null;
+    }
 }
 
 function boxclicked(checkbox) {
@@ -169,6 +175,10 @@ function process_freetexts(message) {
     if (!('field_entries' in message)) {
         return;
     }
+    let debounce_guard_allow = 1;
+    if (message.type != 'init' && message.viewer_id == common_js.viewer_id) {
+        debounce_guard_allow = 0;
+    }
     let fields = message['field_entries'];
     // TODO? save cursor position of box we are currently typing in?
     const field_ids = Object.keys(fields);
@@ -177,8 +187,7 @@ function process_freetexts(message) {
         let value = fields[field_id];
         var field = document.getElementById(field_id);
         // only what changed AND from some other source
-        if (field && field.value != value &&
-            message.viewer_id != common_js.viewer_id) {
+        if (field && field.value != value && debounce_guard_allow) {
             field.value = value;
         }
 
