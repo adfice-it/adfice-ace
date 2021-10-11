@@ -4,8 +4,8 @@
 "use strict";
 
 function get_patient_id_param() {
-    let params = new URLSearchParams(window.location.search)
-    return params.get('id');
+    // let params = new URLSearchParams(window.location.search)
+    return urlParam('id');
 }
 
 function load_footer() {

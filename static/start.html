@@ -61,8 +61,8 @@ Gedetecteerde andere medicijnen:<span id="meds-without-rules"></span>
 <span id="prediction-chance"></span>
 <span id="gauge-risk-score" style="color: red;">(onbekend)</span>
 <script>
-let params = new URLSearchParams(window.location.search)
-var patient_id = params.get('id');
+// let params = new URLSearchParams(window.location.search)
+var patient_id = urlParam('id');
 var prediction_url = 'prediction_explanation?id=' + patient_id;
 document.write('<a href="' + prediction_url +
 '">(lees meer over het predictiemodel)</a>');

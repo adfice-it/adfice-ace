@@ -36,8 +36,8 @@ function get_converter() {
 }
 
 function page_load(before_socket) {
-    let params = new URLSearchParams(window.location.search)
-    five_pages.patient_id = params.get('id');
+    // let params = new URLSearchParams(window.location.search)
+    five_pages.patient_id = urlParam('id');
 
     document.title = 'Patient ' + five_pages.patient_id;
 

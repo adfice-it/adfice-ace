@@ -342,8 +342,9 @@ function connect_web_socket() {
         }
     }
 
-    let params = new URLSearchParams(window.location.search);
-    common_js.patient_id = params.get('id');
+	// URLSearchParams does not work in IE
+    // let params = new URLSearchParams(window.location.search);
+    common_js.patient_id = urlParam('id');
 
     let base_url = ws_protocol + '//' + url_hostname + ':' + url_port;
     let ws_url = base_url + '/patient/' + common_js.patient_id;
@@ -357,6 +358,16 @@ function connect_web_socket() {
     }
 
     return common_js.ws;
+}
+
+function urlParam(parName){
+    var results = new RegExp('[\?&]' + parName + '=([^&#]*)').exec(window.location.href);
+    if (results == null){
+       return null;
+    }
+    else {
+       return decodeURI(results[1]) || 0;
+    }
 }
 
 function connect_web_socket_and_keep_alive() {
