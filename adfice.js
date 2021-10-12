@@ -401,14 +401,9 @@ async function calculatePredictionResult(patient_id) {
     return measurement;
 }
 
-// called from AdficeWebserver
-async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
-    const patient_id = as_id(patientIdentifier);
-    const viewer_id = as_id(viewer);
-
-    let sqls_and_params = [];
-
-    let insert_sql = `/* adfice.setSelectionsForPatient */
+async function setSQLSelectionsForPatient(sqls_and_params, patient_id,
+    viewer_id, cb_states) {
+    let insert_sql = `/* adfice.setAdviceForPatient */
  INSERT INTO patient_advice_selection
            ( patient_id
            , viewer_id
@@ -425,6 +420,48 @@ async function setSelectionsForPatient(patientIdentifier, viewer, cb_states) {
     let params = boxStatesToSelectionStates(patient_id, viewer_id, cb_states);
     for (let i = 0; i < params.length; ++i) {
         sqls_and_params.push([insert_sql, params[i]]);
+    }
+}
+
+async function setSQLFreetextsForPatient(sqls_and_params, patient_id,
+    viewer_id, freetexts) {
+    let insert_sql = `/* adfice.setAdviceForPatient */
+ INSERT INTO patient_advice_freetext
+           ( patient_id
+           , viewer_id
+           , ATC_code
+           , medication_criteria_id
+           , select_box_num
+           , freetext_num
+           , freetext
+           )
+      VALUES (?,?,?,?,?,?,?)
+ ON DUPLICATE KEY
+      UPDATE viewer_id=VALUES(viewer_id)
+           , freetext=VALUES(freetext)
+`;
+    let params = freetextsToRows(patient_id, viewer_id, freetexts);
+    for (let i = 0; i < params.length; ++i) {
+        sqls_and_params.push([insert_sql, params[i]]);
+    }
+}
+
+// called from AdficeWebserver
+async function setAdviceForPatient(patientIdentifier, viewer,
+    cb_states, freetexts) {
+    const patient_id = as_id(patientIdentifier);
+    const viewer_id = as_id(viewer);
+
+    let sqls_and_params = [];
+
+    if (cb_states) {
+        setSQLSelectionsForPatient(sqls_and_params, patient_id, viewer_id,
+            cb_states);
+    }
+
+    if (freetexts) {
+        setSQLFreetextsForPatient(sqls_and_params, patient_id, viewer_id,
+            freetexts);
     }
 
     let db = await this.db_init();
@@ -446,38 +483,6 @@ async function getSelectionsForPatient(patient_id) {
     let params = [patient_id];
     let results = await this.sql_select(sql, params);
     return selectionStatesToBoxStates(results);
-}
-
-// called from AdficeWebserver
-async function setFreetextsForPatient(patientIdentifier, viewer, freetexts) {
-    const patient_id = as_id(patientIdentifier);
-    const viewer_id = as_id(viewer);
-
-    let sqls_and_params = [];
-
-    let insert_sql = `/* adfice.setFreetextForPatient */
- INSERT INTO patient_advice_freetext
-           ( patient_id
-           , viewer_id
-           , ATC_code
-           , medication_criteria_id
-           , select_box_num
-           , freetext_num
-           , freetext
-           )
-      VALUES (?,?,?,?,?,?,?)
- ON DUPLICATE KEY
-      UPDATE viewer_id=VALUES(viewer_id)
-           , freetext=VALUES(freetext)
-`;
-    let params = freetextsToRows(patient_id, viewer_id, freetexts);
-    for (let i = 0; i < params.length; ++i) {
-        sqls_and_params.push([insert_sql, params[i]]);
-    }
-
-    let db = await this.db_init();
-    let rs = await db.as_sql_transaction(sqls_and_params);
-    return rs;
 }
 
 async function getFreetextsForPatient(patient_id) {
@@ -595,7 +600,7 @@ async function getAdviceForPatient(patientIdentifier) {
     let cb_states = [];
     if (Object.keys(selected_advice).length == 0 && patient.id !== undefined) {
         cb_states = preselected_checkboxes;
-        await this.setSelectionsForPatient(patientIdentifier, 0, cb_states);
+        await this.setAdviceForPatient(patientIdentifier, 0, cb_states, null);
         selected_advice = await this.getSelectionsForPatient(patient_id);
     }
 
@@ -915,8 +920,7 @@ function adfice_init(db) {
         getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
         getPatientMeasurements: getPatientMeasurements,
         reloadPatientData: reloadPatientData,
-        setFreetextsForPatient: setFreetextsForPatient,
-        setSelectionsForPatient: setSelectionsForPatient,
+        setAdviceForPatient: setAdviceForPatient,
         shutdown: shutdown,
     };
     return adfice;

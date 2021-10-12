@@ -220,15 +220,12 @@ server.on('upgrade', function upgrade(request, socket, head) {
                 if (message[id_key] == id) {
                     let patient_id = id;
                     let viewer_id = message.viewer_id;
-                    if ('box_states' in message) {
+                    if (('box_states' in message) ||
+                        ('field_entries' in message)) {
                         let selections = message['box_states'];
-                        await adfice.setSelectionsForPatient(
-                            patient_id, viewer_id, selections);
-                    }
-                    if ('field_entries' in message) {
                         let freetexts = message['field_entries'];
-                        await adfice.setFreetextsForPatient(
-                            patient_id, viewer_id, freetexts);
+                        await adfice.setAdviceForPatient(
+                            patient_id, viewer_id, selections, freetexts);
                     }
                     if (message.type == 'definitive') {
                         await adfice.finalizeAndExport(patient_id);

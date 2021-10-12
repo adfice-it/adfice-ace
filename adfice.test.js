@@ -124,7 +124,8 @@ test('setAdviceForPatient(68)', async () => {
         "cb_C09AA02_63b_1": true
     };
 
-    adfice.setSelectionsForPatient(patientNumber, viewer, old_advice);
+    let freetexts = null;
+    adfice.setAdviceForPatient(patientNumber, viewer, old_advice, freetexts);
 
     advice = await adfice.getAdviceForPatient(patientNumber);
     expect(advice.selected_advice).toStrictEqual(old_advice);
@@ -142,7 +143,7 @@ test('setAdviceForPatient(68)', async () => {
         "cb_C09AA02_63_4": false,
         "cb_C09AA02_63b_1": false
     };
-    adfice.setSelectionsForPatient(patientNumber, viewer, new_advice);
+    adfice.setAdviceForPatient(patientNumber, viewer, new_advice, freetexts);
 
     advice = await adfice.getAdviceForPatient(patientNumber);
     expect(advice.selected_advice).toStrictEqual(new_advice);
@@ -160,7 +161,7 @@ test('setAdviceForPatient(68)', async () => {
     expect(advice.is_final).toBeFalsy();
     expect(advice.selected_advice).not.toStrictEqual(new_advice);
 
-    adfice.setSelectionsForPatient(patientNumber, viewer, new_advice);
+    adfice.setAdviceForPatient(patientNumber, viewer, new_advice, freetexts);
 })
 
 test('getAdviceForPatient(27), with labs and problems', async () => {
@@ -268,7 +269,8 @@ test('freetext round trip', async () => {
         ft_C09AA02_63b_1_1: "baz"
     };
 
-    await adfice.setFreetextsForPatient(patient, viewer, freetexts);
+    let cb_states = null;
+    await adfice.setAdviceForPatient(patient, viewer, cb_states, freetexts);
     let actual = await adfice.getFreetextsForPatient(patient);
 
     expect(actual).toStrictEqual(freetexts);
@@ -697,7 +699,8 @@ test('exportForPatient', async () => {
         "cb_NONMED_A_1": true
     };
     let viewer = 999;
-    adfice.setSelectionsForPatient(patient, viewer, new_advice);
+    let freetexts = null;
+    adfice.setAdviceForPatient(patient, viewer, new_advice, freetexts);
 
     // essentially calling adfice.finalizeAndExport(id), but with a file
     await adfice.finalizeAdviceForPatient(patient);
