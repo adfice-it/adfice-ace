@@ -526,7 +526,7 @@ function div_all_ehr_text() {
     html += '<!-- End OTHER -->\n';
 
     html += '<!-- Begin NonMed -->\n';
-    let nm_advices = get_patient_advice.advice_text_non_med || [];
+    let nm_advices = get_patient_advice().advice_text_non_med || [];
     for (let i = 0; i < nm_advices.length; ++i) {
         let nm_advice = nm_advices[i];
         let category = nm_advice.category_id;

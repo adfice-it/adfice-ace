@@ -1,8 +1,6 @@
 Important:
 * Fix IE bugs:
   * copy EHR text does not work: copies unselected as well as selected texts
-* Fix 5-page view bugs:
-  * EHR box is missing EHR text for nonmed advice
 * automate tests for CDSS working on IE11
 * fix testcafe acceptance tests to work with testcafe v1.16.1
 
