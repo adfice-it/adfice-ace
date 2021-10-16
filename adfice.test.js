@@ -686,9 +686,9 @@ test('Update prediction', async () => {
 });
 
 test('exportForPatient', async () => {
-	if(process.env.OS!= null && process.env.OS.includes('Windows')){
-		return;
-	}
+    if (process.env.OS != null && process.env.OS.includes('Windows')) {
+        return;
+    }
     let patient = '168';
     let file = "test-exportForPatient-168.log";
     try {
@@ -720,9 +720,9 @@ test('exportForPatient', async () => {
 });
 
 test('finalize_export API', async () => {
-	if(process.env.OS!= null && process.env.OS.includes('Windows')){
-		return;
-	}
+    if (process.env.OS != null && process.env.OS.includes('Windows')) {
+        return;
+    }
     let patient = '68';
     let file = "test-exportForPatient-68-2.log";
     try {
@@ -738,9 +738,9 @@ test('finalize_export API', async () => {
 });
 
 test('reload from MRS', async () => {
-	if(process.env.OS!= null && process.env.OS.includes('Windows')){
-		return;
-	}	
+    if (process.env.OS != null && process.env.OS.includes('Windows')) {
+        return;
+    }
     let patient = '160';
     let sql = "UPDATE patient SET birth_date='1940-06-16', age=81 WHERE id=?";
     await adfice.sql_select(sql, [patient]);

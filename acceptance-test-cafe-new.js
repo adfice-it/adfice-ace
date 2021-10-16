@@ -343,9 +343,9 @@ test('Checkbox preselected', async t => {
 });
 
 test('Test finalize and renew', async t => {
-	if(process.env.OS!= null && process.env.OS.includes('Windows')){
-		return;
-	}
+    if (process.env.OS != null && process.env.OS.includes('Windows')) {
+        return;
+    }
     let url = `${BASE_URL}/prep?id=161`;
     let window1 = await t.openWindow(url);
 
