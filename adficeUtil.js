@@ -5,6 +5,7 @@
 
 const util = require("util");
 const child_process = require('child_process');
+const path = require('path');
 
 function assert(condition, message) {
     if (condition) {
@@ -54,15 +55,16 @@ function splitFreetext(str) {
 }
 
 function child_process_spawn(cmd, args) {
-    // if (process.platform == "win32") {
-    //     args.unshift('/c', cmd);
-    //     cmd = process.env.comspec;
-    // }
+    if (process.platform == "win32") {
+        args.unshift('/c', cmd);
+        cmd = process.env.comspec;
+    }
     let env = process.env;
-    env.path = ".:" + env.path;
+    env.path = process.cwd() + path.delimiter + env.path;
     let options = {
-        cwd: undefined,
+        cwd: process.cwd(),
         env: env,
+        shell: true,
         stdio: 'inherit',
         setsid: false
     };

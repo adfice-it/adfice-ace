@@ -4,6 +4,7 @@
 "use strict";
 
 const fs = require('fs');
+const path = require('path');
 const autil = require('./adficeUtil');
 const ae = require('./adficeEvaluator');
 const cp = require('./calculatePrediction');
@@ -786,7 +787,7 @@ async function exportForPatient(patient, logfile) {
         args.push(logfile);
     }
 
-    let cmd = './export-to-mrs';
+    let cmd = process.cwd() + path.sep + 'export-to-mrs';
 
     return autil.child_process_spawn(cmd, args);
 }
