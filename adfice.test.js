@@ -109,7 +109,7 @@ test('setAdviceForPatient(68)', async () => {
     let viewer = 999;
     let advice = await adfice.getAdviceForPatient(patientNumber);
 
-    await adfice.reloadPatientData(patientNumber, '/bin/true');
+    await adfice.reloadPatientData(patientNumber, 'bin/empty');
     let old_advice = {
         "cb_C03AA03_42_2": false,
         "cb_C03AA03_42_3": true,
@@ -692,7 +692,7 @@ test('exportForPatient', async () => {
         fs.unlinkSync(file, (err) => {});
     } catch (ignoreError) {}
 
-    await adfice.reloadPatientData(patient, '/bin/true');
+    await adfice.reloadPatientData(patient, 'bin/empty');
     let new_advice = {
         "cb_M03BA03_88_2": true,
         "cb_OTHER_other_1": true,
