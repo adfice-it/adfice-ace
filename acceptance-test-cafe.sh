@@ -11,9 +11,17 @@ node AdficeWebserver.js $PORT &
 CHILD_PID=%1
 sleep 1
 
+# acceptance-test-cafe.js $BASE_URL
+
+if [ "_${SLOW_TEST}_" == '__' ]; then
+TEST_NAME=acceptance-test-cafe.js
+else
+TEST_NAME=slow-acceptance-test.js
+fi;
+
 ./node_modules/.bin/testcafe \
  "firefox:headless" \
- acceptance-test-cafe.js $BASE_URL
+ $TEST_NAME $BASE_URL
 EXIT_CODE=$?
 
 kill $CHILD_PID
