@@ -56,7 +56,7 @@ function splitFreetext(str) {
 
 function child_process_spawn(cmd, args) {
     /* istanbul ignore next */
-	if (process.platform == "win32") {
+    if (process.platform == "win32") {
         args.unshift('/c', 'bash', cmd);
         cmd = process.env.comspec;
     }
