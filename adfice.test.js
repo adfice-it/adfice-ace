@@ -109,7 +109,7 @@ test('setAdviceForPatient(68)', async () => {
     let viewer = 999;
     let advice = await adfice.getAdviceForPatient(patientNumber);
 
-    await adfice.reloadPatientData(patientNumber, 'bin/empty');
+    await adfice.reloadPatientData(patientNumber, 'true');
     let old_advice = {
         "cb_C03AA03_42_2": false,
         "cb_C03AA03_42_3": true,
@@ -686,13 +686,16 @@ test('Update prediction', async () => {
 });
 
 test('exportForPatient', async () => {
+	if(process.env.OS!= null && process.env.OS.includes('Windows')){
+		return;
+	}
     let patient = '168';
     let file = "test-exportForPatient-168.log";
     try {
         fs.unlinkSync(file, (err) => {});
     } catch (ignoreError) {}
 
-    await adfice.reloadPatientData(patient, 'bin/empty');
+    await adfice.reloadPatientData(patient, 'true');
     let new_advice = {
         "cb_M03BA03_88_2": true,
         "cb_OTHER_other_1": true,
@@ -717,6 +720,9 @@ test('exportForPatient', async () => {
 });
 
 test('finalize_export API', async () => {
+	if(process.env.OS!= null && process.env.OS.includes('Windows')){
+		return;
+	}
     let patient = '68';
     let file = "test-exportForPatient-68-2.log";
     try {
@@ -732,6 +738,9 @@ test('finalize_export API', async () => {
 });
 
 test('reload from MRS', async () => {
+	if(process.env.OS!= null && process.env.OS.includes('Windows')){
+		return;
+	}	
     let patient = '160';
     let sql = "UPDATE patient SET birth_date='1940-06-16', age=81 WHERE id=?";
     await adfice.sql_select(sql, [patient]);
