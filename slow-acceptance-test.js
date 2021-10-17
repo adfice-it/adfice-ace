@@ -46,7 +46,7 @@ test('Check multiple viewers making changes', async t => {
     await t.expect(ref_C03AA03.exists).ok();
 
     const oldFreetext = "old";
-    const newFreetext = "This is a test input string";
+    const newFreetext = "new";
 
     // checkbox starts invisible,
     // but becomes visible via websocket message
@@ -90,11 +90,11 @@ test('Check multiple viewers making changes', async t => {
 
     await t.switchToWindow(window1);
 
-    let max_loops = 100;
+    let max_loops = 1000;
     for (let i = 0; i < max_loops; ++i) {
         console.log(i);
         await t.switchToWindow(window2);
-        let numbered_freetext = newFreetext + ' ' + i;
+        let numbered_freetext = newFreetext + '_' + i;
 
         // type some text into the freetext field for this row.
         let freetext_selector_2 = Selector(freetext_css_selector);
