@@ -5,10 +5,9 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-var express = require('express');
-
-var app = new express();
-var listener = app.listen(0, function() {
+const http = require('http');
+let server = http.createServer();
+var listener = server.listen(0, function() {
     console.log(listener.address().port);
     listener.close();
 });
