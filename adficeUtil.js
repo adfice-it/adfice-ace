@@ -15,13 +15,6 @@ function assert(condition, message) {
     }
 }
 
-function ucfirst(s) {
-    if (typeof s !== 'string') {
-        return s;
-    }
-    return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
 function splitFreetext(str) {
     if (str == null) {
         return []
@@ -95,5 +88,4 @@ module.exports = {
     assert: assert,
     child_process_spawn: child_process_spawn,
     splitFreetext: splitFreetext,
-    ucfirst: ucfirst
 }

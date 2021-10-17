@@ -3,12 +3,22 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-function get_base_url() {
+/* istanbul ignore next */
+var basic_utils = {
+    new_xhr: function() {
+        return new XMLHttpRequest();
+    },
+    logger: console
+};
+
+function get_base_url(url) {
+    /* istanbul ignore next */
+    url = (url || document.URL);
     // URL.protocol is not safe in Internet Explorer,
     // thus we shall use regex
     let protocol = 'https:';
     const url_regex = /^([^:]*):\/\/([^:/]*)(:([0-9]+))?/
-    let matches = document.URL.match(url_regex);
+    let matches = url.match(url_regex);
     let url_protocol = matches[1];
     let url_hostname = matches[2];
     let url_port = matches[4];
@@ -28,7 +38,7 @@ function get_base_url() {
 }
 
 function get_content(url, type, callback) {
-    let xhr = new XMLHttpRequest();
+    let xhr = basic_utils.new_xhr();
     xhr.open('GET', url, true);
     xhr.responseType = type;
     xhr.onload = function() {
@@ -36,7 +46,11 @@ function get_content(url, type, callback) {
         // workaround for IE bug: https://github.com/naugtur/xhr/issues/123
         var response = xhr.response;
         if (type == 'json' && typeof(response) == 'string') {
-            response = JSON.parse(response);
+            try {
+                response = JSON.parse(response);
+            } catch (err) /* istanbul ignore next */ {
+                basic_utils.logger.log(err);
+            }
         }
         if (status === 200) {
             callback(null, response);
@@ -60,4 +74,15 @@ function ucfirst(s) {
         return s;
     }
     return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+/* istanbul ignore next */
+if (typeof module !== 'undefined') {
+    module.exports = {
+        basic_utils: basic_utils,
+        get_JSON: get_JSON,
+        get_text: get_text,
+        get_base_url: get_base_url,
+        ucfirst: ucfirst
+    }
 }

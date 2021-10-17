@@ -33,13 +33,6 @@ test('assert(false, messge)', () => {
     expect(msg).toContain("Foo bar");
 })
 
-test('ucfirst', () => {
-    expect(autil.ucfirst('foo bar')).toBe('Foo bar');
-    expect(autil.ucfirst('FOOo')).toBe('FOOo');
-    expect(autil.ucfirst(null)).toBe(null);
-    expect(autil.ucfirst(7)).toBe(7);
-})
-
 test('split freetext advice strings', () => {
 
     let example = "initial:{{free text: pre-filled: first free text}}" +
