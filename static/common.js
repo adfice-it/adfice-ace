@@ -9,6 +9,7 @@ var common_js = {
     viewer_id: null,
     is_final: null,
     ws: null,
+    freetexts_entered: null,
     weirdness: 0,
     messages_received: 0,
     debug: 0,
@@ -65,6 +66,14 @@ function boxclicked(checkbox) {
 }
 
 function freetextentered(textfield) {
+    if (common_js.freetexts_entered != null &&
+        common_js.freetexts_entered != textfield.id) {
+        send_freetext(textfield.id);
+    }
+    common_js.freetexts_entered = textfield.id;
+}
+
+function send_freetext(textfield_id) {
     if (!common_js.ws) {
         common_js.logger.error('got a freetext event for ', textfield,
             'but websocket is null');
@@ -73,7 +82,7 @@ function freetextentered(textfield) {
     }
 
     send_message('freetexts', function(message) {
-        message.textfield = textfield.id;
+        message.textfield = textfield_id;
 
         message['field_entries'] = {};
         let elementList = document.querySelectorAll("input[type='text']");
@@ -382,7 +391,7 @@ function connect_web_socket_and_keep_alive() {
     connect_web_socket();
 
     let one_second = 1000;
-    let ping_interval = 10 * one_second;
+    let ping_interval = 4 * one_second;
     setInterval(function() {
         if (common_js.ws) {
             send_message("ping", function(msg) {
@@ -390,6 +399,17 @@ function connect_web_socket_and_keep_alive() {
             });
         }
     }, ping_interval);
+
+    let freetext_interval = (one_second / 4);
+    setInterval(function() {
+        if (common_js.ws) {
+            let textfield_id = common_js.freetexts_entered;
+            if (textfield_id != null) {
+                send_freetext(textfield_id);
+                common_js.freetexts_entered = null;
+            }
+        }
+    }, freetext_interval);
 }
 
 function copyTextToClipboard(text, type) {
