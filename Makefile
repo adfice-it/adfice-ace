@@ -140,9 +140,11 @@ grep-ie-bad-words: $(BROWSER_JS)
 	done
 	@echo "$@ complete"
 
-check: dbsetup grep-ie-bad-words
+check-unit: dbsetup grep-ie-bad-words
 	npm test adfice
-	@echo
+	@echo "SUCCESS $@"
+
+check: check-unit
 	./acceptance-test.sh
 	./acceptance-test-cafe.sh
 	./acceptance-test-cafe-new.sh
@@ -254,3 +256,9 @@ tidy:
 		*.js \
 		bin/*.js \
 		static/*.js
+
+jest:
+	@echo 'This target skips the npm and dbsetup'
+	@echo 'if this fails, consider "make check"'
+	npm test adfice
+	@echo "SUCCESS $@"
