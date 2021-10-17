@@ -7,15 +7,23 @@ set -e
 
 ID=$1
 
+if [ "_${VERBOSE}_" == "__" ]; then
+VERBOSE=0
+fi
+
 if [ -e ~/adfice-user.env ]; then
 	source ~/adfice-user.env
 fi
 
 if [ "_${2}_" != "__" ]; then
-	echo "sourcing $2"
+	if [ $VERBOSE -gt 0 ]; then
+		echo "sourcing $2"
+	fi
 	source $2
 else
-	echo "sourcing db-scripts.env"
+	if [ $VERBOSE -gt 0 ]; then
+		echo "sourcing db-scripts.env"
+	fi
 	source db-scripts.env
 fi
 
@@ -29,15 +37,21 @@ SQL=`cat $FILE`
 
 i=0
 while [ $i -lt 10 ]; do
-	echo "waiting for db $i"
+	if [ $VERBOSE -gt 0 ]; then
+		echo "waiting for db $i"
+	fi
 	if node ping-db.js ; then
-		echo 'db available'
+		if [ $VERBOSE -gt 0 ]; then
+			echo 'db available'
+		fi
 		break
 	else
 		i=$(( $i + 1 ))
 	fi
 done
 
-echo "FROM: $FILE"
-echo "executing: $SQL"
+if [ $VERBOSE -gt 0 ]; then
+	echo "FROM: $FILE"
+	echo "executing: $SQL"
+fi
 $RUN_SQL "$SQL"
