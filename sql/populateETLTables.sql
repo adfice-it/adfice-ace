@@ -9,7 +9,7 @@ INSERT INTO problem (id, problem_name) VALUES
 (3,'orthostatische-hypotensie'),
 (4,'depressie'),
 (5,'hartfalen'),
-(6,'autonoom falen'),
+(6,'autonoom-falen'),
 (7,'parkinson'),
 (8,'lewy-bodies-dementia'),
 (9,'multiple-system-atrophy'),
