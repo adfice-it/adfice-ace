@@ -23,7 +23,6 @@ window.addEventListener('load', function(event) { start_page_load(); });
 </script>
 </head>
 <body>
-<form id="patient_form">
 <img src="assets/Advice_IT_logo_small.png"
      style="max-width: 10%; height: auto; display: inline;"
      alt="Advice IT logo"
@@ -38,7 +37,6 @@ window.addEventListener('load', function(event) { start_page_load(); });
 			    id="help">Handleiding</button></a>
 </div><!-- nav_container -->
 
-<div id=patient_info>
 
 <!--
  <button type="button" class = "nav_button" id="page_renew"
@@ -46,15 +44,12 @@ window.addEventListener('load', function(event) { start_page_load(); });
          Haal gewijzigde pati&euml;ntdata op</button>
 -->
 
-<div id=patient-info>
+<div id=patient_info>
 <strong>Pati&euml;ntinformatie:</strong><br/>
 Patient: <span id="patient-info-id"></span><br/>
 Leeftijd: <span id="patient-info-age"></span><br/>
 <div style="height: 2em;"></div><br/>
-Gedetecteerde relevante problemen:<span id="patient-problems"></span>
-Lab-waarden: <span id="patient-labs"></span>
-Gedetecteerde relevante medicijnen:<span id="meds-with-rules"></span>
-Gedetecteerde andere medicijnen:<span id="meds-without-rules"></span>
+
 
 <div class="prediction" id="prediction">
 <p>Kans om te vallen binnen 12 maanden:&nbsp;
@@ -75,10 +70,20 @@ document.write('<a href="' + prediction_url +
 </div><!-- gauge_background -->
 </div><!-- prediction -->
 
+<div id=patient_data>
+Gedetecteerde relevante problemen:<div id="patient-problems"></div>
+Lab-waarden: <div id="patient-labs"></div>
+Gedetecteerde relevante medicijnen:<span id="meds-with-rules"></span>
+Gedetecteerde andere medicijnen:<span id="meds-without-rules-list"></span>
+</div><!-- patient_data -->
 
-Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren</strong>
+</div><!-- patient-info -->
+<div style="height: 2em;"></div>
+
+<p style="background-color: white;">Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren
 (<a href="https://www.sciencedirect.com/science/article/pii/S0738399115301658"
 >Lees meer</a>)
+</p>
 
 <div class="instruction_box">
 
@@ -138,6 +143,5 @@ leven voor?<br/>
 </div><!-- instruction_box -->
 
 <div id="div-footer-id"></div><!-- footer -->
-</form>
 </body>
 </html>

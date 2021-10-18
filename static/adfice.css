@@ -9,6 +9,7 @@ input {
 body {
     font-family: Arial, sans-serif;
     font-size: small;
+	background-color: #fffff;
 }
 
 #nav_container {
@@ -57,6 +58,13 @@ body {
     padding-bottom: 5px;
     padding-left: 5px;
     margin-bottom: 30px;
+}
+
+#patient-problems{
+	margin: 10px;
+}
+#patient-labs{
+	margin: 10px;
 }
 
 .advice_no_checkbox {
@@ -224,18 +232,9 @@ div.refpages{
 
 div.instruction_box{
     display: block;
-    clear: both;
     width: 99%;
     margin-bottom: 2em;
-    display: flex;
-    justify-content: space-between;
-}
-
-div.instruction_column{
-    display: flex;
-    width: 48%;
-    flex-direction: column;
-    justify-content: space-between;
+	background-color: #FFFFF;
 }
 
 div.sdm{
@@ -245,10 +244,6 @@ div.sdm{
     padding: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
-}
-
-span.instruction_step {
-    font-family: Arial, sans-serif;
 }
 
 span.instruction_heading {

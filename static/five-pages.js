@@ -166,6 +166,62 @@ function patient_info_problems() {
         get_patient_advice().problems);
 }
 
+function patient_info_problem_start(){
+/* TODO replace this with getting list from DB and improve formatting */
+	let all_problems = ['hypertensie','myocardinfarct','orthostatische-hypotensie','depressie','hartfalen','autonoom-falen','parkinson','lewy-bodies-dementia','multiple-system-atrophy','progressive-supranuclear-palsy','angststoornis','epilepsy','delier','dementie','schizofrenie','hyponatremia','tachycardia','arrhythmia','hypokalemia','hypercalciemie','jicht','atriumfibrilleren','angina-pectoris','paraplegia','dwaarslaesie','diabetes'];
+	let problems = get_patient_advice().problems;
+		let html = '<div id="problem_table">';
+		for (let i = 0; i < all_problems.length; ++i) {
+			let problem = all_problems[i];
+			html += problem + ': ';
+			let ja_nee = 'Nee';
+			for (let j = 0; j < problems.length; ++j) {
+				if(problem == problems[j].name){
+					ja_nee = 'Ja';
+				}
+			}
+			html += ja_nee + '<br>';
+		}
+		html += '</div><!-- problem_table -->';
+	document.getElementById('patient-problems').innerHTML = html;
+}
+
+function patient_info_lab_start(){
+/* TODO replace this with getting list from DB and improve formatting */
+	let all_labs = ['natrium','kalium','calcium','eGFR'];
+	let labs = get_patient_advice().labs;
+		let html = '<div id="lab_table">';
+		for (let i = 0; i < all_labs.length; ++i) {
+			let lab = all_labs[i];
+			html += lab + ': ';
+			let date = '';
+			let result = '';
+			for (let j = 0; j < labs.length; ++j) {
+				if(lab == labs[j].lab_test_name){
+					date = labs.date_measured + ' ';
+					result = labs.lab_test_result + ' ' + labs.lab_test_units;
+				}
+			}
+			html += date + result + '<br>';
+		}
+		html += '</div><!-- problem_table -->';
+	document.getElementById('patient-labs').innerHTML = html;
+}
+
+function patient_info_meds_with_rules_start(){
+	let rule_meds = get_patient_advice().meds_with_rules;
+	let html = '';
+    for (let i = 0; i < rule_meds.length; ++i) {
+        let med = rule_meds[i];
+        if (i) {
+            html += ', '
+        }
+        html += ucfirst(med.medication_name).trim();
+    }
+	html += '<br>';
+	document.getElementById('meds-with-rules').innerHTML = html;
+}
+
 function patient_info_labs() {
     replace_if_exists('patient-labs-list',
         patient_labs_as_html,
@@ -574,6 +630,10 @@ function gauge_risk_score() {
 function start_page_setup() {
     patient_info_age();
     gauge_risk_score();
+	patient_info_problem_start();
+	patient_info_lab_start();
+	patient_info_meds_with_rules_start();
+    patient_info_meds_without_rules();
 }
 
 function prep_page_setup() {
