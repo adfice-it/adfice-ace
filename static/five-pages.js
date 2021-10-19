@@ -196,7 +196,7 @@ function patient_info_problem_start(){
 ['paraplegia','Paraplegie'],
 ['dwaarslaesie','Dwarslaesie']]
 	let problems = get_patient_advice().problems;
-		let html = '<div id="problem_table_div"><table id="problem_table"><tr><td>Probleem</td><td>Aanwezig</td></tr>';
+		let html = '<div id="problem_table_div"><table id="problem_table"><tr><td>Aandoening</td><td>Aanwezig</td></tr>';
 		for (let i = 0; i < all_problems.length; ++i) {
 			let problem = all_problems[i][0];
 			html += '<tr><td>' + all_problems[i][1] + '</td><td>';

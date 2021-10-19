@@ -18,7 +18,6 @@ adfice: from usability
 * New placement and formatting for print button. Add icon to button.
 * Add text "richtlijnen" before ref numbers
 * Change "Andere risicofactoren" to "andere adviezen"
-* Change "Gedetecteerde relevante problemen" to "Gedetecteerde aandoeningen of co-morbiditeit"
 * Change "Haal gewijzigde patientendata" to "Vernieuwen". Add some sort of warning that this will delete all changes.
 * Change display of fall risk on patient page to match patient portal
 * Change Advies page so that grey header does not display; make it more like portal view. (we probably want to keep the patient identifier at the top)
