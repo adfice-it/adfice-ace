@@ -5,6 +5,13 @@
 CREATE TABLE `problem` (
   `id` smallint unsigned NOT NULL AUTO_INCREMENT,
   `problem_name` varchar(100) NOT NULL,
+  `display_name` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `lab` (
+  `id` smallint unsigned NOT NULL AUTO_INCREMENT,
+  `lab_name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

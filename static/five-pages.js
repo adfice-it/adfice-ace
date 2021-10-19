@@ -168,21 +168,47 @@ function patient_info_problems() {
 
 function patient_info_problem_start(){
 /* TODO replace this with getting list from DB and improve formatting */
-	let all_problems = ['hypertensie','myocardinfarct','orthostatische-hypotensie','depressie','hartfalen','autonoom-falen','parkinson','lewy-bodies-dementia','multiple-system-atrophy','progressive-supranuclear-palsy','angststoornis','epilepsy','delier','dementie','schizofrenie','hyponatremia','tachycardia','arrhythmia','hypokalemia','hypercalciemie','jicht','atriumfibrilleren','angina-pectoris','paraplegia','dwaarslaesie','diabetes'];
+	let all_problems =
+[['hypertensie', 'Hypertensie'],
+['angina-pectoris','Angina pectoris'],
+['myocardinfarct','Myocardinfarct'],
+['hartfalen','Decompensatio cordis'],
+['tachycardia','Tachycardie'],
+['arrhythmia','Hartritmestoornis'],
+['atriumfibrilleren','Atriumfibrilleren'],
+['orthostatische-hypotensie','Orthostatische hypotensie'],
+['autonoom-falen','Autonoom falen'],
+['diabetes','Diabetes mellitus'],
+['hyponatremia','Hyponatriëmie'],
+['hypokalemia','Hypokaliëmie'],
+['hypercalciemie','Hypercalciëmie'],
+['jicht','Jicht'],
+['delier','Delier'],
+['depressie','Depressie'],
+['angststoornis','Angststoornis'],
+['schizofrenie','Schizofrenie'],
+['dementie','Dementie'],
+['lewy-bodies-dementia','Lewy body dementie'],
+['parkinson','Ziekte van Parkinson'],
+['multiple-system-atrophy','Multisysteematrofie'],
+['progressive-supranuclear-palsy','Progressieve supranucleaire parese'],
+['epilepsy','Epilepsie'],
+['paraplegia','Paraplegie'],
+['dwaarslaesie','Dwarslaesie']]
 	let problems = get_patient_advice().problems;
-		let html = '<div id="problem_table">';
+		let html = '<div id="problem_table_div"><table id="problem_table"><tr><td>Probleem</td><td>Aanwezig</td></tr>';
 		for (let i = 0; i < all_problems.length; ++i) {
-			let problem = all_problems[i];
-			html += problem + ': ';
+			let problem = all_problems[i][0];
+			html += '<tr><td>' + all_problems[i][1] + '</td><td>';
 			let ja_nee = 'Nee';
 			for (let j = 0; j < problems.length; ++j) {
 				if(problem == problems[j].name){
 					ja_nee = 'Ja';
 				}
 			}
-			html += ja_nee + '<br>';
+			html += ja_nee + '</td></tr>';
 		}
-		html += '</div><!-- problem_table -->';
+		html += '</table></div><!-- problem_table -->';
 	document.getElementById('patient-problems').innerHTML = html;
 }
 
@@ -190,21 +216,21 @@ function patient_info_lab_start(){
 /* TODO replace this with getting list from DB and improve formatting */
 	let all_labs = ['natrium','kalium','calcium','eGFR'];
 	let labs = get_patient_advice().labs;
-		let html = '<div id="lab_table">';
+		let html = '<div id="lab_table_div"><table id="lab_table"><tr><td>Lab</td><td>Datum gemeten</td><td>Waarde</td></tr>';
 		for (let i = 0; i < all_labs.length; ++i) {
 			let lab = all_labs[i];
-			html += lab + ': ';
+			html += '<tr><td>' + lab + '</td><td>';
 			let date = '';
 			let result = '';
 			for (let j = 0; j < labs.length; ++j) {
 				if(lab == labs[j].lab_test_name){
-					date = labs.date_measured + ' ';
-					result = labs.lab_test_result + ' ' + labs.lab_test_units;
+					date += labs.date_measured;
+					result += labs.lab_test_result + ' ' + labs.lab_test_units;
 				}
 			}
-			html += date + result + '<br>';
+			html += '<td>' + date + '</td><td>' + result  + '</td></tr>';
 		}
-		html += '</div><!-- problem_table -->';
+		html += '</table></div><!-- lab_table -->';
 	document.getElementById('patient-labs').innerHTML = html;
 }
 
