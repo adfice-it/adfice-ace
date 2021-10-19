@@ -260,12 +260,13 @@ div.general_advice{
 }
 
 div.gauge_background {
-    width:80%;
+    width:60%;
     height: 0px;
-    padding-bottom: 8%;
+    padding-bottom: 4%;
     /* set "good", "warn", and "critical" thresholds specifically */
     background: linear-gradient(to right, #0F0 5%, #FF0 10%, #F00 30%);
     display: inline-block;
+	border: 2px solid #000000;
     margin-bottom: 3ex;
 }
 
@@ -273,12 +274,12 @@ div.gauge_line {
     width: calc(0.4% + 1px);
     margin-left: calc(-(0.4% / 2 + 0.5px));
     margin-right: calc(-(0.4% / 2 + 0.5px));
-    padding-bottom: calc(10% + 1ex);
+    padding-bottom: calc(7% + 1ex);
     padding-left: 0;
     padding-right: 0;
     background: #000;
     position: relative;
-    top: -0.5ex;
+    top: -0.2ex;
     display: inline-block;
 }
 
@@ -299,6 +300,18 @@ div.gauge_text_right {
     top: 10px;
     left: calc(100% - 3ch - 1em);
     display: inline-block;
+}
+
+div.fallguy_div{
+	position: relative;
+	display: inline-block;
+	margin: 0px;
+    padding: 0px;
+	height: 40px;
+}
+
+img.fallguy{
+	max-height: 100%;
 }
 
 .td_nm_category_name {

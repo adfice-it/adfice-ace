@@ -639,7 +639,7 @@ function gauge_risk_score() {
     let elem_rs = document.getElementById('gauge-risk-score');
     if (elem_rs) {
         if (risk_known) {
-            elem_rs.innerHTML = risk_score;
+            elem_rs.innerHTML = risk_score + '%';
         }
     }
     let elem_gl = document.getElementById('gauge-line');
