@@ -599,7 +599,7 @@ function div_all_ehr_text() {
         let other_id_base = ['OTHER', category, boxnum].join('_');
         let row_id = 'et_' + other_id_base;
         html += '<div id="' + row_id + '"';
-        html += ' style="display:none">\n';
+        html += ' style="display:none;">\n';
         let allow_edit = 0;
         html += cdss_freetext(other_advice.ehr_split, allow_edit, 'efreetext',
             'eft', 'OTHER', category, boxnum);
@@ -615,7 +615,7 @@ function div_all_ehr_text() {
         let boxnum = nm_advice.select_box_num;
         let nma_id_base = ['NONMED', category, boxnum].join('_');
         let row_id = 'et_' + nma_id_base;
-        html += '<div id="' + row_id + '">';
+        html += '<div id="' + row_id + '"';
         html += ' style="display:none">\n';
         let allow_edit = 0;
         html += cdss_freetext(nm_advice.ehr_split, allow_edit, 'efreetext',

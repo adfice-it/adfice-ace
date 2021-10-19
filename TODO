@@ -3,6 +3,7 @@ Important:
   * copy EHR text does not work: copies unselected as well as selected texts
 * automate tests for CDSS working on IE11
 * fix testcafe acceptance tests to work with testcafe v1.16.1
+* figure out what's going on with EHR text on Finalize page
 
 adfice: from usability
 * Change for 3 views to 5 pages: see mockup
@@ -17,7 +18,6 @@ adfice: from usability
 * Add "close this tab" button to each refpage that closes the tab (only possible for tabs opened by JavaScript; not sure if opening new tabs is allowed by Epic)
 * New placement and formatting for print button. Add icon to button.
 * Add text "richtlijnen" before ref numbers
-* Change "Andere risicofactoren" to "andere adviezen"
 * Change "Haal gewijzigde patientendata" to "Vernieuwen". Add some sort of warning that this will delete all changes.
 * Change display of fall risk on patient page to match patient portal
 * Change Advies page so that grey header does not display; make it more like portal view. (we probably want to keep the patient identifier at the top)
