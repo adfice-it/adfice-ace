@@ -224,8 +224,8 @@ function patient_info_lab_start(){
 			let result = '';
 			for (let j = 0; j < labs.length; ++j) {
 				if(lab == labs[j].lab_test_name){
-					date += labs.date_measured;
-					result += labs.lab_test_result + ' ' + labs.lab_test_units;
+					date = labs[j].date_measured;
+					result = labs[j].lab_test_result + ' ' + labs[j].lab_test_units;
 				}
 			}
 			html += '<td>' + date + '</td><td>' + result  + '</td></tr>';

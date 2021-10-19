@@ -415,3 +415,21 @@ test('Check "Geen advies"', async t => {
     await t.click(checkbox_selector);
     await t.expect(checkbox_selector.checked).notOk();
 });
+
+test('Test problem list', async t => {
+    let url = `${BASE_URL}/start?id=5`;
+    let window1 = await t.openWindow(url);
+
+    let problem_table = Selector("#problem_table");
+    await t.expect(problem_table.withText("Angststoornis	Ja").exists).ok();
+    await t.expect(problem_table.withText("Schizofrenie	Nee").exists).ok();
+});
+
+test('Test lab list', async t => {
+	let url = `${BASE_URL}/start?id=27`;
+    let window1 = await t.openWindow(url);
+
+    let lab_table = Selector("#lab_table");
+    await t.expect(lab_table.withText("natrium").exists).ok();
+	await t.expect(lab_table.withText("140").exists).ok();
+});

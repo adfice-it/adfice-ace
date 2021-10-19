@@ -8,9 +8,8 @@ adfice: from usability
 * Change for 3 views to 5 pages: see mockup
 * patient information in first screen also reports negatives: e.g. no cardiac disease
   * Get all_problems and all_labs out of database
-  * Use display_name of problem rather than name (move display_name from patient table to problem table)
+  * Delete display_name from patient table; use display name from problem table in places where display name is used
   * Format lists of labs and problems better
-  * consider adding acceptance tests to make sure this is working correctly
 * look & text of Hoe Gebruik Ik knop has moved
 * content has been added for Hoe gebruik ik... (we may want to improve this content)
 * Add "back" button to prediction model page
