@@ -196,10 +196,10 @@ function patient_info_problem_start(){
 ['paraplegia','Paraplegie'],
 ['dwaarslaesie','Dwarslaesie']]
 	let problems = get_patient_advice().problems;
-		let html = '<div id="problem_table_div"><table id="problem_table"><tr><td>Aandoening</td><td>Aanwezig</td></tr>';
+		let html = '<div id="problem_table_div"><table id="problem_table"><tr><th class="patient_data_td">Aandoening</th><th class="patient_data_td">Aanwezig</th></tr>';
 		for (let i = 0; i < all_problems.length; ++i) {
 			let problem = all_problems[i][0];
-			html += '<tr><td>' + all_problems[i][1] + '</td><td>';
+			html += '<tr><td class="patient_data_td">' + all_problems[i][1] + '</td><td class="patient_data_td">';
 			let ja_nee = 'Nee';
 			for (let j = 0; j < problems.length; ++j) {
 				if(problem == problems[j].name){
@@ -216,10 +216,10 @@ function patient_info_lab_start(){
 /* TODO replace this with getting list from DB and improve formatting */
 	let all_labs = ['natrium','kalium','calcium','eGFR'];
 	let labs = get_patient_advice().labs;
-		let html = '<div id="lab_table_div"><table id="lab_table"><tr><td>Lab</td><td>Datum gemeten</td><td>Waarde</td></tr>';
+		let html = '<div id="lab_table_div"><table id="lab_table"><tr><th class="patient_data_td">Lab</th><th class="patient_data_td">Datum gemeten</th><th class="patient_data_td">Waarde</th></tr>';
 		for (let i = 0; i < all_labs.length; ++i) {
 			let lab = all_labs[i];
-			html += '<tr><td>' + lab + '</td><td>';
+			html += '<tr><td class="patient_data_td">' + lab + '</td>';
 			let date = '';
 			let result = '';
 			for (let j = 0; j < labs.length; ++j) {
@@ -228,7 +228,7 @@ function patient_info_lab_start(){
 					result = labs[j].lab_test_result + ' ' + labs[j].lab_test_units;
 				}
 			}
-			html += '<td>' + date + '</td><td>' + result  + '</td></tr>';
+			html += '<td class="patient_data_td">' + date + '</td><td class="patient_data_td">' + result  + '</td></tr>';
 		}
 		html += '</table></div><!-- lab_table -->';
 	document.getElementById('patient-labs').innerHTML = html;

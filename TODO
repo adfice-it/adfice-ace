@@ -1,38 +1,34 @@
 Important:
 * Fix IE bugs:
-  * copy EHR text does not work: copies unselected as well as selected texts
+  * copy EHR text does not work in IE: copies unselected as well as selected texts
     This seems to be a real bugger. Microsoft Documentation seems to insist this problem was fixed by IE9:
 	https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa752299(v=vs.85)
 	The Internet seems to believe that using .innerText is risky, because it is implemented slightly differently in each browser:
 	http://clubajax.org/plain-text-vs-innertext-vs-textcontent/
 	Maybe using text nodes will work?
-	The only option might be to retrieve the innerHTML and parse the visible/invisible lines...
-	https://stackoverflow.com/questions/43690611/get-only-visible-text-within-an-html-element-and-child-elements
+	Getting the text out of the database again may be the least-worst solution. 
+	(Or just filling this box with data from the databse rather than using css visibility. Then Ctrl+C will also work as expected.
+	If we go with this solution, we may want to do the same for the Advice page, since it will have the same problem when copied.)
 * automate tests for CDSS working on IE11
 * fix testcafe acceptance tests to work with testcafe v1.16.1
-* figure out what's going on with EHR text on Finalize page
+* Getting data out of EHR
+  * log whether system was used at all -- depends upon EHR connection
+    (EHR will provide data, the presence of the data indicates system was used)
+
 
 adfice: from usability
-* Change for 3 views to 5 pages: see mockup
-* patient information in first screen also reports negatives: e.g. no cardiac disease
-  * Get all_problems and all_labs out of database
-  * Delete display_name from patient table; use display name from problem table in places where display name is used
-  * Format lists of labs and problems better
-* look & text of Hoe Gebruik Ik knop has moved
+* Get all_problems and all_labs out of database, 
+  delete display_name from patient table; use display name from problem table in places where display name is used
 * content has been added for Hoe gebruik ik... (we may want to improve this content)
 * Add "back" button to prediction model page
 * consider putting entry of prediction model data on Start page instead of Model Info page
 * Add "close this tab" button to each refpage that closes the tab (only possible for tabs opened by JavaScript; not sure if opening new tabs is allowed by Epic)
 * New placement and formatting for print button. Add icon to button.
 * Add text "richtlijnen" before ref numbers
-* Change "Haal gewijzigde patientendata" to "Vernieuwen". Add some sort of warning that this will delete all changes.
-* Change display of fall risk on patient page to match patient portal
-* Change Advies page so that grey header does not display; make it more like portal view. (we probably want to keep the patient identifier at the top)
-* Change "lees meer over het predictiemodel" to "open het predictiemodel"
+* Change display of fall risk on patient page to match patient portal (I think this is done but needs to be checked)
 * add "back to top" link at the bottom or in the floating toolbar
 * replace prefill text with placeholder text "Specificeer hier..."
 * side-by-side layout
-* replace gradient with gradient as shown in mockup (with pictures)
 * change FK icon to green
 * some sort of UI indication that the file is locked (sent to portal)
 * check refpages (last corrections were done by Bob)
@@ -114,7 +110,4 @@ Important, but unable to do yet:
 * Once we know something about how authentication will work, we may need to do
   something to prevent users without authentication from loading the data.
   * session expiration? browser caching? detect back button, return to page?
-* Getting data out of EHR
-  * log whether system was used at all -- depends upon EHR connection
-    (EHR will provide data, the presence of the data indicates system was used)
 * Sending data to research database

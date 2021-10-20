@@ -12,23 +12,39 @@ body {
 	background-color: #fffff;
 }
 
-#nav_container {
-	float: right;
+#renew_container{
+	background-color: #EEEEEE;
+	margin: 2em;
+	padding: 1em;
 }
 
 #page_renew{
-	background-color: #e45e14;
+	border-radius: 8px;
+	background-color: #0033BB;
+	padding: 1em;
+	font-size: large;
 	color: #ffffff;
 }
 
-#definitive{
-	background-color: #e30104;
+#help_container{
+	display: inline;
+	margin-left: 2em;
+	vertical-align: top;
+}
+
+.nav_button{
+	border-radius: 8px;
+	background-color: #0033BB;
+	padding: 1em;
+	font-size: large;
 	color: #ffffff;
 }
 
-#help{
-	background-color: #75b94e;
-	color: #ffffff;
+#definitive_container {
+	margin-bottom: 1em;
+	padding-top: 1em;
+	padding-bottom: 1em;
+	background-color: #EEEEEE;
 }
 
 #footer {
@@ -60,11 +76,28 @@ body {
     margin-bottom: 30px;
 }
 
+#patient_data{
+	display: flex;
+}
+
+div.patient_data {
+	width: 30%;
+	margin: 2em;
+	padding: 1em;
+	background-color: #EEEEEE;
+}
+
 #patient-problems{
-	margin: 10px;
+	margin: 1em;
 }
 #patient-labs{
-	margin: 10px;
+	margin: 1em;
+}
+
+th,td.patient_data_td {
+	border: 1px solid grey;
+	border-collapse: collapse;
+	padding: 0.3em;
 }
 
 .advice_no_checkbox {

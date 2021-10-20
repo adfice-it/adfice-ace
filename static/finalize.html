@@ -30,24 +30,30 @@ window.addEventListener('load', function(event) { finalize_page_load(); });
      style="max-width: 10%; height: auto; display: inline;"
      alt="Advice IT logo"
 >
-<div id="nav_container" style="display: inline;">
- <button type="button" class = "nav_button" id="definitive"
-         onclick="makeDefinitive()">
-         Opslaan &amp; definitief maken</button>
+<div id="help_container">
  <!-- This is not valid HTML according to https://validator.w3.org -->
  <!-- Error: The element button must not appear as a descendant of the
-	     a element. -->
+	     a element. However, the recommended solution of styling the link
+		 as a button does not align correctly.-->
  <a href = "static/HoeGebruikIkDitSysteem.html"
     target="_blank"><button type="button"
 			    class = "nav_button"
 			    id="help">Handleiding</button></a>
-</div><!-- nav_container -->
+</div><!-- help_container -->
+
 <div id=patient_info>
 <strong>Pati&euml;ntinformatie:</strong><br/>
 Patient: <span id="patient-info-id"></span><br/>
 Leeftijd: <span id="patient-info-age"></span><br/>
 <div style="height: 2em;"></div>
 </div>
+
+<div id="definitive_container">
+ <button type="button" class = "nav_button" id="definitive"
+         onclick="makeDefinitive()">
+         Opslaan &amp; definitief maken</button>
+<p><strong>Let op!</strong> Bij het drukken van deze knop wordt deze record <strong>versleuteld</strong> en kan niet meer veranderd worden. Dit kan niet ongedaan worden.</p>
+</div>		 
 
 <div id="div_ehr_box" class="div_ehr_box"><!-- not in patient view -->
 <p>Tekst om te knippen en plakken in Epic:</p>
@@ -57,6 +63,7 @@ loading ...
 <button id="copy_ehr_text" type="button" class='button_ehr_text'
         onclick="copyEHRTextToClipboard()">Kopieer tekst</button>
 </div> <!-- ehr_box -->
+
 
 <div id="div-footer-id"></div><!-- footer -->
 </form>

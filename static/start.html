@@ -27,15 +27,16 @@ window.addEventListener('load', function(event) { start_page_load(); });
      style="max-width: 10%; height: auto; display: inline;"
      alt="Advice IT logo"
 >
-<div id="nav_container" style="display: inline;">
- <button type="button" class = "nav_button" id="page_renew"
-	 onclick="patientRenew()">
-         Haal gewijzigde pati&euml;ntdata op</button>
+<div id="help_container">
+ <!-- This is not valid HTML according to https://validator.w3.org -->
+ <!-- Error: The element button must not appear as a descendant of the
+	     a element. However, the recommended solution of styling the link
+		 as a button does not align correctly.-->
  <a href = "static/HoeGebruikIkDitSysteem.html"
     target="_blank"><button type="button"
 			    class = "nav_button"
 			    id="help">Handleiding</button></a>
-</div><!-- nav_container -->
+</div><!-- help_container -->
 
 
 <!--
@@ -74,11 +75,20 @@ document.write('<a href="' + prediction_url +
 </div><!--gauge -->
 </div><!-- prediction -->
 
+<div id="renew_container">
+ <button type="button" class = "nav_button" id="page_renew"
+	 onclick="patientRenew()">
+         Vernieuwen</button>
+<P><strong>Let op!</strong> Als u al keuzes heeft gemaakt en advies ingetypt op de andere paginas, wordt deze <em>vernietigd</em> door het drukken van deze knop.</p>		 
+</div>		 
+
 <div id=patient_data>
-Gedetecteerde relevante aandoeningen:<div id="patient-problems"></div>
-Lab-waarden: <div id="patient-labs"></div>
-Gedetecteerde relevante medicijnen:<span id="meds-with-rules"></span>
-Gedetecteerde andere medicijnen:<span id="meds-without-rules-list"></span>
+<div class="patient_data" id="patient-problem_container"><p>Gedetecteerde relevante aandoeningen:</p><div id="patient-problems"></div></div>
+<div class="patient_data" id="patient-lab_container"><p>Lab-waarden:</p><div class="patient_data" id="patient-labs"></div></div>
+<div class="patient_data" id = "patient-med-contaner">
+<p>Gedetecteerde relevante medicijnen:<br><span id="meds-with-rules"></span></p>
+<p>Gedetecteerde andere medicijnen:<br><span id="meds-without-rules-list"></span></p>
+</div><!-- patient_meds -->
 </div><!-- patient_data -->
 
 </div><!-- patient-info -->
