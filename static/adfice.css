@@ -274,13 +274,14 @@ div.gauge_line {
     width: calc(0.4% + 1px);
     margin-left: calc(-(0.4% / 2 + 0.5px));
     margin-right: calc(-(0.4% / 2 + 0.5px));
-    padding-bottom: calc(7% + 1ex);
+    padding-bottom: calc(8% + 1ex);
     padding-left: 0;
     padding-right: 0;
     background: #000;
     position: relative;
-    top: -0.2ex;
+    top: -0.7ex;
     display: inline-block;
+	visibility: hidden;
 }
 
 div.gauge_text_left {
@@ -312,6 +313,7 @@ div.fallguy_div{
 
 img.fallguy{
 	max-height: 100%;
+	margin-bottom: 0.5em;
 }
 
 .td_nm_category_name {

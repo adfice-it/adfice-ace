@@ -49,21 +49,12 @@ window.addEventListener('load', function(event) { consult_page_load(); });
 Patient: <span id="patient-info-id"></span><br/>
 Leeftijd: <span id="patient-info-age"></span><br/>
 <div class="prediction" id = "prediction">
-<p>Kans om te vallen binnen 12 maanden:&nbsp;
-<span id="gauge-risk-score" style="color: red;">(onbekend)</span>
-<script>
-// let params = new URLSearchParams(window.location.search)
-var patient_id = urlParam('id');
-var prediction_url = 'prediction_explanation?id=' + patient_id;
-document.write('<a href="' + prediction_url +
-'">(lees meer over het predictiemodel)</a>');
-</script>
-</p>
+<p>Kans om te vallen binnen 12 maanden:</p>
 <div class="gauge">
 <div class="fallguy_div"><img class="fallguy" src="assets/ADFICE_IT_logo_noFall_small.png"></div>
 <div class='gauge_text_left'>Laag</div>
 <div class='gauge_background'>
-<div id="gauge-line"></div>
+<div class="gauge_line" id="gauge-line"></div>
 <div class='gauge_text_right'>Hoog</div>
 </div><!-- gauge_background -->
 <div class="fallguy_div"><img class="fallguy" src="assets/ADFICE_IT_logo_Fall_small.png"></div>

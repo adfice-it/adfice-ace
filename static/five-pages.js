@@ -644,8 +644,8 @@ function gauge_risk_score() {
     }
     let elem_gl = document.getElementById('gauge-line');
     if (elem_gl && risk_known) {
-        elem_gl.classList.add("gauge_line");
         elem_gl.style.left = risk_score + "%";
+		elem_gl.style.visibility = 'visible';
     }
 }
 
