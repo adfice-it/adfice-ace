@@ -56,13 +56,7 @@ Leeftijd: <span id="patient-info-age"></span><br/>
 <p>Kans om te vallen binnen 12 maanden:&nbsp;
 <span id="prediction-chance"></span>
 <span id="gauge-risk-score" style="color: red;">(onbekend)</span>
-<script>
-// let params = new URLSearchParams(window.location.search)
-var patient_id = urlParam('id');
-var prediction_url = 'prediction_explanation?id=' + patient_id;
-document.write('<a href="' + prediction_url +
-'">(lees meer over het predictiemodel)</a>');
-</script>
+<a href = "static/prediction_explanation.html">(Lees meer over het predictiemodel)</a>
 </p>
 <div class="gauge">
 <div class="fallguy_div"><img class="fallguy" src="assets/ADFICE_IT_logo_noFall_small.png"></div>
