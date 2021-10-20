@@ -44,7 +44,6 @@ body {
 	margin-bottom: 1em;
 	padding-top: 1em;
 	padding-bottom: 1em;
-	background-color: #EEEEEE;
 }
 
 #footer {
@@ -351,4 +350,9 @@ img.fallguy{
 
 .td_nm_category_name {
     font-weight: bold;
+}
+
+.finalize_step {
+	font-size: large;
+	font-weight: bold;
 }

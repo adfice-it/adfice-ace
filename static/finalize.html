@@ -48,22 +48,25 @@ Leeftijd: <span id="patient-info-age"></span><br/>
 <div style="height: 2em;"></div>
 </div>
 
-<div id="definitive_container">
- <button type="button" class = "nav_button" id="definitive"
-         onclick="makeDefinitive()">
-         Opslaan &amp; definitief maken</button>
-<p><strong>Let op!</strong> Bij het drukken van deze knop wordt deze record <strong>versleuteld</strong> en kan niet meer veranderd worden. Dit kan niet ongedaan worden.</p>
-</div>		 
-
+<div id="ehr_container">
+<p class="finalize_step">Stap 1: Knip en plak deze samenvaating in Epic:</p>
 <div id="div_ehr_box" class="div_ehr_box"><!-- not in patient view -->
-<p>Tekst om te knippen en plakken in Epic:</p>
 <div id="div_all_ehr_text" class="div_all_ehr_text">
 loading ...
 </div><!-- div_all_ehr_text -->
 <button id="copy_ehr_text" type="button" class='button_ehr_text'
         onclick="copyEHRTextToClipboard()">Kopieer tekst</button>
 </div> <!-- ehr_box -->
+<p>U kan wijzigingen aanbrengen in deze tekst in Epic.</p>
+</div><!-- ehr_container -->
 
+<div id="definitive_container">
+<p class="finalize_step">Stap 2: Informatie versturen naar pati&eumlnt portaal en afronden:</p>
+ <button type="button" class = "nav_button" id="definitive"
+         onclick="makeDefinitive()">
+         Verstuur & versleutelen</button>
+<p><strong>Let op!</strong> Bij het drukken van deze knop wordt de data verstuurd naar het portaal en deze record wordt versleuteld en kan niet meer veranderd worden. <strong>Dit kan niet ongedaan worden.</strong> Controleer dat alle advies klopt voordat u op deze knop klikt.</p>
+</div>		 
 
 <div id="div-footer-id"></div><!-- footer -->
 </form>
