@@ -19,9 +19,7 @@ Important:
 adfice: from usability
 * Get all_problems and all_labs out of database, 
   delete display_name from patient table; use display name from problem table in places where display name is used
-* Add "back" button to prediction model page
 * consider putting entry of prediction model data on Start page instead of Model Info page
-* Add "close this tab" button to each refpage that closes the tab (only possible for tabs opened by JavaScript; not sure if opening new tabs is allowed by Epic)
 * New placement and formatting for print button. Add icon to button.
 * Add text "richtlijnen" before ref numbers
 * Change display of fall risk on patient page to match patient portal (I think this is done but needs to be checked)
@@ -30,7 +28,7 @@ adfice: from usability
 * side-by-side layout
 * change FK icon to green
 * some sort of UI indication that the file is locked (sent to portal)
-* check refpages (last corrections were done by Bob)
+* search and replace nonprinting chars in refpages (looks like maybe all the HTML special chars were replaced with nonprinting chars rather than the other way around...)
 * content has been added for Hoe gebruik ik... (but it's really quite bad; I guess I will make new content)
 
 Valportaal
@@ -53,7 +51,6 @@ Required changes to rules (Ace will do these):
   the period should come before the free text box.
   (Laxans: should probably become Laxans aanbevolen.)
 * Make sure that all texts begin with a capital letter.
-
 
 
 Not required for "ready to install" but will be required for study:
@@ -110,3 +107,4 @@ Important, but unable to do yet:
   something to prevent users without authentication from loading the data.
   * session expiration? browser caching? detect back button, return to page?
 * Sending data to research database
+* Users wanted a "close this tab" button on each refpage that closes the tab. However, the method that works on IE is considered bad practice, and might not work in the actual deployment environment. We can look into this in the actual deployment enviornment.
