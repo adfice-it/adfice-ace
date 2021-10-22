@@ -262,6 +262,10 @@ div.refpages{
     float: right;
 }
 
+.predict_data{
+	border: 1px solid grey;
+}
+
 div.instruction_box{
     display: block;
     width: 99%;

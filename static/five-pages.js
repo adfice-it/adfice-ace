@@ -91,44 +91,6 @@ function meds_without_rules_as_html(other_meds) {
     return html;
 }
 
-function patient_problems_as_html(problems) {
-    let html = '';
-    for (let i = 0; i < problems.length; ++i) {
-        let problem = problems[i];
-        if (i) {
-            html += ', '
-        }
-        html += '<span id="prob-' + i + '">';
-        html += problem.display_name;
-        html += '</span>';
-    }
-    return html;
-}
-
-function patient_labs_as_html(labs) {
-    let html = '';
-    for (let i = 0; i < labs.length; ++i) {
-        let lab = labs[i];
-        let lab_prefix = "lab_" + i;
-        if (i) {
-            html += ', '
-        }
-        html += '<span id="' + lab_prefix + '">';
-
-        html += '<span id="' + lab_prefix + '_name">';
-        html += lab.lab_test_name + '</span>: ';
-
-        html += '<span id="' + lab_prefix + '_result">';
-        html += lab.lab_test_result + '</span> ';
-
-        html += '<span id="' + lab_prefix + '_date">';
-        html += '(' + JSON.stringify(lab.date_measured).substring(1, 11) + ')';
-        html += '</span>';
-
-        html += '</span>'
-    }
-    return html;
-}
 
 function patient_info_age() {
     let advice = get_patient_advice();
@@ -158,12 +120,6 @@ function patient_info_meds_without_rules() {
     replace_if_exists('meds-without-rules-list',
         meds_without_rules_as_html,
         get_patient_advice().meds_without_rules);
-}
-
-function patient_info_problems() {
-    replace_if_exists('patient-problems-list',
-        patient_problems_as_html,
-        get_patient_advice().problems);
 }
 
 function patient_info_problem_start(){
@@ -224,8 +180,12 @@ function patient_info_lab_start(){
 			let result = '';
 			for (let j = 0; j < labs.length; ++j) {
 				if(lab == labs[j].lab_test_name){
-					date = labs[j].date_measured;
-					result = labs[j].lab_test_result + ' ' + labs[j].lab_test_units;
+					date = niceDate(labs[j].date_measured);
+					result = labs[j].lab_test_result;
+					let units = labs[j].lab_test_units;
+					if(typeof(units) != 'undefined' && units != null){
+						result +=  ' ' + units;
+					}
 				}
 			}
 			html += '<td class="patient_data_td">' + date + '</td><td class="patient_data_td">' + result  + '</td></tr>';
@@ -248,10 +208,10 @@ function patient_info_meds_with_rules_start(){
 	document.getElementById('meds-with-rules').innerHTML = html;
 }
 
-function patient_info_labs() {
-    replace_if_exists('patient-labs-list',
-        patient_labs_as_html,
-        get_patient_advice().labs);
+function prediction_start(){
+	// if there are missing values, display missing values form
+	// fill table with known values
+console.dir(get_patient_advice());	
 }
 
 function set_element_inner(id, html) {
@@ -649,6 +609,18 @@ function gauge_risk_score() {
     }
 }
 
+function niceDate(dtstring) {
+// expects string in the form of YYYY-MM-DDTHH:MM:SS.mmmm
+	if(dtstring.match(/^([0-9]{4}.[0-9]{2}.[0-9]{2}.*)$/)){
+		let year = dtstring.substring(0,4);
+		let m = dtstring.substring(5,7);
+		let d = dtstring.substring(8,10);
+		return d + '-' + m + '-' + year;
+	} else {
+		return 'onbekend';
+	}
+   }
+
 // the following functions specify the needed elements which vary
 // between pages and need to be populated on load
 // and see: function page_load(before_socket)
@@ -666,8 +638,6 @@ function prep_page_setup() {
     patient_info_age();
     patient_info_meds_with_rules();
     patient_info_meds_without_rules();
-    patient_info_problems();
-    patient_info_labs();
     gauge_risk_score();
     let include_no_checkbox_advice = 1;
     big_nested_medicine_advice_table(include_no_checkbox_advice);
@@ -680,8 +650,6 @@ function consult_page_setup() {
     patient_info_age();
     patient_info_meds_with_rules();
     patient_info_meds_without_rules();
-    patient_info_problems();
-    patient_info_labs();
     gauge_risk_score();
     let include_no_checkbox_advice = 0;
     big_nested_medicine_advice_table(include_no_checkbox_advice);

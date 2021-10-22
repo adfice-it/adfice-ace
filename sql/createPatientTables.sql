@@ -242,6 +242,7 @@ CREATE TABLE `patient_measurement` (
   `has_ca_blocker` tinyint DEFAULT NULL,
   `has_incont_med` tinyint DEFAULT NULL,
   `prediction_result` int unsigned DEFAULT NULL,
+  `user_values_updated` datetime DEFAULT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `row_updated` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -298,6 +299,7 @@ CREATE TABLE `patient_measurement_history` (
   `has_ca_blocker` tinyint DEFAULT NULL,
   `has_incont_med` tinyint DEFAULT NULL,
   `prediction_result` int unsigned DEFAULT NULL,
+  `user_values_updated` datetime DEFAULT NULL,
   `row_created` timestamp NOT NULL,
   `row_updated` timestamp NOT NULL,
   PRIMARY KEY (`log_id`),
@@ -360,6 +362,7 @@ CREATE TRIGGER patient_measurement_history_insert
           NEW.has_ca_blocker,
           NEW.has_incont_med,
           NEW.prediction_result,
+		  NEW.user_values_updated,
           NEW.row_created,
           NEW.row_updated
         );
@@ -418,6 +421,7 @@ CREATE TRIGGER patient_measurement_history_update
           OLD.has_ca_blocker,
           OLD.has_incont_med,
           OLD.prediction_result,
+		  OLD.user_values_updated,
           OLD.row_created,
           OLD.row_updated
         );
@@ -476,6 +480,7 @@ CREATE TRIGGER patient_measurement_history_delete
           OLD.has_ca_blocker,
           OLD.has_incont_med,
           OLD.prediction_result,
+		  OLD.user_values_updated,
           OLD.row_created,
           OLD.row_updated
         );
