@@ -433,3 +433,21 @@ test('Test lab list', async t => {
     await t.expect(lab_table.withText("natrium").exists).ok();
 	await t.expect(lab_table.withText("140").exists).ok();
 });
+
+test('Test prediction values missing', async t => {
+	let url = `${BASE_URL}/start?id=27`;
+    let window1 = await t.openWindow(url);
+
+    let missing_table = Selector("#prediction_missing_container");
+    await t.expect(missing_table.withText("grijpkracht").exists).ok();
+	await t.expect(missing_table.withText("anti-epileptica").exists).notOk();
+});
+
+test('Test prediction values present', async t => {
+	let url = `${BASE_URL}/start?id=2`;
+    let window1 = await t.openWindow(url);
+
+    let prediction_table = Selector("#prediction_data_container");
+    await t.expect(prediction_table.withText("21.5").exists).ok();
+	await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
+});

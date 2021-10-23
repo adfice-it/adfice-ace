@@ -236,12 +236,12 @@ function missing_data_form(measurements){
 		html += '</select></td>';
 	}
 	if(measurements.grip_kg == null){ 
-		html += '<tr><td class="prediction_missing">grijpkracht kg</td><td class="prediction_missing">';
+		html += '<tr><td class="prediction_missing">grijpkracht kg (hoogste meting)</td><td class="prediction_missing">';
 		if(measurements.user_grip_kg != null){html += measurements.user_grip_kg;}
 		html += '</td><td class="prediction_missing"><input type="number" min="0.00" max="99.99"></td>';
 	}
 	if(measurements.walking_speed_m_per_s == null){ 
-		html += '<tr><td class="prediction_missing">loopsnelheid m/s</td><td class="prediction_missing">';
+		html += '<tr><td class="prediction_missing">loopsnelheid m/s (zo snel mogelijk)</td><td class="prediction_missing">';
 		if(measurements.user_walking_speed_m_per_s != null){ html += measurements.user_walking_speed_m_per_s;}
 		html += '</td><td class="prediction_missing"><input type="number" min="0.00" max="99.99"></td>';
 	}
