@@ -21,7 +21,7 @@ Important:
 
 adfice: from usability
 * Write user-entered prediction model values back to database (in user_ fields) and recalculate prediction
-* rewrite prediction calculation to use user-entered values if needed
+* add some user_ values to db and add them to tests to get full test coverage again
 * Get all_problems and all_labs out of database, 
   delete display_name from patient table; use display name from problem table in places where display name is used
 * add "back to top" link at the bottom or in the floating toolbar

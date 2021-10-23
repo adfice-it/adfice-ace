@@ -383,21 +383,38 @@ async function calculatePredictionResult(patient_id) {
         return null;
     }
     let measurement = measurements[0];
+	let GDS_score = measurement['GDS_score'] || measurement['user_GDS_score'];
+	let grip_kg = measurement['grip_kg'] || measurement['user_grip_kg'];
+	let walking_speed_m_per_s = measurement['walking_speed_m_per_s'] || measurement['user_walking_speed_m_per_s'];
+	let user_BMI = null;
+	if(measurement['user_height_cm'] != null && measurement['user_weight_kg'] != null){
+		user_BMI = measurement['user_weight_kg']/((measurement['user_height_cm'])^2);
+	}
+	let BMI = measurement['BMI'] || user_BMI;
+	let systolic_bp_mmHg = measurement['systolic_bp_mmHg'] || measurement['user_systolic_bp_mmHg'];
+	let number_of_limitations = measurement['number_of_limitations'] || measurement['user_number_of_limitations'];
+	let nr_falls_12m = measurement['nr_falls_12m'] || measurement['user_nr_falls_12m'];
+	let smoking = measurement['smoking'] || measurement['user_smoking'];
+	let education_hml = measurement['education_hml'] || measurement['user_education_hml'];
+	let fear1 = 0;
+	if(measurement['fear1'] ==1 || measurement['user_fear1'] == 1){fear1 = 1;}
+	let fear2 = 0;
+	if(measurement['fear2'] ==1 || measurement['user_fear2'] == 1){fear2 = 1;}
     let prediction = cp.calculatePredictionDB(
-        measurement['GDS_score'],
-        measurement['grip_kg'],
-        measurement['walking_speed_m_per_s'],
-        measurement['BMI'],
-        measurement['systolic_bp_mmHg'],
-        measurement['number_of_limitations'],
-        measurement['nr_falls_12m'],
-        measurement['smoking'],
+        GDS_score,
+        grip_kg,
+        walking_speed_m_per_s,
+        BMI,
+        systolic_bp_mmHg,
+        number_of_limitations,
+        nr_falls_12m,
+        smoking,
         measurement['has_antiepileptica'],
         measurement['has_ca_blocker'],
         measurement['has_incont_med'],
-        measurement['education_hml'],
-        measurement['fear1'],
-        measurement['fear2']);
+        education_hml,
+        fear1,
+        fear2);
     measurement['prediction_result'] = prediction;
     return measurement;
 }
