@@ -1011,7 +1011,8 @@ function adfice_init(db) {
         isSQLConditionTrue: isSQLConditionTrue,
         selectionStatesToBoxStates: selectionStatesToBoxStates,
         sql_select: sql_select,
-        updatePredictionResult: updatePredictionResult,
+        structureMeas: structureMeas,
+		updatePredictionResult: updatePredictionResult,
 
         /* public API methods */
         addLogEventPrint: addLogEventPrint,

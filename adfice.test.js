@@ -656,10 +656,16 @@ test('Get prediction model result from DB', async () => {
 });
 
 test('Get empty result set from measurements', async () => {
-    let mesurements = await adfice.getPatientMeasurements(1);
-    expect(mesurements).toBe(null);
+    let measurements = await adfice.getPatientMeasurements(1);
+    expect(measurements).toBe(null);
     let prediction1 = await adfice.getPredictionResult(1);
     expect(prediction1).toBe(null);
+});
+
+test('Structure measurements', async () => {
+    let measurements = await adfice.getPatientMeasurements(2);
+    let structuredMeas = adfice.structureMeas(measurements);
+	expect(structuredMeas['grip_kg']).toBe(21.5);
 });
 
 test('Calculate prediction based on DB data', async () => {

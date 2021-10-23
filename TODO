@@ -1,4 +1,5 @@
 Important:
+* figure out why newest TestCafe test passes when run on its own but fails when run as part of Make
 * Fix IE bugs:
   * copy EHR text does not work in IE: copies unselected as well as selected texts
     This seems to be a real bugger. Microsoft Documentation seems to insist this problem was fixed by IE9:
