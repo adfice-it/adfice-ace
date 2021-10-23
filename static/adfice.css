@@ -235,13 +235,14 @@ th,td.patient_data_td {
 	display: flex;
 	width: 100%;
 }
-
+/*
 .med_advice_row2{
 	display: flex;
 	width: 100%;
 	justify-content: center;
     align-items: center;
 }
+*/
 
 .advice_no_checkbox {
     border: 2px solid green;
