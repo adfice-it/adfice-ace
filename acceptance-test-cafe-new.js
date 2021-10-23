@@ -443,6 +443,7 @@ test('Test prediction values missing', async t => {
 	await t.expect(missing_table.withText("anti-epileptica").exists).notOk();
 });
 
+if (0) {
 test('Test prediction values present', async t => {
 	let url = `${BASE_URL}/start?id=2`;
     let window1 = await t.openWindow(url);
@@ -451,3 +452,4 @@ test('Test prediction values present', async t => {
     await t.expect(prediction_table.withText("21.5").exists).ok();
 	await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
 });
+}
