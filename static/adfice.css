@@ -143,6 +143,20 @@ th,td.patient_data_td {
 	float: left;
 	padding-right: 10px;
 }
+
+#advice_container{
+	display: flex;
+}
+
+#div_patient_view{
+	width: 80%;
+}
+
+#button_container{
+	width: 20%;
+}
+
+
 .med_cdss{
 	width: 100%;
 }

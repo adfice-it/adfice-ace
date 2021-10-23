@@ -442,7 +442,7 @@ function big_nested_medicine_advice_table(include_no_checkbox_advice) {
         html += '>Maatregelen (aangekruist indien aanbevolen):</div>';
         let div_ref_page_atc_id = 'div_refpages_' + atc;
         html += '<div id="' + div_ref_page_atc_id + '"';
-        html += ' class="refpages">Referenties:';
+        html += ' class="refpages">Richtlijnen:';
         let referenceNumbers = row.referenceNumbers;
         for (let k = 0; k < referenceNumbers.length; ++k) {
             let ref_page_num = referenceNumbers[k].reference;

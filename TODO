@@ -14,18 +14,16 @@ Important:
 * Getting data out of EHR
   * log whether system was used at all -- depends upon EHR connection
     (EHR will provide data, the presence of the data indicates system was used)
-
+* entering text in a text box should automatically check its check box (not mentioned in usability but seems like a good idea)
 
 adfice: from usability
 * Write user-entered prediction model values back to database (in user_ fields) and recalculate prediction
 * rewrite prediction calculation to use user-entered values if needed
 * Get all_problems and all_labs out of database, 
   delete display_name from patient table; use display name from problem table in places where display name is used
-* New placement and formatting for print button. Add icon to button.
 * Add text "richtlijnen" before ref numbers
 * Change display of fall risk on patient page to match patient portal (I think this is done but needs to be checked)
 * add "back to top" link at the bottom or in the floating toolbar
-* replace prefill text with placeholder text "Specificeer hier..."
 * side-by-side layout
 * change FK icon to green
 * some sort of UI indication that the file is locked (sent to portal)
@@ -95,6 +93,7 @@ Low Priority:
 * naming consistency thoughout the css
 * naming consistency thoughout the javascript
 * naming consistency thoughout the html
+* tidy css page and make naming more consistant
 
 Requested (not required) changes to rules:
 * Rule 50: Split to personalize by age

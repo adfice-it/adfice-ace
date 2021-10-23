@@ -50,6 +50,7 @@ Leeftijd: <span id="patient-info-age"></span><br/>
 <div style="height: 2em;"></div>
 </div><!-- id=patient_info -->
 
+<div id="advice_container">
 <div id="div_patient_view" class="div_patient_view">
 <div class="patient_header patient_view_only"
      id="patient_med_advice_header">Advies over medicaties:</div>
@@ -63,7 +64,6 @@ loading ...
 <img src="/static/WarningRW_openClipArt.png" class="warningicon">
 Als u bijwerkingen of andere gezondheidsproblemen krijgt, neem dan contact op
 met uw huisarts, het ziekenhuis, of uw apotheek.</div>
-</div> <!-- div_patient_view -->
 
 <div id="non_med_advice_patient_area" class="non_med_advice_patient_area">
 <div id="non_med_advice_patient_area_text">
@@ -73,10 +73,15 @@ met uw huisarts, het ziekenhuis, of uw apotheek.</div>
 loading ...
 </div><!-- patient-non-med-advice-list -->
 </div><!-- non_med_advice_patient_area_text -->
-<button id="copy_patient_text" type="button" class='button_patient_text'
-        onclick="copyPatientTextToClipboard()">Kopieer tekst</button>
-<button id="print_button" onclick="windowPrint()">Afdrukken</button>
 </div><!-- "non_med_advice_patient_area" -->
+</div> <!-- div_patient_view -->
+
+<div id="button_container">
+<button id="print_button" class="nav_button" onclick="windowPrint()">Print deze pagina</button>
+<button id="copy_patient_text" type="button" class="nav_button"
+        onclick="copyPatientTextToClipboard()">Kopieer tekst</button>
+</div> <!-- button_container -->
+</div> <!-- advice_container -->
 
 <div id="div-footer-id"></div><!-- footer -->
 </form>
