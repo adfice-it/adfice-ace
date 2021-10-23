@@ -99,15 +99,6 @@ th,td.patient_data_td {
 	padding: 0.3em;
 }
 
-.advice_no_checkbox {
-    border: 2px solid green;
-    padding-top: 5px;
-    padding-right: 5px;
-    padding-bottom: 5px;
-    padding-left: 5px;
-    margin-bottom: 15px;
-}
-
 .advice_header{
 	font-size: large;
 	font-weight: bold;
@@ -155,7 +146,6 @@ th,td.patient_data_td {
 #button_container{
 	width: 20%;
 }
-
 
 .med_cdss{
 	width: 100%;
@@ -233,7 +223,33 @@ th,td.patient_data_td {
 
 .advice_selection_area{
     background: #f5f5f5;
-    margin-bottom: 2em;
+}
+
+.med_advice_container{
+	background: #f7f7f7;
+	padding: 0.5em;
+	margin-bottom: 1em;
+}
+
+.med_advice_row1{
+	display: flex;
+	width: 100%;
+}
+
+.med_advice_row2{
+	display: flex;
+	width: 100%;
+	justify-content: center;
+    align-items: center;
+}
+
+.advice_no_checkbox {
+    border: 2px solid green;
+    padding-top: 1em;
+	padding-bottom: 1em;
+	padding-right: 5px;
+    padding-left: 5px;
+    height: 100%;
 }
 
 .med_name{
@@ -248,6 +264,9 @@ th,td.patient_data_td {
 }
 .fkimg{
 	max-height: 1.2em;
+}
+.checkbox_row{
+	padding-bottom: 0.5em;
 }
 
 .div_ehr_box{
@@ -273,7 +292,7 @@ div.whitespace{
 
 div.refpages{
     display:inline;
-    float: right;
+    margin-left: auto;
 }
 
 #prediction_missing_container{

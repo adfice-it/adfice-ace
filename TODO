@@ -24,15 +24,14 @@ adfice: from usability
 * rewrite prediction calculation to use user-entered values if needed
 * Get all_problems and all_labs out of database, 
   delete display_name from patient table; use display name from problem table in places where display name is used
-* Change display of fall risk on patient page to match patient portal (I think this is done but needs to be checked)
 * add "back to top" link at the bottom or in the floating toolbar
-* side-by-side layout
 * change FK icon to green
 * some sort of UI indication that the file is locked (sent to portal)
 * search and replace nonprinting chars in refpages (looks like maybe all the HTML special chars were replaced with nonprinting chars rather than the other way around...)
 * content has been added for Hoe gebruik ik... (but it's really quite bad; I guess I will make new content)
 
 Valportaal
+* change display of risk gradient to match cdss
 * valportaal: links to apotheek.nl
 * enlarge button for valportaal
   * is this ctrl-shift-plus ? Then maybe do both for cross-browser:

@@ -407,14 +407,36 @@ function big_nested_medicine_advice_table(include_no_checkbox_advice) {
         let med_url = "https://www.farmacotherapeutischkompas.nl" +
             "/bladeren/preparaatteksten/atc/" +
             atc;
-        html += '<div id="div_advice_' + atc + '">';
+        html += '<div id="div_advice_' + atc 
+			 + '" class="med_advice_container"><div id="div_advice_row1_' + atc 
+			 + '" class="med_advice_row1">';
 
         html += '<div id="div_med_name_' + atc + '" class="med_name">';
         html += ucfirst(row.medication_name).trim() + '</div>';
-
-        html += '<a href="' + med_url + '" class="fklink" target="_blank">';
+		
+		        html += '<a href="' + med_url + '" class="fklink" target="_blank">';
         html += '<img src="static/FK_circle_with_linkout.png"';
         html += ' alt="FK" class="fkimg"/></a>' + "\n";
+		
+		let div_ref_page_atc_id = 'div_refpages_' + atc;
+        html += '<div id="' + div_ref_page_atc_id + '"';
+        html += ' class="refpages">Richtlijnen:';
+        let referenceNumbers = row.referenceNumbers;
+        for (let k = 0; k < referenceNumbers.length; ++k) {
+            let ref_page_num = referenceNumbers[k].reference;
+            if (k) {
+                html += ', ';
+            }
+            let ref_page_id = 'atc_ref_page_' + atc + '_' + ref_page_num;
+            html += '<span id="' + ref_page_id + '" class="atc_ref_page">';
+            let ref_url = 'static/refpages/refpage' + ref_page_num + '.html';
+            html += '<a href="' + ref_url + '" target="_blank ">';
+            html += ref_page_num + '</a>';
+            html += '</span><!-- ref_page_id -->\n';
+        }
+        html += '</div><!-- ' + div_ref_page_atc_id + ' -->\n';
+		html += '</div><!-- div_advice_row1_' + atc + ' -->\n';
+		html += '<div id="div_advice_row2_' + atc + '" class="med_advice_row2">\n';
 
         if (include_no_checkbox_advice) {
             let div_advice_atc_id = 'advice_' + atc;
@@ -433,35 +455,19 @@ function big_nested_medicine_advice_table(include_no_checkbox_advice) {
             }
             html += '</div><!-- ' + div_advice_atc_id + ' -->' + "\n";
         }
-
+		
         let cb_advices = row.adviceTextsCheckboxes;
         let div_advice_selection_area_id = 'advice_selection_area_' + i;
         html += '<div id="' + div_advice_selection_area_id + '"';
         html += ' class="advice_selection_area">';
         html += '<div class="checkbox_section_header"';
         html += '>Maatregelen (aangekruist indien aanbevolen):</div>';
-        let div_ref_page_atc_id = 'div_refpages_' + atc;
-        html += '<div id="' + div_ref_page_atc_id + '"';
-        html += ' class="refpages">Richtlijnen:';
-        let referenceNumbers = row.referenceNumbers;
-        for (let k = 0; k < referenceNumbers.length; ++k) {
-            let ref_page_num = referenceNumbers[k].reference;
-            if (k) {
-                html += ', ';
-            }
-            let ref_page_id = 'atc_ref_page_' + atc + '_' + ref_page_num;
-            html += '<span id="' + ref_page_id + '" class="atc_ref_page">';
-            let ref_url = 'static/refpages/refpage' + ref_page_num + '.html';
-            html += '<a href="' + ref_url + '" target="_blank ">';
-            html += ref_page_num + '</a>';
-            html += '</span><!-- ref_page_id -->\n';
-        }
-        html += '</div><!-- ' + div_ref_page_atc_id + ' -->';
+        
 
         // TODO: factor out this loop
         // TODO: extract into checkbox-table.include.html
         html += '<table>\n';
-        html += '<tr><td>Kies een of meer maatregel(en):</td><td></td></tr>\n'
+        html += '<tr><td colspan = 2>Kies een of meer maatregel(en):</td></tr>\n'
         for (let j = 0; j < cb_advices.length; ++j) {
             let cb_advice = cb_advices[j];
             let asa_prefix = "asa_" + i + "_" + j;
@@ -471,12 +477,12 @@ function big_nested_medicine_advice_table(include_no_checkbox_advice) {
             let checkbox_id = 'cb_' + advice_id_base;
             let row_id = 'tr_' + advice_id_base;
             html += '<tr id="' + row_id + '">\n';
-            html += '<td>';
+            html += '<td class="checkbox_row">';
             html += '<span id="' + asa_prefix + '_sbn">';
             html += input_checkbox(checkbox_id);
             html += '</span> <!-- ' + asa_prefix + '_sbn -->';
             html += '</td>\n';
-            html += '<td>';
+            html += '<td class="checkbox_row">';
             let asa_cdss_id = asa_prefix + '_cdss';
             html += '<div id="' + asa_prefix + '_cdss" class="med_cdss">';
             let allow_edit = 1;
@@ -487,6 +493,7 @@ function big_nested_medicine_advice_table(include_no_checkbox_advice) {
         }
         html += '</table>\n';
         html += '</div><!-- advice_selection_area_' + i + ' -->\n';
+		html += '</div><!-- div_advice_row2_' + atc + ' -->\n';
         html += '</div><!-- div_advice_' + atc + ' -->\n';
     }
 
