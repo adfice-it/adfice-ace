@@ -77,6 +77,7 @@ Leeftijd: <span id="patient-info-age"></span><br/>
 </div>		 
 </div><!-- patient-info -->
 
+<h3>Data uit het EPD</h3>
 <div id=patient_data>
 <div class="patient_data" id="patient-problem_container"><p>Gedetecteerde relevante aandoeningen:</p><div id="patient-problems"></div></div>
 <div class="patient_data" id="patient-lab_container"><p>Lab-waarden:</p><div class="patient_data" id="patient-labs"></div></div>
@@ -86,12 +87,11 @@ Leeftijd: <span id="patient-info-age"></span><br/>
 </div><!-- patient_meds -->
 </div><!-- patient_data -->
 
-<div style="height: 2em;"></div>
-
 <div id="prediction_missing_container"></div>
 
 <div id="prediction_data_container">
-<table id="prediction_data_table";>
+<h3>Data voor predictiemodel</h3>
+<table class="predict_data" id="prediction_data_table";>
 <tr><th class="predict_data">variabel</th><th class="predict_data">waarde</th><th class="predict_data">datum gemeten</th><th class="predict_data">ingetypte waarde</th><th class="predict_data">coefficient</th></tr>
 <tr><td class="predict_data">Intercept</td><td class="predict_data"></td><td class="predict_data"></td><td class="predict_data"></td><td class="predict_data">-0.2047 +</td></tr>
 <tr><td class="predict_data">Z-score depressie (GDS)</td><td class = "predict_data predict_db"><div id = "GDS_score"></div></td><td class = "predict_data predict_db"><div id = "GDS_date_measured"></div><td class = "predict_data predict_user"><div id = "user_GDS_score"></div></td></td><td class="predict_data"> 0.0778  * (GDS - 1.4401) / 1.9419 +</td></tr>
@@ -110,21 +110,19 @@ Hoogst behaalde opleiding<sup>e-i</sup><br>
 laag (niveau 1): 0<br>
 midden (niveau 2): 0.1972 +<br>
 hoog (niveau 3): 0.3687 +</td></tr>
-<tr><td class="predict_data">Angst om te vallen: niveau 0</td><td class = "predict_data predict_db"><div id = "fear0"></div></td><td class = "predict_data predict_db"><div id = "fear_of_falls_date_measured"></div></td>
-<td class = "predict_data predict_user"><div id = "user_fear0"></div></td><td class="predict_data">Alle antwoorden zijn <q>Helemaal niet bezorgd</q> = 0</td></tr>
-<tr><td class="predict_data">Angst om te vallen: niveau 1</td><td class = "predict_data predict_db"><div id = "fear1"></div></td><td class = "predict_data predict_db"><div id = "fear_of_falls_date_measured"></div></td>
-<td class = "predict_data predict_user"><div id = "user_fear1"></div></td><td class="predict_data">Tenminste een <q>Een beetje bezorgd</q> of <q>redelijk bezorgd</q> (geen <q>Erg bezorgd</q>) = 0.2268;</td></tr>
-<tr><td class="predict_data">Angst om te vallen: niveau 2</td><td class = "predict_data predict_db"><div id = "fear2"></div></td><td class = "predict_data predict_db"><div id = "fear_of_falls_date_measured"></div></td>
-<td class = "predict_data predict_user"><div id = "user_fear2"></div></td><td class="predict_data">Tenminste een <q>Erg bezorgd</q> = 0.2222</td></tr>
+<tr><td class="predict_data">Angst om te vallen</td><td class = "predict_data predict_db"><div id = "fear"></div></td><td class = "predict_data predict_db"><div id = "fear_of_falls_date_measured"></div></td>
+<td class = "predict_data predict_user"><div id = "user_fear"></div></td><td class="predict_data">
+Alle antwoorden zijn <q>Helemaal niet bezorgd</q> = 0<br>
+Tenminste een <q>Een beetje bezorgd</q> of <q>redelijk bezorgd</q> (geen <q>Erg bezorgd</q>) = 0.2268;<br>
+Tenminste een <q>Erg bezorgd</q> = 0.2222</td></tr>
 </table>
-<em>Data toegevoegd door gebruiker op:<div id="user_values_updated">nvt</div></em>
+<em>Data toegevoegd door gebruiker op: <span id="user_values_updated">nvt</span></em>
 </div><!-- prediction_data_container -->
 
 
-<p style="background-color: white;">Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren
+<h3>Gezamenlijke besluitvormingsmodel om betrokkenheid te stimuleren</h3>
 (<a href="https://www.sciencedirect.com/science/article/pii/S0738399115301658"
 >Lees meer</a>)
-</p>
 
 <div class="instruction_box">
 

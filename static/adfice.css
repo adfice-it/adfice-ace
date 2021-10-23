@@ -81,7 +81,7 @@ body {
 
 div.patient_data {
 	width: 30%;
-	margin: 2em;
+	margin: 1em;
 	padding: 1em;
 	background-color: #EEEEEE;
 }
@@ -260,6 +260,19 @@ div.whitespace{
 div.refpages{
     display:inline;
     float: right;
+}
+
+#prediction_missing_container{
+	background-color: #EEEEEE;
+	margin: 1em;
+	padding: 1em;
+
+}
+
+#prediction_data_container{
+	background-color: #EEEEEE;
+	margin: 1em;
+	padding: 1em;
 }
 
 .predict_data{

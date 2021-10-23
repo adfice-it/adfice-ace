@@ -561,9 +561,9 @@ function structureMeas(measRow) {
 			measurements['user_smoking'] = null;
 			measurements['smoking'] = null;
 			measurements['smoking_date_measured'] = null;
-			measurements['has_antiepileptica'] = 0;
-			measurements['has_ca_blocker'] = 0;
-			measurements['has_incont_med'] = 0;
+			measurements['has_antiepileptica'] = null;
+			measurements['has_ca_blocker'] = null;
+			measurements['has_incont_med'] = null;
 			measurements['prediction_result'] = null;
 			measurements['user_values_updated'] = null;
 	} else {

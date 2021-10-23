@@ -213,15 +213,19 @@ function prediction_start(){
 	let measurements = get_patient_advice().measurements;
 	if(measurements.prediction_result == null){
 		missing_data_form(measurements);
+		document.getElementById('prediction_data_container').style.display = 'none';
+	} else {
+		document.getElementById('prediction_missing_container').style.display = 'none';
+		prediction_data_start(measurements);
 	}
-	// TODO consider making only the input table or the finished table visible
-	prediction_data_start(measurements);
-	
 }
 
 function missing_data_form(measurements){
 	let footnote = '';
-	let html = '<form><table class="prediction_missing" id = "prediction_missing_table"><tr><th class="prediction_missing">variabel</th><th class="prediction_missing">huidige waarde</th><th class="prediction_missing" >nieuwe waarde</th></tr>';
+	let html = '<h3>Data voor predictiemodel</h3><p>Er is nog onvoldoende data om een valrisico te berekenen. Vul de onderstaande data in om een risico te berekenen.</p>\
+				<form>\
+				<table class="prediction_missing" id = "prediction_missing_table">\
+				<tr><th class="prediction_missing">variabel</th><th class="prediction_missing">huidige waarde</th><th class="prediction_missing" >nieuwe waarde</th></tr>';
 	if(measurements.GDS_score == null){ 
 		html += '<tr><td class="prediction_missing">GDS score</td><td class="prediction_missing">';
 		if(measurements.user_GDS_score != null){html += measurements.user_GDS_score;}
@@ -306,8 +310,48 @@ function updateMeas(){
 }
 
 function prediction_data_start(measurements){
-	// TODO
-	document.getElementById('GDS_score').innerHTML = '<div>TODO</div>';
+	let GDS_score = measurements.GDS_score || measurements.user_GDS_score;
+	document.getElementById('GDS_score').innerHTML = GDS_score;
+	document.getElementById('GDS_date_measured').innerHTML = niceDate(measurements.GDS_date_measured);
+	let grip_kg = measurements.grip_kg || measurements.user_grip_kg;
+	document.getElementById('grip_kg').innerHTML = grip_kg;
+	document.getElementById('grip_date_measured').innerHTML = niceDate(measurements.grip_date_measured);
+	let walking_speed_m_per_s = measurements.walking_speed_m_per_s || measurements.user_walking_speed_m_per_s;
+	document.getElementById('walking_speed_m_per_s').innerHTML = walking_speed_m_per_s;
+	document.getElementById('walking_date_measured').innerHTML = niceDate(measurements.walking_date_measured);
+	let user_BMI = null;
+	if(measurements.user_weight_kg != null && measurements.user_height_cm != null){
+		user_BMI = measurements.user_weight_kg / ((measurements.user_height_cm / 100)^2);
+	}
+	let BMI = measurements.BMI || user_BMI;
+	document.getElementById('BMI').innerHTML = BMI;
+	document.getElementById('BMI_date_measured').innerHTML = niceDate(measurements.BMI_date_measured);
+	let systolic_bp_mmHg = measurements.systolic_bp_mmHg || measurements.user_systolic_bp_mmHg;
+	document.getElementById('systolic_bp_mmHg').innerHTML = systolic_bp_mmHg;
+	document.getElementById('bp_date_measured').innerHTML = niceDate(measurements.bp_date_measured);
+	let number_of_limitations = measurements.number_of_limitations || measurements.user_number_of_limitations;
+	document.getElementById('number_of_limitations').innerHTML = number_of_limitations;
+	document.getElementById('functional_limit_date_measured').innerHTML = niceDate(measurements.functional_limit_date_measured);
+	let nr_falls_12m = measurements.nr_falls_12m || measurements.user_nr_falls_12m;
+	document.getElementById('nr_falls_12m').innerHTML = nr_falls_12m;
+	document.getElementById('nr_falls_date_measured').innerHTML = niceDate(measurements.nr_falls_date_measured);
+	let smoking = measurements.smoking || measurements.user_smoking;
+	document.getElementById('smoking').innerHTML = smoking;
+	document.getElementById('smoking_date_measured').innerHTML = niceDate(measurements.smoking_date_measured);
+	document.getElementById('has_antiepileptica').innerHTML = measurements.has_antiepileptica;
+	document.getElementById('has_ca_blocker').innerHTML = measurements.has_ca_blocker;
+	document.getElementById('has_incont_med').innerHTML = measurements.has_incont_med;
+	let education_hml = measurements.education_hml || measurements.user_education_hml;
+	document.getElementById('education_hml').innerHTML = education_hml;
+	let fear = '';
+	if(measurements.fear0 || measurements.user_fear0){ fear = 0; }
+	if(measurements.fear1 || measurements.user_fear1){ fear = 1; }
+	if(measurements.fear2 || measurements.user_fear2){ fear = 2; }
+	document.getElementById('fear').innerHTML = fear;
+	document.getElementById('fear_of_falls_date_measured').innerHTML = niceDate(measurements.fear_of_falls_date_measured);
+	if(measurements.user_values_updated){
+		document.getElementById('user_values_updated').innerHTML = niceDate(measurements.user_values_updated);
+	}
 }
 
 
@@ -707,6 +751,7 @@ function gauge_risk_score() {
 }
 
 function niceDate(dtstring) {
+	if(dtstring == null){ return ''; }
 // expects string in the form of YYYY-MM-DDTHH:MM:SS.mmmm
 	if(dtstring.match(/^([0-9]{4}.[0-9]{2}.[0-9]{2}.*)$/)){
 		let year = dtstring.substring(0,4);

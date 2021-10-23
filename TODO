@@ -17,9 +17,10 @@ Important:
 
 
 adfice: from usability
+* Write user-entered prediction model values back to database (in user_ fields) and recalculate prediction
+* rewrite prediction calculation to use user-entered values if needed
 * Get all_problems and all_labs out of database, 
   delete display_name from patient table; use display name from problem table in places where display name is used
-* consider putting entry of prediction model data on Start page instead of Model Info page
 * New placement and formatting for print button. Add icon to button.
 * Add text "richtlijnen" before ref numbers
 * Change display of fall risk on patient page to match patient portal (I think this is done but needs to be checked)
