@@ -846,6 +846,11 @@ function finalize_page_load() {
     page_load(finalize_page_setup);
 }
 
+function topFunction() {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+
 // export modules for unit testing ?
 if (typeof module !== 'undefined') {
     module.exports = {
