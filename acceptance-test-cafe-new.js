@@ -54,7 +54,15 @@ test('Check multiple viewers making changes', async t => {
     // checkbox starts invisible,
     // but becomes visible via websocket message
     // thus we check that we have received the message
-    let cb_selector = Selector(checkbox_css_selector);
+	// for some reason, display: flex makes the checkboxes invisible to TestCafe.
+	// as a workaround, set display: inline for the duration of the test.
+	const cb_selector = Selector(() => {
+		document.getElementById('div_advice_row2_C03AA03').style.display = "inline";
+		return document.getElementById('cb_C03AA03_42_3');
+	}, {
+        timeout: 1000,
+        visibilityCheck: true
+    });
     await t.expect(cb_selector.visible).ok();
     if (await cb_selector.checked) {
         await t.click(cb_selector);
@@ -75,7 +83,10 @@ test('Check multiple viewers making changes', async t => {
     let window2 = await t.openWindow(`${BASE_URL}/prep?id=68`);
 
     // verify that we show 2 visitors
-    let cb_selector2 = Selector(`input#${checkbox_id}`, {
+    const cb_selector2 = Selector(() => {
+		document.getElementById('div_advice_row2_C03AA03').style.display = "inline";
+		return document.getElementById('cb_C03AA03_42_3');
+	}, {
         timeout: 1000,
         visibilityCheck: true
     });
@@ -124,11 +135,14 @@ test('Checkbox persistence', async t => {
 
     // Open the patient window, uncheck the box if needed
     let window1 = await t.openWindow(url);
-    let checkbox1 = Selector(checkbox_css_selector, {
+	const checkbox1 = Selector(() => {
+		document.getElementById('div_advice_row2_N02AA01').style.display = "inline";
+		return document.getElementById('cb_N02AA01_76_1');
+	}, {
         timeout: 1000,
         visibilityCheck: true
     });
-    if (await checkbox1.checked) {
+	if (await checkbox1.checked) {
         await t.click(checkbox_css_selector);
     }
     await t.expect(checkbox1.checked).notOk();
@@ -136,7 +150,10 @@ test('Checkbox persistence', async t => {
 
     // Open the patient window, verify still unchecked, then check
     let window2 = await t.openWindow(url);
-    let checkbox2 = Selector(checkbox_css_selector, {
+	const checkbox2 = Selector(() => {
+		document.getElementById('div_advice_row2_N02AA01').style.display = "inline";
+		return document.getElementById('cb_N02AA01_76_1');
+	}, {
         timeout: 1000,
         visibilityCheck: true
     });
@@ -147,7 +164,10 @@ test('Checkbox persistence', async t => {
 
     // Open the patient window, verify checked
     let window3 = await t.openWindow(url);
-    let checkbox3 = Selector(checkbox_css_selector, {
+	const checkbox3 = Selector(() => {
+		document.getElementById('div_advice_row2_N02AA01').style.display = "inline";
+		return document.getElementById('cb_N02AA01_76_1');
+	}, {
         timeout: 1000,
         visibilityCheck: true
     });
@@ -384,7 +404,13 @@ test('Check "Geen advies"', async t => {
     let window1 = await t.openWindow(url);
 
     // levodopa has no advice pre-checked
-    let checkbox_selector = Selector(`input#cb_N04BA01_27_2`);
+	const checkbox_selector = Selector(() => {
+		document.getElementById('div_advice_row2_N04BA01').style.display = "inline";
+		return document.getElementById('cb_N04BA01_27_2');
+	}, {
+        timeout: 1000,
+        visibilityCheck: true
+    });
     if (await checkbox_selector.checked) {
         await t.click(checkbox_selector);
     }
