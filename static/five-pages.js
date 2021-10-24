@@ -124,42 +124,16 @@ function patient_info_meds_without_rules() {
 }
 
 function patient_info_problem_start(){
-/* TODO replace this with getting list from DB and improve formatting */
-	let all_problems =
-[['hypertensie', 'Hypertensie'],
-['angina-pectoris','Angina pectoris'],
-['myocardinfarct','Myocardinfarct'],
-['hartfalen','Decompensatio cordis'],
-['tachycardia','Tachycardie'],
-['arrhythmia','Hartritmestoornis'],
-['atriumfibrilleren','Atriumfibrilleren'],
-['orthostatische-hypotensie','Orthostatische hypotensie'],
-['autonoom-falen','Autonoom falen'],
-['diabetes','Diabetes mellitus'],
-['hyponatremia','Hyponatriëmie'],
-['hypokalemia','Hypokaliëmie'],
-['hypercalciemie','Hypercalciëmie'],
-['jicht','Jicht'],
-['delier','Delier'],
-['depressie','Depressie'],
-['angststoornis','Angststoornis'],
-['schizofrenie','Schizofrenie'],
-['dementie','Dementie'],
-['lewy-bodies-dementia','Lewy body dementie'],
-['parkinson','Ziekte van Parkinson'],
-['multiple-system-atrophy','Multisysteematrofie'],
-['progressive-supranuclear-palsy','Progressieve supranucleaire parese'],
-['epilepsy','Epilepsie'],
-['paraplegia','Paraplegie'],
-['dwaarslaesie','Dwarslaesie']]
+	let all_problems = get_patient_advice().all_problems;
 	let problems = get_patient_advice().problems;
 		let html = '<div id="problem_table_div"><table id="problem_table"><tr><th class="patient_data_td">Aandoening</th><th class="patient_data_td">Aanwezig</th></tr>';
-		for (let i = 0; i < all_problems.length; ++i) {
-			let problem = all_problems[i][0];
-			html += '<tr><td class="patient_data_td">' + all_problems[i][1] + '</td><td class="patient_data_td">';
+		let all_problem_names = Object.keys(all_problems);
+		for (let i = 0; i < all_problem_names.length; ++i) {
+			let display_name = all_problems[all_problem_names[i]];
+			html += '<tr><td class="patient_data_td">' + display_name + '</td><td class="patient_data_td">';
 			let ja_nee = 'Nee';
 			for (let j = 0; j < problems.length; ++j) {
-				if(problem == problems[j].name){
+				if(all_problem_names[i] == problems[j].name){
 					ja_nee = 'Ja';
 				}
 			}
@@ -170,8 +144,7 @@ function patient_info_problem_start(){
 }
 
 function patient_info_lab_start(){
-/* TODO replace this with getting list from DB and improve formatting */
-	let all_labs = ['natrium','kalium','calcium','eGFR'];
+	let all_labs = get_patient_advice().all_labs;
 	let labs = get_patient_advice().labs;
 		let html = '<div id="lab_table_div"><table id="lab_table"><tr><th class="patient_data_td">Lab</th><th class="patient_data_td">Datum gemeten</th><th class="patient_data_td">Waarde</th></tr>';
 		for (let i = 0; i < all_labs.length; ++i) {

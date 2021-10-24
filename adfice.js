@@ -631,6 +631,24 @@ function structureMeas(measRow) {
 	}
     return measurements;
 }
+async function getAllProblems() {
+    var sql = `/* adfice.getAllProblems */
+        SELECT problem_name
+             , display_name
+          FROM problem
+      ORDER BY id`;
+    let result = await this.sql_select(sql);
+    return result;
+}
+
+async function getAllLabs() {
+    var sql = `/* adfice.getAllLabs */
+        SELECT lab_name
+          FROM lab
+      ORDER BY id`;
+    let result = await this.sql_select(sql);
+    return result;
+}
 
 // called from AdficeWebserver
 async function getAdviceForPatient(patientIdentifier) {
@@ -729,6 +747,18 @@ async function getAdviceForPatient(patientIdentifier) {
     let debug_info = {
         data_sizes: await this.getTableSizes()
     };
+	
+	let all_problems = {};
+	let sql_problems = await this.getAllProblems();
+	for (let i = 0; i < sql_problems.length; ++i) {
+		all_problems[sql_problems[i].problem_name] = sql_problems[i].display_name;
+	}
+	
+	let all_labs = [];
+	let sql_labs = await this.getAllLabs();
+	for (let i = 0; i < sql_labs.length; ++i) {
+		all_labs.push(sql_labs[i].lab_name);
+	}
 
     let patient_advice = {};
     patient_advice.patient_id = patient_id;
@@ -746,6 +776,8 @@ async function getAdviceForPatient(patientIdentifier) {
     patient_advice.advice_text_non_med = advice_text_non_med;
     patient_advice.advice_other_text = advice_other_text;
     patient_advice.risk_score = risk_score;
+	patient_advice.all_problems = all_problems;
+	patient_advice.all_labs = all_labs;
     patient_advice.debug_info = debug_info;
 
     return patient_advice;
@@ -1013,6 +1045,8 @@ function adfice_init(db) {
         getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
         getAdviceTextsNonMedCheckboxes: getAdviceTextsNonMedCheckboxes,
         getAllAdviceTextsCheckboxes: getAllAdviceTextsCheckboxes,
+		getAllProblems: getAllProblems,
+		getAllLabs: getAllLabs,
         getExportData: getExportData,
         getFreetextsForPatient: getFreetextsForPatient,
         getLabsForPatient: getLabsForPatient,

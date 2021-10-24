@@ -1,5 +1,5 @@
 Important:
-* figure out why newest TestCafe test passes when run on its own but fails when run as part of Make
+* figure out why "Test prediction values present" fails on the first run but passes on subsequent runs
 * Fix IE bugs:
   * copy EHR text does not work in IE: copies unselected as well as selected texts
     This seems to be a real bugger. Microsoft Documentation seems to insist this problem was fixed by IE9:
@@ -22,10 +22,9 @@ Important:
 adfice: from usability
 * Write user-entered prediction model values back to database (in user_ fields) and recalculate prediction
 * add some user_ values to db and add them to tests to get full test coverage again
-* Get all_problems and all_labs out of database, 
-  delete display_name from patient table; use display name from problem table in places where display name is used
 * some sort of UI indication that the file is locked (sent to portal)
 * search and replace nonprinting chars in refpages (looks like maybe all the HTML special chars were replaced with nonprinting chars rather than the other way around...)
+* delete display_name from patient table; use display name from problem table in places where display name is used
 * content has been added for Hoe gebruik ik... (but it's really quite bad; I guess I will make new content)
 
 Valportaal
