@@ -21,4 +21,5 @@ To connect to the db as the '$DB_SCHEMA_NAME' user type:
 mariadb --defaults-file=$DB_DEFAULTS_FILE $DB_SCHEMA_NAME
 
 END_OF_MSG
-docker exec -it ${DB_SCHEMA_NAME}_mariadb bash
+DB_CONTAINER_NAME=${DB_SCHEMA_NAME}_${DB_PORT_EXTERNAL}_mariadb
+docker exec -it ${DB_CONTAINER_NAME} bash

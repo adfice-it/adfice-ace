@@ -96,13 +96,15 @@ else
 	echo
 fi
 
+DB_CONTAINER_NAME=${DB_SCHEMA_NAME}_${DB_PORT_EXTERNAL}_mariadb
+
 echo '# ensure db container is not already running'
-docker stop ${DB_SCHEMA_NAME}_mariadb || true
+docker stop ${DB_CONTAINER_NAME} || true
 
 echo '# start db container'
 docker run -d \
 	-p 127.0.0.1:${DB_PORT_EXTERNAL}:3306 \
-	--name ${DB_SCHEMA_NAME}_mariadb \
+	--name ${DB_CONTAINER_NAME} \
 	--env MYSQL_DATABASE=${DB_SCHEMA_NAME} \
 	--env MYSQL_USER=${DB_SCHEMA_NAME} \
 	--env MYSQL_PASSWORD=$DB_USER_PASSWORD \
@@ -115,15 +117,15 @@ echo "# ${DB_SCHEMA_NAME}_mariadb:$DB_DEFAULTS_FILE"
 cp -v ./${DB_SCHEMA_NAME}.my.cnf ./temp.${DB_SCHEMA_NAME}.my.cnf
 sed -i -e"s/port=${DB_PORT_EXTERNAL}/port=3306/" ./temp.${DB_SCHEMA_NAME}.my.cnf
 docker cp ./temp.${DB_SCHEMA_NAME}.my.cnf \
-	${DB_SCHEMA_NAME}_mariadb:$DB_DEFAULTS_FILE
+	${DB_CONTAINER_NAME}:$DB_DEFAULTS_FILE
 rm -v ./temp.${DB_SCHEMA_NAME}.my.cnf
 
 echo "# ${DB_SCHEMA_NAME}_mariadb:/etc/root.my.cnf"
-docker cp -L ./$ROOT_MY_CNF ${DB_SCHEMA_NAME}_mariadb:/etc/root.my.cnf
+docker cp -L ./$ROOT_MY_CNF ${DB_CONTAINER_NAME}:/etc/root.my.cnf
 
 echo '# copy SQL configuration scripts to container'
 for SQL_FILE in sql/*sql; do
-	docker cp -L $SQL_FILE ${DB_SCHEMA_NAME}_mariadb:$DB_SQL_SCRIPTS_DIR
+	docker cp -L $SQL_FILE ${DB_CONTAINER_NAME}:$DB_SQL_SCRIPTS_DIR
 done
 echo "# done copying configuration scripts"
 
@@ -141,7 +143,7 @@ while [ $i -lt 10 ]; do
 done
 
 echo "# Ensure DB Grants"
-docker exec ${DB_SCHEMA_NAME}_mariadb mariadb \
+docker exec ${DB_CONTAINER_NAME} mariadb \
 	--defaults-file=/etc/root.my.cnf \
 	--host=127.0.0.1 \
 	--port=3306 \
@@ -160,7 +162,7 @@ FLUSH PRIVILEGES;
 "
 
 echo "# Show Databases"
-docker exec ${DB_SCHEMA_NAME}_mariadb mariadb \
+docker exec ${DB_CONTAINER_NAME} mariadb \
 	--defaults-file=/etc/root.my.cnf \
 	--host=127.0.0.1 \
 	--port=3306 \
@@ -168,7 +170,7 @@ docker exec ${DB_SCHEMA_NAME}_mariadb mariadb \
 	-e "SHOW DATABASES;"
 
 echo "# Show ALL DB Grants"
-docker exec ${DB_SCHEMA_NAME}_mariadb mariadb \
+docker exec ${DB_CONTAINER_NAME} mariadb \
 	--defaults-file=/etc/root.my.cnf \
 	--host=127.0.0.1 \
 	--port=3306 \
@@ -176,7 +178,7 @@ docker exec ${DB_SCHEMA_NAME}_mariadb mariadb \
 	-e "SHOW GRANTS;"
 
 echo "# Show USER DB Grants"
-docker exec ${DB_SCHEMA_NAME}_mariadb mariadb \
+docker exec ${DB_CONTAINER_NAME} mariadb \
 	--defaults-file=/etc/${DB_SCHEMA_NAME}.my.cnf \
 	--host=127.0.0.1 \
 	--port=3306 \
@@ -185,4 +187,4 @@ docker exec ${DB_SCHEMA_NAME}_mariadb mariadb \
 
 echo '# db container is up and running'
 echo '# stop the instance with:'
-echo "    docker stop ${DB_SCHEMA_NAME}_mariadb"
+echo "    docker stop ${DB_CONTAINER_NAME}"
