@@ -407,3 +407,7 @@ img.fallguy{
 	font-size: large;
 	font-weight: bold;
 }
+
+#locked{
+	visibility: hidden;
+}

@@ -755,6 +755,7 @@ function start_page_setup() {
 	patient_info_meds_with_rules_start();
     patient_info_meds_without_rules();
 	prediction_start();
+	isFinal();
 }
 
 function prep_page_setup() {
@@ -767,6 +768,7 @@ function prep_page_setup() {
     other_med_advice_area();
     let hide_additional = 1;
     non_med_advice_area(hide_additional);
+	isFinal();
 }
 
 function consult_page_setup() {
@@ -778,6 +780,7 @@ function consult_page_setup() {
     big_nested_medicine_advice_table(include_no_checkbox_advice);
     let hide_additional = 0;
     non_med_advice_area(hide_additional);
+	isFinal();
 }
 
 function advise_page_setup() {
@@ -786,12 +789,14 @@ function advise_page_setup() {
     patient_medicine_advice_table();
     patient_other_med_advice_area();
     patient_non_med_advice();
+	isFinal();
 }
 
 function finalize_page_setup() {
     patient_info_age(); // is this needed?
     gauge_risk_score();
     div_all_ehr_text();
+	isFinal();
 }
 
 // These functions will be called from the web page, e.g.:
@@ -822,6 +827,14 @@ function finalize_page_load() {
 function topFunction() {
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+
+function isFinal(){
+	let is_final = get_patient_advice().is_final;
+	if(is_final){
+		document.body.style.opacity = 0.5;
+		document.getElementById("locked").style.visibility = "visible";
+	}
 }
 
 // export modules for unit testing ?
