@@ -99,6 +99,34 @@ node_modules/.bin/testcafe:
 	ls -l node_modules/.bin/testcafe
 	@echo "$@ complete"
 
+node_modules/showdown/dist/showdown.min.js: node_modules/.bin/testcafe
+	ls -l $@
+	@echo "$@ complete"
+
+node_modules/showdown/dist/showdown.min.js.map: node_modules/.bin/testcafe
+	ls -l $@
+	@echo "$@ complete"
+
+static/thirdparty:
+	mkdir -pv static/thirdparty
+	ls -ld static/thirdparty
+	@echo "$@ complete"
+
+static/thirdparty/showdown.min.js: static/thirdparty \
+		node_modules/showdown/dist/showdown.min.js
+	cp -v node_modules/showdown/dist/showdown.min.js static/thirdparty/
+	ls -l $@
+
+static/thirdparty/showdown.min.js.map: static/thirdparty \
+		node_modules/showdown/dist/showdown.min.js.map
+	cp -v node_modules/showdown/dist/showdown.min.js.map static/thirdparty/
+	ls -l $@
+
+thirdparty: node_modules/ws/lib/websocket-server.js \
+		static/thirdparty/showdown.min.js \
+		static/thirdparty/showdown.min.js.map
+	@echo "$@ complete"
+
 update:
 	npm update
 	@echo "$@ complete"
@@ -144,7 +172,7 @@ check-unit: dbsetup grep-ie-bad-words
 	npm test adfice
 	@echo "SUCCESS $@"
 
-check: check-unit
+check: thirdparty check-unit
 	./acceptance-test.sh
 	./acceptance-test-cafe.sh
 	./acceptance-test-cafe-new.sh
