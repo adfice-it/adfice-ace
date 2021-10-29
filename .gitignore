@@ -16,6 +16,10 @@ qemu.pid
 *.qcow2.pid
 *.qcow2.ssh
 
+showdown.min.js
+showdown.min.js.map
+static/thirdparty
+
 adfice.my.cnf
 root.adfice.my.cnf
 root.my.cnf
