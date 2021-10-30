@@ -675,6 +675,11 @@ test('Calculate prediction based on DB data', async () => {
     expect(measurement).toBe(null);
 });
 
+test('Calculate prediction based on user-entered data', async () => {
+    let measurement = await adfice.calculatePredictionResult(170);
+    expect(measurement.prediction_result).toBeGreaterThan(10);
+});
+
 test('Update prediction', async () => {
     let patient = 2;
     let before = await adfice.getPatientMeasurements(patient);
