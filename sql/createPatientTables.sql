@@ -7,7 +7,6 @@
 CREATE TABLE `patient` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `display_name` varchar(100) DEFAULT NULL,
-  `login_token` varchar(100) NOT NULL,
   `birth_date` date,
   `education_level` varchar(100),
   `age` int unsigned,
@@ -15,8 +14,7 @@ CREATE TABLE `patient` (
   `is_final` tinyint(1),
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `row_updated` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `login_token` (`login_token`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `patient_history` (
@@ -25,7 +23,6 @@ CREATE TABLE `patient_history` (
   `log_op` tinyint NOT NULL,
   `id` int unsigned NOT NULL,
   `display_name` varchar(100),
-  `login_token` varchar(100) NOT NULL,
   `birth_date` date,
   `education_level` varchar(100),
   `age` int unsigned,
@@ -48,7 +45,6 @@ CREATE TRIGGER patient_history_insert
           0,
           NEW.id,
           NEW.display_name,
-          NEW.login_token,
           NEW.birth_date,
           NEW.education_level,
           NEW.age,
@@ -68,7 +64,6 @@ CREATE TRIGGER patient_history_update
           1,
           OLD.id,
           OLD.display_name,
-          OLD.login_token,
           OLD.birth_date,
           OLD.education_level,
           OLD.age,
@@ -88,7 +83,6 @@ CREATE TRIGGER patient_history_delete
           2,
           OLD.id,
           OLD.display_name,
-          OLD.login_token,
           OLD.birth_date,
           OLD.education_level,
           OLD.age,
