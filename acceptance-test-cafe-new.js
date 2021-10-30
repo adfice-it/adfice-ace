@@ -21,6 +21,35 @@ fixture `Adfice`;
 
 const getLocation = ClientFunction(() => document.location.href);
 
+// for some reason, display: flex makes the checkboxes invisible to TestCafe.
+// as a workaround, set display: inline for the duration of the test.
+async function change_flex_style_to_inline(t) {
+    let client_func = ClientFunction(function() {
+        let sheets = document.styleSheets;
+        for (let i = 0; i < sheets.length; ++i) {
+            if (sheets[i] !== undefined) {
+                let rules = sheets[i].cssRules;
+                for (let j = 0; j < rules.length; ++j) {
+                    let rule = rules[j];
+                    let display_style = rule.style['display'];
+                    if (display_style == 'flex') {
+                        console.log('before', rule.style['display']);
+                        rule.style['display'] = 'inline';
+                        console.log('after', rule.style['display']);
+                    }
+                }
+            }
+        }
+    });
+    await client_func();
+}
+
+async function change_view(t, button, url_fragment) {
+    await t.click(button);
+    await t.expect(getLocation()).contains(url_fragment);
+    await change_flex_style_to_inline(t);
+}
+
 // TODO: make launching of the AdficeWebserver the job of the test, and
 // TODO: have each test launch a different instance on a different port
 
@@ -29,6 +58,8 @@ test('Check multiple viewers making changes', async t => {
     let window1 = await t.openWindow(url);
 
     let selector = Selector('body');
+    await t.expect(selector.exists).ok();
+    await change_flex_style_to_inline(t);
 
     // initial check that patient data is rendered
     await t.expect(selector.withText('Indicatie hypertensie').exists).ok()
@@ -51,18 +82,7 @@ test('Check multiple viewers making changes', async t => {
     const oldFreetext = "old";
     const newFreetext = "foo";
 
-    // checkbox starts invisible,
-    // but becomes visible via websocket message
-    // thus we check that we have received the message
-    // for some reason, display: flex makes the checkboxes invisible to TestCafe.
-    // as a workaround, set display: inline for the duration of the test.
-    const cb_selector = Selector(() => {
-        document.getElementById('div_advice_row2_C03AA03').style.display = "inline";
-        return document.getElementById('cb_C03AA03_42_3');
-    }, {
-        timeout: 1000,
-        visibilityCheck: true
-    });
+    let cb_selector = Selector('#cb_C03AA03_42_3');
     await t.expect(cb_selector.visible).ok();
     if (await cb_selector.checked) {
         await t.click(cb_selector);
@@ -81,15 +101,10 @@ test('Check multiple viewers making changes', async t => {
 
     // open a second window and check a box
     let window2 = await t.openWindow(`${BASE_URL}/prep?id=68`);
+    await change_flex_style_to_inline(t);
 
     // verify that we show 2 visitors
-    const cb_selector2 = Selector(() => {
-        document.getElementById('div_advice_row2_C03AA03').style.display = "inline";
-        return document.getElementById('cb_C03AA03_42_3');
-    }, {
-        timeout: 1000,
-        visibilityCheck: true
-    });
+    let cb_selector2 = Selector('#cb_C03AA03_42_3');
     await t.expect(Selector(view_cnt_css_sel).withText("2").exists).ok();
     await t.expect(Selector(view_cnt_css_sel).withText("2").visible).ok();
     await t.switchToWindow(window1);
@@ -135,13 +150,8 @@ test('Checkbox persistence', async t => {
 
     // Open the patient window, uncheck the box if needed
     let window1 = await t.openWindow(url);
-    const checkbox1 = Selector(() => {
-        document.getElementById('div_advice_row2_N02AA01').style.display = "inline";
-        return document.getElementById('cb_N02AA01_76_1');
-    }, {
-        timeout: 1000,
-        visibilityCheck: true
-    });
+    await change_flex_style_to_inline(t);
+    let checkbox1 = Selector('#cb_N02AA01_76_1');
     if (await checkbox1.checked) {
         await t.click(checkbox_css_selector);
     }
@@ -150,13 +160,8 @@ test('Checkbox persistence', async t => {
 
     // Open the patient window, verify still unchecked, then check
     let window2 = await t.openWindow(url);
-    const checkbox2 = Selector(() => {
-        document.getElementById('div_advice_row2_N02AA01').style.display = "inline";
-        return document.getElementById('cb_N02AA01_76_1');
-    }, {
-        timeout: 1000,
-        visibilityCheck: true
-    });
+    await change_flex_style_to_inline(t);
+    let checkbox2 = Selector('#cb_N02AA01_76_1');
     await t.expect(checkbox2.checked).notOk();
     await t.click(checkbox_css_selector);
     await t.expect(checkbox2.checked).ok();
@@ -164,37 +169,10 @@ test('Checkbox persistence', async t => {
 
     // Open the patient window, verify checked
     let window3 = await t.openWindow(url);
-    const checkbox3 = Selector(() => {
-        document.getElementById('div_advice_row2_N02AA01').style.display = "inline";
-        return document.getElementById('cb_N02AA01_76_1');
-    }, {
-        timeout: 1000,
-        visibilityCheck: true
-    });
+    await change_flex_style_to_inline(t);
+    let checkbox3 = Selector('#cb_N02AA01_76_1');
     await t.expect(checkbox3.checked).ok();
 });
-
-
-async function change_flex_style_to_inline(t) {
-    let client_func = ClientFunction(function() {
-        let sheets = document.styleSheets;
-        for (let i = 0; i < sheets.length; ++i) {
-            if (sheets[i] !== undefined) {
-                let rules = sheets[i].cssRules;
-                for (let j = 0; j < rules.length; ++j) {
-                    let rule = rules[j];
-                    let display_style = rule.style['display'];
-                    if (display_style == 'flex') {
-                        console.log('before', rule.style['display']);
-                        rule.style['display'] = 'inline';
-                        console.log('after', rule.style['display']);
-                    }
-                }
-            }
-        }
-    });
-    await client_func();
-}
 
 test('Test selecting views', async t => {
     let url = `${BASE_URL}/prep?id=85`;
@@ -230,7 +208,6 @@ test('Test selecting views', async t => {
     await t.expect(checkbox0.exists).ok();
     await t.expect(checkbox1.exists).ok();
     await t.expect(checkboxOther.exists).ok();
-
 
     // set checkbox0 to unchecked, checkbox1 to checked
     {
@@ -285,9 +262,7 @@ test('Test selecting views', async t => {
     await t.expect(rowOther.visible).ok();
 
     // try switching to the advise view
-    await t.click(button_advise_view);
-    await t.expect(getLocation()).contains(`${BASE_URL}/advise?id=85`);
-    await change_flex_style_to_inline(t);
+    await change_view(t, button_advise_view, `${BASE_URL}/advise?id=85`);
     await t.expect(div_advice_M01AB05.visible).notOk();
     await t.expect(div_ehr_box.visible).notOk();
     // the patient texts are only visible if checked in prep view
@@ -296,27 +271,21 @@ test('Test selecting views', async t => {
     await t.expect(patientOther.visible).notOk();
 
     // try switching to the consult view
-    await t.click(button_consult_view);
-    await t.expect(getLocation()).contains(`${BASE_URL}/consult?id=85`);
-    await change_flex_style_to_inline(t);
+    await change_view(t, button_consult_view, `${BASE_URL}/consult?id=85`);
     await t.expect(div_advice_M01AB05.visible).notOk();
     await t.expect(div_ehr_box.visible).notOk();
     await t.expect(row0.visible).notOk();
     await t.expect(row1.visible).ok();
 
     // try switching back to the prep view
-    await t.click(button_prep_view);
-    await t.expect(getLocation()).contains(`${BASE_URL}/prep?id=85`);
-    await change_flex_style_to_inline(t);
+    await change_view(t, button_prep_view, `${BASE_URL}/prep?id=85`);
     await t.expect(div_advice_M01AB05.visible).ok();
     await t.expect(div_ehr_box.visible).notOk();
     await t.expect(row0.visible).ok();
     await t.expect(row1.visible).ok();
     await t.expect(rowOther.visible).ok();
 
-    await t.click(button_finalize_view);
-    await t.expect(getLocation()).contains(`${BASE_URL}/finalize?id=85`);
-    await change_flex_style_to_inline(t);
+    await change_view(t, button_finalize_view, `${BASE_URL}/finalize?id=85`);
     // the ehr texts are only ever visible if checked
     await t.expect(div_ehr_box.visible).ok();
     await t.expect(ehr0.visible).notOk();
@@ -438,15 +407,10 @@ test('Test finalize and renew', async t => {
 test('Check "Geen advies"', async t => {
     let url = `${BASE_URL}/prep?id=162`;
     let window1 = await t.openWindow(url);
+    await change_flex_style_to_inline(t);
 
     // levodopa has no advice pre-checked
-    const checkbox_selector = Selector(() => {
-        document.getElementById('div_advice_row2_N04BA01').style.display = "inline";
-        return document.getElementById('cb_N04BA01_27_2');
-    }, {
-        timeout: 1000,
-        visibilityCheck: true
-    });
+    const checkbox_selector = Selector('#cb_N04BA01_27_2');
     if (await checkbox_selector.checked) {
         await t.click(checkbox_selector);
     }
@@ -455,6 +419,7 @@ test('Check "Geen advies"', async t => {
     // switch to the advies view
     let button_advise_view = Selector('button#button-advise-view');
     await t.click(button_advise_view);
+    await change_flex_style_to_inline(t);
 
     // locate the "Geen advies" text
     let ga_selector = Selector("div#geen_advies_N04BA01");
@@ -463,6 +428,7 @@ test('Check "Geen advies"', async t => {
     // go to doctor view
     let button_prep_view = Selector('button#button-prep-view');
     await t.click(button_prep_view);
+    await change_flex_style_to_inline(t);
 
     // check some advice
     await t.click(checkbox_selector);
@@ -470,10 +436,12 @@ test('Check "Geen advies"', async t => {
 
     // go to patient view
     await t.click(button_advise_view);
+    await change_flex_style_to_inline(t);
     await t.expect(ga_selector.visible).notOk();
 
     // reset the test
     await t.click(button_prep_view);
+    await change_flex_style_to_inline(t);
     await t.click(checkbox_selector);
     await t.expect(checkbox_selector.checked).notOk();
 });
