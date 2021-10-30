@@ -1,11 +1,18 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
 -- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 
+CREATE TABLE `etl_mrn_patient` (
+  `patient_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `mrn` varchar(250) DEFAULT NULL,
+   PRIMARY KEY (`patient_id`),
+   UNIQUE KEY (`mrn`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- creating patient table, log table, and triggers
 --
 CREATE TABLE `patient` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL,
   `display_name` varchar(100) DEFAULT NULL,
   `birth_date` date,
   `education_level` varchar(100),
