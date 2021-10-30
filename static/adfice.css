@@ -91,6 +91,7 @@ div.patient_data {
 }
 #patient-labs{
 	margin: 1em;
+	width; 100%;
 }
 
 th,td.patient_data_td {
@@ -301,6 +302,10 @@ div.refpages{
 	margin: 1em;
 	padding: 1em;
 
+}
+
+#footnote_missing{
+	font-size: 0.8em;
 }
 
 #prediction_data_container{

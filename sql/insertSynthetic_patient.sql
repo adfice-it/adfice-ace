@@ -186,3 +186,10 @@ INSERT INTO patient (id,display_name,login_token,birth_date,age) VALUES
 (167,"Mw.Test7","ltoken7",'1940-06-16',81),
 (168,"Mw.Test8","ltoken8",'1940-06-16',81),
 (169,"Mw.Test9","ltoken9",'1940-06-16',81);
+
+/* fake patients for prediction model tests */
+INSERT INTO patient (id,display_name,login_token,birth_date,age) VALUES
+(170,"Mevr. User-Entered","mvruserentered",'1940-06-16',81),
+(171,"Mevr. User-Entered1","mvruserentered1",'1940-06-16',81),
+(172,"Mevr. User-Entered2","mvruserentered2",'1940-06-16',81),
+(173,"Mevr. User-Entered3","mvruserentered3",'1940-06-16',81);

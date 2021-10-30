@@ -478,4 +478,30 @@ test('Test prediction values present', async t => {
     await t.expect(prediction_table.withText("21.5").exists).ok();
 	await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
 });
+
+test('Test prediction values present when user-entered', async t => {
+	let url = `${BASE_URL}/start?id=170`;
+    let window1 = await t.openWindow(url);
+
+    let prediction_table = Selector("#prediction_data_container");
+    await t.expect(prediction_table.withText("16.6").exists).ok();
+	await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
+});
+
+test('Test user entering values', async t => {
+	let url = `${BASE_URL}/start?id=173`;
+    let window1 = await t.openWindow(url);
+
+    let missing_table = Selector("#prediction_missing_container");
+	await t.expect(missing_table.withText("grijpkracht").exists).notOk();
+	await t.expect(missing_table.withText("roker").exists).ok();
+	
+/*	let smoking_dropdown = Selector("#smoking_dropdown");
+	await t
+        .click(smoking_dropdown)
+        .click(smoking_dropdown('option', { text: 'Ja' }));
+	var selectedIndex = await(ClientFunction(() => document.getElementsByTagName('select')[0].selectedIndex)());
+    expect(selectedIndex).eql(1);
+*/
+});
 }

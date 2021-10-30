@@ -184,18 +184,28 @@ function patient_info_meds_with_rules_start(){
 
 function prediction_start(){
 	let measurements = get_patient_advice().measurements;
-	if(measurements.prediction_result == null){
+	// for some unholy reason, measurements.prediction_result is null in IE when the page first loads. We'll use risk_score, which is not null.
+	let risk_score = get_patient_advice().risk_score;
+	if(risk_score == null){
+		// if we do not have a prediction result, 
+		// let the user enter prediction model data and hide the prediction model info
 		missing_data_form(measurements);
 		document.getElementById('prediction_data_container').style.display = 'none';
 	} else {
-		document.getElementById('prediction_missing_container').style.display = 'none';
 		prediction_data_start(measurements);
+		// if we have a prediction model result but it came from user-entered data, allow the user to change it
+		if (measurements.user_values_updated != null) {
+			missing_data_form(measurements);
+		} else {
+			// if we actually got complete data from the EHR, don't let the user change it
+			document.getElementById('prediction_missing_container').style.display = 'none';
+		}
 	}
 }
 
 function missing_data_form(measurements){
 	let footnote = '';
-	let html = '<h3>Data voor predictiemodel</h3><p>Er is nog onvoldoende data om een valrisico te berekenen. Vul de onderstaande data in om een risico te berekenen.</p>\
+	let html = '<h3>Data voor predictiemodel</h3><p>Vul de onderstaande data in om een risico te (her)berekenen.</p>\
 				<form>\
 				<table class="prediction_missing" id = "prediction_missing_table">\
 				<tr><th class="prediction_missing">variabel</th><th class="prediction_missing">huidige waarde</th><th class="prediction_missing" >nieuwe waarde</th></tr>';
@@ -203,7 +213,7 @@ function missing_data_form(measurements){
 		html += '<tr><td class="prediction_missing">GDS score</td><td class="prediction_missing">';
 		if(measurements.user_GDS_score != null){html += measurements.user_GDS_score;}
 		html += '</td><td class="prediction_missing"><select name = "GDS_dropdown">'
-		for (let i = 1; i <= 30; ++i) {
+		for (let i = 0; i <= 30; ++i) {
 			html += '<option value = "' + i + '">' + i + '</option>'
 		}
 		html += '</select></td>';
@@ -235,8 +245,7 @@ function missing_data_form(measurements){
 		html += '<tr><td class="prediction_missing">aantal functionele beperkingen*</td><td class="prediction_missing">';
 		if(measurements.user_number_of_limitations != null){ html += measurements.user_number_of_limitations;}
 		html += '</td><td class="prediction_missing"><select name = "ADL_dropdown">'
-		let i = 0;
-		for (let i = 1; i <= 5; ++i) {
+		for (let i = 0; i <= 5; ++i) {
 			html += '<option value = "' + i + '">' + i + '</option>'
 		}
 		html += '</select></td>';
@@ -255,7 +264,7 @@ function missing_data_form(measurements){
 	if(measurements.smoking == null){ 
 		html += '<tr><td class="prediction_missing">roker</td><td class="prediction_missing">';
 		if(measurements.user_smoking != null){ html += measurements.user_smoking;}
-		html += '</td><td class="prediction_missing"><select name = "smoking_dropdown"><option value = "1">Ja</option><option value = "0">Nee </option></select></td>';
+		html += '</td><td class="prediction_missing"><select id = "smoking_dropdown" name = "smoking_dropdown"><option value = "1">Ja</option><option value = "0">Nee </option></select></td>';
 	}
 	if(measurements.education_hml == null){ 
 		html += '<tr><td class="prediction_missing">opleidingsniveau**</td><td class="prediction_missing">';
@@ -274,7 +283,7 @@ function missing_data_form(measurements){
 		footnote += '***Kies 0 als de pati&euml;nt heeft <q>helemaal niet bang</q> beantwoord bij alle items op de FES-I SF7. Kies 1 als de pati&euml;nt heeft <q>Een beetje bezorgd</q> of <q>redelijk bezorgd</q> beantwoord bij tenminste 1 vraag, en kies 2 als de pati&euml;nt heeft <q>Erg bezorgd</q> beantwoord bij tenminste 1 vraag.';
 	}
 	html += '</table><input type="button" value="Verstuur" onclick="updateMeas()"></form>';
-	html += footnote;
+	html += '<div id="footnote_missing">' + footnote + '</div><!-- footnote_missing -->';
 	document.getElementById('prediction_missing_container').innerHTML = html;
 }
 
@@ -283,46 +292,51 @@ function updateMeas(){
 }
 
 function prediction_data_start(measurements){
-	let GDS_score = measurements.GDS_score || measurements.user_GDS_score;
-	document.getElementById('GDS_score').innerHTML = GDS_score;
+	document.getElementById('GDS_score').innerHTML = niceValue(measurements.GDS_score);
+	document.getElementById('user_GDS_score').innerHTML = niceValue(measurements.user_GDS_score);
 	document.getElementById('GDS_date_measured').innerHTML = niceDate(measurements.GDS_date_measured);
-	let grip_kg = measurements.grip_kg || measurements.user_grip_kg;
-	document.getElementById('grip_kg').innerHTML = grip_kg;
+	document.getElementById('grip_kg').innerHTML = niceValue(measurements.grip_kg);
+	document.getElementById('user_grip_kg').innerHTML = niceValue(measurements.user_grip_kg);
 	document.getElementById('grip_date_measured').innerHTML = niceDate(measurements.grip_date_measured);
-	let walking_speed_m_per_s = measurements.walking_speed_m_per_s || measurements.user_walking_speed_m_per_s;
-	document.getElementById('walking_speed_m_per_s').innerHTML = walking_speed_m_per_s;
+	document.getElementById('walking_speed_m_per_s').innerHTML = niceValue(measurements.walking_speed_m_per_s);
+	document.getElementById('user_walking_speed_m_per_s').innerHTML = niceValue(measurements.user_walking_speed_m_per_s);
 	document.getElementById('walking_date_measured').innerHTML = niceDate(measurements.walking_date_measured);
 	let user_BMI = null;
 	if(measurements.user_weight_kg != null && measurements.user_height_cm != null){
 		user_BMI = measurements.user_weight_kg / ((measurements.user_height_cm / 100)^2);
 	}
-	let BMI = measurements.BMI || user_BMI;
-	document.getElementById('BMI').innerHTML = BMI;
+	document.getElementById('BMI').innerHTML = niceValue(measurements.BMI);
+	document.getElementById('user_bmi_calc').innerHTML = niceValue(user_BMI);
 	document.getElementById('BMI_date_measured').innerHTML = niceDate(measurements.BMI_date_measured);
-	let systolic_bp_mmHg = measurements.systolic_bp_mmHg || measurements.user_systolic_bp_mmHg;
-	document.getElementById('systolic_bp_mmHg').innerHTML = systolic_bp_mmHg;
+	document.getElementById('systolic_bp_mmHg').innerHTML = niceValue(measurements.systolic_bp_mmHg);
+	document.getElementById('user_systolic_bp_mmHg').innerHTML = niceValue(measurements.user_systolic_bp_mmHg);
 	document.getElementById('bp_date_measured').innerHTML = niceDate(measurements.bp_date_measured);
-	let number_of_limitations = measurements.number_of_limitations || measurements.user_number_of_limitations;
-	document.getElementById('number_of_limitations').innerHTML = number_of_limitations;
+	document.getElementById('number_of_limitations').innerHTML = niceValue(measurements.number_of_limitations);
+	document.getElementById('user_number_of_limitations').innerHTML = niceValue(measurements.user_number_of_limitations);
 	document.getElementById('functional_limit_date_measured').innerHTML = niceDate(measurements.functional_limit_date_measured);
-	let nr_falls_12m = measurements.nr_falls_12m || measurements.user_nr_falls_12m;
-	document.getElementById('nr_falls_12m').innerHTML = nr_falls_12m;
+	document.getElementById('nr_falls_12m').innerHTML = niceValue(measurements.nr_falls_12m);
+	document.getElementById('user_nr_falls_12m').innerHTML = niceValue(measurements.user_nr_falls_12m);
 	document.getElementById('nr_falls_date_measured').innerHTML = niceDate(measurements.nr_falls_date_measured);
-	let smoking = measurements.smoking || measurements.user_smoking;
-	document.getElementById('smoking').innerHTML = smoking;
+	document.getElementById('smoking').innerHTML = niceValue(measurements.smoking);
+	document.getElementById('user_smoking').innerHTML = niceValue(measurements.user_smoking);
 	document.getElementById('smoking_date_measured').innerHTML = niceDate(measurements.smoking_date_measured);
-	document.getElementById('has_antiepileptica').innerHTML = measurements.has_antiepileptica;
-	document.getElementById('has_ca_blocker').innerHTML = measurements.has_ca_blocker;
-	document.getElementById('has_incont_med').innerHTML = measurements.has_incont_med;
-	let education_hml = measurements.education_hml || measurements.user_education_hml;
-	document.getElementById('education_hml').innerHTML = education_hml;
+	document.getElementById('has_antiepileptica').innerHTML = niceValue(measurements.has_antiepileptica);
+	document.getElementById('has_ca_blocker').innerHTML = niceValue(measurements.has_ca_blocker);
+	document.getElementById('has_incont_med').innerHTML = niceValue(measurements.has_incont_med);
+	document.getElementById('education_hml').innerHTML = niceValue(measurements.education_hml);
+	document.getElementById('user_education_hml').innerHTML = niceValue(measurements.user_education_hml);
 	let fear = '';
-	if(measurements.fear0 || measurements.user_fear0){ fear = 0; }
-	if(measurements.fear1 || measurements.user_fear1){ fear = 1; }
-	if(measurements.fear2 || measurements.user_fear2){ fear = 2; }
+	if(measurements.fear0){ fear = 0; }
+	if(measurements.fear1){ fear = 1; }
+	if(measurements.fear2){ fear = 2; }
 	document.getElementById('fear').innerHTML = fear;
+	fear = '';
+	if(measurements.user_fear0){ fear = 0; }
+	if(measurements.user_fear1){ fear = 1; }
+	if(measurements.user_fear2){ fear = 2; }
+	document.getElementById('user_fear').innerHTML = fear;
 	document.getElementById('fear_of_falls_date_measured').innerHTML = niceDate(measurements.fear_of_falls_date_measured);
-	if(measurements.user_values_updated){
+	if(measurements.user_values_updated != null){
 		document.getElementById('user_values_updated').innerHTML = niceDate(measurements.user_values_updated);
 	}
 }
@@ -741,7 +755,16 @@ function niceDate(dtstring) {
 	} else {
 		return 'onbekend';
 	}
-   }
+}
+
+// Workaround for IE literally displaying "null" for null values
+function niceValue(value) {
+	if(value == null || typeof(value) == 'unknown'){ 
+		return ''; 
+	} else {
+		return value.toString();
+	}
+}
 
 // the following functions specify the needed elements which vary
 // between pages and need to be populated on load
