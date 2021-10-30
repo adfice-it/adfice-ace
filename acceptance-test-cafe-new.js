@@ -54,12 +54,12 @@ test('Check multiple viewers making changes', async t => {
     // checkbox starts invisible,
     // but becomes visible via websocket message
     // thus we check that we have received the message
-	// for some reason, display: flex makes the checkboxes invisible to TestCafe.
-	// as a workaround, set display: inline for the duration of the test.
-	const cb_selector = Selector(() => {
-		document.getElementById('div_advice_row2_C03AA03').style.display = "inline";
-		return document.getElementById('cb_C03AA03_42_3');
-	}, {
+    // for some reason, display: flex makes the checkboxes invisible to TestCafe.
+    // as a workaround, set display: inline for the duration of the test.
+    const cb_selector = Selector(() => {
+        document.getElementById('div_advice_row2_C03AA03').style.display = "inline";
+        return document.getElementById('cb_C03AA03_42_3');
+    }, {
         timeout: 1000,
         visibilityCheck: true
     });
@@ -84,9 +84,9 @@ test('Check multiple viewers making changes', async t => {
 
     // verify that we show 2 visitors
     const cb_selector2 = Selector(() => {
-		document.getElementById('div_advice_row2_C03AA03').style.display = "inline";
-		return document.getElementById('cb_C03AA03_42_3');
-	}, {
+        document.getElementById('div_advice_row2_C03AA03').style.display = "inline";
+        return document.getElementById('cb_C03AA03_42_3');
+    }, {
         timeout: 1000,
         visibilityCheck: true
     });
@@ -135,14 +135,14 @@ test('Checkbox persistence', async t => {
 
     // Open the patient window, uncheck the box if needed
     let window1 = await t.openWindow(url);
-	const checkbox1 = Selector(() => {
-		document.getElementById('div_advice_row2_N02AA01').style.display = "inline";
-		return document.getElementById('cb_N02AA01_76_1');
-	}, {
+    const checkbox1 = Selector(() => {
+        document.getElementById('div_advice_row2_N02AA01').style.display = "inline";
+        return document.getElementById('cb_N02AA01_76_1');
+    }, {
         timeout: 1000,
         visibilityCheck: true
     });
-	if (await checkbox1.checked) {
+    if (await checkbox1.checked) {
         await t.click(checkbox_css_selector);
     }
     await t.expect(checkbox1.checked).notOk();
@@ -150,10 +150,10 @@ test('Checkbox persistence', async t => {
 
     // Open the patient window, verify still unchecked, then check
     let window2 = await t.openWindow(url);
-	const checkbox2 = Selector(() => {
-		document.getElementById('div_advice_row2_N02AA01').style.display = "inline";
-		return document.getElementById('cb_N02AA01_76_1');
-	}, {
+    const checkbox2 = Selector(() => {
+        document.getElementById('div_advice_row2_N02AA01').style.display = "inline";
+        return document.getElementById('cb_N02AA01_76_1');
+    }, {
         timeout: 1000,
         visibilityCheck: true
     });
@@ -164,10 +164,10 @@ test('Checkbox persistence', async t => {
 
     // Open the patient window, verify checked
     let window3 = await t.openWindow(url);
-	const checkbox3 = Selector(() => {
-		document.getElementById('div_advice_row2_N02AA01').style.display = "inline";
-		return document.getElementById('cb_N02AA01_76_1');
-	}, {
+    const checkbox3 = Selector(() => {
+        document.getElementById('div_advice_row2_N02AA01').style.display = "inline";
+        return document.getElementById('cb_N02AA01_76_1');
+    }, {
         timeout: 1000,
         visibilityCheck: true
     });
@@ -404,10 +404,10 @@ test('Check "Geen advies"', async t => {
     let window1 = await t.openWindow(url);
 
     // levodopa has no advice pre-checked
-	const checkbox_selector = Selector(() => {
-		document.getElementById('div_advice_row2_N04BA01').style.display = "inline";
-		return document.getElementById('cb_N04BA01_27_2');
-	}, {
+    const checkbox_selector = Selector(() => {
+        document.getElementById('div_advice_row2_N04BA01').style.display = "inline";
+        return document.getElementById('cb_N04BA01_27_2');
+    }, {
         timeout: 1000,
         visibilityCheck: true
     });
@@ -452,56 +452,56 @@ test('Test problem list', async t => {
 });
 
 test('Test lab list', async t => {
-	let url = `${BASE_URL}/start?id=27`;
+    let url = `${BASE_URL}/start?id=27`;
     let window1 = await t.openWindow(url);
 
     let lab_table = Selector("#lab_table");
     await t.expect(lab_table.withText("natrium").exists).ok();
-	await t.expect(lab_table.withText("140").exists).ok();
+    await t.expect(lab_table.withText("140").exists).ok();
 });
 
 test('Test prediction values missing', async t => {
-	let url = `${BASE_URL}/start?id=27`;
+    let url = `${BASE_URL}/start?id=27`;
     let window1 = await t.openWindow(url);
 
     let missing_table = Selector("#prediction_missing_container");
     await t.expect(missing_table.withText("grijpkracht").exists).ok();
-	await t.expect(missing_table.withText("anti-epileptica").exists).notOk();
+    await t.expect(missing_table.withText("anti-epileptica").exists).notOk();
 });
 
 if (0) {
-test('Test prediction values present', async t => {
-	let url = `${BASE_URL}/start?id=2`;
-    let window1 = await t.openWindow(url);
+    test('Test prediction values present', async t => {
+        let url = `${BASE_URL}/start?id=2`;
+        let window1 = await t.openWindow(url);
 
-    let prediction_table = Selector("#prediction_data_container");
-    await t.expect(prediction_table.withText("21.5").exists).ok();
-	await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
-});
+        let prediction_table = Selector("#prediction_data_container");
+        await t.expect(prediction_table.withText("21.5").exists).ok();
+        await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
+    });
 
-test('Test prediction values present when user-entered', async t => {
-	let url = `${BASE_URL}/start?id=170`;
-    let window1 = await t.openWindow(url);
+    test('Test prediction values present when user-entered', async t => {
+        let url = `${BASE_URL}/start?id=170`;
+        let window1 = await t.openWindow(url);
 
-    let prediction_table = Selector("#prediction_data_container");
-    await t.expect(prediction_table.withText("16.6").exists).ok();
-	await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
-});
+        let prediction_table = Selector("#prediction_data_container");
+        await t.expect(prediction_table.withText("16.6").exists).ok();
+        await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
+    });
 
-test('Test user entering values', async t => {
-	let url = `${BASE_URL}/start?id=173`;
-    let window1 = await t.openWindow(url);
+    test('Test user entering values', async t => {
+        let url = `${BASE_URL}/start?id=173`;
+        let window1 = await t.openWindow(url);
 
-    let missing_table = Selector("#prediction_missing_container");
-	await t.expect(missing_table.withText("grijpkracht").exists).notOk();
-	await t.expect(missing_table.withText("roker").exists).ok();
-	
-/*	let smoking_dropdown = Selector("#smoking_dropdown");
-	await t
-        .click(smoking_dropdown)
-        .click(smoking_dropdown('option', { text: 'Ja' }));
-	var selectedIndex = await(ClientFunction(() => document.getElementsByTagName('select')[0].selectedIndex)());
-    expect(selectedIndex).eql(1);
-*/
-});
+        let missing_table = Selector("#prediction_missing_container");
+        await t.expect(missing_table.withText("grijpkracht").exists).notOk();
+        await t.expect(missing_table.withText("roker").exists).ok();
+
+        /*	let smoking_dropdown = Selector("#smoking_dropdown");
+        	await t
+                .click(smoking_dropdown)
+                .click(smoking_dropdown('option', { text: 'Ja' }));
+        	var selectedIndex = await(ClientFunction(() => document.getElementsByTagName('select')[0].selectedIndex)());
+            expect(selectedIndex).eql(1);
+        */
+    });
 }

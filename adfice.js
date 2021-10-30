@@ -383,23 +383,27 @@ async function calculatePredictionResult(patient_id) {
         return null;
     }
     let measurement = measurements[0];
-	let GDS_score = measurement['GDS_score'] || measurement['user_GDS_score'];
-	let grip_kg = measurement['grip_kg'] || measurement['user_grip_kg'];
-	let walking_speed_m_per_s = measurement['walking_speed_m_per_s'] || measurement['user_walking_speed_m_per_s'];
-	let user_BMI = null;
-	if(measurement['user_height_cm'] != null && measurement['user_weight_kg'] != null){
-		user_BMI = measurement['user_weight_kg']/((measurement['user_height_cm'])^2);
-	}
-	let BMI = measurement['BMI'] || user_BMI;
-	let systolic_bp_mmHg = measurement['systolic_bp_mmHg'] || measurement['user_systolic_bp_mmHg'];
-	let number_of_limitations = measurement['number_of_limitations'] || measurement['user_number_of_limitations'];
-	let nr_falls_12m = measurement['nr_falls_12m'] || measurement['user_nr_falls_12m'];
-	let smoking = measurement['smoking'] || measurement['user_smoking'];
-	let education_hml = measurement['education_hml'] || measurement['user_education_hml'];
-	let fear1 = 0;
-	if(measurement['fear1'] ==1 || measurement['user_fear1'] == 1){fear1 = 1;}
-	let fear2 = 0;
-	if(measurement['fear2'] ==1 || measurement['user_fear2'] == 1){fear2 = 1;}
+    let GDS_score = measurement['GDS_score'] || measurement['user_GDS_score'];
+    let grip_kg = measurement['grip_kg'] || measurement['user_grip_kg'];
+    let walking_speed_m_per_s = measurement['walking_speed_m_per_s'] || measurement['user_walking_speed_m_per_s'];
+    let user_BMI = null;
+    if (measurement['user_height_cm'] != null && measurement['user_weight_kg'] != null) {
+        user_BMI = measurement['user_weight_kg'] / ((measurement['user_height_cm']) ^ 2);
+    }
+    let BMI = measurement['BMI'] || user_BMI;
+    let systolic_bp_mmHg = measurement['systolic_bp_mmHg'] || measurement['user_systolic_bp_mmHg'];
+    let number_of_limitations = measurement['number_of_limitations'] || measurement['user_number_of_limitations'];
+    let nr_falls_12m = measurement['nr_falls_12m'] || measurement['user_nr_falls_12m'];
+    let smoking = measurement['smoking'] || measurement['user_smoking'];
+    let education_hml = measurement['education_hml'] || measurement['user_education_hml'];
+    let fear1 = 0;
+    if (measurement['fear1'] == 1 || measurement['user_fear1'] == 1) {
+        fear1 = 1;
+    }
+    let fear2 = 0;
+    if (measurement['fear2'] == 1 || measurement['user_fear2'] == 1) {
+        fear2 = 1;
+    }
     let prediction = cp.calculatePredictionDB(
         GDS_score,
         grip_kg,
@@ -536,99 +540,99 @@ function structureLabs(labRows) {
 
 function structureMeas(measRow) {
     let measurements = {};
-	// seems like there ought to be a less horrible way to do this, but this'll do.
-	// the ETL should prevent this from happening in real life, but it definitely happens in the test data.
-	if (typeof(measRow) == 'undefined' || measRow == null || measRow.length !=1){
-		    measurements['user_education_hml'] = null;
-			measurements['education_hml'] = null;
-			measurements['user_height_cm'] = null;
-			measurements['height_cm'] = null;
-			measurements['height_date_measured'] = null;
-			measurements['user_weight_kg'] = null;
-			measurements['weight_kg'] = null;
-			measurements['weight_date_measured'] = null;
-			measurements['BMI'] = null;
-			measurements['BMI_date_measured'] = null;
-			measurements['user_GDS_score'] = null;
-			measurements['GDS_score'] = null;
-			measurements['GDS_date_measured'] = null;
-			measurements['user_grip_kg'] = null;
-			measurements['grip_kg'] = null;
-			measurements['grip_date_measured'] = null;
-			measurements['user_walking_speed_m_per_s'] = null;
-			measurements['walking_speed_m_per_s'] = null;
-			measurements['walking_date_measured'] = null;
-			measurements['user_systolic_bp_mmHg'] = null;
-			measurements['systolic_bp_mmHg'] = null;
-			measurements['diastolic_bp_mmHg'] = null;
-			measurements['bp_date_measured'] = null;
-			measurements['user_number_of_limitations'] = null;
-			measurements['number_of_limitations'] = null;
-			measurements['functional_limit_date_measured'] = null;
-			measurements['user_fear0'] = null;
-			measurements['user_fear1'] = null;
-			measurements['user_fear2'] = null;
-			measurements['fear0'] = null;
-			measurements['fear1'] = null;
-			measurements['fear2'] = null;
-			measurements['fear_of_falls_date_measured'] = null;
-			measurements['user_nr_falls_12m'] = null;
-			measurements['nr_falls_12m'] = null;
-			measurements['nr_falls_date_measured'] = null;
-			measurements['user_smoking'] = null;
-			measurements['smoking'] = null;
-			measurements['smoking_date_measured'] = null;
-			measurements['has_antiepileptica'] = null;
-			measurements['has_ca_blocker'] = null;
-			measurements['has_incont_med'] = null;
-			measurements['prediction_result'] = null;
-			measurements['user_values_updated'] = null;
-	} else {
-		measurements['user_education_hml'] = measRow[0].user_education_hml;
-		measurements['education_hml'] = measRow[0].education_hml;
-		measurements['user_height_cm'] = measRow[0].user_height_cm;
-		measurements['height_cm'] = measRow[0].height_cm;
-		measurements['height_date_measured'] = measRow[0].height_date_measured;
-		measurements['user_weight_kg'] = measRow[0].user_weight_kg;
-		measurements['weight_kg'] = measRow[0].weight_kg;
-		measurements['weight_date_measured'] = measRow[0].weight_date_measured;
-		measurements['BMI'] = measRow[0].BMI;
-		measurements['BMI_date_measured'] = measRow[0].BMI_date_measured;
-		measurements['user_GDS_score'] = measRow[0].user_GDS_score;
-		measurements['GDS_score'] = measRow[0].GDS_score;
-		measurements['GDS_date_measured'] = measRow[0].GDS_date_measured;
-		measurements['user_grip_kg'] = measRow[0].user_grip_kg;
-		measurements['grip_kg'] = measRow[0].grip_kg;
-		measurements['grip_date_measured'] = measRow[0].grip_date_measured;
-		measurements['user_walking_speed_m_per_s'] = measRow[0].user_walking_speed_m_per_s;
-		measurements['walking_speed_m_per_s'] = measRow[0].walking_speed_m_per_s;
-		measurements['walking_date_measured'] = measRow[0].walking_date_measured;
-		measurements['user_systolic_bp_mmHg'] = measRow[0].user_systolic_bp_mmHg;
-		measurements['systolic_bp_mmHg'] = measRow[0].systolic_bp_mmHg;
-		measurements['diastolic_bp_mmHg'] = measRow[0].diastolic_bp_mmHg;
-		measurements['bp_date_measured'] = measRow[0].bp_date_measured;
-		measurements['user_number_of_limitations'] = measRow[0].user_number_of_limitations;
-		measurements['number_of_limitations'] = measRow[0].number_of_limitations;
-		measurements['functional_limit_date_measured'] = measRow[0].functional_limit_date_measured;
-		measurements['user_fear0'] = measRow[0].user_fear0;
-		measurements['user_fear1'] = measRow[0].user_fear1;
-		measurements['user_fear2'] = measRow[0].user_fear2;
-		measurements['fear0'] = measRow[0].fear0;
-		measurements['fear1'] = measRow[0].fear1;
-		measurements['fear2'] = measRow[0].fear2;
-		measurements['fear_of_falls_date_measured'] = measRow[0].fear_of_falls_date_measured;
-		measurements['user_nr_falls_12m'] = measRow[0].user_nr_falls_12m;
-		measurements['nr_falls_12m'] = measRow[0].nr_falls_12m;
-		measurements['nr_falls_date_measured'] = measRow[0].nr_falls_date_measured;
-		measurements['user_smoking'] = measRow[0].user_smoking;
-		measurements['smoking'] = measRow[0].smoking;
-		measurements['smoking_date_measured'] = measRow[0].smoking_date_measured;
-		measurements['has_antiepileptica'] = measRow[0].has_antiepileptica;
-		measurements['has_ca_blocker'] = measRow[0].has_ca_blocker;
-		measurements['has_incont_med'] = measRow[0].has_incont_med;
-		measurements['prediction_result'] = measRow[0].prediction_result;
-		measurements['user_values_updated'] = measRow[0].user_values_updated;
-	}
+    // seems like there ought to be a less horrible way to do this, but this'll do.
+    // the ETL should prevent this from happening in real life, but it definitely happens in the test data.
+    if (typeof(measRow) == 'undefined' || measRow == null || measRow.length != 1) {
+        measurements['user_education_hml'] = null;
+        measurements['education_hml'] = null;
+        measurements['user_height_cm'] = null;
+        measurements['height_cm'] = null;
+        measurements['height_date_measured'] = null;
+        measurements['user_weight_kg'] = null;
+        measurements['weight_kg'] = null;
+        measurements['weight_date_measured'] = null;
+        measurements['BMI'] = null;
+        measurements['BMI_date_measured'] = null;
+        measurements['user_GDS_score'] = null;
+        measurements['GDS_score'] = null;
+        measurements['GDS_date_measured'] = null;
+        measurements['user_grip_kg'] = null;
+        measurements['grip_kg'] = null;
+        measurements['grip_date_measured'] = null;
+        measurements['user_walking_speed_m_per_s'] = null;
+        measurements['walking_speed_m_per_s'] = null;
+        measurements['walking_date_measured'] = null;
+        measurements['user_systolic_bp_mmHg'] = null;
+        measurements['systolic_bp_mmHg'] = null;
+        measurements['diastolic_bp_mmHg'] = null;
+        measurements['bp_date_measured'] = null;
+        measurements['user_number_of_limitations'] = null;
+        measurements['number_of_limitations'] = null;
+        measurements['functional_limit_date_measured'] = null;
+        measurements['user_fear0'] = null;
+        measurements['user_fear1'] = null;
+        measurements['user_fear2'] = null;
+        measurements['fear0'] = null;
+        measurements['fear1'] = null;
+        measurements['fear2'] = null;
+        measurements['fear_of_falls_date_measured'] = null;
+        measurements['user_nr_falls_12m'] = null;
+        measurements['nr_falls_12m'] = null;
+        measurements['nr_falls_date_measured'] = null;
+        measurements['user_smoking'] = null;
+        measurements['smoking'] = null;
+        measurements['smoking_date_measured'] = null;
+        measurements['has_antiepileptica'] = null;
+        measurements['has_ca_blocker'] = null;
+        measurements['has_incont_med'] = null;
+        measurements['prediction_result'] = null;
+        measurements['user_values_updated'] = null;
+    } else {
+        measurements['user_education_hml'] = measRow[0].user_education_hml;
+        measurements['education_hml'] = measRow[0].education_hml;
+        measurements['user_height_cm'] = measRow[0].user_height_cm;
+        measurements['height_cm'] = measRow[0].height_cm;
+        measurements['height_date_measured'] = measRow[0].height_date_measured;
+        measurements['user_weight_kg'] = measRow[0].user_weight_kg;
+        measurements['weight_kg'] = measRow[0].weight_kg;
+        measurements['weight_date_measured'] = measRow[0].weight_date_measured;
+        measurements['BMI'] = measRow[0].BMI;
+        measurements['BMI_date_measured'] = measRow[0].BMI_date_measured;
+        measurements['user_GDS_score'] = measRow[0].user_GDS_score;
+        measurements['GDS_score'] = measRow[0].GDS_score;
+        measurements['GDS_date_measured'] = measRow[0].GDS_date_measured;
+        measurements['user_grip_kg'] = measRow[0].user_grip_kg;
+        measurements['grip_kg'] = measRow[0].grip_kg;
+        measurements['grip_date_measured'] = measRow[0].grip_date_measured;
+        measurements['user_walking_speed_m_per_s'] = measRow[0].user_walking_speed_m_per_s;
+        measurements['walking_speed_m_per_s'] = measRow[0].walking_speed_m_per_s;
+        measurements['walking_date_measured'] = measRow[0].walking_date_measured;
+        measurements['user_systolic_bp_mmHg'] = measRow[0].user_systolic_bp_mmHg;
+        measurements['systolic_bp_mmHg'] = measRow[0].systolic_bp_mmHg;
+        measurements['diastolic_bp_mmHg'] = measRow[0].diastolic_bp_mmHg;
+        measurements['bp_date_measured'] = measRow[0].bp_date_measured;
+        measurements['user_number_of_limitations'] = measRow[0].user_number_of_limitations;
+        measurements['number_of_limitations'] = measRow[0].number_of_limitations;
+        measurements['functional_limit_date_measured'] = measRow[0].functional_limit_date_measured;
+        measurements['user_fear0'] = measRow[0].user_fear0;
+        measurements['user_fear1'] = measRow[0].user_fear1;
+        measurements['user_fear2'] = measRow[0].user_fear2;
+        measurements['fear0'] = measRow[0].fear0;
+        measurements['fear1'] = measRow[0].fear1;
+        measurements['fear2'] = measRow[0].fear2;
+        measurements['fear_of_falls_date_measured'] = measRow[0].fear_of_falls_date_measured;
+        measurements['user_nr_falls_12m'] = measRow[0].user_nr_falls_12m;
+        measurements['nr_falls_12m'] = measRow[0].nr_falls_12m;
+        measurements['nr_falls_date_measured'] = measRow[0].nr_falls_date_measured;
+        measurements['user_smoking'] = measRow[0].user_smoking;
+        measurements['smoking'] = measRow[0].smoking;
+        measurements['smoking_date_measured'] = measRow[0].smoking_date_measured;
+        measurements['has_antiepileptica'] = measRow[0].has_antiepileptica;
+        measurements['has_ca_blocker'] = measRow[0].has_ca_blocker;
+        measurements['has_incont_med'] = measRow[0].has_incont_med;
+        measurements['prediction_result'] = measRow[0].prediction_result;
+        measurements['user_values_updated'] = measRow[0].user_values_updated;
+    }
     return measurements;
 }
 async function getAllProblems() {
@@ -668,10 +672,10 @@ async function getAdviceForPatient(patientIdentifier) {
     for (let i = 0; i < problems.length; ++i) {
         problemList.push(problems[i].name);
     }
-	
-	let measurements = structureMeas(await this.getPatientMeasurements(patient_id));
-	
-	var meds = await this.getMedsForPatient(patient_id);
+
+    let measurements = structureMeas(await this.getPatientMeasurements(patient_id));
+
+    var meds = await this.getMedsForPatient(patient_id);
     let drugList = [];
     for (let i = 0; i < meds.length; ++i) {
         drugList.push(meds[i].ATC_code);
@@ -747,18 +751,18 @@ async function getAdviceForPatient(patientIdentifier) {
     let debug_info = {
         data_sizes: await this.getTableSizes()
     };
-	
-	let all_problems = {};
-	let sql_problems = await this.getAllProblems();
-	for (let i = 0; i < sql_problems.length; ++i) {
-		all_problems[sql_problems[i].problem_name] = sql_problems[i].display_name;
-	}
-	
-	let all_labs = [];
-	let sql_labs = await this.getAllLabs();
-	for (let i = 0; i < sql_labs.length; ++i) {
-		all_labs.push(sql_labs[i].lab_name);
-	}
+
+    let all_problems = {};
+    let sql_problems = await this.getAllProblems();
+    for (let i = 0; i < sql_problems.length; ++i) {
+        all_problems[sql_problems[i].problem_name] = sql_problems[i].display_name;
+    }
+
+    let all_labs = [];
+    let sql_labs = await this.getAllLabs();
+    for (let i = 0; i < sql_labs.length; ++i) {
+        all_labs.push(sql_labs[i].lab_name);
+    }
 
     let patient_advice = {};
     patient_advice.patient_id = patient_id;
@@ -769,15 +773,15 @@ async function getAdviceForPatient(patientIdentifier) {
     patient_advice.meds_without_rules = meds_without_fired;
     patient_advice.meds_with_rules = meds_with_fired;
     patient_advice.problems = problems;
-	patient_advice.measurements = measurements;
+    patient_advice.measurements = measurements;
     patient_advice.medication_advice = advice;
     patient_advice.selected_advice = selected_advice;
     patient_advice.free_texts = free_texts;
     patient_advice.advice_text_non_med = advice_text_non_med;
     patient_advice.advice_other_text = advice_other_text;
     patient_advice.risk_score = risk_score;
-	patient_advice.all_problems = all_problems;
-	patient_advice.all_labs = all_labs;
+    patient_advice.all_problems = all_problems;
+    patient_advice.all_labs = all_labs;
     patient_advice.debug_info = debug_info;
 
     return patient_advice;
@@ -1045,8 +1049,8 @@ function adfice_init(db) {
         getAdviceTextsNoCheckboxes: getAdviceTextsNoCheckboxes,
         getAdviceTextsNonMedCheckboxes: getAdviceTextsNonMedCheckboxes,
         getAllAdviceTextsCheckboxes: getAllAdviceTextsCheckboxes,
-		getAllProblems: getAllProblems,
-		getAllLabs: getAllLabs,
+        getAllProblems: getAllProblems,
+        getAllLabs: getAllLabs,
         getExportData: getExportData,
         getFreetextsForPatient: getFreetextsForPatient,
         getLabsForPatient: getLabsForPatient,
@@ -1063,7 +1067,7 @@ function adfice_init(db) {
         selectionStatesToBoxStates: selectionStatesToBoxStates,
         sql_select: sql_select,
         structureMeas: structureMeas,
-		updatePredictionResult: updatePredictionResult,
+        updatePredictionResult: updatePredictionResult,
 
         /* public API methods */
         addLogEventPrint: addLogEventPrint,
