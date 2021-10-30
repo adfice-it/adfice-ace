@@ -174,9 +174,32 @@ test('Checkbox persistence', async t => {
     await t.expect(checkbox3.checked).ok();
 });
 
+
+async function change_flex_style_to_inline(t) {
+    let client_func = ClientFunction(function() {
+        let sheets = document.styleSheets;
+        for (let i = 0; i < sheets.length; ++i) {
+            if (sheets[i] !== undefined) {
+                let rules = sheets[i].cssRules;
+                for (let j = 0; j < rules.length; ++j) {
+                    let rule = rules[j];
+                    let display_style = rule.style['display'];
+                    if (display_style == 'flex') {
+                        console.log('before', rule.style['display']);
+                        rule.style['display'] = 'inline';
+                        console.log('after', rule.style['display']);
+                    }
+                }
+            }
+        }
+    });
+    await client_func();
+}
+
 test('Test selecting views', async t => {
     let url = `${BASE_URL}/prep?id=85`;
     let window1 = await t.openWindow(url);
+    await change_flex_style_to_inline(t);
 
     let button_start_view = Selector('button#button-start-view');
     let button_prep_view = Selector('button#button-prep-view');
@@ -188,6 +211,7 @@ test('Test selecting views', async t => {
 
     let div_advice_M01AB05 = Selector('div#advice_M01AB05');
     let checkbox0 = Selector('#cb_M01AB05_80b_2');
+    let checkbox1_tr = Selector('#tr_M01AB05_78_3');
     let checkbox1 = Selector('#cb_M01AB05_78_3');
     let checkboxOther = Selector('#cb_OTHER_other_1');
 
@@ -203,6 +227,10 @@ test('Test selecting views', async t => {
     let patient1 = Selector('#pt_M01AB05_78_3');
     let patientOther = Selector('#pt_OTHER_other_1');
 
+    await t.expect(checkbox0.exists).ok();
+    await t.expect(checkbox1.exists).ok();
+    await t.expect(checkboxOther.exists).ok();
+
 
     // set checkbox0 to unchecked, checkbox1 to checked
     {
@@ -211,7 +239,11 @@ test('Test selecting views', async t => {
         }
         await t.expect(checkbox0.checked).notOk();
 
+        await t.expect(checkbox1_tr.exists).ok();
+        await t.expect(checkbox1_tr.visible).ok();
+        await t.expect(checkbox1.visible).ok();
         if (!(await checkbox1.checked)) {
+            await t.expect(checkbox1.visible).ok();
             await t.click(checkbox1);
         }
         await t.expect(checkbox1.checked).ok();
@@ -255,6 +287,7 @@ test('Test selecting views', async t => {
     // try switching to the advise view
     await t.click(button_advise_view);
     await t.expect(getLocation()).contains(`${BASE_URL}/advise?id=85`);
+    await change_flex_style_to_inline(t);
     await t.expect(div_advice_M01AB05.visible).notOk();
     await t.expect(div_ehr_box.visible).notOk();
     // the patient texts are only visible if checked in prep view
@@ -265,6 +298,7 @@ test('Test selecting views', async t => {
     // try switching to the consult view
     await t.click(button_consult_view);
     await t.expect(getLocation()).contains(`${BASE_URL}/consult?id=85`);
+    await change_flex_style_to_inline(t);
     await t.expect(div_advice_M01AB05.visible).notOk();
     await t.expect(div_ehr_box.visible).notOk();
     await t.expect(row0.visible).notOk();
@@ -273,6 +307,7 @@ test('Test selecting views', async t => {
     // try switching back to the prep view
     await t.click(button_prep_view);
     await t.expect(getLocation()).contains(`${BASE_URL}/prep?id=85`);
+    await change_flex_style_to_inline(t);
     await t.expect(div_advice_M01AB05.visible).ok();
     await t.expect(div_ehr_box.visible).notOk();
     await t.expect(row0.visible).ok();
@@ -281,6 +316,7 @@ test('Test selecting views', async t => {
 
     await t.click(button_finalize_view);
     await t.expect(getLocation()).contains(`${BASE_URL}/finalize?id=85`);
+    await change_flex_style_to_inline(t);
     // the ehr texts are only ever visible if checked
     await t.expect(div_ehr_box.visible).ok();
     await t.expect(ehr0.visible).notOk();

@@ -173,8 +173,7 @@ check-unit: dbsetup grep-ie-bad-words
 	@echo "SUCCESS $@"
 
 check: thirdparty check-unit
-	./acceptance-test.sh
-	./acceptance-test-cafe.sh
+	./acceptance-test-patient-validation.sh
 	./acceptance-test-cafe-new.sh
 	@echo "SUCCESS $@"
 

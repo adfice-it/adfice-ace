@@ -91,6 +91,8 @@ Low Priority:
 * naming consistency thoughout the javascript
 * naming consistency thoughout the html
 * tidy css page and make naming more consistant
+* testcafe checkboxes contained in display:flex divs are not clickable
+  * open a bug with a tiny reproducible example
 
 Requested (not required) changes to rules:
 * Rule 50: Split to personalize by age

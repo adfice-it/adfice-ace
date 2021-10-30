@@ -503,9 +503,7 @@ function big_nested_medicine_advice_table(include_no_checkbox_advice) {
             let row_id = 'tr_' + advice_id_base;
             html += '<tr id="' + row_id + '">\n';
             html += '<td class="checkbox_row">';
-            html += '<span id="' + asa_prefix + '_sbn">';
             html += input_checkbox(checkbox_id);
-            html += '</span> <!-- ' + asa_prefix + '_sbn -->';
             html += '</td>\n';
             html += '<td class="checkbox_row">';
             let asa_cdss_id = asa_prefix + '_cdss';

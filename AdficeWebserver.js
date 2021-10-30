@@ -107,13 +107,9 @@ app.get("/", renderIndex);
 app.get("/index", renderIndex);
 app.get("/index.html", renderIndex);
 
-app.get("/patient", renderAdviceForPatient);
+app.get("/patient", express.static('static/start.html'));
 
 app.get("/patient-validation", renderValidationAdviceForPatient);
-
-app.get("/prediction_explanation", renderPredictionExplanation);
-
-app.get("/checkboxes", renderAdviceTextsCheckboxes);
 
 server.receivers = {};
 
