@@ -252,7 +252,9 @@ server.on('upgrade', function upgrade(request, socket, head) {
                             console.log('sending reply:\n', msg_string);
                         }
                         ws.send(msg_string);
-                    } else {
+                    } else if (message.type == 'submit_missings') { 
+						await adfice.updatePredictionWithUserValues(patient_id, message['submit_missings']);
+					} else {
                         send_all(kind, patient_id, message);
                     }
                 }

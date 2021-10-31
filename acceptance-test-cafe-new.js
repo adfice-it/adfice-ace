@@ -500,12 +500,11 @@ if (0) {
         await t.expect(missing_table.withText("grijpkracht").exists).notOk();
         await t.expect(missing_table.withText("roker").exists).ok();
 
-        /*	let smoking_dropdown = Selector("#smoking_dropdown");
+        /*	let smoking_dropdown = Selector("#user_smoking");
         	await t
                 .click(smoking_dropdown)
                 .click(smoking_dropdown('option', { text: 'Ja' }));
-        	var selectedIndex = await(ClientFunction(() => document.getElementsByTagName('select')[0].selectedIndex)());
-            expect(selectedIndex).eql(1);
+        	
         */
     });
 }

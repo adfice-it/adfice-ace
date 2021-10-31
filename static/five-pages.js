@@ -206,7 +206,7 @@ function prediction_start() {
 function missing_data_form(measurements) {
     let footnote = '';
     let html = '<h3>Data voor predictiemodel</h3><p>Vul de onderstaande data in om een risico te (her)berekenen.</p>\
-				<form>\
+				<form id="missing_data_form">\
 				<table class="prediction_missing" id = "prediction_missing_table">\
 				<tr><th class="prediction_missing">variabel</th><th class="prediction_missing">huidige waarde</th><th class="prediction_missing" >nieuwe waarde</th></tr>';
     if (measurements.GDS_score == null) {
@@ -214,7 +214,8 @@ function missing_data_form(measurements) {
         if (measurements.user_GDS_score != null) {
             html += measurements.user_GDS_score;
         }
-        html += '</td><td class="prediction_missing"><select name = "GDS_dropdown">'
+        html += '</td><td class="prediction_missing"><select id="user_GDS_score" name = "GDS_dropdown">'
+		html += '<option value = ""></option>'
         for (let i = 0; i <= 30; ++i) {
             html += '<option value = "' + i + '">' + i + '</option>'
         }
@@ -225,40 +226,41 @@ function missing_data_form(measurements) {
         if (measurements.user_grip_kg != null) {
             html += measurements.user_grip_kg;
         }
-        html += '</td><td class="prediction_missing"><input type="number" min="0.00" max="99.99"></td>';
+        html += '</td><td class="prediction_missing"><input id="user_grip_kg" type="number" min="0.00" max="99.99"></td>';
     }
     if (measurements.walking_speed_m_per_s == null) {
         html += '<tr><td class="prediction_missing">loopsnelheid m/s (zo snel mogelijk)</td><td class="prediction_missing">';
         if (measurements.user_walking_speed_m_per_s != null) {
             html += measurements.user_walking_speed_m_per_s;
         }
-        html += '</td><td class="prediction_missing"><input type="number" min="0.00" max="99.99"></td>';
+        html += '</td><td class="prediction_missing"><input id="user_walking_speed_m_per_s" type="number" min="0.00" max="99.99"></td>';
     }
     if (measurements.BMI == null && (measurements.height_cm == null || measurements.weight_kg == null)) {
         html += '<tr><td class="prediction_missing">lengte cm</td><td class="prediction_missing">';
         if (measurements.user_height_cm != null) {
             html += measurements.user_height_cm;
         }
-        html += '</td><td class="prediction_missing"><input type="number" min="40" max="250"></td>';
+        html += '</td><td class="prediction_missing"><input id="user_height_cm" type="number" min="40" max="250"></td>';
         html += '<tr><td class="prediction_missing">gewicht kg</td><td class="prediction_missing">';
         if (measurements.user_weight_kg != null) {
             html += measurements.user_weight_kg;
         }
-        html += '</td><td class="prediction_missing"><input type="number" min="20" max="500"></td>';
+        html += '</td><td class="prediction_missing"><input id="user_weight_kg" type="number" min="20" max="500"></td>';
     }
     if (measurements.systolic_bp_mmHg == null) {
         html += '<tr><td class="prediction_missing">systolische bloeddruk mmHg</td><td class="prediction_missing">';
         if (measurements.user_systolic_bp_mmHg != null) {
             html += measurements.user_systolic_bp_mmHg;
         }
-        html += '</td><td class="prediction_missing"><input type="number" min="20" max="250"></td>';
+        html += '</td><td class="prediction_missing"><input id="user_systolic_bp_mmHg" type="number" min="20" max="250"></td>';
     }
     if (measurements.number_of_limitations == null) {
         html += '<tr><td class="prediction_missing">aantal functionele beperkingen*</td><td class="prediction_missing">';
         if (measurements.user_number_of_limitations != null) {
             html += measurements.user_number_of_limitations;
         }
-        html += '</td><td class="prediction_missing"><select name = "ADL_dropdown">'
+        html += '</td><td class="prediction_missing"><select id="user_number_of_limitations" name = "ADL_dropdown">';
+		html += '<option value = ""></option>';
         for (let i = 0; i <= 5; ++i) {
             html += '<option value = "' + i + '">' + i + '</option>'
         }
@@ -275,21 +277,21 @@ function missing_data_form(measurements) {
         if (measurements.user_nr_falls_12m != null) {
             html += measurements.user_nr_falls_12m;
         }
-        html += '</td><td class="prediction_missing"><input type="number" min="0" max="1000"></td>';
+        html += '</td><td class="prediction_missing"><input id="user_nr_falls_12m" type="number" min="0" max="1000"></td>';
     }
     if (measurements.smoking == null) {
         html += '<tr><td class="prediction_missing">roker</td><td class="prediction_missing">';
         if (measurements.user_smoking != null) {
             html += measurements.user_smoking;
         }
-        html += '</td><td class="prediction_missing"><select id = "smoking_dropdown" name = "smoking_dropdown"><option value = "1">Ja</option><option value = "0">Nee </option></select></td>';
+        html += '</td><td class="prediction_missing"><select id = "user_smoking" name = "smoking_dropdown"><option value = ""></option><option value = "1">Ja</option><option value = "0">Nee </option></select></td>';
     }
     if (measurements.education_hml == null) {
         html += '<tr><td class="prediction_missing">opleidingsniveau**</td><td class="prediction_missing">';
         if (measurements.user_education_hml != null) {
             html += measurements.user_education_hml;
         }
-        html += '</td><td class="prediction_missing"><select name = "education_dropdown"><option value = "1">Laag</option><option value = "2">Midden</option><option value = "3">Hoog</option></select></td>';
+        html += '</td><td class="prediction_missing"><select id="user_education_hml" name = "education_dropdown"><option value = ""></option><option value = "1">Laag</option><option value = "2">Midden</option><option value = "3">Hoog</option></select></td>';
         footnote += '**Kies uit:<br>Laag: lager beroepsonderwijs: LTS, LHNO, LEAO, handels(dag)school, huishoudschool, agrarische school, praktijkdiploma, middenstandsonderwijs';
         footnote += '<br>Midden: middelbaarberoepsonderwijs: MBA, LO-akten, MTS, MEAO';
         footnote += '<br>Hoog: hoger beroepsonderwijs: HTS, HEAO, MO-opleiding, kweekschool, sociale/pedagogische academie<br>';
@@ -305,17 +307,14 @@ function missing_data_form(measurements) {
         if (measurements.user_fear2 == 1) {
             html += '2';
         }
-        html += '</td><td class="prediction_missing"><select name = "fear_dropdown"><option value = "0">0: niet bang</option><option value = "1">1: een beetje/redelijk</option><option value = "2">2: erg bezorgd</option></select></td>';
+        html += '</td><td class="prediction_missing"><select id="fear_dropdown" name = "fear_dropdown"><option value = ""></option><option value = "0">0: niet bang</option><option value = "1">1: een beetje/redelijk</option><option value = "2">2: erg bezorgd</option></select></td>';
         footnote += '***Kies 0 als de pati&euml;nt heeft <q>helemaal niet bang</q> beantwoord bij alle items op de FES-I SF7. Kies 1 als de pati&euml;nt heeft <q>Een beetje bezorgd</q> of <q>redelijk bezorgd</q> beantwoord bij tenminste 1 vraag, en kies 2 als de pati&euml;nt heeft <q>Erg bezorgd</q> beantwoord bij tenminste 1 vraag.';
     }
-    html += '</table><input type="button" value="Verstuur" onclick="updateMeas()"></form>';
+    html += '</table><input id="button_submit_missings" type="button" onclick="updateMeas()" value="Verstuur"></form>';
     html += '<div id="footnote_missing">' + footnote + '</div><!-- footnote_missing -->';
     document.getElementById('prediction_missing_container').innerHTML = html;
 }
 
-function updateMeas() {
-    // TODO
-}
 
 function prediction_data_start(measurements) {
     document.getElementById('GDS_score').innerHTML = niceValue(measurements.GDS_score);

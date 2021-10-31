@@ -37,8 +37,8 @@ INSERT INTO patient_measurement
 user_weight_kg,user_GDS_score,user_grip_kg,user_walking_speed_m_per_s,
 user_systolic_bp_mmHg,user_number_of_limitations,user_fear0,user_fear1,
 user_fear2,user_nr_falls_12m,user_smoking,has_antiepileptica,
-has_ca_blocker,has_incont_med,user_values_updated) VALUES
-(170, (select NOW()),3,160,50,0,25,0.3,120,2,0,1,0,1,0,0,0,0, (select NOW()));
+has_ca_blocker,has_incont_med,user_values_updated, prediction_result) VALUES
+(170, (select NOW()),3,160,50,0,25,0.3,120,2,0,1,0,1,0,0,0,0, (select NOW()), 57);
 
 -- complete data, mix of user-entered and EHR-extracted
 INSERT INTO patient_measurement
@@ -46,8 +46,8 @@ INSERT INTO patient_measurement
 user_GDS_score,user_grip_kg,user_walking_speed_m_per_s,
 user_systolic_bp_mmHg,user_number_of_limitations,user_fear0,user_fear1,
 user_fear2,user_nr_falls_12m,smoking,has_antiepileptica,
-has_ca_blocker,has_incont_med,user_values_updated) VALUES
-(171, (select NOW()),3,25,0,25,0.3,120,2,0,1,0,1,0,0,0,0, (select NOW()));
+has_ca_blocker,has_incont_med,user_values_updated, prediction_result) VALUES
+(171, (select NOW()),3,25,0,25,0.3,120,2,0,1,0,1,0,0,0,0, (select NOW()), 45);
 
 -- incomplete data
 INSERT INTO patient_measurement
