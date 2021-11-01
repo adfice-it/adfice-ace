@@ -318,38 +318,38 @@ function missing_data_form(measurements) {
 
 function prediction_data_start(measurements) {
     document.getElementById('GDS_score').innerHTML = niceValue(measurements.GDS_score);
-    document.getElementById('user_GDS_score').innerHTML = niceValue(measurements.user_GDS_score);
+    document.getElementById('d_user_GDS_score').innerHTML = niceValue(measurements.user_GDS_score);
     document.getElementById('GDS_date_measured').innerHTML = niceDate(measurements.GDS_date_measured);
     document.getElementById('grip_kg').innerHTML = niceValue(measurements.grip_kg);
-    document.getElementById('user_grip_kg').innerHTML = niceValue(measurements.user_grip_kg);
+    document.getElementById('d_user_grip_kg').innerHTML = niceValue(measurements.user_grip_kg);
     document.getElementById('grip_date_measured').innerHTML = niceDate(measurements.grip_date_measured);
     document.getElementById('walking_speed_m_per_s').innerHTML = niceValue(measurements.walking_speed_m_per_s);
-    document.getElementById('user_walking_speed_m_per_s').innerHTML = niceValue(measurements.user_walking_speed_m_per_s);
+    document.getElementById('d_user_walking_speed_m_per_s').innerHTML = niceValue(measurements.user_walking_speed_m_per_s);
     document.getElementById('walking_date_measured').innerHTML = niceDate(measurements.walking_date_measured);
     let user_BMI = null;
     if (measurements.user_weight_kg != null && measurements.user_height_cm != null) {
         user_BMI = measurements.user_weight_kg / ((measurements.user_height_cm / 100) ^ 2);
     }
     document.getElementById('BMI').innerHTML = niceValue(measurements.BMI);
-    document.getElementById('user_bmi_calc').innerHTML = niceValue(user_BMI);
+    document.getElementById('d_user_bmi_calc').innerHTML = niceValue(user_BMI);
     document.getElementById('BMI_date_measured').innerHTML = niceDate(measurements.BMI_date_measured);
     document.getElementById('systolic_bp_mmHg').innerHTML = niceValue(measurements.systolic_bp_mmHg);
-    document.getElementById('user_systolic_bp_mmHg').innerHTML = niceValue(measurements.user_systolic_bp_mmHg);
+    document.getElementById('d_user_systolic_bp_mmHg').innerHTML = niceValue(measurements.user_systolic_bp_mmHg);
     document.getElementById('bp_date_measured').innerHTML = niceDate(measurements.bp_date_measured);
     document.getElementById('number_of_limitations').innerHTML = niceValue(measurements.number_of_limitations);
-    document.getElementById('user_number_of_limitations').innerHTML = niceValue(measurements.user_number_of_limitations);
+    document.getElementById('d_user_number_of_limitations').innerHTML = niceValue(measurements.user_number_of_limitations);
     document.getElementById('functional_limit_date_measured').innerHTML = niceDate(measurements.functional_limit_date_measured);
     document.getElementById('nr_falls_12m').innerHTML = niceValue(measurements.nr_falls_12m);
-    document.getElementById('user_nr_falls_12m').innerHTML = niceValue(measurements.user_nr_falls_12m);
+    document.getElementById('d_user_nr_falls_12m').innerHTML = niceValue(measurements.user_nr_falls_12m);
     document.getElementById('nr_falls_date_measured').innerHTML = niceDate(measurements.nr_falls_date_measured);
     document.getElementById('smoking').innerHTML = niceValue(measurements.smoking);
-    document.getElementById('user_smoking').innerHTML = niceValue(measurements.user_smoking);
+    document.getElementById('d_user_smoking').innerHTML = niceValue(measurements.user_smoking);
     document.getElementById('smoking_date_measured').innerHTML = niceDate(measurements.smoking_date_measured);
     document.getElementById('has_antiepileptica').innerHTML = niceValue(measurements.has_antiepileptica);
     document.getElementById('has_ca_blocker').innerHTML = niceValue(measurements.has_ca_blocker);
     document.getElementById('has_incont_med').innerHTML = niceValue(measurements.has_incont_med);
     document.getElementById('education_hml').innerHTML = niceValue(measurements.education_hml);
-    document.getElementById('user_education_hml').innerHTML = niceValue(measurements.user_education_hml);
+    document.getElementById('d_user_education_hml').innerHTML = niceValue(measurements.user_education_hml);
     let fear = '';
     if (measurements.fear0) {
         fear = 0;
@@ -371,7 +371,7 @@ function prediction_data_start(measurements) {
     if (measurements.user_fear2) {
         fear = 2;
     }
-    document.getElementById('user_fear').innerHTML = fear;
+    document.getElementById('d_user_fear').innerHTML = fear;
     document.getElementById('fear_of_falls_date_measured').innerHTML = niceDate(measurements.fear_of_falls_date_measured);
     if (measurements.user_values_updated != null) {
         document.getElementById('user_values_updated').innerHTML = niceDate(measurements.user_values_updated);

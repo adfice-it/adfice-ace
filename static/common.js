@@ -92,6 +92,7 @@ function updateMeas() {
 		}
 		console.log(message);
 	});
+	localStorage.clear();
 	window.location.reload(true);
 }
 
