@@ -384,7 +384,9 @@ async function calculatePredictionResult(patient_id) {
     }
     let measurement = measurements[0];
     let GDS_score = measurement['GDS_score'];
-		if(GDS_score == null){ GDS_score = measurement['user_GDS_score']; }
+    if (GDS_score == null) {
+        GDS_score = measurement['user_GDS_score'];
+    }
     let grip_kg = measurement['grip_kg'] || measurement['user_grip_kg'];
     let walking_speed_m_per_s = measurement['walking_speed_m_per_s'] || measurement['user_walking_speed_m_per_s'];
     let user_BMI = null;
@@ -394,11 +396,17 @@ async function calculatePredictionResult(patient_id) {
     let BMI = measurement['BMI'] || user_BMI;
     let systolic_bp_mmHg = measurement['systolic_bp_mmHg'] || measurement['user_systolic_bp_mmHg'];
     let number_of_limitations = measurement['number_of_limitations'];
-		if(number_of_limitations == null){ number_of_limitations = measurement['user_number_of_limitations']; }
+    if (number_of_limitations == null) {
+        number_of_limitations = measurement['user_number_of_limitations'];
+    }
     let nr_falls_12m = measurement['nr_falls_12m'];
-		if(nr_falls_12m == null){ nr_falls_12m = measurement['user_nr_falls_12m']; }
+    if (nr_falls_12m == null) {
+        nr_falls_12m = measurement['user_nr_falls_12m'];
+    }
     let smoking = measurement['smoking'];
-		if(smoking == null){ smoking = measurement['user_smoking']; }
+    if (smoking == null) {
+        smoking = measurement['user_smoking'];
+    }
     let education_hml = measurement['education_hml'] || measurement['user_education_hml'];
     let fear1 = 0;
     if (measurement['fear1'] == 1 || measurement['user_fear1'] == 1) {
@@ -408,7 +416,7 @@ async function calculatePredictionResult(patient_id) {
     if (measurement['fear2'] == 1 || measurement['user_fear2'] == 1) {
         fear2 = 1;
     }
-		
+
     let prediction = cp.calculatePredictionDB(
         GDS_score,
         grip_kg,
@@ -496,40 +504,46 @@ async function setAdviceForPatient(patientIdentifier, viewer,
     return rs;
 }
 
-async function updatePredictionWithUserValues(patient_id, form_data){
-	let fields = Object.keys(form_data);
-	
-	let sql = `/* adfice.updatePredictionWithUserValues */
+async function updatePredictionWithUserValues(patient_id, form_data) {
+    let fields = Object.keys(form_data);
+
+    let sql = `/* adfice.updatePredictionWithUserValues */
         UPDATE patient_measurement
            SET `
-	let params = [];
-	for (let i = 0; i < fields.length; ++i) {
-		if(form_data[fields[i]] != ""){
-			if(fields[i] == "fear_dropdown"){
-				sql += 'user_fear0=' + '?,';
-				sql += 'user_fear1=' + '?,';
-				sql += 'user_fear2=' + '?,';
-				if(form_data[fields[i]] == 0){params.push(1, 0, 0);}
-				if(form_data[fields[i]] == 1){params.push(0, 1, 0);}
-				if(form_data[fields[i]] == 2){params.push(0, 0, 1);}
-			} else {
-				sql += fields[i] + '=' + '?,';
-				params.push(form_data[fields[i]]);
-			}
-		}
-	}
-	if(params.length > 0){
-		sql += 'user_values_updated = (select now())'; 
-		sql += " WHERE patient_id = " + patient_id;
-		let sql_and_params = [sql, params];
-		let list_of_updates = [sql_and_params];
-		let db = await this.db_init();
-		let rs = await db.as_sql_transaction(list_of_updates);
-		await this.calculateAndStorePredictionResult(patient_id);
-		return rs;
-	} else {
-		return null;
-	}
+    let params = [];
+    for (let i = 0; i < fields.length; ++i) {
+        if (form_data[fields[i]] != "") {
+            if (fields[i] == "fear_dropdown") {
+                sql += 'user_fear0=' + '?,';
+                sql += 'user_fear1=' + '?,';
+                sql += 'user_fear2=' + '?,';
+                if (form_data[fields[i]] == 0) {
+                    params.push(1, 0, 0);
+                }
+                if (form_data[fields[i]] == 1) {
+                    params.push(0, 1, 0);
+                }
+                if (form_data[fields[i]] == 2) {
+                    params.push(0, 0, 1);
+                }
+            } else {
+                sql += fields[i] + '=' + '?,';
+                params.push(form_data[fields[i]]);
+            }
+        }
+    }
+    if (params.length > 0) {
+        sql += 'user_values_updated = (select now())';
+        sql += " WHERE patient_id = " + patient_id;
+        let sql_and_params = [sql, params];
+        let list_of_updates = [sql_and_params];
+        let db = await this.db_init();
+        let rs = await db.as_sql_transaction(list_of_updates);
+        await this.calculateAndStorePredictionResult(patient_id);
+        return rs;
+    } else {
+        return null;
+    }
 }
 
 async function getSelectionsForPatient(patient_id) {
@@ -1109,7 +1123,7 @@ function adfice_init(db) {
         sql_select: sql_select,
         structureMeas: structureMeas,
         updatePredictionResult: updatePredictionResult,
-		updatePredictionWithUserValues: updatePredictionWithUserValues,
+        updatePredictionWithUserValues: updatePredictionWithUserValues,
 
         /* public API methods */
         addLogEventPrint: addLogEventPrint,

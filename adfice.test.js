@@ -165,73 +165,73 @@ test('setAdviceForPatient(68)', async () => {
 })
 
 test('updatePredictionWithUserValues, update all missing data', async () => {
-	let patient_id = 172;
-	let form_data = {};
-	form_data['user_GDS_score'] =  '1';
-	form_data['user_grip_kg'] = '15';
-	form_data['user_walking_speed_m_per_s'] = '0.2';
-	form_data['user_height_cm'] = '160';
-	form_data['user_weight_kg'] = '60';
-	form_data['user_systolic_bp_mmHg'] = '120';
-	form_data['user_number_of_limitations'] = '2';
-	form_data['user_nr_falls_12m'] = '2';
-	form_data['user_smoking'] = '0';
-	form_data['user_education_hml'] = '2';
-	form_data['fear_dropdown'] = '2';
-	let measurements = await adfice.getPatientMeasurements(patient_id);
-	let measurement = measurements[0];
-	expect(measurement['prediction_result']).toBeFalsy();
-	expect(measurement['user_grip_kg']).toBeFalsy();
-	await adfice.updatePredictionWithUserValues(patient_id, form_data);
-	measurements = await adfice.getPatientMeasurements(patient_id);
-	measurement = measurements[0];
-	expect(measurement['prediction_result']).toBeGreaterThan(10);
-	expect(measurement['user_grip_kg']).toBe(15);
-	
-	patient_id = 170;
-	form_data = {};
-	form_data['user_GDS_score'] =  '';
-	form_data['user_grip_kg'] = '';
-	form_data['user_walking_speed_m_per_s'] = '';
-	form_data['user_height_cm'] = '';
-	form_data['user_weight_kg'] = '';
-	form_data['user_systolic_bp_mmHg'] = '';
-	form_data['user_number_of_limitations'] = '';
-	form_data['user_nr_falls_12m'] = '';
-	form_data['user_smoking'] = '';
-	form_data['user_education_hml'] = '';
-	form_data['fear_dropdown'] = '';
-	measurements = await adfice.getPatientMeasurements(patient_id);
-	measurement = measurements[0];
-	let prediction_result = measurement['prediction_result'];
-	expect(prediction_result).toBeGreaterThan(10);
-	expect(measurement['user_grip_kg']).toBe(25);
-	await adfice.updatePredictionWithUserValues(patient_id, form_data);
-	measurements = await adfice.getPatientMeasurements(patient_id);
-	measurement = measurements[0];
-	expect(measurement['prediction_result']).toBe(prediction_result);
-	expect(measurement['user_grip_kg']).toBe(25);
-	
-	patient_id = 172;
-	form_data = {};
-	form_data['fear_dropdown'] = '0';
-	await adfice.updatePredictionWithUserValues(patient_id, form_data);
-	measurements = await adfice.getPatientMeasurements(patient_id);
-	measurement = measurements[0];
-	expect(measurement['user_fear0']).toBe(1);
-	expect(measurement['user_fear1']).toBe(0);
-	form_data = {};
-	form_data['fear_dropdown'] = '1';
-	await adfice.updatePredictionWithUserValues(patient_id, form_data);
-	measurements = await adfice.getPatientMeasurements(patient_id);
-	measurement = measurements[0];
-	expect(measurement['user_fear1']).toBe(1);
-	expect(measurement['user_fear0']).toBe(0);
-	
-	// clean up
-	let params = [172];
-	let sql = 'UPDATE patient_measurement SET user_GDS_score = null, user_grip_kg = null, user_walking_speed_m_per_s = null, user_height_cm = null, user_weight_kg = null, user_systolic_bp_mmHg = null, user_number_of_limitations = null, user_nr_falls_12m = null, user_nr_falls_12m = null, user_smoking = null, user_education_hml = null, user_fear0 = null, user_fear1 = null, user_fear2 = null, prediction_result = null, user_values_updated = null WHERE patient_id = ?';
-	await adfice.sql_select(sql, params);
+    let patient_id = 172;
+    let form_data = {};
+    form_data['user_GDS_score'] = '1';
+    form_data['user_grip_kg'] = '15';
+    form_data['user_walking_speed_m_per_s'] = '0.2';
+    form_data['user_height_cm'] = '160';
+    form_data['user_weight_kg'] = '60';
+    form_data['user_systolic_bp_mmHg'] = '120';
+    form_data['user_number_of_limitations'] = '2';
+    form_data['user_nr_falls_12m'] = '2';
+    form_data['user_smoking'] = '0';
+    form_data['user_education_hml'] = '2';
+    form_data['fear_dropdown'] = '2';
+    let measurements = await adfice.getPatientMeasurements(patient_id);
+    let measurement = measurements[0];
+    expect(measurement['prediction_result']).toBeFalsy();
+    expect(measurement['user_grip_kg']).toBeFalsy();
+    await adfice.updatePredictionWithUserValues(patient_id, form_data);
+    measurements = await adfice.getPatientMeasurements(patient_id);
+    measurement = measurements[0];
+    expect(measurement['prediction_result']).toBeGreaterThan(10);
+    expect(measurement['user_grip_kg']).toBe(15);
+
+    patient_id = 170;
+    form_data = {};
+    form_data['user_GDS_score'] = '';
+    form_data['user_grip_kg'] = '';
+    form_data['user_walking_speed_m_per_s'] = '';
+    form_data['user_height_cm'] = '';
+    form_data['user_weight_kg'] = '';
+    form_data['user_systolic_bp_mmHg'] = '';
+    form_data['user_number_of_limitations'] = '';
+    form_data['user_nr_falls_12m'] = '';
+    form_data['user_smoking'] = '';
+    form_data['user_education_hml'] = '';
+    form_data['fear_dropdown'] = '';
+    measurements = await adfice.getPatientMeasurements(patient_id);
+    measurement = measurements[0];
+    let prediction_result = measurement['prediction_result'];
+    expect(prediction_result).toBeGreaterThan(10);
+    expect(measurement['user_grip_kg']).toBe(25);
+    await adfice.updatePredictionWithUserValues(patient_id, form_data);
+    measurements = await adfice.getPatientMeasurements(patient_id);
+    measurement = measurements[0];
+    expect(measurement['prediction_result']).toBe(prediction_result);
+    expect(measurement['user_grip_kg']).toBe(25);
+
+    patient_id = 172;
+    form_data = {};
+    form_data['fear_dropdown'] = '0';
+    await adfice.updatePredictionWithUserValues(patient_id, form_data);
+    measurements = await adfice.getPatientMeasurements(patient_id);
+    measurement = measurements[0];
+    expect(measurement['user_fear0']).toBe(1);
+    expect(measurement['user_fear1']).toBe(0);
+    form_data = {};
+    form_data['fear_dropdown'] = '1';
+    await adfice.updatePredictionWithUserValues(patient_id, form_data);
+    measurements = await adfice.getPatientMeasurements(patient_id);
+    measurement = measurements[0];
+    expect(measurement['user_fear1']).toBe(1);
+    expect(measurement['user_fear0']).toBe(0);
+
+    // clean up
+    let params = [172];
+    let sql = 'UPDATE patient_measurement SET user_GDS_score = null, user_grip_kg = null, user_walking_speed_m_per_s = null, user_height_cm = null, user_weight_kg = null, user_systolic_bp_mmHg = null, user_number_of_limitations = null, user_nr_falls_12m = null, user_nr_falls_12m = null, user_smoking = null, user_education_hml = null, user_fear0 = null, user_fear1 = null, user_fear2 = null, prediction_result = null, user_values_updated = null WHERE patient_id = ?';
+    await adfice.sql_select(sql, params);
 })
 
 test('getAdviceForPatient(27), with labs and problems', async () => {

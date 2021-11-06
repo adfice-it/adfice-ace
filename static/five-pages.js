@@ -215,7 +215,7 @@ function missing_data_form(measurements) {
             html += measurements.user_GDS_score;
         }
         html += '</td><td class="prediction_missing"><select id="user_GDS_score" name = "GDS_dropdown">'
-		html += '<option value = ""></option>'
+        html += '<option value = ""></option>'
         for (let i = 0; i <= 30; ++i) {
             html += '<option value = "' + i + '">' + i + '</option>'
         }
@@ -260,7 +260,7 @@ function missing_data_form(measurements) {
             html += measurements.user_number_of_limitations;
         }
         html += '</td><td class="prediction_missing"><select id="user_number_of_limitations" name = "ADL_dropdown">';
-		html += '<option value = ""></option>';
+        html += '<option value = ""></option>';
         for (let i = 0; i <= 5; ++i) {
             html += '<option value = "' + i + '">' + i + '</option>'
         }

@@ -354,50 +354,52 @@ test('Test prediction values missing', async t => {
 });
 
 test('Test prediction values present', async t => {
-	let url = `${BASE_URL}/start?id=2`;
-	let window1 = await t.openWindow(url);
+    let url = `${BASE_URL}/start?id=2`;
+    let window1 = await t.openWindow(url);
 
-	let prediction_table = Selector("#prediction_data_container");
-	await t.expect(prediction_table.withText("21.5").exists).ok();
-	await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
+    let prediction_table = Selector("#prediction_data_container");
+    await t.expect(prediction_table.withText("21.5").exists).ok();
+    await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
 });
 
 test('Test prediction values present when user-entered', async t => {
-	let url = `${BASE_URL}/start?id=170`;
-	let window1 = await t.openWindow(url);
+    let url = `${BASE_URL}/start?id=170`;
+    let window1 = await t.openWindow(url);
 
-	let prediction_table = Selector("#prediction_data_container");
-	await t.expect(prediction_table.withText("16.6").exists).ok();
-	await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
+    let prediction_table = Selector("#prediction_data_container");
+    await t.expect(prediction_table.withText("16.6").exists).ok();
+    await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
 });
 
 test('Test user entering values', async t => {
-	let url = `${BASE_URL}/start?id=173`;
-	let window1 = await t.openWindow(url);
-	await change_flex_style_to_inline(t);
+    let url = `${BASE_URL}/start?id=173`;
+    let window1 = await t.openWindow(url);
+    await change_flex_style_to_inline(t);
 
-	let missing_table = Selector("#prediction_missing_container");
-	await t.expect(missing_table.withText("grijpkracht").exists).notOk();
-	await t.expect(missing_table.withText("roker").exists).ok();
-	await t.expect(missing_table.visible).ok();
-	
-	let smoking_dropdown = Selector("#user_smoking");
-	await t.expect(smoking_dropdown.visible).ok();
-	await t
-	.click(smoking_dropdown)
-	.click(Selector('option', { text: 'Ja' }));
+    let missing_table = Selector("#prediction_missing_container");
+    await t.expect(missing_table.withText("grijpkracht").exists).notOk();
+    await t.expect(missing_table.withText("roker").exists).ok();
+    await t.expect(missing_table.visible).ok();
 
-	let submit_button = Selector('#button_submit_missings');
-	await t.click(submit_button);
-	
-	let smoking_cell = Selector("#d_user_smoking");
-	await t.expect(smoking_cell.exists).ok();
-// For some reason this test does not pass, but performing the steps manually works.
-//	await t.expect(smoking_cell.withText("1").exists).ok();
-	
-	// there is currently no way to clear the user-entered data via the UI, so this test can't clean up after itself.
-	// Right now the test is written so that it does not check the negative state (i.e. it does not check to see that Roker is null at the start)
-	// but if we add functionality to clear values then we can add the negative checks
+    let smoking_dropdown = Selector("#user_smoking");
+    await t.expect(smoking_dropdown.visible).ok();
+    await t
+        .click(smoking_dropdown)
+        .click(Selector('option', {
+            text: 'Ja'
+        }));
+
+    let submit_button = Selector('#button_submit_missings');
+    await t.click(submit_button);
+
+    let smoking_cell = Selector("#d_user_smoking");
+    await t.expect(smoking_cell.exists).ok();
+    // For some reason this test does not pass, but performing the steps manually works.
+    //	await t.expect(smoking_cell.withText("1").exists).ok();
+
+    // there is currently no way to clear the user-entered data via the UI, so this test can't clean up after itself.
+    // Right now the test is written so that it does not check the negative state (i.e. it does not check to see that Roker is null at the start)
+    // but if we add functionality to clear values then we can add the negative checks
 });
 
 // slow tests run last

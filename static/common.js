@@ -74,7 +74,7 @@ function freetextentered(textfield) {
 }
 
 function updateMeas() {
-	if (!common_js.ws) {
+    if (!common_js.ws) {
         common_js.logger.error('got a submit_missings event but websocket is null');
         ++common_js.weirdness;
         return;
@@ -86,14 +86,14 @@ function updateMeas() {
         message['submit_missings'] = {};
         let form = document.getElementById('missing_data_form');
         for (let i = 0; i < form.elements.length; ++i) {
-			if(form.elements[i].id != "button_submit_missings"){
-				message['submit_missings'][form.elements[i].id] = form.elements[i].value;
-			}
-		}
-		console.log(message);
-	});
-	localStorage.clear();
-	window.location.reload(true);
+            if (form.elements[i].id != "button_submit_missings") {
+                message['submit_missings'][form.elements[i].id] = form.elements[i].value;
+            }
+        }
+        console.log(message);
+    });
+    localStorage.clear();
+    window.location.reload(true);
 }
 
 
