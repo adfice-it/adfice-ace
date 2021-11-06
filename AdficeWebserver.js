@@ -111,6 +111,20 @@ app.get("/patient", express.static('static/start.html'));
 
 app.get("/patient-validation", renderValidationAdviceForPatient);
 
+app.get('/load', async function(req, res) {
+    let mrn = req.query.mrn;
+    let id = await adfice.id_for_mrn(mrn);
+    res.redirect('/start?id=' + id);
+});
+
+// // sketch of post support
+// app.use(express.urlencoded({extended:false}));
+// app.post('/load', function (req, res) {
+//    mrn = req.body.mrn;
+//    // ...
+// });
+
+
 server.receivers = {};
 
 function msg_header(message, kind, id) {

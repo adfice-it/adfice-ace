@@ -12,6 +12,18 @@ afterAll(async () => {
     return await adfice.shutdown();
 });
 
+test('test patient_id for valid mrn', async () => {
+    let mrn = 'DummyMRN-641923847';
+    let patient_id = await adfice.id_for_mrn(mrn);
+    expect(patient_id).toBe(163);
+});
+
+test('test patient_id for missing mrn', async () => {
+    let mrn = 'DummyMRN-SirNotAppearing-641923847';
+    let patient_id = await adfice.id_for_mrn(mrn);
+    expect(patient_id).toBe(null);
+});
+
 test('test advice text 6e', async () => {
     //console.log('6e');
     var rule_numbers = ["6e"];

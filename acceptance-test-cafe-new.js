@@ -53,6 +53,13 @@ async function change_view(t, button, url_fragment) {
 // TODO: make launching of the AdficeWebserver the job of the test, and
 // TODO: have each test launch a different instance on a different port
 
+test('test incoming link from EHR', async t => {
+    let url = `${BASE_URL}/load?mrn=DummyMRN-641923847`;
+    let window1 = await t.openWindow(url);
+    const getLocation = ClientFunction(() => document.location.href);
+
+    await t.expect(getLocation()).contains('/start?');
+});
 
 test('Test selecting views', async t => {
     let url = `${BASE_URL}/prep?id=85`;

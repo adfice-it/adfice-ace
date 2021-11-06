@@ -1,6 +1,10 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
 -- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
+
+INSERT INTO etl_mrn_patient (mrn, patient_id) VALUES
+('DummyMRN-641923847', 163);
+
 INSERT INTO patient (id,display_name,birth_date,education_level) VALUES
 (1,"Mevr. Empty",'1940-02-10',NULL),
 (2,"Mevr. Predict",'1940-02-11',"HEAO"),

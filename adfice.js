@@ -1082,6 +1082,16 @@ async function addLogEventCopyEHRText(viewer_id, patient_id) {
     return await this.addLogEvent(viewer_id, patient_id, 3);
 }
 
+async function id_for_mrn(mrn) {
+    let sql = 'SELECT patient_id FROM etl_mrn_patient WHERE mrn=?';
+    let params = [mrn];
+    let results = await this.sql_select(sql, params);
+    if (results.length == 0) {
+        return null;
+    }
+    return results[0].patient_id;
+}
+
 function adfice_init(db) {
     let adfice = {
         /* private variables */
@@ -1133,6 +1143,7 @@ function adfice_init(db) {
         getAdviceForPatient: getAdviceForPatient,
         getAdviceTextsCheckboxes: getAdviceTextsCheckboxes,
         getPatientMeasurements: getPatientMeasurements,
+        id_for_mrn: id_for_mrn,
         reloadPatientData: reloadPatientData,
         setAdviceForPatient: setAdviceForPatient,
         shutdown: shutdown,
