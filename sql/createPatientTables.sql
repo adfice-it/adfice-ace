@@ -587,13 +587,13 @@ CREATE TABLE `patient_problem` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `patient_id` int unsigned NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,
-  `problem_id` smallint unsigned DEFAULT NULL,
   `start_date` datetime DEFAULT NULL,
-  `name` varchar(200) DEFAULT NULL,
-  `display_name` varchar(200) DEFAULT NULL,
+  `name` varchar(60) DEFAULT NULL,
+  `icd_10` varchar(10) DEFAULT NULL,
+  `ehr_text` varchar(200) DEFAULT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `patient_id` (`patient_id`,`date_retrieved`,`problem_id`),
+  UNIQUE KEY `patient_id` (`patient_id`,`date_retrieved`,`name`),
   INDEX (`patient_id`, `id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -604,10 +604,10 @@ CREATE TABLE `patient_problem_history` (
   `id` int unsigned NOT NULL,
   `patient_id` int unsigned NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,
-  `problem_id` smallint unsigned DEFAULT NULL,
   `start_date` datetime DEFAULT NULL,
-  `name` varchar(200) DEFAULT NULL,
-  `display_name` varchar(200) DEFAULT NULL,
+  `name` varchar(60) DEFAULT NULL,
+  `icd_10` varchar(10) DEFAULT NULL,
+  `ehr_text` varchar(200) DEFAULT NULL,
   `row_created` timestamp NOT NULL,
   PRIMARY KEY (`log_id`),
   INDEX (log_row_created),
@@ -626,10 +626,10 @@ CREATE TRIGGER patient_problem_history_insert
           NEW.id,
           NEW.patient_id,
           NEW.date_retrieved,
-          NEW.problem_id,
           NEW.start_date,
           NEW.name,
-          NEW.display_name,
+          NEW.icd_10,
+		  NEW.ehr_text,
           NEW.row_created
         );
 
@@ -644,10 +644,10 @@ CREATE TRIGGER patient_problem_history_update
           OLD.id,
           OLD.patient_id,
           OLD.date_retrieved,
-          OLD.problem_id,
           OLD.start_date,
           OLD.name,
-          OLD.display_name,
+          OLD.icd_10,
+		  OLD.ehr_text,
           OLD.row_created
         );
 
@@ -662,10 +662,10 @@ CREATE TRIGGER patient_problem_history_delete
           OLD.id,
           OLD.patient_id,
           OLD.date_retrieved,
-          OLD.problem_id,
           OLD.start_date,
           OLD.name,
-          OLD.display_name,
+          OLD.icd_10,
+		  OLD.ehr_text,
           OLD.row_created
         );
 

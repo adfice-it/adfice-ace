@@ -290,9 +290,9 @@ async function getProblemsForPatient(patient_id) {
         SELECT name
              , start_date
              , display_name
-          FROM patient_problem
+          FROM patient_problem join problem on patient_problem.name = problem.problem_name
          WHERE patient_id=?
-      ORDER BY id`;
+      ORDER BY patient_problem.id`;
     let params = [patient_id, patient_id];
     let probs = await this.sql_select(sql, params);
     return probs;

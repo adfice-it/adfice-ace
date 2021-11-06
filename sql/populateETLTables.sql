@@ -38,9 +38,9 @@ INSERT INTO lab (id, lab_name) VALUES
 (3,'calcium'),
 (4,'eGFR');
 
-
-/*
-According to the internet, Lewy-bodies should get ICD-10 code G31.83
-https://www.icd10data.com/ICD10CM/Codes/G00-G99/G30-G32/G31-/G31.83
-Our codes are not specified to the 2nd decimal.
-*/
+INSERT INTO `med_map` (id, RxNorm, ATC, generic_name) VALUES
+(null,'327361','L04AB04','adalimumab'),
+(null,'311372','R06AX13','loratadine'),
+(null,'42347','N06AX12','bupropion'),
+(null,'8896','R01BA52','pseudoephedrine'),
+(null,'51428','A10AB05','insulin aspart');

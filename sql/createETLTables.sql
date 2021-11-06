@@ -32,3 +32,11 @@ CREATE TABLE `education_level` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `coded_level` (`coded_level`,`level`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `med_map` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `RxNorm` varchar(10),
+  `ATC` varchar(10),
+  `generic_name` varchar(100),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
