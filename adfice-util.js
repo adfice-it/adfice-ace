@@ -49,7 +49,7 @@ function split_freetext(str) {
 }
 
 async function to_json_file(path, obj) {
-    let json = JSON.stringify(obj, null, 4);
+    let json = JSON.stringify(obj, null, 4) + '\n';
     let options = {};
     let promise = new Promise(function(resolve, reject) {
         fs.writeFile(path, json, options, function(err) {
@@ -67,11 +67,12 @@ async function to_json_file(path, obj) {
 async function from_json_file(path) {
     let promise = new Promise(function(resolve, reject) {
         fs.readFile(path, 'utf8', function(err, utf8_bytes) {
+            const obj = JSON.parse(utf8_bytes);
             /* istanbul ignore next */
             if (err) {
                 reject(err);
             } else {
-                resolve(JSON.parse(utf8_bytes));
+                resolve(obj);
             }
         });
     });
