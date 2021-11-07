@@ -115,6 +115,13 @@ app.get("/patient-validation", render_validation_advice);
 app.get('/load', async function(req, res) {
     let mrn = req.query.mrn;
     let id = await adfice.id_for_mrn(mrn);
+    // if (!id) {
+    //     let etl = requrie(ETL_LIB);
+    //     let etl_options = await autil.from_json_file(ETL_OPTIONS_JSON_PATH);
+    //     let user_id = req.query.user_id;
+    //     let participant_number = req.query.participant_number;
+    //     id = await etl.etl(mrn, user_id, participant_number, etl_options);
+    // }
     res.redirect('/start?id=' + id);
 });
 
