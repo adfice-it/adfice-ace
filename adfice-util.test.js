@@ -4,6 +4,7 @@
 "use strict";
 
 const autil = require('./adfice-util')
+const fs = require('fs');
 
 test('assert true', () => {
     autil.assert(true);
@@ -95,4 +96,22 @@ test('split freetext handle bad strings', () => {
         text: "",
         editable: true
     }]);
-})
+});
+
+test('json serialization file round-trip', async function() {
+    let path = 'adfice-util.test.garbage.json';
+    try {
+        fs.unlinkSync(path);
+    } catch (ignore) {
+        // it is okay that the file does not exist
+    }
+
+    let obj1 = {
+        foo: 'bar',
+        whiz: 'bang',
+    };
+    await autil.to_json_file(path, obj1);
+    let obj2 = await autil.from_json_file(path);
+    expect(obj2).toStrictEqual(obj1);
+    fs.unlinkSync(path);
+});

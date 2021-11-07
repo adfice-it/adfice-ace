@@ -5,6 +5,7 @@
 
 const util = require("util");
 const child_process = require('child_process');
+const fs = require('fs');
 const path = require('path');
 
 function assert(condition, message) {
@@ -47,6 +48,36 @@ function split_freetext(str) {
     return result;
 }
 
+async function to_json_file(path, obj) {
+    let json = JSON.stringify(obj, null, 4);
+    let options = {};
+    let promise = new Promise(function(resolve, reject) {
+        fs.writeFile(path, json, options, function(err) {
+            /* istanbul ignore next */
+            if (err) {
+                reject(err);
+            } else {
+                resolve(err);
+            }
+        });
+    });
+    return promise;
+}
+
+async function from_json_file(path) {
+    let promise = new Promise(function(resolve, reject) {
+        fs.readFile(path, 'utf8', function(err, utf8_bytes) {
+            /* istanbul ignore next */
+            if (err) {
+                reject(err);
+            } else {
+                resolve(JSON.parse(utf8_bytes));
+            }
+        });
+    });
+    return promise;
+}
+
 function child_process_spawn(cmd, args) {
     /* istanbul ignore next */
     if (process.platform == "win32") {
@@ -87,5 +118,7 @@ function child_process_spawn(cmd, args) {
 module.exports = {
     assert: assert,
     child_process_spawn: child_process_spawn,
+    from_json_file: from_json_file,
     split_freetext: split_freetext,
+    to_json_file: to_json_file,
 }
