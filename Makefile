@@ -174,7 +174,7 @@ check-unit: dbsetup grep-ie-bad-words
 
 check: thirdparty check-unit
 	./acceptance-test-patient-validation.sh
-	./acceptance-test-cafe-new.sh
+	./acceptance-test-cafe.sh
 	@echo "SUCCESS $@"
 
 ADFICE_TAR_CONTENTS=COPYING \
@@ -246,7 +246,7 @@ vm-check: adfice-centos-8.3-vm.qcow2 node_modules/.bin/testcafe
 	$(VM_SSH_ADFICE) "bash -c 'cd /data/webapps/adfice; npm test'"
 	@echo "Make sure it works before a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
-		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
+		acceptance-test-cafe.js https://127.0.0.1:$(VM_PORT_HTTPS)
 	@echo
 	@echo "shutting down, to Make sure it works after a restart"
 	$(call vm-shutdown,test-adfice-centos-8.3-vm.qcow2)
@@ -256,7 +256,7 @@ vm-check: adfice-centos-8.3-vm.qcow2 node_modules/.bin/testcafe
 	$(call vm-launch,test-adfice-centos-8.3-vm.qcow2)
 	@echo "Make sure it works after a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
-		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
+		acceptance-test-cafe.js https://127.0.0.1:$(VM_PORT_HTTPS)
 	@echo
 	@echo "Make sure it automatically restarts if the service crashes"
 	$(VM_SSH) "bash -c 'ps aux | grep -e Adfice[W]ebserver'"
@@ -266,7 +266,7 @@ vm-check: adfice-centos-8.3-vm.qcow2 node_modules/.bin/testcafe
 	sleep 5
 	$(VM_SSH) "bash -c 'ps aux | grep -e Adfice[W]ebserver'"
 	./node_modules/.bin/testcafe "firefox:headless" \
-		acceptance-test-cafe-new.js https://127.0.0.1:$(VM_PORT_HTTPS)
+		acceptance-test-cafe.js https://127.0.0.1:$(VM_PORT_HTTPS)
 	$(call vm-shutdown,test-adfice-centos-8.3-vm.qcow2)
 	@echo "SUCCESS $@"
 
