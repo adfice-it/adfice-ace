@@ -121,6 +121,9 @@ app.get('/load', async function(req, res) {
     //     let user_id = req.query.user_id;
     //     let participant_number = req.query.participant_number;
     //     id = await etl.etl(mrn, user_id, participant_number, etl_options);
+    //     if (!id) {
+    //         res.redirect('/load-error');
+    //     }
     // }
     res.redirect('/start?id=' + id);
 });
