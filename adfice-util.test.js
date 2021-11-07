@@ -3,7 +3,7 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-const autil = require('./adficeUtil')
+const autil = require('./adfice-util')
 
 test('assert true', () => {
     autil.assert(true);
@@ -56,15 +56,15 @@ test('split freetext advice strings', () => {
         editable: true
     }];
 
-    expect(autil.splitFreetext(example)).toStrictEqual(expected);
+    expect(autil.split_freetext(example)).toStrictEqual(expected);
 
     expected = [{
         id: 0,
         text: "foo",
         editable: false
     }];
-    expect(autil.splitFreetext("foo")).toStrictEqual(expected);
-    expect(autil.splitFreetext(null)).toStrictEqual([]);
+    expect(autil.split_freetext("foo")).toStrictEqual(expected);
+    expect(autil.split_freetext(null)).toStrictEqual([]);
 })
 
 test('split freetext handle bad strings', () => {
@@ -72,7 +72,7 @@ test('split freetext handle bad strings', () => {
     let example = "initial:{{free text: pre-filled: first free text}}" +
         " some addtional text:{{free text}}";
 
-    expect(autil.splitFreetext("{free text}}")).toStrictEqual([{
+    expect(autil.split_freetext("{free text}}")).toStrictEqual([{
         id: 0,
         text: "{free text",
         editable: false
@@ -81,7 +81,7 @@ test('split freetext handle bad strings', () => {
         text: "BAD DATA",
         editable: true
     }]);
-    expect(autil.splitFreetext("{free text:}}")).toStrictEqual([{
+    expect(autil.split_freetext("{free text:}}")).toStrictEqual([{
         id: 0,
         text: "{free text:",
         editable: false
@@ -90,7 +90,7 @@ test('split freetext handle bad strings', () => {
         text: "BAD DATA",
         editable: true
     }]);
-    expect(autil.splitFreetext("{{free text:}")).toStrictEqual([{
+    expect(autil.split_freetext("{{free text:}")).toStrictEqual([{
         id: 1,
         text: "",
         editable: true

@@ -5,7 +5,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const autil = require('./adficeUtil');
+const autil = require('./adfice-util');
 const ae = require('./adficeEvaluator');
 const cp = require('./calculatePrediction');
 const adb = require('./adficeDB');
@@ -43,13 +43,13 @@ function split_advice_texts_cdss_ehr_patient(advice_texts) {
 
         row.an_fyi = 'Flat fields "cdss", "ehr", "patient" are for debugging';
 
-        row.cdss_split = autil.splitFreetext(row.cdss);
+        row.cdss_split = autil.split_freetext(row.cdss);
         /* delete row.cdss; TODO: switch patient-validation to cdss_split */
 
-        row.ehr_split = autil.splitFreetext(row.ehr);
+        row.ehr_split = autil.split_freetext(row.ehr);
         /* delete row.ehr */
 
-        row.patient_split = autil.splitFreetext(row.patient);
+        row.patient_split = autil.split_freetext(row.patient);
         /* delete row.patient */
     }
     return advice_texts;

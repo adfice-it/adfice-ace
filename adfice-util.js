@@ -15,7 +15,7 @@ function assert(condition, message) {
     }
 }
 
-function splitFreetext(str) {
+function split_freetext(str) {
     if (str == null) {
         return []
     };
@@ -87,5 +87,5 @@ function child_process_spawn(cmd, args) {
 module.exports = {
     assert: assert,
     child_process_spawn: child_process_spawn,
-    splitFreetext: splitFreetext,
+    split_freetext: split_freetext,
 }
