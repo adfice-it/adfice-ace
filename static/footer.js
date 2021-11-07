@@ -5,7 +5,7 @@
 
 function get_patient_id_param() {
     // let params = new URLSearchParams(window.location.search)
-    return urlParam('id');
+    return url_param('id');
 }
 
 function load_footer() {

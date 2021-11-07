@@ -25,35 +25,36 @@ const DEBUG = ((process.env.DEBUG !== undefined) &&
     (process.env.DEBUG !== "0"));
 console.log('DEBUG: ', DEBUG);
 
-async function getDataForPatient(req, res) {
+async function get_data_for_patient(req, res) {
     let patient_id = req.query.id || req.query.patient || 0;
     let patient_advice = await adfice.get_advice_for_patient(patient_id);
     let data = {
-        lang: 'nl',
-        md: md,
         patient_id: patient_id,
         patient_advice: patient_advice,
     };
     return data;
 }
 
-async function renderIndex(req, res) {
+async function render_index(req, res) {
     res.render("index"); //.ejs
 }
 
-async function jsonAdviceForPatient(req, res) {
-    res.json(await getDataForPatient(req, res));
+async function json_advice(req, res) {
+    res.json(await get_data_for_patient(req, res));
 }
 
-async function renderAdviceForPatient(req, res) {
-    res.render("patient" /* .ejs */ , await getDataForPatient(req, res));
+async function render_advice(req, res) {
+    res.render("patient" /* .ejs */ , await get_data_for_patient(req, res));
 }
 
-async function renderValidationAdviceForPatient(req, res) {
-    res.render("patient-validation", await getDataForPatient(req, res)); // .ejs
+async function render_validation_advice(req, res) {
+    let data = await get_data_for_patient(req, res);
+    data['md'] = md;
+    data['lang'] = 'nl';
+    res.render("patient-validation", data); // .ejs
 }
 
-async function renderPredictionExplanation(req, res) {
+async function render_prediction_explanation(req, res) {
     let patient_id = req.query.id || 0;
     let patient_measurements = await adfice.get_patient_measurements(patient_id);
     let patient_measurement;
@@ -70,7 +71,7 @@ async function renderPredictionExplanation(req, res) {
     }); // .ejs
 }
 
-async function renderAdviceTextsCheckboxes(req, res) {
+async function render_advice_texts_checkboxes(req, res) {
     let query_id = req.query.id || "6e";
     let rule_numbers = query_id.split(',');
     let advice_texts = await adfice.get_advice_texts_checkboxes(rule_numbers);
@@ -101,15 +102,15 @@ app.use("/advise", express.static('static/advise.html'));
 app.use("/finalize", express.static('static/finalize.html'));
 
 app.set('view engine', 'ejs');
-app.get("/advice", jsonAdviceForPatient);
+app.get("/advice", json_advice);
 
-app.get("/", renderIndex);
-app.get("/index", renderIndex);
-app.get("/index.html", renderIndex);
+app.get("/", render_index);
+app.get("/index", render_index);
+app.get("/index.html", render_index);
 
 app.get("/patient", express.static('static/start.html'));
 
-app.get("/patient-validation", renderValidationAdviceForPatient);
+app.get("/patient-validation", render_validation_advice);
 
 app.get('/load', async function(req, res) {
     let mrn = req.query.mrn;
@@ -267,7 +268,8 @@ server.on('upgrade', function upgrade(request, socket, head) {
                         }
                         ws.send(msg_string);
                     } else if (message.type == 'submit_missings') {
-                        await adfice.updatePredictionWithUserValues(patient_id, message['submit_missings']);
+                        await adfice.update_prediction_with_user_values(
+                            patient_id, message['submit_missings']);
                     } else {
                         send_all(kind, patient_id, message);
                     }

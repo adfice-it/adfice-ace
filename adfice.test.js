@@ -177,7 +177,7 @@ test('set_advice_for_patient(68)', async () => {
     adfice.set_advice_for_patient(patient_num, viewer, new_advice, freetexts);
 })
 
-test('updatePredictionWithUserValues, update all missing data', async () => {
+test('update_prediction_with_user_values, update all missing data', async () => {
     let patient_id = 172;
     let form_data = {};
     form_data['user_GDS_score'] = '1';
@@ -195,7 +195,7 @@ test('updatePredictionWithUserValues, update all missing data', async () => {
     let measurement = measurements[0];
     expect(measurement['prediction_result']).toBeFalsy();
     expect(measurement['user_grip_kg']).toBeFalsy();
-    await adfice.updatePredictionWithUserValues(patient_id, form_data);
+    await adfice.update_prediction_with_user_values(patient_id, form_data);
     measurements = await adfice.get_patient_measurements(patient_id);
     measurement = measurements[0];
     expect(measurement['prediction_result']).toBeGreaterThan(10);
@@ -219,7 +219,7 @@ test('updatePredictionWithUserValues, update all missing data', async () => {
     let prediction_result = measurement['prediction_result'];
     expect(prediction_result).toBeGreaterThan(10);
     expect(measurement['user_grip_kg']).toBe(25);
-    await adfice.updatePredictionWithUserValues(patient_id, form_data);
+    await adfice.update_prediction_with_user_values(patient_id, form_data);
     measurements = await adfice.get_patient_measurements(patient_id);
     measurement = measurements[0];
     expect(measurement['prediction_result']).toBe(prediction_result);
@@ -228,14 +228,14 @@ test('updatePredictionWithUserValues, update all missing data', async () => {
     patient_id = 172;
     form_data = {};
     form_data['fear_dropdown'] = '0';
-    await adfice.updatePredictionWithUserValues(patient_id, form_data);
+    await adfice.update_prediction_with_user_values(patient_id, form_data);
     measurements = await adfice.get_patient_measurements(patient_id);
     measurement = measurements[0];
     expect(measurement['user_fear0']).toBe(1);
     expect(measurement['user_fear1']).toBe(0);
     form_data = {};
     form_data['fear_dropdown'] = '1';
-    await adfice.updatePredictionWithUserValues(patient_id, form_data);
+    await adfice.update_prediction_with_user_values(patient_id, form_data);
     measurements = await adfice.get_patient_measurements(patient_id);
     measurement = measurements[0];
     expect(measurement['user_fear1']).toBe(1);
@@ -380,16 +380,16 @@ test('get_advice_for_patient(85), normal eGFR', async () => {
 });
 
 test('getSQLcondition rule 38', async () => {
-    let ruleNumber = 38;
-    let sqlCondition = await adfice.get_sql_condition(ruleNumber);
+    let rule_number = 38;
+    let sqlCondition = await adfice.get_sql_condition(rule_number);
     expect(sqlCondition).toContain("patient_problem");
 });
 
 test('is_sql_condition_true', async () => {
-    let patientIdentifier = 44;
-    let ruleNumber = 38;
-    let isConditionTrue = await adfice.is_sql_condition_true(patientIdentifier,
-        ruleNumber);
+    let patient_identifier = 44;
+    let rule_number = 38;
+    let isConditionTrue = await adfice.is_sql_condition_true(patient_identifier,
+        rule_number);
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
 });
@@ -747,7 +747,7 @@ test('Get empty result set from measurements', async () => {
 
 test('Structure measurements', async () => {
     let measurements = await adfice.get_patient_measurements(2);
-    let structuredMeas = adfice.structureMeas(measurements);
+    let structuredMeas = adfice.structure_meas(measurements);
     expect(structuredMeas['grip_kg']).toBe(21.5);
 });
 

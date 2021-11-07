@@ -73,7 +73,7 @@ function freetextentered(textfield) {
     message_globals.freetexts_entered = textfield.id;
 }
 
-function updateMeas() {
+function update_meas() {
     if (!message_globals.ws) {
         message_globals.logger.error(
             'got a submit_missings event but websocket is null');
@@ -392,7 +392,7 @@ function connect_web_socket() {
 
     // URLSearchParams does not work in IE
     // let params = new URLSearchParams(window.location.search);
-    message_globals.patient_id = urlParam('id');
+    message_globals.patient_id = url_param('id');
 
     let base_url = ws_protocol + '//' + url_hostname + ':' + url_port;
     let ws_url = base_url + '/patient/' + message_globals.patient_id;
@@ -408,8 +408,8 @@ function connect_web_socket() {
     return message_globals.ws;
 }
 
-function urlParam(parName) {
-    var results = new RegExp('[\?&]' + parName + '=([^&#]*)').exec(window.location.href);
+function url_param(par_name) {
+    var results = new RegExp('[\?&]' + par_name + '=([^&#]*)').exec(window.location.href);
     if (results == null) {
         return null;
     } else {
@@ -442,7 +442,7 @@ function connect_web_socket_and_keep_alive() {
     }, freetext_interval);
 }
 
-function copyTextToClipboard(text, type) {
+function copy_text_to_clipboard(text, type) {
     if (navigator.clipboard != undefined) {
         navigator.clipboard.writeText(text);
     } else if (window.clipboardData) {
@@ -458,29 +458,29 @@ function copyTextToClipboard(text, type) {
 }
 
 //TODO does not work in IE. Copies the text from both the selected AND NONSELECTED options.
-function copyEHRTextToClipboard() {
+function copy_ehr_text_to_clipboard() {
     var allEHRText = document.getElementById("div_all_ehr_text");
-    return copyTextToClipboard(allEHRText.innerText, 'was_copied_ehr');
+    return copy_text_to_clipboard(allEHRText.innerText, 'was_copied_ehr');
 }
 
-function copyPatientTextToClipboard() {
+function copy_patient_text_to_clipboard() {
     var dpv = document.getElementById("div_patient_view");
     var nma = document.getElementById("non_med_advice_patient_area_text");
     var all_text = dpv.innerText + "\n" + "\n" + nma.innerText;
-    return copyTextToClipboard(all_text, 'was_copied_patient');
+    return copy_text_to_clipboard(all_text, 'was_copied_patient');
 }
 
-function makeDefinitive() {
+function make_definitive() {
     send_message('definitive');
     return true;
 }
 
-function patientRenew() {
+function patient_renew() {
     send_message('patient_renew');
     return true;
 }
 
-function windowPrint() {
+function window_print() {
     window.print();
     send_message('was_printed');
     return true;

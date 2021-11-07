@@ -225,24 +225,24 @@ async function get_meds(patient_id) {
 
 /* TODO refactor to make this set-based, rather than loop */
 /* (the list is not long, we should read the whole table in to RAM) */
-async function get_sql_condition(ruleNumber) {
+async function get_sql_condition(rule_number) {
     var sql = `/* adfice.get_sql_condition */
         SELECT sql_condition
           FROM med_rules
          WHERE medication_criteria_id=?
          `;
-    let results = await this.sql_select(sql, [ruleNumber]);
+    let results = await this.sql_select(sql, [rule_number]);
     return results[0]['sql_condition'];
 }
 
-async function is_sql_condition_true(patientIdentifier, ruleNumber) {
-    let patient_id = as_id(patientIdentifier);
-    let result = await this.evaluate_sqlCondition(patient_id, ruleNumber);
+async function is_sql_condition_true(patient_identifier, rule_number) {
+    let patient_id = as_id(patient_identifier);
+    let result = await this.evaluate_sql_condition(patient_id, rule_number);
     return result;
 }
 
-async function evaluate_sqlCondition(patient_id, ruleNumber) {
-    var sql = await this.get_sql_condition(ruleNumber);
+async function evaluate_sql_condition(patient_id, rule_number) {
+    var sql = await this.get_sql_condition(rule_number);
     if (sql == null) {
         return true;
     } //no conditions === always true
@@ -275,13 +275,13 @@ async function evaluate_sql(sql, patient_id) {
     return true;
 }
 
-async function get_preselect_rules(ruleNumber) {
+async function get_preselect_rules(rule_number) {
     var sql = `/* adfice.get_preselect_rules */
         SELECT *
           FROM preselect_rules
          WHERE medication_criteria_id=?
          `;
-    let results = await this.sql_select(sql, [ruleNumber]);
+    let results = await this.sql_select(sql, [rule_number]);
     return results;
 }
 
@@ -482,16 +482,16 @@ async function set_sql_freetexts(sqls_and_params, patient_id, viewer_id,
       UPDATE viewer_id=VALUES(viewer_id)
            , freetext=VALUES(freetext)
 `;
-    let params = freetextsToRows(patient_id, viewer_id, freetexts);
+    let params = freetexts_to_rows(patient_id, viewer_id, freetexts);
     for (let i = 0; i < params.length; ++i) {
         sqls_and_params.push([insert_sql, params[i]]);
     }
 }
 
 // called from AdficeWebserver
-async function set_advice_for_patient(patientIdentifier, viewer,
+async function set_advice_for_patient(patient_identifier, viewer,
     cb_states, freetexts) {
-    const patient_id = as_id(patientIdentifier);
+    const patient_id = as_id(patient_identifier);
     const viewer_id = as_id(viewer);
 
     let sqls_and_params = [];
@@ -510,10 +510,10 @@ async function set_advice_for_patient(patientIdentifier, viewer,
     return rs;
 }
 
-async function updatePredictionWithUserValues(patient_id, form_data) {
+async function update_prediction_with_user_values(patient_id, form_data) {
     let fields = Object.keys(form_data);
 
-    let sql = `/* adfice.updatePredictionWithUserValues */
+    let sql = `/* adfice.update_prediction_with_user_values */
         UPDATE patient_measurement
            SET `
     let params = [];
@@ -582,13 +582,13 @@ async function get_freetexts(patient_id) {
        ORDER BY id`;
     let params = [patient_id];
     let results = await this.sql_select(sql, params);
-    return rowsToFreetexts(results);
+    return rows_to_freetexts(results);
 }
 
-function structureLabs(labRows) {
+function structure_labs(lab_rows) {
     let labTests = {};
-    for (let i = 0; i < labRows.length; ++i) {
-        let row = labRows[i];
+    for (let i = 0; i < lab_rows.length; ++i) {
+        let row = lab_rows[i];
         let lab_test_name = row.lab_test_name;
         let lab_test_result = row.lab_test_result;
         let date_measured = row.date_measured;
@@ -599,14 +599,14 @@ function structureLabs(labRows) {
     return labTests;
 }
 
-function structureMeas(measRow) {
+function structure_meas(meas_row) {
     let measurements = {};
     // seems like there ought to be a less horrible way to do this,
     // but this'll do.
     // the ETL should prevent this from happening in real life,
     // but it definitely happens in the test data.
-    if (typeof(measRow) == 'undefined' || measRow == null ||
-        measRow.length != 1) {
+    if (typeof(meas_row) == 'undefined' || meas_row == null ||
+        meas_row.length != 1) {
         measurements['user_education_hml'] = null;
         measurements['education_hml'] = null;
         measurements['user_height_cm'] = null;
@@ -652,51 +652,51 @@ function structureMeas(measRow) {
         measurements['prediction_result'] = null;
         measurements['user_values_updated'] = null;
     } else {
-        // maybe: measurements = mesaRow[0];
-        measurements['user_education_hml'] = measRow[0].user_education_hml;
-        measurements['education_hml'] = measRow[0].education_hml;
-        measurements['user_height_cm'] = measRow[0].user_height_cm;
-        measurements['height_cm'] = measRow[0].height_cm;
-        measurements['height_date_measured'] = measRow[0].height_date_measured;
-        measurements['user_weight_kg'] = measRow[0].user_weight_kg;
-        measurements['weight_kg'] = measRow[0].weight_kg;
-        measurements['weight_date_measured'] = measRow[0].weight_date_measured;
-        measurements['BMI'] = measRow[0].BMI;
-        measurements['BMI_date_measured'] = measRow[0].BMI_date_measured;
-        measurements['user_GDS_score'] = measRow[0].user_GDS_score;
-        measurements['GDS_score'] = measRow[0].GDS_score;
-        measurements['GDS_date_measured'] = measRow[0].GDS_date_measured;
-        measurements['user_grip_kg'] = measRow[0].user_grip_kg;
-        measurements['grip_kg'] = measRow[0].grip_kg;
-        measurements['grip_date_measured'] = measRow[0].grip_date_measured;
-        measurements['user_walking_speed_m_per_s'] = measRow[0].user_walking_speed_m_per_s;
-        measurements['walking_speed_m_per_s'] = measRow[0].walking_speed_m_per_s;
-        measurements['walking_date_measured'] = measRow[0].walking_date_measured;
-        measurements['user_systolic_bp_mmHg'] = measRow[0].user_systolic_bp_mmHg;
-        measurements['systolic_bp_mmHg'] = measRow[0].systolic_bp_mmHg;
-        measurements['diastolic_bp_mmHg'] = measRow[0].diastolic_bp_mmHg;
-        measurements['bp_date_measured'] = measRow[0].bp_date_measured;
-        measurements['user_number_of_limitations'] = measRow[0].user_number_of_limitations;
-        measurements['number_of_limitations'] = measRow[0].number_of_limitations;
-        measurements['functional_limit_date_measured'] = measRow[0].functional_limit_date_measured;
-        measurements['user_fear0'] = measRow[0].user_fear0;
-        measurements['user_fear1'] = measRow[0].user_fear1;
-        measurements['user_fear2'] = measRow[0].user_fear2;
-        measurements['fear0'] = measRow[0].fear0;
-        measurements['fear1'] = measRow[0].fear1;
-        measurements['fear2'] = measRow[0].fear2;
-        measurements['fear_of_falls_date_measured'] = measRow[0].fear_of_falls_date_measured;
-        measurements['user_nr_falls_12m'] = measRow[0].user_nr_falls_12m;
-        measurements['nr_falls_12m'] = measRow[0].nr_falls_12m;
-        measurements['nr_falls_date_measured'] = measRow[0].nr_falls_date_measured;
-        measurements['user_smoking'] = measRow[0].user_smoking;
-        measurements['smoking'] = measRow[0].smoking;
-        measurements['smoking_date_measured'] = measRow[0].smoking_date_measured;
-        measurements['has_antiepileptica'] = measRow[0].has_antiepileptica;
-        measurements['has_ca_blocker'] = measRow[0].has_ca_blocker;
-        measurements['has_incont_med'] = measRow[0].has_incont_med;
-        measurements['prediction_result'] = measRow[0].prediction_result;
-        measurements['user_values_updated'] = measRow[0].user_values_updated;
+        // maybe: measurements = meas_row[0];
+        measurements['user_education_hml'] = meas_row[0].user_education_hml;
+        measurements['education_hml'] = meas_row[0].education_hml;
+        measurements['user_height_cm'] = meas_row[0].user_height_cm;
+        measurements['height_cm'] = meas_row[0].height_cm;
+        measurements['height_date_measured'] = meas_row[0].height_date_measured;
+        measurements['user_weight_kg'] = meas_row[0].user_weight_kg;
+        measurements['weight_kg'] = meas_row[0].weight_kg;
+        measurements['weight_date_measured'] = meas_row[0].weight_date_measured;
+        measurements['BMI'] = meas_row[0].BMI;
+        measurements['BMI_date_measured'] = meas_row[0].BMI_date_measured;
+        measurements['user_GDS_score'] = meas_row[0].user_GDS_score;
+        measurements['GDS_score'] = meas_row[0].GDS_score;
+        measurements['GDS_date_measured'] = meas_row[0].GDS_date_measured;
+        measurements['user_grip_kg'] = meas_row[0].user_grip_kg;
+        measurements['grip_kg'] = meas_row[0].grip_kg;
+        measurements['grip_date_measured'] = meas_row[0].grip_date_measured;
+        measurements['user_walking_speed_m_per_s'] = meas_row[0].user_walking_speed_m_per_s;
+        measurements['walking_speed_m_per_s'] = meas_row[0].walking_speed_m_per_s;
+        measurements['walking_date_measured'] = meas_row[0].walking_date_measured;
+        measurements['user_systolic_bp_mmHg'] = meas_row[0].user_systolic_bp_mmHg;
+        measurements['systolic_bp_mmHg'] = meas_row[0].systolic_bp_mmHg;
+        measurements['diastolic_bp_mmHg'] = meas_row[0].diastolic_bp_mmHg;
+        measurements['bp_date_measured'] = meas_row[0].bp_date_measured;
+        measurements['user_number_of_limitations'] = meas_row[0].user_number_of_limitations;
+        measurements['number_of_limitations'] = meas_row[0].number_of_limitations;
+        measurements['functional_limit_date_measured'] = meas_row[0].functional_limit_date_measured;
+        measurements['user_fear0'] = meas_row[0].user_fear0;
+        measurements['user_fear1'] = meas_row[0].user_fear1;
+        measurements['user_fear2'] = meas_row[0].user_fear2;
+        measurements['fear0'] = meas_row[0].fear0;
+        measurements['fear1'] = meas_row[0].fear1;
+        measurements['fear2'] = meas_row[0].fear2;
+        measurements['fear_of_falls_date_measured'] = meas_row[0].fear_of_falls_date_measured;
+        measurements['user_nr_falls_12m'] = meas_row[0].user_nr_falls_12m;
+        measurements['nr_falls_12m'] = meas_row[0].nr_falls_12m;
+        measurements['nr_falls_date_measured'] = meas_row[0].nr_falls_date_measured;
+        measurements['user_smoking'] = meas_row[0].user_smoking;
+        measurements['smoking'] = meas_row[0].smoking;
+        measurements['smoking_date_measured'] = meas_row[0].smoking_date_measured;
+        measurements['has_antiepileptica'] = meas_row[0].has_antiepileptica;
+        measurements['has_ca_blocker'] = meas_row[0].has_ca_blocker;
+        measurements['has_incont_med'] = meas_row[0].has_incont_med;
+        measurements['prediction_result'] = meas_row[0].prediction_result;
+        measurements['user_values_updated'] = meas_row[0].user_values_updated;
     }
     return measurements;
 }
@@ -720,8 +720,8 @@ async function get_all_labs() {
 }
 
 // called from AdficeWebserver
-async function get_advice_for_patient(patientIdentifier) {
-    let patient_id = as_id(patientIdentifier);
+async function get_advice_for_patient(patient_identifier) {
+    let patient_id = as_id(patient_identifier);
     let patient = await this.get_patient_by_id(patient_id);
     let age = patient.age;
     let is_final = false;
@@ -729,8 +729,8 @@ async function get_advice_for_patient(patientIdentifier) {
         is_final = true;
     }
 
-    let labRows = await this.get_labs(patient_id);
-    let labTests = structureLabs(labRows);
+    let lab_rows = await this.get_labs(patient_id);
+    let labTests = structure_labs(lab_rows);
 
     let problems = await this.get_problems(patient_id);
     let problemList = [];
@@ -738,7 +738,7 @@ async function get_advice_for_patient(patientIdentifier) {
         problemList.push(problems[i].name);
     }
 
-    let measurements = structureMeas(
+    let measurements = structure_meas(
         await this.get_patient_measurements(patient_id));
 
     var meds = await this.get_meds(patient_id);
@@ -807,7 +807,7 @@ async function get_advice_for_patient(patientIdentifier) {
     let cb_states = [];
     if (Object.keys(selected_advice).length == 0 && patient.id !== undefined) {
         cb_states = preselected_checkboxes;
-        await this.set_advice_for_patient(patientIdentifier, 0, cb_states,
+        await this.set_advice_for_patient(patient_identifier, 0, cb_states,
             null);
         selected_advice = await this.get_selections(patient_id);
     }
@@ -837,7 +837,7 @@ async function get_advice_for_patient(patientIdentifier) {
     patient_advice.patient_id = patient_id;
     patient_advice.age = age;
     patient_advice.is_final = is_final;
-    patient_advice.labs = labRows;
+    patient_advice.labs = lab_rows;
     patient_advice.medications = meds;
     patient_advice.meds_without_rules = meds_without_fired;
     patient_advice.meds_with_rules = meds_with_fired;
@@ -916,7 +916,7 @@ function selection_states_to_box_states(selection_states) {
     return output;
 }
 
-function rowsToFreetexts(rows) {
+function rows_to_freetexts(rows) {
     let output = {};
     for (let i = 0; i < rows.length; ++i) {
         let row = rows[i];
@@ -930,7 +930,7 @@ function rowsToFreetexts(rows) {
     return output;
 }
 
-function freetextsToRows(patient_id, viewer_id, freetexts) {
+function freetexts_to_rows(patient_id, viewer_id, freetexts) {
     let output = [];
     const freetext_ids = Object.keys(freetexts);
     freetext_ids.forEach((freetext_id, index) => {
@@ -954,8 +954,8 @@ function freetextsToRows(patient_id, viewer_id, freetexts) {
 }
 
 // called from export-to-mrs.js
-async function get_export_data(patientIdentifier) {
-    let patient_id = as_id(patientIdentifier);
+async function get_export_data(patient_identifier) {
+    let patient_id = as_id(patient_identifier);
     let sql = `/* adfice.get_export_data */
     SELECT s.patient_id
          , COALESCE(pm.medication_name, nmh.category_name) AS medcat_name
@@ -1120,7 +1120,7 @@ function adfice_init(db) {
         db_init: db_init,
         determine_preselected_checkboxes: determine_preselected_checkboxes,
         evaluate_sql: evaluate_sql,
-        evaluate_sqlCondition: evaluate_sqlCondition,
+        evaluate_sql_condition: evaluate_sql_condition,
         export_patient: export_patient,
         finalize_advice: finalize_advice,
         get_active_rules: get_active_rules,
@@ -1145,9 +1145,9 @@ function adfice_init(db) {
         is_sql_condition_true: is_sql_condition_true,
         selection_states_to_box_states: selection_states_to_box_states,
         sql_select: sql_select,
-        structureMeas: structureMeas,
+        structure_meas: structure_meas,
         update_prediction_result: update_prediction_result,
-        updatePredictionWithUserValues: updatePredictionWithUserValues,
+        update_prediction_with_user_values: update_prediction_with_user_values,
 
         /* public API methods */
         add_log_event_print: add_log_event_print,

@@ -7,7 +7,7 @@
 // static/basic-utils.js defines:
 //     function get_base_url()
 //     function get_content(url, type, callback)
-//     function get_JSON(url, callback)
+//     function get_json(url, callback)
 //     function get_text(url, callback)
 //     function ucfirst(str)
 
@@ -37,7 +37,7 @@ function get_converter() {
 
 function page_load(before_socket) {
     // let params = new URLSearchParams(window.location.search)
-    five_pages.patient_id = urlParam('id');
+    five_pages.patient_id = url_param('id');
 
     document.title = 'Patient ' + five_pages.patient_id;
 
@@ -46,7 +46,7 @@ function page_load(before_socket) {
 
     let json_url = get_base_url() + 'advice?id=' + five_pages.patient_id;
     // json_data is populated by get_advice_for_patient() in adfice.js
-    get_JSON(json_url, function(err, json_data) {
+    get_json(json_url, function(err, json_data) {
         console.log(json_data);
         if (err) {
             console.log("url:", json_url, "error:", err);
@@ -154,7 +154,7 @@ function patient_info_lab_start() {
         let result = '';
         for (let j = 0; j < labs.length; ++j) {
             if (lab == labs[j].lab_test_name) {
-                date = niceDate(labs[j].date_measured);
+                date = nice_date(labs[j].date_measured);
                 result = labs[j].lab_test_result;
                 let units = labs[j].lab_test_units;
                 if (typeof(units) != 'undefined' && units != null) {
@@ -310,46 +310,46 @@ function missing_data_form(measurements) {
         html += '</td><td class="prediction_missing"><select id="fear_dropdown" name = "fear_dropdown"><option value = ""></option><option value = "0">0: niet bang</option><option value = "1">1: een beetje/redelijk</option><option value = "2">2: erg bezorgd</option></select></td>';
         footnote += '***Kies 0 als de pati&euml;nt heeft <q>helemaal niet bang</q> beantwoord bij alle items op de FES-I SF7. Kies 1 als de pati&euml;nt heeft <q>Een beetje bezorgd</q> of <q>redelijk bezorgd</q> beantwoord bij tenminste 1 vraag, en kies 2 als de pati&euml;nt heeft <q>Erg bezorgd</q> beantwoord bij tenminste 1 vraag.';
     }
-    html += '</table><input id="button_submit_missings" type="button" onclick="updateMeas()" value="Verstuur"></form>';
+    html += '</table><input id="button_submit_missings" type="button" onclick="update_meas()" value="Verstuur"></form>';
     html += '<div id="footnote_missing">' + footnote + '</div><!-- footnote_missing -->';
     document.getElementById('prediction_missing_container').innerHTML = html;
 }
 
 
 function prediction_data_start(measurements) {
-    document.getElementById('GDS_score').innerHTML = niceValue(measurements.GDS_score);
-    document.getElementById('d_user_GDS_score').innerHTML = niceValue(measurements.user_GDS_score);
-    document.getElementById('GDS_date_measured').innerHTML = niceDate(measurements.GDS_date_measured);
-    document.getElementById('grip_kg').innerHTML = niceValue(measurements.grip_kg);
-    document.getElementById('d_user_grip_kg').innerHTML = niceValue(measurements.user_grip_kg);
-    document.getElementById('grip_date_measured').innerHTML = niceDate(measurements.grip_date_measured);
-    document.getElementById('walking_speed_m_per_s').innerHTML = niceValue(measurements.walking_speed_m_per_s);
-    document.getElementById('d_user_walking_speed_m_per_s').innerHTML = niceValue(measurements.user_walking_speed_m_per_s);
-    document.getElementById('walking_date_measured').innerHTML = niceDate(measurements.walking_date_measured);
+    document.getElementById('GDS_score').innerHTML = nice_value(measurements.GDS_score);
+    document.getElementById('d_user_GDS_score').innerHTML = nice_value(measurements.user_GDS_score);
+    document.getElementById('GDS_date_measured').innerHTML = nice_date(measurements.GDS_date_measured);
+    document.getElementById('grip_kg').innerHTML = nice_value(measurements.grip_kg);
+    document.getElementById('d_user_grip_kg').innerHTML = nice_value(measurements.user_grip_kg);
+    document.getElementById('grip_date_measured').innerHTML = nice_date(measurements.grip_date_measured);
+    document.getElementById('walking_speed_m_per_s').innerHTML = nice_value(measurements.walking_speed_m_per_s);
+    document.getElementById('d_user_walking_speed_m_per_s').innerHTML = nice_value(measurements.user_walking_speed_m_per_s);
+    document.getElementById('walking_date_measured').innerHTML = nice_date(measurements.walking_date_measured);
     let user_BMI = null;
     if (measurements.user_weight_kg != null && measurements.user_height_cm != null) {
         user_BMI = measurements.user_weight_kg / ((measurements.user_height_cm / 100) ^ 2);
     }
-    document.getElementById('BMI').innerHTML = niceValue(measurements.BMI);
-    document.getElementById('d_user_bmi_calc').innerHTML = niceValue(user_BMI);
-    document.getElementById('BMI_date_measured').innerHTML = niceDate(measurements.BMI_date_measured);
-    document.getElementById('systolic_bp_mmHg').innerHTML = niceValue(measurements.systolic_bp_mmHg);
-    document.getElementById('d_user_systolic_bp_mmHg').innerHTML = niceValue(measurements.user_systolic_bp_mmHg);
-    document.getElementById('bp_date_measured').innerHTML = niceDate(measurements.bp_date_measured);
-    document.getElementById('number_of_limitations').innerHTML = niceValue(measurements.number_of_limitations);
-    document.getElementById('d_user_number_of_limitations').innerHTML = niceValue(measurements.user_number_of_limitations);
-    document.getElementById('functional_limit_date_measured').innerHTML = niceDate(measurements.functional_limit_date_measured);
-    document.getElementById('nr_falls_12m').innerHTML = niceValue(measurements.nr_falls_12m);
-    document.getElementById('d_user_nr_falls_12m').innerHTML = niceValue(measurements.user_nr_falls_12m);
-    document.getElementById('nr_falls_date_measured').innerHTML = niceDate(measurements.nr_falls_date_measured);
-    document.getElementById('smoking').innerHTML = niceValue(measurements.smoking);
-    document.getElementById('d_user_smoking').innerHTML = niceValue(measurements.user_smoking);
-    document.getElementById('smoking_date_measured').innerHTML = niceDate(measurements.smoking_date_measured);
-    document.getElementById('has_antiepileptica').innerHTML = niceValue(measurements.has_antiepileptica);
-    document.getElementById('has_ca_blocker').innerHTML = niceValue(measurements.has_ca_blocker);
-    document.getElementById('has_incont_med').innerHTML = niceValue(measurements.has_incont_med);
-    document.getElementById('education_hml').innerHTML = niceValue(measurements.education_hml);
-    document.getElementById('d_user_education_hml').innerHTML = niceValue(measurements.user_education_hml);
+    document.getElementById('BMI').innerHTML = nice_value(measurements.BMI);
+    document.getElementById('d_user_bmi_calc').innerHTML = nice_value(user_BMI);
+    document.getElementById('BMI_date_measured').innerHTML = nice_date(measurements.BMI_date_measured);
+    document.getElementById('systolic_bp_mmHg').innerHTML = nice_value(measurements.systolic_bp_mmHg);
+    document.getElementById('d_user_systolic_bp_mmHg').innerHTML = nice_value(measurements.user_systolic_bp_mmHg);
+    document.getElementById('bp_date_measured').innerHTML = nice_date(measurements.bp_date_measured);
+    document.getElementById('number_of_limitations').innerHTML = nice_value(measurements.number_of_limitations);
+    document.getElementById('d_user_number_of_limitations').innerHTML = nice_value(measurements.user_number_of_limitations);
+    document.getElementById('functional_limit_date_measured').innerHTML = nice_date(measurements.functional_limit_date_measured);
+    document.getElementById('nr_falls_12m').innerHTML = nice_value(measurements.nr_falls_12m);
+    document.getElementById('d_user_nr_falls_12m').innerHTML = nice_value(measurements.user_nr_falls_12m);
+    document.getElementById('nr_falls_date_measured').innerHTML = nice_date(measurements.nr_falls_date_measured);
+    document.getElementById('smoking').innerHTML = nice_value(measurements.smoking);
+    document.getElementById('d_user_smoking').innerHTML = nice_value(measurements.user_smoking);
+    document.getElementById('smoking_date_measured').innerHTML = nice_date(measurements.smoking_date_measured);
+    document.getElementById('has_antiepileptica').innerHTML = nice_value(measurements.has_antiepileptica);
+    document.getElementById('has_ca_blocker').innerHTML = nice_value(measurements.has_ca_blocker);
+    document.getElementById('has_incont_med').innerHTML = nice_value(measurements.has_incont_med);
+    document.getElementById('education_hml').innerHTML = nice_value(measurements.education_hml);
+    document.getElementById('d_user_education_hml').innerHTML = nice_value(measurements.user_education_hml);
     let fear = '';
     if (measurements.fear0) {
         fear = 0;
@@ -372,9 +372,9 @@ function prediction_data_start(measurements) {
         fear = 2;
     }
     document.getElementById('d_user_fear').innerHTML = fear;
-    document.getElementById('fear_of_falls_date_measured').innerHTML = niceDate(measurements.fear_of_falls_date_measured);
+    document.getElementById('fear_of_falls_date_measured').innerHTML = nice_date(measurements.fear_of_falls_date_measured);
     if (measurements.user_values_updated != null) {
-        document.getElementById('user_values_updated').innerHTML = niceDate(measurements.user_values_updated);
+        document.getElementById('user_values_updated').innerHTML = nice_date(measurements.user_values_updated);
     }
 }
 
@@ -779,7 +779,7 @@ function gauge_risk_score() {
     }
 }
 
-function niceDate(dtstring) {
+function nice_date(dtstring) {
     if (dtstring == null) {
         return '';
     }
@@ -795,7 +795,7 @@ function niceDate(dtstring) {
 }
 
 // Workaround for IE literally displaying "null" for null values
-function niceValue(value) {
+function nice_value(value) {
     if (value == null || typeof(value) == 'unknown') {
         return '';
     } else {
@@ -815,7 +815,7 @@ function start_page_setup() {
     patient_info_meds_with_rules_start();
     patient_info_meds_without_rules();
     prediction_start();
-    isFinal();
+    is_final();
 }
 
 function prep_page_setup() {
@@ -828,7 +828,7 @@ function prep_page_setup() {
     other_med_advice_area();
     let hide_additional = 1;
     non_med_advice_area(hide_additional);
-    isFinal();
+    is_final();
 }
 
 function consult_page_setup() {
@@ -840,7 +840,7 @@ function consult_page_setup() {
     big_nested_medicine_advice_table(include_no_checkbox_advice);
     let hide_additional = 0;
     non_med_advice_area(hide_additional);
-    isFinal();
+    is_final();
 }
 
 function advise_page_setup() {
@@ -849,14 +849,14 @@ function advise_page_setup() {
     patient_medicine_advice_table();
     patient_other_med_advice_area();
     patient_non_med_advice();
-    isFinal();
+    is_final();
 }
 
 function finalize_page_setup() {
     patient_info_age(); // is this needed?
     gauge_risk_score();
     div_all_ehr_text();
-    isFinal();
+    is_final();
 }
 
 // These functions will be called from the web page, e.g.:
@@ -884,12 +884,12 @@ function finalize_page_load() {
     page_load(finalize_page_setup);
 }
 
-function topFunction() {
+function top_function() {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
 
-function isFinal() {
+function is_final() {
     let is_final = get_patient_advice().is_final;
     if (is_final) {
         document.body.style.opacity = 0.5;

@@ -61,7 +61,7 @@ function get_content(url, type, callback) {
     xhr.send();
 };
 
-function get_JSON(url, callback) {
+function get_json(url, callback) {
     get_content(url, 'json', callback);
 }
 
@@ -80,7 +80,7 @@ function ucfirst(s) {
 if (typeof module !== 'undefined') {
     module.exports = {
         basic_utils: basic_utils,
-        get_JSON: get_JSON,
+        get_json: get_json,
         get_text: get_text,
         get_base_url: get_base_url,
         ucfirst: ucfirst

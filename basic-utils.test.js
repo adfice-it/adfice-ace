@@ -66,35 +66,35 @@ function mock_xhr_request(bu_get_func, status_code, resp_in, resp_out) {
 
     expect(open_called).toBe(1);
 
-    if (bu_get_func === bu.get_JSON) {
+    if (bu_get_func === bu.get_json) {
         expect(mock_xhr.responseType).toBe('json');
     } else {
         expect(mock_xhr.responseType).toBe('text');
     }
 }
 
-test('get_JSON', async function() {
+test('get_json', async function() {
     let status_code = 200;
     let resp = {
         foo: 'bar'
     };
-    mock_xhr_request(bu.get_JSON, status_code, resp, resp);
+    mock_xhr_request(bu.get_json, status_code, resp, resp);
 });
 
-test('get_JSON_text', async function() {
+test('get_json_text', async function() {
     let status_code = 200;
     let resp_in = '{ "foo": "bar" }';
     let resp_out = {
         foo: 'bar'
     };
-    mock_xhr_request(bu.get_JSON, status_code, resp_in, resp_out);
+    mock_xhr_request(bu.get_json, status_code, resp_in, resp_out);
 });
 
-test('get_JSON_404', async function() {
+test('get_json_404', async function() {
     let status_code = 404;
     let resp_in = '"Not found."';
     let resp_out = JSON.parse('"Not found."');
-    mock_xhr_request(bu.get_JSON, status_code, resp_in, resp_out);
+    mock_xhr_request(bu.get_json, status_code, resp_in, resp_out);
 });
 
 test('get_text', async function() {
