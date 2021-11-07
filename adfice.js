@@ -96,7 +96,7 @@ async function get_all_advice_texts_checkboxes() {
     return all;
 }
 
-// called from AdficeWebserver
+// called from adfice-webserver-runner
 async function get_advice_texts_checkboxes(rule_numbers, all) {
     if ((rule_numbers == null) || (!rule_numbers.length)) {
         return [];
@@ -488,7 +488,7 @@ async function set_sql_freetexts(sqls_and_params, patient_id, viewer_id,
     }
 }
 
-// called from AdficeWebserver
+// called from adfice-webserver-runner
 async function set_advice_for_patient(patient_identifier, viewer,
     cb_states, freetexts) {
     const patient_id = as_id(patient_identifier);
@@ -675,7 +675,7 @@ async function get_all_labs() {
     return result;
 }
 
-// called from AdficeWebserver
+// called from adfice-webserver-runner
 async function get_advice_for_patient(patient_identifier) {
     let patient_id = as_id(patient_identifier);
     let patient = await this.get_patient_by_id(patient_id);

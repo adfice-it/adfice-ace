@@ -7,7 +7,7 @@ if [ "_${PORT}_" == "__" ] || [ $PORT -lt 1024 ]; then
 fi
 
 BASE_URL="http://127.0.0.1:$PORT"
-node AdficeWebserver.js $PORT &
+node adfice-webserver-runner.js $PORT &
 CHILD_PID=%1
 sleep 1
 

@@ -18,7 +18,7 @@ import {
 
 fixture `Adfice`;
 
-// TODO: make launching of the AdficeWebserver the job of the test, and
+// TODO: make launching of the adfice-webserver the job of the test, and
 // TODO: have each test launch a different instance on a different port
 
 test('Check multiple viewers making changes', async t => {

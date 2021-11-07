@@ -50,8 +50,8 @@ async function change_view(t, button, url_fragment) {
     await change_flex_style_to_inline(t);
 }
 
-// TODO: make launching of the AdficeWebserver the job of the test, and
-// TODO: have each test launch a different instance on a different port
+// TODO: make launching of the adfice-webserver the job of the test
+// TODO: have each test launch a different adfice instance on a different port
 
 test('test incoming link from EHR', async t => {
     let url = `${BASE_URL}/load?mrn=DummyMRN-641923847`;

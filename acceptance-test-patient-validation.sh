@@ -7,7 +7,7 @@ if [ "_${PORT}_" == "__" ] || [ $PORT -lt 1024 ]; then
 	PORT=$(bin/free-port)
 fi
 
-node AdficeWebserver.js $PORT &
+node adfice-webserver-runner.js $PORT &
 CHILD_PID=%1
 sleep 1
 FILE="patient-validation_id.68.out"

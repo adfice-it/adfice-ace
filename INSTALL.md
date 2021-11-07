@@ -30,7 +30,7 @@ bin/load-synthetic-data.sh
 5. Start the web server on the desired port, for instance port 8080:
 
 ```
-node AdficeWebserver.js 8080
+node adfice-webserver-runner.js 8080
 ```
 
 Finally, browse to the server: http://localhost:8080/patient?id=1

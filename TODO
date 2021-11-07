@@ -51,10 +51,11 @@ Not required for "ready to install" but will be required for study:
 
 Mid Priority:
 * Add a way to clear user-entered prediction model data. This can be used by the TestCafe test to clean up after itself.
-* Each acceptance test should start an instance of AdficeWebserver
-  * refactor AdficeWebserver to be more testable
+* Each acceptance test should start an instance of adfice-webserver
+  * refactor adfice-webserver-runner to be more testable
   * refactor the client js (static/patient.js) to be more testable
-* automate test reconnect behavior on web-socket drop or AdficeWebserver restart
+* automate test reconnect behavior on web-socket drop
+  (or adfice-webserver-runner restart)
 * specify DB port, separate instance for local human testing, automated testing
 * specify DB per-test, or otherwise ensure:
   * tests can be run in parallel

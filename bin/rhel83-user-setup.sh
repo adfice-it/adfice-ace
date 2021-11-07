@@ -48,7 +48,7 @@ tee ~/.config/systemd/user/adfice.service << END_OF_FILE
 Description=Adfice web service
 
 [Service]
-ExecStart=/usr/bin/node AdficeWebserver.js $ADFICE_HTTP_PORT
+ExecStart=/usr/bin/node adfice-webserver-runner.js $ADFICE_HTTP_PORT
 WorkingDirectory=$ADFICE_INSTALL_DIR
 Restart=always
 RestartSec=5
