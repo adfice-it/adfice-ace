@@ -259,12 +259,12 @@ vm-check: adfice-centos-8.3-vm.qcow2 node_modules/.bin/testcafe
 		acceptance-test-cafe.js https://127.0.0.1:$(VM_PORT_HTTPS)
 	@echo
 	@echo "Make sure it automatically restarts if the service crashes"
-	$(VM_SSH) "bash -c 'ps aux | grep -e Adfice[W]ebserver'"
+	$(VM_SSH) "bash -c 'ps aux | grep -e adfice-[w]ebserver'"
 	$(VM_SSH) "bash -c \"\
-		kill \$$(ps -aux | grep -e Adfice[W]ebserver | tr -s ' ' \
+		kill \$$(ps -aux | grep -e adfice-[w]ebserver | tr -s ' ' \
 		| cut -d ' ' -f 2)\""
 	sleep 5
-	$(VM_SSH) "bash -c 'ps aux | grep -e Adfice[W]ebserver'"
+	$(VM_SSH) "bash -c 'ps aux | grep -e adfice-[w]ebserver'"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe.js https://127.0.0.1:$(VM_PORT_HTTPS)
 	$(call vm-shutdown,test-adfice-centos-8.3-vm.qcow2)
