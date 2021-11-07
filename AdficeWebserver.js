@@ -6,17 +6,22 @@
 // TODO: make starting and stopping the AdficeWebserver much more friendly
 // for testing.
 
-let http = require('http');
-let ws = require('ws');
-let express = require('express');
-let ejs = require('ejs');
-let util = require('util');
-let showdown = require('showdown');
-let adfice_factory = require('./adfice.js');
+const http = require('http');
+const ws = require('ws');
+const express = require('express');
+const ejs = require('ejs');
+const util = require('util');
+const showdown = require('showdown');
+const adfice_factory = require('./adfice.js');
+const autil = require('./adfice-util');
 
-let adfice = adfice_factory.adfice_init();
+const ETL_LIB = process.argv[3] || process.env.ETL_LIB || './stub-etl';
+console.log('ETL_LIB: ', ETL_LIB);
+const etl = require(ETL_LIB);
 
-let md = new showdown.Converter();
+const ETL_OPTIONS_JSON_PATH = process.argv[4] ||
+    process.env.ETL_OPTIONS_JSON_PATH || './stub-etl-options.json';
+console.log('ETL_OPTIONS_JSON_PATH: ', ETL_OPTIONS_JSON_PATH);
 
 const PORT = process.argv[2] || process.env.PORT || 8080;
 console.log('PORT: ', PORT);
@@ -24,6 +29,8 @@ console.log('PORT: ', PORT);
 const DEBUG = ((process.env.DEBUG !== undefined) &&
     (process.env.DEBUG !== "0"));
 console.log('DEBUG: ', DEBUG);
+
+let adfice = adfice_factory.adfice_init();
 
 async function get_data_for_patient(req, res) {
     let patient_id = req.query.id || req.query.patient || 0;
@@ -35,56 +42,16 @@ async function get_data_for_patient(req, res) {
     return data;
 }
 
-async function render_index(req, res) {
-    res.render("index"); //.ejs
-}
-
 async function json_advice(req, res) {
     res.json(await get_data_for_patient(req, res));
 }
 
-async function render_advice(req, res) {
-    res.render("patient" /* .ejs */ , await get_data_for_patient(req, res));
-}
-
 async function render_validation_advice(req, res) {
     let data = await get_data_for_patient(req, res);
-    data['md'] = md;
+    data['md'] = new showdown.Converter();
     data['lang'] = 'nl';
     res.render("patient-validation", data); // .ejs
 }
-
-async function render_prediction_explanation(req, res) {
-    let patient_id = req.query.id || 0;
-    let patient_measurements = await adfice.get_patient_measurements(patient_id);
-    let patient_measurement;
-    if (patient_measurements == null) {
-        patient_measurement = null;
-    } else {
-        patient_measurement = patient_measurements[0];
-    }
-
-    res.render("prediction_explanation", {
-        lang: 'nl',
-        patient_id: patient_id,
-        patient_measurement: patient_measurement
-    }); // .ejs
-}
-
-async function render_advice_texts_checkboxes(req, res) {
-    let query_id = req.query.id || "6e";
-    let rule_numbers = query_id.split(',');
-    let advice_texts = await adfice.get_advice_texts_checkboxes(rule_numbers);
-    res.render("checkboxes", {
-        rule_numbers: rule_numbers,
-        advice_texts: advice_texts
-    }); // .ejs
-}
-
-
-process.on('exit', function() {
-    console.log('server is not listening on ' + PORT);
-});
 
 let app = express();
 const server = http.createServer(app);
@@ -104,6 +71,9 @@ app.use("/finalize", express.static('static/finalize.html'));
 app.set('view engine', 'ejs');
 app.get("/advice", json_advice);
 
+async function render_index(req, res) {
+    res.render("index"); //.ejs
+}
 app.get("/", render_index);
 app.get("/index", render_index);
 app.get("/index.html", render_index);
@@ -112,20 +82,31 @@ app.get("/patient", express.static('static/start.html'));
 
 app.get("/patient-validation", render_validation_advice);
 
+app.use("/load-error", express.static('static/load-error.html'));
+
 app.get('/load', async function(req, res) {
     let mrn = req.query.mrn;
     let id = await adfice.id_for_mrn(mrn);
-    // if (!id) {
-    //     let etl = requrie(ETL_LIB);
-    //     let etl_options = await autil.from_json_file(ETL_OPTIONS_JSON_PATH);
-    //     let user_id = req.query.user_id;
-    //     let participant_number = req.query.participant_number;
-    //     id = await etl.etl(mrn, user_id, participant_number, etl_options);
-    //     if (!id) {
-    //         res.redirect('/load-error');
-    //     }
-    // }
-    res.redirect('/start?id=' + id);
+    let encoded_err = null;
+    if (!id) {
+        try {
+            let etl_options = await autil.from_json_file(ETL_OPTIONS_JSON_PATH);
+            let user_id = req.query.user;
+            let participant_number = req.query.participant;
+            id = await etl.etl(mrn, user_id, participant_number, etl_options);
+        } catch (err) {
+            encoded_err = encodeURIComponent('' + err);
+        }
+    }
+    if (!id) {
+        let param_str = '?mrn=' + mrn;
+        if (encoded_err !== null) {
+            param_str += '&err=' + encoded_err;
+        }
+        res.redirect('/load-error' + param_str);
+    } else {
+        res.redirect('/start?id=' + id);
+    }
 });
 
 // // sketch of post support
@@ -301,4 +282,8 @@ server.listen(PORT, () => {
 
 server.on('close', function() {
     console.log(`closing server running on ${PORT}`);
+});
+
+process.on('exit', function() {
+    console.log('server is not listening on ' + PORT);
 });

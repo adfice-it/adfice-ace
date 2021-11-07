@@ -1053,6 +1053,9 @@ async function add_log_event_copy_ehr_text(viewer_id, patient_id) {
 }
 
 async function id_for_mrn(mrn) {
+    if (!mrn) {
+        return null;
+    }
     let sql = 'SELECT patient_id FROM etl_mrn_patient WHERE mrn=?';
     let params = [mrn];
     let results = await this.sql_select(sql, params);

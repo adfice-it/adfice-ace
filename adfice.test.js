@@ -18,6 +18,12 @@ test('test patient_id for valid mrn', async () => {
     expect(patient_id).toBe(163);
 });
 
+test('test patient_id for no mrn', async () => {
+    let mrn = null;
+    let patient_id = await adfice.id_for_mrn(mrn);
+    expect(patient_id).toBe(null);
+});
+
 test('test patient_id for missing mrn', async () => {
     let mrn = 'DummyMRN-SirNotAppearing-641923847';
     let patient_id = await adfice.id_for_mrn(mrn);

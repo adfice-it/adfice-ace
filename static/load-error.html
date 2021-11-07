@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw -->
+<html lang="nl_nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="header-title">Error</title>
+<link rel="stylesheet" type="text/css" href="assets/adfice.css">
+<style>
+#button-start-view {
+    background-color: #008000;
+    color: #FFFFFF;
+}
+</style>
+<script src="assets/message.js"></script>
+<script>
+function load_error_page_load() {
+    let mrn = url_param('mrn');
+    let elem = document.getElementById('div-error-text');
+    let content = '<p>Error met ' + mrn + '</p>\n';
+    let err = url_param('err');
+    if (err) {
+        content += '<p>' + err + '</p>\n';
+    }
+    elem.innerHTML=content;
+}
+window.addEventListener('load', function(event) { load_error_page_load(); });
+</script>
+</head>
+<body>
+<img src="assets/Advice_IT_logo_small.png"
+     style="max-width: 10%; height: auto; display: inline;"
+     alt="Advice IT logo"
+>
+<div id='div-error-text'>
+Error
+</div><!-- error-text -->
+</body>
+</html>

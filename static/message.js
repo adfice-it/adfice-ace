@@ -413,7 +413,7 @@ function url_param(par_name) {
     if (results == null) {
         return null;
     } else {
-        return decodeURI(results[1]) || 0;
+        return decodeURIComponent(results[1]) || 0;
     }
 }
 
