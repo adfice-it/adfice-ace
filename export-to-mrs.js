@@ -13,7 +13,7 @@ async function main() {
     var adfice = adfice_factory.adfice_init();
 
     try {
-        let data = await adfice.getExportData(patient);
+        let data = await adfice.get_export_data(patient);
 
         console.log(JSON.stringify({
             'patient_id': patient,

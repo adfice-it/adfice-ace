@@ -3,9 +3,9 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-const cp = require('./calculatePrediction')
+const cp = require('./calculate-prediction')
 
-test('calculatePrediction', () => {
+test('calculate_prediction', () => {
     let GDS_score = 1;
     let grip_kg = 21.5;
     let walking_speed_m_per_s = 0.6;
@@ -22,7 +22,7 @@ test('calculatePrediction', () => {
     let edu3 = 0;
     let fear1 = 0;
     let fear2 = 1;
-    let prediction = cp.calculatePrediction(
+    let prediction = cp.calculate_prediction(
         GDS_score,
         grip_kg,
         walking_speed_m_per_s,
@@ -42,7 +42,7 @@ test('calculatePrediction', () => {
     expect(prediction).toBe(70);
 })
 
-test('calculatePredictionDB good data', () => {
+test('calculate_prediction_db good data', () => {
     let GDS_score = 1;
     let grip_kg = 21.5;
     let walking_speed_m_per_s = 0.6;
@@ -57,7 +57,7 @@ test('calculatePredictionDB good data', () => {
     let education_hml = 3;
     let fear1 = 0;
     let fear2 = 1;
-    let prediction = cp.calculatePredictionDB(
+    let prediction = cp.calculate_prediction_db(
         GDS_score,
         grip_kg,
         walking_speed_m_per_s,
@@ -76,7 +76,7 @@ test('calculatePredictionDB good data', () => {
 
     nr_falls_12m = 0;
     education_hml = 1;
-    prediction = cp.calculatePredictionDB(
+    prediction = cp.calculate_prediction_db(
         GDS_score,
         grip_kg,
         walking_speed_m_per_s,
@@ -95,7 +95,7 @@ test('calculatePredictionDB good data', () => {
 
     nr_falls_12m = 1;
     education_hml = 2;
-    prediction = cp.calculatePredictionDB(
+    prediction = cp.calculate_prediction_db(
         GDS_score,
         grip_kg,
         walking_speed_m_per_s,
@@ -113,7 +113,7 @@ test('calculatePredictionDB good data', () => {
     expect(prediction).toBe(55);
 })
 
-test('calculatePredictionDB bad data', () => {
+test('calculate_prediction_db bad data', () => {
     let GDS_score = 1;
     let grip_kg = null;
     let walking_speed_m_per_s = 0.6;
@@ -128,7 +128,7 @@ test('calculatePredictionDB bad data', () => {
     let education_hml = 3;
     let fear1 = 0;
     let fear2 = 1;
-    let prediction = cp.calculatePredictionDB(
+    let prediction = cp.calculate_prediction_db(
         GDS_score,
         grip_kg,
         walking_speed_m_per_s,

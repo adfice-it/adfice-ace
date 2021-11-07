@@ -27,7 +27,7 @@ console.log('DEBUG: ', DEBUG);
 
 async function getDataForPatient(req, res) {
     let patient_id = req.query.id || req.query.patient || 0;
-    let patient_advice = await adfice.getAdviceForPatient(patient_id);
+    let patient_advice = await adfice.get_advice_for_patient(patient_id);
     let data = {
         lang: 'nl',
         md: md,
@@ -55,7 +55,7 @@ async function renderValidationAdviceForPatient(req, res) {
 
 async function renderPredictionExplanation(req, res) {
     let patient_id = req.query.id || 0;
-    let patient_measurements = await adfice.getPatientMeasurements(patient_id);
+    let patient_measurements = await adfice.get_patient_measurements(patient_id);
     let patient_measurement;
     if (patient_measurements == null) {
         patient_measurement = null;
@@ -73,7 +73,7 @@ async function renderPredictionExplanation(req, res) {
 async function renderAdviceTextsCheckboxes(req, res) {
     let query_id = req.query.id || "6e";
     let rule_numbers = query_id.split(',');
-    let advice_texts = await adfice.getAdviceTextsCheckboxes(rule_numbers);
+    let advice_texts = await adfice.get_advice_texts_checkboxes(rule_numbers);
     res.render("checkboxes", {
         rule_numbers: rule_numbers,
         advice_texts: advice_texts
@@ -157,7 +157,7 @@ async function patient_advice_message(kind, id) {
     ++global_patient_advice_message_count;
     /* viewer_id should come from the session */
     let viewer_id = global_patient_advice_message_count;
-    let patient_advice = await adfice.getAdviceForPatient(id);
+    let patient_advice = await adfice.get_advice_for_patient(id);
 
     let freetexts = patient_advice.free_texts;
     let selections = patient_advice.selected_advice || {};
@@ -234,26 +234,26 @@ server.on('upgrade', function upgrade(request, socket, head) {
                         ('field_entries' in message)) {
                         let selections = message['box_states'];
                         let freetexts = message['field_entries'];
-                        await adfice.setAdviceForPatient(
+                        await adfice.set_advice_for_patient(
                             patient_id, viewer_id, selections, freetexts);
                     }
                     if (message.type == 'definitive') {
-                        await adfice.finalizeAndExport(patient_id);
+                        await adfice.finalize_and_export(patient_id);
                         let new_msg = await patient_advice_message(kind,
                             patient_id);
                         send_all(kind, patient_id, new_msg);
                     } else if (message.type == 'patient_renew') {
-                        await adfice.reloadPatientData(patient_id);
+                        await adfice.reload_patient_data(patient_id);
                         let new_msg = await patient_advice_message(kind,
                             patient_id);
                         send_all(kind, patient_id, new_msg);
                     } else if (message.type == 'was_printed') {
-                        await adfice.addLogEventPrint(viewer_id, patient_id);
+                        await adfice.add_log_event_print(viewer_id, patient_id);
                     } else if (message.type == 'was_copied_patient') {
-                        await adfice.addLogEventCopyPatientText(viewer_id,
+                        await adfice.add_log_event_copy_patient_text(viewer_id,
                             patient_id);
                     } else if (message.type == 'was_copied_ehr') {
-                        await adfice.addLogEventCopyEHRText(viewer_id,
+                        await adfice.add_log_event_copy_ehr_text(viewer_id,
                             patient_id);
                     } else if (message.type == 'ping') {
                         let pong = {};

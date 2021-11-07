@@ -3,7 +3,7 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-const adb = require('./adficeDB');
+const adb = require('./adfice-db');
 
 async function export_to_portal_db(db_env_file_path, patient_id, json_advice) {
     let sqls_and_params = [];

@@ -16,7 +16,7 @@ The list of drugs in selector_or is joined with or, the list of drugs in selecto
 The only exception to this format is rule 19 and 19a, which have a condition_problem & condition_drug. I've designated this by starting the condition_drug block with an & . If we decide this is too inconvenient, we can simply merge these two rules and mention it in the advice text instead.
 
 Condition_problem has boolean logic (ands and ors).
-Condition.drug can contain a list of drugs or medication.startDate. A comma-sepaarated list of drugs is joined with OR, ! and &! indicate that it should be joined with NOT and AND NOT. A list of drugs here is checking for ANY medication in the patient's medication list; it *will not* be one of the medications in selector_or or selector_not.
+Condition.drug can contain a list of drugs or medication.start_date. A comma-sepaarated list of drugs is joined with OR, ! and &! indicate that it should be joined with NOT and AND NOT. A list of drugs here is checking for ANY medication in the patient's medication list; it *will not* be one of the medications in selector_or or selector_not.
 Condition_age and condition_lab can have < and > .
 Condition_lab can have a value or a date or both. ! indicates that the value is missing (i.e. there is no natrium value for this patient).
 If we are lucky, if an allergy is a drug allergy we will get an ATC code for the class or classes of drugs that the patient is allergic to. If they are allergic to THIS drug then condition_allergy = true. I suspect allergies are free text, though, so this is low priority.

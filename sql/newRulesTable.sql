@@ -75,8 +75,8 @@ NOT schizofrenie","","atc:N05A","! problem:delier & ! problem:dementie & ! probl
 ("16","yes","no","antipsychotics N05A","all","{{preselect box 2}{SELECTOR(N05AA01 OR N05AA03 OR N05AB03 OR N05AB06 OR N05AC02 OR N05AH03 OR N05AH04) AND CONDITION()}}","atc:N05A","",7),
 ("17","yes","no","antipsychotics N05A","bijwerking","","atc:N05A","allergic-reaction",7),
 ("18","yes","no","antipsychotics N05A","all","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:N05A","",7),
-("19","yes","no","antidepressants N06A","medication started less than 6 months ago & depressie","","atc:N06A","medication.startDate > now-6-months & problem:depressie",8),
-("19a","yes","no","antidepressants N06A","medication  started more than 6 months ago & depressie","","atc:N06A","medication.startDate <= now-6-months & problem:depressie",8),
+("19","yes","no","antidepressants N06A","medication started less than 6 months ago & depressie","","atc:N06A","medication.start_date > now-6-months & problem:depressie",8),
+("19a","yes","no","antidepressants N06A","medication  started more than 6 months ago & depressie","","atc:N06A","medication.start_date <= now-6-months & problem:depressie",8),
 ("19b","yes","no","antidepressants N06A","angststoornis NOT depressie","","atc:N06A","problem:angststoornis & ! problem:depressie",8),
 ("19c","yes","no","antidepressants N06A","NOT depressie and NOT angststoornis","","atc:N06A"," ! problem:depressie & ! problem:angststoornis",8),
 ("19d","yes","no","antidepressants N06A","all","","atc:N06A","",8),
@@ -789,7 +789,7 @@ UPDATE med_rules SET preselect_criteria = NULL WHERE medication_criteria_id in("
 /* INSERT INTO med_rules (`medication_criteria_id`, active`,`needs_review`,`medication_criteria`,`patient_group_criteria`,`preselect_criteria`,`selector_logic`,`condition_logic`,`reference`) VALUES ("132a","yes","no","AVertigomedicatie
 N06BX03 (piracetam)","all","","atc:N06BX03","",12); */
 UPDATE med_rules SET selector_logic = "atc:N06BX03" WHERE medication_criteria_id in("133","134");
-UPDATE med_rules SET patient_group_criteria = "medication started less than 6 months ago (or unknown) & depressie", condition_logic = "(medication.startDate > now-6-months | !medication.startDate) & problem:depressie" where medication_criteria_id = "19";
+UPDATE med_rules SET patient_group_criteria = "medication started less than 6 months ago (or unknown) & depressie", condition_logic = "(medication.start_date > now-6-months | !medication.start_date) & problem:depressie" where medication_criteria_id = "19";
 
 /*
 INSERT INTO med_rules (`medication_criteria_id`, active`,`needs_review`,`medication_criteria`,`patient_group_criteria`,`preselect_criteria`,`selector_logic`,`condition_logic`,`reference`) VALUES 

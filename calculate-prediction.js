@@ -3,7 +3,7 @@
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 
-function calculatePredictionDB(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
+function calculate_prediction_db(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
     systolic_bp_mmHg, number_of_limitations, nr_falls_12m, smoking,
     has_antiepileptica, has_ca_blocker, has_incont_med, education_hml, fear1,
     fear2) {
@@ -49,7 +49,7 @@ function calculatePredictionDB(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
     }
     // fear of falls (FES score) is categorical, thus fear0, fear1, *or*
     // fear2 should = 1; the other two should be 0.
-    return calculatePrediction(
+    return calculate_prediction(
         GDS_score,
         grip_kg,
         walking_speed_m_per_s,
@@ -68,7 +68,7 @@ function calculatePredictionDB(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
         fear2);
 }
 
-function calculatePrediction(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
+function calculate_prediction(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
     systolic_bp_mmHg, number_of_limitations, nrFall1, nrFall2, smoking,
     has_antiepileptica, has_ca_blocker, has_incont_med, edu2, edu3, fear1,
     fear2) {
@@ -95,6 +95,6 @@ function calculatePrediction(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
 }
 
 module.exports = {
-    calculatePrediction: calculatePrediction,
-    calculatePredictionDB: calculatePredictionDB
+    calculate_prediction: calculate_prediction,
+    calculate_prediction_db: calculate_prediction_db
 }

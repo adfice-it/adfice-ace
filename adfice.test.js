@@ -27,7 +27,7 @@ test('test patient_id for missing mrn', async () => {
 test('test advice text 6e', async () => {
     //console.log('6e');
     var rule_numbers = ["6e"];
-    var texts = await adfice.getAdviceTextsCheckboxes(rule_numbers);
+    var texts = await adfice.get_advice_texts_checkboxes(rule_numbers);
     expect(texts.length).toBe(12);
     expect(texts[0].select_box_category).toBe('stop');
     expect(texts[1].select_box_category).toBe('taper-stop');
@@ -39,12 +39,12 @@ test('test advice text 6e', async () => {
     let str = 'Gebruik dit medicijn zoals u tot nu toe al deed.';
     expect(texts[6].patient_split[0].text).toBe(str);
 
-    texts = await adfice.getAdviceTextsNoCheckboxes(rule_numbers);
+    texts = await adfice.get_advice_texts_no_checkboxes(rule_numbers);
     expect(texts.length).toBe(1);
     expect(texts[0].cdss_split[0].text).toContain('angststoornis');
 })
 
-test('boxStatesToSelectionStates', () => {
+test('box_states_to_selection_states', () => {
     const patient_id = 32;
     const viewer = 188;
     const box_states = {
@@ -55,11 +55,12 @@ test('boxStatesToSelectionStates', () => {
         [32, 188, "C03AA03", "42", 2, 0],
         [32, 188, "C03AA03", "42b", 3, 1]
     ];
-    let out = adfice.boxStatesToSelectionStates(patient_id, viewer, box_states);
+    let out = adfice.box_states_to_selection_states(patient_id, viewer,
+        box_states);
     expect(out).toStrictEqual(expected);
 });
 
-test('selectionStatesToBoxStates', () => {
+test('selection_states_to_box_states', () => {
     const selection_states = [{
         patient_id: 32,
         ATC_code: "C03AA03",
@@ -79,15 +80,15 @@ test('selectionStatesToBoxStates', () => {
         "cb_C03AA03_42b_3": true
     };
 
-    let out = adfice.selectionStatesToBoxStates(selection_states);
+    let out = adfice.selection_states_to_box_states(selection_states);
 
     expect(out).toStrictEqual(expected);
 });
 
-test('getAdviceForPatient(68), no labs, no problems', async () => {
+test('get_advice_for_patient(68), no labs, no problems', async () => {
     //console.log('68');
-    let patientNumber = 68;
-    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    let patient_num = 68;
+    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(2);
     let adv0 = advice[0];
@@ -115,13 +116,13 @@ test('getAdviceForPatient(68), no labs, no problems', async () => {
 
 });
 
-test('setAdviceForPatient(68)', async () => {
+test('set_advice_for_patient(68)', async () => {
     //console.log('68 part 2');
-    let patientNumber = 68;
+    let patient_num = 68;
     let viewer = 999;
-    let advice = await adfice.getAdviceForPatient(patientNumber);
+    let advice = await adfice.get_advice_for_patient(patient_num);
 
-    await adfice.reloadPatientData(patientNumber, 'true');
+    await adfice.reload_patient_data(patient_num, 'true');
     let old_advice = {
         "cb_C03AA03_42_2": false,
         "cb_C03AA03_42_3": true,
@@ -137,9 +138,9 @@ test('setAdviceForPatient(68)', async () => {
     };
 
     let freetexts = null;
-    adfice.setAdviceForPatient(patientNumber, viewer, old_advice, freetexts);
+    adfice.set_advice_for_patient(patient_num, viewer, old_advice, freetexts);
 
-    advice = await adfice.getAdviceForPatient(patientNumber);
+    advice = await adfice.get_advice_for_patient(patient_num);
     expect(advice.selected_advice).toStrictEqual(old_advice);
 
     let new_advice = {
@@ -155,25 +156,25 @@ test('setAdviceForPatient(68)', async () => {
         "cb_C09AA02_63_4": false,
         "cb_C09AA02_63b_1": false
     };
-    adfice.setAdviceForPatient(patientNumber, viewer, new_advice, freetexts);
+    adfice.set_advice_for_patient(patient_num, viewer, new_advice, freetexts);
 
-    advice = await adfice.getAdviceForPatient(patientNumber);
+    advice = await adfice.get_advice_for_patient(patient_num);
     expect(advice.selected_advice).toStrictEqual(new_advice);
 
     expect(advice.is_final).toBeFalsy();
-    await adfice.finalizeAdviceForPatient(patientNumber);
-    advice = await adfice.getAdviceForPatient(patientNumber);
+    await adfice.finalize_advice(patient_num);
+    advice = await adfice.get_advice_for_patient(patient_num);
     expect(advice.is_final).toBeTruthy();
 
-    let data = await adfice.getExportData(patientNumber);
+    let data = await adfice.get_export_data(patient_num);
     expect(data.length).toBe(2);
 
-    await adfice.clearAdviceForPatient(patientNumber);
-    advice = await adfice.getAdviceForPatient(patientNumber);
+    await adfice.clear_advice_for_patient(patient_num);
+    advice = await adfice.get_advice_for_patient(patient_num);
     expect(advice.is_final).toBeFalsy();
     expect(advice.selected_advice).not.toStrictEqual(new_advice);
 
-    adfice.setAdviceForPatient(patientNumber, viewer, new_advice, freetexts);
+    adfice.set_advice_for_patient(patient_num, viewer, new_advice, freetexts);
 })
 
 test('updatePredictionWithUserValues, update all missing data', async () => {
@@ -190,12 +191,12 @@ test('updatePredictionWithUserValues, update all missing data', async () => {
     form_data['user_smoking'] = '0';
     form_data['user_education_hml'] = '2';
     form_data['fear_dropdown'] = '2';
-    let measurements = await adfice.getPatientMeasurements(patient_id);
+    let measurements = await adfice.get_patient_measurements(patient_id);
     let measurement = measurements[0];
     expect(measurement['prediction_result']).toBeFalsy();
     expect(measurement['user_grip_kg']).toBeFalsy();
     await adfice.updatePredictionWithUserValues(patient_id, form_data);
-    measurements = await adfice.getPatientMeasurements(patient_id);
+    measurements = await adfice.get_patient_measurements(patient_id);
     measurement = measurements[0];
     expect(measurement['prediction_result']).toBeGreaterThan(10);
     expect(measurement['user_grip_kg']).toBe(15);
@@ -213,13 +214,13 @@ test('updatePredictionWithUserValues, update all missing data', async () => {
     form_data['user_smoking'] = '';
     form_data['user_education_hml'] = '';
     form_data['fear_dropdown'] = '';
-    measurements = await adfice.getPatientMeasurements(patient_id);
+    measurements = await adfice.get_patient_measurements(patient_id);
     measurement = measurements[0];
     let prediction_result = measurement['prediction_result'];
     expect(prediction_result).toBeGreaterThan(10);
     expect(measurement['user_grip_kg']).toBe(25);
     await adfice.updatePredictionWithUserValues(patient_id, form_data);
-    measurements = await adfice.getPatientMeasurements(patient_id);
+    measurements = await adfice.get_patient_measurements(patient_id);
     measurement = measurements[0];
     expect(measurement['prediction_result']).toBe(prediction_result);
     expect(measurement['user_grip_kg']).toBe(25);
@@ -228,14 +229,14 @@ test('updatePredictionWithUserValues, update all missing data', async () => {
     form_data = {};
     form_data['fear_dropdown'] = '0';
     await adfice.updatePredictionWithUserValues(patient_id, form_data);
-    measurements = await adfice.getPatientMeasurements(patient_id);
+    measurements = await adfice.get_patient_measurements(patient_id);
     measurement = measurements[0];
     expect(measurement['user_fear0']).toBe(1);
     expect(measurement['user_fear1']).toBe(0);
     form_data = {};
     form_data['fear_dropdown'] = '1';
     await adfice.updatePredictionWithUserValues(patient_id, form_data);
-    measurements = await adfice.getPatientMeasurements(patient_id);
+    measurements = await adfice.get_patient_measurements(patient_id);
     measurement = measurements[0];
     expect(measurement['user_fear1']).toBe(1);
     expect(measurement['user_fear0']).toBe(0);
@@ -246,10 +247,10 @@ test('updatePredictionWithUserValues, update all missing data', async () => {
     await adfice.sql_select(sql, params);
 })
 
-test('getAdviceForPatient(27), with labs and problems', async () => {
+test('get_advice_for_patient(27), with labs and problems', async () => {
     //console.log('27');
-    let patientNumber = 27;
-    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    let patient_num = 27;
+    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(1);
     let adv0 = advice[0];
@@ -270,9 +271,9 @@ test('getAdviceForPatient(27), with labs and problems', async () => {
     expect(noCheckbox0.cdss_split[0].text).toContain("depressie");
 })
 
-test('getAdviceForPatient(1), no med rule advice', async () => {
-    let patientNumber = 1;
-    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+test('get_advice_for_patient(1), no med rule advice', async () => {
+    let patient_num = 1;
+    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(0);
     let non_med_advice = patientAdvice.advice_text_non_med;
@@ -284,18 +285,18 @@ test('getAdviceForPatient(1), no med rule advice', async () => {
     expect(Object.keys(patientAdvice.selected_advice).length).toBe(4);
 })
 
-test('getAdviceForPatient(60), sparse patient', async () => {
+test('get_advice_for_patient(60), sparse patient', async () => {
     //console.log('60');
-    let patientNumber = 60;
-    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    let patient_num = 60;
+    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(1);
 })
 
-test('getAdviceForPatient(9), patient with non-rule med', async () => {
+test('get_advice_for_patient(9), patient with non-rule med', async () => {
     //console.log('9');
-    let patientNumber = 9;
-    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    let patient_num = 9;
+    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
     let medication_advice_atc = [];
     for (let i = 0; i < patientAdvice.medication_advice.length; ++i) {
         let row = patientAdvice.medication_advice[i];
@@ -312,25 +313,25 @@ test('getAdviceForPatient(9), patient with non-rule med', async () => {
     expect(medication_advice_atc.includes(atc)).toBe(true);
 })
 
-test('getAdviceForPatient(null)', async () => {
+test('get_advice_for_patient(null)', async () => {
     //console.log('null');
-    let patientNumber = null;
-    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    let patient_num = null;
+    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(0);
 })
 
-test('getAdviceForPatient(-1)', async () => {
+test('get_advice_for_patient(-1)', async () => {
     //console.log('-1');
-    let patientNumber = -1;
-    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+    let patient_num = -1;
+    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(0);
 })
 
-test('getAdviceForPatient(bogus)', async () => {
-    let patientNumber = 'bogus';
-    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+test('get_advice_for_patient(bogus)', async () => {
+    let patient_num = 'bogus';
+    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(0);
 })
@@ -352,25 +353,25 @@ test('freetext round trip', async () => {
     };
 
     let cb_states = null;
-    await adfice.setAdviceForPatient(patient, viewer, cb_states, freetexts);
-    let actual = await adfice.getFreetextsForPatient(patient);
+    await adfice.set_advice_for_patient(patient, viewer, cb_states, freetexts);
+    let actual = await adfice.get_freetexts(patient);
 
     expect(actual).toStrictEqual(freetexts);
 })
 
 test('no rules fired', async () => {
-    expect(await adfice.getAdviceTextsCheckboxes(null)).toStrictEqual([]);
-    expect(await adfice.getAdviceTextsNoCheckboxes(null)).toStrictEqual([]);
-    expect(await adfice.getReferenceNumbers(null)).toStrictEqual([]);
+    expect(await adfice.get_advice_texts_checkboxes(null)).toStrictEqual([]);
+    expect(await adfice.get_advice_texts_no_checkboxes(null)).toStrictEqual([]);
+    expect(await adfice.get_reference_numbers(null)).toStrictEqual([]);
 
-    expect(await adfice.getAdviceTextsCheckboxes([])).toStrictEqual([]);
-    expect(await adfice.getAdviceTextsNoCheckboxes([])).toStrictEqual([]);
-    expect(await adfice.getReferenceNumbers([])).toStrictEqual([]);
+    expect(await adfice.get_advice_texts_checkboxes([])).toStrictEqual([]);
+    expect(await adfice.get_advice_texts_no_checkboxes([])).toStrictEqual([]);
+    expect(await adfice.get_reference_numbers([])).toStrictEqual([]);
 });
 
-test('getAdviceForPatient(85), normal eGFR', async () => {
-    let patientNumber = 85;
-    let patientAdvice = await adfice.getAdviceForPatient(patientNumber);
+test('get_advice_for_patient(85), normal eGFR', async () => {
+    let patient_num = 85;
+    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
     let advice = patientAdvice.medication_advice;
     // TODO check for malformed patient data. In this case labTests was not
     // being constructed correctly. Or just replace the criteria with SQL and
@@ -380,311 +381,311 @@ test('getAdviceForPatient(85), normal eGFR', async () => {
 
 test('getSQLcondition rule 38', async () => {
     let ruleNumber = 38;
-    let sqlCondition = await adfice.getSQLCondition(ruleNumber);
+    let sqlCondition = await adfice.get_sql_condition(ruleNumber);
     expect(sqlCondition).toContain("patient_problem");
 });
 
-test('isSQLConditionTrue', async () => {
+test('is_sql_condition_true', async () => {
     let patientIdentifier = 44;
     let ruleNumber = 38;
-    let isConditionTrue = await adfice.isSQLConditionTrue(patientIdentifier,
+    let isConditionTrue = await adfice.is_sql_condition_true(patientIdentifier,
         ruleNumber);
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
 });
 
 test('SQL error check', async () => {
-    let isConditionTrue = await adfice.isSQLConditionTrue(5, "6");
+    let isConditionTrue = await adfice.is_sql_condition_true(5, "6");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(6, "6a");
+    isConditionTrue = await adfice.is_sql_condition_true(6, "6a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(4, "6b");
+    isConditionTrue = await adfice.is_sql_condition_true(4, "6b");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(8, "9");
+    isConditionTrue = await adfice.is_sql_condition_true(8, "9");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(5, "9");
+    isConditionTrue = await adfice.is_sql_condition_true(5, "9");
     expect(isConditionTrue).toBe(false);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(9, "10");
+    isConditionTrue = await adfice.is_sql_condition_true(9, "10");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(12, "12");
+    isConditionTrue = await adfice.is_sql_condition_true(12, "12");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(15, "14");
+    isConditionTrue = await adfice.is_sql_condition_true(15, "14");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(15, "14a");
+    isConditionTrue = await adfice.is_sql_condition_true(15, "14a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(16, "14b");
+    isConditionTrue = await adfice.is_sql_condition_true(16, "14b");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(17, "14c");
+    isConditionTrue = await adfice.is_sql_condition_true(17, "14c");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(18, "14d");
+    isConditionTrue = await adfice.is_sql_condition_true(18, "14d");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(18, "15");
+    isConditionTrue = await adfice.is_sql_condition_true(18, "15");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(26, "19");
+    isConditionTrue = await adfice.is_sql_condition_true(26, "19");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(27, "19a");
+    isConditionTrue = await adfice.is_sql_condition_true(27, "19a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(28, "19b");
+    isConditionTrue = await adfice.is_sql_condition_true(28, "19b");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(29, "19c");
+    isConditionTrue = await adfice.is_sql_condition_true(29, "19c");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(25, "21");
+    isConditionTrue = await adfice.is_sql_condition_true(25, "21");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(26, "22");
+    isConditionTrue = await adfice.is_sql_condition_true(26, "22");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(26, "23");
+    isConditionTrue = await adfice.is_sql_condition_true(26, "23");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(30, "24");
+    isConditionTrue = await adfice.is_sql_condition_true(30, "24");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(31, "25");
+    isConditionTrue = await adfice.is_sql_condition_true(31, "25");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(34, "26");
+    isConditionTrue = await adfice.is_sql_condition_true(34, "26");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(36, "26a");
+    isConditionTrue = await adfice.is_sql_condition_true(36, "26a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(33, "26b");
+    isConditionTrue = await adfice.is_sql_condition_true(33, "26b");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(41, "35");
+    isConditionTrue = await adfice.is_sql_condition_true(41, "35");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(42, "36");
+    isConditionTrue = await adfice.is_sql_condition_true(42, "36");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(43, "37");
+    isConditionTrue = await adfice.is_sql_condition_true(43, "37");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(44, "38");
+    isConditionTrue = await adfice.is_sql_condition_true(44, "38");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(45, "40");
+    isConditionTrue = await adfice.is_sql_condition_true(45, "40");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(46, "40a");
+    isConditionTrue = await adfice.is_sql_condition_true(46, "40a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(47, "40b");
+    isConditionTrue = await adfice.is_sql_condition_true(47, "40b");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(48, "40c");
+    isConditionTrue = await adfice.is_sql_condition_true(48, "40c");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(48, "41");
+    isConditionTrue = await adfice.is_sql_condition_true(48, "41");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(51, "48");
+    isConditionTrue = await adfice.is_sql_condition_true(51, "48");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(55, "52");
+    isConditionTrue = await adfice.is_sql_condition_true(55, "52");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(56, "53");
+    isConditionTrue = await adfice.is_sql_condition_true(56, "53");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(60, "57a");
+    isConditionTrue = await adfice.is_sql_condition_true(60, "57a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(60, "58");
+    isConditionTrue = await adfice.is_sql_condition_true(60, "58");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(62, "59");
+    isConditionTrue = await adfice.is_sql_condition_true(62, "59");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(78, "68");
+    isConditionTrue = await adfice.is_sql_condition_true(78, "68");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(79, "69");
+    isConditionTrue = await adfice.is_sql_condition_true(79, "69");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(81, "70");
+    isConditionTrue = await adfice.is_sql_condition_true(81, "70");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(80, "70");
+    isConditionTrue = await adfice.is_sql_condition_true(80, "70");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(85, "79");
+    isConditionTrue = await adfice.is_sql_condition_true(85, "79");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(86, "80");
+    isConditionTrue = await adfice.is_sql_condition_true(86, "80");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(89, "80a");
+    isConditionTrue = await adfice.is_sql_condition_true(89, "80a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(89, "80b");
+    isConditionTrue = await adfice.is_sql_condition_true(89, "80b");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(89, "81");
+    isConditionTrue = await adfice.is_sql_condition_true(89, "81");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(87, "81");
+    isConditionTrue = await adfice.is_sql_condition_true(87, "81");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(84, "83");
+    isConditionTrue = await adfice.is_sql_condition_true(84, "83");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(91, "86");
+    isConditionTrue = await adfice.is_sql_condition_true(91, "86");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(92, "87");
+    isConditionTrue = await adfice.is_sql_condition_true(92, "87");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(92, "89");
+    isConditionTrue = await adfice.is_sql_condition_true(92, "89");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(93, "90");
+    isConditionTrue = await adfice.is_sql_condition_true(93, "90");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(95, "91");
+    isConditionTrue = await adfice.is_sql_condition_true(95, "91");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(94, "91");
+    isConditionTrue = await adfice.is_sql_condition_true(94, "91");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.isSQLConditionTrue(102, "102");
+    isConditionTrue = await adfice.is_sql_condition_true(102, "102");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
 });
 
 test('Check preselect SQL', async () => {
-    let preselectRules = await adfice.getPreselectRules("6e");
+    let preselectRules = await adfice.get_preselect_rules("6e");
     let sql = preselectRules[0]['sql_condition'].toString();
-    let result = await (adfice.evaluateSQL(sql, 4));
+    let result = await (adfice.evaluate_sql(sql, 4));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[1]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 8));
+    result = await (adfice.evaluate_sql(sql, 8));
     expect(result).toBe(false);
     sql = "";
     result = null;
     sql = preselectRules[2]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 8));
+    result = await (adfice.evaluate_sql(sql, 8));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[3]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 8));
+    result = await (adfice.evaluate_sql(sql, 8));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
     result = null;
 
-    preselectRules = await adfice.getPreselectRules("19f");
+    preselectRules = await adfice.get_preselect_rules("19f");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 1));
+    result = await (adfice.evaluate_sql(sql, 1));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
     result = null;
 
-    preselectRules = await adfice.getPreselectRules("42");
+    preselectRules = await adfice.get_preselect_rules("42");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 1));
+    result = await (adfice.evaluate_sql(sql, 1));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[1]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 1));
+    result = await (adfice.evaluate_sql(sql, 1));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[2]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 48));
+    result = await (adfice.evaluate_sql(sql, 48));
     expect(result).toBe(true);
-    result = await (adfice.evaluateSQL(sql, 31));
+    result = await (adfice.evaluate_sql(sql, 31));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[3]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 51));
+    result = await (adfice.evaluate_sql(sql, 51));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[4]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 51));
+    result = await (adfice.evaluate_sql(sql, 51));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
     result = null;
 
-    preselectRules = await adfice.getPreselectRules("46");
+    preselectRules = await adfice.get_preselect_rules("46");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 51));
+    result = await (adfice.evaluate_sql(sql, 51));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
     result = null;
 
-    preselectRules = await adfice.getPreselectRules("50");
+    preselectRules = await adfice.get_preselect_rules("50");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 51));
+    result = await (adfice.evaluate_sql(sql, 51));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
     result = null;
 
-    preselectRules = await adfice.getPreselectRules("56");
+    preselectRules = await adfice.get_preselect_rules("56");
     sql = preselectRules[1]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 51));
+    result = await (adfice.evaluate_sql(sql, 51));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[2]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 1));
+    result = await (adfice.evaluate_sql(sql, 1));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
     result = null;
 
-    preselectRules = await adfice.getPreselectRules("63");
+    preselectRules = await adfice.get_preselect_rules("63");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 51));
+    result = await (adfice.evaluate_sql(sql, 51));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
     result = null;
 
-    preselectRules = await adfice.getPreselectRules("78");
+    preselectRules = await adfice.get_preselect_rules("78");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 79));
+    result = await (adfice.evaluate_sql(sql, 79));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[1]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 84));
+    result = await (adfice.evaluate_sql(sql, 84));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
     result = null;
 
-    preselectRules = await adfice.getPreselectRules("88");
+    preselectRules = await adfice.get_preselect_rules("88");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluateSQL(sql, 1));
+    result = await (adfice.evaluate_sql(sql, 1));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
@@ -698,7 +699,7 @@ test('Check preselected checkbox output', async () => {
     let rules = ["88"];
     let patient = 1;
     let atc = "M03AC01";
-    output = await adfice.determinePreselectedCheckboxes(rules, patient, atc);
+    output = await adfice.determine_preselected_checkboxes(rules, patient, atc);
     expect(output["cb_M03AC01_88_2"]).toBe("checked");
 
     // Ace does not think it is possible for 2 checkboxes to be checked with
@@ -706,86 +707,86 @@ test('Check preselected checkbox output', async () => {
     rules = ["45", "46", "48", "48a", "49"];
     patient = 51;
     atc = "C02AA02";
-    output = await adfice.determinePreselectedCheckboxes(rules, patient, atc);
+    output = await adfice.determine_preselected_checkboxes(rules, patient, atc);
     expect(output["cb_C02AA02_46_1"]).toBe("checked");
 
     rules = ["42"];
     patient = 1;
     atc = "C03CA02"
-    output = await adfice.determinePreselectedCheckboxes(rules, patient, atc);
+    output = await adfice.determine_preselected_checkboxes(rules, patient, atc);
     expect(output["cb_C03CA02_42_2"]).toBe("checked");
 
     // preselect-not is not actually used by any rules,
-    // is tested in adficeEvaluator.test.js
+    // is tested in adfice-evaluator.test.js
 });
 
 test('Get prediction model result from DB', async () => {
     let patient = 142
 
     // clear any saved result
-    let measurements = await adfice.getPatientMeasurements(patient);
+    let measurements = await adfice.get_patient_measurements(patient);
     let measurement = measurements[0];
     let row_id = measurement.id;
-    await adfice.updatePredictionResult(row_id, null);
+    await adfice.update_prediction_result(row_id, null);
 
     // add prediction result to database on first fetch if not present
-    let prediction = await adfice.getPredictionResult(patient);
+    let prediction = await adfice.get_prediction_result(patient);
     expect(prediction).toBe(74);
 
     // second fetch gets the same result, but does not update the db
-    prediction = await adfice.getPredictionResult(patient);
+    prediction = await adfice.get_prediction_result(patient);
     expect(prediction).toBe(74);
 });
 
 test('Get empty result set from measurements', async () => {
-    let measurements = await adfice.getPatientMeasurements(1);
+    let measurements = await adfice.get_patient_measurements(1);
     expect(measurements).toBe(null);
-    let prediction1 = await adfice.getPredictionResult(1);
+    let prediction1 = await adfice.get_prediction_result(1);
     expect(prediction1).toBe(null);
 });
 
 test('Structure measurements', async () => {
-    let measurements = await adfice.getPatientMeasurements(2);
+    let measurements = await adfice.get_patient_measurements(2);
     let structuredMeas = adfice.structureMeas(measurements);
     expect(structuredMeas['grip_kg']).toBe(21.5);
 });
 
 test('Calculate prediction based on DB data', async () => {
-    let measurement = await adfice.calculatePredictionResult(2);
+    let measurement = await adfice.calculate_prediction_result(2);
     expect(measurement.prediction_result).toBeGreaterThan(10);
-    measurement = await adfice.calculatePredictionResult(1);
+    measurement = await adfice.calculate_prediction_result(1);
     expect(measurement).toBe(null);
 });
 
 test('Calculate prediction based on user-entered data', async () => {
-    let measurement = await adfice.calculatePredictionResult(170);
+    let measurement = await adfice.calculate_prediction_result(170);
     expect(measurement.prediction_result).toBeGreaterThan(10);
 });
 
 test('Update prediction', async () => {
     let patient = 2;
-    let before = await adfice.getPatientMeasurements(patient);
+    let before = await adfice.get_patient_measurements(patient);
     expect(before.length).toBeGreaterThan(0);
     expect(before[0].prediction_result).toBe(null);
     let row_id = before[0].id;
     try {
-        await adfice.calculateAndStorePredictionResult(patient);
-        let after = await adfice.getPatientMeasurements(patient);
+        await adfice.calculate_store_prediction_result(patient);
+        let after = await adfice.get_patient_measurements(patient);
         expect(after.length).toBeGreaterThan(0);
         expect(after[0].prediction_result).toBeGreaterThan(10);
     } finally {
-        adfice.updatePredictionResult(row_id, null);
+        adfice.update_prediction_result(row_id, null);
     }
 });
 
-test('exportForPatient', async () => {
+test('export_patient', async () => {
     let patient = '168';
-    let file = "test-exportForPatient-168.log";
+    let file = "test-export_patient-168.log";
     try {
         fs.unlinkSync(file, (err) => {});
     } catch (ignoreError) {}
 
-    await adfice.reloadPatientData(patient, 'true');
+    await adfice.reload_patient_data(patient, 'true');
     let new_advice = {
         "cb_M03BA03_88_2": true,
         "cb_OTHER_other_1": true,
@@ -793,11 +794,11 @@ test('exportForPatient', async () => {
     };
     let viewer = 999;
     let freetexts = null;
-    adfice.setAdviceForPatient(patient, viewer, new_advice, freetexts);
+    adfice.set_advice_for_patient(patient, viewer, new_advice, freetexts);
 
-    // essentially calling adfice.finalizeAndExport(id), but with a file
-    await adfice.finalizeAdviceForPatient(patient);
-    await adfice.exportForPatient(patient, file);
+    // essentially calling adfice.finalize_and_export(id), but with a file
+    await adfice.finalize_advice(patient);
+    await adfice.export_patient(patient, file);
 
     const contents = fs.readFileSync(file, 'utf8');
 
@@ -811,34 +812,34 @@ test('exportForPatient', async () => {
 
 test('finalize_export API', async () => {
     let patient = '68';
-    let file = "test-exportForPatient-68-2.log";
+    let file = "test-export_patient-68-2.log";
     try {
         fs.unlinkSync(file, (err) => {});
     } catch (ignoreError) {}
 
-    await adfice.clearAdviceForPatient(patient);
-    await adfice.finalizeAndExport(patient, file);
-    let patientAdvice = await adfice.getAdviceForPatient(patient);
+    await adfice.clear_advice_for_patient(patient);
+    await adfice.finalize_and_export(patient, file);
+    let patientAdvice = await adfice.get_advice_for_patient(patient);
     expect(patientAdvice.is_final).toBeTruthy();
     fs.unlinkSync(file);
-    await adfice.clearAdviceForPatient(patient);
+    await adfice.clear_advice_for_patient(patient);
 });
 
 test('reload from MRS', async () => {
     let patient = '160';
     let sql = "UPDATE patient SET birth_date='1940-06-16', age=81 WHERE id=?";
     await adfice.sql_select(sql, [patient]);
-    let patientAdvice = await adfice.getAdviceForPatient(patient);
+    let patientAdvice = await adfice.get_advice_for_patient(patient);
     expect(patientAdvice.age).toBe(81);
 
     let cmd = 'bin/reload-synthetic-data.sh';
-    await adfice.reloadPatientData(patient, cmd);
-    patientAdvice = await adfice.getAdviceForPatient(patient);
+    await adfice.reload_patient_data(patient, cmd);
+    patientAdvice = await adfice.get_advice_for_patient(patient);
     expect(patientAdvice.age).toBe(80);
 
     // test default no-op reload script
     patient = '169';
-    await adfice.reloadPatientData(patient);
+    await adfice.reload_patient_data(patient);
 });
 
 test('log print event', async () => {
@@ -851,9 +852,9 @@ test('log print event', async () => {
         cnt = results[0].cnt;
     }
 
-    await adfice.addLogEventPrint(viewer, patient);
-    await adfice.addLogEventCopyPatientText(viewer, patient);
-    await adfice.addLogEventCopyEHRText(viewer, patient);
+    await adfice.add_log_event_print(viewer, patient);
+    await adfice.add_log_event_copy_patient_text(viewer, patient);
+    await adfice.add_log_event_copy_ehr_text(viewer, patient);
 
     let results2 = await adfice.sql_select(sql, [patient]);
     let cnt2 = 0;

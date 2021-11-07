@@ -45,7 +45,7 @@ function page_load(before_socket) {
     el_pi_id.innerText = five_pages.patient_id;
 
     let json_url = get_base_url() + 'advice?id=' + five_pages.patient_id;
-    // json_data is populated by getAdviceForPatient() in adfice.js
+    // json_data is populated by get_advice_for_patient() in adfice.js
     get_JSON(json_url, function(err, json_data) {
         console.log(json_data);
         if (err) {

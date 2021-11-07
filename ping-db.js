@@ -4,7 +4,7 @@
 "use strict";
 
 const fs = require('fs');
-const adb = require('./adficeDB');
+const adb = require('./adfice-db');
 
 async function main() {
     let config = {
