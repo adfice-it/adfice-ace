@@ -4,7 +4,7 @@
 "use strict";
 
 /* global data used by these functions */
-var common_js = {
+var message_globals = {
     patient_id: null,
     viewer_id: null,
     is_final: null,
@@ -18,8 +18,8 @@ var common_js = {
 
 function send_message(message_type, apply) {
     let message = {};
-    message.viewer_id = common_js.viewer_id;
-    message.patient_id = common_js.patient_id;
+    message.viewer_id = message_globals.viewer_id;
+    message.patient_id = message_globals.patient_id;
     message.type = message_type;
 
     if (apply) {
@@ -27,28 +27,28 @@ function send_message(message_type, apply) {
     }
 
     let msg_str = JSON.stringify(message, null, 4);
-    if (common_js.debug > 0) {
-        common_js.logger.log('sending:', msg_str);
+    if (message_globals.debug > 0) {
+        message_globals.logger.log('sending:', msg_str);
     }
     try {
-        common_js.ws.send(msg_str);
+        message_globals.ws.send(msg_str);
     } catch (err) {
-        common_js.logger.log(err, 'could not send:', msg_str);
-        ++common_js.weirdness;
-        common_js.ws = null;
+        message_globals.logger.log(err, 'could not send:', msg_str);
+        ++message_globals.weirdness;
+        message_globals.ws = null;
     }
 }
 
 function boxclicked(checkbox) {
-    if (!common_js.ws) {
+    if (!message_globals.ws) {
         checkbox.checked = !checkbox.checked;
-        common_js.logger.error('got a check event for', checkbox,
+        message_globals.logger.error('got a check event for', checkbox,
             'but websocket is null');
-        ++common_js.weirdness;
+        ++message_globals.weirdness;
         return;
     }
-    if (common_js.debug > 0) {
-        common_js.logger.log('Checkbox ' + checkbox.id + ' clicked' +
+    if (message_globals.debug > 0) {
+        message_globals.logger.log('Checkbox ' + checkbox.id + ' clicked' +
             ' and is now ' + checkbox.checked);
     }
 
@@ -66,28 +66,30 @@ function boxclicked(checkbox) {
 }
 
 function freetextentered(textfield) {
-    if (common_js.freetexts_entered != null &&
-        common_js.freetexts_entered != textfield.id) {
+    if (message_globals.freetexts_entered != null &&
+        message_globals.freetexts_entered != textfield.id) {
         send_freetext(textfield.id);
     }
-    common_js.freetexts_entered = textfield.id;
+    message_globals.freetexts_entered = textfield.id;
 }
 
 function updateMeas() {
-    if (!common_js.ws) {
-        common_js.logger.error('got a submit_missings event but websocket is null');
-        ++common_js.weirdness;
+    if (!message_globals.ws) {
+        message_globals.logger.error(
+            'got a submit_missings event but websocket is null');
+        ++message_globals.weirdness;
         return;
     }
 
     send_message('submit_missings', function(message) {
-        message.patient_id = common_js.patient_id;
+        message.patient_id = message_globals.patient_id;
 
         message['submit_missings'] = {};
         let form = document.getElementById('missing_data_form');
         for (let i = 0; i < form.elements.length; ++i) {
             if (form.elements[i].id != "button_submit_missings") {
-                message['submit_missings'][form.elements[i].id] = form.elements[i].value;
+                let val = form.elements[i].value;
+                message['submit_missings'][form.elements[i].id] = val;
             }
         }
         console.log(message);
@@ -99,10 +101,10 @@ function updateMeas() {
 
 
 function send_freetext(textfield_id) {
-    if (!common_js.ws) {
-        common_js.logger.error('got a freetext event for ', textfield,
+    if (!message_globals.ws) {
+        message_globals.logger.error('got a freetext event for ', textfield,
             'but websocket is null');
-        ++common_js.weirdness;
+        ++message_globals.weirdness;
         return;
     }
 
@@ -210,7 +212,8 @@ function process_freetexts(message) {
         return;
     }
     let debounce_guard_allow = 1;
-    if (message.type != 'init' && message.viewer_id == common_js.viewer_id) {
+    let our_id = message_globals.viewer_id;
+    if (message.type != 'init' && message.viewer_id == our_id) {
         debounce_guard_allow = 0;
     }
     let fields = message['field_entries'];
@@ -260,8 +263,8 @@ function process_viewer_count(message) {
 }
 
 function first_incoming_message(event) {
-    if (common_js.debug > 0) {
-        common_js.logger.log('first_incoming_message');
+    if (message_globals.debug > 0) {
+        message_globals.logger.log('first_incoming_message');
     }
     let elementList = document.querySelectorAll("input[type='checkbox']");
     for (let i = 0; i < elementList.length; ++i) {
@@ -284,29 +287,31 @@ function first_incoming_message(event) {
 }
 
 function ws_on_message(event) {
-    if (common_js.messages_received == 0) {
+    if (message_globals.messages_received == 0) {
         first_incoming_message(event);
     }
-    ++common_js.messages_received;
-    if (common_js.debug > 0) {
-        common_js.logger.log('received: ', event.data);
+    ++message_globals.messages_received;
+    if (message_globals.debug > 0) {
+        message_globals.logger.log('received: ', event.data);
     }
 
     const message = JSON.parse(event.data);
 
-    if (message.type == 'init' && !common_js.viewer_id) {
+    if (message.type == 'init' && !message_globals.viewer_id) {
         /* viewer_id should come from the session */
-        common_js.viewer_id = message.viewer_id;
+        message_globals.viewer_id = message.viewer_id;
     }
 
     if ((!('patient_id' in message)) ||
-        (message.patient_id != common_js.patient_id)) {
-        common_js.logger.log('expected patient_id of:', common_js.patient_id);
-        common_js.logger.log('               but was:', message.patient_id);
-        common_js.logger.log(JSON.stringify({
+        (message.patient_id != message_globals.patient_id)) {
+        message_globals.logger.log('expected patient_id of:',
+            message_globals.patient_id);
+        message_globals.logger.log('               but was:',
+            message.patient_id);
+        message_globals.logger.log(JSON.stringify({
             message: message
         }, null, 4));
-        ++common_js.weirdness;
+        ++message_globals.weirdness;
         return;
     }
 
@@ -317,17 +322,17 @@ function ws_on_message(event) {
     process_viewer_count(message);
 
     if ('is_final' in message) {
-        common_js.is_final = message['is_final'];
+        message_globals.is_final = message['is_final'];
     }
 
     let elementList = document.querySelectorAll("input");
     for (let i = 0; i < elementList.length; ++i) {
         let input = elementList[i];
-        input.disabled = common_js.is_final;
+        input.disabled = message_globals.is_final;
     }
 
     if ('debug_info' in message) {
-        common_js.logger.log(JSON.stringify({
+        message_globals.logger.log(JSON.stringify({
             debug_info: message.debug_info
         }, null, 4));
     }
@@ -345,21 +350,21 @@ function ws_on_close(event) {
         input.disabled = true;
     };
 
-    common_js.ws = null;
-    common_js.messages_received = 0;
+    message_globals.ws = null;
+    message_globals.messages_received = 0;
 
     let one_second = 1000;
-    common_js.logger.log('Socket closed:', event.reason,
+    message_globals.logger.log('Socket closed:', event.reason,
         ' will try to reconnect');
     setTimeout(function() {
-        common_js.logger.log('Reconnecting....');
+        message_globals.logger.log('Reconnecting....');
         connect_web_socket();
     }, one_second);
 }
 
 function ws_on_error(err) {
-    common_js.logger.error('Socket error: ', err.message);
-    common_js.ws.close();
+    message_globals.logger.error('Socket error: ', err.message);
+    message_globals.ws.close();
 };
 
 function connect_web_socket() {
@@ -387,20 +392,20 @@ function connect_web_socket() {
 
     // URLSearchParams does not work in IE
     // let params = new URLSearchParams(window.location.search);
-    common_js.patient_id = urlParam('id');
+    message_globals.patient_id = urlParam('id');
 
     let base_url = ws_protocol + '//' + url_hostname + ':' + url_port;
-    let ws_url = base_url + '/patient/' + common_js.patient_id;
-    common_js.ws = new WebSocket(ws_url);
-    common_js.ws.onmessage = ws_on_message;
-    common_js.ws.onclose = ws_on_close;
-    common_js.ws.onerror = ws_on_error;
+    let ws_url = base_url + '/patient/' + message_globals.patient_id;
+    message_globals.ws = new WebSocket(ws_url);
+    message_globals.ws.onmessage = ws_on_message;
+    message_globals.ws.onclose = ws_on_close;
+    message_globals.ws.onerror = ws_on_error;
 
-    if (common_js.debug > 0) {
-        common_js.logger.log('creating websocket with url:', ws_url);
+    if (message_globals.debug > 0) {
+        message_globals.logger.log('creating websocket with url:', ws_url);
     }
 
-    return common_js.ws;
+    return message_globals.ws;
 }
 
 function urlParam(parName) {
@@ -418,7 +423,7 @@ function connect_web_socket_and_keep_alive() {
     let one_second = 1000;
     let ping_interval = 4 * one_second;
     setInterval(function() {
-        if (common_js.ws) {
+        if (message_globals.ws) {
             send_message("ping", function(msg) {
                 msg.sent = Date.now();
             });
@@ -427,11 +432,11 @@ function connect_web_socket_and_keep_alive() {
 
     let freetext_interval = (one_second / 4);
     setInterval(function() {
-        if (common_js.ws) {
-            let textfield_id = common_js.freetexts_entered;
+        if (message_globals.ws) {
+            let textfield_id = message_globals.freetexts_entered;
             if (textfield_id != null) {
                 send_freetext(textfield_id);
-                common_js.freetexts_entered = null;
+                message_globals.freetexts_entered = null;
             }
         }
     }, freetext_interval);

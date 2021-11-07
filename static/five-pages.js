@@ -60,7 +60,7 @@ function page_load(before_socket) {
 
         before_socket();
 
-        // common.js defines connect_web_socket_and_keep_alive()
+        // message.js defines connect_web_socket_and_keep_alive()
         connect_web_socket_and_keep_alive();
     });
 }
