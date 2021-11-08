@@ -7,17 +7,19 @@ CREATE TABLE `etl_mrn_patient` (
    PRIMARY KEY (`patient_id`),
    UNIQUE KEY (`mrn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+CREATE TABLE `etl_bsn_patient` (
+  `patient_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `bsn` varchar(250) DEFAULT NULL,
+   PRIMARY KEY (`patient_id`),
+   UNIQUE KEY (`bsn`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 --
 -- creating patient table, log table, and triggers
 --
 CREATE TABLE `patient` (
-  `id` int unsigned NOT NULL,
-  `display_name` varchar(100) DEFAULT NULL,
+  `id` int unsigned NOT NULL,  `display_name` varchar(100) DEFAULT NULL,
   `birth_date` date,
-  `education_level` varchar(100),
   `age` int unsigned,
-  `is_fake` tinyint,
   `is_final` tinyint(1),
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `row_updated` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -28,12 +30,9 @@ CREATE TABLE `patient_history` (
   `log_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `log_row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `log_op` tinyint NOT NULL,
-  `id` int unsigned NOT NULL,
-  `display_name` varchar(100),
+  `id` int unsigned NOT NULL,  `display_name` varchar(100) DEFAULT NULL,
   `birth_date` date,
-  `education_level` varchar(100),
   `age` int unsigned,
-  `is_fake` tinyint,
   `is_final` tinyint(1),
   `row_created` timestamp NOT NULL,
   `row_updated` timestamp NOT NULL,
@@ -50,12 +49,9 @@ CREATE TRIGGER patient_history_insert
           NULL,
           NULL,
           0,
-          NEW.id,
-          NEW.display_name,
+          NEW.id,          NEW.display_name,
           NEW.birth_date,
-          NEW.education_level,
           NEW.age,
-          NEW.is_fake,
           NEW.is_final,
           NEW.row_created,
           NEW.row_updated
@@ -69,12 +65,9 @@ CREATE TRIGGER patient_history_update
           NULL,
           NULL,
           1,
-          OLD.id,
-          OLD.display_name,
+          OLD.id,          OLD.display_name,
           OLD.birth_date,
-          OLD.education_level,
           OLD.age,
-          OLD.is_fake,
           OLD.is_final,
           OLD.row_created,
           OLD.row_updated
@@ -88,12 +81,9 @@ CREATE TRIGGER patient_history_delete
           NULL,
           NULL,
           2,
-          OLD.id,
-          OLD.display_name,
+          OLD.id,          OLD.display_name,
           OLD.birth_date,
-          OLD.education_level,
           OLD.age,
-          OLD.is_fake,
           OLD.is_final,
           OLD.row_created,
           OLD.row_updated

@@ -177,10 +177,10 @@ INSERT INTO etl_mrn_patient (mrn, patient_id) VALUES
 ('DummyMRN-000026857', 172),
 ('DummyMRN-000025032', 173);
 
-INSERT INTO patient (id,display_name,birth_date,education_level) VALUES
-(1,"Mevr. Empty",'1940-02-10',NULL),
-(2,"Mevr. Predict",'1940-02-11',"HEAO"),
-(3,"Mr. Predict",'1942-01-01',"Gymnasium 1 jaar");
+INSERT INTO patient (id,display_name,birth_date) VALUES
+(1,"Mevr. Empty",'1940-02-10'),
+(2,"Mevr. Predict",'1940-02-11'),
+(3,"Mr. Predict",'1942-01-01');
 
 INSERT INTO patient (id,display_name,birth_date) VALUES
 (4,"Mevr. Benzo-NoComorbid",'1940-02-12'),
