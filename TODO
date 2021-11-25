@@ -81,10 +81,9 @@ Mid Priority:
         FROM information_schema.tables
        WHERE table_schema='adfice'
     ORDER BY size_bytes DESC;
-* make black-and-white printer-friendly css (wait until vue/client-ejs)
+* make black-and-white printer-friendly css
 
 Low Priority:
-* allow user to fill in missing values in prediction model page
 * naming consistency thoughout the css
 * naming consistency thoughout the javascript
 * naming consistency thoughout the html
