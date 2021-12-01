@@ -5,7 +5,9 @@
 
 var fs = require('fs');
 const util = require("util");
-
+/*Returns:meds_with_rules_to_fire: a map of ATC codes: a list of the medication_criteria_ids of rules that fire for each ATC code. Only contains meds that fired rules.
+meds_with_fired: a list of the medications that had rules fire (for displaying on start page)
+meds_without_fired: a list of the medications that didn't have rules file (also for displaying on start page)*/
 async function evaluate_rules(meds, rules, patient_id, is_sql_condition_true) {
     let meds_with_rules_to_fire = {};
     let meds_with_fired = [];
