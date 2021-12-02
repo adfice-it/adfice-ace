@@ -862,8 +862,8 @@ CREATE TABLE `logged_events` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `rules_fired` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `patient_id` int unsigned NOT NULL,  `ATC_code` varchar(10) NOT NULL,
-  `rules_fired` varchar(100) NOT NULL,
+  `patient_id` int unsigned NOT NULL,  `ATC_code` varchar(10) DEFAULT NULL,
+  `rules_fired` varchar(100) DEFAULT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 --
