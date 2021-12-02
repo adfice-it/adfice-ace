@@ -35,8 +35,7 @@ function question_marks(num) {
 async function sql_select(sql, params) {
     let db = await this.db_init();
     return await db.sql_query(sql, params);
-}
-
+}
 function split_advice_texts_cdss_ehr_patient(advice_texts) {
     for (let j = 0; j < advice_texts.length; ++j) {
         let row = advice_texts[j];
@@ -758,7 +757,7 @@ async function get_advice_for_patient(patient_identifier) {
         }
     }
     let advice_other_text = await this.get_advice_other_texts_checkboxes();
-    let selected_advice = await this.get_selections(patient_id);	await logFiredRules(patient_id, meds_with_rules_to_fire);
+    let selected_advice = await this.get_selections(patient_id);	await this.logFiredRules(patient_id, meds_with_rules_to_fire);
 
     let cb_states = [];
     if (Object.keys(selected_advice).length == 0 && patient.id !== undefined) {
@@ -811,12 +810,10 @@ async function get_advice_for_patient(patient_identifier) {
 
     return patient_advice;
 }
-async function logFiredRules(patient_id, meds_with_rules_to_fire){
-    let meds = Object.keys(meds_with_rules_to_fire);	let sql = `/* adfice.logFiredRules */
+async function logFiredRules(patient_id, meds_with_rules_to_fire){    let meds = Object.keys(meds_with_rules_to_fire);	let sql = `/* adfice.logFiredRules */
          INSERT INTO rules_fired (id, patient_id, ATC_code, rules_fired)		 VALUES(null,?,?,?)`;    let sqls_and_params = [];
-	for (let i = 0; i < meds.length; ++i){		let rule_string = meds_with_rules_to_fire[meds[i]].toString();		let params = [patient_id,meds[i],rule_string];		sqls_and_params.push([sql, params]);	}// the if statement is required to keep this from choking during other tests    if(sqls_and_params.length > 0 && typeof(this) != 'undefined'){		let db = await this.db_init();
-		await db.as_sql_transaction(sqls_and_params);	}
-}
+	for (let i = 0; i < meds.length; ++i){		let rule_string = meds_with_rules_to_fire[meds[i]].toString();		let params = [patient_id,meds[i],rule_string];		sqls_and_params.push([sql, params]);	}	let db = await this.db_init();
+    let rs = await db.as_sql_transaction(sqls_and_params);}
 async function determine_preselected_checkboxes(fired, patient_id, atc_code) {
     let preselected = {};
     for (let i = 0; i < fired.length; ++i) {

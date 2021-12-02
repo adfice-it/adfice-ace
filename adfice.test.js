@@ -782,9 +782,8 @@ test('Update prediction', async () => {
 	expect(after.length).toBeGreaterThan(0);
     expect(after[0].prediction_result).toBeGreaterThan(10);
 });test('Log fired rules', async () => {
-    let patient = 162;	let sql = 'select * from rules_fired where patient_id =' + patient;
-	let before = await adfice.sql_select(sql);
-	let meds_with_rules_to_fire = {};	meds_with_rules_to_fire['N05AH04'] = ['14','14a','16','18','105'];	meds_with_rules_to_fire['N05CF02'] = ['6b','6e','7','10','11'];	await adfice.logFiredRules(patient, meds_with_rules_to_fire);	let after =  await adfice.sql_select(sql);	let sql_cleanup = "delete from rules_fired where patient_id =" + patient;	await adfice.sql_select(sql_cleanup);    expect(before.length).toBe(0);	expect(after.length).toBe(2);
+    let patient = 165;	let sql = 'select * from rules_fired where patient_id =' + patient;
+	let before = await adfice.sql_select(sql);	let meds_with_rules_to_fire = {};	meds_with_rules_to_fire['N05AH04'] = ['14','14a','16','18','105'];	meds_with_rules_to_fire['N05CF02'] = ['6b','6e','7','10','11'];	await adfice.logFiredRules(patient, meds_with_rules_to_fire);	let after =  await adfice.sql_select(sql);	let sql_cleanup = "delete from rules_fired where patient_id =" + patient;	await adfice.sql_select(sql_cleanup);    expect(before.length).toBe(0);	expect(after.length).toBe(2);
 	if(after[0].ATC_code == 'N05AH04'){		expect(after[0].rules_fired).toBe('14,14a,16,18,105');	} else {		expect(after[0].rules_fired).toBe('6b,6e,7,10,11');	}
 });
 
