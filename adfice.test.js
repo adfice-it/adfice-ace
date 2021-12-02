@@ -771,22 +771,20 @@ test('Calculate prediction based on user-entered data', async () => {
 
 test('Update prediction', async () => {
     let patient = 2;
-    let before = await adfice.get_patient_measurements(patient);
-    expect(before.length).toBeGreaterThan(0);
-    expect(before[0].prediction_result).toBe(null);
-    let row_id = before[0].id;
+	let precheck = await adfice.get_patient_measurements(patient);	let row_id = precheck[0].id;	    await adfice.update_prediction_result(row_id, null);    let before = await adfice.get_patient_measurements(patient);	let after = null;
     try {
         await adfice.calculate_store_prediction_result(patient);
-        let after = await adfice.get_patient_measurements(patient);
-        expect(after.length).toBeGreaterThan(0);
-        expect(after[0].prediction_result).toBeGreaterThan(10);
+        after = await adfice.get_patient_measurements(patient);
     } finally {
-        adfice.update_prediction_result(row_id, null);
-    }
+		let row_id = before[0].id;
+        await adfice.update_prediction_result(row_id, null);		let cleanup = await adfice.get_patient_measurements(patient);    }    expect(before.length).toBeGreaterThan(0);
+    expect(before[0].prediction_result).toBe(null);
+	expect(after.length).toBeGreaterThan(0);
+    expect(after[0].prediction_result).toBeGreaterThan(10);
 });test('Log fired rules', async () => {
     let patient = 162;	let sql = 'select * from rules_fired where patient_id =' + patient;
 	let before = await adfice.sql_select(sql);
-	let meds_with_rules_to_fire = {};	meds_with_rules_to_fire['N05AH04'] = ['14','14a','16','18','105'];	meds_with_rules_to_fire['N05CF02'] = ['6b','6e','7','10','11'];	adfice.logFiredRules(patient, meds_with_rules_to_fire);	let after =  await adfice.sql_select(sql);	let foo = after.toString(); // work around for some sort of Schrodinger's Bug - length = 0 unless you read the object as a string first.	let sql_cleanup = "delete from rules_fired where patient_id =" + patient;	await adfice.sql_select(sql_cleanup);    expect(before.length).toBe(0);	expect(after.length).toBe(2);
+	let meds_with_rules_to_fire = {};	meds_with_rules_to_fire['N05AH04'] = ['14','14a','16','18','105'];	meds_with_rules_to_fire['N05CF02'] = ['6b','6e','7','10','11'];	await adfice.logFiredRules(patient, meds_with_rules_to_fire);	let after =  await adfice.sql_select(sql);	let sql_cleanup = "delete from rules_fired where patient_id =" + patient;	await adfice.sql_select(sql_cleanup);    expect(before.length).toBe(0);	expect(after.length).toBe(2);
 	if(after[0].ATC_code == 'N05AH04'){		expect(after[0].rules_fired).toBe('14,14a,16,18,105');	} else {		expect(after[0].rules_fired).toBe('6b,6e,7,10,11');	}
 });
 
