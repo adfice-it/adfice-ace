@@ -9,7 +9,7 @@ CREATE TABLE `etl_mrn_patient` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `etl_bsn_patient` (
   `patient_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `bsn` varchar(10) DEFAULT NULL,
+  `bsn` varchar(15) DEFAULT NULL,
    PRIMARY KEY (`patient_id`),
    UNIQUE KEY (`bsn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;--
