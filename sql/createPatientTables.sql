@@ -3,13 +3,13 @@
 
 CREATE TABLE `etl_mrn_patient` (
   `patient_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `mrn` varchar(250) DEFAULT NULL,
+  `mrn` varchar(50) DEFAULT NULL,
    PRIMARY KEY (`patient_id`),
    UNIQUE KEY (`mrn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `etl_bsn_patient` (
   `patient_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `bsn` varchar(250) DEFAULT NULL,
+  `bsn` varchar(10) DEFAULT NULL,
    PRIMARY KEY (`patient_id`),
    UNIQUE KEY (`bsn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;--
