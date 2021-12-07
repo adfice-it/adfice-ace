@@ -8,13 +8,13 @@ Important:
 	Maybe using text nodes will work?
 	Getting the text out of the database again may be the least-worst solution. 
 	(Or just filling this box with data from the databse rather than using css visibility. Then Ctrl+C will also work as expected.
-	If we go with this solution, we may want to do the same for the Advice page, since it will have the same problem when copied.)
+	If we go with this solution, we may want to do the same for the Advice page, since it will have the same problem when copied.)	Note: using visibility: hidden did not work. The problem is not that MS implemented the solution literally; it seems to be that they did not actually implement it.
 * Think about what we know about the "doctor_id" and incorporate its use into the code.  * How do we expect the doctor_id to come in? Presumably we'll need it for OAUTH. I guess it's in the post data?
   * We will need to keep a log of OAUTH authorizations. Should we use logged_events for this? Should we change viewer_id to doctor_id in this table?  * I've added a doctor_id field to patient_advice_selection, but I will need to add code to populate it.* figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
 * Getting data out of EHR
   * Look into free FHIR servers and see if we can create a version of the ETL that can be included in the main repo
     https://confluence.hl7.org/display/FHIR/Public+Test+Servers
-  * use of the "vernieuwen" button is probably an event we should log  * consider removing birth date entirely from the data; we only need age  * If etl can't find the patient or a BSN, it will return null. Make sure the caller handles this sensibly.* fix layout of non-med advice (if there is a free text box, checkbox lines up oddly)* automate tests for CDSS working on IE11
+  * use of the "vernieuwen" button is probably an event we should log  * consider removing birth date entirely from the data; we only need age  * If etl can't find the patient or a BSN, it will return null. Make sure the caller handles this sensibly.* fix layout of non-med advice (if there is a free text box, checkbox lines up oddly)* other med advice free text box does not display on Consult view (should display here too)* automate tests for CDSS working on IE11
 * fix testcafe acceptance tests to work with testcafe v1.16.1
 * entering text in a text box should automatically check its check box (not mentioned in usability but seems like a good idea)
 * search and replace nonprinting chars in refpages (looks like maybe all the HTML special chars were replaced with nonprinting chars rather than the other way around...)
