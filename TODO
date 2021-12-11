@@ -1,14 +1,6 @@
 Important:
 * Fix IE bugs:
-  * copy EHR text does not work in IE: copies unselected as well as selected texts
-    This seems to be a real bugger. Microsoft Documentation seems to insist this problem was fixed by IE9:
-	https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa752299(v=vs.85)
-	The Internet seems to believe that using .innerText is risky, because it is implemented slightly differently in each browser:
-	http://clubajax.org/plain-text-vs-innertext-vs-textcontent/
-	Maybe using text nodes will work?
-	Getting the text out of the database again may be the least-worst solution. 
-	(Or just filling this box with data from the databse rather than using css visibility. Then Ctrl+C will also work as expected.
-	If we go with this solution, we may want to do the same for the Advice page, since it will have the same problem when copied.)	Note: using visibility: hidden did not work. The problem is not that MS implemented the solution literally; it seems to be that they did not actually implement it.
+  * Copy EHR text works correctly now for nonmed advice but not for med advice. Med advice seems to have some poorly-formed HTML, e.g.:	<div id="et_N05BA01_6e_1" style="display: block;">	<div class="efreetext" id="eft_N05BA01_6e_1_0">	Stop</div><!-- eft_N05BA01_6e_1_0 -->	</div><!-- et_N05BA01_6e_1 -->	<div id="et_N05BA01_6e_2" style="display: none;">	<div class="efreetext" id="eft_N05BA01_6e_2_0">	Afbouwen volgens afbouwschema waarna stop</div><!-- eft_N05BA01_6e_2_0 -->	<div class="efreetext" id="eft_N05BA01_6e_2_1"></div><!-- eft_N05BA01_6e_2_1 -->	</div><!-- et_N05BA01_6e_2 -->
 * Think about what we know about the "doctor_id" and incorporate its use into the code.  * How do we expect the doctor_id to come in? Presumably we'll need it for OAUTH. I guess it's in the post data?
   * We will need to keep a log of OAUTH authorizations. Should we use logged_events for this? Should we change viewer_id to doctor_id in this table?  * I've added a doctor_id field to patient_advice_selection, but I will need to add code to populate it.* figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
 * Getting data out of EHR

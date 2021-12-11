@@ -456,17 +456,25 @@ function copy_text_to_clipboard(text, type) {
 
     return true;
 }
-
-//TODO does not work in IE. Copies the text from both the selected AND NONSELECTED options.
+function innerTextVisibleOnly(element) {                                            
+        var result = "";		var i = 0;
+        for (i=0; i < element.children.length; ++i) {
+                if (element.children[i].style.visibility != 'hidden' &&
+                        element.children[i].style.display != 'none'
+                        ) {
+                        result += element.children[i].innerText + '\n';
+                }
+        }
+        return result;                                                          
+}
+//TODO Now correctly copies only the visible text from the nonmed advice but not from the med advice.
 function copy_ehr_text_to_clipboard() {
-    var allEHRText = document.getElementById("div_all_ehr_text");
-    return copy_text_to_clipboard(allEHRText.innerText, 'was_copied_ehr');
+    var allEHRText = document.getElementById("div_all_ehr_text");	var displayed_inner_text = innerTextVisibleOnly(allEHRText);    return copy_text_to_clipboard(displayed_inner_text, 'was_copied_ehr');
 }
 
 function copy_patient_text_to_clipboard() {
     var dpv = document.getElementById("div_patient_view");
-    var nma = document.getElementById("non_med_advice_patient_area_text");
-    var all_text = dpv.innerText + "\n" + "\n" + nma.innerText;
+    var nma = document.getElementById("non_med_advice_patient_area_text");	var patient_med_text = innerTextVisibleOnly(dpv);	var patient_nonmed_text = innerTextVisibleOnly(nma);    var all_text = patient_med_text + "\n" + "\n" + patient_nonmed_text;
     return copy_text_to_clipboard(all_text, 'was_copied_patient');
 }
 
