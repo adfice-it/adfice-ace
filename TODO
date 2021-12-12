@@ -1,14 +1,12 @@
 Important:
-* Fix IE bugs:
-  * Copy EHR text works correctly now for nonmed advice but not for med advice. Med advice seems to have some poorly-formed HTML, e.g.:	<div id="et_N05BA01_6e_1" style="display: block;">	<div class="efreetext" id="eft_N05BA01_6e_1_0">	Stop</div><!-- eft_N05BA01_6e_1_0 -->	</div><!-- et_N05BA01_6e_1 -->	<div id="et_N05BA01_6e_2" style="display: none;">	<div class="efreetext" id="eft_N05BA01_6e_2_0">	Afbouwen volgens afbouwschema waarna stop</div><!-- eft_N05BA01_6e_2_0 -->	<div class="efreetext" id="eft_N05BA01_6e_2_1"></div><!-- eft_N05BA01_6e_2_1 -->	</div><!-- et_N05BA01_6e_2 -->
 * Figure out "on update" statements for research tables* Think about what we know about the "doctor_id" and incorporate its use into the code.  * How do we expect the doctor_id to come in? Presumably we'll need it for OAUTH. I guess it's in the post data?
   * We will need to keep a log of OAUTH authorizations. Should we use logged_events for this? Should we change viewer_id to doctor_id in this table?  * I've added a doctor_id field to patient_advice_selection, but I will need to add code to populate it.* figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
 * Getting data out of EHR
   * Look into free FHIR servers and see if we can create a version of the ETL that can be included in the main repo
     https://confluence.hl7.org/display/FHIR/Public+Test+Servers
-  * use of the "vernieuwen" button is probably an event we should log  * consider removing birth date entirely from the data; we only need age  * If etl can't find the patient or a BSN, it will return null. Make sure the caller handles this sensibly.* fix layout of non-med advice (if there is a free text box, checkbox lines up oddly)* other med advice free text box does not display on Consult view (should display here too)* automate tests for CDSS working on IE11
+  * use of the "vernieuwen" button is probably an event we should log  * consider removing birth date entirely from the data; we only need age  * If etl can't find the patient or a BSN, it will return null. Make sure the caller handles this sensibly.* fix layout of non-med advice (if there is a free text box, checkbox lines up oddly)* other med advice free text box does not display on Consult view (should display here too)* entering text in a text box should automatically check its check box (not mentioned in usability but seems like a good idea)
+* automate tests for CDSS working on IE11
 * fix testcafe acceptance tests to work with testcafe v1.16.1
-* entering text in a text box should automatically check its check box (not mentioned in usability but seems like a good idea)
 * search and replace nonprinting chars in refpages (looks like maybe all the HTML special chars were replaced with nonprinting chars rather than the other way around...)
 * content has been added for Hoe gebruik ik... (but it's really quite bad; I guess I will make new content)
 * We will need to log which users logged in and viewed records. Add this to our logging data.
@@ -37,7 +35,7 @@ Required changes to rules (Ace will do these):
 
 
 Mid Priority:
-* Add a way to clear user-entered prediction model data. This can be used by the TestCafe test to clean up after itself.
+* The "other med advice" (ft_OTHER_other_1_1) and "other nonmed advice" (ft_NONMED_V_1_1)   should ideally be textarea rather than input text (allow multiple lines). One option would  be to convert all the input text to textarea and format the boxes to be smaller for the  fields that are normally smaller.* Add a way to clear user-entered prediction model data. This can be used by the TestCafe test to clean up after itself.
 * Each acceptance test should start an instance of adfice-webserver
   * refactor adfice-webserver-runner to be more testable
   * refactor the client js (static/patient.js) to be more testable
