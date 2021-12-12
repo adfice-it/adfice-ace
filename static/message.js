@@ -447,8 +447,7 @@ function copy_text_to_clipboard(text, type) {
         navigator.clipboard.writeText(text);
     } else if (window.clipboardData) {
         // Internet Explorer
-        window.clipboardData.setData("Text", text);
-    } else {
+        window.clipboardData.setData("Text", text);    } else {
         alert("browser does not support copy");
     }
 
@@ -462,19 +461,18 @@ function innerTextVisibleOnly(element) {
                 if (element.children[i].style.visibility != 'hidden' &&
                         element.children[i].style.display != 'none'
                         ) {
-                        result += element.children[i].innerText + '\n';
-                }
-        }
+console.log("shown: " + element.children[i].id + "-------------\n");                        result += element.children[i].innerText + '\n';
+                } else {console.log("hidden: " + element.children[i].id + "-------------\n");}        }
         return result;                                                          
 }
-//TODO Now correctly copies only the visible text from the nonmed advice but not from the med advice.
 function copy_ehr_text_to_clipboard() {
-    var allEHRText = document.getElementById("div_all_ehr_text");	var displayed_inner_text = innerTextVisibleOnly(allEHRText);    return copy_text_to_clipboard(displayed_inner_text, 'was_copied_ehr');
+    var allEHRText = document.getElementById("div_all_ehr_text");	var displayed_inner_text = innerTextVisibleOnly(allEHRText);	//get rid of extra CR and LF
+	displayed_inner_text = displayed_inner_text.replace(/\r\n?/g, "");    return copy_text_to_clipboard(displayed_inner_text, 'was_copied_ehr');
 }
 
 function copy_patient_text_to_clipboard() {
-    var dpv = document.getElementById("div_patient_view");
-    var nma = document.getElementById("non_med_advice_patient_area_text");	var patient_med_text = innerTextVisibleOnly(dpv);	var patient_nonmed_text = innerTextVisibleOnly(nma);    var all_text = patient_med_text + "\n" + "\n" + patient_nonmed_text;
+    var patient_medication_advice_list = document.getElementById("patient-medication-advice-list");	var div_other_med_advice = document.getElementById("div_other_med_advice");
+    var patient_non_med_advice_list = document.getElementById("patient-non-med-advice-list");	var all_text = document.getElementById("patient_med_advice_header").innerText + "\n";	all_text = all_text + innerTextVisibleOnly(patient_medication_advice_list) + "\n";	all_text = all_text + innerTextVisibleOnly(div_other_med_advice) + "\n";	all_text = all_text + document.getElementById("patient_warning").innerText + "\n\n";	all_text = all_text + document.getElementById("header_overige_advies").innerText + "\n";	all_text = all_text + innerTextVisibleOnly(patient_non_med_advice_list);
     return copy_text_to_clipboard(all_text, 'was_copied_patient');
 }
 
