@@ -1,9 +1,5 @@
 Important:
 * Figure out "on update" statements for research tables
-* Think about what we know about the "doctor_id" and incorporate its use into the code.
-  * How do we expect the doctor_id to come in? Presumably we'll need it for OAUTH. I guess it's in the post data?
-  * We will need to keep a log of OAUTH authorizations. Should we use logged_events for this? Should we change viewer_id to doctor_id in this table?
-  * I've added a doctor_id field to patient_advice_selection, but I will need to add code to populate it.
 * figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
 * Getting data out of EHR
   * Look into free FHIR servers and see if we can create a version of the ETL that can be included in the main repo
@@ -19,6 +15,10 @@ Important:
 * search and replace nonprinting chars in refpages (looks like maybe all the HTML special chars were replaced with nonprinting chars rather than the other way around...)
 * content has been added for Hoe gebruik ik... (but it's really quite bad; I guess I will make new content)
 * We will need to log which users logged in and viewed records. Add this to our logging data.
+  * We don't know how the doctor_id will come in, which makes it difficult to build this now.
+  * I've added a doctor_id field to patient_advice_selection, but I will need to add code to populate it.
+  * Should we use logged_events for this? Should we change viewer_id to doctor_id in the logged_events table?
+
 
 Valportaal
 * change display of risk gradient to match cdss
