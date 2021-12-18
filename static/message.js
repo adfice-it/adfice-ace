@@ -447,7 +447,8 @@ function copy_text_to_clipboard(text, type) {
         navigator.clipboard.writeText(text);
     } else if (window.clipboardData) {
         // Internet Explorer
-        window.clipboardData.setData("Text", text);    } else {
+        window.clipboardData.setData("Text", text);
+    } else {
         alert("browser does not support copy");
     }
 
@@ -455,24 +456,41 @@ function copy_text_to_clipboard(text, type) {
 
     return true;
 }
-function innerTextVisibleOnly(element) {                                            
-        var result = "";		var i = 0;
-        for (i=0; i < element.children.length; ++i) {
-                if (element.children[i].style.visibility != 'hidden' &&
-                        element.children[i].style.display != 'none'
-                        ) {
-console.log("shown: " + element.children[i].id + "-------------\n");                        result += element.children[i].innerText + '\n';
-                } else {console.log("hidden: " + element.children[i].id + "-------------\n");}        }
-        return result;                                                          
-}
+
+function innerTextVisibleOnly(element) {
+    var result = "";
+    var i = 0;
+    for (i = 0; i < element.children.length; ++i) {
+        if (element.children[i].style.visibility != 'hidden' &&
+            element.children[i].style.display != 'none'
+        ) {
+            console.log("shown: " + element.children[i].id + "-------------\n");
+            result += element.children[i].innerText + '\n';
+        } else {
+            console.log("hidden: " + element.children[i].id + "-------------\n");
+        }
+    }
+    return result;
+}
+
 function copy_ehr_text_to_clipboard() {
-    var allEHRText = document.getElementById("div_all_ehr_text");	var displayed_inner_text = innerTextVisibleOnly(allEHRText);	//get rid of extra CR and LF
-	displayed_inner_text = displayed_inner_text.replace(/\r\n?/g, "");    return copy_text_to_clipboard(displayed_inner_text, 'was_copied_ehr');
+    var allEHRText = document.getElementById("div_all_ehr_text");
+    var displayed_inner_text = innerTextVisibleOnly(allEHRText);
+    //get rid of extra CR and LF
+    displayed_inner_text = displayed_inner_text.replace(/\r\n?/g, "");
+    return copy_text_to_clipboard(displayed_inner_text, 'was_copied_ehr');
 }
 
 function copy_patient_text_to_clipboard() {
-    var patient_medication_advice_list = document.getElementById("patient-medication-advice-list");	var div_other_med_advice = document.getElementById("div_other_med_advice");
-    var patient_non_med_advice_list = document.getElementById("patient-non-med-advice-list");	var all_text = document.getElementById("patient_med_advice_header").innerText + "\n";	all_text = all_text + innerTextVisibleOnly(patient_medication_advice_list) + "\n";	all_text = all_text + innerTextVisibleOnly(div_other_med_advice) + "\n";	all_text = all_text + document.getElementById("patient_warning").innerText + "\n\n";	all_text = all_text + document.getElementById("header_overige_advies").innerText + "\n";	all_text = all_text + innerTextVisibleOnly(patient_non_med_advice_list);
+    var patient_medication_advice_list = document.getElementById("patient-medication-advice-list");
+    var div_other_med_advice = document.getElementById("div_other_med_advice");
+    var patient_non_med_advice_list = document.getElementById("patient-non-med-advice-list");
+    var all_text = document.getElementById("patient_med_advice_header").innerText + "\n";
+    all_text = all_text + innerTextVisibleOnly(patient_medication_advice_list) + "\n";
+    all_text = all_text + innerTextVisibleOnly(div_other_med_advice) + "\n";
+    all_text = all_text + document.getElementById("patient_warning").innerText + "\n\n";
+    all_text = all_text + document.getElementById("header_overige_advies").innerText + "\n";
+    all_text = all_text + innerTextVisibleOnly(patient_non_med_advice_list);
     return copy_text_to_clipboard(all_text, 'was_copied_patient');
 }
 

@@ -697,7 +697,8 @@ function div_all_ehr_text() {
         //html += '<div id="advice_ehr_area_' + i + '" class="advice_ehr_area">';
         let row = medication_advice[i];
         let atc = row.ATC_code;
-        let cb_advices = row.adviceTextsCheckboxes;		let med_name = ucfirst(row.medication_name).trim();
+        let cb_advices = row.adviceTextsCheckboxes;
+        let med_name = ucfirst(row.medication_name).trim();
         html += '<div id = "' + med_name + '_name" class="med_name_ehr">' + med_name + ':</div><!-- med_name -->\n';
         for (let j = 0; j < cb_advices.length; ++j) {
             let cb_advice = cb_advices[j];
@@ -710,7 +711,11 @@ function div_all_ehr_text() {
             html += '<div id="' + row_id + '"';
             html += ' style="display:none">\n';
             let allow_edit = 0;
-			//TODO the structure of this HTML is not great.			/* <div id="et_bla">static text<div id="eft_bla">free text</div></div>			   would be more correct 			   Guessing it's equally ugly in the other areas with free text. */            html += cdss_freetext(cb_advice.ehr_split, allow_edit, 'efreetext',
+            //TODO the structure of this HTML is not great.
+            /* <div id="et_bla">static text<div id="eft_bla">free text</div></div>
+               would be more correct 
+               Guessing it's equally ugly in the other areas with free text. */
+            html += cdss_freetext(cb_advice.ehr_split, allow_edit, 'efreetext',
                 'eft', atc, rulenum, boxnum);
             html += '</div><!-- ' + row_id + ' -->\n';
         }
@@ -740,7 +745,8 @@ function div_all_ehr_text() {
         let category = nm_advice.category_id;
         let boxnum = nm_advice.select_box_num;
         let nma_id_base = ['NONMED', category, boxnum].join('_');
-//TODO but this is parsed correctly by our Copy workaround - what's the difference?        let row_id = 'et_' + nma_id_base;
+        //TODO but this is parsed correctly by our Copy workaround - what's the difference?
+        let row_id = 'et_' + nma_id_base;
         html += '<div id="' + row_id + '"';
         html += ' style="display:none">\n';
         let allow_edit = 0;
