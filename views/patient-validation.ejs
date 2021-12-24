@@ -63,7 +63,7 @@ Leeftijd: <%= patient_advice.age %><br/>
 <% let referenceString = ""; -%>
 <%     for (let k = 0; k < referenceNumbers.length; ++k ) { -%>
 <%         let ref = referenceNumbers[k]; -%>
-<%           referenceString += "<a href=\"https://kik.amc.nl/falls/refpages/refpage" + ref.reference + ".html\" target=\"_blank\">" + ref.reference + "</a>"; -%>
+<%           referenceString += '<a href="static/refpages/refpage' + ref.reference + '.html" target="_blank">' + ref.reference + '</a>'; -%>
 <%	     if(k < referenceNumbers.length-1){referenceString += ",";} -%>
 <% } -%>
 <div class="refpages">Referenties:<%- referenceString %></div>
