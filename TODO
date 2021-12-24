@@ -18,7 +18,7 @@ Important:
   * We don't know how the doctor_id will come in, which makes it difficult to build this now.
   * I've added a doctor_id field to patient_advice_selection, but I will need to add code to populate it.
   * Should we use logged_events for this? Should we change viewer_id to doctor_id in the logged_events table?
-
+* Change risk gradient: The bar will transition from green (very low risk; 0-15%) to yellow (medium risk; 15-30%) to orange (elevated risk; 30-50%) to red (high risk; 50-60%) to deep red (very high risk; ≥60%). Text labels: ‘laag’ close to the left side of the bar, ‘verhoogd’ at about 25%, and zeer hoog at around 50%
 
 Valportaal
 * change display of risk gradient to match cdss

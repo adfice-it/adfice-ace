@@ -73,7 +73,7 @@ Leeftijd: <span id="patient-info-age"></span><br/>
  <button type="button" class = "nav_button" id="page_renew"
 	 onclick="patient_renew()">
          Vernieuwen</button>
-<P><strong>Let op!</strong> Als u al keuzes heeft gemaakt en advies ingetypt op de andere paginas, wordt deze <em>vernietigd</em> door het drukken van deze knop.</p>
+<P><strong>Let op!</strong> Dit maakt alle door u gemaakte aanpassingen ongedaan.</p>
 </div>
 </div><!-- patient-info -->
 
@@ -83,14 +83,14 @@ Leeftijd: <span id="patient-info-age"></span><br/>
 <div class="patient_data" id="patient-lab_container"><p>Lab-waarden:</p><div class="patient_data" id="patient-labs"></div></div>
 <div class="patient_data" id = "patient-med-contaner">
 <p>Gedetecteerde relevante medicijnen:<br><span id="meds-with-rules"></span></p>
-<p>Gedetecteerde andere medicijnen:<br><span id="meds-without-rules-list"></span></p>
+<p>Andere gedetecteerde medicijnen:<br><span id="meds-without-rules-list"></span></p>
 </div><!-- patient_meds -->
 </div><!-- patient_data -->
 
 <div id="prediction_data_container">
 <h3>Data voor predictiemodel</h3>
 <table class="predict_data" id="prediction_data_table">
-<tr><th class="predict_data">variabel</th><th class="predict_data">waarde</th><th class="predict_data">datum gemeten</th><th class="predict_data">ingetypte waarde</th><th class="predict_data">coefficient</th></tr>
+<tr><th class="predict_data">variabel</th><th class="predict_data">waarde</th><th class="predict_data">datum gemeten</th><th class="predict_data">ingetypte waarde</th><th class="predict_data">co&euml;ffici&euml;nt</th></tr>
 <tr><td class="predict_data">Intercept</td><td class="predict_data"></td><td class="predict_data"></td><td class="predict_data"></td><td class="predict_data">-0.2047 +</td></tr>
 <tr><td class="predict_data">Z-score depressie (GDS)</td><td class = "predict_data predict_db"><div id = "GDS_score"></div></td><td class = "predict_data predict_db"><div id = "GDS_date_measured"></div><td class = "predict_data predict_user"><div id = "d_user_GDS_score"></div></td></td><td class="predict_data"> 0.0778  * (GDS - 1.4401) / 1.9419 +</td></tr>
 <tr><td class="predict_data">Z-score grijpkracht</td><td class = "predict_data predict_db"><div id = "grip_kg"><div></td><td class = "predict_data predict_db"><div id = "grip_date_measured"></div></td><td class = "predict_data predict_user"><div id = "d_user_grip_kg"></div></td><td class="predict_data"> -0.1678  * (kga  - 32.4838) / 10.8414 +</td></tr>

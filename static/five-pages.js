@@ -205,7 +205,7 @@ function prediction_start() {
 
 function missing_data_form(measurements) {
     let footnote = '';
-    let html = '<h3>Data voor predictiemodel</h3><p>Vul de onderstaande data in om een risico te (her)berekenen.</p>\
+    let html = '<h3>Data voor predictiemodel</h3><p>Vul de onderstaande gegevens in om het valrisico te (her)berekenen.</p>\
 				<form id="missing_data_form">\
 				<table class="prediction_missing" id = "prediction_missing_table">\
 				<tr><th class="prediction_missing">variabel</th><th class="prediction_missing">huidige waarde</th><th class="prediction_missing" >nieuwe waarde</th></tr>';
@@ -265,7 +265,7 @@ function missing_data_form(measurements) {
             html += '<option value = "' + i + '">' + i + '</option>'
         }
         html += '</select></td>';
-        footnote += '*Aantal van het volgende items waarop de patient heeft enige moiete of kan niet:\n';
+        footnote += '*Aantal van de volgende handelingen die de patiënt niet kan uitvoeren of waarmee de patiënt enige moeite mee heeft:\n';
         footnote += '<ol><li>Kunt u een trap van 15 treden op- en aflopen zonder stil te moeten staan?</li>\n';
         footnote += '<li>Kunt u zich aan- en uitkleden?</li>\n';
         footnote += '<li>Kunt u gaan zitten en opstaan uit een stoel?</li>\n';
@@ -308,7 +308,7 @@ function missing_data_form(measurements) {
             html += '2';
         }
         html += '</td><td class="prediction_missing"><select id="fear_dropdown" name = "fear_dropdown"><option value = ""></option><option value = "0">0: niet bang</option><option value = "1">1: een beetje/redelijk</option><option value = "2">2: erg bezorgd</option></select></td>';
-        footnote += '***Kies 0 als de pati&euml;nt heeft <q>helemaal niet bang</q> beantwoord bij alle items op de FES-I SF7. Kies 1 als de pati&euml;nt heeft <q>Een beetje bezorgd</q> of <q>redelijk bezorgd</q> beantwoord bij tenminste 1 vraag, en kies 2 als de pati&euml;nt heeft <q>Erg bezorgd</q> beantwoord bij tenminste 1 vraag.';
+        footnote += '***Kies 2 als de pati&euml;nt \'Erg bezorgd\' heeft beantwoord bij tenminste 1 van de items. <br/>Kies 1 als de pati&euml;nt \'Een beetje bezorgd\' of \'Redelijk bezorgd\' heeft beantwoord bij tenminste 1 van de items. <br/>Kies 0 als de pati&euml;nt \'helemaal niet bang\' heeft beantwoord bij alle items op de FES-I-SF7.';
     }
     html += '</table><input id="button_submit_missings" type="button" onclick="update_meas()" value="Verstuur"></form>';
     html += '<div id="footnote_missing">' + footnote + '</div><!-- footnote_missing -->';
