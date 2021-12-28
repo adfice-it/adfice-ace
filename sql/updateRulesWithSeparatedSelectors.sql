@@ -57,7 +57,7 @@ UPDATE med_rules SET selector_or = "C03A,C07B,C03EA", selector_not = NULL WHERE 
 UPDATE med_rules SET selector_or = "C03A,C07B,C03EA", selector_not = NULL WHERE medication_criteria_id = "40b";
 UPDATE med_rules SET selector_or = "C03A,C07B,C03EA", selector_not = NULL WHERE medication_criteria_id = "40c";
 UPDATE med_rules SET selector_or = "C03,C02L,C07B,C07C,C07D,C08G,C09BA,C09DA", selector_not = "C03CA,C03CB,C03EB" WHERE medication_criteria_id = "41";
-UPDATE med_rules SET selector_or = "C03,C02L,C07B,C07C,C07D,C08G,C09BA,C09DA", selector_not = NULL WHERE medication_criteria_id = "42";
+UPDATE med_rules SET selector_or = "C03,C02L,C07B,C07C,C07D,C08G,C09BA,C09DA", selector_not = NULL WHERE medication_criteria_id = "42";UPDATE med_rules SET selector_or = "C07B,C07C,C07D", selector_not = NULL WHERE medication_criteria_id = "42a";UPDATE med_rules SET selector_or = "C03,C02L,C08G,C09BA,C09DA", selector_not = NULL WHERE medication_criteria_id = "42b";
 UPDATE med_rules SET selector_or = "C03,C02L,C07B,C07C,C07D,C08G,C09BA,C09DA", selector_not = NULL WHERE medication_criteria_id = "43";
 UPDATE med_rules SET selector_or = "C03,C02L,C07B,C07C,C07D,C08G,C09BA,C09DA", selector_not = NULL WHERE medication_criteria_id = "44";
 UPDATE med_rules SET selector_or = "C02,C03,C04,C07,C08,C09,C10BX03,C10BX07,C10BX09,C10BX11,C10BX14", selector_not = NULL WHERE medication_criteria_id = "45";
@@ -82,7 +82,7 @@ UPDATE med_rules SET selector_or = "C07AA, C07AG, C07BA, C07BG, C07CA, C07CG, C0
 UPDATE med_rules SET selector_or = "C07,S01ED", selector_not = "C07B,C07C,C07D" WHERE medication_criteria_id = "58";
 UPDATE med_rules SET selector_or = "C07,S01ED", selector_not = "C07AB,C07BB,C07CB,C07DB,C07EB" WHERE medication_criteria_id = "59";
 UPDATE med_rules SET selector_or = "C07,S01ED", selector_not = "C07B,C07C,C07D" WHERE medication_criteria_id = "60";
-UPDATE med_rules SET selector_or = "C07,S01ED", selector_not = "C07B,C07C,C07D" WHERE medication_criteria_id = "61";
+UPDATE med_rules SET selector_or = "C07,S01ED", selector_not = "C07B,C07C,C07D" WHERE medication_criteria_id = "61";UPDATE med_rules SET selector_or = "C07" WHERE medication_criteria_id = "62";
 UPDATE med_rules SET selector_or = "C09", selector_not = "C09BA,C09DA" WHERE medication_criteria_id = "63";
 UPDATE med_rules SET selector_or = "C09", selector_not = "C09BA,C09DA" WHERE medication_criteria_id = "63a";
 UPDATE med_rules SET selector_or = "C09", selector_not = "C09BA,C09DA" WHERE medication_criteria_id = "63b";

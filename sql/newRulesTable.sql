@@ -155,18 +155,16 @@ C02L Antihypertensives and diuretics in combination
 C07B Beta blocking agents and thiazides 
 C07C Beta blocking agents and other diuretics 
 C07D Beta blocking agents, thiazides and other diuretics 
-C09BA and C09DA ACEi and ARB with diuretics","all","{{preselect box 2}{
-(SELECTOR(C03CA
-or C03CB
-or C03EB) AND CONDITION(
-NOT hartfalen (probleemlijst))
-)
+C09BA and C09DA ACEi and ARB with diuretics","all","","((atc:C03 &! C03CA &! C03CB &! C03EB) | atc:C02L | atc:C07B | atc:C07C | atc:C07D )","",13),("42a","yes","no","Diuretica combined with beta-blockers:
+C07B Beta blocking agents and thiazides 
+C07C Beta blocking agents and other diuretics 
+C07D Beta blocking agents, thiazides and other diuretics","all","{{preselect box 2}{
 OR
 (SELECTOR() AND
 CONDITION(NOT hypertensie and NOT hartfalen))
 
 OR
-(SELECTOR(C03A or C07B or C03EA)
+(SELECTOR(C07B)
 AND CONDITION (
 (kalium < 3,0
 mmol/l
@@ -189,7 +187,40 @@ orthostatische hypotensie (probleemlijst)))
 
 or
 (SELECTOR(C07DA) AND CONDITION())
-}}","((atc:C03 &! C03CA &! C03CB &! C03EB) | atc:C02L | atc:C07B | atc:C07C | atc:C07D )","",13),
+}}","(atc:C07B | atc:C07C | atc:C07D )","",18),("42b","yes","no","Diuretica NOT combined with beta-blockers: C03 diuretics except lisdiruetics
+C02L Antihypertensives and diuretics in combination 
+C09BA and C09DA ACEi and ARB with diuretics","all","{{preselect box 2}{
+(SELECTOR(C03CA
+or C03CB
+or C03EB) AND CONDITION(
+NOT hartfalen (probleemlijst))
+)
+OR
+(SELECTOR() AND
+CONDITION(NOT hypertensie and NOT hartfalen))
+
+OR
+(SELECTOR(C03A or C03EA)
+AND CONDITION (
+(kalium < 3,0
+mmol/l
+OR hypokalemia (probleemlijst))
+OR (natrium < 130 mmol/l OR hyponatremia (probleemlijst))
+OR
+(gecorrigeerd niet-eiwitgebonden calcium > 2,65 mmol/l OR hypercalciemie (probleemlijst))
+OR
+jicht (probleemlijst))
+)
+
+OR 
+(SELECTOR() AND CONDITION(
+(Parkinson (probleemlijst)
+OR 
+Lewy-bodies dementie (probleemlijst) OR Multiple system atrophy (probleemlijst) OR progressive supranuclear palsy (probleemlijst)
+)
+AND
+orthostatische hypotensie (probleemlijst)))
+}}","((atc:C03 &! C03CA &! C03CB &! C03EB) | atc:C02L)","",13),
 ("43","yes","no","Diuretica: C03 diuretics
 C02L Antihypertensives and diuretics in combination 
 C07B Beta blocking agents and thiazides 
@@ -395,6 +426,8 @@ S01ED beta-blocker eyedrops","bijwerking","","(atc:C07 | atc:S01ED) & ! atc:C07B
 ("61","yes","no","Beta-blokkers
 C07 beta-blockers NOT (C07B, C07C, or C07D) (combinations with diuretics)
 S01ED beta-blocker eyedrops","all","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","(atc:C07 | atc:S01ED) & ! atc:C07B & ! atc:C07C & ! atc:C07D","",18),
+("62","yes","no","Beta-blokkers
+C07 systemic beta-blockers","all","","atc:C07","",18),
 ("63","yes","no","RAS-remmers: ACE-remmers, angiotensinereceptor blokkers C09 EXCEPT C09BA and C09DA (with diuretics)","all","{{preselect box 1}{SELECTOR() AND CONDITION (
 (Parkinson (probleemlijst)
 OR 

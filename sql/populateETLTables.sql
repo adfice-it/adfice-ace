@@ -21,7 +21,7 @@ INSERT INTO problem (id, problem_name, display_name) VALUES
 (15,'delier','Delier'),
 (16,'depressie','Depressie'),
 (17,'angststoornis','Angststoornis'),
-(18,'schizofrenie','Schizofrenie'),
+(18,'schizofrenie','Schizoaffectieve aandoening'),
 (19,'dementie','Dementie'),
 (20,'lewy-bodies-dementia','Lewy body dementie'),
 (21,'parkinson','Ziekte van Parkinson'),

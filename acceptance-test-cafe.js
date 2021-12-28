@@ -339,7 +339,7 @@ test('Test problem list', async t => {
 
     let problem_table = Selector("#problem_table");
     await t.expect(problem_table.withText("Angststoornis	Ja").exists).ok();
-    await t.expect(problem_table.withText("Schizofrenie	Nee").exists).ok();
+    await t.expect(problem_table.withText("Schizoaffectieve aandoening	Nee").exists).ok();
 });
 
 test('Test lab list', async t => {
@@ -427,7 +427,7 @@ test('Check multiple viewers making changes', async t => {
 
     let atc = "C03AA03"; // hydrochlorothiazide
     let rule = "42";
-    let cbn = "3";
+    let cbn = "6";
     let checkbox_id = `cb_${atc}_${rule}_${cbn}`;
     let checkbox_css_selector = `input#${checkbox_id}`;
     let freetext_id = `ft_${atc}_${rule}_${cbn}_1`;
@@ -440,7 +440,7 @@ test('Check multiple viewers making changes', async t => {
     const oldFreetext = "old";
     const newFreetext = "foo";
 
-    let cb_selector = Selector('#cb_C03AA03_42_3');
+    let cb_selector = Selector('#cb_C03AA03_42_6');
     await t.expect(cb_selector.visible).ok();
     if (await cb_selector.checked) {
         await t.click(cb_selector);
@@ -462,7 +462,7 @@ test('Check multiple viewers making changes', async t => {
     await change_flex_style_to_inline(t);
 
     // verify that we show 2 visitors
-    let cb_selector2 = Selector('#cb_C03AA03_42_3');
+    let cb_selector2 = Selector('#cb_C03AA03_42_6');
     await t.expect(Selector(view_cnt_css_sel).withText("2").exists).ok();
     await t.expect(Selector(view_cnt_css_sel).withText("2").visible).ok();
     await t.switchToWindow(window1);
