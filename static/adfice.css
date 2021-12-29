@@ -359,8 +359,7 @@ div.gauge_background {
     width:60%;
     height: 0px;
     padding-bottom: 4%;
-    /* set "good", "warn", and "critical" thresholds specifically */
-    background: linear-gradient(to right, #0F0 5%, #FF0 10%, #F00 30%);
+    /* The bar will transition from green (very low risk; 0-15%) to yellow (medium risk; 15-30%) to orange (elevated risk; 30-50%) to red (high risk; 50-60%) to deep red (very high risk; ≥60%).*/    background: linear-gradient(to right, #0F0 5%, #FF0 15%, #F70 35%, #F00 55%, #800 65%);
     display: inline-block;
 	border: 2px solid #000000;
     margin-bottom: 3ex;
@@ -387,15 +386,22 @@ div.gauge_text_left {
     padding: 0px;
     width: 0px;
     display: inline-block;
+}/* Text labels: ‘laag’ close to the left side of the bar, ‘verhoogd’ at about 25%, and zeer hoog at around 50% */div.gauge_text_middle {
+    position: relative;
+    top: 10px;
+    margin: 0px;
+    padding: 0px;
+    width: 0px;    left: calc(25% - 4ch - 1em);
+    display: inline-block;
 }
 
 div.gauge_text_right {
     position: relative;
     margin: 0px;
     padding: 0px;
-    width: 0px;
+    width: 10ch;
     top: 10px;
-    left: calc(100% - 3ch - 1em);
+    left: calc(100% - 9ch);
     display: inline-block;
 }
 

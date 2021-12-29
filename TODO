@@ -8,17 +8,14 @@ Important:
   * consider removing birth date entirely from the data; we only need age
   * If etl can't find the patient or a BSN, it will return null. Make sure the caller handles this sensibly.
 * fix layout of non-med advice (if there is a free text box, checkbox lines up oddly)
-* other med advice free text box does not display on Consult view (should display here too)
 * entering text in a text box should automatically check its check box (not mentioned in usability but seems like a good idea)
 * automate tests for CDSS working on IE11
 * fix testcafe acceptance tests to work with testcafe v1.16.1
-* search and replace nonprinting chars in refpages (looks like maybe all the HTML special chars were replaced with nonprinting chars rather than the other way around...)
-* content has been added for Hoe gebruik ik... (but it's really quite bad; I guess I will make new content)
 * We will need to log which users logged in and viewed records. Add this to our logging data.
   * We believe doctor_id will come in on the URL.
   * I've added a doctor_id field to patient_advice_selection, but I will need to add code to populate it.
   * Should we use logged_events for this? Should we change viewer_id to doctor_id in the logged_events table?
-* Change risk gradient: The bar will transition from green (very low risk; 0-15%) to yellow (medium risk; 15-30%) to orange (elevated risk; 30-50%) to red (high risk; 50-60%) to deep red (very high risk; ≥60%). Text labels: ‘laag’ close to the left side of the bar, ‘verhoogd’ at about 25%, and zeer hoog at around 50%
+
 
 Valportaal
 * change display of risk gradient to match cdss
