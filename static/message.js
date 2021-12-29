@@ -333,7 +333,9 @@ function ws_on_message(event) {
     for (let i = 0; i < textAreaList.length; ++i) {
         let ta = textAreaList[i];
         ta.disabled = message_globals.is_final;
-    }
+    }	if(message_globals.is_final){
+		document.body.style.opacity = 0.5;
+	}
 
     if ('debug_info' in message) {
         message_globals.logger.log(JSON.stringify({
