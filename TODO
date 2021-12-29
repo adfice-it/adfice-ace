@@ -1,6 +1,5 @@
 Important:
-* Figure out "on update" statements for research tables* Seems that greying out the locked files isn't working- maybe an IE problem?
-* Getting data out of EHR
+* Figure out "on update" statements for research tables* Getting data out of EHR
   * Look into free FHIR servers and see if we can create a version of the ETL that can be included in the main repo
     https://confluence.hl7.org/display/FHIR/Public+Test+Servers
   * use of the "vernieuwen" button is probably an event we should log
