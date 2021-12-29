@@ -589,8 +589,7 @@ function other_med_advice_area() {
         html += '</div> <!-- ' + other_prefix + 'cdss -->\n';
         html += '</div> <!-- other_cdss_container -->\n';
         html += '</div><!-- ' + row_id + ' -->\n';
-    }
-    set_element_inner('div_other_med_advice_area', html);
+    }    set_element_inner('div_other_med_advice_area', html);	// add css class to "other advice" area - ugly but functional	document.getElementById("ft_OTHER_other_1_1").className = "ft_input ft_big"; 
 }
 
 function patient_other_med_advice_area() {
@@ -662,9 +661,7 @@ function non_med_advice_area(hide_additional) {
         html += '</div> <!-- ' + nma_prefix + '_cdss -->\n';
         html += '</div> <!-- nonmed_cdss_container -->\n';
         html += '</div><!-- nonmed_row -->\n';
-    }
-    set_element_inner('non_med_advice_selection_area', html);
-}
+    }    set_element_inner('non_med_advice_selection_area', html);	// add css class to "other advice" area - ugly but functional	document.getElementById("ft_NONMED_V_1_1").className = "ft_input ft_big"; }
 
 function patient_non_med_advice() {
     let html = '';

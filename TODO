@@ -1,9 +1,5 @@
 Important:
 * Figure out "on update" statements for research tables
-* The "other med advice" (ft_OTHER_other_1_1) and "other nonmed advice" (ft_NONMED_V_1_1)
-  should ideally be textarea rather than input text (allow multiple lines). One option would
-  be to convert all the input text to textarea and format the boxes to be smaller for the
-  fields that are normally smaller.
 * entering text in a text box should automatically check its check box (not mentioned in usability but seems like a good idea)
 * Getting data out of EHR
   * Look into free FHIR servers and see if we can create a version of the ETL that can be included in the main repo

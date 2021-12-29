@@ -186,23 +186,24 @@ th,td.patient_data_td {
 }
 .ft_input {
     width: 50em;
+}.ft_big {
+	height: 4em;
+}
+.other_advice_row{
+	display: flex;
+	position: relative;
+	height: auto;
 }
-.div_other_advice{
-	display: block;
-}
-
 .other_checkbox{
 	display: inline;
-	margin-bottom: 15px;
 }
 .other_cdss_container{
   display: inline-block;
   width: 55%;
-  margin-top: 15px;
 }
 .other_cdss{
   display: block;
-  width: 100%;
+  margin-bottom: 10px;
 }
 
 .patient_med_cb_row{
