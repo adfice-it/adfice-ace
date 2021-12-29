@@ -609,7 +609,7 @@ test('Check preselect SQL', async () => {
     sql = "";
     result = null;
 
-/* TODO adjust test to check new rules 42a and 42b *//*    preselectRules = await adfice.get_preselect_rules("42");
+    preselectRules = await adfice.get_preselect_rules("42a");
     sql = preselectRules[0]['sql_condition'].toString();
     result = await (adfice.evaluate_sql(sql, 1));
     expect(result).toBe(true);
@@ -637,7 +637,23 @@ test('Check preselect SQL', async () => {
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
-    result = null;*/
+    result = null;    preselectRules = await adfice.get_preselect_rules("42b");
+    sql = preselectRules[0]['sql_condition'].toString();
+    result = await (adfice.evaluate_sql(sql, 1));
+    expect(result).toBe(true);
+    sql = "";
+    result = null;
+    sql = preselectRules[1]['sql_condition'].toString();
+    result = await (adfice.evaluate_sql(sql, 51));
+    expect(result).toBe(true);
+    sql = "";
+    result = null;
+    sql = preselectRules[2]['sql_condition'].toString();
+    result = await (adfice.evaluate_sql(sql, 51));
+    expect(result).toBe(true);
+    preselectRules = null;
+    sql = "";
+    result = null;
 
     preselectRules = await adfice.get_preselect_rules("46");
     sql = preselectRules[0]['sql_condition'].toString();
