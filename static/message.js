@@ -112,7 +112,7 @@ function send_freetext(textfield_id) {
         message.textfield = textfield_id;
 
         message['field_entries'] = {};
-        let elementList = document.querySelectorAll("input[type='text']");
+        let elementList = document.querySelectorAll("textarea");
         for (let i = 0; i < elementList.length; ++i) {
             let field = elementList[i];
             message['field_entries'][field.id] = field.value;
@@ -276,7 +276,7 @@ function first_incoming_message(event) {
         process_checkbox(checkbox.id, false)
     }
 
-    elementList = document.querySelectorAll("input[type='text']");
+    elementList = document.querySelectorAll("textarea");
     for (let i = 0; i < elementList.length; ++i) {
         let textfield = elementList[i];
         textfield.style.visibility = "visible";
@@ -329,6 +329,10 @@ function ws_on_message(event) {
     for (let i = 0; i < elementList.length; ++i) {
         let input = elementList[i];
         input.disabled = message_globals.is_final;
+    }	let textAreaList = document.querySelectorAll("textarea");
+    for (let i = 0; i < textAreaList.length; ++i) {
+        let ta = textAreaList[i];
+        ta.disabled = message_globals.is_final;
     }
 
     if ('debug_info' in message) {
@@ -348,7 +352,11 @@ function ws_on_close(event) {
     for (let i = 0; i < elementList.length; ++i) {
         let input = elementList[i];
         input.disabled = true;
-    };
+    };	let textAreaList = document.querySelectorAll("textarea");
+    for (let i = 0; i < textAreaList.length; ++i) {
+        let ta = textAreaList[i];
+        ta.disabled = true;
+    }
 
     message_globals.ws = null;
     message_globals.messages_received = 0;

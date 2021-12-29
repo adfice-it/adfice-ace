@@ -395,8 +395,8 @@ function cdss_freetext(cdss_split, allow_edit, ftdivclass, ftprefix,
         let chunk = cdss_split[k];
         let chunk_id = [ftprefix, atc, rulenum, boxnum, k].join('_');
         if (allow_edit && chunk.editable) {
-            html += '<input id="' + chunk_id + '" type="text" placeholder="Specificeer hier..."';
-            html += ' class="ft_input" value="' + chunk.text + '"/>\n';
+            html += '<textarea rows=1 id="' + chunk_id + '" type="text" placeholder="Specificeer hier..."';
+            html += ' class="ft_input">' + chunk.text + '</textarea>\n';
         } else {
             html += '<div id="' + chunk_id + '" class ="' + ftdivclass + '">\n';
             let cbString = get_converter().makeHtml(chunk.text);

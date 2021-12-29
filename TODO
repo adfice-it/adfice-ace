@@ -1,19 +1,23 @@
 Important:
 * Figure out "on update" statements for research tables
-* figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
+* The "other med advice" (ft_OTHER_other_1_1) and "other nonmed advice" (ft_NONMED_V_1_1)
+  should ideally be textarea rather than input text (allow multiple lines). One option would
+  be to convert all the input text to textarea and format the boxes to be smaller for the
+  fields that are normally smaller.
+* entering text in a text box should automatically check its check box (not mentioned in usability but seems like a good idea)
 * Getting data out of EHR
   * Look into free FHIR servers and see if we can create a version of the ETL that can be included in the main repo
     https://confluence.hl7.org/display/FHIR/Public+Test+Servers
   * use of the "vernieuwen" button is probably an event we should log
   * consider removing birth date entirely from the data; we only need age
   * If etl can't find the patient or a BSN, it will return null. Make sure the caller handles this sensibly.
-* entering text in a text box should automatically check its check box (not mentioned in usability but seems like a good idea)
-* automate tests for CDSS working on IE11
-* fix testcafe acceptance tests to work with testcafe v1.16.1
 * We will need to log which users logged in and viewed records. Add this to our logging data.
   * We believe doctor_id will come in on the URL.
   * I've added a doctor_id field to patient_advice_selection, but I will need to add code to populate it.
   * Should we use logged_events for this? Should we change viewer_id to doctor_id in the logged_events table?
+* figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
+* automate tests for CDSS working on IE11
+* fix testcafe acceptance tests to work with testcafe v1.16.1
 
 
 Valportaal
@@ -41,10 +45,6 @@ Required changes to rules (Ace will do these):
 
 
 Mid Priority:
-* The "other med advice" (ft_OTHER_other_1_1) and "other nonmed advice" (ft_NONMED_V_1_1)
-  should ideally be textarea rather than input text (allow multiple lines). One option would
-  be to convert all the input text to textarea and format the boxes to be smaller for the
-  fields that are normally smaller.
 * Add a way to clear user-entered prediction model data. This can be used by the TestCafe test to clean up after itself.
 * Each acceptance test should start an instance of adfice-webserver
   * refactor adfice-webserver-runner to be more testable

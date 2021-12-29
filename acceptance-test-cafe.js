@@ -431,7 +431,7 @@ test('Check multiple viewers making changes', async t => {
     let checkbox_id = `cb_${atc}_${rule}_${cbn}`;
     let checkbox_css_selector = `input#${checkbox_id}`;
     let freetext_id = `ft_${atc}_${rule}_${cbn}_1`;
-    let freetext_css_selector = `input#${freetext_id}`;
+    let freetext_css_selector = `textarea#${freetext_id}`;
 
     let ref_page_num = 14;
     let ref_C03AA03 = Selector(`#atc_ref_page_${atc}_${ref_page_num}`);
