@@ -63,7 +63,13 @@ test('Automatic selection of free text checkbox when text entered', async t => {
 	await t.pressKey('backspace');
 	await t.pressKey('backspace');
 	let ta_checkbox_state4 = await ta_checkbox.checked;
-	await t.click(ta_checkbox);		await t.expect(ta_checkbox_state1).notOk();	await t.expect(ta_checkbox_state2).ok();	await t.expect(ta_checkbox_state3).ok();	await t.expect(ta_checkbox_state4).ok();
+	await t.click(ta_checkbox);
+	
+	await t.expect(ta_checkbox_state1).notOk();
+	await t.expect(ta_checkbox_state2).ok();
+	await t.expect(ta_checkbox_state3).ok();
+	await t.expect(ta_checkbox_state4).ok();
+
 });
 // TODO: make launching of the adfice-webserver the job of the test
 // TODO: have each test launch a different adfice instance on a different port
@@ -422,7 +428,9 @@ test('Test user entering values', async t => {
     // there is currently no way to clear the user-entered data via the UI, so this test can't clean up after itself.
     // Right now the test is written so that it does not check the negative state (i.e. it does not check to see that Roker is null at the start)
     // but if we add functionality to clear values then we can add the negative checks
-});
+});
+
+
 
 // slow tests run last
 

@@ -186,9 +186,11 @@ th,td.patient_data_td {
 }
 .ft_input {
     width: 50em;
-}.ft_big {
+}
+.ft_big {
 	height: 4em;
-}
+}
+
 .other_advice_row{
 	display: flex;
 	position: relative;
