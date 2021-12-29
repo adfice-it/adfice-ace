@@ -839,7 +839,7 @@ function consult_page_setup() {
     patient_info_meds_without_rules();
     gauge_risk_score();
     let include_no_checkbox_advice = 0;
-    big_nested_medicine_advice_table(include_no_checkbox_advice);
+    big_nested_medicine_advice_table(include_no_checkbox_advice);	other_med_advice_area();
     let hide_additional = 0;
     non_med_advice_area(hide_additional);
     is_final();
