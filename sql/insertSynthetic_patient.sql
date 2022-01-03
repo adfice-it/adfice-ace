@@ -175,7 +175,7 @@ INSERT INTO etl_mrn_patient (mrn, patient_id) VALUES
 ('DummyMRN-000007831', 170),
 ('DummyMRN-000032156', 171),
 ('DummyMRN-000026857', 172),
-('DummyMRN-000025032', 173);
+('DummyMRN-000025032', 173);INSERT INTO etl_user (ehr_user_id) VALUES ('dr_alice'),('dr_bob');
 
 INSERT INTO patient (id,display_name,birth_date) VALUES
 (1,"Mevr. Empty",'1940-02-10'),
@@ -369,3 +369,4 @@ INSERT INTO patient (id,display_name,birth_date,age) VALUES
 (171,"Mevr. User-Entered1",'1940-06-16',81),
 (172,"Mevr. User-Entered2",'1940-06-16',81),
 (173,"Mevr. User-Entered3",'1940-06-16',81);
+

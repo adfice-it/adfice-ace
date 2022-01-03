@@ -7,16 +7,28 @@ CREATE TABLE `etl_mrn_patient` (
    PRIMARY KEY (`patient_id`),
    UNIQUE KEY (`mrn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `etl_bsn_patient` (
+
+CREATE TABLE `etl_bsn_patient` (
   `patient_id` int unsigned NOT NULL AUTO_INCREMENT,
   `bsn` varchar(15) DEFAULT NULL,
    PRIMARY KEY (`patient_id`),
    UNIQUE KEY (`bsn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;--
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `etl_user` (
+  `doctor_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `ehr_user_id` varchar(50) DEFAULT NULL,
+   PRIMARY KEY (`doctor_id`),
+   UNIQUE KEY (`ehr_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
 -- creating patient table, log table, and triggers
 --
 CREATE TABLE `patient` (
-  `id` int unsigned NOT NULL,  `display_name` varchar(100) DEFAULT NULL,  `participant_number` int unsigned DEFAULT NULL,
+  `id` int unsigned NOT NULL,
+  `display_name` varchar(100) DEFAULT NULL,
+  `participant_number` int unsigned DEFAULT NULL,
   `birth_date` date,
   `age` int unsigned,
   `is_final` tinyint(1),
@@ -29,8 +41,10 @@ CREATE TABLE `patient_history` (
   `log_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `log_row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `log_op` tinyint NOT NULL,
-  `id` int unsigned NOT NULL,  `display_name` varchar(100) DEFAULT NULL,
-  `participant_number` int unsigned DEFAULT NULL,  `birth_date` date,
+  `id` int unsigned NOT NULL,
+  `display_name` varchar(100) DEFAULT NULL,
+  `participant_number` int unsigned DEFAULT NULL,
+  `birth_date` date,
   `age` int unsigned,
   `is_final` tinyint(1),
   `row_created` timestamp NOT NULL,
@@ -48,7 +62,9 @@ CREATE TRIGGER patient_history_insert
           NULL,
           NULL,
           0,
-          NEW.id,          NEW.display_name,		  NEW.participant_number,
+          NEW.id,
+          NEW.display_name,
+		  NEW.participant_number,
           NEW.birth_date,
           NEW.age,
           NEW.is_final,
@@ -64,7 +80,9 @@ CREATE TRIGGER patient_history_update
           NULL,
           NULL,
           1,
-          OLD.id,          OLD.display_name,		  OLD.participant_number,
+          OLD.id,
+          OLD.display_name,
+		  OLD.participant_number,
           OLD.birth_date,
           OLD.age,
           OLD.is_final,
@@ -80,7 +98,9 @@ CREATE TRIGGER patient_history_delete
           NULL,
           NULL,
           2,
-          OLD.id,          OLD.display_name,	      OLD.participant_number,
+          OLD.id,
+          OLD.display_name,
+	      OLD.participant_number,
           OLD.birth_date,
           OLD.age,
           OLD.is_final,
@@ -663,7 +683,8 @@ CREATE TRIGGER patient_problem_history_delete
 --
 CREATE TABLE patient_advice_selection (
   id int unsigned NOT NULL AUTO_INCREMENT,
-  viewer_id int unsigned NOT NULL,  doctor_id varchar(50) DEFAULT NULL,
+  viewer_id int unsigned NOT NULL,
+  doctor_id int unsigned DEFAULT NULL,
   patient_id int unsigned NOT NULL,
   ATC_code varchar(10) NOT NULL,
   medication_criteria_id varchar(8) NOT NULL,
@@ -679,7 +700,8 @@ CREATE TABLE patient_advice_selection_history (
   log_row_created timestamp DEFAULT CURRENT_TIMESTAMP,
   log_op tinyint NOT NULL,
   id int unsigned NOT NULL,
-  viewer_id int unsigned NOT NULL,  doctor_id varchar(50) DEFAULT NULL,
+  viewer_id int unsigned NOT NULL,
+  doctor_id int unsigned DEFAULT NULL,
   patient_id int unsigned NOT NULL,
   ATC_code varchar(10) NOT NULL,
   medication_criteria_id varchar(8) NOT NULL,
@@ -701,7 +723,8 @@ CREATE TRIGGER patient_advice_selection_history_insert
           NULL,
           0,
           NEW.id,
-          NEW.viewer_id,		  NEW.doctor_id,
+          NEW.viewer_id,
+		  NEW.doctor_id,
           NEW.patient_id,
           NEW.ATC_code,
           NEW.medication_criteria_id,
@@ -721,7 +744,8 @@ CREATE TRIGGER patient_advice_selection_history_update
           NULL,
           1,
           OLD.id,
-          OLD.viewer_id,		  OLD.doctor_id,
+          OLD.viewer_id,
+		  OLD.doctor_id,
           OLD.patient_id,
           OLD.ATC_code,
           OLD.medication_criteria_id,
@@ -742,7 +766,8 @@ CREATE TRIGGER patient_advice_selection_history_delete
           NULL,
           2,
           OLD.id,
-          OLD.viewer_id,		  OLD.doctor_id,
+          OLD.viewer_id,
+		  OLD.doctor_id,
           OLD.patient_id,
           OLD.ATC_code,
           OLD.medication_criteria_id,
@@ -757,6 +782,7 @@ CREATE TRIGGER patient_advice_selection_history_delete
 CREATE TABLE patient_advice_freetext (
   id int unsigned NOT NULL AUTO_INCREMENT,
   viewer_id int unsigned NOT NULL,
+  doctor_id int unsigned DEFAULT NULL,
   patient_id int unsigned NOT NULL,
   ATC_code varchar(10) NOT NULL,
   medication_criteria_id varchar(8) NOT NULL,
@@ -774,6 +800,7 @@ CREATE TABLE patient_advice_freetext_history (
   log_op tinyint NOT NULL,
   id int unsigned NOT NULL,
   viewer_id int unsigned NOT NULL,
+  doctor_id int unsigned DEFAULT NULL,
   patient_id int unsigned NOT NULL,
   ATC_code varchar(10) NOT NULL,
   medication_criteria_id varchar(8) NOT NULL,
@@ -797,6 +824,7 @@ CREATE TRIGGER patient_advice_freetext_history_insert
           0,
           NEW.id,
           NEW.viewer_id,
+		  NEW.doctor_id,
           NEW.patient_id,
           NEW.ATC_code,
           NEW.medication_criteria_id,
@@ -818,6 +846,7 @@ CREATE TRIGGER patient_advice_freetext_history_update
           1,
           OLD.id,
           OLD.viewer_id,
+		  OLD.doctor_id,
           OLD.patient_id,
           OLD.ATC_code,
           OLD.medication_criteria_id,
@@ -840,6 +869,7 @@ CREATE TRIGGER patient_advice_freetext_history_delete
           2,
           OLD.id,
           OLD.viewer_id,
+		  OLD.doctor_id,
           OLD.patient_id,
           OLD.ATC_code,
           OLD.medication_criteria_id,
@@ -855,17 +885,22 @@ CREATE TRIGGER patient_advice_freetext_history_delete
 CREATE TABLE `logged_events` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `viewer_id` int unsigned NOT NULL,
+  `doctor_id` int unsigned DEFAULT NULL,
   `patient_id` int unsigned NOT NULL,
   `event_type` int unsigned NOT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `rules_fired` (
+
+CREATE TABLE `rules_fired` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `patient_id` int unsigned NOT NULL,  `ATC_code` varchar(10) DEFAULT NULL,
+  `patient_id` int unsigned NOT NULL,
+  `ATC_code` varchar(10) DEFAULT NULL,
   `rules_fired` varchar(100) DEFAULT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- END of patient table creation.
 --

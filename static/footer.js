@@ -7,7 +7,10 @@ function get_patient_id_param() {
     // let params = new URLSearchParams(window.location.search)
     return url_param('id');
 }
-
+function get_doctor_id_param() {
+    // let params = new URLSearchParams(window.location.search)
+    return url_param('doctor_id');
+}
 function load_footer() {
     let footer_url = get_base_url() + 'assets/footer.include.html';
     get_text(footer_url, function(err, footer_include_html) {
@@ -29,7 +32,7 @@ function load_footer() {
 
 function switch_view(view) {
     let base_url = get_base_url();
-    let new_url = base_url + view + '?id=' + get_patient_id_param();
+    let new_url = base_url + view + '?id=' + get_patient_id_param() + '&doctor_id=' + get_doctor_id_param();
 
     // sort of surprising that this is all it takes:
     window.location = new_url;

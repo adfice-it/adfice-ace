@@ -1,14 +1,17 @@
 Important:
-* Figure out "on update" statements for research tables* Getting data out of EHR
+* Figure out "on update" statements for research tables
+* Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?
+* Getting data out of EHR
   * Look into free FHIR servers and see if we can create a version of the ETL that can be included in the main repo
     https://confluence.hl7.org/display/FHIR/Public+Test+Servers
   * use of the "vernieuwen" button is probably an event we should log
   * consider removing birth date entirely from the data; we only need age
   * If etl can't find the patient or a BSN, it will return null. Make sure the caller handles this sensibly.
-* We will need to log which users logged in and viewed records. Add this to our logging data.
-  * We believe doctor_id will come in on the URL.
-  * I've added a doctor_id field to patient_advice_selection, but I will need to add code to populate it.
-  * Should we use logged_events for this? Should we change viewer_id to doctor_id in the logged_events table?
+* Using the user_id
+  * User_id is converted to doctor_id and passed as a URL paramter (done)
+  * Checkbox selection and freetext tables have a doctor_id field (done)
+  * Checkbox and freetext should record doctor_id alongside viewer_id (not yet done)
+  * We need to log when a user views a record. Should we use logged_events for this? Should we change viewer_id to doctor_id in the logged_events table?
 * figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
 * automate tests for CDSS working on IE11
 * fix testcafe acceptance tests to work with testcafe v1.16.1

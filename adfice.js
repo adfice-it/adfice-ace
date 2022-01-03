@@ -1082,6 +1082,19 @@ async function id_for_mrn(mrn) {
     return results[0].patient_id;
 }
 
+async function doctor_id_for_user(user_id) {
+    if (!user_id) {
+        return null;
+    }
+    let sql = 'SELECT doctor_id FROM etl_user WHERE ehr_user_id=?';
+    let params = [user_id];
+    let results = await this.sql_select(sql, params);
+    if (results.length == 0) {
+        return null;
+    }
+    return results[0].doctor_id;
+}
+
 function adfice_init(db) {
     let adfice = {
         /* private variables */
@@ -1130,6 +1143,7 @@ function adfice_init(db) {
         add_log_event_print: add_log_event_print,
         add_log_event_copy_patient_text: add_log_event_copy_patient_text,
         add_log_event_copy_ehr_text: add_log_event_copy_ehr_text,
+		doctor_id_for_user: doctor_id_for_user,
         finalize_and_export: finalize_and_export,
         get_advice_for_patient: get_advice_for_patient,
         get_advice_texts_checkboxes: get_advice_texts_checkboxes,

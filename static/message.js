@@ -72,7 +72,17 @@ function freetextentered(textfield) {
     }
     message_globals.freetexts_entered = textfield.id;
 }
-function freetextAutoSelectCheckbox(textfield){	// the checkbox id is always = the textfield id, but with cb instead of ft and without the _1 at the end.	let checkbox_id = textfield.id.replace("ft","cb");	checkbox_id = checkbox_id.slice(0, checkbox_id.length - 2);	let tf_checkbox = document.getElementById(checkbox_id);	if(!tf_checkbox.checked){		tf_checkbox.checked = true;	}}
+
+function freetextAutoSelectCheckbox(textfield){
+	// the checkbox id is always = the textfield id, but with cb instead of ft and without the _1 at the end.
+	let checkbox_id = textfield.id.replace("ft","cb");
+	checkbox_id = checkbox_id.slice(0, checkbox_id.length - 2);
+	let tf_checkbox = document.getElementById(checkbox_id);
+	if(!tf_checkbox.checked){
+		tf_checkbox.checked = true;
+	}
+}
+
 function update_meas() {
     if (!message_globals.ws) {
         message_globals.logger.error(
@@ -281,7 +291,8 @@ function first_incoming_message(event) {
         let textfield = elementList[i];
         textfield.style.visibility = "visible";
         textfield.onkeyup = function() {
-            freetextentered(textfield);			freetextAutoSelectCheckbox(textfield);
+            freetextentered(textfield);
+			freetextAutoSelectCheckbox(textfield);
         };
     }
 }
@@ -329,11 +340,15 @@ function ws_on_message(event) {
     for (let i = 0; i < elementList.length; ++i) {
         let input = elementList[i];
         input.disabled = message_globals.is_final;
-    }	let textAreaList = document.querySelectorAll("textarea");
+    }
+
+	let textAreaList = document.querySelectorAll("textarea");
     for (let i = 0; i < textAreaList.length; ++i) {
         let ta = textAreaList[i];
         ta.disabled = message_globals.is_final;
-    }	if(message_globals.is_final){
+    }
+
+	if(message_globals.is_final){
 		document.body.style.opacity = 0.5;
 	}
 
@@ -354,7 +369,9 @@ function ws_on_close(event) {
     for (let i = 0; i < elementList.length; ++i) {
         let input = elementList[i];
         input.disabled = true;
-    };	let textAreaList = document.querySelectorAll("textarea");
+    };
+
+	let textAreaList = document.querySelectorAll("textarea");
     for (let i = 0; i < textAreaList.length; ++i) {
         let ta = textAreaList[i];
         ta.disabled = true;

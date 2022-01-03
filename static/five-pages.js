@@ -13,6 +13,7 @@
 
 var five_pages = {
     patient_id: null,
+	doctor_id: null,
     data: {},
     xhttp: null,
     converter: null,
@@ -33,6 +34,12 @@ function get_converter() {
         five_pages.converter = new showdown.Converter();
     }
     return five_pages.converter;
+}
+
+function set_doctor_id(){
+	if(url_param('doctor_id') != null) {
+		five_pages.doctor_id = url_param('doctor_id');
+	}
 }
 
 function page_load(before_socket) {
@@ -589,7 +596,10 @@ function other_med_advice_area() {
         html += '</div> <!-- ' + other_prefix + 'cdss -->\n';
         html += '</div> <!-- other_cdss_container -->\n';
         html += '</div><!-- ' + row_id + ' -->\n';
-    }    set_element_inner('div_other_med_advice_area', html);	// add css class to "other advice" area - ugly but functional	document.getElementById("ft_OTHER_other_1_1").className = "ft_input ft_big"; 
+    }
+    set_element_inner('div_other_med_advice_area', html);
+	// add css class to "other advice" area - ugly but functional
+	document.getElementById("ft_OTHER_other_1_1").className = "ft_input ft_big";
 }
 
 function patient_other_med_advice_area() {
@@ -661,7 +671,11 @@ function non_med_advice_area(hide_additional) {
         html += '</div> <!-- ' + nma_prefix + '_cdss -->\n';
         html += '</div> <!-- nonmed_cdss_container -->\n';
         html += '</div><!-- nonmed_row -->\n';
-    }    set_element_inner('non_med_advice_selection_area', html);	// add css class to "other advice" area - ugly but functional	document.getElementById("ft_NONMED_V_1_1").className = "ft_input ft_big"; }
+    }
+    set_element_inner('non_med_advice_selection_area', html);
+	// add css class to "other advice" area - ugly but functional
+	document.getElementById("ft_NONMED_V_1_1").className = "ft_input ft_big"; 
+}
 
 function patient_non_med_advice() {
     let html = '';
@@ -807,6 +821,7 @@ function nice_value(value) {
 // and see: function page_load(before_socket)
 
 function start_page_setup() {
+	set_doctor_id();
     patient_info_age();
     gauge_risk_score();
     patient_info_problem_start();
@@ -815,6 +830,7 @@ function start_page_setup() {
     patient_info_meds_without_rules();
     prediction_start();
     is_final();
+console.log('doctor id: ' + five_pages.doctor_id);
 }
 
 function prep_page_setup() {
@@ -836,7 +852,8 @@ function consult_page_setup() {
     patient_info_meds_without_rules();
     gauge_risk_score();
     let include_no_checkbox_advice = 0;
-    big_nested_medicine_advice_table(include_no_checkbox_advice);	other_med_advice_area();
+    big_nested_medicine_advice_table(include_no_checkbox_advice);
+	other_med_advice_area();
     let hide_additional = 0;
     non_med_advice_area(hide_additional);
     is_final();

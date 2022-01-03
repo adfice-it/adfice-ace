@@ -84,11 +84,11 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     app.get('/load', async function(req, res) {
         let mrn = req.query.mrn;
         let id = await adfice.id_for_mrn(mrn);
+		let user_id = req.query.user;
         let encoded_err = null;
         if (!id) {
             try {
                 let etl_opts = await autil.from_json_file(etl_opts_path);
-                let user_id = req.query.user;
                 let participant_number = req.query.participant;
                 id = await etl.etl(mrn, user_id, participant_number, etl_opts);
             } catch (err) {
@@ -102,7 +102,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             }
             res.redirect('/load-error' + param_str);
         } else {
-            res.redirect('/start?id=' + id);
+			// let log = await adfice.add_log_event_access(user_id,id);
+			let doctor_id = await adfice.doctor_id_for_user(user_id);
+            res.redirect('/start?id=' + id + '&doctor_id=' + doctor_id);
         }
     });
 

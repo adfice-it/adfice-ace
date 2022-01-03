@@ -30,6 +30,24 @@ test('test patient_id for missing mrn', async () => {
     expect(patient_id).toBe(null);
 });
 
+test('test doctor_id for user_id', async () => {
+    let user_id = 'dr_bob';
+    let doctor_id = await adfice.doctor_id_for_user(user_id);
+    expect(doctor_id).toBe(2);
+});
+
+test('test doctor_id for null user_id', async () => {
+    let user_id = null;
+    let doctor_id = await adfice.doctor_id_for_user(user_id);
+    expect(doctor_id).toBe(null);
+});
+
+test('test doctor_id for nonexistant user_id', async () => {
+    let user_id = 'sir_not_appearing';
+    let doctor_id = await adfice.doctor_id_for_user(user_id);
+    expect(doctor_id).toBe(null);
+});
+
 test('test advice text 6e', async () => {
     //console.log('6e');
     var rule_numbers = ["6e"];
