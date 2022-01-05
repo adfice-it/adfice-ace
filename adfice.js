@@ -1065,6 +1065,17 @@ async function add_log_event_copy_patient_text(viewer_id, patient_id) {
 
 async function add_log_event_copy_ehr_text(viewer_id, patient_id) {
     return await this.add_log_event(viewer_id, patient_id, 3);
+}async function add_log_event_access(user_id, patient_id){	if(typeof(user_id) == undefined || user_id == null){		user_id = "unknown";	}
+	let sql = `/* adfice.add_log_event_access */
+		INSERT INTO access_log
+           ( ehr_user_id		   , patient_id
+           )
+		VALUES (?,?)
+`;
+    let params = [user_id,
+        as_id(patient_id)
+    ];
+    return await this.sql_select(sql, params);
 }
 
 async function id_for_mrn(mrn) {
@@ -1138,7 +1149,7 @@ function adfice_init(db) {
         update_prediction_with_user_values: update_prediction_with_user_values,
 
         /* public API methods */
-        add_log_event_print: add_log_event_print,
+        add_log_event_access: add_log_event_access,		add_log_event_print: add_log_event_print,
         add_log_event_copy_patient_text: add_log_event_copy_patient_text,
         add_log_event_copy_ehr_text: add_log_event_copy_ehr_text,
 		doctor_id_for_user: doctor_id_for_user,

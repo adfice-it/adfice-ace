@@ -101,8 +101,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                 param_str += '&err=' + encoded_err;
             }
             res.redirect('/load-error' + param_str);
-        } else {
-			// let log = await adfice.add_log_event_access(user_id,id);
+        } else {			await adfice.add_log_event_access(user_id, id);
 			let doctor_id = await adfice.doctor_id_for_user(user_id);
             res.redirect('/start?id=' + id + '&doctor_id=' + doctor_id);
         }

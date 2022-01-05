@@ -885,9 +885,17 @@ CREATE TRIGGER patient_advice_freetext_history_delete
 CREATE TABLE `logged_events` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `viewer_id` int unsigned NOT NULL,
-  `doctor_id` int unsigned DEFAULT NULL,
   `patient_id` int unsigned NOT NULL,
   `event_type` int unsigned NOT NULL,
+  `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;--
+-- no `row_updated` because it is append-only
+--
+CREATE TABLE `access_log` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `ehr_user_id` varchar(50) NOT NULL,
+  `patient_id` int unsigned NOT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

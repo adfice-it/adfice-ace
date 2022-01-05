@@ -938,4 +938,22 @@ test('log print event', async () => {
         cnt2 = results2[0].cnt;
     }
     expect(cnt2).toBe(cnt + 3);
+});test('access log', async () => {
+    let user_id = 'dr_alice';
+    let patient = '166';
+    let sql = "SELECT COUNT(*) AS cnt FROM access_log WHERE patient_id = ?";
+    let results = await adfice.sql_select(sql, [patient]);
+    let cnt = 0;
+    if (results.length > 0) {
+        cnt = results[0].cnt;
+    }
+
+    await adfice.add_log_event_access(user_id, patient);
+
+    let results2 = await adfice.sql_select(sql, [patient]);
+    let cnt2 = 0;
+    if (results2.length > 0) {
+        cnt2 = results2[0].cnt;
+    }
+    expect(cnt2).toBe(cnt + 1);
 });
