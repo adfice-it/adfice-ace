@@ -830,7 +830,6 @@ function start_page_setup() {
     patient_info_meds_without_rules();
     prediction_start();
     is_final();
-console.log('doctor id: ' + five_pages.doctor_id);
 }
 
 function prep_page_setup() {

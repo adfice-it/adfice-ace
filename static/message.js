@@ -5,7 +5,7 @@
 
 /* global data used by these functions */
 var message_globals = {
-    patient_id: null,
+    patient_id: null,	doctor_id: null,
     viewer_id: null,
     is_final: null,
     ws: null,
@@ -18,7 +18,7 @@ var message_globals = {
 
 function send_message(message_type, apply) {
     let message = {};
-    message.viewer_id = message_globals.viewer_id;
+    message.viewer_id = message_globals.viewer_id;	message.doctor_id = message_globals.doctor_id;
     message.patient_id = message_globals.patient_id;
     message.type = message_type;
 
@@ -419,8 +419,8 @@ function connect_web_socket() {
 
     // URLSearchParams does not work in IE
     // let params = new URLSearchParams(window.location.search);
-    message_globals.patient_id = url_param('id');
-
+    message_globals.patient_id = url_param('id');	message_globals.doctor_id = url_param('doctor_id');
+	
     let base_url = ws_protocol + '//' + url_hostname + ':' + url_port;
     let ws_url = base_url + '/patient/' + message_globals.patient_id;
     message_globals.ws = new WebSocket(ws_url);
