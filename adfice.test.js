@@ -74,7 +74,8 @@ test('test advice text 6e', async () => {
 
 test('box_states_to_selection_states', () => {
     const patient_id = 32;
-    const viewer = 188;	const doctor_id = 1;
+    const viewer = 188;
+	const doctor_id = 1;
     const box_states = {
         "cb_C03AA03_42_2": false,
         "cb_C03AA03_42b_3": true
@@ -147,7 +148,8 @@ test('get_advice_for_patient(68), no labs, no problems', async () => {
 test('set_advice_for_patient(68)', async () => {
     //console.log('68 part 2');
     let patient_num = 68;
-    let viewer = 999;	let doctor_id = 1;
+    let viewer = 999;
+	let doctor_id = 1;
     let advice = await adfice.get_advice_for_patient(patient_num);
 
     await adfice.reload_patient_data(patient_num, 'true');
@@ -366,7 +368,8 @@ test('get_advice_for_patient(bogus)', async () => {
 
 test('freetext round trip', async () => {
 
-    let viewer = "2";	let doctor_id = "1";
+    let viewer = "2";
+	let doctor_id = "1";
     let patient = "26";
     let freetexts = {
         ft_C03AA03_42_1_1: "",
@@ -860,7 +863,8 @@ test('Log fired rules', async () => {
 });
 
 test('export_patient', async () => {
-    let patient = '168';	let doctor_id = '1';
+    let patient = '168';
+	let doctor_id = '1';
     let file = "test-export_patient-168.log";
     try {
         fs.unlinkSync(file, (err) => {});
@@ -942,7 +946,9 @@ test('log print event', async () => {
         cnt2 = results2[0].cnt;
     }
     expect(cnt2).toBe(cnt + 3);
-});test('access log', async () => {
+});
+
+test('access log', async () => {
     let user_id = 'dr_alice';
     let patient = '166';
     let sql = "SELECT COUNT(*) AS cnt FROM access_log WHERE patient_id = ?";
@@ -968,5 +974,6 @@ test('log print event', async () => {
         cnt3 = results3[0].cnt;
     }
 	
-    expect(cnt2).toBe(cnt + 1);	expect(cnt3).toBe(cnt2 + 1);
+    expect(cnt2).toBe(cnt + 1);
+	expect(cnt3).toBe(cnt2 + 1);
 });

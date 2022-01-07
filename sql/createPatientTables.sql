@@ -889,7 +889,9 @@ CREATE TABLE `logged_events` (
   `event_type` int unsigned NOT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;--
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
 -- no `row_updated` because it is append-only
 --
 CREATE TABLE `access_log` (

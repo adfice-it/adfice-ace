@@ -43,7 +43,8 @@ async function etl(mrn, user_id, participant_number, options) {
             '2dd'
           ]
         ],
-        ['/* medListOfInserts */\n\t\t\tINSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code) VALUES (@patient_id,?,?,?,?)',          [ 
+        ['/* medListOfInserts */\n\t\t\tINSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code) VALUES (@patient_id,?,?,?,?)',
+          [ 
 			'2022-1-7 13:9:35', 
 			'levoDOPA', 
 			'levodopa', 
@@ -151,12 +152,14 @@ async function etl(mrn, user_id, participant_number, options) {
 
 }
 
+
 /*
 The user can also press the "vernieuwen" button, which should reload all the data for a particular patient.
 In this case, we will get a patient ID and look up the MRN.
 Tables patient and etl_patient_bsn are updated; for the other tables
 we delete any old data before adding new data.
-*/async function etl_renew(patient_id, options){
+*/
+async function etl_renew(patient_id, options){
 	let list_of_transactions = [
         ['/* patientListOfUpdates */ UPDATE patient SET birth_date = ?, age = ?, is_final = 0 WHERE id = ' + patient_id,
           [ '1940-1-1', '82' ]

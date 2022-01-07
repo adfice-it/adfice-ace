@@ -447,7 +447,8 @@ async function set_sql_selections(sqls_and_params, patient_id, doctor_id,
     let insert_sql = `/* adfice.set_advice_for_patient */
  INSERT INTO patient_advice_selection
            ( patient_id
-           , doctor_id           , viewer_id
+           , doctor_id
+           , viewer_id
            , ATC_code
            , medication_criteria_id
            , select_box_num
@@ -470,7 +471,8 @@ async function set_sql_freetexts(sqls_and_params, patient_id, doctor_id, viewer_
     let insert_sql = `/* adfice.set_advice_for_patient */
  INSERT INTO patient_advice_freetext
            ( patient_id
-           , doctor_id           , viewer_id
+           , doctor_id
+           , viewer_id
            , ATC_code
            , medication_criteria_id
            , select_box_num
@@ -492,7 +494,8 @@ async function set_sql_freetexts(sqls_and_params, patient_id, doctor_id, viewer_
 async function set_advice_for_patient(patient_identifier, doctor, 
 		viewer, cb_states, freetexts) {
     const patient_id = as_id(patient_identifier);
-    const viewer_id = as_id(viewer);	const doctor_id = as_id(doctor);
+    const viewer_id = as_id(viewer);
+	const doctor_id = as_id(doctor);
 
     let sqls_and_params = [];
 
@@ -764,7 +767,8 @@ async function get_advice_for_patient(patient_identifier) {
     let cb_states = [];
     if (Object.keys(selected_advice).length == 0 && patient.id !== undefined) {
         cb_states = preselected_checkboxes;
-        await this.set_advice_for_patient(patient_identifier, null,			0, cb_states, null);
+        await this.set_advice_for_patient(patient_identifier, null,
+			0, cb_states, null);
         selected_advice = await this.get_selections(patient_id);
     }
 
@@ -912,7 +916,8 @@ function freetexts_to_rows(patient_id, doctor_id, viewer_id, freetexts) {
         let text_num = parseInt(parts[4], 10);
         let freetext = freetexts[freetext_id];
         output.push([
-            patient_id,			doctor_id,
+            patient_id,
+			doctor_id,
             viewer_id,
             atc,
             criterion,
@@ -1065,10 +1070,16 @@ async function add_log_event_copy_patient_text(viewer_id, patient_id) {
 
 async function add_log_event_copy_ehr_text(viewer_id, patient_id) {
     return await this.add_log_event(viewer_id, patient_id, 3);
-}async function add_log_event_access(user_id, patient_id){	if(typeof(user_id) == undefined || user_id == null){		user_id = "unknown";	}
+}
+
+async function add_log_event_access(user_id, patient_id){
+	if(typeof(user_id) == undefined || user_id == null){
+		user_id = "unknown";
+	}
 	let sql = `/* adfice.add_log_event_access */
 		INSERT INTO access_log
-           ( ehr_user_id		   , patient_id
+           ( ehr_user_id
+		   , patient_id
            )
 		VALUES (?,?)
 `;
@@ -1152,7 +1163,8 @@ function adfice_init(db) {
         update_prediction_with_user_values: update_prediction_with_user_values,
 
         /* public API methods */
-        add_log_event_access: add_log_event_access,		add_log_event_print: add_log_event_print,
+        add_log_event_access: add_log_event_access,
+		add_log_event_print: add_log_event_print,
         add_log_event_copy_patient_text: add_log_event_copy_patient_text,
         add_log_event_copy_ehr_text: add_log_event_copy_ehr_text,
 		doctor_id_for_user: doctor_id_for_user,
