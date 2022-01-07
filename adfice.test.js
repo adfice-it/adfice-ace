@@ -955,5 +955,14 @@ test('log print event', async () => {
     if (results2.length > 0) {
         cnt2 = results2[0].cnt;
     }
-    expect(cnt2).toBe(cnt + 1);
+	
+	user_id = null;
+	await adfice.add_log_event_access(user_id, patient);
+	let results3 = await adfice.sql_select(sql, [patient]);
+	let cnt3 = 0;
+	if (results3.length > 0) {
+        cnt3 = results3[0].cnt;
+    }
+	
+    expect(cnt2).toBe(cnt + 1);	expect(cnt3).toBe(cnt2 + 1);
 });
