@@ -5,8 +5,12 @@ Important:
   * Look into free FHIR servers and see if we can create a version of the ETL that can be included in the main repo
     https://confluence.hl7.org/display/FHIR/Public+Test+Servers
   * use of the "vernieuwen" button is probably an event we should log
-  * If etl can't find the patient or a BSN, it will return null. Make sure the caller handles this sensibly.
-  * Change "verniewen" to call ETL instead of a bash script
+  * Change "vernieuwen" to call ETL instead of a bash script:
+	Currently, a message "renew" goes to advice_webserver.js which calls adfice.reload_patient_data().
+	This calls clear_advice_for_patient(), which duplicates the DELETE commands that happen in etl.
+	IMO this should be handled by the ETL; if ETL fails to retrieve new data it does not delete the old data.
+	It is probably better to just have adfice_webserver.js call etl, and leave adfice.js out of it.
+	If "vernieuwen" fails it should show an error message to the user.
 * consider removing birth date entirely from the data; we only need age
 * figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
 * automate tests for CDSS working on IE11

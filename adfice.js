@@ -1099,7 +1099,10 @@ async function doctor_id_for_user(user_id) {
     let params = [user_id];
     let results = await this.sql_select(sql, params);
     if (results.length == 0) {
-        return null;
+        sql = "INSERT INTO etl_user (ehr_user_id) VALUES (?);";
+		await this.sql_select(sql, params);
+		sql = 'SELECT doctor_id FROM etl_user WHERE ehr_user_id=?';
+		results = await this.sql_select(sql, params);
     }
     return results[0].doctor_id;
 }
