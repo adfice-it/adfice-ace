@@ -1007,42 +1007,6 @@ async function finalize_and_export(patient_id, logfile) {
     await this.export_patient(patient_id, logfile);
 }
 
-async function clear_advice_for_patient(patient_id) {
-    let sqls_and_params = [];
-    let sql = `/* adfice.clear_advice_for_patient */
-        UPDATE patient
-           SET is_final = 0
-         WHERE id = ?`;
-    let params = [patient_id];
-    sqls_and_params.push([sql, params]);
-
-    sql = `/* adfice.clear_advice_for_patient */
-  DELETE FROM patient_advice_selection
-        WHERE patient_id = ?`;
-    sqls_and_params.push([sql, params]);
-
-    sql = `/* adfice.clear_advice_for_patient */
-  DELETE FROM patient_advice_freetext
-        WHERE patient_id = ?`;
-    sqls_and_params.push([sql, params]);
-
-    let db = await this.db_init();
-    let rs = await db.as_sql_transaction(sqls_and_params);
-    return rs;
-}
-
-async function reload_patient_data(patient, cmd) {
-    let patient_id = as_id(patient);
-    await this.clear_advice_for_patient(patient_id);
-    if (!cmd) {
-        cmd = 'bin/reload-patient-data.sh';
-    }
-
-    let args = [patient];
-
-    return autil.child_process_spawn(cmd, args);
-}
-
 async function add_log_event(viewer_id, patient_id, event_type) {
     let sql = `/* adfice.add_log_event */
  INSERT INTO logged_events
@@ -1128,7 +1092,6 @@ function adfice_init(db) {
         box_states_to_selection_states: box_states_to_selection_states,
         calculate_store_prediction_result: calculate_store_prediction_result,
         calculate_prediction_result: calculate_prediction_result,
-        clear_advice_for_patient: clear_advice_for_patient,
         db_init: db_init,
         determine_preselected_checkboxes: determine_preselected_checkboxes,
         evaluate_sql: evaluate_sql,
@@ -1173,7 +1136,6 @@ function adfice_init(db) {
         get_advice_texts_checkboxes: get_advice_texts_checkboxes,
         get_patient_measurements: get_patient_measurements,
         id_for_mrn: id_for_mrn,
-        reload_patient_data: reload_patient_data,
         set_advice_for_patient: set_advice_for_patient,
         shutdown: shutdown,
     };

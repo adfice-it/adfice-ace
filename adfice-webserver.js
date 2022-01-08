@@ -237,7 +237,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                                     patient_id);
                                 send_all(kind, patient_id, new_msg);
                             } else if (message.type == 'patient_renew') {
-                                await adfice.reload_patient_data(patient_id);
+                                await etl.etl_renew(patient_id);
                                 let new_msg = await patient_advice_message(kind,
                                     patient_id);
                                 send_all(kind, patient_id, new_msg);

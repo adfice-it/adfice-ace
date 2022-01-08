@@ -10,7 +10,29 @@ const fs = require('fs');
 var adfice = adfice_factory.adfice_init();
 afterAll(async () => {
     return await adfice.shutdown();
-});
+});async function clear_advice_for_patient(adfice, patient_id) {
+    let sqls_and_params = [];
+    let sql = `/* adfice.clear_advice_for_patient */
+        UPDATE patient
+           SET is_final = 0
+         WHERE id = ?`;
+    let params = [patient_id];
+    sqls_and_params.push([sql, params]);
+
+    sql = `/* adfice.clear_advice_for_patient */
+  DELETE FROM patient_advice_selection
+        WHERE patient_id = ?`;
+    sqls_and_params.push([sql, params]);
+
+    sql = `/* adfice.clear_advice_for_patient */
+  DELETE FROM patient_advice_freetext
+        WHERE patient_id = ?`;
+    sqls_and_params.push([sql, params]);
+
+    let db = await adfice.db_init();
+    let rs = await db.as_sql_transaction(sqls_and_params);
+    return rs;
+}
 
 test('test patient_id for valid mrn', async () => {
     let mrn = 'DummyMRN-641923847';
@@ -152,7 +174,7 @@ test('set_advice_for_patient(68)', async () => {
 	let doctor_id = 1;
     let advice = await adfice.get_advice_for_patient(patient_num);
 
-    await adfice.reload_patient_data(patient_num, 'true');
+    await clear_advice_for_patient(adfice, patient_num);
     let old_advice = {
         "cb_C03AA03_42_2": false,
         "cb_C03AA03_42_3": true,
@@ -199,7 +221,7 @@ test('set_advice_for_patient(68)', async () => {
     let data = await adfice.get_export_data(patient_num);
     expect(data.length).toBe(2);
 
-    await adfice.clear_advice_for_patient(patient_num);
+    await clear_advice_for_patient(adfice, patient_num);
     advice = await adfice.get_advice_for_patient(patient_num);
     expect(advice.is_final).toBeFalsy();
     expect(advice.selected_advice).not.toStrictEqual(new_advice);
@@ -870,7 +892,7 @@ test('export_patient', async () => {
         fs.unlinkSync(file, (err) => {});
     } catch (ignoreError) {}
 
-    await adfice.reload_patient_data(patient, 'true');
+    await clear_advice_for_patient(adfice, patient);
     let new_advice = {
         "cb_M03BA03_88_2": true,
         "cb_OTHER_other_1": true,
@@ -901,29 +923,12 @@ test('finalize_export API', async () => {
         fs.unlinkSync(file, (err) => {});
     } catch (ignoreError) {}
 
-    await adfice.clear_advice_for_patient(patient);
+    await clear_advice_for_patient(adfice, patient);
     await adfice.finalize_and_export(patient, file);
     let patientAdvice = await adfice.get_advice_for_patient(patient);
     expect(patientAdvice.is_final).toBeTruthy();
     fs.unlinkSync(file);
-    await adfice.clear_advice_for_patient(patient);
-});
-
-test('reload from MRS', async () => {
-    let patient = '160';
-    let sql = "UPDATE patient SET birth_date='1940-06-16', age=81 WHERE id=?";
-    await adfice.sql_select(sql, [patient]);
-    let patientAdvice = await adfice.get_advice_for_patient(patient);
-    expect(patientAdvice.age).toBe(81);
-
-    let cmd = 'bin/reload-synthetic-data.sh';
-    await adfice.reload_patient_data(patient, cmd);
-    patientAdvice = await adfice.get_advice_for_patient(patient);
-    expect(patientAdvice.age).toBe(80);
-
-    // test default no-op reload script
-    patient = '169';
-    await adfice.reload_patient_data(patient);
+    await clear_advice_for_patient(adfice, patient);
 });
 
 test('log print event', async () => {

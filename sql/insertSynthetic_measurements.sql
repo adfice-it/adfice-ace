@@ -67,4 +67,6 @@ has_incont_med) VALUES
 
 (173, (select NOW()), 3, 160, (select NOW()), 55, (select NOW()),  21.5,(select NOW()), 1, (select NOW()),
 21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 1,
+(select NOW()), 0, 0, 1, (select NOW()), 3, (select NOW()),0,0,1),/* fake patient for data reload test */(174, (select NOW()), 3, 160, (select NOW()), 55, (select NOW()),  21.5,(select NOW()), 1, (select NOW()),
+21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 1,
 (select NOW()), 0, 0, 1, (select NOW()), 3, (select NOW()),0,0,1);

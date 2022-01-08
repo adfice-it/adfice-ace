@@ -276,7 +276,7 @@ test('Checkbox preselected', async t => {
 });
 
 test('Test finalize and renew', async t => {
-    let url = `${BASE_URL}/prep?id=161`;
+    let url = `${BASE_URL}/prep?id=167`;
     let window1 = await t.openWindow(url);
 
     let checkbox_id = "cb_NONMED_V_1";
@@ -429,7 +429,29 @@ test('Test user entering values', async t => {
     // Right now the test is written so that it does not check the negative state (i.e. it does not check to see that Roker is null at the start)
     // but if we add functionality to clear values then we can add the negative checks
 });
-
+test('Test reload data', async t => {
+	//this test assumes we are using the stub_etl    let url = `${BASE_URL}/prep?id=174&doctor_id=2`;
+    let window1 = await t.openWindow(url);
+    await change_flex_style_to_inline(t);
+	
+	let cb_levo_stop = Selector('#cb_N04BA01_27_2');
+	await t.click(cb_levo_stop);
+	await t.expect(cb_levo_stop.checked).ok();
+	let cb_diaz_stop = Selector('#cb_N05BA01_6e_1');
+	await t.expect(cb_diaz_stop.exists).notOk();
+	let button_start_view = Selector('button#button-start-view');
+	await t.click(button_start_view);
+	await change_flex_style_to_inline(t);
+	let page_renew = Selector('#page_renew');
+	await t.click(page_renew);	let button_prep_view = Selector('button#button-prep-view');
+	await t.click(button_prep_view);
+	await change_flex_style_to_inline(t);
+	await t.expect(cb_levo_stop.checked).notOk();
+	await t.expect(cb_diaz_stop.exists).ok();
+		/*
+	test cannot clean up after itself; will only run correctly 1x
+	*/
+});
 
 
 // slow tests run last

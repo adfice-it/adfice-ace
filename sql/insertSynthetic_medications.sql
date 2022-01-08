@@ -224,4 +224,5 @@ INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, gen
 (159,(select NOW()),"salmeterol","salmeterol","R03AC12",'2019-02-11'),
 
 (162,(select NOW()),"levodopa","levodopa","N04BA01",'2019-02-11'),
-(168,(select NOW()),"methocarbamol","methocarbamol","M03BA03",'2019-02-11');
+(168,(select NOW()),"methocarbamol","methocarbamol","M03BA03",'2019-02-11'),/* fake patient for data reload test */(174,(select NOW()),"lixisenatide","lixisenatide","A10BJ03",'2019-02-11'),
+(174,(select NOW()),"levodopa","levodopa","N04BA01",'2019-02-11');
