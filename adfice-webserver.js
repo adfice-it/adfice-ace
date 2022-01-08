@@ -237,9 +237,12 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                                     patient_id);
                                 send_all(kind, patient_id, new_msg);
                             } else if (message.type == 'patient_renew') {
-                                await etl.etl_renew(patient_id);
-                                let new_msg = await patient_advice_message(kind,
-                                    patient_id);
+                                let returned_patient = await etl.etl_renew(patient_id);
+								if(returned_patient != patient_id){
+									alert("Er is op dit moment geen verbinding met het EPD. De data is niet vernieuwd.");
+								} 
+								let new_msg = await patient_advice_message(kind,
+										patient_id);
                                 send_all(kind, patient_id, new_msg);
                             } else if (message.type == 'was_printed') {
                                 await adfice.add_log_event_print(viewer_id, patient_id);
