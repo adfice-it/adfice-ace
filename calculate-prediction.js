@@ -72,25 +72,25 @@ function calculate_prediction(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
     systolic_bp_mmHg, number_of_limitations, nrFall1, nrFall2, smoking,
     has_antiepileptica, has_ca_blocker, has_incont_med, edu2, edu3, fear1,
     fear2) {
-    var p = -0.2047 +
-        0.0778 * (GDS_score - 1.4401) / 1.9419 +
-        -0.1678 * (grip_kg - 32.4838) / 10.8414 +
-        0.0997 * (walking_speed_m_per_s - 0.9417) / 0.2760 +
-        -0.0204 * BMI +
-        -0.0039 * systolic_bp_mmHg +
-        0.1419 * (number_of_limitations - 1.2088) / 1.5286 +
-        nrFall1 * 0.4841 +
-        nrFall2 * 0.6791 +
-        smoking * -0.2870 +
-        has_antiepileptica * 0.4962 +
-        has_ca_blocker * -0.1866 +
-        has_incont_med * 0.7459 +
-        edu2 * 0.1972 +
-        edu3 * 0.3687 +
-        fear1 * 0.2268 +
-        fear2 * 0.2222;
+    var p = -0.043 +
+        0.068 * (GDS_score - 1.4401) / 1.9419 +
+        -0.148 * (grip_kg - 32.4838) / 10.8414 +
+        0.088 * (walking_speed_m_per_s - 0.9417) / 0.2760 +
+        -0.018 * BMI +
+        -0.003 * systolic_bp_mmHg +
+        0.125 * (number_of_limitations - 1.2088) / 1.5286 +
+        nrFall1 * 0.426 +
+        nrFall2 * 0.597 +
+        smoking * -0.252 +
+        has_antiepileptica * 0.436 +
+        has_ca_blocker * -0.164 +
+        has_incont_med * 0.656 +
+        edu2 * 0.173 +
+        edu3 * 0.324 +
+        fear1 * 0.199 +
+        fear2 * 0.195;
     var prediction = Math.round(100 * (Math.exp(p) / (1 + Math.exp(p))));
-
+// console.log(prediction);// console.log('GDS_score: ' + GDS_score + '\ngrip_kg: ' + grip_kg + '\nwalking_speed_m_per_s: ' + walking_speed_m_per_s + '\nBMI: ' + BMI + '\nsystolic_bp_mmHg: ' + systolic_bp_mmHg + '\nnumber_of_limitations: ' + number_of_limitations + '\nnrFall1: ' + nrFall1 + '\nnrFall2: ' + nrFall2 + '\nsmoking: ' + smoking + '\nhas_antiepileptica: ' + has_antiepileptica + '\nhas_ca_blocker: ' + has_ca_blocker + '\nhas_incont_med: ' + has_incont_med + '\nedu2: ' + edu2 + '\nedu3: ' + edu3 + '\nfear1: ' + fear1 + '\nfear2: ' + fear2);
     return prediction;
 }
 
