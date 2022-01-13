@@ -1,7 +1,6 @@
 Important:
 * Figure out "on update" statements for research tables
 * Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?
-* Make changes to prediction model
 * Getting data out of EHR
   * Look into free FHIR servers and see if we can create a version of the ETL that can be included in the main repo
     https://confluence.hl7.org/display/FHIR/Public+Test+Servers
