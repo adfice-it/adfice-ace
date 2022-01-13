@@ -7,3 +7,8 @@ The source code and documentation is provided in the interests of transparency a
 
 Read more about this project here:
 https://adfice-it.github.io/adfice-ace/
+
+Copyright:
+The software in this project is licensed under the GPLv3+ (see COPYING file).
+
+The ADFICE_IT logo is used with the permission of the ADFICE_IT project. All rights are reserved. 
