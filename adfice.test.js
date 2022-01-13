@@ -931,7 +931,7 @@ test('finalize_export API', async () => {
     await clear_advice_for_patient(adfice, patient);
 });
 
-test('log print event', async () => {
+test('log events', async () => {
     let viewer = '2';
     let patient = '166';
     let sql = "SELECT COUNT(*) AS cnt FROM logged_events WHERE patient_id = ?";
@@ -944,13 +944,14 @@ test('log print event', async () => {
     await adfice.add_log_event_print(viewer, patient);
     await adfice.add_log_event_copy_patient_text(viewer, patient);
     await adfice.add_log_event_copy_ehr_text(viewer, patient);
+	await adfice.add_log_event_renew(viewer, patient);
 
     let results2 = await adfice.sql_select(sql, [patient]);
     let cnt2 = 0;
     if (results2.length > 0) {
         cnt2 = results2[0].cnt;
     }
-    expect(cnt2).toBe(cnt + 3);
+    expect(cnt2).toBe(cnt + 4);
 });
 
 test('access log', async () => {

@@ -1036,6 +1036,10 @@ async function add_log_event_copy_ehr_text(viewer_id, patient_id) {
     return await this.add_log_event(viewer_id, patient_id, 3);
 }
 
+async function add_log_event_renew(viewer_id, patient_id) {
+    return await this.add_log_event(viewer_id, patient_id, 4);
+}
+
 async function add_log_event_access(user_id, patient_id){
 	if(typeof(user_id) == undefined || user_id == null){
 		user_id = "unknown";
@@ -1128,6 +1132,7 @@ function adfice_init(db) {
         /* public API methods */
         add_log_event_access: add_log_event_access,
 		add_log_event_print: add_log_event_print,
+		add_log_event_renew: add_log_event_renew,
         add_log_event_copy_patient_text: add_log_event_copy_patient_text,
         add_log_event_copy_ehr_text: add_log_event_copy_ehr_text,
 		doctor_id_for_user: doctor_id_for_user,
