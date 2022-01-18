@@ -20,7 +20,7 @@ Stoppen bij:
 ("6e",6,"refer","psychologist","Doorverwijzing psycholoog via huisarts: {{free text}}","Doorverwijzing psycholoog via huisarts: {{free text}}","De huisarts zal u doorverwijzen naar een psycholoog. Overleg met uw huisarts voor een psycholoog bij u in de buurt. {{free text}}"),
 ("6e",7,"consult","other","Consult andere specialist: {{free text}}","ICC: {{free text}}","Doorverwijzing naar een andere specialist. U hoeft hier zelf geen afspraak voor te maken. Van de dokter heeft u hier informatie over gekregen hoe dit te doen. Heeft u na twee weken geen brief ontvangen? Neem dan contact met ons op. {{free text}}"),
 ("6e",11,"refer","other","Doorverwijzing naar andere specialist: {{free text}}","Doorverwijzing: {{free text}}","Doorverwijzing naar andere specialist. Let op, u maakt zelf een afspraak. Van de dokter heeft u hier informatie over gekregen hoe dit te doen. {{free text}}"),
-("6e",8,"non-med","sleep","Niet-medicamenteuze slaapadviezen","Niet-medicamenteuze slaapadviezen gegeven.","De dokter heeft u adviezen gegeven hoe u beter kunt slapen. Deze adviezen waren:
+("6e",8,"inform","sleep","Niet-medicamenteuze slaapadviezen","Niet-medicamenteuze slaapadviezen gegeven.","De dokter heeft u adviezen gegeven hoe u beter kunt slapen. Deze adviezen waren:
 - probeer overdag niet te slapen.
 - Ga zoveel mogelijk op dezelfde tijden naar bed. Sta op dezelfde tijd op.
 - Gebruik &#39;s avonds geen alcohol of cafeïnehoudende dranken zoals koffie of cola meer.
@@ -89,13 +89,13 @@ Bij mensen die antidepressiva langdurig gebruiken, is een consultatie met eventu
 ("16",1,"stop","","Stoppen (afbouwen niet nodig).","Stop.","U kunt direct stoppen."),
 ("16",2,"taper-stop","","Afbouwen waarna stoppen: elke 2 weken dosis verminderen met 25-50%. Schema: {{free text}}","Afbouwen volgens afbouwschema waarna stop: {{free text}}","Stoppen via een afbouwschema. {{free text}}"),
 ("16",3,"taper-reduce","","Afbouwen tot minimaal effectieve dosis: elke 2 weken dosis verminderen met 25-50%. Schema: {{free text}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema: {{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
-("16",4,"non-med","delirium","Niet medicamenteuze adviezen delier","Niet-medicamenteuze adviezen tav delier gegeven.","**Wat is een delier?** Een delier is in de meeste gevallen een tijdelijk ziektebeeld. Als de lichamelijke situatie verbetert neemt de verwardheid af. De dokter heeft u advies gegeven over hoe u om kunt gaan met de acute verwardheid (delier). Het geven van structuur kan een persoon met delier gerust stellen.
+("16",4,"inform","delirium","Niet medicamenteuze adviezen delier","Niet-medicamenteuze adviezen tav delier gegeven.","**Wat is een delier?** Een delier is in de meeste gevallen een tijdelijk ziektebeeld. Als de lichamelijke situatie verbetert neemt de verwardheid af. De dokter heeft u advies gegeven over hoe u om kunt gaan met de acute verwardheid (delier). Het geven van structuur kan een persoon met delier gerust stellen.
 - Zorg dat uw naaste overdag kleren aantrekt en alleen &#39;s avonds pyjama aandoet.
 - Let erop dat uw naaste gebruik maakt van een eventuele bril en gehoorapparaat. Kom overdag zoveel mogelijk uit bed.
 - Eet aan tafel.
 - Zorg dat u een kalender zichtbaar heeft hangen met hierop de dag en datum.
 - Stel een dagprogramma op bijvoorbeeld met hulp van de casemanager. Een casemanager is een onafhankelijke en vaste begeleider voor mensen met delier én hun naasten.- Voor meer informatie zie: https://www.thuisarts.nl/delier ."),
-("16",5,"non-med","dementia","Niet medicamenteuze adviezen dementie","Niet-medicamenteuze adviezen tav dementie gegeven.","**Hoe om te gaan met gedragsveranderingen bij dementie**
+("16",5,"inform","dementia","Niet medicamenteuze adviezen dementie","Niet-medicamenteuze adviezen tav dementie gegeven.","**Hoe om te gaan met gedragsveranderingen bij dementie**
 - Realiseert u zich dat uw naaste met dementie niet bewust bepaald gedrag laat zien.
 - Kijk of u mee kunt gaan in de wereld van uw naaste met dementie.
 - Houdt een dagelijks ritme en vaste gewoontes aan
@@ -140,7 +140,7 @@ Overweeg afbouwen
 ("19f",1,"taper-stop","","Afbouwen waarna stoppen: dosis verminderen met 25% elke 1-4 weken. Schema: {{free text}}","Afbouwen volgens afbouwschema waarna stop: {{free text}}","Stoppen via een afbouwschema.
 Het is mogelijk dat u ontwenningsverschijnselen voelt tijdens die periode. Dit kan o.a. slapeloosheid, agitatie, angst of malaise zijn. In de meeste gevallen verdwijnen deze na 1-4 weken. {{free text}}"),
 ("19f",2,"taper-reduce","","Afbouwen tot minimaal effectieve dosis met 25% elke 1-4 weken. Schema: {{free text}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema: {{free text}}","Verlagen van dosering via een afbouwschema. Het is mogelijk dat u voelt ontwenningsverschijnselen tijdens die periode. Dit kan zijn o.a. slapeloosheid, agitatie, angst, of malaise. In de meeste gevallen gaan deze over 1-4 weken verdwijnen. {{free text}}"),
-("19f",3,"non-med","","Niet-medicamenteuze behandeling depressie: bewegingstherapie, leefstijladviezen","Adviezen tav bewegingstherapie gegeven.","De dokter heeft u verteld dat regelmatig bewegen een positief effect kan hebben op de depressie. Dagelijks een wandeling maken of hardlopen kan een gunstige invloed hebben op uw depressie. Ook krachttraining in de sportschool of ontspanningsoefeningen doen kan u helpen. Probeert u het uit of bewegen ook voor u een gunstig effect heeft op uw depressie en kijk wat voor u het prettigste is."),
+("19f",3,"inform","","Niet-medicamenteuze behandeling depressie: bewegingstherapie, leefstijladviezen","Adviezen tav bewegingstherapie gegeven.","De dokter heeft u verteld dat regelmatig bewegen een positief effect kan hebben op de depressie. Dagelijks een wandeling maken of hardlopen kan een gunstige invloed hebben op uw depressie. Ook krachttraining in de sportschool of ontspanningsoefeningen doen kan u helpen. Probeert u het uit of bewegen ook voor u een gunstig effect heeft op uw depressie en kijk wat voor u het prettigste is."),
 ("19f",4,"refer","psychiatrist","Doorverwijzing naar (ouderen)psychiater via huisarts: {{free text}}","Doorverwijzing naar (ouderen)psychiater via huisarts: {{free text}}","De huisarts zal u doorverwijzen naar een (ouderen)psychiater. Overleg met uw huisarts voor een (ouderen)psychiater bij u in de buurt. {{free text}}"),
 ("19f",5,"refer","psychologist","Doorverwijzing psycholoog via huisarts: {{free text}}","Doorverwijzing psycholoog via huisarts: {{free text}}","De huisarts zal u doorverwijzen naar een psycholoog. Overleg met uw huisarts voor een psycholoog bij u in de buurt. {{free text}}"),
 ("19f",6,"refer","poh","Doorverwijzing naar POH: {{free text}}","Doorverwijzing naar POH: {{free text}}","Doorverwijzing naar een praktijkondersteuner van de huisarts. Let op, u maakt zelf een afspraak. {{free text}}"),
@@ -164,7 +164,7 @@ Het is mogelijk dat u ontwenningsverschijnselen voelt tijdens die periode. Dit k
 ("26",NULL,"","","Als de val een gevolg van bevriezen tijdens het lopen is, dan is optimaliseren van anti-Parkinsonmedicatie aanbevolen (in overleg met neuroloog).","",""),
 ("26a",NULL,"","","**Deze patiënt heeft de Ziekte van Parkinson en orthostatische hypotensie**. Orthostatische hypotensie kan verergerd worden door bepaalde anti-Parkinson medicatie. Overleg met een neuroloog wordt aanbevolen.","",""),
 ("26b",NULL,"","","**Deze patiënt heeft geen Ziekte van Parkinson of Parkinson-gerelateerde aandoening in de probleemlijst:** Controleer de indicatie voor deze medicatie. Als er geen indicatie (meer) is, is afbouwen aanbevolen. Behalve bij **ziekte van Parkinson of Parkinson-gerelateerd aandoening** ).","",""),
-("27",1,"discuss","neuro","Overleg met neuroloog ivm afbouw anti-Parkinson medicatie.","Overleg met neuroloog ivm afbouw anti-Parkinson medicatie.","Uw dokter overlegt met uw neuroloog over uw anti-Parkinson medicatie."),
+("27",1,"discuss","neuro","Overleg met neuroloog ivm afbouw anti-Parkinson medicatie te bespreken: {{free text}}","Overleg met neuroloog ivm afbouw anti-Parkinson medicatie: {{free text}}","Uw dokter overlegt met uw neuroloog over uw anti-Parkinson medicatie. {{free text}}"),
 ("27",2,"taper-stop","","Afbouwen volgens afbouwschema waarna stop. Afbouwschema: {{free text}}","Afbouwen volgens afbouwschema waarna stop: {{free text}}","Stoppen via een afbouwschema. {{free text}}"),
 ("27",3,"taper-reduce","","Afbouwen tot minimaal effectieve dosis: {{free text}}","Afbouwen tot minimaal effectieve dosis volgens afbouwschema: {{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
 ("27",4,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al gewend was."),
@@ -468,7 +468,7 @@ Overweeg stoppen bij alle indicaties (hypnoticum/sedativum, chronische jeuk, all
 Overweeg stoppen: 
 - Als er sprake is van duizeligheid, verwardheid, wazig zien, sufheid of een velrengd QT-interval.","",""),
 ("110",1,"stop","","Stoppen","Stop","U kunt direct stoppen."),
-("110",2,"non-med","incont","Niet medicamenteuze behandeling tav urge incontinentie zoals blaastraining en bekkenbodemspieroefeningen.","Niet medicamenteuze adviezen tav urgency incontinentie gegeven.","De dokter heeft u adviezen gegeven voor de behandeling van de incontinentie. Deze adviezen waren:
+("110",2,"inform","incont","Niet medicamenteuze behandeling tav urge incontinentie zoals blaastraining en bekkenbodemspieroefeningen.","Niet medicamenteuze adviezen tav urgency incontinentie gegeven.","De dokter heeft u adviezen gegeven voor de behandeling van de incontinentie. Deze adviezen waren:
 - Train uw blaas, door bijvoorbeeld bij aandrang het plassen uit te stellen. Informatie kunt u vinden op deze website: [https://www.thuisarts.nl/urine-incontinentie/ik-ga-blaastrainingen-doen](https://www.thuisarts.nl/urine-incontinentie/ik-ga-blaastrainingen-doen)
 - Doe oefeningen voor de bekkenbodemspieren. Informatie kunt u vinden op deze website: [https://www.thuisarts.nl/urine-incontinentie/ik-ga-bekkenbodemoefeningen-doen](https://www.thuisarts.nl/urine-incontinentie/ik-ga-bekkenbodemoefeningen-doen)."),
 ("110",3,"refer","physio","Doorverwijzing naar fysiotherapeut voor bekkenbodemspieroefeningen: {{free text}}","Verwijzing naar fysiotherapeut voor bekkenbodemspieroefeningen: {{free text}}","Doorverwijzing naar een fysiotherapeut. U moet zelf een afspraak hiervoor maken. {{free text}}"),
@@ -525,7 +525,7 @@ Streefwaarde HbA1c, afhankelijk van leeftijd, behandeling en ziekteduur. Standaa
 ("129",1,"taper-stop","","Afbouwen waarna stoppen: elke 2 weken: 75%, 50%, 25%, 12,5%, 0%: {{free text}}","Afbouwen volgens afbouwschema waarna stop: {{free text}}","Stoppen via een afbouwschema. {{free text}}"),
 ("129",2,"consult","other","Consult andere specialist: {{free text}}","ICC: {{free text}}","Doorverwijzing naar een andere specialist. U hoeft hier zelf geen afspraak voor te maken. Van de dokter heeft u hier informatie over gekregen hoe dit te doen. Heeft u na twee weken geen brief ontvangen? Neem dan contact met ons op. {{free text}}"),
 ("129",3,"refer","other","Doorverwijzing naar andere specialist: {{free text}}","Doorverwijzing: {{free text}}","Doorverwijzing naar andere specialist. Let op, u maakt zelf een afspraak. Van de dokter heeft u hier informatie over gekregen hoe dit te doen. {{free text}}"),
-("129",4,"non-med","dementia","Niet medicamenteuze adviezen dementie","Niet-medicamenteuze adviezen tav dementie gegeven.","**Hoe om te gaan met gedragsveranderingen bij dementie**
+("129",4,"inform","dementia","Niet medicamenteuze adviezen dementie","Niet-medicamenteuze adviezen tav dementie gegeven.","**Hoe om te gaan met gedragsveranderingen bij dementie**
 - Realiseert u zich dat uw naaste met dementie niet bewust bepaald gedrag laat zien.
 - Kijk of u mee kunt gaan in de wereld van uw naaste met dementie.
 - Houdt een dagelijks ritme en vaste gewoontes aan
