@@ -680,6 +680,7 @@ function non_med_advice_area(hide_additional) {
 function patient_non_med_advice() {
     let html = '';
     let nm_advices = get_patient_advice().advice_text_non_med;
+	let last_category_name = '';
     for (let i = 0; i < nm_advices.length; ++i) {
         let nm_advice = nm_advices[i];
         let nma_prefix = "nma_" + i;
@@ -688,7 +689,12 @@ function patient_non_med_advice() {
         let boxnum = nm_advice.select_box_num;
         let nma_id_base = ['NONMED', category, boxnum].join('_');
         let row_id = 'pt_' + nma_id_base;
-
+        if (category_name != last_category_name) {
+            last_category_name = category_name;
+			html += '<div id="' + 'patient_nm_cat_' + category + '"' +
+				' class="patient_nm_category_name" style="display: none">' +
+				category_name + '</div>\n';;
+        }
         html += '<div id="' + row_id + '" class="patient_nonmed_cb_row"';
         html += ' style="display:none">\n';
         let allow_edit = 0;

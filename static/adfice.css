@@ -125,9 +125,13 @@ th,td.patient_data_td {
 	color: #f28931;
 	margin-top: 15px;
 }
-.patient_nonmed_category{
+.patient_nm_category_name{
 	font-weight: bold;
 	color: #f28931;
+}
+
+span.patient_nonmed_category{
+	display: none;
 }
 
 #patient_warning{

@@ -168,15 +168,26 @@ function process_checkbox(checkbox_id, checked) {
 
     let patient_row_id = checkbox_id.replace(/^cb_/, 'pt_');
     let patient_row = document.getElementById(patient_row_id);
+	let cat_id = '';
+	if(checkbox_id.lastIndexOf("cb_NONMED_", 0) === 0){
+		cat_id = 'patient_nm_cat_' + checkbox_id.charAt(10);
+	}
+	let cat_name_div = document.getElementById(cat_id);
     if (patient_row) {
         if (checked) {
             // patient_row.classList.add("checkbox-checked");
             // patient_row.classList.remove("checkbox-unchecked");
             patient_row.style.display = 'block';
+			if(cat_name_div){
+				cat_name_div.style.display = 'block';
+			}
         } else {
             // patient_row.classList.add("checkbox-unchecked");
             // patient_row.classList.remove("checkbox-checked");
             patient_row.style.display = 'none';
+			if(cat_name_div){
+				cat_name_div.style.display = 'none';
+			}
         }
     }
 }

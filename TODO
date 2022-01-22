@@ -2,8 +2,6 @@ Important:
 * Figure out "on update" statements for research tables
 * Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?
 * fix testcafe acceptance tests to work with testcafe v1.16.1
-* Why does only "Bewegingsadvies" work the way it should with the headers in the patient-friendly advice view?
-  Why is the header "Schoeisel/voetproblemen" not showing up at all?
 * make changes to ICD-10 mapping
 * Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
 
@@ -32,6 +30,7 @@ Mid Priority:
     consider adding code which simulates a failed retrieval to test failure states
 * consider removing birth date entirely from the data; we only need age
 * figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
+* figure out why TestCafe "Nonmed headers display correctly on patient page" fails
 * automate tests for CDSS working on IE11
 * Add a way to clear user-entered prediction model data. This can be used by the TestCafe test to clean up after itself.
 * Each acceptance test should start an instance of adfice-webserver
