@@ -6,7 +6,7 @@ Important:
 * Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
 * Change doctor_id and patient_id to use UUIDs instead of PK
 * Remove viewer_id from tables; replace with doctor_id
-* Add new SDM graphic
+* Add new SDM graphic* Add links to Ephor for drugs in checkboxes with an Ephor entry
 
 
 Valportaal
