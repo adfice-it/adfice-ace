@@ -758,21 +758,21 @@ N07CA (anti-vertigo medications)
 N06BX03 (piracetam)","all","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:N07CA |
 atc:N06BX03","",12),
 ("135","yes","no","Sympathicomimetica:
-R03AC bèta2-sympathicomimetica
+R03AC bÃ¨ta2-sympathicomimetica
 R01AA
 R01AB sympathicomimetica, nasaal
 R01BA Nasal decongestants for systemic use: Sympathomimetics
 S01EA Sympathomimetics in glaucoma therapy
 S01FB Mydriatics and cycloplegics: Sympathomimetics excluding antiglaucoma preparations","all","","atc:R03AC | atc:R01AA | atc:R01AB | atc:R01BA  | atc:S01EA | atc:S01FB","",33),
 ("136","yes","no","Sympathicomimetica:
-R03AC bèta2-sympathicomimetica
+R03AC bÃ¨ta2-sympathicomimetica
 R01AA
 R01AB sympathicomimetica, nasaal
 R01BA Nasal decongestants for systemic use: Sympathomimetics
 S01EA Sympathomimetics in glaucoma therapy
 S01FB Mydriatics and cycloplegics: Sympathomimetics excluding antiglaucoma preparations","bijwerking","","atc:R03AC | atc:R01AA | atc:R01AB | atc:R01BA  | atc:S01EA | atc:S01FB","allergic-reaction",33),
 ("137","yes","no","Sympathicomimetica:
-R03AC bèta2-sympathicomimetica
+R03AC bÃ¨ta2-sympathicomimetica
 R01AA
 R01AB sympathicomimetica, nasaal
 R01BA Nasal decongestants for systemic use: Sympathomimetics
