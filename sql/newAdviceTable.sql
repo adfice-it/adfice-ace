@@ -29,7 +29,8 @@ Stoppen bij:
 - Zorg voor voldoende lichaamsbeweging overdag (minstens 30 minuten bewegen).
 - Zorg dat u &#39;s avonds geen zware inspanning (zoals bijvoorbeeld sporten) verricht.
 - Zorg ervoor dat uw slaapkamer een aangename temperatuur heeft.
-- Zorg ervoor dat uw slaapkamer goed geventileerd en donker is.- Zie ook https://www.thuisarts.nl/slaapproblemen
+- Zorg ervoor dat uw slaapkamer goed geventileerd en donker is.
+- Zie ook https://www.thuisarts.nl/slaapproblemen
 
 Bespreek het met uw dokter, als het niet lukt om deze adviezen op te volgen."),
 ("6e",9,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al gewend was."),
@@ -68,7 +69,8 @@ Bij BPSD wordt risperidon geadviseerd.
 Bij **psychotische patiënten met de ziekte van Parkinson** (en Parkinson-gerelateerde aandoeningen) wordt clozapine <a href=\"https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/c/clozapine\" target=\"_blank\"><img class=\"fkimg\" src = \"/static/FK_circle_with_linkout.png\"></a> geadviseerd..
 (Dosis wordt (tevens) bepaald op geleide van de bloedspiegel. Controleer vóór start van de behandeling het leukocytenaantal en het absolute neutrofielenaantal.)
 
-Bij het switchen van een antipsychoticum naar een ander antipsychoticum wordt cross-titratie aanbevolen (het afbouwen van het te stoppen antipsychoticum en tegelijk insluipen van het te starten antipsychoticum). Hierbij kan gebruik gemaakt worden van de switchtabellen op: [http://wiki.psychiatrienet.nl/wiki/SwitchAntipsychotics](http://wiki.psychiatrienet.nl/wiki/SwitchAntipsychotics) voor advies per geneesmiddel.","",""),("14a",1,"switch","haloperidol","**Indicatie delier:** Vervangen door haloperidol<a href=\"https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/h/haloperidol\" target=\"_blank\"><img class=\"fkimg\" src = \"/static/FK_circle_with_linkout.png\"></a> 0,5-5 mg/dag in 1-3 doses, eventueel ophogen tot max. 5 mg/dag.","Vervangen door haloperidol, 0,5-5 mg/dag in 1-3 doses","Vervangen door haloperidol. Neem haloperidol in volgens de instructies van de apotheek. Vraag de apotheek naar de meest voorkomende bijwerkingen."),
+Bij het switchen van een antipsychoticum naar een ander antipsychoticum wordt cross-titratie aanbevolen (het afbouwen van het te stoppen antipsychoticum en tegelijk insluipen van het te starten antipsychoticum). Hierbij kan gebruik gemaakt worden van de switchtabellen op: [http://wiki.psychiatrienet.nl/wiki/SwitchAntipsychotics](http://wiki.psychiatrienet.nl/wiki/SwitchAntipsychotics) voor advies per geneesmiddel.","",""),
+("14a",1,"switch","haloperidol","**Indicatie delier:** Vervangen door haloperidol<a href=\"https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/h/haloperidol\" target=\"_blank\"><img class=\"fkimg\" src = \"/static/FK_circle_with_linkout.png\"></a> 0,5-5 mg/dag in 1-3 doses, eventueel ophogen tot max. 5 mg/dag.","Vervangen door haloperidol, 0,5-5 mg/dag in 1-3 doses","Vervangen door haloperidol. Neem haloperidol in volgens de instructies van de apotheek. Vraag de apotheek naar de meest voorkomende bijwerkingen."),
 ("14a",2,"switch","risperidon","Vervangen door risperidon <a href=\"https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/r/risperidon\" target=\"_blank\"><img class=\"fkimg\" src = \"/static/FK_circle_with_linkout.png\"></a> 0,25mg 2dd, optimale dosering 0,5mg 2dd voor max 6 weken. Evt. individueel verhogen met 0,25mg 2dd om de dag naar 0,5-1mg 2dd.","Vervangen door risperidon, 0,5mg 2dd.","Vervangen door risperidon. Neem risperidon in volgens de instructies van de apotheek. Vraag de apotheek naar de meest voorkomende bijwerkingen."),
 ("14a",3,"switch","clozapine","Vervangen door clozapine <a href=\"https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/c/clozapine\" target=\"_blank\"><img class=\"fkimg\" src = \"/static/FK_circle_with_linkout.png\"></a>. Begindosering: max. 12,5 mg 1dd &#39;s avonds, deze in stappen van 12,5 mg 1–2×/week verhogen tot 25–37,5 mg/dag; maximaal 50 mg 1×/dag aan het einde van de tweede week.","Vervangen door clozapine: Begindosering: max. 12,5 mg 1dd &#39;s avonds, deze in stappen van 12,5 mg 1–2×/week verhogen tot 25–37,5 mg/dag; maximaal 50 mg 1×/dag aan het einde van de tweede week.","Vervangen door clozapine. Volg de instructies van de apotheek. Vraag de apotheek naar de meest voorkomende bijwerkingen."),
 ("14b",1,"switch","risperidon","**Indicatie BPSD:** Vervangen door risperidon <a href=\"https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/r/risperidon\" target=\"_blank\"><img class=\"fkimg\" src = \"/static/FK_circle_with_linkout.png\"></a> 0,25mg 2dd, optimale dosering 0,5mg 2dd voor max 6 weken. Evt. individueel verhogen met 0,25mg 2dd om de dag naar 0,5-1mg 2dd.","Vervangen door risperidon, 2dd 0,25mg.","Vervangen door risperidon. Neem risperidon in volgens de instructies van de apotheek. Vraag de apotheek naar de meest voorkomende bijwerkingen."),
@@ -76,7 +78,8 @@ Bij het switchen van een antipsychoticum naar een ander antipsychoticum wordt cr
 ("14c",NULL,"","","Bij schizoaffectieve aandoening zijn antipsychotica geïndiceerd. Bij gebruik > 4 maanden, overleggen met psychiater om alternatieven of lagere dosis te bespreken. Bij de meeste patiënten zijn haloperidol of risperidon voorkeursmiddelen.Bij psychotische patiënten met ziekte van Parkinson en Parkinson-gerelateerde aandoeningen heeft clozapine de voorkeur. De voorkeuren en ervaring van de patiënt spelen ook een belangrijke rol.","",""),
 ("14d",NULL,"","","**Deze patiënt heeft geen delier, dementie of schizoaffectieve aandoening in de probleemlijst:
 Controleer de indicatie voor deze medicatie. Als er geen indicatie (meer) is, is geleidelijk afbouwen aanbevolen.Behalve bij korte-termijn gebruik wegens geagiteerd gedrag bij delier of dementie (< 1 maand) of gebruik voor schizoaffectieve aandoening
-Bij medicamenteuze therapie van een delier wordt haloperidol of risperidon geadviseerd.
+
+Bij medicamenteuze therapie van een delier wordt haloperidol of risperidon geadviseerd.
 
 Bij BPSD wordt risperidon geadviseerd.
 
@@ -94,7 +97,8 @@ Bij mensen die antidepressiva langdurig gebruiken, is een consultatie met eventu
 - Let erop dat uw naaste gebruik maakt van een eventuele bril en gehoorapparaat. Kom overdag zoveel mogelijk uit bed.
 - Eet aan tafel.
 - Zorg dat u een kalender zichtbaar heeft hangen met hierop de dag en datum.
-- Stel een dagprogramma op bijvoorbeeld met hulp van de casemanager. Een casemanager is een onafhankelijke en vaste begeleider voor mensen met delier én hun naasten.- Voor meer informatie zie: https://www.thuisarts.nl/delier ."),
+- Stel een dagprogramma op bijvoorbeeld met hulp van de casemanager. Een casemanager is een onafhankelijke en vaste begeleider voor mensen met delier én hun naasten.
+- Voor meer informatie zie: https://www.thuisarts.nl/delier ."),
 ("16",5,"inform","dementia","Niet medicamenteuze adviezen dementie","Niet-medicamenteuze adviezen tav dementie gegeven.","**Hoe om te gaan met gedragsveranderingen bij dementie**
 - Realiseert u zich dat uw naaste met dementie niet bewust bepaald gedrag laat zien.
 - Kijk of u mee kunt gaan in de wereld van uw naaste met dementie.
@@ -295,7 +299,8 @@ Anders: *digoxine*: eerste dag 0,75 mg, daarna 1 dd 0,25 mg.","",""),
 ("59",2,"switch","atenolol","Vervangen door atenolol <a href=\"https://www.farmacotherapeutischkompas.nl/bladeren/preparaatteksten/a/atenolol\" target=\"_blank\"><img class=\"fkimg\" src=\"/static/FK_circle_with_linkout.png\"></a> 50–100 mg 1dd.","Vervangen door atenolol, 50-100mg 1dd","Vervangen door atenolol. Volg de instructies van de apotheek. Vraag de apotheek naar de meest voorkomende bijwerkingen. {{free text}}"),
 ("60",NULL,"","","**Patiënt heeft mogelijk bijwerkingen van deze medicatie.** Overweeg stoppen of lagere dosering. ","",""),
 ("61",1,"follow-up","","Vervolgafspraak: {{free text}}","Monitor voor veranderingen in symptomen. Vervolgafspraak: {{free text}}","Uw dokter neemt contact met u op om te kijken of het u lukt om het advies te volgen en na te gaan of u nieuwe symptomen heeft gehad. Een vervolgafspraak wordt ingepland. {{free text}}"),
-("62",NULL,"","","Het afbouwen van betablokkers kan tot rebound hypertensie of reflextachycardie leiden. Doe dit in stappen van 25-50% verlaging per keer, over één tot twee weken. Controleer de  bloeddruk na 1-2 weken.","",""),("63",NULL,"","","ACE-remmers of ATII-antagonisten zijn voorkeursmiddelen bij **hypertensie en decompensatio cordis**.","",""),
+("62",NULL,"","","Het afbouwen van betablokkers kan tot rebound hypertensie of reflextachycardie leiden. Doe dit in stappen van 25-50% verlaging per keer, over één tot twee weken. Controleer de  bloeddruk na 1-2 weken.","",""),
+("63",NULL,"","","ACE-remmers of ATII-antagonisten zijn voorkeursmiddelen bij **hypertensie en decompensatio cordis**.","",""),
 ("63",1,"taper-stop","","Afbouwen waarna stoppen. Afbouwschema: {{free text}}","Afbouwen volgens afbouwschema waarna stop: {{free text}}","Stoppen via een afbouwschema. {{free text}}"),
 ("63",2,"taper-reduce","","Afbouwen tot de minimaal effectieve dosis bereikt is. Afbouwschema: {{free text}}","Afbouwen tot de minimaal effectieve dosis volgens afbouwschema: {{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
 ("63",3,"continue","","Continueren","Continueren","Gebruik dit medicijn zoals u tot nu toe al gewend was."),

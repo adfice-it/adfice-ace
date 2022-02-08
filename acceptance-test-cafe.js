@@ -430,8 +430,11 @@ test('Test user entering values', async t => {
     // Right now the test is written so that it does not check the negative state (i.e. it does not check to see that Roker is null at the start)
     // but if we add functionality to clear values then we can add the negative checks
 });
-test('Test reload data', async t => {
-	//this test assumes we are using the stub_etl    let url = `${BASE_URL}/prep?id=174&doctor_id=2`;
+
+
+test('Test reload data', async t => {
+	//this test assumes we are using the stub_etl
+    let url = `${BASE_URL}/prep?id=174&doctor_id=2`;
     let window1 = await t.openWindow(url);
     await change_flex_style_to_inline(t);
 	
@@ -444,12 +447,14 @@ test('Test user entering values', async t => {
 	await t.click(button_start_view);
 	await change_flex_style_to_inline(t);
 	let page_renew = Selector('#page_renew');
-	await t.click(page_renew);	let button_prep_view = Selector('button#button-prep-view');
+	await t.click(page_renew);
+	let button_prep_view = Selector('button#button-prep-view');
 	await t.click(button_prep_view);
 	await change_flex_style_to_inline(t);
 	await t.expect(cb_levo_stop.checked).notOk();
 	await t.expect(cb_diaz_stop.exists).ok();
-		/*
+	
+	/*
 	test cannot clean up after itself; will only run correctly 1x
 	*/
  });

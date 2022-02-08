@@ -10,7 +10,9 @@ const fs = require('fs');
 var adfice = adfice_factory.adfice_init();
 afterAll(async () => {
     return await adfice.shutdown();
-});async function clear_advice_for_patient(adfice, patient_id) {
+});
+
+async function clear_advice_for_patient(adfice, patient_id) {
     let sqls_and_params = [];
     let sql = `/* adfice.clear_advice_for_patient */
         UPDATE patient

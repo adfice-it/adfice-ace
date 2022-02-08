@@ -44,6 +44,7 @@ div.ref{
   line-height: 1.8;
 	padding: 4px;
 	padding-right: 60px;
-	padding-left: 60px;  overflow-wrap: break-word;
+	padding-left: 60px;
+  overflow-wrap: break-word;
   word-wrap: break-word;
 }

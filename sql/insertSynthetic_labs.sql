@@ -28,5 +28,7 @@ INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_nam
 /* fake patients for validation 2 */
 INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_result, lab_test_units) VALUES
 (152,(select NOW()),(select NOW()),"eGFR",40,"mL/min/1.73 m² "),
-(153,(select NOW()),(select NOW()),"eGFR",20,"mL/min/1.73 m² "),/* fake patient for data reload test */
+(153,(select NOW()),(select NOW()),"eGFR",20,"mL/min/1.73 m² "),
+
+/* fake patient for data reload test */
 (174,(select NOW()),(select NOW()),"eGFR",40,"mL/min/1.73 m² "),;

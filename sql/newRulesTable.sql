@@ -155,7 +155,8 @@ C02L Antihypertensives and diuretics in combination
 C07B Beta blocking agents and thiazides 
 C07C Beta blocking agents and other diuretics 
 C07D Beta blocking agents, thiazides and other diuretics 
-C09BA and C09DA ACEi and ARB with diuretics","all","","((atc:C03 &! C03CA &! C03CB &! C03EB) | atc:C02L | atc:C07B | atc:C07C | atc:C07D )","",13),("42a","yes","no","Diuretica combined with beta-blockers:
+C09BA and C09DA ACEi and ARB with diuretics","all","","((atc:C03 &! C03CA &! C03CB &! C03EB) | atc:C02L | atc:C07B | atc:C07C | atc:C07D )","",13),
+("42a","yes","no","Diuretica combined with beta-blockers:
 C07B Beta blocking agents and thiazides 
 C07C Beta blocking agents and other diuretics 
 C07D Beta blocking agents, thiazides and other diuretics","all","{{preselect box 2}{
@@ -187,7 +188,8 @@ orthostatische hypotensie (probleemlijst)))
 
 or
 (SELECTOR(C07DA) AND CONDITION())
-}}","(atc:C07B | atc:C07C | atc:C07D )","",18),("42b","yes","no","Diuretica NOT combined with beta-blockers: C03 diuretics except lisdiruetics
+}}","(atc:C07B | atc:C07C | atc:C07D )","",18),
+("42b","yes","no","Diuretica NOT combined with beta-blockers: C03 diuretics except lisdiruetics
 C02L Antihypertensives and diuretics in combination 
 C09BA and C09DA ACEi and ARB with diuretics","all","{{preselect box 2}{
 (SELECTOR(C03CA
