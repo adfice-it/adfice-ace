@@ -6,7 +6,7 @@
 /* global data used by these functions */
 var message_globals = {
     patient_id: null,
-	doctor_id: null,
+    doctor_id: null,
     viewer_id: null,
     is_final: null,
     ws: null,
@@ -20,7 +20,7 @@ var message_globals = {
 function send_message(message_type, apply) {
     let message = {};
     message.viewer_id = message_globals.viewer_id;
-	message.doctor_id = message_globals.doctor_id;
+    message.doctor_id = message_globals.doctor_id;
 
     message.patient_id = message_globals.patient_id;
     message.type = message_type;
@@ -77,14 +77,14 @@ function freetextentered(textfield) {
     message_globals.freetexts_entered = textfield.id;
 }
 
-function freetextAutoSelectCheckbox(textfield){
-	// the checkbox id is always = the textfield id, but with cb instead of ft and without the _1 at the end.
-	let checkbox_id = textfield.id.replace("ft","cb");
-	checkbox_id = checkbox_id.slice(0, checkbox_id.length - 2);
-	let tf_checkbox = document.getElementById(checkbox_id);
-	if(!tf_checkbox.checked){
-		tf_checkbox.checked = true;
-	}
+function freetextAutoSelectCheckbox(textfield) {
+    // the checkbox id is always = the textfield id, but with cb instead of ft and without the _1 at the end.
+    let checkbox_id = textfield.id.replace("ft", "cb");
+    checkbox_id = checkbox_id.slice(0, checkbox_id.length - 2);
+    let tf_checkbox = document.getElementById(checkbox_id);
+    if (!tf_checkbox.checked) {
+        tf_checkbox.checked = true;
+    }
 }
 
 function update_meas() {
@@ -168,26 +168,26 @@ function process_checkbox(checkbox_id, checked) {
 
     let patient_row_id = checkbox_id.replace(/^cb_/, 'pt_');
     let patient_row = document.getElementById(patient_row_id);
-	let cat_id = '';
-	if(checkbox_id.lastIndexOf("cb_NONMED_", 0) === 0){
-		cat_id = 'patient_nm_cat_' + checkbox_id.charAt(10);
-	}
-	let cat_name_div = document.getElementById(cat_id);
+    let cat_id = '';
+    if (checkbox_id.lastIndexOf("cb_NONMED_", 0) === 0) {
+        cat_id = 'patient_nm_cat_' + checkbox_id.charAt(10);
+    }
+    let cat_name_div = document.getElementById(cat_id);
     if (patient_row) {
         if (checked) {
             // patient_row.classList.add("checkbox-checked");
             // patient_row.classList.remove("checkbox-unchecked");
             patient_row.style.display = 'block';
-			if(cat_name_div){
-				cat_name_div.style.display = 'block';
-			}
+            if (cat_name_div) {
+                cat_name_div.style.display = 'block';
+            }
         } else {
             // patient_row.classList.add("checkbox-unchecked");
             // patient_row.classList.remove("checkbox-checked");
             patient_row.style.display = 'none';
-			if(cat_name_div){
-				cat_name_div.style.display = 'none';
-			}
+            if (cat_name_div) {
+                cat_name_div.style.display = 'none';
+            }
         }
     }
 }
@@ -307,7 +307,7 @@ function first_incoming_message(event) {
         textfield.style.visibility = "visible";
         textfield.onkeyup = function() {
             freetextentered(textfield);
-			freetextAutoSelectCheckbox(textfield);
+            freetextAutoSelectCheckbox(textfield);
         };
     }
 }
@@ -357,15 +357,15 @@ function ws_on_message(event) {
         input.disabled = message_globals.is_final;
     }
 
-	let textAreaList = document.querySelectorAll("textarea");
+    let textAreaList = document.querySelectorAll("textarea");
     for (let i = 0; i < textAreaList.length; ++i) {
         let ta = textAreaList[i];
         ta.disabled = message_globals.is_final;
     }
 
-	if(message_globals.is_final){
-		document.body.style.opacity = 0.5;
-	}
+    if (message_globals.is_final) {
+        document.body.style.opacity = 0.5;
+    }
 
     if ('debug_info' in message) {
         message_globals.logger.log(JSON.stringify({
@@ -386,7 +386,7 @@ function ws_on_close(event) {
         input.disabled = true;
     };
 
-	let textAreaList = document.querySelectorAll("textarea");
+    let textAreaList = document.querySelectorAll("textarea");
     for (let i = 0; i < textAreaList.length; ++i) {
         let ta = textAreaList[i];
         ta.disabled = true;
@@ -435,8 +435,8 @@ function connect_web_socket() {
     // URLSearchParams does not work in IE
     // let params = new URLSearchParams(window.location.search);
     message_globals.patient_id = url_param('id');
-	message_globals.doctor_id = url_param('doctor_id');
-	
+    message_globals.doctor_id = url_param('doctor_id');
+
     let base_url = ws_protocol + '//' + url_hostname + ':' + url_port;
     let ws_url = base_url + '/patient/' + message_globals.patient_id;
     message_globals.ws = new WebSocket(ws_url);

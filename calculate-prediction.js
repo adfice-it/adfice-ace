@@ -90,8 +90,8 @@ function calculate_prediction(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
         fear1 * 0.199 +
         fear2 * 0.195;
     var prediction = Math.round(100 * (Math.exp(p) / (1 + Math.exp(p))));
-// console.log(prediction);
-// console.log('GDS_score: ' + GDS_score + '\ngrip_kg: ' + grip_kg + '\nwalking_speed_m_per_s: ' + walking_speed_m_per_s + '\nBMI: ' + BMI + '\nsystolic_bp_mmHg: ' + systolic_bp_mmHg + '\nnumber_of_limitations: ' + number_of_limitations + '\nnrFall1: ' + nrFall1 + '\nnrFall2: ' + nrFall2 + '\nsmoking: ' + smoking + '\nhas_antiepileptica: ' + has_antiepileptica + '\nhas_ca_blocker: ' + has_ca_blocker + '\nhas_incont_med: ' + has_incont_med + '\nedu2: ' + edu2 + '\nedu3: ' + edu3 + '\nfear1: ' + fear1 + '\nfear2: ' + fear2);
+    // console.log(prediction);
+    // console.log('GDS_score: ' + GDS_score + '\ngrip_kg: ' + grip_kg + '\nwalking_speed_m_per_s: ' + walking_speed_m_per_s + '\nBMI: ' + BMI + '\nsystolic_bp_mmHg: ' + systolic_bp_mmHg + '\nnumber_of_limitations: ' + number_of_limitations + '\nnrFall1: ' + nrFall1 + '\nnrFall2: ' + nrFall2 + '\nsmoking: ' + smoking + '\nhas_antiepileptica: ' + has_antiepileptica + '\nhas_ca_blocker: ' + has_ca_blocker + '\nhas_incont_med: ' + has_incont_med + '\nedu2: ' + edu2 + '\nedu3: ' + edu3 + '\nfear1: ' + fear1 + '\nfear2: ' + fear2);
     return prediction;
 }
 

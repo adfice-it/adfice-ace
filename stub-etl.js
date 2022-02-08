@@ -16,130 +16,130 @@ if the MRN is already in our DB. If not, it calls "etl(...)" which will
 load the patient data into the DB and assign an adfice patient_id.
 */
 async function etl(mrn, user_id, participant_number, options) {
-	await addDoctor(user_id);
-	
-	let list_of_inserts = [
-        ['INSERT INTO etl_mrn_patient (mrn) VALUES (?)', [ mrn ]],
-        ['SET @patient_id=(SELECT patient_id FROM etl_mrn_patient WHERE mrn = ?)', [ mrn ]],
-        ['/* patientListOfInserts */ INSERT INTO patient (id, participant_number, birth_date, age, is_final) VALUES (@patient_id,?,?,?,0)', [ participant_number, '1940-1-1', '82' ]],
-        ['/* patientListOfInserts */ INSERT INTO etl_bsn_patient (patient_id, bsn) VALUES (@patient_id,?)', [ '123456782' ]],
+    await addDoctor(user_id);
+
+    let list_of_inserts = [
+        ['INSERT INTO etl_mrn_patient (mrn) VALUES (?)', [mrn]],
+        ['SET @patient_id=(SELECT patient_id FROM etl_mrn_patient WHERE mrn = ?)', [mrn]],
+        ['/* patientListOfInserts */ INSERT INTO patient (id, participant_number, birth_date, age, is_final) VALUES (@patient_id,?,?,?,0)', [participant_number, '1940-1-1', '82']],
+        ['/* patientListOfInserts */ INSERT INTO etl_bsn_patient (patient_id, bsn) VALUES (@patient_id,?)', ['123456782']],
         ['/* medListOfInserts */\n\t\t\tINSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date, dose) VALUES (@patient_id,?,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            'Diazepam',
-            'diazepam',
-            'N05BA01',
-            '2021-12-28 09:06:00.000',
-            'Take twice daily'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                'Diazepam',
+                'diazepam',
+                'N05BA01',
+                '2021-12-28 09:06:00.000',
+                'Take twice daily'
+            ]
         ],
         ['/* medListOfInserts */\n\t\t\tINSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date, dose) VALUES (@patient_id,?,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            'COBICIstat',
-            'cobicistat',
-            'V03AX03',
-            '2021-01-27 10:10:00.000',
-            '2dd'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                'COBICIstat',
+                'cobicistat',
+                'V03AX03',
+                '2021-01-27 10:10:00.000',
+                '2dd'
+            ]
         ],
         ['/* medListOfInserts */\n\t\t\tINSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code) VALUES (@patient_id,?,?,?,?)',
-          [ 
-			'2022-1-7 13:9:35', 
-			'levoDOPA', 
-			'levodopa', 
-			'N04BA01' 
-		  ]
-		],
+            [
+                '2022-1-7 13:9:35',
+                'levoDOPA',
+                'levodopa',
+                'N04BA01'
+            ]
+        ],
         ['/* medListOfInserts */\n\t\t\tINSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, start_date, dose) VALUES (@patient_id,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            'zinkzalf',
-            'zinkzalf',
-            '2021-01-27 10:10:00.000',
-            '4x daily'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                'zinkzalf',
+                'zinkzalf',
+                '2021-01-27 10:10:00.000',
+                '4x daily'
+            ]
         ],
         ['/* medListOfInserts */\n\t\t\tINSERT INTO patient_medication (patient_id, date_retrieved, medication_name, start_date, dose) VALUES (@patient_id,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            'voedingssupplement',
-            '2021-01-27 10:10:00.000',
-            '3x daily'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                'voedingssupplement',
+                '2021-01-27 10:10:00.000',
+                '3x daily'
+            ]
         ],
         ['/* probListOfInserts */\n\t\t\tINSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10, ehr_text, start_date) VALUES (@patient_id,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            'hypertensie',
-            'I10',
-            'Essentiële (primaire) hypertensie',
-            '2017-02-27'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                'hypertensie',
+                'I10',
+                'Essentiële (primaire) hypertensie',
+                '2017-02-27'
+            ]
         ],
         ['/* probListOfInserts */\n\t\t\tINSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10, ehr_text, start_date) VALUES (@patient_id,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            'angina-pectoris',
-            'I20.0',
-            'Instabiele angina pectoris',
-            '2020-03-15'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                'angina-pectoris',
+                'I20.0',
+                'Instabiele angina pectoris',
+                '2020-03-15'
+            ]
         ],
         ['/* probListOfInserts */\n\t\t\tINSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10) VALUES (@patient_id,?,?,?)',
-          [ 
-			'2022-1-7 13:9:35', 
-			'diabetes', 
-			'E11.9' 
-		  ]
+            [
+                '2022-1-7 13:9:35',
+                'diabetes',
+                'E11.9'
+            ]
         ],
         ['/* labListOfInserts */ INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_code, lab_test_result, lab_test_units) VALUES (@patient_id,?,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            '2022-01-07 10:18:00',
-            'eGFR',
-            '33914-3',
-            '>60',
-            'mL/min/1.73 m²'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                '2022-01-07 10:18:00',
+                'eGFR',
+                '33914-3',
+                '>60',
+                'mL/min/1.73 m²'
+            ]
         ],
         ['/* labListOfInserts */ INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_code, lab_test_result, lab_test_units) VALUES (@patient_id,?,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            '2022-01-07 10:18:00',
-            'natrium',
-            '82812-9',
-            '135',
-            'mmol/l'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                '2022-01-07 10:18:00',
+                'natrium',
+                '82812-9',
+                '135',
+                'mmol/l'
+            ]
         ],
         ['/* labListOfInserts */ INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_code, lab_test_result, lab_test_units) VALUES (@patient_id,?,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            '2022-01-07 10:18:00',
-            'kalium',
-            '2823-3',
-            '3.5',
-            'mmol/l'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                '2022-01-07 10:18:00',
+                'kalium',
+                '2823-3',
+                '3.5',
+                'mmol/l'
+            ]
         ],
         ['/* measListOfInserts */ INSERT INTO patient_measurement (patient_id,date_retrieved,systolic_bp_mmHg,bp_date_measured,height_cm,height_date_measured,weight_kg,weight_date_measured,smoking, smoking_date_measured) VALUES (@patient_id,?,?,?,?,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            120,
-            '2012-11-29',
-            130,
-            '2020-01-27',
-            32,
-            '2020-01-27',
-            0,
-            '2021-08-05'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                120,
+                '2012-11-29',
+                130,
+                '2020-01-27',
+                32,
+                '2020-01-27',
+                0,
+                '2021-08-05'
+            ]
         ]
-      ];
-	await sql_transaction(list_of_inserts);
-	sql = 'SELECT patient_id FROM etl_mrn_patient WHERE mrn = ?';
-    let results = await sql_select(sql, [ mrn ]);
+    ];
+    await sql_transaction(list_of_inserts);
+    sql = 'SELECT patient_id FROM etl_mrn_patient WHERE mrn = ?';
+    let results = await sql_select(sql, [mrn]);
     let id = null;
     /* istanbul ignore next */
     if (results.length) {
@@ -159,154 +159,154 @@ In this case, we will get a patient ID and look up the MRN.
 Tables patient and etl_patient_bsn are updated; for the other tables
 we delete any old data before adding new data.
 */
-async function etl_renew(patient_id, options){
-	let list_of_transactions = [
+async function etl_renew(patient_id, options) {
+    let list_of_transactions = [
         ['/* patientListOfUpdates */ UPDATE patient SET birth_date = ?, age = ?, is_final = 0 WHERE id = ' + patient_id,
-          [ '1940-1-1', '82' ]
+            ['1940-1-1', '82']
         ],
         ['/* patientListOfUpdates */ UPDATE etl_bsn_patient SET bsn = ? WHERE patient_id = ' + patient_id,
-          [ '123456782' ]
+            ['123456782']
         ],
-        [ 'SET @patient_id= ?', [ patient_id ] ],
-        [ 'DELETE FROM patient_medication where patient_id = ?', [ patient_id ] ],
+        ['SET @patient_id= ?', [patient_id]],
+        ['DELETE FROM patient_medication where patient_id = ?', [patient_id]],
         ['/* medListOfInserts */\n\t\t\tINSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date, dose) VALUES (@patient_id,?,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            'Diazepam',
-            'diazepam',
-            'N05BA01',
-            '2021-12-28 09:06:00.000',
-            'Take twice daily'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                'Diazepam',
+                'diazepam',
+                'N05BA01',
+                '2021-12-28 09:06:00.000',
+                'Take twice daily'
+            ]
         ],
         ['/* medListOfInserts */\n\t\t\tINSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date, dose) VALUES (@patient_id,?,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            'COBICIstat',
-            'cobicistat',
-            'V03AX03',
-            '2021-01-27 10:10:00.000',
-            '2dd'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                'COBICIstat',
+                'cobicistat',
+                'V03AX03',
+                '2021-01-27 10:10:00.000',
+                '2dd'
+            ]
         ],
         ['/* medListOfInserts */\n\t\t\tINSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code) VALUES (@patient_id,?,?,?,?)',
-          [ 
-			'2022-1-7 13:9:35', 
-			'levoDOPA', 
-			'levodopa', 
-			'N04BA01' 
-		  ]
-		],
+            [
+                '2022-1-7 13:9:35',
+                'levoDOPA',
+                'levodopa',
+                'N04BA01'
+            ]
+        ],
         ['/* medListOfInserts */\n\t\t\tINSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, start_date, dose) VALUES (@patient_id,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            'zinkzalf',
-            'zinkzalf',
-            '2021-01-27 10:10:00.000',
-            '4x daily'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                'zinkzalf',
+                'zinkzalf',
+                '2021-01-27 10:10:00.000',
+                '4x daily'
+            ]
         ],
         ['/* medListOfInserts */\n\t\t\tINSERT INTO patient_medication (patient_id, date_retrieved, medication_name, start_date, dose) VALUES (@patient_id,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            'voedingssupplement',
-            '2021-01-27 10:10:00.000',
-            '3x daily'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                'voedingssupplement',
+                '2021-01-27 10:10:00.000',
+                '3x daily'
+            ]
         ],
-        [ 'DELETE FROM patient_problem where patient_id = ?', [ patient_id ] ],
+        ['DELETE FROM patient_problem where patient_id = ?', [patient_id]],
         ['/* probListOfInserts */\n\t\t\tINSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10, ehr_text, start_date) VALUES (@patient_id,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            'hypertensie',
-            'I10',
-            'Essentiële (primaire) hypertensie',
-            '2017-02-27'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                'hypertensie',
+                'I10',
+                'Essentiële (primaire) hypertensie',
+                '2017-02-27'
+            ]
         ],
         ['/* probListOfInserts */\n\t\t\tINSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10, ehr_text, start_date) VALUES (@patient_id,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            'angina-pectoris',
-            'I20.0',
-            'Instabiele angina pectoris',
-            '2020-03-15'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                'angina-pectoris',
+                'I20.0',
+                'Instabiele angina pectoris',
+                '2020-03-15'
+            ]
         ],
         ['/* probListOfInserts */\n\t\t\tINSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10) VALUES (@patient_id,?,?,?)',
-          [ 
-			'2022-1-7 13:9:35', 
-			'diabetes', 
-			'E11.9' 
-		  ]
+            [
+                '2022-1-7 13:9:35',
+                'diabetes',
+                'E11.9'
+            ]
         ],
-        [ 'DELETE FROM patient_lab where patient_id = ?', [ patient_id ] ],
+        ['DELETE FROM patient_lab where patient_id = ?', [patient_id]],
         ['/* labListOfInserts */ INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_code, lab_test_result, lab_test_units) VALUES (@patient_id,?,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            '2022-01-07 10:18:00',
-            'eGFR',
-            '33914-3',
-            '>60',
-            'mL/min/1.73 m²'
-          ]
-        ],
-        ['/* labListOfInserts */ INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_code, lab_test_result, lab_test_units) VALUES (@patient_id,?,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            '2022-01-07 10:18:00',
-            'natrium',
-            '82812-9',
-            '135',
-            'mmol/l'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                '2022-01-07 10:18:00',
+                'eGFR',
+                '33914-3',
+                '>60',
+                'mL/min/1.73 m²'
+            ]
         ],
         ['/* labListOfInserts */ INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_code, lab_test_result, lab_test_units) VALUES (@patient_id,?,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            '2022-01-07 10:18:00',
-            'kalium',
-            '2823-3',
-            '3.5',
-            'mmol/l'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                '2022-01-07 10:18:00',
+                'natrium',
+                '82812-9',
+                '135',
+                'mmol/l'
+            ]
         ],
-        [ 'DELETE FROM patient_measurement where patient_id = ?', [ patient_id ] ],
+        ['/* labListOfInserts */ INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_code, lab_test_result, lab_test_units) VALUES (@patient_id,?,?,?,?,?,?)',
+            [
+                '2022-1-7 13:9:35',
+                '2022-01-07 10:18:00',
+                'kalium',
+                '2823-3',
+                '3.5',
+                'mmol/l'
+            ]
+        ],
+        ['DELETE FROM patient_measurement where patient_id = ?', [patient_id]],
         ['/* measListOfInserts */ INSERT INTO patient_measurement (patient_id,date_retrieved,systolic_bp_mmHg,bp_date_measured,height_cm,height_date_measured,weight_kg,weight_date_measured,smoking, smoking_date_measured) VALUES (@patient_id,?,?,?,?,?,?,?,?,?)',
-          [
-            '2022-1-7 13:9:35',
-            120,
-            '2012-11-29',
-            130,
-            '2020-01-27',
-            32,
-            '2020-01-27',
-            0,
-            '2021-08-05'
-          ]
+            [
+                '2022-1-7 13:9:35',
+                120,
+                '2012-11-29',
+                130,
+                '2020-01-27',
+                32,
+                '2020-01-27',
+                0,
+                '2021-08-05'
+            ]
         ],
-        ['DELETE FROM patient_advice_selection where patient_id = ?', [ patient_id ]],
-        ['DELETE FROM patient_advice_freetext where patient_id = ?', [ patient_id ]]
-      ];
-	  
-	await sql_transaction(list_of_transactions);
+        ['DELETE FROM patient_advice_selection where patient_id = ?', [patient_id]],
+        ['DELETE FROM patient_advice_freetext where patient_id = ?', [patient_id]]
+    ];
 
-	await shutdown();
-	return patient_id;
+    await sql_transaction(list_of_transactions);
+
+    await shutdown();
+    return patient_id;
 
 }
 
-async function addDoctor(ehr_user_id){
-	try{
-		await sql_select("INSERT INTO etl_user (ehr_user_id) VALUES('" + ehr_user_id +"');");
-	} catch (error){
-		/* istanbul ignore else */
-		if(error.code == 'ER_DUP_ENTRY'){
-			// do nothing - doctor already exists in db, that's okay
-		} else {	
-			throw error; // let other errors be errors
-		}
-	}
+async function addDoctor(ehr_user_id) {
+    try {
+        await sql_select("INSERT INTO etl_user (ehr_user_id) VALUES('" + ehr_user_id + "');");
+    } catch (error) {
+        /* istanbul ignore else */
+        if (error.code == 'ER_DUP_ENTRY') {
+            // do nothing - doctor already exists in db, that's okay
+        } else {
+            throw error; // let other errors be errors
+        }
+    }
 }
 
 // db functions
@@ -340,5 +340,5 @@ async function shutdown() {
 
 module.exports = {
     etl: etl,
-	etl_renew: etl_renew,
+    etl_renew: etl_renew,
 };

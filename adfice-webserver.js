@@ -84,7 +84,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     app.get('/load', async function(req, res) {
         let mrn = req.query.mrn;
         let id = await adfice.id_for_mrn(mrn);
-		let user_id = req.query.user;
+        let user_id = req.query.user;
         let encoded_err = null;
         if (!id) {
             try {
@@ -102,8 +102,8 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             }
             res.redirect('/load-error' + param_str);
         } else {
-			await adfice.add_log_event_access(user_id, id);
-			let doctor_id = await adfice.doctor_id_for_user(user_id);
+            await adfice.add_log_event_access(user_id, id);
+            let doctor_id = await adfice.doctor_id_for_user(user_id);
 
             res.redirect('/start?id=' + id + '&doctor_id=' + doctor_id);
         }
@@ -223,7 +223,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                         if (message[id_key] == id) {
                             let patient_id = id;
                             let viewer_id = message.viewer_id;
-							let doctor_id = message.doctor_id;
+                            let doctor_id = message.doctor_id;
                             if (('box_states' in message) ||
                                 ('field_entries' in message)) {
                                 let selections = message['box_states'];
@@ -238,12 +238,12 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                                 send_all(kind, patient_id, new_msg);
                             } else if (message.type == 'patient_renew') {
                                 await adfice.add_log_event_renew(viewer_id, patient_id);
-								let returned_patient = await etl.etl_renew(patient_id);
-								if(returned_patient != patient_id){
-									alert("Er is op dit moment geen verbinding met het EPD. De data is niet vernieuwd.");
-								} 
-								let new_msg = await patient_advice_message(kind,
-										patient_id);
+                                let returned_patient = await etl.etl_renew(patient_id);
+                                if (returned_patient != patient_id) {
+                                    alert("Er is op dit moment geen verbinding met het EPD. De data is niet vernieuwd.");
+                                }
+                                let new_msg = await patient_advice_message(kind,
+                                    patient_id);
                                 send_all(kind, patient_id, new_msg);
                             } else if (message.type == 'was_printed') {
                                 await adfice.add_log_event_print(viewer_id, patient_id);

@@ -69,10 +69,10 @@ test('test doctor_id for null user_id', async () => {
 test('test doctor_id for nonexistant user_id', async () => {
     let user_id = 'sir_not_appearing';
     let doctor_id = await adfice.doctor_id_for_user(user_id);
-	
-	// clean up
-	await adfice.sql_select("DELETE FROM etl_user WHERE ehr_user_id=?", [user_id]);
-	
+
+    // clean up
+    await adfice.sql_select("DELETE FROM etl_user WHERE ehr_user_id=?", [user_id]);
+
     expect(doctor_id).toBeGreaterThan(2);
 });
 
@@ -99,7 +99,7 @@ test('test advice text 6e', async () => {
 test('box_states_to_selection_states', () => {
     const patient_id = 32;
     const viewer = 188;
-	const doctor_id = 1;
+    const doctor_id = 1;
     const box_states = {
         "cb_C03AA03_42_2": false,
         "cb_C03AA03_42b_3": true
@@ -173,7 +173,7 @@ test('set_advice_for_patient(68)', async () => {
     //console.log('68 part 2');
     let patient_num = 68;
     let viewer = 999;
-	let doctor_id = 1;
+    let doctor_id = 1;
     let advice = await adfice.get_advice_for_patient(patient_num);
 
     await clear_advice_for_patient(adfice, patient_num);
@@ -393,7 +393,7 @@ test('get_advice_for_patient(bogus)', async () => {
 test('freetext round trip', async () => {
 
     let viewer = "2";
-	let doctor_id = "1";
+    let doctor_id = "1";
     let patient = "26";
     let freetexts = {
         ft_C03AA03_42_1_1: "",
@@ -888,7 +888,7 @@ test('Log fired rules', async () => {
 
 test('export_patient', async () => {
     let patient = '168';
-	let doctor_id = '1';
+    let doctor_id = '1';
     let file = "test-export_patient-168.log";
     try {
         fs.unlinkSync(file, (err) => {});
@@ -946,7 +946,7 @@ test('log events', async () => {
     await adfice.add_log_event_print(viewer, patient);
     await adfice.add_log_event_copy_patient_text(viewer, patient);
     await adfice.add_log_event_copy_ehr_text(viewer, patient);
-	await adfice.add_log_event_renew(viewer, patient);
+    await adfice.add_log_event_renew(viewer, patient);
 
     let results2 = await adfice.sql_select(sql, [patient]);
     let cnt2 = 0;
@@ -973,15 +973,15 @@ test('access log', async () => {
     if (results2.length > 0) {
         cnt2 = results2[0].cnt;
     }
-	
-	user_id = null;
-	await adfice.add_log_event_access(user_id, patient);
-	let results3 = await adfice.sql_select(sql, [patient]);
-	let cnt3 = 0;
-	if (results3.length > 0) {
+
+    user_id = null;
+    await adfice.add_log_event_access(user_id, patient);
+    let results3 = await adfice.sql_select(sql, [patient]);
+    let cnt3 = 0;
+    if (results3.length > 0) {
         cnt3 = results3[0].cnt;
     }
-	
+
     expect(cnt2).toBe(cnt + 1);
-	expect(cnt3).toBe(cnt2 + 1);
+    expect(cnt3).toBe(cnt2 + 1);
 });

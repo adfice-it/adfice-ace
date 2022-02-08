@@ -53,23 +53,23 @@ async function change_view(t, button, url_fragment) {
 test('Automatic selection of free text checkbox when text entered', async t => {
     let url = `${BASE_URL}/prep?id=24`;
     let window1 = await t.openWindow(url);
-	let ta_checkbox = Selector('#cb_N05AX08_16_2');
-	let ta = Selector('#ft_N05AX08_16_2_1');
-	let ta_checkbox_state1 = await ta_checkbox.checked;
-	await t.click(ta);
-	await t.pressKey('f');
-	let ta_checkbox_state2 = await ta_checkbox.checked;
+    let ta_checkbox = Selector('#cb_N05AX08_16_2');
+    let ta = Selector('#ft_N05AX08_16_2_1');
+    let ta_checkbox_state1 = await ta_checkbox.checked;
+    await t.click(ta);
+    await t.pressKey('f');
+    let ta_checkbox_state2 = await ta_checkbox.checked;
     await t.pressKey('o');
-	let ta_checkbox_state3 = await ta_checkbox.checked;
-	await t.pressKey('backspace');
-	await t.pressKey('backspace');
-	let ta_checkbox_state4 = await ta_checkbox.checked;
-	await t.click(ta_checkbox);
-	
-	await t.expect(ta_checkbox_state1).notOk();
-	await t.expect(ta_checkbox_state2).ok();
-	await t.expect(ta_checkbox_state3).ok();
-	await t.expect(ta_checkbox_state4).ok();
+    let ta_checkbox_state3 = await ta_checkbox.checked;
+    await t.pressKey('backspace');
+    await t.pressKey('backspace');
+    let ta_checkbox_state4 = await ta_checkbox.checked;
+    await t.click(ta_checkbox);
+
+    await t.expect(ta_checkbox_state1).notOk();
+    await t.expect(ta_checkbox_state2).ok();
+    await t.expect(ta_checkbox_state3).ok();
+    await t.expect(ta_checkbox_state4).ok();
 
 });
 // TODO: make launching of the adfice-webserver the job of the test
@@ -433,64 +433,64 @@ test('Test user entering values', async t => {
 
 
 test('Test reload data', async t => {
-	//this test assumes we are using the stub_etl
+    //this test assumes we are using the stub_etl
     let url = `${BASE_URL}/prep?id=174&doctor_id=2`;
     let window1 = await t.openWindow(url);
     await change_flex_style_to_inline(t);
-	
-	let cb_levo_stop = Selector('#cb_N04BA01_27_2');
-	await t.click(cb_levo_stop);
-	await t.expect(cb_levo_stop.checked).ok();
-	let cb_diaz_stop = Selector('#cb_N05BA01_6e_1');
-	await t.expect(cb_diaz_stop.exists).notOk();
-	let button_start_view = Selector('button#button-start-view');
-	await t.click(button_start_view);
-	await change_flex_style_to_inline(t);
-	let page_renew = Selector('#page_renew');
-	await t.click(page_renew);
-	let button_prep_view = Selector('button#button-prep-view');
-	await t.click(button_prep_view);
-	await change_flex_style_to_inline(t);
-	await t.expect(cb_levo_stop.checked).notOk();
-	await t.expect(cb_diaz_stop.exists).ok();
-	
-	/*
-	test cannot clean up after itself; will only run correctly 1x
-	*/
- });
+
+    let cb_levo_stop = Selector('#cb_N04BA01_27_2');
+    await t.click(cb_levo_stop);
+    await t.expect(cb_levo_stop.checked).ok();
+    let cb_diaz_stop = Selector('#cb_N05BA01_6e_1');
+    await t.expect(cb_diaz_stop.exists).notOk();
+    let button_start_view = Selector('button#button-start-view');
+    await t.click(button_start_view);
+    await change_flex_style_to_inline(t);
+    let page_renew = Selector('#page_renew');
+    await t.click(page_renew);
+    let button_prep_view = Selector('button#button-prep-view');
+    await t.click(button_prep_view);
+    await change_flex_style_to_inline(t);
+    await t.expect(cb_levo_stop.checked).notOk();
+    await t.expect(cb_diaz_stop.exists).ok();
+
+    /*
+    test cannot clean up after itself; will only run correctly 1x
+    */
+});
 
 // This test fails; the checkbox is not visible. I don't know why; emperically they are there
 test('Nonmed headers display correctly on patient page', async t => {
-	// check some nonmed advice
-	let url = `${BASE_URL}/prep?id=160&doctor_id=2`;
-	await change_flex_style_to_inline(t);
-	let cb_selector = Selector('#cb_NONMED_B_2');
-/*	await t.expect(cb_selector.visible).ok();
-	let b2_is_checked = await cb_selector.checked;
-	if (!b2_is_checked) {
-        await t.click(cb_selector);
-    }
-	let cb_selector2 = Selector('#cb_NONMED_G_1');
-	await t.expect(cb_selector2.visible).ok();
-	let g_is_checked = await cb_selector2.checked;
-	if (!g_is_checked) {
-		await t.click(cb_selector);
-	}
-	// switch to advies view
-	let button_advise_view = Selector('button#button-advise-view');
-	await t.click(button_advise_view);
-	await change_flex_style_to_inline(t);
-	// check that correct headers appear
-	let beweg1 = Selector('#td_nm_category_name_B_1');
-	let beweg2 = Selector('#td_nm_category_name_B_2');
-	let fysio = Selector('#td_nm_category_name_C_1');
-	let shoe = Selector('#td_nm_category_name_G_1');
-	
-	await t.expect(beweg1.visible).ok();
-	await t.expect(beweg2.visible).ok();
-	await t.expect(fysio.visible).notOk();
-	await t.expect(shoe.visible).ok();
-*/	
+    // check some nonmed advice
+    let url = `${BASE_URL}/prep?id=160&doctor_id=2`;
+    await change_flex_style_to_inline(t);
+    let cb_selector = Selector('#cb_NONMED_B_2');
+    /*	await t.expect(cb_selector.visible).ok();
+    	let b2_is_checked = await cb_selector.checked;
+    	if (!b2_is_checked) {
+            await t.click(cb_selector);
+        }
+    	let cb_selector2 = Selector('#cb_NONMED_G_1');
+    	await t.expect(cb_selector2.visible).ok();
+    	let g_is_checked = await cb_selector2.checked;
+    	if (!g_is_checked) {
+    		await t.click(cb_selector);
+    	}
+    	// switch to advies view
+    	let button_advise_view = Selector('button#button-advise-view');
+    	await t.click(button_advise_view);
+    	await change_flex_style_to_inline(t);
+    	// check that correct headers appear
+    	let beweg1 = Selector('#td_nm_category_name_B_1');
+    	let beweg2 = Selector('#td_nm_category_name_B_2');
+    	let fysio = Selector('#td_nm_category_name_C_1');
+    	let shoe = Selector('#td_nm_category_name_G_1');
+    	
+    	await t.expect(beweg1.visible).ok();
+    	await t.expect(beweg2.visible).ok();
+    	await t.expect(fysio.visible).notOk();
+    	await t.expect(shoe.visible).ok();
+    */
 });
 
 
