@@ -333,29 +333,8 @@ div.refpages{
 	border: 1px solid grey;
 }
 
-div.instruction_box{
-    display: block;
-    width: 99%;
-    margin-bottom: 2em;
-	background-color: #FFFFF;
-}
-
-div.sdm{
-    background: #DDDDDD;
-    text-align: left;
-    border: 2px solid black;
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-span.instruction_heading {
-    font-weight: bold;
-}
-
-span.instruction_step {
-    padding-right: 5px;
-    padding-left: 5px;
+.sdm_image{
+	max-height: 90vh;
 }
 
 div.general_advice{

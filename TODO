@@ -6,25 +6,7 @@ Important:
 * Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
 * Change doctor_id and patient_id to use UUIDs instead of PK
 * Remove viewer_id from tables; replace with doctor_id
-* Add new SDM graphic* Add links to Ephor for drugs in checkboxes with an Ephor entry
-
-
-Valportaal
-* change display of risk gradient to match cdss
-* valportaal: links to apotheek.nl
-* enlarge button for valportaal
-  * is this ctrl-shift-plus ? Then maybe do both for cross-browser:
-    * document.body.style.MozTransform = 'scale(400%)'
-    * document.body.style.zoom = '400%'
-    * (be sure to check footer positioning if there is a footer)
-* search button for valportaal
-  * static content only?
-  * https://www.plainlight.com/duckduckgo-search.html#custom-search ?
-* testing of the static/ served javascript files
-* make a "build valportaal vm" script
-* small textual changes and links provided in spreadsheet "valportaal broken links etc.xlsx"
-
-
+* Add links to Ephor for drugs in checkboxes with an Ephor entry
 Mid Priority:
 * Getting data out of EHR
   * Look into free FHIR servers and see if we can create a version of the ETL that can be included in the main repo
