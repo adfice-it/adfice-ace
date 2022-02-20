@@ -6,7 +6,7 @@ Important:
 * Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
 * Change doctor_id and patient_id to use UUIDs instead of PK
 * Remove viewer_id from tables; replace with doctor_id
-* Add links to Ephor for drugs in checkboxes with an Ephor entry
+
 Mid Priority:
 * Getting data out of EHR
   * Look into free FHIR servers and see if we can create a version of the ETL that can be included in the main repo
@@ -16,6 +16,7 @@ Mid Priority:
 * consider removing birth date entirely from the data; we only need age
 * figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
 * figure out why TestCafe "Nonmed headers display correctly on patient page" fails
+* See if we can get rid of <span> headers in nonmed advice. (I think they are not used any more.)
 * automate tests for CDSS working on IE11
 * Add a way to clear user-entered prediction model data. This can be used by the TestCafe test to clean up after itself.
 * Each acceptance test should start an instance of adfice-webserver
