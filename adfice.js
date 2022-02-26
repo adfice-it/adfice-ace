@@ -1007,37 +1007,37 @@ async function finalize_and_export(patient_id, logfile) {
     await this.export_patient(patient_id, logfile);
 }
 
-async function add_log_event(viewer_id, patient_id, event_type) {
+async function add_log_event(doctor_id, patient_id, event_type) {
     let sql = `/* adfice.add_log_event */
  INSERT INTO logged_events
-           ( viewer_id
+           ( doctor_id
            , patient_id
            , event_type
            )
       VALUES (?,?,?)
 `;
     let params = [
-        as_id(viewer_id),
+        as_id(doctor_id),
         as_id(patient_id),
         as_id(event_type)
     ];
     return await this.sql_select(sql, params);
 }
 
-async function add_log_event_print(viewer_id, patient_id) {
-    return await this.add_log_event(viewer_id, patient_id, 1);
+async function add_log_event_print(doctor_id, patient_id) {
+    return await this.add_log_event(doctor_id, patient_id, 1);
 }
 
-async function add_log_event_copy_patient_text(viewer_id, patient_id) {
-    return await this.add_log_event(viewer_id, patient_id, 2);
+async function add_log_event_copy_patient_text(doctor_id, patient_id) {
+    return await this.add_log_event(doctor_id, patient_id, 2);
 }
 
-async function add_log_event_copy_ehr_text(viewer_id, patient_id) {
-    return await this.add_log_event(viewer_id, patient_id, 3);
+async function add_log_event_copy_ehr_text(doctor_id, patient_id) {
+    return await this.add_log_event(doctor_id, patient_id, 3);
 }
 
-async function add_log_event_renew(viewer_id, patient_id) {
-    return await this.add_log_event(viewer_id, patient_id, 4);
+async function add_log_event_renew(doctor_id, patient_id) {
+    return await this.add_log_event(doctor_id, patient_id, 4);
 }
 
 async function add_log_event_access(user_id, patient_id) {
