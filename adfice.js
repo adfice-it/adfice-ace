@@ -466,25 +466,24 @@ async function set_sql_selections(sqls_and_params, patient_id, doctor_id,
     }
 }
 
-async function set_sql_freetexts(sqls_and_params, patient_id, doctor_id, viewer_id,
+async function set_sql_freetexts(sqls_and_params, patient_id, doctor_id,
     freetexts) {
     let insert_sql = `/* adfice.set_advice_for_patient */
  INSERT INTO patient_advice_freetext
            ( patient_id
            , doctor_id
-           , viewer_id
            , ATC_code
            , medication_criteria_id
            , select_box_num
            , freetext_num
            , freetext
            )
-      VALUES (?,?,?,?,?,?,?,?)
+      VALUES (?,?,?,?,?,?,?)
  ON DUPLICATE KEY
-      UPDATE viewer_id=VALUES(viewer_id)
+      UPDATE doctor_id=VALUES(doctor_id)
            , freetext=VALUES(freetext)
 `;
-    let params = freetexts_to_rows(patient_id, doctor_id, viewer_id, freetexts);
+    let params = freetexts_to_rows(patient_id, doctor_id, freetexts);
     for (let i = 0; i < params.length; ++i) {
         sqls_and_params.push([insert_sql, params[i]]);
     }
@@ -505,7 +504,7 @@ async function set_advice_for_patient(patient_identifier, doctor,
     }
 
     if (freetexts) {
-        set_sql_freetexts(sqls_and_params, patient_id, doctor_id, viewer_id, freetexts);
+        set_sql_freetexts(sqls_and_params, patient_id, doctor_id, freetexts);
     }
 
     let db = await this.db_init();
@@ -574,7 +573,6 @@ async function get_selections(patient_id) {
 async function get_freetexts(patient_id) {
     var sql = `/* adfice.getFreetextForPatient */
          SELECT patient_id
-              , viewer_id
               , ATC_code
               , medication_criteria_id
               , select_box_num
@@ -905,7 +903,7 @@ function rows_to_freetexts(rows) {
     return output;
 }
 
-function freetexts_to_rows(patient_id, doctor_id, viewer_id, freetexts) {
+function freetexts_to_rows(patient_id, doctor_id, freetexts) {
     let output = [];
     const freetext_ids = Object.keys(freetexts);
     freetext_ids.forEach((freetext_id, index) => {
@@ -918,7 +916,6 @@ function freetexts_to_rows(patient_id, doctor_id, viewer_id, freetexts) {
         output.push([
             patient_id,
             doctor_id,
-            viewer_id,
             atc,
             criterion,
             box_num,

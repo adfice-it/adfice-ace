@@ -683,7 +683,7 @@ CREATE TRIGGER patient_problem_history_delete
 --
 CREATE TABLE patient_advice_selection (
   id int unsigned NOT NULL AUTO_INCREMENT,
-  viewer_id int unsigned NOT NULL,
+  viewer_id int unsigned DEFAULT NULL,
   doctor_id int unsigned DEFAULT NULL,
   patient_id int unsigned NOT NULL,
   ATC_code varchar(10) NOT NULL,
@@ -700,7 +700,7 @@ CREATE TABLE patient_advice_selection_history (
   log_row_created timestamp DEFAULT CURRENT_TIMESTAMP,
   log_op tinyint NOT NULL,
   id int unsigned NOT NULL,
-  viewer_id int unsigned NOT NULL,
+  viewer_id int unsigned DEFAULT NULL,
   doctor_id int unsigned DEFAULT NULL,
   patient_id int unsigned NOT NULL,
   ATC_code varchar(10) NOT NULL,
@@ -781,7 +781,7 @@ CREATE TRIGGER patient_advice_selection_history_delete
 --
 CREATE TABLE patient_advice_freetext (
   id int unsigned NOT NULL AUTO_INCREMENT,
-  viewer_id int unsigned NOT NULL,
+  viewer_id int unsigned DEFAULT NULL,
   doctor_id int unsigned DEFAULT NULL,
   patient_id int unsigned NOT NULL,
   ATC_code varchar(10) NOT NULL,
@@ -799,7 +799,7 @@ CREATE TABLE patient_advice_freetext_history (
   log_row_created timestamp DEFAULT CURRENT_TIMESTAMP,
   log_op tinyint NOT NULL,
   id int unsigned NOT NULL,
-  viewer_id int unsigned NOT NULL,
+  viewer_id int unsigned DEFAULT NULL,
   doctor_id int unsigned DEFAULT NULL,
   patient_id int unsigned NOT NULL,
   ATC_code varchar(10) NOT NULL,
