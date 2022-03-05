@@ -5,7 +5,12 @@ Important:
 * make changes to ICD-10 mapping
 * Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
 * Figure out how to exclude footer from page that is printed by the print button (footer blocks some of the text)
-* Change doctor_id and patient_id to use UUIDs instead of PK
+* Change patient_id to use UUID instead of PK
+* Show appropriate errors when someone attempts to access system and:
+	- user_id is absent
+	- participant_id is absent
+	- MRN does not retrieve a patient
+  Consider blocking access when doctor_id is null (will have to adjust lots of tests accordingly)
 
 Mid Priority:
 * Getting data out of EHR

@@ -16,10 +16,11 @@ CREATE TABLE `etl_bsn_patient` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `etl_user` (
-  `doctor_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `etl_user_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `doctor_id` varchar(36) NOT NULL,
   `ehr_user_id` varchar(50) DEFAULT NULL,
-   PRIMARY KEY (`doctor_id`),
-   UNIQUE KEY (`ehr_user_id`)
+   PRIMARY KEY (`etl_user_id`),
+   UNIQUE KEY (`doctor_id`, `ehr_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -683,7 +684,7 @@ CREATE TRIGGER patient_problem_history_delete
 --
 CREATE TABLE patient_advice_selection (
   id int unsigned NOT NULL AUTO_INCREMENT,
-  doctor_id int unsigned DEFAULT NULL,
+  doctor_id varchar(36) DEFAULT NULL,
   patient_id int unsigned NOT NULL,
   ATC_code varchar(10) NOT NULL,
   medication_criteria_id varchar(8) NOT NULL,
@@ -699,7 +700,7 @@ CREATE TABLE patient_advice_selection_history (
   log_row_created timestamp DEFAULT CURRENT_TIMESTAMP,
   log_op tinyint NOT NULL,
   id int unsigned NOT NULL,
-  doctor_id int unsigned DEFAULT NULL,
+  doctor_id varchar(36) DEFAULT NULL,
   patient_id int unsigned NOT NULL,
   ATC_code varchar(10) NOT NULL,
   medication_criteria_id varchar(8) NOT NULL,
@@ -776,7 +777,7 @@ CREATE TRIGGER patient_advice_selection_history_delete
 --
 CREATE TABLE patient_advice_freetext (
   id int unsigned NOT NULL AUTO_INCREMENT,
-  doctor_id int unsigned DEFAULT NULL,
+  doctor_id varchar(36) DEFAULT NULL,
   patient_id int unsigned NOT NULL,
   ATC_code varchar(10) NOT NULL,
   medication_criteria_id varchar(8) NOT NULL,
@@ -793,7 +794,7 @@ CREATE TABLE patient_advice_freetext_history (
   log_row_created timestamp DEFAULT CURRENT_TIMESTAMP,
   log_op tinyint NOT NULL,
   id int unsigned NOT NULL,
-  doctor_id int unsigned DEFAULT NULL,
+  doctor_id varchar(36) DEFAULT NULL,
   patient_id int unsigned NOT NULL,
   ATC_code varchar(10) NOT NULL,
   medication_criteria_id varchar(8) NOT NULL,
@@ -874,7 +875,7 @@ CREATE TRIGGER patient_advice_freetext_history_delete
 --
 CREATE TABLE `logged_events` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `doctor_id` int unsigned NOT NULL,
+  `doctor_id` varchar(36) NOT NULL,
   `patient_id` int unsigned NOT NULL,
   `event_type` int unsigned NOT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,

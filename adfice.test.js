@@ -57,7 +57,7 @@ test('test patient_id for missing mrn', async () => {
 test('test doctor_id for user_id', async () => {
     let user_id = 'dr_bob';
     let doctor_id = await adfice.doctor_id_for_user(user_id);
-    expect(doctor_id).toBe(2);
+    expect(doctor_id).toBe('4573fee8-4845-44ff-a9c2-1e988ba81f8f');
 });
 
 test('test doctor_id for null user_id', async () => {
@@ -73,7 +73,7 @@ test('test doctor_id for nonexistant user_id', async () => {
     // clean up
     await adfice.sql_select("DELETE FROM etl_user WHERE ehr_user_id=?", [user_id]);
 
-    expect(doctor_id).toBeGreaterThan(2);
+    expect(doctor_id.length).toBe(36);
 });
 
 test('test advice text 6e', async () => {

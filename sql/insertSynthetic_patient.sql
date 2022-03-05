@@ -178,7 +178,9 @@ INSERT INTO etl_mrn_patient (mrn, patient_id) VALUES
 ('DummyMRN-000025032', 173),
 ('DummyMRN-000025777', 174);
 
-INSERT INTO etl_user (ehr_user_id) VALUES ('dr_alice'),('dr_bob');
+INSERT INTO etl_user (doctor_id, ehr_user_id) VALUES 
+('b2eb56d6-3e6e-48c7-992f-f8556fc9bd07', 'dr_alice'),
+('4573fee8-4845-44ff-a9c2-1e988ba81f8f','dr_bob');
 
 INSERT INTO patient (id,display_name,birth_date) VALUES
 (1,"Mevr. Empty",'1940-02-10'),

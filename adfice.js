@@ -492,7 +492,7 @@ async function set_sql_freetexts(sqls_and_params, patient_id, doctor_id,
 async function set_advice_for_patient(patient_identifier, doctor,
     cb_states, freetexts) {
     const patient_id = as_id(patient_identifier);
-    const doctor_id = as_id(doctor);
+    const doctor_id = doctor;
 
     let sqls_and_params = [];
 
@@ -1011,7 +1011,7 @@ async function add_log_event(doctor_id, patient_id, event_type) {
       VALUES (?,?,?)
 `;
     let params = [
-        as_id(doctor_id),
+        doctor_id,
         as_id(patient_id),
         as_id(event_type)
     ];
@@ -1072,7 +1072,7 @@ async function doctor_id_for_user(user_id) {
     let params = [user_id];
     let results = await this.sql_select(sql, params);
     if (results.length == 0) {
-        sql = "INSERT INTO etl_user (ehr_user_id) VALUES (?);";
+        sql = "INSERT INTO etl_user (doctor_id, ehr_user_id) VALUES ((select uuid()), ?);";
         await this.sql_select(sql, params);
         sql = 'SELECT doctor_id FROM etl_user WHERE ehr_user_id=?';
         results = await this.sql_select(sql, params);
