@@ -222,14 +222,13 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                         let id_key = `${kind}_id`;
                         if (message[id_key] == id) {
                             let patient_id = id;
-                            let viewer_id = message.viewer_id;
                             let doctor_id = message.doctor_id;
                             if (('box_states' in message) ||
                                 ('field_entries' in message)) {
                                 let selections = message['box_states'];
                                 let freetexts = message['field_entries'];
                                 await adfice.set_advice_for_patient(
-                                    patient_id, doctor_id, viewer_id, selections, freetexts);
+                                    patient_id, doctor_id, selections, freetexts);
                             }
                             if (message.type == 'definitive') {
                                 await adfice.finalize_and_export(patient_id);

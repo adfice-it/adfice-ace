@@ -443,23 +443,22 @@ async function calculate_prediction_result(patient_id) {
 }
 
 async function set_sql_selections(sqls_and_params, patient_id, doctor_id,
-    viewer_id, cb_states) {
+    cb_states) {
     let insert_sql = `/* adfice.set_advice_for_patient */
  INSERT INTO patient_advice_selection
            ( patient_id
            , doctor_id
-           , viewer_id
            , ATC_code
            , medication_criteria_id
            , select_box_num
            , selected
            )
-      VALUES (?,?,?,?,?,?,?)
+      VALUES (?,?,?,?,?,?)
  ON DUPLICATE KEY
-      UPDATE viewer_id=VALUES(viewer_id)
+      UPDATE doctor_id=VALUES(doctor_id)
            , selected=VALUES(selected)
 `;
-    let params = box_states_to_selection_states(patient_id, doctor_id, viewer_id,
+    let params = box_states_to_selection_states(patient_id, doctor_id,
         cb_states);
     for (let i = 0; i < params.length; ++i) {
         sqls_and_params.push([insert_sql, params[i]]);
@@ -491,15 +490,14 @@ async function set_sql_freetexts(sqls_and_params, patient_id, doctor_id,
 
 // called from adfice-webserver-runner
 async function set_advice_for_patient(patient_identifier, doctor,
-    viewer, cb_states, freetexts) {
+    cb_states, freetexts) {
     const patient_id = as_id(patient_identifier);
-    const viewer_id = as_id(viewer);
     const doctor_id = as_id(doctor);
 
     let sqls_and_params = [];
 
     if (cb_states) {
-        set_sql_selections(sqls_and_params, patient_id, doctor_id, viewer_id,
+        set_sql_selections(sqls_and_params, patient_id, doctor_id,
             cb_states);
     }
 
@@ -557,7 +555,6 @@ async function update_prediction_with_user_values(patient_id, form_data) {
 async function get_selections(patient_id) {
     var sql = `/* adfice.get_selections */
         SELECT patient_id
-             , viewer_id
              , ATC_code
              , medication_criteria_id
              , select_box_num
@@ -766,7 +763,7 @@ async function get_advice_for_patient(patient_identifier) {
     if (Object.keys(selected_advice).length == 0 && patient.id !== undefined) {
         cb_states = preselected_checkboxes;
         await this.set_advice_for_patient(patient_identifier, null,
-            0, cb_states, null);
+            cb_states, null);
         selected_advice = await this.get_selections(patient_id);
     }
 
@@ -851,7 +848,7 @@ async function determine_preselected_checkboxes(fired, patient_id, atc_code) {
     return preselected;
 }
 
-function box_states_to_selection_states(patient_id, doctor_id, viewer_id, box_states) {
+function box_states_to_selection_states(patient_id, doctor_id, box_states) {
     let output = [];
 
     const checkbox_ids = Object.keys(box_states);
@@ -864,7 +861,7 @@ function box_states_to_selection_states(patient_id, doctor_id, viewer_id, box_st
         if (box_states[checkbox_id]) {
             checked = 1;
         }
-        output.push([patient_id, doctor_id, viewer_id, atc, criterion, box_num, checked]);
+        output.push([patient_id, doctor_id, atc, criterion, box_num, checked]);
     });
 
     return output;

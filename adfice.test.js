@@ -98,17 +98,16 @@ test('test advice text 6e', async () => {
 
 test('box_states_to_selection_states', () => {
     const patient_id = 32;
-    const viewer = 188;
     const doctor_id = 1;
     const box_states = {
         "cb_C03AA03_42_2": false,
         "cb_C03AA03_42b_3": true
     };
     const expected = [
-        [32, 1, 188, "C03AA03", "42", 2, 0],
-        [32, 1, 188, "C03AA03", "42b", 3, 1]
+        [32, 1, "C03AA03", "42", 2, 0],
+        [32, 1, "C03AA03", "42b", 3, 1]
     ];
-    let out = adfice.box_states_to_selection_states(patient_id, doctor_id, viewer,
+    let out = adfice.box_states_to_selection_states(patient_id, doctor_id,
         box_states);
     expect(out).toStrictEqual(expected);
 });
@@ -192,7 +191,7 @@ test('set_advice_for_patient(68)', async () => {
     };
 
     let freetexts = null;
-    adfice.set_advice_for_patient(patient_num, doctor_id, viewer, old_advice, freetexts);
+    adfice.set_advice_for_patient(patient_num, doctor_id, old_advice, freetexts);
 
     advice = await adfice.get_advice_for_patient(patient_num);
     expect(advice.selected_advice).toStrictEqual(old_advice);
@@ -210,7 +209,7 @@ test('set_advice_for_patient(68)', async () => {
         "cb_C09AA02_63_4": false,
         "cb_C09AA02_63b_1": false
     };
-    adfice.set_advice_for_patient(patient_num, doctor_id, viewer, new_advice, freetexts);
+    adfice.set_advice_for_patient(patient_num, doctor_id, new_advice, freetexts);
 
     advice = await adfice.get_advice_for_patient(patient_num);
     expect(advice.selected_advice).toStrictEqual(new_advice);
@@ -228,7 +227,7 @@ test('set_advice_for_patient(68)', async () => {
     expect(advice.is_final).toBeFalsy();
     expect(advice.selected_advice).not.toStrictEqual(new_advice);
 
-    adfice.set_advice_for_patient(patient_num, doctor_id, viewer, new_advice, freetexts);
+    adfice.set_advice_for_patient(patient_num, doctor_id, new_advice, freetexts);
 })
 
 test('update_prediction_with_user_values, update all missing data', async () => {
@@ -408,7 +407,7 @@ test('freetext round trip', async () => {
     };
 
     let cb_states = null;
-    await adfice.set_advice_for_patient(patient, doctor_id, viewer, cb_states, freetexts);
+    await adfice.set_advice_for_patient(patient, doctor_id, cb_states, freetexts);
     let actual = await adfice.get_freetexts(patient);
 
     expect(actual).toStrictEqual(freetexts);
@@ -902,7 +901,7 @@ test('export_patient', async () => {
     };
     let viewer = 999;
     let freetexts = null;
-    adfice.set_advice_for_patient(patient, doctor_id, viewer, new_advice, freetexts);
+    adfice.set_advice_for_patient(patient, doctor_id, new_advice, freetexts);
 
     // essentially calling adfice.finalize_and_export(id), but with a file
     await adfice.finalize_advice(patient);
