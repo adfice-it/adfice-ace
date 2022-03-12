@@ -4,7 +4,6 @@ Important:
 * fix testcafe acceptance tests to work with testcafe v1.16.1
 * make changes to ICD-10 mapping
 * Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
-* Figure out how to exclude footer from page that is printed by the print button (footer blocks some of the text)
 * Change patient_id to use UUID instead of PK
 * Show appropriate errors when someone attempts to access system and:
 	- user_id is absent
@@ -22,6 +21,7 @@ Mid Priority:
 * figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
 * figure out why TestCafe "Nonmed headers display correctly on patient page" fails
 * See if we can get rid of <span> headers in nonmed advice. (I think they are not used any more.)
+* Can we write any meaningful test for fivepages.js print_page()? It has one job...
 * automate tests for CDSS working on IE11
 * Add a way to clear user-entered prediction model data. This can be used by the TestCafe test to clean up after itself.
 * Each acceptance test should start an instance of adfice-webserver

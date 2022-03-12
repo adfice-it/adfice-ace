@@ -822,6 +822,13 @@ function nice_value(value) {
     }
 }
 
+// Prints the page without the navigation footer
+function print_page(){
+	document.getElementById('div-footer-id').style.display = 'none';
+	window_print();
+	document.getElementById('div-footer-id').style.display = 'block';
+}
+
 // the following functions specify the needed elements which vary
 // between pages and need to be populated on load
 // and see: function page_load(before_socket)
