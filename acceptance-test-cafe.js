@@ -55,10 +55,10 @@ async function load(t) {
     let participant = 100;
     let user = 'dr_bob';
 
-    await t.openWindow(`${BASE_URL}/load`+
-            `?mrn=${mrn}` +
-            `&user=${user}`+
-            `&participant=${participant}`);
+    await t.openWindow(`${BASE_URL}/load` +
+        `?mrn=${mrn}` +
+        `&user=${user}` +
+        `&participant=${participant}`);
 }
 
 test('Automatic selection of free text checkbox when text entered', async t => {
@@ -90,8 +90,8 @@ test('Automatic selection of free text checkbox when text entered', async t => {
 test('test incoming link from EHR', async t => {
     let participant = 100;
     let user = 'dr_bob';
-    let url = `${BASE_URL}/load?mrn=DummyMRN-641923847`
-        +`&user=${user}&participant=${participant}`;
+    let url = `${BASE_URL}/load?mrn=DummyMRN-641923847` +
+        `&user=${user}&participant=${participant}`;
     let window1 = await t.openWindow(url);
     const getLocation = ClientFunction(() => document.location.href);
 

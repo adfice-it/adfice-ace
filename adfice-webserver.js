@@ -57,8 +57,12 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     let app = express();
 
     let max_session_ms = 2 * 60 * 60 * 1000; // two hours
-    var session_manager = session({ secret: cookie_secret,
-                      cookie: { maxAge: max_session_ms }});
+    var session_manager = session({
+        secret: cookie_secret,
+        cookie: {
+            maxAge: max_session_ms
+        }
+    });
     app.use(session_manager);
 
     const server = http.createServer(app);
@@ -194,7 +198,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 
         // reconnect session/cookie info to request using express API
         // TODO: consider pull request on express-session to add this
-        session_manager(request, {}, function(){});
+        session_manager(request, {}, function() {});
 
         const pathname = request.url;
         server.wss.handleUpgrade(request, socket, head,
