@@ -13,7 +13,6 @@
 
 var five_pages = {
     patient_id: null,
-    doctor_id: null,
     data: {},
     xhttp: null,
     converter: null,
@@ -34,12 +33,6 @@ function get_converter() {
         five_pages.converter = new showdown.Converter();
     }
     return five_pages.converter;
-}
-
-function set_doctor_id() {
-    if (url_param('doctor_id') != null) {
-        five_pages.doctor_id = url_param('doctor_id');
-    }
 }
 
 function page_load(before_socket) {
@@ -834,7 +827,6 @@ function print_page(){
 // and see: function page_load(before_socket)
 
 function start_page_setup() {
-    set_doctor_id();
     patient_info_age();
     gauge_risk_score();
     patient_info_problem_start();

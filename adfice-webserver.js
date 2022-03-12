@@ -6,11 +6,15 @@
 const http = require('http');
 const ws = require('ws');
 const express = require('express');
+const session = require('express-session');
 const ejs = require('ejs');
 const util = require('util');
+const crypto = require('crypto');
 const showdown = require('showdown');
 const adfice_factory = require('./adfice.js');
 const autil = require('./adfice-util');
+
+const cookie_secret = crypto.randomBytes(16).toString('hex');
 
 const DEBUG = ((process.env.DEBUG !== undefined) &&
     (process.env.DEBUG !== "0"));
@@ -51,6 +55,12 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     }
 
     let app = express();
+
+    let max_session_ms = 2 * 60 * 60 * 1000; // two hours
+    var session_manager = session({ secret: cookie_secret,
+                      cookie: { maxAge: max_session_ms }});
+    app.use(session_manager);
+
     const server = http.createServer(app);
     server.wss = new ws.Server({
         noServer: true
@@ -104,8 +114,10 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         } else {
             await adfice.add_log_event_access(user_id, id);
             let doctor_id = await adfice.doctor_id_for_user(user_id);
+            log_debug(server, 'setting doctor id:', doctor_id);
+            req.session.doctor_id = doctor_id;
 
-            res.redirect('/start?id=' + id + '&doctor_id=' + doctor_id);
+            res.redirect('/start?id=' + id);
         }
     });
 
@@ -179,6 +191,11 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     }
 
     server.on('upgrade', function upgrade(request, socket, head) {
+
+        // reconnect session/cookie info to request using express API
+        // TODO: consider pull request on express-session to add this
+        session_manager(request, {}, function(){});
+
         const pathname = request.url;
         server.wss.handleUpgrade(request, socket, head,
             async function done(ws) {
@@ -222,7 +239,14 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                         let id_key = `${kind}_id`;
                         if (message[id_key] == id) {
                             let patient_id = id;
-                            let doctor_id = message.doctor_id;
+                            let doctor_id = null;
+                            if (!request.session) {
+                                throw 'No session?';
+                            }
+                            doctor_id = request.session.doctor_id;
+                            if (DEBUG > 0) {
+                                console.log('got doctor id:', doctor_id);
+                            }
                             if (('box_states' in message) ||
                                 ('field_entries' in message)) {
                                 let selections = message['box_states'];

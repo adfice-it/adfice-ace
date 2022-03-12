@@ -50,7 +50,19 @@ async function change_view(t, button, url_fragment) {
     await change_flex_style_to_inline(t);
 }
 
+async function load(t) {
+    let mrn = 'DummyMRN-000014366';
+    let participant = 100;
+    let user = 'dr_bob';
+
+    await t.openWindow(`${BASE_URL}/load`+
+            `?mrn=${mrn}` +
+            `&user=${user}`+
+            `&participant=${participant}`);
+}
+
 test('Automatic selection of free text checkbox when text entered', async t => {
+    await load(t);
     let url = `${BASE_URL}/prep?id=24`;
     let window1 = await t.openWindow(url);
     let ta_checkbox = Selector('#cb_N05AX08_16_2');
@@ -76,7 +88,10 @@ test('Automatic selection of free text checkbox when text entered', async t => {
 // TODO: have each test launch a different adfice instance on a different port
 
 test('test incoming link from EHR', async t => {
-    let url = `${BASE_URL}/load?mrn=DummyMRN-641923847`;
+    let participant = 100;
+    let user = 'dr_bob';
+    let url = `${BASE_URL}/load?mrn=DummyMRN-641923847`
+        +`&user=${user}&participant=${participant}`;
     let window1 = await t.openWindow(url);
     const getLocation = ClientFunction(() => document.location.href);
 
@@ -84,6 +99,7 @@ test('test incoming link from EHR', async t => {
 });
 
 test('Test selecting views', async t => {
+    await load(t);
     let url = `${BASE_URL}/prep?id=85`;
     let window1 = await t.openWindow(url);
     await change_flex_style_to_inline(t);
@@ -203,6 +219,7 @@ test('Test selecting views', async t => {
 });
 
 async function check_checkbox_and_freetext(t, id) {
+    await load(t);
     // ensure our cb is selected
     let cb_id = Selector('#cb_' + id);
     if (!(await cb_id.checked)) {
@@ -228,6 +245,7 @@ async function check_checkbox_and_freetext(t, id) {
 }
 
 test('Test free text fields', async t => {
+    await load(t);
     let url = `${BASE_URL}/prep?id=23`;
     let window1 = await t.openWindow(url);
 
@@ -236,6 +254,7 @@ test('Test free text fields', async t => {
 });
 
 test('Test non-med free text fields', async t => {
+    await load(t);
     let url = `${BASE_URL}/prep?id=10`;
     let window1 = await t.openWindow(url);
 
@@ -244,6 +263,7 @@ test('Test non-med free text fields', async t => {
 });
 
 test('Test med lists', async t => {
+    await load(t);
     let url = `${BASE_URL}/prep?id=9`;
     let window1 = await t.openWindow(url);
 
@@ -258,6 +278,7 @@ test('Test med lists', async t => {
 });
 
 test('Checkbox preselected', async t => {
+    await load(t);
     let url = `${BASE_URL}/prep?id=51`;
     let window1 = await t.openWindow(url);
 
@@ -277,6 +298,7 @@ test('Checkbox preselected', async t => {
 });
 
 test('Test finalize and renew', async t => {
+    await load(t);
     let url = `${BASE_URL}/prep?id=167`;
     let window1 = await t.openWindow(url);
 
@@ -314,6 +336,7 @@ test('Test finalize and renew', async t => {
 });
 
 test('Check "Geen advies"', async t => {
+    await load(t);
     let url = `${BASE_URL}/prep?id=162`;
     let window1 = await t.openWindow(url);
     await change_flex_style_to_inline(t);
@@ -356,6 +379,7 @@ test('Check "Geen advies"', async t => {
 });
 
 test('Test problem list', async t => {
+    await load(t);
     let url = `${BASE_URL}/start?id=5`;
     let window1 = await t.openWindow(url);
 
@@ -365,6 +389,7 @@ test('Test problem list', async t => {
 });
 
 test('Test lab list', async t => {
+    await load(t);
     let url = `${BASE_URL}/start?id=27`;
     let window1 = await t.openWindow(url);
 
@@ -374,6 +399,7 @@ test('Test lab list', async t => {
 });
 
 test('Test prediction values missing', async t => {
+    await load(t);
     let url = `${BASE_URL}/start?id=27`;
     let window1 = await t.openWindow(url);
 
@@ -383,6 +409,7 @@ test('Test prediction values missing', async t => {
 });
 
 test('Test prediction values present', async t => {
+    await load(t);
     let url = `${BASE_URL}/start?id=2`;
     let window1 = await t.openWindow(url);
 
@@ -392,6 +419,7 @@ test('Test prediction values present', async t => {
 });
 
 test('Test prediction values present when user-entered', async t => {
+    await load(t);
     let url = `${BASE_URL}/start?id=170`;
     let window1 = await t.openWindow(url);
 
@@ -401,6 +429,7 @@ test('Test prediction values present when user-entered', async t => {
 });
 
 test('Test user entering values', async t => {
+    await load(t);
     let url = `${BASE_URL}/start?id=173`;
     let window1 = await t.openWindow(url);
     await change_flex_style_to_inline(t);
@@ -433,8 +462,9 @@ test('Test user entering values', async t => {
 
 
 test('Test reload data', async t => {
+    await load(t);
     //this test assumes we are using the stub_etl
-    let url = `${BASE_URL}/prep?id=174&doctor_id=2`;
+    let url = `${BASE_URL}/prep?id=174`;
     let window1 = await t.openWindow(url);
     await change_flex_style_to_inline(t);
 
@@ -461,8 +491,9 @@ test('Test reload data', async t => {
 
 // This test fails; the checkbox is not visible. I don't know why; emperically they are there
 test('Nonmed headers display correctly on patient page', async t => {
+    await load(t);
     // check some nonmed advice
-    let url = `${BASE_URL}/prep?id=160&doctor_id=2`;
+    let url = `${BASE_URL}/prep?id=160`;
     await change_flex_style_to_inline(t);
     let cb_selector = Selector('#cb_NONMED_B_2');
     /*	await t.expect(cb_selector.visible).ok();
@@ -496,6 +527,7 @@ test('Nonmed headers display correctly on patient page', async t => {
 
 // slow tests run last
 test('Check multiple viewers making changes', async t => {
+    await load(t);
     let url = `${BASE_URL}/prep?id=68`;
     let window1 = await t.openWindow(url);
 
@@ -587,6 +619,7 @@ test('Check multiple viewers making changes', async t => {
 
 
 test('Checkbox persistence', async t => {
+    await load(t);
     let checkbox_id = "cb_N02AA01_76_1";
     let checkbox_css_selector = `input#${checkbox_id}`;
     let url = `${BASE_URL}/prep?id=78`;
