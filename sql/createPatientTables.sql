@@ -2,9 +2,11 @@
 -- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
 
 CREATE TABLE `etl_mrn_patient` (
-  `patient_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `patient_id` varchar(36) NOT NULL,
   `mrn` varchar(50) DEFAULT NULL,
-   PRIMARY KEY (`patient_id`),
+   PRIMARY KEY (`id`),
+   UNIQUE KEY (`patient_id`),
    UNIQUE KEY (`mrn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -27,7 +29,8 @@ CREATE TABLE `etl_user` (
 -- creating patient table, log table, and triggers
 --
 CREATE TABLE `patient` (
-  `id` int unsigned NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `patient_id` varchar(36) NOT NULL,
   `display_name` varchar(100) DEFAULT NULL,
   `participant_number` int unsigned DEFAULT NULL,
   `birth_date` date,
@@ -35,7 +38,8 @@ CREATE TABLE `patient` (
   `is_final` tinyint(1),
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `row_updated` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`patient_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `patient_history` (
@@ -114,7 +118,7 @@ CREATE TRIGGER patient_history_delete
 --
 CREATE TABLE `patient_lab` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `patient_id` int unsigned DEFAULT NULL,
+  `patient_id` varchar(36) NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,
   `date_measured` datetime DEFAULT NULL,
   `lab_test_name` varchar(100) DEFAULT NULL,
@@ -132,7 +136,7 @@ CREATE TABLE `patient_lab_history` (
   `log_row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `log_op` tinyint NOT NULL,
   `id` int unsigned NOT NULL,
-  `patient_id` int unsigned DEFAULT NULL,
+  `patient_id` varchar(36) NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,
   `date_measured` datetime DEFAULT NULL,
   `lab_test_name` varchar(100) DEFAULT NULL,
@@ -208,7 +212,7 @@ CREATE TRIGGER patient_lab_history_delete
 --
 CREATE TABLE `patient_measurement` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `patient_id` int unsigned NOT NULL,
+  `patient_id` varchar(36) NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,
   `user_education_hml` smallint unsigned DEFAULT NULL,
   `education_hml` smallint unsigned DEFAULT NULL,
@@ -265,7 +269,7 @@ CREATE TABLE `patient_measurement_history` (
   `log_row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `log_op` tinyint NOT NULL,
   `id` int unsigned NOT NULL,
-  `patient_id` int unsigned NOT NULL,
+  `patient_id` varchar(36) NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,
   `user_education_hml` smallint unsigned DEFAULT NULL,
   `education_hml` smallint unsigned DEFAULT NULL,
@@ -501,7 +505,7 @@ CREATE TRIGGER patient_measurement_history_delete
 --
 CREATE TABLE `patient_medication` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `patient_id` int unsigned NOT NULL,
+  `patient_id` varchar(36) NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,
   `medication_name` varchar(100) DEFAULT NULL,
   `generic_name` varchar(100) DEFAULT NULL,
@@ -519,7 +523,7 @@ CREATE TABLE `patient_medication_history` (
   `log_row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `log_op` tinyint NOT NULL,
   `id` int unsigned NOT NULL,
-  `patient_id` int unsigned NOT NULL,
+  `patient_id` varchar(36) NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,
   `medication_name` varchar(100) DEFAULT NULL,
   `generic_name` varchar(100) DEFAULT NULL,
@@ -595,7 +599,7 @@ CREATE TRIGGER patient_medication_history_delete
 --
 CREATE TABLE `patient_problem` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `patient_id` int unsigned NOT NULL,
+  `patient_id` varchar(36) NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,
   `start_date` datetime DEFAULT NULL,
   `name` varchar(60) DEFAULT NULL,
@@ -612,7 +616,7 @@ CREATE TABLE `patient_problem_history` (
   `log_row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `log_op` tinyint NOT NULL,
   `id` int unsigned NOT NULL,
-  `patient_id` int unsigned NOT NULL,
+  `patient_id` varchar(36) NOT NULL,
   `date_retrieved` datetime DEFAULT NULL,
   `start_date` datetime DEFAULT NULL,
   `name` varchar(60) DEFAULT NULL,
@@ -876,7 +880,7 @@ CREATE TRIGGER patient_advice_freetext_history_delete
 CREATE TABLE `logged_events` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `doctor_id` varchar(36) NOT NULL,
-  `patient_id` int unsigned NOT NULL,
+  `patient_id` varchar(36) NOT NULL,
   `event_type` int unsigned NOT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -888,14 +892,14 @@ CREATE TABLE `logged_events` (
 CREATE TABLE `access_log` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `ehr_user_id` varchar(50) NOT NULL,
-  `patient_id` int unsigned NOT NULL,
+  `patient_id` varchar(36) NOT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `rules_fired` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `patient_id` int unsigned NOT NULL,
+  `patient_id` varchar(36) NOT NULL,
   `ATC_code` varchar(10) DEFAULT NULL,
   `rules_fired` varchar(100) DEFAULT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,

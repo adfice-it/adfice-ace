@@ -39,7 +39,7 @@ async function clear_advice_for_patient(adfice, patient_id) {
 test('test patient_id for valid mrn', async () => {
     let mrn = 'DummyMRN-641923847';
     let patient_id = await adfice.id_for_mrn(mrn);
-    expect(patient_id).toBe(163);
+    expect(patient_id).toBe("163");
 });
 
 test('test patient_id for no mrn', async () => {

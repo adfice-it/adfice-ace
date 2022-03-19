@@ -199,16 +199,6 @@ async function get_active_rules() {
     return rules;
 }
 
-function as_id(num_or_str) {
-    let num;
-    if (typeof num_or_str == 'number') {
-        num = num_or_str;
-    } else {
-        num = parseInt(num_or_str, 10) || 0;
-    }
-    return num;
-}
-
 async function get_meds(patient_id) {
     var sql = `/* adfice.get_meds */
         SELECT ATC_code
@@ -235,8 +225,7 @@ async function get_sql_condition(rule_number) {
     return results[0]['sql_condition'];
 }
 
-async function is_sql_condition_true(patient_identifier, rule_number) {
-    let patient_id = as_id(patient_identifier);
+async function is_sql_condition_true(patient_id, rule_number) {
     let result = await this.evaluate_sql_condition(patient_id, rule_number);
     return result;
 }
@@ -489,9 +478,8 @@ async function set_sql_freetexts(sqls_and_params, patient_id, doctor_id,
 }
 
 // called from adfice-webserver-runner
-async function set_advice_for_patient(patient_identifier, doctor,
+async function set_advice_for_patient(patient_id, doctor,
     cb_states, freetexts) {
-    const patient_id = as_id(patient_identifier);
     const doctor_id = doctor;
 
     let sqls_and_params = [];
@@ -674,8 +662,7 @@ async function get_all_labs() {
 }
 
 // called from adfice-webserver-runner
-async function get_advice_for_patient(patient_identifier) {
-    let patient_id = as_id(patient_identifier);
+async function get_advice_for_patient(patient_id) {
     let patient = await this.get_patient_by_id(patient_id);
     let age = patient.age;
     let is_final = false;
@@ -762,7 +749,7 @@ async function get_advice_for_patient(patient_identifier) {
     let cb_states = [];
     if (Object.keys(selected_advice).length == 0 && patient.id !== undefined) {
         cb_states = preselected_checkboxes;
-        await this.set_advice_for_patient(patient_identifier, null,
+        await this.set_advice_for_patient(patient_id, null,
             cb_states, null);
         selected_advice = await this.get_selections(patient_id);
     }
@@ -924,8 +911,7 @@ function freetexts_to_rows(patient_id, doctor_id, freetexts) {
 }
 
 // called from export-to-mrs.js
-async function get_export_data(patient_identifier) {
-    let patient_id = as_id(patient_identifier);
+async function get_export_data(patient_id) {
     let sql = `/* adfice.get_export_data */
     SELECT s.patient_id
          , COALESCE(pm.medication_name, nmh.category_name) AS medcat_name
@@ -1012,8 +998,8 @@ async function add_log_event(doctor_id, patient_id, event_type) {
 `;
     let params = [
         doctor_id,
-        as_id(patient_id),
-        as_id(event_type)
+        patient_id,
+        event_type
     ];
     return await this.sql_select(sql, params);
 }
@@ -1045,9 +1031,7 @@ async function add_log_event_access(user_id, patient_id) {
            )
 		VALUES (?,?)
 `;
-    let params = [user_id,
-        as_id(patient_id)
-    ];
+    let params = [user_id, patient_id];
     return await this.sql_select(sql, params);
 }
 

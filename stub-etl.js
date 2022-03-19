@@ -18,8 +18,10 @@ load the patient data into the DB and assign an adfice patient_id.
 async function etl(mrn, user_id, participant_number, options) {
     await addDoctor(user_id);
 
+    const unique_id = crypto.randomBytes(16).toString('hex');
+
     let list_of_inserts = [
-        ['INSERT INTO etl_mrn_patient (mrn) VALUES (?)', [mrn]],
+        ['INSERT INTO etl_mrn_patient (patient_id, mrn) VALUES (?, ?)', [unique_id, mrn]],
         ['SET @patient_id=(SELECT patient_id FROM etl_mrn_patient WHERE mrn = ?)', [mrn]],
         ['/* patientListOfInserts */ INSERT INTO patient (id, participant_number, birth_date, age, is_final) VALUES (@patient_id,?,?,?,0)', [participant_number, '1940-1-1', '82']],
         ['/* patientListOfInserts */ INSERT INTO etl_bsn_patient (patient_id, bsn) VALUES (@patient_id,?)', ['123456782']],
