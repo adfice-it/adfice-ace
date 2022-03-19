@@ -15,9 +15,7 @@ The adfice web server will get the MRN from the URL and then check to see
 if the MRN is already in our DB. If not, it calls "etl(...)" which will
 load the patient data into the DB and assign an adfice patient_id.
 */
-async function etl(mrn, user_id, participant_number, options) {
-    await addDoctor(user_id);
-
+async function etl(mrn, participant_number, options) {
     const unique_id = crypto.randomBytes(16).toString('hex');
 
     let list_of_inserts = [
@@ -296,19 +294,6 @@ async function etl_renew(patient_id, options) {
     await shutdown();
     return patient_id;
 
-}
-
-async function addDoctor(ehr_user_id) {
-    try {
-        await sql_select("INSERT INTO etl_user (ehr_user_id) VALUES('" + ehr_user_id + "');");
-    } catch (error) {
-        /* istanbul ignore else */
-        if (error.code == 'ER_DUP_ENTRY') {
-            // do nothing - doctor already exists in db, that's okay
-        } else {
-            throw error; // let other errors be errors
-        }
-    }
 }
 
 // db functions

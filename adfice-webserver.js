@@ -104,7 +104,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             try {
                 let etl_opts = await autil.from_json_file(etl_opts_path);
                 let participant_number = req.query.participant;
-                id = await etl.etl(mrn, user_id, participant_number, etl_opts);
+                id = await etl.etl(mrn, participant_number, etl_opts);
             } catch (err) {
                 encoded_err = encodeURIComponent('' + err);
             }
