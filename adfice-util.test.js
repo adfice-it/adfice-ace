@@ -115,3 +115,40 @@ test('json serialization file round-trip', async function() {
     expect(obj2).toStrictEqual(obj1);
     fs.unlinkSync(path);
 });
+
+function expect_uuid4_version_and_variant(bytes) {
+    // version 4 UUIDs: xxxxxxxx-xxxx-4xxx-Vxxx-xxxxxxxxxxxx
+    // the 2 most significant bits of V should be 0b10
+    expect(bytes[6] & 0xF0).toBe(0x40);
+    expect(bytes[8] & 0xC0).toBe(0x80);
+}
+
+test('uuid4_new', function() {
+    let uuid_bytes = autil.uuid4_new();
+    expect(uuid_bytes.length).toBe(16);
+    expect_uuid4_version_and_variant(uuid_bytes);
+});
+
+const uuid4_regex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89ABab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
+
+test('uuid4_new_string', function() {
+    let uuid_str_1 = autil.uuid4_new_string();
+    expect(uuid_str_1.length).toBe(36);
+    expect(uuid_str_1).toMatch(uuid4_regex);
+
+    let uuid_str_2 = autil.uuid4_new_string();
+    expect(uuid_str_2.length).toBe(36);
+    expect(uuid_str_2).toMatch(uuid4_regex);
+
+    expect(uuid_str_2).not.toBe(uuid_str_1);
+});
+
+test('set_version_and_variant, uuid_bytes_to_string', function() {
+    let bytes = new Uint8Array(16);
+    bytes[15] = 3;
+    autil.uuid4_set_version_and_variant(bytes);
+    expect_uuid4_version_and_variant(bytes);
+
+    let uuid_str = autil.uuid_bytes_to_string(bytes);
+    expect(uuid_str).toBe("00000000-0000-4000-8000-000000000003");
+});

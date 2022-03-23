@@ -7,6 +7,7 @@ const util = require("util");
 const child_process = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 function assert(condition, message) {
     if (condition) {
@@ -116,10 +117,63 @@ function child_process_spawn(cmd, args) {
     return promise;
 }
 
+function uuid4_new() {
+    return uuid4_set_version_and_variant(crypto.randomBytes(16));
+}
+
+function uuid4_new_string() {
+    return uuid_bytes_to_string(uuid4_new());
+}
+
+function uuid4_set_version_and_variant(bytes) {
+    assert_array_has_16_bytes(bytes);
+    // Version 4 UUIDs are expected to have 6 fixed bits in the 16 bytes:
+    // four bits for the version, and two for the variant.
+    // The remaining 122 bits are for psudo-random values.
+    // (16 * 8) - 6 = 122
+    // xxxxxxxx-xxxx-Vxxx-Txxx-xxxxxxxxxxxx
+    // Version: 4 (psudo-random)
+    // varianT: 8 (possible values 8, 9, A, B)
+    bytes[6] = (bytes[6] & 0x0F) + 0x40; // set Version 4
+    bytes[8] = (bytes[8] & 0x3F) + 0x80; // set varianT 8
+    return bytes;
+}
+
+function uuid_bytes_to_string(bytes) {
+    assert_array_has_16_bytes(bytes);
+    let uuid_str = '';
+    for (let i = 0; i < 16; ++i) {
+        // 8-4-4-4-12
+        if ((i == 4) || (i == 6) || (i == 8) || (i == 10)) {
+            uuid_str += '-';
+        }
+        if (bytes[i] < 0x10) {
+            uuid_str += '0';
+        }
+        uuid_str += (bytes[i] & 0xFF).toString(16);
+    }
+    return uuid_str;
+}
+
+/* istanbul ignore next */
+function assert_array_has_16_bytes(bytes) {
+    assert(((bytes instanceof Uint8Array) ||
+            (bytes instanceof Buffer) ||
+            (bytes instanceof Array)),
+        "bytes type: " + Object.prototype.toString.call(bytes));
+    assert(bytes.length >= 16, "too few bytes, bytes.length: " + bytes.length);
+    assert(!isNaN(bytes[0]), "bytes does not contain numbers? " +
+        " bytes[0]: " + Object.prototype.toString.call(bytes[0]));
+}
+
 module.exports = {
     assert: assert,
     child_process_spawn: child_process_spawn,
     from_json_file: from_json_file,
     split_freetext: split_freetext,
     to_json_file: to_json_file,
+    uuid4_new,
+    uuid4_new_string,
+    uuid4_set_version_and_variant,
+    uuid_bytes_to_string,
 }
