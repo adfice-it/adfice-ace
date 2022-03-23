@@ -5,6 +5,7 @@
 
 /* Since the stub_etl does not connect to a patient record, it always uses the same patient data */
 const adb = require('./adfice-db');
+const autil = require('./adfice-util');
 
 var db = null;
 
@@ -16,10 +17,10 @@ if the MRN is already in our DB. If not, it calls "etl(...)" which will
 load the patient data into the DB and assign an adfice patient_id.
 */
 async function etl(mrn, participant_number, options) {
-    const unique_id = crypto.randomBytes(16).toString('hex');
+    const uuid = autil.uuid4_new_string();
 
     let list_of_inserts = [
-        ['INSERT INTO etl_mrn_patient (patient_id, mrn) VALUES (?, ?)', [unique_id, mrn]],
+        ['INSERT INTO etl_mrn_patient (patient_id, mrn) VALUES (?, ?)', [uuid, mrn]],
         ['SET @patient_id=(SELECT patient_id FROM etl_mrn_patient WHERE mrn = ?)', [mrn]],
         ['/* patientListOfInserts */ INSERT INTO patient (id, participant_number, birth_date, age, is_final) VALUES (@patient_id,?,?,?,0)', [participant_number, '1940-1-1', '82']],
         ['/* patientListOfInserts */ INSERT INTO etl_bsn_patient (patient_id, bsn) VALUES (@patient_id,?)', ['123456782']],

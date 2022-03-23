@@ -9,12 +9,11 @@ const express = require('express');
 const session = require('express-session');
 const ejs = require('ejs');
 const util = require('util');
-const crypto = require('crypto');
 const showdown = require('showdown');
 const adfice_factory = require('./adfice.js');
 const autil = require('./adfice-util');
 
-const cookie_secret = crypto.randomBytes(16).toString('hex');
+const cookie_secret = autil.uuid4_new_string();
 
 const DEBUG = ((process.env.DEBUG !== undefined) &&
     (process.env.DEBUG !== "0"));
