@@ -10,6 +10,9 @@ if [ $(id -u) != '0' ]; then
 	exit 1
 fi
 
+echo "# Installing NodeJS (system version, currently 10.24.0, tested with v12)"
+dnf install -y nodejs
+
 echo "# We need MariaDB version >= 10.5 to support SQL Condition queries,"
 echo "# the repositories seem to only have version 10.3"
 echo "# thus, add the official MariaDB repository"
@@ -30,9 +33,6 @@ yum makecache
 
 echo "# Installing MariaDB Server (10.5)"
 dnf install -y mariadb-server
-
-echo "# Installing NodeJS (system version, currently 10.24.0, tested with v12)"
-dnf install -y nodejs
 
 systemctl start mariadb
 
