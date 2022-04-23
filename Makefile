@@ -80,7 +80,7 @@ endef
 define vm-shutdown
 	$(VM_SSH) 'shutdown -h -t 2 now & exit'
 	{ while kill -0 `cat $(1).pid`; do \
-		echo "wating for $(1) pid `cat $(1).pid` to terminate"; \
+		echo "waiting for $(1) pid `cat $(1).pid` to terminate"; \
 		sleep 1; done }
 	rm -v $(1).nic $(1).ssh $(1).pid
 	sleep 2
@@ -209,25 +209,25 @@ adfice-user.env:
 	echo 'ADFICE_TAR_FILE=/home/adfice/adfice-ace.tar.gz' >> $@
 	echo 'ADFICE_HTTP_PORT=8081' >> $@
 
-centos-vm/basic-centos-8.3-vm.qcow2: centos-vm/Makefile
+centos-vm/basic-rocky-8.5-vm.qcow2: centos-vm/Makefile
 	@echo "begin $@"
 	pushd centos-vm \
-		&& make basic-centos-8.3-vm.qcow2 \
+		&& make basic-rocky-8.5-vm.qcow2 \
 		&& popd
 	@echo "SUCCESS $@"
 
-basic-centos-8.3-vm.qcow2: centos-vm/basic-centos-8.3-vm.qcow2
+basic-rocky-8.5-vm.qcow2: centos-vm/basic-rocky-8.5-vm.qcow2
 	@echo "begin $@"
-	cp -v centos-vm/basic-centos-8.3-vm.qcow2 basic-centos-8.3-vm.qcow2
-	chmod -v a-w basic-centos-8.3-vm.qcow2
+	cp -v centos-vm/basic-rocky-8.5-vm.qcow2 basic-rocky-8.5-vm.qcow2
+	chmod -v a-w basic-rocky-8.5-vm.qcow2
 	@echo "SUCCESS $@"
 
-adfice-centos-8.3-vm.qcow2: basic-centos-8.3-vm.qcow2 \
+adfice-rocky-8.5-vm.qcow2: basic-rocky-8.5-vm.qcow2 \
 		bin/vm-init.sh \
 		adfice-ace.tar.gz \
 		adfice-user.env
 	qemu-img create -f qcow2 -F qcow2 \
-		-b basic-centos-8.3-vm.qcow2 \
+		-b basic-rocky-8.5-vm.qcow2 \
 		tmp-x-vm.qcow2
 	$(call vm-launch,tmp-x-vm.qcow2)
 	$(VM_SCP) bin/vm-init.sh \
@@ -238,22 +238,22 @@ adfice-centos-8.3-vm.qcow2: basic-centos-8.3-vm.qcow2 \
 	$(call vm-shutdown,tmp-x-vm.qcow2)
 	mv -v tmp-x-vm.qcow2 $@
 
-vm-check: adfice-centos-8.3-vm.qcow2 node_modules/.bin/testcafe
+vm-check: adfice-rocky-8.5-vm.qcow2 node_modules/.bin/testcafe
 	qemu-img create -f qcow2 -F qcow2 \
-		-b adfice-centos-8.3-vm.qcow2 \
-		test-adfice-centos-8.3-vm.qcow2
-	$(call vm-launch,test-adfice-centos-8.3-vm.qcow2)
+		-b adfice-rocky-8.5-vm.qcow2 \
+		test-adfice-rocky-8.5-vm.qcow2
+	$(call vm-launch,test-adfice-rocky-8.5-vm.qcow2)
 	$(VM_SSH_ADFICE) "bash -c 'cd /data/webapps/adfice; npm test'"
 	@echo "Make sure it works before a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe.js https://127.0.0.1:$(VM_PORT_HTTPS)
 	@echo
 	@echo "shutting down, to Make sure it works after a restart"
-	$(call vm-shutdown,test-adfice-centos-8.3-vm.qcow2)
+	$(call vm-shutdown,test-adfice-rocky-8.5-vm.qcow2)
 	@echo
-	@echo 'launch #2 test-adfice-centos-8.3-vm.qcow2'
+	@echo 'launch #2 test-adfice-rocky-8.5-vm.qcow2'
 	@echo
-	$(call vm-launch,test-adfice-centos-8.3-vm.qcow2)
+	$(call vm-launch,test-adfice-rocky-8.5-vm.qcow2)
 	@echo "Make sure it works after a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe.js https://127.0.0.1:$(VM_PORT_HTTPS)
@@ -267,7 +267,7 @@ vm-check: adfice-centos-8.3-vm.qcow2 node_modules/.bin/testcafe
 	$(VM_SSH) "bash -c 'ps aux | grep -e adfice-[w]ebserver'"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-cafe.js https://127.0.0.1:$(VM_PORT_HTTPS)
-	$(call vm-shutdown,test-adfice-centos-8.3-vm.qcow2)
+	$(call vm-shutdown,test-adfice-rocky-8.5-vm.qcow2)
 	@echo "SUCCESS $@"
 
 submodules-update:
