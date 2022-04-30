@@ -1,4 +1,5 @@
 Important:
+* Verniewen button successfully changes the data in the database, but not on the screen. Possibly some caching BS.
 * Figure out "on update" statements for research tables
 * Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?
 * make changes to ICD-10 mapping
