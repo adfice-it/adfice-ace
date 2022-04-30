@@ -1,5 +1,4 @@
 Important:
-* check whether build scripts need to be updated
 * Figure out "on update" statements for research tables
 * Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?
 * make changes to ICD-10 mapping
@@ -11,6 +10,8 @@ Important:
   Consider blocking access when doctor_id is null (will have to adjust lots of tests accordingly)
   (For convenience: adjust dummy-mrn to match the patient id so we can still easily get to specific test patients)
 * Add back button to Lees meer page
+* TODOs in prediction explanation page
+* Expunge unused Prediction code
 
 Mid Priority:
 * Getting data out of EHR

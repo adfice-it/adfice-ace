@@ -90,7 +90,7 @@ test('Automatic selection of free text checkbox when text entered', async t => {
 test('test incoming link from EHR', async t => {
     let participant = 100;
     let user = 'dr_bob';
-    let url = `${BASE_URL}/load?mrn=DummyMRN-641923847` +
+    let url = `${BASE_URL}/load?mrn=DummyMRN-000000163` +
         `&user=${user}&participant=${participant}`;
     let window1 = await t.openWindow(url);
     const getLocation = ClientFunction(() => document.location.href);

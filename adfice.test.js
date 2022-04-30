@@ -37,7 +37,7 @@ async function clear_advice_for_patient(adfice, patient_id) {
 }
 
 test('test patient_id for valid mrn', async () => {
-    let mrn = 'DummyMRN-641923847';
+    let mrn = 'DummyMRN-000000163';
     let patient_id = await adfice.id_for_mrn(mrn);
     expect(patient_id).toBe("163");
 });
@@ -49,7 +49,7 @@ test('test patient_id for no mrn', async () => {
 });
 
 test('test patient_id for missing mrn', async () => {
-    let mrn = 'DummyMRN-SirNotAppearing-641923847';
+    let mrn = 'DummyMRN-SirNotAppearing-000000163';
     let patient_id = await adfice.id_for_mrn(mrn);
     expect(patient_id).toBe(null);
 });

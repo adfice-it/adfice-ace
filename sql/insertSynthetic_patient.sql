@@ -165,7 +165,7 @@ INSERT INTO etl_mrn_patient (mrn, patient_id) VALUES
 ('DummyMRN-000024322', "160"),
 ('DummyMRN-000000487', "161"),
 ('DummyMRN-000013686', "162"),
-('DummyMRN-641923847', "163"),
+('DummyMRN-000000163', "163"),
 ('DummyMRN-000004784', "164"),
 ('DummyMRN-000012783', "165"),
 ('DummyMRN-000031620', "166"),
