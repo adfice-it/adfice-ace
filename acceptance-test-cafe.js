@@ -51,7 +51,7 @@ async function change_view(t, button, url_fragment) {
 }
 
 async function load(t) {
-    let mrn = 'DummyMRN-000014366';
+    let mrn = 'DummyMRN-000000163';
     let participant = 100;
     let user = 'dr_bob';
 
