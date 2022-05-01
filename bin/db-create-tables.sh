@@ -26,6 +26,7 @@ done
 
 echo '# load schema'
 for SQL in \
+	drop_all_tables.sql \
 	createRulesTable.sql \
 	createPatientTables.sql \
 	createETLTables.sql \

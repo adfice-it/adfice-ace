@@ -183,6 +183,7 @@ ADFICE_TAR_CONTENTS=COPYING \
 		export-to-mrs \
 		INSTALL.md \
 		Makefile \
+		Makefile.basic \
 		notes \
 		package.json \
 		README.md \
