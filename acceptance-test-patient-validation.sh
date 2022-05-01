@@ -13,7 +13,8 @@ sleep 1
 FILE="patient-validation_id.68.out"
 
 rm -fv "$FILE"
-URL="localhost:${PORT}/patient-validation?id=68"
+PATIENT_ID="00000000-0000-4000-8000-100000000068"
+URL="localhost:${PORT}/patient-validation?id=${PATIENT_ID}"
 curl --silent $URL > "$FILE"
 CURL_EXIT_CODE=$?
 

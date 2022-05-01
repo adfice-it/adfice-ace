@@ -17,6 +17,11 @@ function assert(condition, message) {
     }
 }
 
+/* istanbul ignore next */
+function dump(data) {
+    console.log(JSON.stringify(data, null, 4));
+}
+
 function split_freetext(str) {
     if (str == null) {
         return []
@@ -169,6 +174,7 @@ function assert_array_has_16_bytes(bytes) {
 module.exports = {
     assert: assert,
     child_process_spawn: child_process_spawn,
+    dump: dump,
     from_json_file: from_json_file,
     split_freetext: split_freetext,
     to_json_file: to_json_file,

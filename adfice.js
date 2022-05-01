@@ -221,7 +221,8 @@ async function get_sql_condition(rule_number) {
           FROM med_rules
          WHERE medication_criteria_id=?
          `;
-    let results = await this.sql_select(sql, [rule_number]);
+    let params = [rule_number];
+    let results = await this.sql_select(sql, params);
     return results[0]['sql_condition'];
 }
 
@@ -292,7 +293,7 @@ async function get_patient_by_id(patient_id) {
     var sql = `/* adfice.get_patient_by_id */
         SELECT *
           FROM patient
-         WHERE id=?`;
+         WHERE patient_id=?`;
     let params = [patient_id];
     let results = await this.sql_select(sql, params);
     let patient;
@@ -499,6 +500,7 @@ async function set_advice_for_patient(patient_id, doctor,
 }
 
 async function update_prediction_with_user_values(patient_id, form_data) {
+
     let fields = Object.keys(form_data);
 
     let sql = `/* adfice.update_prediction_with_user_values */
@@ -528,7 +530,8 @@ async function update_prediction_with_user_values(patient_id, form_data) {
     }
     if (params.length > 0) {
         sql += 'user_values_updated = (select now())';
-        sql += " WHERE patient_id = " + patient_id;
+        sql += " WHERE patient_id = ? ";
+        params.push(patient_id);
         let sql_and_params = [sql, params];
         let list_of_updates = [sql_and_params];
         let db = await this.db_init();
@@ -693,9 +696,11 @@ async function get_advice_for_patient(patient_id) {
 
     let evaluated = await ae.evaluate_rules(meds, rules, patient_id,
         async (pId, ruleNum) => {
-            return await this.is_sql_condition_true(pId, ruleNum);
+            let result = await this.is_sql_condition_true(pId, ruleNum);
+            return result;
         }
     );
+
     let meds_with_rules_to_fire = evaluated.meds_with_rules_to_fire;
     let meds_with_fired = evaluated.meds_with_fired;
     let meds_without_fired = evaluated.meds_without_fired;
@@ -975,7 +980,7 @@ async function finalize_advice(patient_id) {
     let sql = `/* adfice.finalize_advice */
     UPDATE patient
        SET is_final = 1
-     WHERE id = ?`
+     WHERE patient_id = ?`
     let params = [patient_id];
     let db = await this.db_init();
     let result = await db.sql_query(sql, params);

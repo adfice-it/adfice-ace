@@ -69,7 +69,7 @@ CREATE TRIGGER patient_history_insert
           0,
           NEW.id,
           NEW.display_name,
-		  NEW.participant_number,
+          NEW.participant_number,
           NEW.birth_date,
           NEW.age,
           NEW.is_final,
@@ -87,7 +87,7 @@ CREATE TRIGGER patient_history_update
           1,
           OLD.id,
           OLD.display_name,
-		  OLD.participant_number,
+          OLD.participant_number,
           OLD.birth_date,
           OLD.age,
           OLD.is_final,
@@ -105,7 +105,7 @@ CREATE TRIGGER patient_history_delete
           2,
           OLD.id,
           OLD.display_name,
-	      OLD.participant_number,
+          OLD.participant_number,
           OLD.birth_date,
           OLD.age,
           OLD.is_final,
@@ -377,7 +377,7 @@ CREATE TRIGGER patient_measurement_history_insert
           NEW.has_ca_blocker,
           NEW.has_incont_med,
           NEW.prediction_result,
-		  NEW.user_values_updated,
+          NEW.user_values_updated,
           NEW.row_created,
           NEW.row_updated
         );
@@ -436,7 +436,7 @@ CREATE TRIGGER patient_measurement_history_update
           OLD.has_ca_blocker,
           OLD.has_incont_med,
           OLD.prediction_result,
-		  OLD.user_values_updated,
+          OLD.user_values_updated,
           OLD.row_created,
           OLD.row_updated
         );
@@ -495,7 +495,7 @@ CREATE TRIGGER patient_measurement_history_delete
           OLD.has_ca_blocker,
           OLD.has_incont_med,
           OLD.prediction_result,
-		  OLD.user_values_updated,
+          OLD.user_values_updated,
           OLD.row_created,
           OLD.row_updated
         );
@@ -643,7 +643,7 @@ CREATE TRIGGER patient_problem_history_insert
           NEW.start_date,
           NEW.name,
           NEW.icd_10,
-		  NEW.ehr_text,
+          NEW.ehr_text,
           NEW.row_created
         );
 
@@ -661,7 +661,7 @@ CREATE TRIGGER patient_problem_history_update
           OLD.start_date,
           OLD.name,
           OLD.icd_10,
-		  OLD.ehr_text,
+          OLD.ehr_text,
           OLD.row_created
         );
 
@@ -679,7 +679,7 @@ CREATE TRIGGER patient_problem_history_delete
           OLD.start_date,
           OLD.name,
           OLD.icd_10,
-		  OLD.ehr_text,
+          OLD.ehr_text,
           OLD.row_created
         );
 
@@ -689,7 +689,7 @@ CREATE TRIGGER patient_problem_history_delete
 CREATE TABLE patient_advice_selection (
   id int unsigned NOT NULL AUTO_INCREMENT,
   doctor_id varchar(36) DEFAULT NULL,
-  patient_id int unsigned NOT NULL,
+  patient_id varchar(36) NOT NULL,
   ATC_code varchar(10) NOT NULL,
   medication_criteria_id varchar(8) NOT NULL,
   select_box_num smallint unsigned NOT NULL,
@@ -705,7 +705,7 @@ CREATE TABLE patient_advice_selection_history (
   log_op tinyint NOT NULL,
   id int unsigned NOT NULL,
   doctor_id varchar(36) DEFAULT NULL,
-  patient_id int unsigned NOT NULL,
+  patient_id varchar(36) NOT NULL,
   ATC_code varchar(10) NOT NULL,
   medication_criteria_id varchar(8) NOT NULL,
   select_box_num smallint unsigned NOT NULL,
@@ -726,7 +726,7 @@ CREATE TRIGGER patient_advice_selection_history_insert
           NULL,
           0,
           NEW.id,
-		  NEW.doctor_id,
+          NEW.doctor_id,
           NEW.patient_id,
           NEW.ATC_code,
           NEW.medication_criteria_id,
@@ -746,7 +746,7 @@ CREATE TRIGGER patient_advice_selection_history_update
           NULL,
           1,
           OLD.id,
-		  OLD.doctor_id,
+          OLD.doctor_id,
           OLD.patient_id,
           OLD.ATC_code,
           OLD.medication_criteria_id,
@@ -767,7 +767,7 @@ CREATE TRIGGER patient_advice_selection_history_delete
           NULL,
           2,
           OLD.id,
-		  OLD.doctor_id,
+          OLD.doctor_id,
           OLD.patient_id,
           OLD.ATC_code,
           OLD.medication_criteria_id,
@@ -782,7 +782,7 @@ CREATE TRIGGER patient_advice_selection_history_delete
 CREATE TABLE patient_advice_freetext (
   id int unsigned NOT NULL AUTO_INCREMENT,
   doctor_id varchar(36) DEFAULT NULL,
-  patient_id int unsigned NOT NULL,
+  patient_id varchar(36) NOT NULL,
   ATC_code varchar(10) NOT NULL,
   medication_criteria_id varchar(8) NOT NULL,
   select_box_num smallint unsigned NOT NULL,
@@ -799,7 +799,7 @@ CREATE TABLE patient_advice_freetext_history (
   log_op tinyint NOT NULL,
   id int unsigned NOT NULL,
   doctor_id varchar(36) DEFAULT NULL,
-  patient_id int unsigned NOT NULL,
+  patient_id varchar(36) NOT NULL,
   ATC_code varchar(10) NOT NULL,
   medication_criteria_id varchar(8) NOT NULL,
   select_box_num smallint unsigned NOT NULL,
@@ -821,7 +821,7 @@ CREATE TRIGGER patient_advice_freetext_history_insert
           NULL,
           0,
           NEW.id,
-		  NEW.doctor_id,
+          NEW.doctor_id,
           NEW.patient_id,
           NEW.ATC_code,
           NEW.medication_criteria_id,
@@ -842,7 +842,7 @@ CREATE TRIGGER patient_advice_freetext_history_update
           NULL,
           1,
           OLD.id,
-		  OLD.doctor_id,
+          OLD.doctor_id,
           OLD.patient_id,
           OLD.ATC_code,
           OLD.medication_criteria_id,
@@ -864,7 +864,7 @@ CREATE TRIGGER patient_advice_freetext_history_delete
           NULL,
           2,
           OLD.id,
-		  OLD.doctor_id,
+          OLD.doctor_id,
           OLD.patient_id,
           OLD.ATC_code,
           OLD.medication_criteria_id,

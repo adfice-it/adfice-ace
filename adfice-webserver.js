@@ -96,9 +96,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     app.use("/load-error", express.static('static/load-error.html'));
 
     app.get('/load', async function(req, res) {
-		res.set('Cache-Control', 'no-cache, must-revalidate, max-age=-1');
-		res.set('Pragma', 'no-cache, must-revalidate');
-		res.set('Expires', '-1');
+        res.set('Cache-Control', 'no-cache, must-revalidate, max-age=-1');
+        res.set('Pragma', 'no-cache, must-revalidate');
+        res.set('Expires', '-1');
 
         let mrn = req.query.mrn;
         let id = await adfice.id_for_mrn(mrn);
@@ -271,11 +271,24 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                                 await adfice.add_log_event_renew(doctor_id, patient_id);
                                 let returned_patient = await etl.etl_renew(patient_id);
                                 if (returned_patient != patient_id) {
-                                    alert("Er is op dit moment geen verbinding met het EPD. De data is niet vernieuwd.");
+                                    let err_text_en = "etl.etl_renew( " +
+                                        patient_id +
+                                        " ) unexpectedly returned " +
+                                        returned_patient;
+                                    console.log(err_text_en);
+
+                                    let err_msg = {};
+                                    err_msg.type = 'error_message';
+                                    err_msg.err_text = err_text_en;
+                                    msg_header(err_msg, kind, patient_id);
+                                    let msg_string = JSON.stringify(err_msg, null, 4);
+                                    ws.send(msg_string);
+                                } else {
+                                    let new_msg = await patient_advice_message(kind,
+                                        patient_id);
+                                    // console.log(new_msg);
+                                    send_all(kind, patient_id, new_msg);
                                 }
-                                let new_msg = await patient_advice_message(kind,
-                                    patient_id);
-                                send_all(kind, patient_id, new_msg);
                             } else if (message.type == 'was_printed') {
                                 await adfice.add_log_event_print(doctor_id, patient_id);
                             } else if (message.type == 'was_copied_patient') {

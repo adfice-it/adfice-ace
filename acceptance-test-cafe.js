@@ -50,21 +50,23 @@ async function change_view(t, button, url_fragment) {
     await change_flex_style_to_inline(t);
 }
 
-async function load(t) {
-    let mrn = 'DummyMRN-000000163';
-    let participant = 100;
+async function load(t, mrn, participant) {
     let user = 'dr_bob';
-
-    await t.openWindow(`${BASE_URL}/load` +
+    let url = `${BASE_URL}/load` +
         `?mrn=${mrn}` +
         `&user=${user}` +
-        `&participant=${participant}`);
+        `&participant=${participant}`;
+    // console.log("load:", url);
+    return await t.openWindow(url);
 }
 
 test('Automatic selection of free text checkbox when text entered', async t => {
-    await load(t);
-    let url = `${BASE_URL}/prep?id=24`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000024';
+    let participant = 10024;
+    let window1 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000024";
+    let url = `${BASE_URL}/prep?id=${patient_id}`;
+    await t.navigateTo(url);
     let ta_checkbox = Selector('#cb_N05AX08_16_2');
     let ta = Selector('#ft_N05AX08_16_2_1');
     let ta_checkbox_state1 = await ta_checkbox.checked;
@@ -99,9 +101,12 @@ test('test incoming link from EHR', async t => {
 });
 
 test('Test selecting views', async t => {
-    await load(t);
-    let url = `${BASE_URL}/prep?id=85`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000085';
+    let participant = 10085;
+    let window1 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000085";
+    let url = `${BASE_URL}/prep?id=${patient_id}`;
+    await t.navigateTo(url);
     await change_flex_style_to_inline(t);
 
     let button_start_view = Selector('button#button-start-view');
@@ -187,7 +192,7 @@ test('Test selecting views', async t => {
     await t.expect(rowOther.visible).ok();
 
     // try switching to the advise view
-    await change_view(t, button_advise_view, `${BASE_URL}/advise?id=85`);
+    await change_view(t, button_advise_view, `${BASE_URL}/advise?id=${patient_id}`);
     await t.expect(div_advice_M01AB05.visible).notOk();
     await t.expect(div_ehr_box.visible).notOk();
     // the patient texts are only visible if checked in prep view
@@ -196,21 +201,21 @@ test('Test selecting views', async t => {
     await t.expect(patientOther.visible).notOk();
 
     // try switching to the consult view
-    await change_view(t, button_consult_view, `${BASE_URL}/consult?id=85`);
+    await change_view(t, button_consult_view, `${BASE_URL}/consult?id=${patient_id}`);
     await t.expect(div_advice_M01AB05.visible).notOk();
     await t.expect(div_ehr_box.visible).notOk();
     await t.expect(row0.visible).notOk();
     await t.expect(row1.visible).ok();
 
     // try switching back to the prep view
-    await change_view(t, button_prep_view, `${BASE_URL}/prep?id=85`);
+    await change_view(t, button_prep_view, `${BASE_URL}/prep?id=${patient_id}`);
     await t.expect(div_advice_M01AB05.visible).ok();
     await t.expect(div_ehr_box.visible).notOk();
     await t.expect(row0.visible).ok();
     await t.expect(row1.visible).ok();
     await t.expect(rowOther.visible).ok();
 
-    await change_view(t, button_finalize_view, `${BASE_URL}/finalize?id=85`);
+    await change_view(t, button_finalize_view, `${BASE_URL}/finalize?id=${patient_id}`);
     // the ehr texts are only ever visible if checked
     await t.expect(div_ehr_box.visible).ok();
     await t.expect(ehr0.visible).notOk();
@@ -218,8 +223,8 @@ test('Test selecting views', async t => {
     await t.expect(ehrOther.visible).notOk();
 });
 
-async function check_checkbox_and_freetext(t, id) {
-    await load(t);
+async function check_checkbox_and_freetext(t, mrn, participant, id) {
+    await load(t, mrn, participant);
     // ensure our cb is selected
     let cb_id = Selector('#cb_' + id);
     if (!(await cb_id.checked)) {
@@ -245,27 +250,36 @@ async function check_checkbox_and_freetext(t, id) {
 }
 
 test('Test free text fields', async t => {
-    await load(t);
-    let url = `${BASE_URL}/prep?id=23`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000023';
+    let participant = 10023;
+    let window1 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000023";
+    let url = `${BASE_URL}/prep?id=${patient_id}`;
+    await t.navigateTo(url);
 
     let id = 'N05AD01_16_2';
-    check_checkbox_and_freetext(t, id);
+    check_checkbox_and_freetext(t, mrn, participant, id);
 });
 
 test('Test non-med free text fields', async t => {
-    await load(t);
-    let url = `${BASE_URL}/prep?id=10`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000010';
+    let participant = 10010;
+    let window1 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000010";
+    let url = `${BASE_URL}/prep?id=${patient_id}`;
+    await t.navigateTo(url);
 
     let id = 'NONMED_D_1';
     check_checkbox_and_freetext(t, id);
 });
 
 test('Test med lists', async t => {
-    await load(t);
-    let url = `${BASE_URL}/prep?id=9`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000009';
+    let participant = 10009;
+    let window1 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000009";
+    let url = `${BASE_URL}/prep?id=${patient_id}`;
+    await t.navigateTo(url);
 
     // ensure our cb is selected
     let meds_with_rules = Selector("#meds_with_rules");
@@ -278,9 +292,12 @@ test('Test med lists', async t => {
 });
 
 test('Checkbox preselected', async t => {
-    await load(t);
-    let url = `${BASE_URL}/prep?id=51`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000051';
+    let participant = 10051;
+    let window1 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000051";
+    let url = `${BASE_URL}/prep?id=${patient_id}`;
+    await t.navigateTo(url);
 
     let unchecked_id = "cb_C02AA02_46_5";
     let unchecked_checkbox = Selector(`input#${unchecked_id}`, {
@@ -298,9 +315,12 @@ test('Checkbox preselected', async t => {
 });
 
 test('Test finalize and renew', async t => {
-    await load(t);
-    let url = `${BASE_URL}/prep?id=167`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000167';
+    let participant = 10167;
+    let window0 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000167";
+    let url = `${BASE_URL}/prep?id=${patient_id}`;
+    await t.navigateTo(url);
 
     let checkbox_id = "cb_NONMED_V_1";
     let checkbox_css_selector = `input#${checkbox_id}`;
@@ -320,14 +340,13 @@ test('Test finalize and renew', async t => {
 
     await t.expect(cb_selector.hasAttribute('disabled')).ok();
 
-    // typically, renew would _not_ be called after a finalize,
-    // however, this is a handy way to reset the test case.
+    // console.log('typically, renew would _not_ be called after a finalize,');
+    // console.log('however, this is a handy way to reset the test case.');
     let button_start_view = Selector('button#button-start-view');
     await t.click(button_start_view);
 
     let button_renew = Selector('button#page_renew');
     await t.expect(button_renew.exists).ok();
-
     await t.click(button_renew);
 
     // go back to the prep page
@@ -336,9 +355,12 @@ test('Test finalize and renew', async t => {
 });
 
 test('Check "Geen advies"', async t => {
-    await load(t);
-    let url = `${BASE_URL}/prep?id=162`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000162';
+    let participant = 10162;
+    let window1 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000162";
+    let url = `${BASE_URL}/prep?id=${patient_id}`;
+    await t.navigateTo(url);
     await change_flex_style_to_inline(t);
 
     // levodopa has no advice pre-checked
@@ -379,19 +401,26 @@ test('Check "Geen advies"', async t => {
 });
 
 test('Test problem list', async t => {
-    await load(t);
-    let url = `${BASE_URL}/start?id=5`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000005';
+    let participant = 10005;
+    let window0 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000005";
+    let url = `${BASE_URL}/start?id=${patient_id}`;
+    await t.navigateTo(url);
 
     let problem_table = Selector("#problem_table");
+    await t.expect(problem_table.withText("Angststoornis").exists).ok();
     await t.expect(problem_table.withText("Angststoornis	Ja").exists).ok();
     await t.expect(problem_table.withText("Schizoaffectieve aandoening	Nee").exists).ok();
 });
 
 test('Test lab list', async t => {
-    await load(t);
-    let url = `${BASE_URL}/start?id=27`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000027';
+    let participant = 10027;
+    let window1 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000027";
+    let url = `${BASE_URL}/start?id=${patient_id}`;
+    await t.navigateTo(url);
 
     let lab_table = Selector("#lab_table");
     await t.expect(lab_table.withText("natrium").exists).ok();
@@ -399,9 +428,12 @@ test('Test lab list', async t => {
 });
 
 test('Test prediction values missing', async t => {
-    await load(t);
-    let url = `${BASE_URL}/start?id=27`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000027';
+    let participant = 10027;
+    let window1 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000027";
+    let url = `${BASE_URL}/start?id=${patient_id}`;
+    await t.navigateTo(url);
 
     let missing_table = Selector("#prediction_missing_container");
     await t.expect(missing_table.withText("grijpkracht").exists).ok();
@@ -409,9 +441,12 @@ test('Test prediction values missing', async t => {
 });
 
 test('Test prediction values present', async t => {
-    await load(t);
-    let url = `${BASE_URL}/start?id=2`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000002';
+    let participant = 10002;
+    let window1 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000002";
+    let url = `${BASE_URL}/start?id=${patient_id}`;
+    await t.navigateTo(url);
 
     let prediction_table = Selector("#prediction_data_container");
     await t.expect(prediction_table.withText("21.5").exists).ok();
@@ -419,9 +454,12 @@ test('Test prediction values present', async t => {
 });
 
 test('Test prediction values present when user-entered', async t => {
-    await load(t);
-    let url = `${BASE_URL}/start?id=170`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000170';
+    let participant = 10170;
+    let window1 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000170";
+    let url = `${BASE_URL}/start?id=${patient_id}`;
+    await t.navigateTo(url);
 
     let prediction_table = Selector("#prediction_data_container");
     await t.expect(prediction_table.withText("16.6").exists).ok();
@@ -429,9 +467,12 @@ test('Test prediction values present when user-entered', async t => {
 });
 
 test('Test user entering values', async t => {
-    await load(t);
-    let url = `${BASE_URL}/start?id=173`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000173';
+    let participant = 10173;
+    let window1 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000173";
+    let url = `${BASE_URL}/start?id=${patient_id}`;
+    await t.navigateTo(url);
     await change_flex_style_to_inline(t);
 
     let missing_table = Selector("#prediction_missing_container");
@@ -460,12 +501,14 @@ test('Test user entering values', async t => {
     // but if we add functionality to clear values then we can add the negative checks
 });
 
-
 test('Test reload data', async t => {
-    await load(t);
+    let mrn = 'DummyMRN-000000174';
+    let participant = 10174;
+    let window0 = await load(t, mrn, participant);
     //this test assumes we are using the stub_etl
-    let url = `${BASE_URL}/prep?id=174`;
-    let window1 = await t.openWindow(url);
+    let patient_id = "00000000-0000-4000-8000-100000000174";
+    let url = `${BASE_URL}/prep?id=${patient_id}`;
+    await t.navigateTo(url);
     await change_flex_style_to_inline(t);
 
     let cb_levo_stop = Selector('#cb_N04BA01_27_2');
@@ -491,9 +534,12 @@ test('Test reload data', async t => {
 
 // This test fails; the checkbox is not visible. I don't know why; emperically they are there
 test('Nonmed headers display correctly on patient page', async t => {
-    await load(t);
+    let mrn = 'DummyMRN-000000160';
+    let participant = 10160;
+    let window1 = await load(t, mrn, participant);
     // check some nonmed advice
-    let url = `${BASE_URL}/prep?id=160`;
+    let patient_id = "00000000-0000-4000-8000-100000000160";
+    let url = `${BASE_URL}/prep?id=${patient_id}`;
     await change_flex_style_to_inline(t);
     let cb_selector = Selector('#cb_NONMED_B_2');
     /*	await t.expect(cb_selector.visible).ok();
@@ -524,12 +570,14 @@ test('Nonmed headers display correctly on patient page', async t => {
     */
 });
 
-
 // slow tests run last
 test('Check multiple viewers making changes', async t => {
-    await load(t);
-    let url = `${BASE_URL}/prep?id=68`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000068';
+    let participant = 10068;
+    let window1 = await load(t, mrn, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000068";
+    let url = `${BASE_URL}/prep?id=${patient_id}`;
+    await t.navigateTo(url);
 
     let selector = Selector('body');
     await t.expect(selector.exists).ok();
@@ -563,7 +611,7 @@ test('Check multiple viewers making changes', async t => {
     }
     await t.expect(cb_selector.checked).notOk();
 
-    // type some text into the freetext field for this row.
+    // console.log('type some text into the freetext field for this row.');
     let freetext_selector_1 = Selector(freetext_css_selector);
     await t.selectText(freetext_selector_1);
     await t.typeText(freetext_selector_1, oldFreetext);
@@ -574,7 +622,7 @@ test('Check multiple viewers making changes', async t => {
     await t.expect(Selector(view_cnt_css_sel).withText("1").visible).notOk();
 
     // open a second window and check a box
-    let window2 = await t.openWindow(`${BASE_URL}/prep?id=68`);
+    let window2 = await t.openWindow(`${BASE_URL}/prep?id=${patient_id}`);
     await change_flex_style_to_inline(t);
 
     // verify that we show 2 visitors
@@ -617,15 +665,17 @@ test('Check multiple viewers making changes', async t => {
     await t.expect(Selector(view_cnt_css_sel).withText("1").visible).notOk();
 });
 
-
 test('Checkbox persistence', async t => {
-    await load(t);
+    let mrn = 'DummyMRN-000000078';
+    let participant = 10078;
+    let window1 = await load(t, mrn, participant);
     let checkbox_id = "cb_N02AA01_76_1";
     let checkbox_css_selector = `input#${checkbox_id}`;
-    let url = `${BASE_URL}/prep?id=78`;
+    let patient_id = "00000000-0000-4000-8000-100000000078";
+    let url = `${BASE_URL}/prep?id=${patient_id}`;
 
     // Open the patient window, uncheck the box if needed
-    let window1 = await t.openWindow(url);
+    await t.navigateTo(url);
     await change_flex_style_to_inline(t);
     let checkbox1 = Selector('#cb_N02AA01_76_1');
     if (await checkbox1.checked) {

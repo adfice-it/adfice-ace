@@ -4,6 +4,7 @@
 "use strict";
 
 const adfice_factory = require('./adfice');
+const autil = require('./adfice-util');
 const util = require("util");
 const fs = require('fs');
 
@@ -17,7 +18,7 @@ async function clear_advice_for_patient(adfice, patient_id) {
     let sql = `/* adfice.clear_advice_for_patient */
         UPDATE patient
            SET is_final = 0
-         WHERE id = ?`;
+         WHERE patient_id = ?`;
     let params = [patient_id];
     sqls_and_params.push([sql, params]);
 
@@ -39,7 +40,7 @@ async function clear_advice_for_patient(adfice, patient_id) {
 test('test patient_id for valid mrn', async () => {
     let mrn = 'DummyMRN-000000163';
     let patient_id = await adfice.id_for_mrn(mrn);
-    expect(patient_id).toBe("163");
+    expect(patient_id).toBe("00000000-0000-4000-8000-100000000163");
 });
 
 test('test patient_id for no mrn', async () => {
@@ -97,15 +98,15 @@ test('test advice text 6e', async () => {
 })
 
 test('box_states_to_selection_states', () => {
-    const patient_id = 32;
+    const patient_id = "00000000-0000-4000-8000-100000000032";
     const doctor_id = 1;
     const box_states = {
         "cb_C03AA03_42_2": false,
         "cb_C03AA03_42b_3": true
     };
     const expected = [
-        [32, 1, "C03AA03", "42", 2, 0],
-        [32, 1, "C03AA03", "42b", 3, 1]
+        [patient_id, 1, "C03AA03", "42", 2, 0],
+        [patient_id, 1, "C03AA03", "42b", 3, 1]
     ];
     let out = adfice.box_states_to_selection_states(patient_id, doctor_id,
         box_states);
@@ -113,14 +114,15 @@ test('box_states_to_selection_states', () => {
 });
 
 test('selection_states_to_box_states', () => {
+    const patient_id = "00000000-0000-4000-8000-100000000032";
     const selection_states = [{
-        patient_id: 32,
+        patient_id: patient_id,
         ATC_code: "C03AA03",
         medication_criteria_id: "42",
         select_box_num: 2,
         selected: 0
     }, {
-        patient_id: 32,
+        patient_id: patient_id,
         ATC_code: "C03AA03",
         medication_criteria_id: "42b",
         select_box_num: 3,
@@ -139,8 +141,8 @@ test('selection_states_to_box_states', () => {
 
 test('get_advice_for_patient(68), no labs, no problems', async () => {
     //console.log('68');
-    let patient_num = 68;
-    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
+    let patient_id = "00000000-0000-4000-8000-100000000068";
+    let patientAdvice = await adfice.get_advice_for_patient(patient_id);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(2);
     let adv0 = advice[0];
@@ -170,12 +172,12 @@ test('get_advice_for_patient(68), no labs, no problems', async () => {
 
 test('set_advice_for_patient(68)', async () => {
     //console.log('68 part 2');
-    let patient_num = 68;
+    let patient_id = "00000000-0000-4000-8000-100000000068";
     let viewer = 999;
     let doctor_id = 1;
-    let advice = await adfice.get_advice_for_patient(patient_num);
+    let advice = await adfice.get_advice_for_patient(patient_id);
 
-    await clear_advice_for_patient(adfice, patient_num);
+    await clear_advice_for_patient(adfice, patient_id);
     let old_advice = {
         "cb_C03AA03_42_2": false,
         "cb_C03AA03_42_3": true,
@@ -191,9 +193,9 @@ test('set_advice_for_patient(68)', async () => {
     };
 
     let freetexts = null;
-    adfice.set_advice_for_patient(patient_num, doctor_id, old_advice, freetexts);
+    adfice.set_advice_for_patient(patient_id, doctor_id, old_advice, freetexts);
 
-    advice = await adfice.get_advice_for_patient(patient_num);
+    advice = await adfice.get_advice_for_patient(patient_id);
     expect(advice.selected_advice).toStrictEqual(old_advice);
 
     let new_advice = {
@@ -209,29 +211,30 @@ test('set_advice_for_patient(68)', async () => {
         "cb_C09AA02_63_4": false,
         "cb_C09AA02_63b_1": false
     };
-    adfice.set_advice_for_patient(patient_num, doctor_id, new_advice, freetexts);
+    adfice.set_advice_for_patient(patient_id, doctor_id, new_advice, freetexts);
 
-    advice = await adfice.get_advice_for_patient(patient_num);
+    advice = await adfice.get_advice_for_patient(patient_id);
+
     expect(advice.selected_advice).toStrictEqual(new_advice);
 
     expect(advice.is_final).toBeFalsy();
-    await adfice.finalize_advice(patient_num);
-    advice = await adfice.get_advice_for_patient(patient_num);
+    await adfice.finalize_advice(patient_id);
+    advice = await adfice.get_advice_for_patient(patient_id);
     expect(advice.is_final).toBeTruthy();
 
-    let data = await adfice.get_export_data(patient_num);
+    let data = await adfice.get_export_data(patient_id);
     expect(data.length).toBe(2);
 
-    await clear_advice_for_patient(adfice, patient_num);
-    advice = await adfice.get_advice_for_patient(patient_num);
+    await clear_advice_for_patient(adfice, patient_id);
+    advice = await adfice.get_advice_for_patient(patient_id);
     expect(advice.is_final).toBeFalsy();
     expect(advice.selected_advice).not.toStrictEqual(new_advice);
 
-    adfice.set_advice_for_patient(patient_num, doctor_id, new_advice, freetexts);
+    adfice.set_advice_for_patient(patient_id, doctor_id, new_advice, freetexts);
 })
 
 test('update_prediction_with_user_values, update all missing data', async () => {
-    let patient_id = 172;
+    let patient_id = "00000000-0000-4000-8000-100000000172";
     let form_data = {};
     form_data['user_GDS_score'] = '1';
     form_data['user_grip_kg'] = '15';
@@ -254,7 +257,7 @@ test('update_prediction_with_user_values, update all missing data', async () => 
     expect(measurement['prediction_result']).toBeGreaterThan(10);
     expect(measurement['user_grip_kg']).toBe(15);
 
-    patient_id = 170;
+    patient_id = "00000000-0000-4000-8000-100000000170";
     form_data = {};
     form_data['user_GDS_score'] = '';
     form_data['user_grip_kg'] = '';
@@ -278,7 +281,7 @@ test('update_prediction_with_user_values, update all missing data', async () => 
     expect(measurement['prediction_result']).toBe(prediction_result);
     expect(measurement['user_grip_kg']).toBe(25);
 
-    patient_id = 172;
+    patient_id = "00000000-0000-4000-8000-100000000172";
     form_data = {};
     form_data['fear_dropdown'] = '0';
     await adfice.update_prediction_with_user_values(patient_id, form_data);
@@ -295,15 +298,15 @@ test('update_prediction_with_user_values, update all missing data', async () => 
     expect(measurement['user_fear0']).toBe(0);
 
     // clean up
-    let params = [172];
+    let params = [patient_id];
     let sql = 'UPDATE patient_measurement SET user_GDS_score = null, user_grip_kg = null, user_walking_speed_m_per_s = null, user_height_cm = null, user_weight_kg = null, user_systolic_bp_mmHg = null, user_number_of_limitations = null, user_nr_falls_12m = null, user_nr_falls_12m = null, user_smoking = null, user_education_hml = null, user_fear0 = null, user_fear1 = null, user_fear2 = null, prediction_result = null, user_values_updated = null WHERE patient_id = ?';
     await adfice.sql_select(sql, params);
 })
 
 test('get_advice_for_patient(27), with labs and problems', async () => {
     //console.log('27');
-    let patient_num = 27;
-    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
+    let patient_id = "00000000-0000-4000-8000-100000000027";
+    let patientAdvice = await adfice.get_advice_for_patient(patient_id);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(1);
     let adv0 = advice[0];
@@ -325,8 +328,8 @@ test('get_advice_for_patient(27), with labs and problems', async () => {
 })
 
 test('get_advice_for_patient(1), no med rule advice', async () => {
-    let patient_num = 1;
-    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
+    let patient_id = "00000000-0000-4000-8000-100000000001";
+    let patientAdvice = await adfice.get_advice_for_patient(patient_id);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(0);
     let non_med_advice = patientAdvice.advice_text_non_med;
@@ -340,16 +343,16 @@ test('get_advice_for_patient(1), no med rule advice', async () => {
 
 test('get_advice_for_patient(60), sparse patient', async () => {
     //console.log('60');
-    let patient_num = 60;
-    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
+    let patient_id = "00000000-0000-4000-8000-100000000060";
+    let patientAdvice = await adfice.get_advice_for_patient(patient_id);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(1);
 })
 
 test('get_advice_for_patient(9), patient with non-rule med', async () => {
     //console.log('9');
-    let patient_num = 9;
-    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
+    let patient_id = "00000000-0000-4000-8000-100000000009";
+    let patientAdvice = await adfice.get_advice_for_patient(patient_id);
     let medication_advice_atc = [];
     for (let i = 0; i < patientAdvice.medication_advice.length; ++i) {
         let row = patientAdvice.medication_advice[i];
@@ -368,23 +371,23 @@ test('get_advice_for_patient(9), patient with non-rule med', async () => {
 
 test('get_advice_for_patient(null)', async () => {
     //console.log('null');
-    let patient_num = null;
-    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
+    let patient_id = null;
+    let patientAdvice = await adfice.get_advice_for_patient(patient_id);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(0);
 })
 
 test('get_advice_for_patient(-1)', async () => {
     //console.log('-1');
-    let patient_num = -1;
-    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
+    let patient_id = -1;
+    let patientAdvice = await adfice.get_advice_for_patient(patient_id);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(0);
 })
 
 test('get_advice_for_patient(bogus)', async () => {
-    let patient_num = 'bogus';
-    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
+    let patient_id = 'bogus';
+    let patientAdvice = await adfice.get_advice_for_patient(patient_id);
     let advice = patientAdvice.medication_advice;
     expect(advice.length).toBe(0);
 })
@@ -393,7 +396,7 @@ test('freetext round trip', async () => {
 
     let viewer = "2";
     let doctor_id = "1";
-    let patient = "26";
+    let patient = "00000000-0000-4000-8000-100000000026";
     let freetexts = {
         ft_C03AA03_42_1_1: "",
         ft_C03AA03_42_2_1: "serie van",
@@ -424,8 +427,8 @@ test('no rules fired', async () => {
 });
 
 test('get_advice_for_patient(85), normal eGFR', async () => {
-    let patient_num = 85;
-    let patientAdvice = await adfice.get_advice_for_patient(patient_num);
+    let patient_id = "00000000-0000-4000-8000-100000000085";
+    let patientAdvice = await adfice.get_advice_for_patient(patient_id);
     let advice = patientAdvice.medication_advice;
     // TODO check for malformed patient data. In this case labTests was not
     // being constructed correctly. Or just replace the criteria with SQL and
@@ -440,210 +443,219 @@ test('getSQLcondition rule 38', async () => {
 });
 
 test('is_sql_condition_true', async () => {
-    let patient_identifier = 44;
+    let patient_id = "00000000-0000-4000-8000-100000000044";
     let rule_number = 38;
-    let isConditionTrue = await adfice.is_sql_condition_true(patient_identifier,
+    let isConditionTrue = await adfice.is_sql_condition_true(patient_id,
         rule_number);
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
 });
 
 test('SQL error check', async () => {
-    let isConditionTrue = await adfice.is_sql_condition_true(5, "6");
+    let isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000005", "6");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(6, "6a");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000006", "6a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(4, "6b");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000004", "6b");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(8, "9");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000008", "9");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(5, "9");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000005", "9");
     expect(isConditionTrue).toBe(false);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(9, "10");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000009", "10");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(12, "12");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000012", "12");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(15, "14");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000015", "14");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(15, "14a");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000015", "14a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(16, "14b");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000016", "14b");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(17, "14c");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000017", "14c");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(18, "14d");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000018", "14d");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(18, "15");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000018", "15");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(26, "19");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000026", "19");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(27, "19a");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000027", "19a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(28, "19b");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000028", "19b");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(29, "19c");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000029", "19c");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(25, "21");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000025", "21");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(26, "22");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000026", "22");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(26, "23");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000026", "23");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(30, "24");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000030", "24");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(31, "25");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000031", "25");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(34, "26");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000034", "26");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(36, "26a");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000036", "26a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(33, "26b");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000033", "26b");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(41, "35");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000041", "35");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(42, "36");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000042", "36");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(43, "37");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000043", "37");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(44, "38");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000044", "38");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(45, "40");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000045", "40");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(46, "40a");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000046", "40a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(47, "40b");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000047", "40b");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(48, "40c");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000048", "40c");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(48, "41");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000048", "41");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(51, "48");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000051", "48");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(55, "52");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000055", "52");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(56, "53");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000056", "53");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(60, "57a");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000060", "57a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(60, "58");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000060", "58");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(62, "59");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000062", "59");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(78, "68");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000078", "68");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(79, "69");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000079", "69");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(81, "70");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000081", "70");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(80, "70");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000080", "70");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(85, "79");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000085", "79");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(86, "80");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000086", "80");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(89, "80a");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000089", "80a");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(89, "80b");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000089", "80b");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(89, "81");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000089", "81");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(87, "81");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000087", "81");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(84, "83");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000084", "83");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(91, "86");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000091", "86");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(92, "87");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000092", "87");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(92, "89");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000092", "89");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(93, "90");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000093", "90");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(95, "91");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000095", "91");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(94, "91");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000094", "91");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
-    isConditionTrue = await adfice.is_sql_condition_true(102, "102");
+    isConditionTrue = await adfice.is_sql_condition_true("00000000-0000-4000-8000-100000000102", "102");
     expect(isConditionTrue).toBe(true);
     isConditionTrue = false;
 });
 
 test('Check preselect SQL', async () => {
+    let patient_id1 = "00000000-0000-4000-8000-100000000001";
+    let patient_id4 = "00000000-0000-4000-8000-100000000004";
+    let patient_id8 = "00000000-0000-4000-8000-100000000008";
+    let patient_id31 = "00000000-0000-4000-8000-100000000031";
+    let patient_id48 = "00000000-0000-4000-8000-100000000048";
+    let patient_id51 = "00000000-0000-4000-8000-100000000051";
+    let patient_id79 = "00000000-0000-4000-8000-100000000079";
+    let patient_id84 = "00000000-0000-4000-8000-100000000084";
+
     let preselectRules = await adfice.get_preselect_rules("6e");
     let sql = preselectRules[0]['sql_condition'].toString();
-    let result = await (adfice.evaluate_sql(sql, 4));
+    let result = await (adfice.evaluate_sql(sql, patient_id4));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[1]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 8));
+    result = await (adfice.evaluate_sql(sql, patient_id8));
     expect(result).toBe(false);
     sql = "";
     result = null;
     sql = preselectRules[2]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 8));
+    result = await (adfice.evaluate_sql(sql, patient_id8));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[3]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 8));
+    result = await (adfice.evaluate_sql(sql, patient_id8));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
@@ -651,7 +663,7 @@ test('Check preselect SQL', async () => {
 
     preselectRules = await adfice.get_preselect_rules("19f");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 1));
+    result = await (adfice.evaluate_sql(sql, patient_id1));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
@@ -661,29 +673,29 @@ test('Check preselect SQL', async () => {
     preselectRules = await adfice.get_preselect_rules("42a");
 
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 1));
+    result = await (adfice.evaluate_sql(sql, patient_id1));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[1]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 1));
+    result = await (adfice.evaluate_sql(sql, patient_id1));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[2]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 48));
+    result = await (adfice.evaluate_sql(sql, patient_id48));
     expect(result).toBe(true);
-    result = await (adfice.evaluate_sql(sql, 31));
+    result = await (adfice.evaluate_sql(sql, patient_id31));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[3]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 51));
+    result = await (adfice.evaluate_sql(sql, patient_id51));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[4]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 51));
+    result = await (adfice.evaluate_sql(sql, patient_id51));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
@@ -691,17 +703,17 @@ test('Check preselect SQL', async () => {
 
     preselectRules = await adfice.get_preselect_rules("42b");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 1));
+    result = await (adfice.evaluate_sql(sql, patient_id1));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[1]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 51));
+    result = await (adfice.evaluate_sql(sql, patient_id51));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[2]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 51));
+    result = await (adfice.evaluate_sql(sql, patient_id51));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
@@ -711,7 +723,7 @@ test('Check preselect SQL', async () => {
 
     preselectRules = await adfice.get_preselect_rules("46");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 51));
+    result = await (adfice.evaluate_sql(sql, patient_id51));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
@@ -719,7 +731,7 @@ test('Check preselect SQL', async () => {
 
     preselectRules = await adfice.get_preselect_rules("50");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 51));
+    result = await (adfice.evaluate_sql(sql, patient_id51));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
@@ -727,12 +739,12 @@ test('Check preselect SQL', async () => {
 
     preselectRules = await adfice.get_preselect_rules("56");
     sql = preselectRules[1]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 51));
+    result = await (adfice.evaluate_sql(sql, patient_id51));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[2]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 1));
+    result = await (adfice.evaluate_sql(sql, patient_id1));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
@@ -740,7 +752,7 @@ test('Check preselect SQL', async () => {
 
     preselectRules = await adfice.get_preselect_rules("63");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 51));
+    result = await (adfice.evaluate_sql(sql, patient_id51));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
@@ -748,12 +760,12 @@ test('Check preselect SQL', async () => {
 
     preselectRules = await adfice.get_preselect_rules("78");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 79));
+    result = await (adfice.evaluate_sql(sql, patient_id79));
     expect(result).toBe(true);
     sql = "";
     result = null;
     sql = preselectRules[1]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 84));
+    result = await (adfice.evaluate_sql(sql, patient_id84));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
@@ -761,7 +773,7 @@ test('Check preselect SQL', async () => {
 
     preselectRules = await adfice.get_preselect_rules("88");
     sql = preselectRules[0]['sql_condition'].toString();
-    result = await (adfice.evaluate_sql(sql, 1));
+    result = await (adfice.evaluate_sql(sql, patient_id1));
     expect(result).toBe(true);
     preselectRules = null;
     sql = "";
@@ -773,7 +785,7 @@ test('Check preselected checkbox output', async () => {
     let output = {};
 
     let rules = ["88"];
-    let patient = 1;
+    let patient = "00000000-0000-4000-8000-100000000001";
     let atc = "M03AC01";
     output = await adfice.determine_preselected_checkboxes(rules, patient, atc);
     expect(output["cb_M03AC01_88_2"]).toBe("checked");
@@ -781,13 +793,13 @@ test('Check preselected checkbox output', async () => {
     // Ace does not think it is possible for 2 checkboxes to be checked with
     // the current rules. In theory, it would be allowed.
     rules = ["45", "46", "48", "48a", "49"];
-    patient = 51;
+    patient = "00000000-0000-4000-8000-100000000051";
     atc = "C02AA02";
     output = await adfice.determine_preselected_checkboxes(rules, patient, atc);
     expect(output["cb_C02AA02_46_1"]).toBe("checked");
 
     rules = ["42b"];
-    patient = 1;
+    patient = "00000000-0000-4000-8000-100000000001";
     atc = "C03CA02"
     output = await adfice.determine_preselected_checkboxes(rules, patient, atc);
     expect(output["cb_C03CA02_42b_2"]).toBe("checked");
@@ -797,7 +809,7 @@ test('Check preselected checkbox output', async () => {
 });
 
 test('Get prediction model result from DB', async () => {
-    let patient = 142
+    let patient = "00000000-0000-4000-8000-100000000142"
 
     // clear any saved result
     let measurements = await adfice.get_patient_measurements(patient);
@@ -815,32 +827,37 @@ test('Get prediction model result from DB', async () => {
 });
 
 test('Get empty result set from measurements', async () => {
-    let measurements = await adfice.get_patient_measurements(1);
+    let patient_id = "00000000-0000-4000-8000-100000000001";
+    let measurements = await adfice.get_patient_measurements(patient_id);
     expect(measurements).toBe(null);
-    let prediction1 = await adfice.get_prediction_result(1);
+    let prediction1 = await adfice.get_prediction_result(patient_id);
     expect(prediction1).toBe(null);
 });
 
 test('Structure measurements', async () => {
-    let measurements = await adfice.get_patient_measurements(2);
+    let patient_id = "00000000-0000-4000-8000-100000000002";
+    let measurements = await adfice.get_patient_measurements(patient_id);
     let structuredMeas = adfice.structure_meas(measurements);
     expect(structuredMeas['grip_kg']).toBe(21.5);
 });
 
 test('Calculate prediction based on DB data', async () => {
-    let measurement = await adfice.calculate_prediction_result(2);
+    let patient_id1 = "00000000-0000-4000-8000-100000000001";
+    let patient_id2 = "00000000-0000-4000-8000-100000000002";
+    let measurement = await adfice.calculate_prediction_result(patient_id2);
     expect(measurement.prediction_result).toBeGreaterThan(10);
-    measurement = await adfice.calculate_prediction_result(1);
+    measurement = await adfice.calculate_prediction_result(patient_id1);
     expect(measurement).toBe(null);
 });
 
 test('Calculate prediction based on user-entered data', async () => {
-    let measurement = await adfice.calculate_prediction_result(170);
+    let patient_id = "00000000-0000-4000-8000-100000000170";
+    let measurement = await adfice.calculate_prediction_result(patient_id);
     expect(measurement.prediction_result).toBeGreaterThan(10);
 });
 
 test('Update prediction', async () => {
-    let patient = 2;
+    let patient = "00000000-0000-4000-8000-100000000002";
     let precheck = await adfice.get_patient_measurements(patient);
     let row_id = precheck[0].id;
     await adfice.update_prediction_result(row_id, null);
@@ -862,18 +879,19 @@ test('Update prediction', async () => {
 });
 
 test('Log fired rules', async () => {
-    let patient = 165;
-    let sql = 'select * from rules_fired where patient_id =' + patient;
-    let before = await adfice.sql_select(sql);
+    let patient = "00000000-0000-4000-8000-100000000165";
+    let sql = 'select * from rules_fired where patient_id = ?';
+    let params = [patient];
+    let before = await adfice.sql_select(sql, params);
 
     let meds_with_rules_to_fire = {};
     meds_with_rules_to_fire['N05AH04'] = ['14', '14a', '16', '18', '105'];
     meds_with_rules_to_fire['N05CF02'] = ['6b', '6e', '7', '10', '11'];
     await adfice.logFiredRules(patient, meds_with_rules_to_fire);
 
-    let after = await adfice.sql_select(sql);
-    let sql_cleanup = "delete from rules_fired where patient_id =" + patient;
-    await adfice.sql_select(sql_cleanup);
+    let after = await adfice.sql_select(sql, params);
+    let sql_cleanup = "delete from rules_fired where patient_id = ?";
+    await adfice.sql_select(sql_cleanup, params);
 
     expect(before.length).toBe(0);
     expect(after.length).toBe(2);
@@ -886,7 +904,7 @@ test('Log fired rules', async () => {
 });
 
 test('export_patient', async () => {
-    let patient = '168';
+    let patient = "00000000-0000-4000-8000-100000000168";
     let doctor_id = '1';
     let file = "test-export_patient-168.log";
     try {
@@ -918,7 +936,7 @@ test('export_patient', async () => {
 });
 
 test('finalize_export API', async () => {
-    let patient = '68';
+    let patient = "00000000-0000-4000-8000-100000000068";
     let file = "test-export_patient-68-2.log";
     try {
         fs.unlinkSync(file, (err) => {});
@@ -934,7 +952,7 @@ test('finalize_export API', async () => {
 
 test('log events', async () => {
     let viewer = '2';
-    let patient = '166';
+    let patient = "00000000-0000-4000-8000-100000000166";
     let sql = "SELECT COUNT(*) AS cnt FROM logged_events WHERE patient_id = ?";
     let results = await adfice.sql_select(sql, [patient]);
     let cnt = 0;
@@ -957,7 +975,7 @@ test('log events', async () => {
 
 test('access log', async () => {
     let user_id = 'dr_alice';
-    let patient = '166';
+    let patient = "00000000-0000-4000-8000-100000000166";
     let sql = "SELECT COUNT(*) AS cnt FROM access_log WHERE patient_id = ?";
     let results = await adfice.sql_select(sql, [patient]);
     let cnt = 0;
