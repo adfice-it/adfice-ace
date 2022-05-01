@@ -541,6 +541,7 @@ function make_definitive() {
 
 function patient_renew() {
     send_message('patient_renew');
+	window.location.reload(true);
     return true;
 }
 

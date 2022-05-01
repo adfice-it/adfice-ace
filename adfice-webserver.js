@@ -73,6 +73,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     app.use("/assets", express.static('static'));
 
     app.use("/start", express.static('static/start.html'));
+
     app.use("/prep", express.static('static/prep.html'));
     app.use("/consult", express.static('static/consult.html'));
     app.use("/advise", express.static('static/advise.html'));
@@ -95,6 +96,10 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     app.use("/load-error", express.static('static/load-error.html'));
 
     app.get('/load', async function(req, res) {
+		res.set('Cache-Control', 'no-cache, must-revalidate, max-age=-1');
+		res.set('Pragma', 'no-cache, must-revalidate');
+		res.set('Expires', '-1');
+
         let mrn = req.query.mrn;
         let id = await adfice.id_for_mrn(mrn);
         let user_id = req.query.user;
