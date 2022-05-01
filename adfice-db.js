@@ -7,7 +7,6 @@ const fs = require('fs');
 const dotenv = require('dotenv');
 const mariadb = require('mariadb');
 
-/* istanbul ignore next */
 async function init(config, env_file_path) {
     let dbconfig = {};
     config = config || {};
@@ -16,19 +15,26 @@ async function init(config, env_file_path) {
     var envfile = {};
     try {
         envfile = await dotenv.parse(fs.readFileSync(env_file_path));
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
         console.log(error);
     }
 
-    dbconfig.host = config.host ||
-        process.env.DB_HOST ||
-        envfile.DB_HOST ||
-        '127.0.0.1';
+    if (config.socketPath || process.env.DB_SOCKET_PATH ||
+        envfile.DB_SOCKET_PATH) {
+        dbconfig.socketPath = config.socketPath ||
+            process.env.DB_SOCKET_PATH ||
+            envfile.DB_SOCKET_PATH;
+    } else {
+        dbconfig.host = config.host ||
+            process.env.DB_HOST ||
+            envfile.DB_HOST ||
+            '127.0.0.1';
 
-    dbconfig.port = config.port ||
-        process.env.DB_PORT ||
-        envfile.DB_PORT ||
-        3306;
+        dbconfig.port = config.port ||
+            process.env.DB_PORT ||
+            envfile.DB_PORT ||
+            3306;
+    }
 
     dbconfig.user = config.user ||
         process.env.DB_USER ||
@@ -55,10 +61,13 @@ async function init(config, env_file_path) {
         envfile.DB_CONNECTION_LIMIT ||
         '5';
 
-    /* istanbul ignore else */
-    if (!dbconfig.password) {
-        let passwd = await fs.promises.readFile(dbconfig.passwordFile);
-        dbconfig.password = String(passwd).trim();
+    if (dbconfig.passwordFile && !dbconfig.password) {
+        try {
+            let passwd = await fs.promises.readFile(dbconfig.passwordFile);
+            dbconfig.password = String(passwd).trim();
+        } catch (error) /* istanbul ignore next */ {
+            console.log(error);
+        }
     }
 
     let db = {

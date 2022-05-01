@@ -26,6 +26,7 @@ root.my.cnf
 db-scripts.env
 db-create-tables.env
 adfice-user.env
+adfice-db.test.temp.env
 
 portal-db-scripts.env
 root.valportaal.my.cnf
