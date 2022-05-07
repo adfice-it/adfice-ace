@@ -164,6 +164,69 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         send_all(kind, id, message);
     }
 
+    async function handle_patient_message(ws, doctor_id, patient_id, kind,
+        message) {
+        if (('box_states' in message) ||
+            ('field_entries' in message)) {
+            let selections = message['box_states'];
+            let freetexts = message['field_entries'];
+            await adfice.set_advice_for_patient(
+                patient_id, doctor_id, selections, freetexts);
+        }
+        if (message.type == 'definitive') {
+            await adfice.finalize_and_export(patient_id);
+            let new_msg = await patient_advice_message(kind,
+                patient_id);
+            send_all(kind, patient_id, new_msg);
+        } else if (message.type == 'patient_renew') {
+            await adfice.add_log_event_renew(doctor_id, patient_id);
+            let returned_patient = await etl.etl_renew(patient_id);
+            if (returned_patient != patient_id) {
+                let err_text_en = "etl.etl_renew( " +
+                    patient_id +
+                    " ) unexpectedly returned " +
+                    returned_patient;
+                console.log(err_text_en);
+
+                let err_msg = {};
+                err_msg.type = 'error_message';
+                err_msg.err_text = err_text_en;
+                msg_header(err_msg, kind, patient_id);
+                let msg_string = JSON.stringify(err_msg, null, 4);
+                ws.send(msg_string);
+            } else {
+                let new_msg = await patient_advice_message(kind,
+                    patient_id);
+                // console.log(new_msg);
+                send_all(kind, patient_id, new_msg);
+            }
+        } else if (message.type == 'was_printed') {
+            await adfice.add_log_event_print(doctor_id, patient_id);
+        } else if (message.type == 'was_copied_patient') {
+            await adfice.add_log_event_copy_patient_text(doctor_id,
+                patient_id);
+        } else if (message.type == 'was_copied_ehr') {
+            await adfice.add_log_event_copy_ehr_text(doctor_id,
+                patient_id);
+        } else if (message.type == 'ping') {
+            let pong = {};
+            pong.type = 'pong';
+            pong.sent = message.sent;
+            pong.recv = Date.now();
+            msg_header(pong, kind, patient_id);
+            let msg_string = JSON.stringify(pong, null, 4);
+            if (DEBUG > 2) {
+                console.log('sending reply:\n', msg_string);
+            }
+            ws.send(msg_string);
+        } else if (message.type == 'submit_missings') {
+            await adfice.update_prediction_with_user_values(
+                patient_id, message['submit_missings']);
+        } else {
+            send_all(kind, patient_id, message);
+        }
+    }
+
     var global_patient_advice_message_count = 0;
     async function patient_advice_message(kind, id) {
         ++global_patient_advice_message_count;
@@ -239,6 +302,25 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                         console.log('received: ', data);
                     }
                     try {
+                        if (!request.session) {
+                            throw 'No session?';
+                        }
+                        let doctor_id = request.session.doctor_id;
+                        if (DEBUG > 0) {
+                            console.log('got doctor id:', doctor_id);
+                        }
+                        if (!doctor_id) {
+                            const err_msg = 'No doctor_id in session';
+                            if (DEBUG > 0) {
+                                console.log(JSON.stringify({
+                                    err_msg: err_msg,
+                                    data: data,
+                                    request: request,
+                                }));
+                            }
+                            throw err_msg;
+                        }
+
                         let message = JSON.parse(data);
                         if (DEBUG > 0 && message.type != 'ping') {
                             console.log('received: ', data);
@@ -247,73 +329,8 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                         let id_key = `${kind}_id`;
                         if (message[id_key] == id) {
                             let patient_id = id;
-                            let doctor_id = null;
-                            if (!request.session) {
-                                throw 'No session?';
-                            }
-                            doctor_id = request.session.doctor_id;
-                            if (DEBUG > 0) {
-                                console.log('got doctor id:', doctor_id);
-                            }
-                            if (('box_states' in message) ||
-                                ('field_entries' in message)) {
-                                let selections = message['box_states'];
-                                let freetexts = message['field_entries'];
-                                await adfice.set_advice_for_patient(
-                                    patient_id, doctor_id, selections, freetexts);
-                            }
-                            if (message.type == 'definitive') {
-                                await adfice.finalize_and_export(patient_id);
-                                let new_msg = await patient_advice_message(kind,
-                                    patient_id);
-                                send_all(kind, patient_id, new_msg);
-                            } else if (message.type == 'patient_renew') {
-                                await adfice.add_log_event_renew(doctor_id, patient_id);
-                                let returned_patient = await etl.etl_renew(patient_id);
-                                if (returned_patient != patient_id) {
-                                    let err_text_en = "etl.etl_renew( " +
-                                        patient_id +
-                                        " ) unexpectedly returned " +
-                                        returned_patient;
-                                    console.log(err_text_en);
-
-                                    let err_msg = {};
-                                    err_msg.type = 'error_message';
-                                    err_msg.err_text = err_text_en;
-                                    msg_header(err_msg, kind, patient_id);
-                                    let msg_string = JSON.stringify(err_msg, null, 4);
-                                    ws.send(msg_string);
-                                } else {
-                                    let new_msg = await patient_advice_message(kind,
-                                        patient_id);
-                                    // console.log(new_msg);
-                                    send_all(kind, patient_id, new_msg);
-                                }
-                            } else if (message.type == 'was_printed') {
-                                await adfice.add_log_event_print(doctor_id, patient_id);
-                            } else if (message.type == 'was_copied_patient') {
-                                await adfice.add_log_event_copy_patient_text(doctor_id,
-                                    patient_id);
-                            } else if (message.type == 'was_copied_ehr') {
-                                await adfice.add_log_event_copy_ehr_text(doctor_id,
-                                    patient_id);
-                            } else if (message.type == 'ping') {
-                                let pong = {};
-                                pong.type = 'pong';
-                                pong.sent = message.sent;
-                                pong.recv = Date.now();
-                                msg_header(pong, kind, patient_id);
-                                let msg_string = JSON.stringify(pong, null, 4);
-                                if (DEBUG > 2) {
-                                    console.log('sending reply:\n', msg_string);
-                                }
-                                ws.send(msg_string);
-                            } else if (message.type == 'submit_missings') {
-                                await adfice.update_prediction_with_user_values(
-                                    patient_id, message['submit_missings']);
-                            } else {
-                                send_all(kind, patient_id, message);
-                            }
+                            handle_patient_message(ws, doctor_id, patient_id,
+                                kind, message);
                         }
                     } catch (error) {
                         console.log(error);
