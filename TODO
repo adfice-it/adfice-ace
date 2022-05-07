@@ -4,12 +4,8 @@ Important:
 * make changes to ICD-10 mapping
 * Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
 * Show appropriate errors when someone attempts to access system and:
-	- user_id is absent
-	- participant_id is absent
-	- MRN does not retrieve a patient
+		- user has valid doctor_id but attempts to navigate to invalid patient_id
         - if the page renew fails, it should notify the user in some way
-  Consider blocking access when doctor_id is null (will have to adjust lots of tests accordingly)
-  (For convenience: adjust dummy-mrn to match the patient id so we can still easily get to specific test patients)
 * Add back button to Lees meer page
 * TODOs in prediction explanation page
 * Expunge unused Prediction code
