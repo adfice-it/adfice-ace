@@ -18,7 +18,10 @@
 function load_error_page_load() {
     let mrn = url_param('mrn');
     let elem = document.getElementById('div-error-text');
-    let content = '<p>Error met ' + mrn + '</p>\n';
+    let content = ''
+	if (mrn) {
+		content += '<p>Error met het laden van data voor patiënt met MRN ' + mrn + '</p>\n';
+	}
     let err = url_param('err');
     if (err) {
         content += '<p>' + err + '</p>\n';
@@ -33,8 +36,12 @@ window.addEventListener('load', function(event) { load_error_page_load(); });
      style="max-width: 10%; height: auto; display: inline;"
      alt="Advice IT logo"
 >
-<div id='div-error-text'>
-Error
+<p>Error</p>
+<p><div id='div-error-text'>
 </div><!-- error-text -->
+</p>
+<p>
+Probeer het link in het EPD opnieuw te klikken.
+</p>
 </body>
 </html>

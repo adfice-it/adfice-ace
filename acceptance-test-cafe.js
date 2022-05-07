@@ -527,12 +527,11 @@ test('Test reload data', async t => {
     await t.expect(cb_levo_stop.checked).notOk();
     await t.expect(cb_diaz_stop.exists).ok();
 
-    /*
-    test cannot clean up after itself; will only run correctly 1x
-    */
+    
+    // test cannot clean up after itself; will only run correctly 1x
+    
 });
 
-// This test fails; the checkbox is not visible. I don't know why; emperically they are there
 test('Nonmed headers display correctly on patient page', async t => {
     let mrn = 'DummyMRN-000000160';
     let participant = 10160;
@@ -572,6 +571,57 @@ test('Nonmed headers display correctly on patient page', async t => {
     }
 
 });
+
+test('Redirect to error page if invalid navigation is attempted', async t => {
+	let mrn = 'DummyMRN-000000172';
+	let user = 'dr_bob';
+	let participant = '10172';
+    let url_no_participant = 
+	    `${BASE_URL}/load` +
+        `?mrn=${mrn}` +
+        `&user=${user}` ;
+	let window1 = await t.openWindow(url_no_participant);
+
+	let getLocation = ClientFunction(() => document.location.href);
+    await t.expect(getLocation()).contains('load-error');
+	let body = Selector('body');
+	await t.expect(body.withText('Error').exists).ok()
+	await t.expect(body.withText('DummyMRN-000000172').exists).ok()
+
+	let url_no_user = 
+	    `${BASE_URL}/load` +
+        `?mrn=${mrn}` +
+        `&participant=${participant}` ;
+	let window2 = await t.openWindow(url_no_user);
+	getLocation = ClientFunction(() => document.location.href);
+    await t.expect(getLocation()).contains('load-error');
+	body = Selector('body');
+	await t.expect(body.withText('Error').exists).ok()
+	await t.expect(body.withText('DummyMRN-000000172').exists).ok()
+	
+	let url_no_mrn = 
+	    `${BASE_URL}/load` +
+        `?user=${user}` +
+        `&participant=${participant}` ;
+	let window3 = await t.openWindow(url_no_mrn);
+	getLocation = ClientFunction(() => document.location.href);
+    await t.expect(getLocation()).contains('load-error');
+	body = Selector('body');
+	await t.expect(body.withText('Error').exists).ok()
+	await t.expect(body.withText('DummyMRN-000000172').exists).notOk()
+});
+/*
+test('Redirect to error page if doctor_id is lost', async t => {
+	// attempt to navigate directly to a patient page without going via Load first
+	let url_not_redirected = '${BASE_URL}/start' + '?id=00000000-0000-4000-8000-100000000172';
+	let window1 = await t.openWindow(url_not_redirected);
+	getLocation = ClientFunction(() => document.location.href);
+    await t.expect(getLocation()).contains('load-error');
+	body = Selector('body');
+	await t.expect(body.withText('Error').exists).ok()
+	await t.expect(body.withText('DummyMRN-000000172').exists).notOk();
+});	
+*/
 
 // slow tests run last
 test('Check multiple viewers making changes', async t => {

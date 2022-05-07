@@ -101,32 +101,43 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         res.set('Expires', '-1');
 
         let mrn = req.query.mrn;
-        let id = await adfice.id_for_mrn(mrn);
         let user_id = req.query.user;
-        let encoded_err = null;
-        if (!id) {
-            try {
-                let etl_opts = await autil.from_json_file(etl_opts_path);
-                let participant_number = req.query.participant;
-                id = await etl.etl(mrn, participant_number, etl_opts);
-            } catch (err) {
-                encoded_err = encodeURIComponent('' + err);
-            }
-        }
-        if (!id) {
-            let param_str = '?mrn=' + mrn;
-            if (encoded_err !== null) {
-                param_str += '&err=' + encoded_err;
-            }
-            res.redirect('/load-error' + param_str);
-        } else {
-            await adfice.add_log_event_access(user_id, id);
-            let doctor_id = await adfice.doctor_id_for_user(user_id);
-            log_debug(server, 'setting doctor id:', doctor_id);
-            req.session.doctor_id = doctor_id;
+        let participant_number = req.query.participant;
+		if(mrn==null || user_id == null || participant_number == null){
+			if(mrn==null){
+				res.redirect('/load-error');
+			}
+			if(user_id == null || participant_number == null){
+				let p_str = '?mrn=' + mrn;
+				res.redirect('/load-error' + p_str);
+			}
+		} else {
+			let id = await adfice.id_for_mrn(mrn);
+			
+			let encoded_err = null;
+			if (!id) {
+				try {
+					let etl_opts = await autil.from_json_file(etl_opts_path);
+					id = await etl.etl(mrn, participant_number, etl_opts);
+				} catch (err) {
+					encoded_err = encodeURIComponent('' + err);
+				}
+			}
+			if (!id) {
+				let param_str = '?mrn=' + mrn;
+				if (encoded_err !== null) {
+					param_str += '&err=' + encoded_err;
+				}
+				res.redirect('/load-error' + param_str);
+			} else {
+				await adfice.add_log_event_access(user_id, id);
+				let doctor_id = await adfice.doctor_id_for_user(user_id);
+				log_debug(server, 'setting doctor id:', doctor_id);
+				req.session.doctor_id = doctor_id;
 
-            res.redirect('/start?id=' + id);
-        }
+				res.redirect('/start?id=' + id);
+			}
+		}
     });
 
     // // sketch of post support
