@@ -310,14 +310,20 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                             console.log('got doctor id:', doctor_id);
                         }
                         if (!doctor_id) {
-                            const err_msg = 'No doctor_id in session';
+                            const err_msg_txt = 'No doctor_id in session';
                             if (DEBUG > 0) {
                                 console.log(JSON.stringify({
-                                    err_msg: err_msg,
+                                    err_msg: err_msg_txt,
                                     data: data,
                                     request: request,
                                 }));
                             }
+                            let err_msg = {};
+                            err_msg.type = 'error_message';
+                            err_msg.err_text = err_msg_txt;
+                            msg_header(err_msg, kind, patient_id);
+                            let msg_string = JSON.stringify(err_msg, null, 4);
+                            ws.send(msg_string);
                             throw err_msg;
                         }
 
