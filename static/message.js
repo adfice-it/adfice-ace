@@ -170,7 +170,22 @@ function process_checkbox(checkbox_id, checked) {
     if (checkbox_id.lastIndexOf("cb_NONMED_", 0) === 0) {
         cat_id = 'patient_nm_cat_' + checkbox_id.charAt(10);
     }
-    let cat_name_div = document.getElementById(cat_id);
+    let cat_name_div = '';
+    // TODO: cat_id should not be empty string,
+    // also, category name blanking for rows past the first row
+    // is no longer working, and this may be related
+    if (cat_id) {
+        cat_name_div = document.getElementById(cat_id);
+    }
+    if (message_globals.debug > 0) {
+        message_globals.logger.log(JSON.stringify({
+            checkbox_id: checkbox_id,
+            checked: checked,
+            patient_row_id: patient_row_id,
+            patient_row: patient_row,
+            cat_id: cat_id
+        }));
+    }
     if (patient_row) {
         if (checked) {
             // patient_row.classList.add("checkbox-checked");

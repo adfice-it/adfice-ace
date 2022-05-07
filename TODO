@@ -14,6 +14,7 @@ Important:
 * TODOs in prediction explanation page
 * Expunge unused Prediction code
 * Stubborn caching in IE means that browser must be closed and reopened to get new data to load after Vernieuwen or Verstuur (sending hand-entered prediction model data). All the headers that are supposed to control this have been added. I can't figure out anything else to try to make this work. Apparently it partly depends on browser settings; see what happens in the real deploy.
+* non-medication advice categories all print out, should just the first one, other should be hidden
 
 Mid Priority:
 * Getting data out of EHR
