@@ -190,7 +190,8 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 
                 let err_msg = {};
                 err_msg.type = 'error_message';
-                err_msg.err_text = err_text_en;
+                err_msg.text = err_text_en;
+                err_msg.time = Date.now();
                 msg_header(err_msg, kind, patient_id);
                 let msg_string = JSON.stringify(err_msg, null, 4);
                 ws.send(msg_string);
@@ -320,8 +321,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                             }
                             let err_msg = {};
                             err_msg.type = 'error_message';
-                            err_msg.err_text = err_msg_txt;
-                            msg_header(err_msg, kind, patient_id);
+                            err_msg.text = err_msg_txt;
+                            err_msg.time = Date.now();
+                            msg_header(err_msg, kind, id);
                             let msg_string = JSON.stringify(err_msg, null, 4);
                             ws.send(msg_string);
                             throw err_msg;

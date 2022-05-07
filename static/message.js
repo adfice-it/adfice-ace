@@ -370,6 +370,11 @@ function ws_on_message(event) {
             debug_info: message.debug_info
         }, null, 4));
     }
+
+    if (message.type == 'error_message') {
+        message_globals.logger.log(JSON.stringify(message, null, 4));
+        // TODO: redirect to error page
+    }
 }
 
 function ws_on_close(event) {
