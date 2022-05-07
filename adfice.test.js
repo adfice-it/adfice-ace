@@ -382,14 +382,14 @@ test('get_advice_for_patient(-1)', async () => {
     let patient_id = -1;
     let patientAdvice = await adfice.get_advice_for_patient(patient_id);
     let advice = patientAdvice.medication_advice;
-    expect(advice.length).toBe(0);
+    expect(advice).toBe(undefined);
 })
 
 test('get_advice_for_patient(bogus)', async () => {
     let patient_id = 'bogus';
     let patientAdvice = await adfice.get_advice_for_patient(patient_id);
     let advice = patientAdvice.medication_advice;
-    expect(advice.length).toBe(0);
+    expect(advice).toBe(undefined);
 })
 
 test('freetext round trip', async () => {

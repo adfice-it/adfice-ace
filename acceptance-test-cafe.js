@@ -627,6 +627,24 @@ test('Redirect to error page if doctor_id is lost', async t => {
 	await t.expect(body.withText('DummyMRN-000000172').exists).notOk();
 });	
 
+test('Redirect to error page if patient_id is bad', async t => {
+    let mrn = 'DummyMRN-000000160';
+    let participant = 10160;
+    let window1 = await load(t, mrn, participant);
+	// attempt to navigate directly to a different (invalid) patient page
+	let url_bad_patient_id = 
+	    `${BASE_URL}/start` +
+        `?id=00000000-0000-4000-8000-000000000000`;
+    window1 = await t.navigateTo(url_bad_patient_id);
+	// Redirect takes a moment. We have to wait.
+	// await t.wait(4000);
+	let getLocation = ClientFunction(() => document.location.href);
+    await t.expect(getLocation()).contains('load-error');
+	let body = Selector('body');
+	await t.expect(body.withText('Error').exists).ok()
+	await t.expect(body.withText('verloren').exists).ok()
+	await t.expect(body.withText('DummyMRN-000000172').exists).notOk();
+});
 
 // slow tests run last
 test('Check multiple viewers making changes', async t => {

@@ -175,6 +175,25 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         send_all(kind, id, message);
     }
 
+    function make_error_message(text, kind, patient_id) {
+                let err_msg = {};
+                err_msg.type = 'error_message';
+                err_msg.text = text;
+                err_msg.time = Date.now();
+                try {
+                msg_header(err_msg, kind, patient_id);
+                } catch (error) {
+                    console.log(error);
+                }
+            return err_msg;
+    }
+
+    function send_error(ws, text, kind, patient_id) {
+            let err_msg = make_error_message(text, kind, patient_id);
+                let msg_string = JSON.stringify(err_msg, null, 4);
+                ws.send(msg_string);
+    }
+
     async function handle_patient_message(ws, doctor_id, patient_id, kind,
         message) {
         if (('box_states' in message) ||
@@ -199,13 +218,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                     returned_patient;
                 console.log(err_text_en);
 
-                let err_msg = {};
-                err_msg.type = 'error_message';
-                err_msg.text = err_text_en;
-                err_msg.time = Date.now();
-                msg_header(err_msg, kind, patient_id);
-                let msg_string = JSON.stringify(err_msg, null, 4);
-                ws.send(msg_string);
+                send_error(ws, err_text_en, kind, patient_id);
             } else {
                 let new_msg = await patient_advice_message(kind,
                     patient_id);
@@ -245,6 +258,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         /* viewer_id should come from the session */
         let viewer_id = global_patient_advice_message_count;
         let patient_advice = await adfice.get_advice_for_patient(id);
+        if (patient_advice.patient_id != id) {
+            return make_error_message('patient id not valid', kind, id);
+        }
 
         let freetexts = patient_advice.free_texts;
         let selections = patient_advice.selected_advice || {};
@@ -330,14 +346,8 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                                     request: request,
                                 }));
                             }
-                            let err_msg = {};
-                            err_msg.type = 'error_message';
-                            err_msg.text = err_msg_txt;
-                            err_msg.time = Date.now();
-                            msg_header(err_msg, kind, id);
-                            let msg_string = JSON.stringify(err_msg, null, 4);
-                            ws.send(msg_string);
-                            throw err_msg;
+                            send_error(ws, err_msg_txt, kind, id);
+                            throw err_msg_txt;
                         }
 
                         let message = JSON.parse(data);

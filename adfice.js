@@ -667,6 +667,10 @@ async function get_all_labs() {
 // called from adfice-webserver-runner
 async function get_advice_for_patient(patient_id) {
     let patient = await this.get_patient_by_id(patient_id);
+    if (patient.patient_id != patient_id) {
+        return {};
+    }
+
     let age = patient.age;
     let is_final = false;
     if (patient.is_final) {

@@ -51,6 +51,11 @@ function page_load(before_socket) {
         if (err) {
             console.log("url:", json_url, "error:", err);
         }
+        if ((!json_data.patient_advice) ||
+            (json_data.patient_advice.patient_id != five_pages.patient_id)) {
+		    let url = "/load-error?err=patient_id is invalid";
+            window.location = url;
+        }
         five_pages.data = json_data;
         if (five_pages.debug > 0) {
             five_pages.logger.log(JSON.stringify({
@@ -114,17 +119,17 @@ function replace_if_exists(elem_id, to_html_func, objs) {
 function patient_info_meds_with_rules() {
     replace_if_exists('meds-with-rules-list',
         meds_with_rules_as_html,
-        get_patient_advice().meds_with_rules);
+        get_patient_advice().meds_with_rules || []);
 }
 
 function patient_info_meds_without_rules() {
     replace_if_exists('meds-without-rules-list',
         meds_without_rules_as_html,
-        get_patient_advice().meds_without_rules);
+        get_patient_advice().meds_without_rules || []);
 }
 
 function patient_info_problem_start() {
-    let all_problems = get_patient_advice().all_problems;
+    let all_problems = get_patient_advice().all_problems || {};
     let problems = get_patient_advice().problems;
     let html = '<div id="problem_table_div"><table id="problem_table"><tr><th class="patient_data_td">Aandoening</th><th class="patient_data_td">Aanwezig</th></tr>';
     let all_problem_names = Object.keys(all_problems);
@@ -144,8 +149,8 @@ function patient_info_problem_start() {
 }
 
 function patient_info_lab_start() {
-    let all_labs = get_patient_advice().all_labs;
-    let labs = get_patient_advice().labs;
+    let all_labs = get_patient_advice().all_labs || [];
+    let labs = get_patient_advice().labs || [];
     let html = '<div id="lab_table_div"><table id="lab_table"><tr><th class="patient_data_td">Lab</th><th class="patient_data_td">Datum gemeten</th><th class="patient_data_td">Waarde</th></tr>';
     for (let i = 0; i < all_labs.length; ++i) {
         let lab = all_labs[i];
@@ -169,7 +174,7 @@ function patient_info_lab_start() {
 }
 
 function patient_info_meds_with_rules_start() {
-    let rule_meds = get_patient_advice().meds_with_rules;
+    let rule_meds = get_patient_advice().meds_with_rules || [];
     let html = '';
     for (let i = 0; i < rule_meds.length; ++i) {
         let med = rule_meds[i];
@@ -183,7 +188,7 @@ function patient_info_meds_with_rules_start() {
 }
 
 function prediction_start() {
-    let measurements = get_patient_advice().measurements;
+    let measurements = get_patient_advice().measurements || {};
     // for some unholy reason, measurements.prediction_result is null in IE when the page first loads. We'll use risk_score, which is not null.
     let risk_score = get_patient_advice().risk_score;
     if (risk_score == null) {
