@@ -103,41 +103,41 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         let mrn = req.query.mrn;
         let user_id = req.query.user;
         let participant_number = req.query.participant;
-		if(mrn==null || user_id == null || participant_number == null){
-			if(mrn==null){
-				res.redirect('/load-error');
-			}
-			if(user_id == null || participant_number == null){
-				let p_str = '?mrn=' + mrn;
-				res.redirect('/load-error' + p_str);
-			}
-		} else {
-			let id = await adfice.id_for_mrn(mrn);
-			
-			let encoded_err = null;
-			if (!id) {
-				try {
-					let etl_opts = await autil.from_json_file(etl_opts_path);
-					id = await etl.etl(mrn, participant_number, etl_opts);
-				} catch (err) {
-					encoded_err = encodeURIComponent('' + err);
-				}
-			}
-			if (!id) {
-				let param_str = '?mrn=' + mrn;
-				if (encoded_err !== null) {
-					param_str += '&err=' + encoded_err;
-				}
-				res.redirect('/load-error' + param_str);
-			} else {
-				await adfice.add_log_event_access(user_id, id);
-				let doctor_id = await adfice.doctor_id_for_user(user_id);
-				log_debug(server, 'setting doctor id:', doctor_id);
-				req.session.doctor_id = doctor_id;
+        if (mrn == null || user_id == null || participant_number == null) {
+            if (mrn == null) {
+                res.redirect('/load-error');
+            }
+            if (user_id == null || participant_number == null) {
+                let p_str = '?mrn=' + mrn;
+                res.redirect('/load-error' + p_str);
+            }
+        } else {
+            let id = await adfice.id_for_mrn(mrn);
 
-				res.redirect('/start?id=' + id);
-			}
-		}
+            let encoded_err = null;
+            if (!id) {
+                try {
+                    let etl_opts = await autil.from_json_file(etl_opts_path);
+                    id = await etl.etl(mrn, participant_number, etl_opts);
+                } catch (err) {
+                    encoded_err = encodeURIComponent('' + err);
+                }
+            }
+            if (!id) {
+                let param_str = '?mrn=' + mrn;
+                if (encoded_err !== null) {
+                    param_str += '&err=' + encoded_err;
+                }
+                res.redirect('/load-error' + param_str);
+            } else {
+                await adfice.add_log_event_access(user_id, id);
+                let doctor_id = await adfice.doctor_id_for_user(user_id);
+                log_debug(server, 'setting doctor id:', doctor_id);
+                req.session.doctor_id = doctor_id;
+
+                res.redirect('/start?id=' + id);
+            }
+        }
     });
 
     // // sketch of post support
@@ -176,22 +176,22 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     }
 
     function make_error_message(text, kind, patient_id) {
-                let err_msg = {};
-                err_msg.type = 'error_message';
-                err_msg.text = text;
-                err_msg.time = Date.now();
-                try {
-                msg_header(err_msg, kind, patient_id);
-                } catch (error) {
-                    console.log(error);
-                }
-            return err_msg;
+        let err_msg = {};
+        err_msg.type = 'error_message';
+        err_msg.text = text;
+        err_msg.time = Date.now();
+        try {
+            msg_header(err_msg, kind, patient_id);
+        } catch (error) {
+            console.log(error);
+        }
+        return err_msg;
     }
 
     function send_error(ws, text, kind, patient_id) {
-            let err_msg = make_error_message(text, kind, patient_id);
-                let msg_string = JSON.stringify(err_msg, null, 4);
-                ws.send(msg_string);
+        let err_msg = make_error_message(text, kind, patient_id);
+        let msg_string = JSON.stringify(err_msg, null, 4);
+        ws.send(msg_string);
     }
 
     async function handle_patient_message(ws, doctor_id, patient_id, kind,

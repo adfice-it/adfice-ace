@@ -53,7 +53,7 @@ function page_load(before_socket) {
         }
         if ((!json_data.patient_advice) ||
             (json_data.patient_advice.patient_id != five_pages.patient_id)) {
-		    let url = "/load-error?err=patient_id is invalid";
+            let url = "/load-error?err=patient_id is invalid";
             window.location = url;
         }
         five_pages.data = json_data;
