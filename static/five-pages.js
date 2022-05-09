@@ -640,21 +640,19 @@ function non_med_advice_area(hide_additional) {
         let checkbox_id = 'cb_' + nma_id_base;
         let row_id = 'tr_' + nma_id_base;
         let category_name = nm_advice.category_name;
-        let category_name_class = "nm_category_entry_additional";
+		let category_name_class = "";
         if (category_name != last_category_name) {
             last_category_name = category_name;
             category_name_class = "nm_category_entry_first";
-        }
+        } else {
+			category_name_class = "nm_category_entry_additional";
+		}
         html += '<div id="' + row_id + '" class="nonmed_row">\n';
         let td_nm_cat_id = ['td', 'nm', 'category', 'name',
             nm_advice.category_id, boxnum
         ].join('_');
         html += '<div id="' + td_nm_cat_id + '"';
         html += ' class="td_nm_category_name ' + category_name_class + '"';
-        if (hide_additional &&
-            category_name_class == "nm_category_entry_additional") {
-            html += ' style="visibility:hidden"';
-        }
         html += '>';
         html += category_name + '</div>\n';
         html += '<div id="' + nma_prefix + '_sbn" class="nonmed_checkbox">\n';
@@ -684,15 +682,21 @@ function patient_non_med_advice() {
         let nma_prefix = "nma_" + i;
         let category = nm_advice.category_id;
         let category_name = nm_advice.category_name;
-        let boxnum = nm_advice.select_box_num;
+        let category_name_class = "";
+		let boxnum = nm_advice.select_box_num;
         let nma_id_base = ['NONMED', category, boxnum].join('_');
         let row_id = 'pt_' + nma_id_base;
-        if (category_name != last_category_name) {
+		if (category_name != last_category_name) {
             last_category_name = category_name;
-            html += '<div id="' + 'patient_nm_cat_' + category + '"' +
-                ' class="patient_nm_category_name" style="display: none">' +
-                category_name + '</div>\n';;
-        }
+			category_name_class = "nm_category_entry_first";
+        } else {
+			category_name_class = "nm_category_entry_additional";
+		}
+		html += '<div id="' + 'patient_nm_cat_' + category + '_' + boxnum + '"' +
+			' class="patient_nm_category_name ' +
+			category_name_class +
+			'" style="display:none">' +
+			category_name + '</div><!-- patient_nm_cat -->\n'
         html += '<div id="' + row_id + '" class="patient_nonmed_cb_row"';
         html += ' style="display:none">\n';
         let allow_edit = 0;
@@ -863,7 +867,7 @@ function consult_page_setup() {
     let include_no_checkbox_advice = 0;
     big_nested_medicine_advice_table(include_no_checkbox_advice);
     other_med_advice_area();
-    let hide_additional = 0;
+    let hide_additional = 1;
     non_med_advice_area(hide_additional);
     is_final();
 }

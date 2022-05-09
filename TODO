@@ -4,13 +4,12 @@ Important:
 * make changes to ICD-10 mapping
 * Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
 * Show appropriate errors when someone attempts to access system and:
-		- user has valid doctor_id but attempts to navigate to invalid patient_id
         - if the page renew fails, it should notify the user in some way
 * Add back button to Lees meer page
 * TODOs in prediction explanation page
 * Expunge unused Prediction code
 * Stubborn caching in IE means that browser must be closed and reopened to get new data to load after Vernieuwen or Verstuur (sending hand-entered prediction model data). All the headers that are supposed to control this have been added. I can't figure out anything else to try to make this work. Apparently it partly depends on browser settings; see what happens in the real deploy.
-* non-medication advice categories all print out, should just the first one, other should be hidden
+
 
 Mid Priority:
 * Getting data out of EHR

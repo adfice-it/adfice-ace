@@ -164,17 +164,16 @@ function process_checkbox(checkbox_id, checked) {
         }
     }
 
+	// "patient row" is the advice for patients; only exists on the Advice page
     let patient_row_id = checkbox_id.replace(/^cb_/, 'pt_');
     let patient_row = document.getElementById(patient_row_id);
     let cat_id = '';
     if (checkbox_id.lastIndexOf("cb_NONMED_", 0) === 0) {
-        cat_id = 'patient_nm_cat_' + checkbox_id.charAt(10);
+		cat_id = checkbox_id.replace(/^cb_NONMED_/, 'patient_nm_cat_');
     }
     let cat_name_div = '';
-    // TODO: cat_id should not be empty string,
-    // also, category name blanking for rows past the first row
-    // is no longer working, and this may be related
     if (cat_id) {
+		//cat_id will be empty for 'cb_OTHER_other_1' (free text box other med advice)
         cat_name_div = document.getElementById(cat_id);
     }
     if (message_globals.debug > 0) {

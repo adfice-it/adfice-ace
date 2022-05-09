@@ -130,6 +130,10 @@ th,td.patient_data_td {
 	color: #f28931;
 }
 
+.nm_category_entry_additional{
+	visibility: hidden;
+}
+
 span.patient_nonmed_category{
 	display: none;
 }

@@ -532,7 +532,7 @@ test('Test reload data', async t => {
 
 });
 
-test('Nonmed headers display correctly on patient page', async t => {
+test('Nonmed headers display correctly', async t => {
     let mrn = 'DummyMRN-000000160';
     let participant = 10160;
     let window1 = await load(t, mrn, participant);
@@ -551,26 +551,111 @@ test('Nonmed headers display correctly on patient page', async t => {
     await t.expect(cb_selector2.visible).ok();
     let g_is_checked = await cb_selector2.checked;
     if (!g_is_checked) {
-        await t.click(cb_selector);
+        await t.click(cb_selector2);
     }
+	// check that correct headers appear
+    let beweg1 = Selector('#td_nm_category_name_B_1');
+    let beweg2 = Selector('#td_nm_category_name_B_2');
+    let fysio = Selector('#td_nm_category_name_C_1');
+    let shoe = Selector('#td_nm_category_name_G_1');
+    await t.expect(beweg1.visible).ok();
+    await t.expect(beweg2.visible).notOk();
+    await t.expect(fysio.visible).ok();
+    await t.expect(shoe.visible).ok();
+	
+	// switch to consult view
+    let button_consult_view = Selector('button#button-consult-view');
+    await t.click(button_consult_view);
+    await change_flex_style_to_inline(t);
+	// check that correct headers appear
+    beweg1 = Selector('#td_nm_category_name_B_1');
+    beweg2 = Selector('#td_nm_category_name_B_2');
+    fysio = Selector('#td_nm_category_name_C_1');
+    shoe = Selector('#td_nm_category_name_G_1');
+    await t.expect(beweg1.visible).ok();
+    await t.expect(beweg2.visible).notOk();
+    await t.expect(fysio.visible).notOk();
+    await t.expect(shoe.visible).ok();
+
     // switch to advies view
     let button_advise_view = Selector('button#button-advise-view');
     await t.click(button_advise_view);
     await change_flex_style_to_inline(t);
     // check that correct headers appear
-    let beweg1 = Selector('#td_nm_category_name_B_1');
-    let beweg2 = Selector('#td_nm_category_name_B_2');
-    let fysio = Selector('#td_nm_category_name_C_1');
-    let shoe = Selector('#td_nm_category_name_G_1');
-
-    if (0) {
-        await t.expect(beweg1.visible).ok();
-        await t.expect(beweg2.visible).ok();
-        await t.expect(fysio.visible).notOk();
-        await t.expect(shoe.visible).ok();
-    }
+    beweg1 = Selector('#patient_nm_cat_B_1');
+    beweg2 = Selector('#patient_nm_cat_B_2');
+    fysio = Selector('#patient_nm_cat_C_1');
+    shoe = Selector('#patient_nm_cat_G_1');
+    await t.expect(beweg1.visible).ok();
+    await t.expect(beweg2.visible).notOk();
+    await t.expect(fysio.visible).notOk();
+    await t.expect(shoe.visible).ok();
 
 });
+
+test('Other med advice box', async t => {
+	let mrn = 'DummyMRN-000000160';
+    let participant = 10160;
+    let window1 = await load(t, mrn, participant);
+	
+	//check that Other-other box is not visible to start
+	let button_consult_view = Selector('button#button-consult-view');
+    await t.click(button_consult_view);
+    await change_flex_style_to_inline(t);
+	let other_text_box = Selector('#ft_OTHER_other_1_1');
+	await t.expect(other_text_box.withText('This is a test').exists).notOk();
+	
+	let button_advise_view = Selector('button#button-advise-view');
+    await t.click(button_advise_view);
+    await change_flex_style_to_inline(t);
+	let other_advice_row = Selector('#pt_OTHER_other_1');
+	let other_advice_header = Selector('#pft_OTHER_other_1_0');
+	let other_advice_box = Selector('#pft_OTHER_other_1_1');
+	await t.expect(other_advice_row.visible).notOk();
+	await t.expect(other_advice_header.visible).notOk();
+	await t.expect(other_advice_box.visible).notOk();
+	
+	//back to prep view, enter some text
+	let button_prep_view = Selector('button#button-prep-view');
+    await t.click(button_prep_view);
+    await change_flex_style_to_inline(t);
+	let cb_selector = Selector('#cb_OTHER_other_1');
+    await t.expect(cb_selector.visible).ok();
+    let other_is_checked = await cb_selector.checked;
+    if (!other_is_checked) {
+        await t.click(cb_selector);
+    }
+	other_text_box = Selector('#ft_OTHER_other_1_1');
+	await t.click(other_text_box);
+	await t.typeText(other_text_box, 'This is a test', { replace: true });
+	// switch to consult view
+    await t.click(button_consult_view);
+    await change_flex_style_to_inline(t);
+	other_text_box = Selector('#ft_OTHER_other_1_1');
+	await t.expect(other_text_box.value).eql('This is a test');
+	
+	// switch to advies view
+    await t.click(button_advise_view);
+	await change_flex_style_to_inline(t);
+	other_advice_row = Selector('#pt_OTHER_other_1');
+	other_advice_header = Selector('#pft_OTHER_other_1_0');
+	other_advice_box = Selector('#pft_OTHER_other_1_1');
+	await t.expect(other_advice_row.visible).ok();
+	await t.expect(other_advice_header.withText('Uw arts').exists).ok();
+	await t.expect(other_advice_box.withText('This is a test').exists).ok();
+	
+	//clean up
+	await t.click(button_prep_view);
+    await change_flex_style_to_inline(t);
+	await t.click(other_text_box);
+	await t.pressKey('ctrl+a delete'); //apparently this is what you have to do to clear the text box
+	await t.expect(cb_selector.visible).ok();
+    other_is_checked = await cb_selector.checked;
+    if (other_is_checked) {
+        await t.click(cb_selector);
+    }
+});
+
 
 test('Redirect to error page if invalid navigation is attempted', async t => {
     let mrn = 'DummyMRN-000000172';
