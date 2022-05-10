@@ -559,7 +559,7 @@ test('Nonmed headers display correctly', async t => {
     if (!g_is_checked) {
         await t.click(cb_selector2);
     }
-	// check that correct headers appear
+    // check that correct headers appear
     let beweg1 = Selector('#td_nm_category_name_B_1');
     let beweg2 = Selector('#td_nm_category_name_B_2');
     let fysio = Selector('#td_nm_category_name_C_1');
@@ -568,12 +568,12 @@ test('Nonmed headers display correctly', async t => {
     await t.expect(beweg2.visible).notOk();
     await t.expect(fysio.visible).ok();
     await t.expect(shoe.visible).ok();
-	
-	// switch to consult view
+
+    // switch to consult view
     let button_consult_view = Selector('button#button-consult-view');
     await t.click(button_consult_view);
     await change_flex_style_to_inline(t);
-	// check that correct headers appear
+    // check that correct headers appear
     beweg1 = Selector('#td_nm_category_name_B_1');
     beweg2 = Selector('#td_nm_category_name_B_2');
     fysio = Selector('#td_nm_category_name_C_1');
@@ -600,62 +600,64 @@ test('Nonmed headers display correctly', async t => {
 });
 
 test('Other med advice box', async t => {
-	let mrn = 'DummyMRN-000000160';
+    let mrn = 'DummyMRN-000000160';
     let participant = 10160;
     let window1 = await load(t, mrn, participant);
-	
-	//check that Other-other box is not visible to start
-	let button_consult_view = Selector('button#button-consult-view');
+
+    //check that Other-other box is not visible to start
+    let button_consult_view = Selector('button#button-consult-view');
     await t.click(button_consult_view);
     await change_flex_style_to_inline(t);
-	let other_text_box = Selector('#ft_OTHER_other_1_1');
-	await t.expect(other_text_box.withText('This is a test').exists).notOk();
-	
-	let button_advise_view = Selector('button#button-advise-view');
+    let other_text_box = Selector('#ft_OTHER_other_1_1');
+    await t.expect(other_text_box.withText('This is a test').exists).notOk();
+
+    let button_advise_view = Selector('button#button-advise-view');
     await t.click(button_advise_view);
     await change_flex_style_to_inline(t);
-	let other_advice_row = Selector('#pt_OTHER_other_1');
-	let other_advice_header = Selector('#pft_OTHER_other_1_0');
-	let other_advice_box = Selector('#pft_OTHER_other_1_1');
-	await t.expect(other_advice_row.visible).notOk();
-	await t.expect(other_advice_header.visible).notOk();
-	await t.expect(other_advice_box.visible).notOk();
-	
-	//back to prep view, enter some text
-	let button_prep_view = Selector('button#button-prep-view');
+    let other_advice_row = Selector('#pt_OTHER_other_1');
+    let other_advice_header = Selector('#pft_OTHER_other_1_0');
+    let other_advice_box = Selector('#pft_OTHER_other_1_1');
+    await t.expect(other_advice_row.visible).notOk();
+    await t.expect(other_advice_header.visible).notOk();
+    await t.expect(other_advice_box.visible).notOk();
+
+    //back to prep view, enter some text
+    let button_prep_view = Selector('button#button-prep-view');
     await t.click(button_prep_view);
     await change_flex_style_to_inline(t);
-	let cb_selector = Selector('#cb_OTHER_other_1');
+    let cb_selector = Selector('#cb_OTHER_other_1');
     await t.expect(cb_selector.visible).ok();
     let other_is_checked = await cb_selector.checked;
     if (!other_is_checked) {
         await t.click(cb_selector);
     }
-	other_text_box = Selector('#ft_OTHER_other_1_1');
-	await t.click(other_text_box);
-	await t.typeText(other_text_box, 'This is a test', { replace: true });
-	// switch to consult view
+    other_text_box = Selector('#ft_OTHER_other_1_1');
+    await t.click(other_text_box);
+    await t.typeText(other_text_box, 'This is a test', {
+        replace: true
+    });
+    // switch to consult view
     await t.click(button_consult_view);
     await change_flex_style_to_inline(t);
-	other_text_box = Selector('#ft_OTHER_other_1_1');
-	await t.expect(other_text_box.value).eql('This is a test');
-	
-	// switch to advies view
+    other_text_box = Selector('#ft_OTHER_other_1_1');
+    await t.expect(other_text_box.value).eql('This is a test');
+
+    // switch to advies view
     await t.click(button_advise_view);
-	await change_flex_style_to_inline(t);
-	other_advice_row = Selector('#pt_OTHER_other_1');
-	other_advice_header = Selector('#pft_OTHER_other_1_0');
-	other_advice_box = Selector('#pft_OTHER_other_1_1');
-	await t.expect(other_advice_row.visible).ok();
-	await t.expect(other_advice_header.withText('Uw arts').exists).ok();
-	await t.expect(other_advice_box.withText('This is a test').exists).ok();
-	
-	//clean up
-	await t.click(button_prep_view);
     await change_flex_style_to_inline(t);
-	await t.click(other_text_box);
-	await t.pressKey('ctrl+a delete'); //apparently this is what you have to do to clear the text box
-	await t.expect(cb_selector.visible).ok();
+    other_advice_row = Selector('#pt_OTHER_other_1');
+    other_advice_header = Selector('#pft_OTHER_other_1_0');
+    other_advice_box = Selector('#pft_OTHER_other_1_1');
+    await t.expect(other_advice_row.visible).ok();
+    await t.expect(other_advice_header.withText('Uw arts').exists).ok();
+    await t.expect(other_advice_box.withText('This is a test').exists).ok();
+
+    //clean up
+    await t.click(button_prep_view);
+    await change_flex_style_to_inline(t);
+    await t.click(other_text_box);
+    await t.pressKey('ctrl+a delete'); //apparently this is what you have to do to clear the text box
+    await t.expect(cb_selector.visible).ok();
     other_is_checked = await cb_selector.checked;
     if (other_is_checked) {
         await t.click(cb_selector);
@@ -675,8 +677,8 @@ test('Redirect to error page if invalid navigation is attempted', async t => {
     let getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
     let body = Selector('body');
-    await t.expect(body.withText('Error').exists).ok()
-    await t.expect(body.withText('DummyMRN-000000172').exists).ok()
+    await t.expect(body.withText('Error').exists).ok();
+    await t.expect(body.withText('DummyMRN-000000172').exists).ok();
 
     let url_no_user =
         `${BASE_URL}/load` +
@@ -686,8 +688,8 @@ test('Redirect to error page if invalid navigation is attempted', async t => {
     getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
     body = Selector('body');
-    await t.expect(body.withText('Error').exists).ok()
-    await t.expect(body.withText('DummyMRN-000000172').exists).ok()
+    await t.expect(body.withText('Error').exists).ok();
+    await t.expect(body.withText('DummyMRN-000000172').exists).ok();
 
     let url_no_mrn =
         `${BASE_URL}/load` +
@@ -697,8 +699,8 @@ test('Redirect to error page if invalid navigation is attempted', async t => {
     getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
     body = Selector('body');
-    await t.expect(body.withText('Error').exists).ok()
-    await t.expect(body.withText('DummyMRN-000000172').exists).notOk()
+    await t.expect(body.withText('Error').exists).ok();
+    await t.expect(body.withText('DummyMRN-000000172').exists).notOk();
 });
 
 test('Redirect to error page if doctor_id is lost', async t => {
@@ -712,8 +714,8 @@ test('Redirect to error page if doctor_id is lost', async t => {
     let getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
     let body = Selector('body');
-    await t.expect(body.withText('Error').exists).ok()
-    await t.expect(body.withText('verloren').exists).ok()
+    await t.expect(body.withText('Error').exists).ok();
+    await t.expect(body.withText('verloren').exists).ok();
     await t.expect(body.withText('DummyMRN-000000172').exists).notOk();
 });
 
@@ -731,7 +733,7 @@ test('Redirect to error page if patient_id is bad', async t => {
     let getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
     let body = Selector('body');
-    await t.expect(body.withText('Error').exists).ok()
+    await t.expect(body.withText('Error').exists).ok();
     if (0) {
         // in manual testing, if we spam the invalid patient id start page,
         // we can see that sometimes we get a message indicating that we have
@@ -739,7 +741,7 @@ test('Redirect to error page if patient_id is bad', async t => {
         // > Socket closed: <empty string>  will try to reconnect
         // must debug this
         await t.expect(body.withText('invalid').exists).ok();
-	    await t.expect(body.withText('verloren').exists).notOk();
+        await t.expect(body.withText('verloren').exists).notOk();
         await t.expect(body.withText('DummyMRN-000000172').exists).notOk();
     }
 });
@@ -759,10 +761,10 @@ test('Check multiple viewers making changes', async t => {
     await change_flex_style_to_inline(t);
 
     // initial check that patient data is rendered
-    await t.expect(selector.withText('Indicatie hypertensie').exists).ok()
-    await t.expect(selector.withText('Enalapril').exists).ok()
-    await t.expect(selector.withText('Hydrochlorothiazide').exists).ok()
-    await t.expect(selector.withText('ACE-remmers').exists).ok()
+    await t.expect(selector.withText('Indicatie hypertensie').exists).ok();
+    await t.expect(selector.withText('Enalapril').exists).ok();
+    await t.expect(selector.withText('Hydrochlorothiazide').exists).ok();
+    await t.expect(selector.withText('ACE-remmers').exists).ok();
 
     let atc = "C03AA03"; // hydrochlorothiazide
     let rule = "42";
