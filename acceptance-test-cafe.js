@@ -10,6 +10,11 @@
   'acceptance-test-cafe.js',
   'http://127.0.0.1:8090'
 */
+
+/* To run tests not headless (using 55556 as an arbitrary port):
+ node adfice-webserver-runner.js 55556
+ ./node_modules/.bin/testcafe firefox acceptance-test-cafe.js http://127.0.0.1:55556
+*/
 let BASE_URL = process.argv[4];
 
 import {
@@ -532,6 +537,7 @@ test('Test reload data', async t => {
 
 });
 
+
 test('Nonmed headers display correctly', async t => {
     let mrn = 'DummyMRN-000000160';
     let participant = 10160;
@@ -656,7 +662,6 @@ test('Other med advice box', async t => {
     }
 });
 
-
 test('Redirect to error page if invalid navigation is attempted', async t => {
     let mrn = 'DummyMRN-000000172';
     let user = 'dr_bob';
@@ -721,15 +726,17 @@ test('Redirect to error page if patient_id is bad', async t => {
         `${BASE_URL}/start` +
         `?id=00000000-0000-4000-8000-000000000000`;
     window1 = await t.navigateTo(url_bad_patient_id);
-    // Redirect takes a moment. We have to wait.
-    // await t.wait(4000);
+    // Will sometimes show "session is lost" (verloren) error instead if we don't wait. So we wait.
+    await t.wait(3000);
     let getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
     let body = Selector('body');
     await t.expect(body.withText('Error').exists).ok()
-    await t.expect(body.withText('verloren').exists).ok()
+    await t.expect(body.withText('invalid').exists).ok()
+	await t.expect(body.withText('verloren').exists).notOk();
     await t.expect(body.withText('DummyMRN-000000172').exists).notOk();
 });
+
 
 // slow tests run last
 test('Check multiple viewers making changes', async t => {
