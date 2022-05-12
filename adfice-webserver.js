@@ -103,11 +103,11 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         let mrn = req.query.mrn;
         let user_id = req.query.user;
         let participant_number = req.query.participant;
-        if (mrn == null || user_id == null || participant_number == null) {
+        if (mrn == null || user_id == null) {
             if (mrn == null) {
                 res.redirect('/load-error');
             }
-            if (user_id == null || participant_number == null) {
+            if (user_id == null) {
                 let p_str = '?mrn=' + mrn;
                 res.redirect('/load-error' + p_str);
             }
