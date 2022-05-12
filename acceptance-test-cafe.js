@@ -544,8 +544,8 @@ test('Test load new patient data', async t => {
     let participant = 10175;
     let window0 = await load(t, mrn, participant);
     //this test assumes we are using the stub_etl
-    
-	let lab_table = Selector("#lab_table");
+
+    let lab_table = Selector("#lab_table");
     await t.expect(lab_table.withText("natrium").exists).ok();
     await t.expect(lab_table.withText("135").exists).ok();
 
@@ -682,19 +682,19 @@ test('Redirect to error page if invalid navigation is attempted', async t => {
     let mrn = 'DummyMRN-000000172';
     let user = 'dr_bob';
     let participant = '10172';
-/* URL with null participant is (at least temporarily) accepted
-    let url_no_participant =
-        `${BASE_URL}/load` +
-        `?mrn=${mrn}` +
-        `&user=${user}`;
-    let window1 = await t.openWindow(url_no_participant);
+    /* URL with null participant is (at least temporarily) accepted
+        let url_no_participant =
+            `${BASE_URL}/load` +
+            `?mrn=${mrn}` +
+            `&user=${user}`;
+        let window1 = await t.openWindow(url_no_participant);
 
-    let getLocation = ClientFunction(() => document.location.href);
-    await t.expect(getLocation()).contains('load-error');
-    let body = Selector('body');
-    await t.expect(body.withText('Error').exists).ok();
-    await t.expect(body.withText('DummyMRN-000000172').exists).ok();
-*/
+        let getLocation = ClientFunction(() => document.location.href);
+        await t.expect(getLocation()).contains('load-error');
+        let body = Selector('body');
+        await t.expect(body.withText('Error').exists).ok();
+        await t.expect(body.withText('DummyMRN-000000172').exists).ok();
+    */
     let url_no_user =
         `${BASE_URL}/load` +
         `?mrn=${mrn}` +
