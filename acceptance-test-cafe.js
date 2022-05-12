@@ -65,6 +65,8 @@ async function load(t, mrn, participant) {
     return await t.openWindow(url);
 }
 
+const getWindowLocation = ClientFunction(() => window.location);
+
 test('Automatic selection of free text checkbox when text entered', async t => {
     let mrn = 'DummyMRN-000000024';
     let participant = 10024;
@@ -537,6 +539,18 @@ test('Test reload data', async t => {
 
 });
 
+test('Test load new patient data', async t => {
+    let mrn = 'DummyMRN-000000175';
+    let participant = 10175;
+    let window0 = await load(t, mrn, participant);
+    //this test assumes we are using the stub_etl
+    
+	let lab_table = Selector("#lab_table");
+    await t.expect(lab_table.withText("natrium").exists).ok();
+    await t.expect(lab_table.withText("135").exists).ok();
+
+});
+
 
 test('Nonmed headers display correctly', async t => {
     let mrn = 'DummyMRN-000000160';
@@ -668,6 +682,7 @@ test('Redirect to error page if invalid navigation is attempted', async t => {
     let mrn = 'DummyMRN-000000172';
     let user = 'dr_bob';
     let participant = '10172';
+/* URL with null participant is (at least temporarily) accepted
     let url_no_participant =
         `${BASE_URL}/load` +
         `?mrn=${mrn}` +
@@ -679,15 +694,14 @@ test('Redirect to error page if invalid navigation is attempted', async t => {
     let body = Selector('body');
     await t.expect(body.withText('Error').exists).ok();
     await t.expect(body.withText('DummyMRN-000000172').exists).ok();
-
+*/
     let url_no_user =
         `${BASE_URL}/load` +
         `?mrn=${mrn}` +
         `&participant=${participant}`;
     let window2 = await t.openWindow(url_no_user);
-    getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
-    body = Selector('body');
+    let body = Selector('body');
     await t.expect(body.withText('Error').exists).ok();
     await t.expect(body.withText('DummyMRN-000000172').exists).ok();
 
@@ -696,7 +710,6 @@ test('Redirect to error page if invalid navigation is attempted', async t => {
         `?user=${user}` +
         `&participant=${participant}`;
     let window3 = await t.openWindow(url_no_mrn);
-    getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
     body = Selector('body');
     await t.expect(body.withText('Error').exists).ok();
