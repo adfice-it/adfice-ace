@@ -1,6 +1,9 @@
 Important:
 * Figure out "on update" statements for research tables
 * Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?
+* stress test doctor_id errors - why does the commented-out code fix the problem?
+* add a mysqldump to the SQL scripts
+ -- something like: if path for db backups is specified, back up the database before dropping tables.
 * make changes to ICD-10 mapping
 * Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
 * Show appropriate errors when someone attempts to access system and:
