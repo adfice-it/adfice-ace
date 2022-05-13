@@ -191,6 +191,7 @@ ADFICE_TAR_CONTENTS=COPYING \
 		$(shell find static views -type l) \
 		system.db-scripts.env \
 		testingNotes.txt \
+		$(shell ls *etl-options.json) \
 		TODO
 
 # transform fails to do something sensible with symbolic links
