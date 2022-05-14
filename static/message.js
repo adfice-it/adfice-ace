@@ -388,7 +388,7 @@ function ws_on_message(event) {
     if (message.type == 'error_message') {
         message_globals.logger.log(JSON.stringify(message, null, 4));
         let url = "/load-error";
-        if (message.text = 'No doctor_id in session') {
+        if (message.text == 'No doctor_id in session') {
             url += "?err=Verbinding met server is verloren."
         }
         window.location = url;

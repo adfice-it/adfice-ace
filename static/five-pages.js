@@ -53,8 +53,15 @@ function page_load(before_socket) {
         }
         if ((!json_data.patient_advice) ||
             (json_data.patient_advice.patient_id != five_pages.patient_id)) {
+            if (!json_data.patient_advice) {
+                console.log("no json_data patient_advice");
+            } else {
+                console.log("expected patient_id '" + five_pages.patient_id +
+                    "' but was '" + json_data.patient_advice.patient_id + "'.");
+            }
             let url = "/load-error?err=patient_id is invalid";
             window.location = url;
+            return;
         }
         five_pages.data = json_data;
         if (five_pages.debug > 0) {

@@ -648,6 +648,7 @@ test('Other med advice box', async t => {
     other_text_box = Selector('#ft_OTHER_other_1_1');
     await t.click(other_text_box);
     await t.typeText(other_text_box, 'This is a test', {
+        speed: 0.1,
         replace: true
     });
     // switch to consult view

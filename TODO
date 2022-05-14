@@ -81,3 +81,5 @@ Important, but unable to do yet:
 * Sending data to research database (right now we have some tables in our own database that mimic the research db tables)
 * Users wanted a "close this tab" button on each refpage that closes the tab. However, the method that works on IE is considered bad practice, and might not work in the actual deployment environment. We can look into this in the actual deployment enviornment.
 
+* the "debounce" of typing input does not work reliably with headless test-cafe
+  * adding a "speed:0.1" worked around it, but we should do better

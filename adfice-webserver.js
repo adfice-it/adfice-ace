@@ -258,10 +258,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         /* viewer_id should come from the session */
         let viewer_id = global_patient_advice_message_count;
         let patient_advice = await adfice.get_advice_for_patient(id);
-        /*        if (patient_advice.patient_id != id) {
-                    return make_error_message('patient id not valid', kind, id);
-                }
-        */
+        if (patient_advice.patient_id != id) {
+            return make_error_message('patient id not valid', kind, id);
+        }
         let freetexts = patient_advice.free_texts;
         let selections = patient_advice.selected_advice || {};
 
