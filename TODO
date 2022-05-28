@@ -1,7 +1,7 @@
 Important:
+* update to node 16
 * Figure out "on update" statements for research tables
 * Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?
-* stress test doctor_id errors - why does the commented-out code fix the problem?
 * add a mysqldump to the SQL scripts
  -- something like: if path for db backups is specified, back up the database before dropping tables.
 * make changes to ICD-10 mapping
@@ -9,8 +9,6 @@ Important:
 * Show appropriate errors when someone attempts to access system and:
         - if the page renew fails, it should notify the user in some way
 * Add back button to Lees meer page
-* TODOs in prediction explanation page
-* Expunge unused Prediction code
 * Stubborn caching in IE means that browser must be closed and reopened to get new data to load after Vernieuwen or Verstuur (sending hand-entered prediction model data). All the headers that are supposed to control this have been added. I can't figure out anything else to try to make this work. Apparently it partly depends on browser settings; see what happens in the real deploy.
 
 
@@ -69,7 +67,10 @@ Low Priority:
 * tidy css page and make naming more consistant
 * testcafe checkboxes contained in display:flex divs are not clickable
   * open a bug with a tiny reproducible example
-
+* the "debounce" of typing input does not work reliably with headless test-cafe
+  * adding a "speed:0.1" worked around it, but we should do better
+  
+---------------------------------------------------------
 Requested (not required) changes to rules:
 * Rule 50: Split to personalize by age
 * Rule 45: Split to personalize by +/- OH.
@@ -83,6 +84,5 @@ Important, but unable to do yet:
   * session expiration? browser caching? detect back button, return to page?
 * Sending data to research database (right now we have some tables in our own database that mimic the research db tables)
 * Users wanted a "close this tab" button on each refpage that closes the tab. However, the method that works on IE is considered bad practice, and might not work in the actual deployment environment. We can look into this in the actual deployment enviornment.
+---------------------------------------------------------
 
-* the "debounce" of typing input does not work reliably with headless test-cafe
-  * adding a "speed:0.1" worked around it, but we should do better
