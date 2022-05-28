@@ -919,7 +919,7 @@ function freetexts_to_rows(patient_id, doctor_id, freetexts) {
     return output;
 }
 
-// called from export-to-mrs.js
+// called from export-to-portal.js
 async function get_export_data(patient_id) {
     let sql = `/* adfice.get_export_data */
     SELECT s.patient_id
@@ -975,7 +975,7 @@ async function export_patient(patient, logfile) {
         args.push(logfile);
     }
 
-    let cmd = process.cwd() + path.sep + 'export-to-mrs';
+    let cmd = process.cwd() + path.sep + 'export-to-portal';
 
     return autil.child_process_spawn(cmd, args);
 }

@@ -32,5 +32,5 @@ echo "" >> $LOG
 echo "----" >> $LOG
 date --utc +%Y.%m.%d_%H.%M.%S%z >> $LOG
 echo "ID: $ID" >> $LOG
-node ./export-to-mrs.js $ID >> $LOG
+node ./export-to-portal.js $ID >> $LOG
 echo "----" >> $LOG
