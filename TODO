@@ -1,5 +1,15 @@
 Important:
-* update to node 16
+* make adfice.export_patient actually export the advice + BSN to the portal
+  - make sure it is exporting to the right schema
+  - configure it to use the portal db settings
+  - consider whether this should really be a shell script or if it should be just another .js file
+  - current behavior:
+    button click ->>> adfice.export_patient
+	-> export-to-portal.sh
+	-> node ./export-to-portal.js
+	--> creates an instance of adfice.js and calls adfice.get_export_data(patient)
+	--> calls portal-export.js 
+	----> creates an instance of adfice-db with the portal db settings 
 * Figure out "on update" statements for research tables
 * Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?
 * add a mysqldump to the SQL scripts
