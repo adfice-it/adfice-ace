@@ -1014,21 +1014,20 @@ async function read_from_portal_db(portal_db_env_file_path, patient_id) {
 async function finalize_and_export(patient_id, portal_db_env_file_path,
     read_back) {
 
-    await this.finalize_advice(patient_id);
-
-    let json_advice = await this.get_export_data(patient_id);
-
     /* istanbul ignore else */
     if (!portal_db_env_file_path) {
         portal_db_env_file_path = './portal-dbconfig.env';
     }
 
+    let json_advice = await this.get_export_data(patient_id);
     await export_to_portal_db(portal_db_env_file_path, patient_id, json_advice);
 
     let rv = null;
     if (read_back) {
         rv = await read_from_portal_db(portal_db_env_file_path, patient_id);
     }
+
+    await this.finalize_advice(patient_id);
 
     return rv;
 }
