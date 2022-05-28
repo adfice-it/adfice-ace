@@ -965,21 +965,6 @@ async function get_export_data(patient_id) {
     return results;
 }
 
-// expect to be called from external
-async function export_patient(patient, logfile) {
-    let args = ['-i', patient];
-
-    /* istanbul ignore next */
-    if (logfile) {
-        args.push('-l');
-        args.push(logfile);
-    }
-
-    let cmd = process.cwd() + path.sep + 'export-to-portal';
-
-    return autil.child_process_spawn(cmd, args);
-}
-
 async function finalize_advice(patient_id) {
     let sql = `/* adfice.finalize_advice */
     UPDATE patient
@@ -991,9 +976,61 @@ async function finalize_advice(patient_id) {
     return result;
 }
 
-async function finalize_and_export(patient_id, logfile) {
+async function export_to_portal_db(portal_db_env_file_path, patient_id,
+    json_advice) {
+
+    let sqls_and_params = [];
+
+    sqls_and_params.push([
+        "DELETE FROM patient_advice WHERE patient_id = ?",
+        [patient_id]
+    ]);
+
+    sqls_and_params.push([
+        "INSERT INTO patient_advice (patient_id, json_advice) VALUES (?,?)",
+        [patient_id, JSON.stringify(json_advice)]
+    ]);
+
+    let db = await adb.init(null, portal_db_env_file_path);
+    try {
+        return await db.as_sql_transaction(sqls_and_params);
+    } finally {
+        await db.close();
+    }
+}
+
+async function read_from_portal_db(portal_db_env_file_path, patient_id) {
+    let sql = "SELECT json_advice FROM patient_advice WHERE patient_id = ?";
+    let params = [patient_id];
+
+    let db = await adb.init(null, portal_db_env_file_path);
+    try {
+        return await db.sql_query(sql, params);
+    } finally {
+        await db.close();
+    }
+}
+
+async function finalize_and_export(patient_id, portal_db_env_file_path,
+    read_back) {
+
     await this.finalize_advice(patient_id);
-    await this.export_patient(patient_id, logfile);
+
+    let json_advice = await this.get_export_data(patient_id);
+
+    /* istanbul ignore else */
+    if (!portal_db_env_file_path) {
+        portal_db_env_file_path = './portal-dbconfig.env';
+    }
+
+    await export_to_portal_db(portal_db_env_file_path, patient_id, json_advice);
+
+    let rv = null;
+    if (read_back) {
+        rv = await read_from_portal_db(portal_db_env_file_path, patient_id);
+    }
+
+    return rv;
 }
 
 async function add_log_event(doctor_id, patient_id, event_type) {
@@ -1087,7 +1124,6 @@ function adfice_init(db) {
         determine_preselected_checkboxes: determine_preselected_checkboxes,
         evaluate_sql: evaluate_sql,
         evaluate_sql_condition: evaluate_sql_condition,
-        export_patient: export_patient,
         finalize_advice: finalize_advice,
         get_active_rules: get_active_rules,
         get_advice_other_texts_checkboxes: get_advice_other_texts_checkboxes,

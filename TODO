@@ -4,12 +4,10 @@ Important:
   - configure it to use the portal db settings
   - consider whether this should really be a shell script or if it should be just another .js file
   - current behavior:
-    button click ->>> adfice.export_patient
-	-> export-to-portal.sh
-	-> node ./export-to-portal.js
-	--> creates an instance of adfice.js and calls adfice.get_export_data(patient)
-	--> calls portal-export.js 
-	----> creates an instance of adfice-db with the portal db settings 
+    button click ->>> adfice.finalize_and_export,
+	this instanitates a database connection using portal-dbconfig.env
+	which deletes previous patient_advice for that patient_id
+	and inserts the current advice
 * Figure out "on update" statements for research tables
 * Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?
 * add a mysqldump to the SQL scripts

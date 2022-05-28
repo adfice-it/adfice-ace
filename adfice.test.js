@@ -906,10 +906,6 @@ test('Log fired rules', async () => {
 test('export_patient', async () => {
     let patient = "00000000-0000-4000-8000-100000000168";
     let doctor_id = '1';
-    let file = "test-export_patient-168.log";
-    try {
-        fs.unlinkSync(file, (err) => {});
-    } catch (ignoreError) {}
 
     await clear_advice_for_patient(adfice, patient);
     let new_advice = {
@@ -921,32 +917,25 @@ test('export_patient', async () => {
     let freetexts = null;
     adfice.set_advice_for_patient(patient, doctor_id, new_advice, freetexts);
 
-    // essentially calling adfice.finalize_and_export(id), but with a file
-    await adfice.finalize_advice(patient);
-    await adfice.export_patient(patient, file);
+    const portal_db_env_path = null;
+    const read_back = true;
+    const returned = await adfice.finalize_and_export(patient,
+        portal_db_env_path, read_back);
 
-    const contents = fs.readFileSync(file, 'utf8');
+    const contents = JSON.stringify(returned);
 
     expect(contents).toMatch(/168/);
     expect(contents).toMatch(/metho/);
     expect(contents).toMatch(/Stoppen/);
     expect(contents).toMatch(/Valpre/);
-
-    fs.unlinkSync(file);
 });
 
 test('finalize_export API', async () => {
     let patient = "00000000-0000-4000-8000-100000000068";
-    let file = "test-export_patient-68-2.log";
-    try {
-        fs.unlinkSync(file, (err) => {});
-    } catch (ignoreError) {}
-
     await clear_advice_for_patient(adfice, patient);
-    await adfice.finalize_and_export(patient, file);
+    await adfice.finalize_and_export(patient);
     let patientAdvice = await adfice.get_advice_for_patient(patient);
     expect(patientAdvice.is_final).toBeTruthy();
-    fs.unlinkSync(file);
     await clear_advice_for_patient(adfice, patient);
 });
 
