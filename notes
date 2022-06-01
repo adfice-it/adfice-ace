@@ -2,3 +2,39 @@ JS setup:
 * sudo apt install npm
 * npm install mariadb
 * on Windows, download and install node.js
+
+Testing:
+The "make check" target will load the test data in a local instance.
+
+Assuming the test patients are in the system, first go to the "load"
+page, as if sent there by the EHR.
+
+The "load" page expects 3 parameters,
+* mrn
+* user
+* participant
+
+The test data (see: sql/insertSynthetic_patient.sql) is all of the form
+that the "mrn", and the adfice patient id all are roughly matched.
+
+The mrn values for the test users are of the form: DummyMRN-000000xxx
+where the "xxx" is a number greater than zero.
+
+The patient_id is of the test users are of the from:
+00000000-0000-4000-8000-100000000xxx
+where the "xxx" of the patient_id matches the "xxx" of the mrn.
+
+Note that an "all zeros" Version 4 (random) UUID would look like:
+00000000-0000-4000-8000-000000000000
+The test data puts a "1" in value in the 21st position, and then
+fills the last three positions. If we create fake-random UUIDs for
+something other than a patient, we can put a different value than
+"1" in the 21st position.
+
+The participant number is typically NULL, or 10xxx where "xxx" matches.
+
+The test data "users" of the system are "dr_alice" and "dr_bob"
+
+To look at test patient 167, the URL would look like this:
+
+http://localhost:8080/load?mrn=DummyMRN-000000167&user=dr_bob&participant=10167
