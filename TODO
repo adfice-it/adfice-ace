@@ -1,13 +1,10 @@
 Important:
 * make adfice.export_patient actually export the advice + BSN to the portal
-  - make sure it is exporting to the right schema
-  - configure it to use the portal db settings
-  - consider whether this should really be a shell script or if it should be just another .js file
   - current behavior:
-    button click ->>> adfice.finalize_and_export,
-	this instanitates a database connection using portal-dbconfig.env
-	which deletes previous patient_advice for that patient_id
-	and inserts the current advice
+    button click ->>> adfice.finalize_and_export (defaults to using portal-dbconfig.env)
+	-> calls get_export_data, export_to_portal_db (which writes to the portal db)
+* Give better feedback if portal export succeeds, and useful feedback if it fails.	
+	- finalize_advice returns a result; this result could be passed back to the UI to generate a reaction
 * Figure out "on update" statements for research tables
 * Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?
 * add a mysqldump to the SQL scripts
@@ -26,7 +23,6 @@ Mid Priority:
     https://confluence.hl7.org/display/FHIR/Public+Test+Servers
   * stub-etl will always succeed; 
     consider adding code which simulates a failed retrieval to test failure states
-* change and rename "export-to-mrs" so that it only exports to the portal rather than attempting to be a generic solution for exporting anywhere (portal db might be a remote db, or might be another db running on the same MariaDB instance). What does it take to create a working demo (a running adfice-ace will actually export to a running valportaal)?
 * change separation of labor so adfice-ace writes to the database and adfice-xxx-etl returns a JSON with the needed data rather than writing directly to the DB (move SQL code from etl to adfice-ace and have etl build a json without the SQL)
 * consider removing birth date entirely from the data; we only need age
 * fix testcafe acceptance tests to work with testcafe v1.16.1

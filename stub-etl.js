@@ -176,12 +176,14 @@ Tables patient and etl_patient_bsn are updated; for the other tables
 we delete any old data before adding new data.
 */
 async function etl_renew(patient_id, options) {
+	let fake_bsn = '888000' 
+		+  patient_id.substring(patient_id.length-4, patient_id.length);
     let list_of_transactions = [
         ['/* patientListOfUpdates */ UPDATE patient SET birth_date = ?, age = ?, is_final = 0 WHERE patient_id = ?',
             ['1940-1-1', '82', patient_id]
         ],
         ['/* patientListOfUpdates */ UPDATE etl_bsn_patient SET bsn = ? WHERE patient_id = ?',
-            ['123456782', patient_id]
+            [fake_bsn, patient_id]
         ],
         ['SET @patient_id= ?', [patient_id]],
         ['DELETE FROM patient_medication where patient_id = ?', [patient_id]],

@@ -305,6 +305,7 @@ async function get_patient_by_id(patient_id) {
     return patient;
 }
 
+// Why is patient_id in params twice?
 async function get_labs(patient_id) {
     var sql = `/* adfice.get_labs */
         SELECT lab_test_name
@@ -327,6 +328,19 @@ async function get_patient_measurements(patient_id) {
     let results = await this.sql_select(sql, params);
     if (results.length > 0) {
         return results;
+    }
+    return null;
+}
+
+async function get_bsn(patient_id) {
+    var sql = `/* adfice.get_bsn */
+        SELECT bsn
+          FROM etl_bsn_patient
+         WHERE patient_id=?`
+    let params = [patient_id];
+    let results = await this.sql_select(sql, params);
+        if (results.length == 1) {
+        return results[0]['bsn'];
     }
     return null;
 }
@@ -977,7 +991,7 @@ async function finalize_advice(patient_id) {
 }
 
 async function export_to_portal_db(portal_db_env_file_path, patient_id,
-    json_advice) {
+    bsn, json_advice) {
 
     let sqls_and_params = [];
 
@@ -987,8 +1001,8 @@ async function export_to_portal_db(portal_db_env_file_path, patient_id,
     ]);
 
     sqls_and_params.push([
-        "INSERT INTO patient_advice (patient_id, json_advice) VALUES (?,?)",
-        [patient_id, JSON.stringify(json_advice)]
+        "INSERT INTO patient_advice (patient_id, bsn, json_advice) VALUES (?,?,?)",
+        [patient_id, bsn, JSON.stringify(json_advice)]
     ]);
 
     let db = await adb.init(null, portal_db_env_file_path);
@@ -999,6 +1013,7 @@ async function export_to_portal_db(portal_db_env_file_path, patient_id,
     }
 }
 
+// this function only exists to confirm that the write to the portal was successful
 async function read_from_portal_db(portal_db_env_file_path, patient_id) {
     let sql = "SELECT json_advice FROM patient_advice WHERE patient_id = ?";
     let params = [patient_id];
@@ -1020,7 +1035,9 @@ async function finalize_and_export(patient_id, portal_db_env_file_path,
     }
 
     let json_advice = await this.get_export_data(patient_id);
-    await export_to_portal_db(portal_db_env_file_path, patient_id, json_advice);
+	let bsn = await this.get_bsn(patient_id);
+	
+    await export_to_portal_db(portal_db_env_file_path, patient_id, bsn, json_advice);
 
     let rv = null;
     if (read_back) {
@@ -1131,7 +1148,8 @@ function adfice_init(db) {
         get_all_advice_texts_checkboxes: get_all_advice_texts_checkboxes,
         get_all_problems: get_all_problems,
         get_all_labs: get_all_labs,
-        get_export_data: get_export_data,
+        get_bsn: get_bsn,
+		get_export_data: get_export_data,
         get_freetexts: get_freetexts,
         get_labs: get_labs,
         get_meds: get_meds,
