@@ -1,10 +1,10 @@
 Important:
-* make adfice.export_patient actually export the advice + BSN to the portal
-  - current behavior:
-    button click ->>> adfice.finalize_and_export (defaults to using portal-dbconfig.env)
-	-> calls get_export_data, export_to_portal_db (which writes to the portal db)
 * Give better feedback if portal export succeeds, and useful feedback if it fails.	
 	- finalize_advice returns a result; this result could be passed back to the UI to generate a reaction
+	- how do we construct a test to simulate a failed write to the db?
+	  -- if the path is bad, throws an error. We should probably catch this error.
+	  -- but if the path is fine but something goes wrong with the transaction, we still want it to fail.
+* a malformed URL seems to cause the application to crash. We should probably make it robust to malformed URLs.	  
 * Figure out "on update" statements for research tables
 * Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?
 * add a mysqldump to the SQL scripts

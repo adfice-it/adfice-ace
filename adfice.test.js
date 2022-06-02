@@ -942,6 +942,27 @@ test('export_patient', async () => {
     expect(contents).toMatch(/Valpre/);
 });
 
+test('Do not export patients without BSN', async () => {
+    let patient = "bogus";
+    let doctor_id = '1';
+
+    await clear_advice_for_patient(adfice, patient);
+    let new_advice = {
+        "cb_M03BA03_88_2": true,
+        "cb_OTHER_other_1": true,
+        "cb_NONMED_A_1": true
+    };
+    let freetexts = null;
+    await adfice.set_advice_for_patient(patient, doctor_id, new_advice, freetexts);
+
+    const portal_db_env_path = null;
+    const read_back = true;
+    const returned = await adfice.finalize_and_export(patient,
+        portal_db_env_path, read_back);
+
+    expect(returned).toBe(null);
+});
+
 test('finalize_export API', async () => {
     let patient = "00000000-0000-4000-8000-100000000068";
     await clear_advice_for_patient(adfice, patient);
