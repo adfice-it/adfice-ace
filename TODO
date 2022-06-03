@@ -1,9 +1,11 @@
 Important:
+* Add some functionality for session timeout/redirect to error page. We will need this if I can't get the EHR's built-in browser to work. 
+* Display MRN instead of patient ID.
 * Give better feedback if portal export succeeds, and useful feedback if it fails.	
 	- finalize_advice returns a result; this result could be passed back to the UI to generate a reaction
-	- how do we construct a test to simulate a failed write to the db?
-	  -- if the path is bad, throws an error. We should probably catch this error.
-	  -- but if the path is fine but something goes wrong with the transaction, we still want it to fail.
+	- how do we construct a test to simulate a failed write to the db? (see adfice.js line 1045)
+	  -- if it cannot connect to the db, the test times out but it does not throw an error. How do we detect this and show an appropriate error to the user?
+	  -- If the path is fine but something goes wrong with the transaction, we want to detect this error. Is there a way to do this from the return value? (See adfice.js line 1043)
 * a malformed URL seems to cause the application to crash. We should probably make it robust to malformed URLs.	  
 * Figure out "on update" statements for research tables
 * Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?

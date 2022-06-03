@@ -1040,7 +1040,7 @@ async function finalize_and_export(patient_id, portal_db_env_file_path,
 	// if we fail to retrieve a BSN, we probably should not be exporting to the portal
 	if(bsn){
 		let success = await export_to_portal_db(portal_db_env_file_path, patient_id, bsn, json_advice);
-		
+// console.log("Success looks like this: " + JSON.stringify({success}, null, 4));		
 		/* istanbul ignore next */
 		if(!success){
 			return null;
