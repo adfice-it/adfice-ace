@@ -6,16 +6,15 @@ Important:
 	- how do we construct a test to simulate a failed write to the db? (see adfice.js line 1045)
 	  -- if it cannot connect to the db, the test times out but it does not throw an error. How do we detect this and show an appropriate error to the user?
 	  -- If the path is fine but something goes wrong with the transaction, we want to detect this error. Is there a way to do this from the return value? (See adfice.js line 1043)
-* a malformed URL seems to cause the application to crash. We should probably make it robust to malformed URLs.	  
 * Figure out "on update" statements for research tables
 * Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?
 * add a mysqldump to the SQL scripts
  -- something like: if path for db backups is specified, back up the database before dropping tables.
-* make changes to ICD-10 mapping
-* Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
 * Show appropriate errors when someone attempts to access system and:
         - if the page renew fails, it should notify the user in some way
 * Add back button to Lees meer page
+* make changes to ICD-10 mapping
+* Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
 * Stubborn caching in IE means that browser must be closed and reopened to get new data to load after Vernieuwen or Verstuur (sending hand-entered prediction model data). All the headers that are supposed to control this have been added. I can't figure out anything else to try to make this work. Apparently it partly depends on browser settings; see what happens in the real deploy.
 
 

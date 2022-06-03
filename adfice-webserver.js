@@ -103,13 +103,19 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         let mrn = req.query.mrn;
         let user_id = req.query.user;
         let participant_number = req.query.participant;
-        if (mrn == null || user_id == null) {
-            if (mrn == null) {
+        if (mrn == null 
+			|| user_id == null 
+			|| typeof(mrn)!= 'string' //If there are 2 MRNs in the URL, error
+			|| typeof(user_id) != 'string') //If there are 2 user_ids in the URL, error
+			{
+            if (mrn == null || typeof(mrn)!= 'string' ) {
                 res.redirect('/load-error');
+				return;
             }
-            if (user_id == null) {
+            if (user_id == null || typeof(user_id) != 'string') {
                 let p_str = '?mrn=' + mrn;
                 res.redirect('/load-error' + p_str);
+				return;
             }
         } else {
             let id = await adfice.id_for_mrn(mrn);
