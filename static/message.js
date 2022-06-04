@@ -12,6 +12,7 @@ var message_globals = {
     freetexts_entered: null,
     weirdness: 0,
     messages_received: 0,
+    reset_session_timeout: false,
     debug: 0,
     logger: console
 };
@@ -22,6 +23,7 @@ function send_message(message_type, apply) {
 
     message.patient_id = message_globals.patient_id;
     message.type = message_type;
+    message.reset_session_timeout = message_globals.reset_session_timeout;
 
     if (apply) {
         apply(message);
@@ -33,6 +35,7 @@ function send_message(message_type, apply) {
     }
     try {
         message_globals.ws.send(msg_str);
+        message_globals.reset_session_timeout = false;
     } catch (err) {
         message_globals.logger.log(err, 'could not send:', msg_str);
         ++message_globals.weirdness;
@@ -387,15 +390,33 @@ function ws_on_message(event) {
 
     if (message.type == 'error_message') {
         message_globals.logger.log(JSON.stringify(message, null, 4));
-		if(message.text.includes("Portal write error")){
-			alert("Er was een probleem optreden met het verzending naar het Valportaal. Print het advies a.u.b. uit vanuit het Advies pagina, en geef het aan de patiënt op papier. U kunt het versturen naar het Valportaal later opnieuw proberen.");
-		} else {
-			let url = "/load-error";
-			if (message.text == 'No doctor_id in session') {
-				url += "?err=Verbinding met server is verloren."
-			}
-			window.location = url;
-		}
+        if (message.text.includes("Portal write error")) {
+            alert("Er was een probleem optreden met het verzending naar het Valportaal. Print het advies a.u.b. uit vanuit het Advies pagina, en geef het aan de patiënt op papier. U kunt het versturen naar het Valportaal later opnieuw proberen.");
+        } else {
+            let url = "/load-error";
+            if (message.text == 'No doctor_id in session') {
+                url += "?err=Verbinding met server is verloren."
+            }
+            window.location = url;
+        }
+    }
+
+    if ('timeout_ms_remaining' in message) {
+        const two_minutes = (2 * 60 * 1000);
+        const ten_seconds = (10 * 1000);
+        let remaining = message.timeout_ms_remaining;
+
+        if (remaining < ten_seconds) {
+            let url = "/load-error";
+            url += "?err=Session expired."
+            window.location = url;
+        } else if (remaining < two_minutes) {
+            let div = document.getElementById("expiration");
+            div.style.display = 'block';
+        } else {
+            let div = document.getElementById("expiration");
+            div.style.display = 'none';
+        }
     }
 }
 
@@ -484,6 +505,12 @@ function url_param(par_name) {
     }
 }
 
+function send_ping() {
+    send_message("ping", function(msg) {
+        msg.sent = Date.now();
+    });
+}
+
 function connect_web_socket_and_keep_alive() {
     connect_web_socket();
 
@@ -491,9 +518,7 @@ function connect_web_socket_and_keep_alive() {
     let ping_interval = 4 * one_second;
     setInterval(function() {
         if (message_globals.ws) {
-            send_message("ping", function(msg) {
-                msg.sent = Date.now();
-            });
+            send_ping();
         }
     }, ping_interval);
 
@@ -576,4 +601,9 @@ function window_print() {
     window.print();
     send_message('was_printed');
     return true;
+}
+
+function reset_session_timeout() {
+    message_globals.reset_session_timeout = true;
+    send_ping();
 }

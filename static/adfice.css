@@ -54,6 +54,14 @@ body {
 	padding-bottom: 1em;
 }
 
+#expiration {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	text-align: center;
+	display: none;
+}
+
 #footer {
     position: fixed;
     bottom: 0;

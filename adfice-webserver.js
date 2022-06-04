@@ -55,7 +55,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 
     let app = express();
 
-    let max_session_ms = 2 * 60 * 60 * 1000; // two hours
+    let max_session_ms = 15 * 60 * 1000; // 15 minutes
     var session_manager = session({
         secret: cookie_secret,
         cookie: {
@@ -129,14 +129,15 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                 param_str += '&err=' + encoded_err;
             }
             res.redirect('/load-error' + param_str);
-        } else {
-            await adfice.add_log_event_access(user_id, id);
-            let doctor_id = await adfice.doctor_id_for_user(user_id);
-            log_debug(server, 'setting doctor id:', doctor_id);
-            req.session.doctor_id = doctor_id;
-
-            res.redirect('/start?id=' + id);
+            return;
         }
+
+        await adfice.add_log_event_access(user_id, id);
+        let doctor_id = await adfice.doctor_id_for_user(user_id);
+        log_debug(server, 'setting doctor id:', doctor_id);
+        req.session.doctor_id = doctor_id;
+
+        res.redirect('/start?id=' + id);
     });
 
     // // sketch of post support
@@ -193,8 +194,18 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         ws.send(msg_string);
     }
 
+    function has_user_activity(message) {
+        if (message.type != 'ping') {
+            return true;
+        }
+        if (message.reset_session_timeout) {
+            return true;
+        }
+        return false;
+    }
+
     async function handle_patient_message(ws, doctor_id, patient_id, kind,
-        message) {
+        message, timeout_ms_remaining) {
         if (('box_states' in message) ||
             ('field_entries' in message)) {
             let selections = message['box_states'];
@@ -204,13 +215,13 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         }
         if (message.type == 'definitive') {
             let result = await adfice.finalize_and_export(patient_id);
-			if(result.error){
-				send_error(ws, result.error, kind, patient_id);
-			} else {		
-				let new_msg = await patient_advice_message(kind,
-					patient_id);
-				send_all(kind, patient_id, new_msg);
-			}
+            if (result.error) {
+                send_error(ws, result.error, kind, patient_id);
+            } else {
+                let new_msg = await patient_advice_message(kind,
+                    patient_id);
+                send_all(kind, patient_id, new_msg);
+            }
         } else if (message.type == 'patient_renew') {
             await adfice.add_log_event_renew(doctor_id, patient_id);
             let returned_patient = await etl.etl_renew(patient_id);
@@ -240,6 +251,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             pong.type = 'pong';
             pong.sent = message.sent;
             pong.recv = Date.now();
+            pong.timeout_ms_remaining = timeout_ms_remaining;
             msg_header(pong, kind, patient_id);
             let msg_string = JSON.stringify(pong, null, 4);
             if (DEBUG > 2) {
@@ -330,6 +342,10 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                     if (DEBUG > 2) {
                         console.log('received: ', data);
                     }
+                    if (request.session.cookie.maxAge < 1) {
+                        ws.close();
+                        return;
+                    }
                     try {
                         if (!request.session) {
                             throw 'No session?';
@@ -352,15 +368,20 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                         }
 
                         let message = JSON.parse(data);
+                        let user_activity = has_user_activity(message);
+                        if (user_activity) {
+                            request.session.touch();
+                        }
                         if (DEBUG > 0 && message.type != 'ping') {
                             console.log('received: ', data);
                         }
                         message.viewers = server.receivers[kind][id].size;
                         let id_key = `${kind}_id`;
+                        let timeout_ms_remaining = request.session.cookie.maxAge;
                         if (message[id_key] == id) {
                             let patient_id = id;
                             handle_patient_message(ws, doctor_id, patient_id,
-                                kind, message);
+                                kind, message, timeout_ms_remaining);
                         }
                     } catch (error) {
                         console.log(error);
