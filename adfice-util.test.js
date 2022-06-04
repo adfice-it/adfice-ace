@@ -152,3 +152,10 @@ test('set_version_and_variant, uuid_bytes_to_string', function() {
     let uuid_str = autil.uuid_bytes_to_string(bytes);
     expect(uuid_str).toBe("00000000-0000-4000-8000-000000000003");
 });
+
+test('tmp_path defaults', function() {
+    let prefix;
+    let suffix;
+    let path = autil.tmp_path(prefix, suffix);
+    expect(path).toMatch(/tmp\./);
+});

@@ -6,6 +6,7 @@
 const util = require("util");
 const child_process = require('child_process');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const crypto = require('crypto');
 
@@ -54,11 +55,22 @@ function split_freetext(str) {
     return result;
 }
 
+function tmp_path(prefix, suffix) {
+    prefix = (typeof prefix !== 'undefined') ? prefix : 'tmp.';
+    suffix = (typeof suffix !== 'undefined') ? suffix : '';
+    let name = prefix + crypto.randomBytes(16).toString('hex') + suffix;
+    return path.join(os.tmpdir(), name);
+}
+
 async function to_json_file(path, obj) {
     let json = JSON.stringify(obj, null, 4) + '\n';
+    await to_file(path, json);
+}
+
+async function to_file(path, contents) {
     let options = {};
     let promise = new Promise(function(resolve, reject) {
-        fs.writeFile(path, json, options, function(err) {
+        fs.writeFile(path, contents, options, function(err) {
             /* istanbul ignore next */
             if (err) {
                 reject(err);
@@ -177,6 +189,8 @@ module.exports = {
     dump: dump,
     from_json_file: from_json_file,
     split_freetext: split_freetext,
+    tmp_path: tmp_path,
+    to_file: to_file,
     to_json_file: to_json_file,
     uuid4_new,
     uuid4_new_string,
