@@ -61,6 +61,30 @@ async function init(config, env_file_path) {
         envfile.DB_CONNECTION_LIMIT ||
         '5';
 
+    if (config.acquireTimeout ||
+        process.env.DB_ACQUIRE_TIMEOUT ||
+        envfile.DB_ACQUIRE_TIMEOUT) {
+        dbconfig.acquireTimeout = config.acquireTimeout ||
+            process.env.DB_ACQUIRE_TIMEOUT ||
+            envfile.DB_ACQUIRE_TIMEOUT;
+    }
+
+    if (config.connectTimeout ||
+        process.env.DB_CONNECT_TIMEOUT ||
+        envfile.DB_CONNECT_TIMEOUT) {
+        dbconfig.connectTimeout = config.connectTimeout ||
+            process.env.DB_CONNECT_TIMEOUT ||
+            envfile.DB_CONNECT_TIMEOUT;
+    }
+
+    if (config.initializationTimeout ||
+        process.env.DB_INITIALIZATION_TIMEOUT ||
+        envfile.DB_INITIALIZATION_TIMEOUT) {
+        dbconfig.initializationTimeout = config.initializationTimeout ||
+            process.env.DB_INITIALIZATION_TIMEOUT ||
+            envfile.DB_INITIALIZATION_TIMEOUT;
+    }
+
     if (dbconfig.passwordFile && !dbconfig.password) {
         try {
             let passwd = await fs.promises.readFile(dbconfig.passwordFile);
