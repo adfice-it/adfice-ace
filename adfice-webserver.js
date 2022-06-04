@@ -203,10 +203,14 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                 patient_id, doctor_id, selections, freetexts);
         }
         if (message.type == 'definitive') {
-            await adfice.finalize_and_export(patient_id);
-            let new_msg = await patient_advice_message(kind,
-                patient_id);
-            send_all(kind, patient_id, new_msg);
+            let result = await adfice.finalize_and_export(patient_id);
+			if(result.error){
+				send_error(ws, result.error, kind, patient_id);
+			} else {		
+				let new_msg = await patient_advice_message(kind,
+					patient_id);
+				send_all(kind, patient_id, new_msg);
+			}
         } else if (message.type == 'patient_renew') {
             await adfice.add_log_event_renew(doctor_id, patient_id);
             let returned_patient = await etl.etl_renew(patient_id);
@@ -216,7 +220,6 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                     " ) unexpectedly returned " +
                     returned_patient;
                 console.log(err_text_en);
-
                 send_error(ws, err_text_en, kind, patient_id);
             } else {
                 let new_msg = await patient_advice_message(kind,

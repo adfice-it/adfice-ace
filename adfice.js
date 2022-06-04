@@ -1040,7 +1040,7 @@ async function finalize_and_export(patient_id, portal_db_env_file_path,
     // if we fail to retrieve a BSN, we should not be exporting to the portal
     if (!bsn) {
         return {
-            error: "Failed to acquire BSN"
+            error: "Portal write error: Failed to acquire BSN"
         };
     }
 
@@ -1049,7 +1049,7 @@ async function finalize_and_export(patient_id, portal_db_env_file_path,
             patient_id, bsn, json_advice);
     } catch (e) {
         return {
-            error: "Failed to write to portal",
+            error: "Portal write error: Write to portal failed",
             caught: e,
         };
     }
