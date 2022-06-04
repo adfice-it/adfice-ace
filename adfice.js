@@ -1056,7 +1056,8 @@ async function finalize_and_export(patient_id, portal_db_env_file_path,
 
     let rv = {};
     if (read_back) {
-        rv = await read_from_portal_db(portal_db_env_file_path, patient_id);
+        rv.read_back = await read_from_portal_db(portal_db_env_file_path,
+            patient_id);
     }
 
     await this.finalize_advice(patient_id);
