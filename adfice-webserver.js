@@ -103,46 +103,39 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         let mrn = req.query.mrn;
         let user_id = req.query.user;
         let participant_number = req.query.participant;
-        if (mrn == null 
-			|| user_id == null 
-			|| typeof(mrn)!= 'string' //If there are 2 MRNs in the URL, error
-			|| typeof(user_id) != 'string') //If there are 2 user_ids in the URL, error
-			{
-            if (mrn == null || typeof(mrn)!= 'string' ) {
-                res.redirect('/load-error');
-				return;
+        if (mrn == null || typeof(mrn) != 'string' /* 2 MRNs in URL */ ) {
+            res.redirect('/load-error');
+            return;
+        }
+        if (user_id == null || typeof(user_id) != 'string' /* 2 user */ ) {
+            let p_str = '?mrn=' + mrn;
+            res.redirect('/load-error' + p_str);
+            return;
+        }
+        let id = await adfice.id_for_mrn(mrn);
+
+        let encoded_err = null;
+        if (!id) {
+            try {
+                let etl_opts = await autil.from_json_file(etl_opts_path);
+                id = await etl.etl(mrn, participant_number, etl_opts);
+            } catch (err) {
+                encoded_err = encodeURIComponent('' + err);
             }
-            if (user_id == null || typeof(user_id) != 'string') {
-                let p_str = '?mrn=' + mrn;
-                res.redirect('/load-error' + p_str);
-				return;
+        }
+        if (!id) {
+            let param_str = '?mrn=' + mrn;
+            if (encoded_err !== null) {
+                param_str += '&err=' + encoded_err;
             }
+            res.redirect('/load-error' + param_str);
         } else {
-            let id = await adfice.id_for_mrn(mrn);
+            await adfice.add_log_event_access(user_id, id);
+            let doctor_id = await adfice.doctor_id_for_user(user_id);
+            log_debug(server, 'setting doctor id:', doctor_id);
+            req.session.doctor_id = doctor_id;
 
-            let encoded_err = null;
-            if (!id) {
-                try {
-                    let etl_opts = await autil.from_json_file(etl_opts_path);
-                    id = await etl.etl(mrn, participant_number, etl_opts);
-                } catch (err) {
-                    encoded_err = encodeURIComponent('' + err);
-                }
-            }
-            if (!id) {
-                let param_str = '?mrn=' + mrn;
-                if (encoded_err !== null) {
-                    param_str += '&err=' + encoded_err;
-                }
-                res.redirect('/load-error' + param_str);
-            } else {
-                await adfice.add_log_event_access(user_id, id);
-                let doctor_id = await adfice.doctor_id_for_user(user_id);
-                log_debug(server, 'setting doctor id:', doctor_id);
-                req.session.doctor_id = doctor_id;
-
-                res.redirect('/start?id=' + id);
-            }
+            res.redirect('/start?id=' + id);
         }
     });
 

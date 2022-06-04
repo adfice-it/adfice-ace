@@ -339,7 +339,7 @@ async function get_bsn(patient_id) {
          WHERE patient_id=?`
     let params = [patient_id];
     let results = await this.sql_select(sql, params);
-        if (results.length == 1) {
+    if (results.length == 1) {
         return results[0]['bsn'];
     }
     return null;
@@ -1035,28 +1035,31 @@ async function finalize_and_export(patient_id, portal_db_env_file_path,
     }
 
     let json_advice = await this.get_export_data(patient_id);
-	let bsn = await this.get_bsn(patient_id);
-	
-	// if we fail to retrieve a BSN, we probably should not be exporting to the portal
-	if(bsn){
-		let success = await export_to_portal_db(portal_db_env_file_path, patient_id, bsn, json_advice);
-// console.log("Success looks like this: " + JSON.stringify({success}, null, 4));		
-		/* istanbul ignore next */
-		if(!success){
-			return null;
-		}
+    let bsn = await this.get_bsn(patient_id);
 
-		let rv = null;
-		if (read_back) {
-			rv = await read_from_portal_db(portal_db_env_file_path, patient_id);
-		}
+    // if we fail to retrieve a BSN, we should not be exporting to the portal
+    if (!bsn) {
+        return null;
+    }
 
-		await this.finalize_advice(patient_id);
+    let success = await export_to_portal_db(portal_db_env_file_path,
+        patient_id, bsn, json_advice);
+    // console.log("Success looks like this: " +
+    //     JSON.stringify({success}, null, 4));
 
-		return rv;
-	} else {
-		return null;
-	}
+    /* istanbul ignore next */
+    if (!success) {
+        return null;
+    }
+
+    let rv = null;
+    if (read_back) {
+        rv = await read_from_portal_db(portal_db_env_file_path, patient_id);
+    }
+
+    await this.finalize_advice(patient_id);
+
+    return rv;
 }
 
 async function add_log_event(doctor_id, patient_id, event_type) {
@@ -1159,7 +1162,7 @@ function adfice_init(db) {
         get_all_problems: get_all_problems,
         get_all_labs: get_all_labs,
         get_bsn: get_bsn,
-		get_export_data: get_export_data,
+        get_export_data: get_export_data,
         get_freetexts: get_freetexts,
         get_labs: get_labs,
         get_meds: get_meds,

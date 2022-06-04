@@ -520,7 +520,7 @@ test('Test reload data', async t => {
 
     let cb_levo_stop = Selector('#cb_N04BA01_27_2');
     await t.click(cb_levo_stop);
-console.log("Test cannot clean up after itself. This test will fail on 2nd run.");	
+    console.log("Test cannot clean up after itself. This test will fail on 2nd run.");
     await t.expect(cb_levo_stop.checked).ok();
     let cb_diaz_stop = Selector('#cb_N05BA01_6e_1');
     await t.expect(cb_diaz_stop.exists).notOk();
@@ -762,7 +762,7 @@ test('Redirect to error page if multiple mrns or user_ids are in URL', async t =
     let url_duplicate =
         `${BASE_URL}/load` +
         `?mrn=DummyMRN-000000143&user=dr_bob&participant=10143` +
-		`?mrn=DummyMRN-000000144&user=dr_alice&participant=10144`;
+        `?mrn=DummyMRN-000000144&user=dr_alice&participant=10144`;
     window1 = await t.navigateTo(url_duplicate);
     // Will sometimes show "session is lost" (verloren) error instead if we don't wait. So we wait.
     await t.wait(3000);

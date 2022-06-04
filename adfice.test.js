@@ -837,13 +837,13 @@ test('Get empty result set from measurements', async () => {
 test('Get bsn', async () => {
     let patient_id = "00000000-0000-4000-8000-100000000001";
     let bsn = await adfice.get_bsn(patient_id);
-	expect(bsn).toBe('888000001');
+    expect(bsn).toBe('888000001');
 });
 
 test('Fail to get bsn', async () => {
     let patient_id = "BAD_ID";
     let bsn = await adfice.get_bsn(patient_id);
-	expect(bsn).toBe(null);
+    expect(bsn).toBe(null);
 });
 
 test('Structure measurements', async () => {
