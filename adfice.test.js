@@ -942,6 +942,44 @@ test('export_patient', async () => {
     expect(contents).toMatch(/Valpre/);
 });
 
+test('export db not available', async () => {
+    let patient = "00000000-0000-4000-8000-100000000168";
+    let doctor_id = '1';
+
+    await clear_advice_for_patient(adfice, patient);
+    let new_advice = {
+        "cb_M03BA03_88_2": true,
+        "cb_OTHER_other_1": true,
+        "cb_NONMED_A_1": true
+    };
+    let viewer = 999;
+    let freetexts = null;
+    await adfice.set_advice_for_patient(patient, doctor_id, new_advice, freetexts);
+
+    // jest.setTimeout(20 * 1000);
+
+    const bogus_db_contents = `# Bogus DB contents
+DB_HOST=127.0.0.1
+DB_PORT=54242
+DB_USER=bogus
+DB_NAME=bogus
+DB_PASSWORD=bogus
+# 2 seconds
+DB_ACQUIRE_TIMEOUT=1000
+DB_CONNECT_TIMEOUT=1000
+DB_INITIALIZATION_TIMEOUT=1000
+`
+    const bogus_portal_db_env_path = autil.tmp_path('bogus-db-', '.env');
+    await autil.to_file(bogus_portal_db_env_path, bogus_db_contents);
+
+    const read_back = true;
+    const returned = await adfice.finalize_and_export(patient,
+        bogus_portal_db_env_path, read_back);
+    fs.unlinkSync(bogus_portal_db_env_path, (err) => {});
+
+    expect(returned.error).toMatch(/portal/);
+});
+
 test('Do not export patients without BSN', async () => {
     let patient = "bogus";
     let doctor_id = '1';
@@ -960,7 +998,7 @@ test('Do not export patients without BSN', async () => {
     const returned = await adfice.finalize_and_export(patient,
         portal_db_env_path, read_back);
 
-    expect(returned).toBe(null);
+    expect(returned.error).toMatch(/BSN/);
 });
 
 test('finalize_export API', async () => {

@@ -1039,20 +1039,22 @@ async function finalize_and_export(patient_id, portal_db_env_file_path,
 
     // if we fail to retrieve a BSN, we should not be exporting to the portal
     if (!bsn) {
-        return null;
+        return {
+            error: "Failed to acquire BSN"
+        };
     }
 
-    let success = await export_to_portal_db(portal_db_env_file_path,
-        patient_id, bsn, json_advice);
-    // console.log("Success looks like this: " +
-    //     JSON.stringify({success}, null, 4));
-
-    /* istanbul ignore next */
-    if (!success) {
-        return null;
+    try {
+        await export_to_portal_db(portal_db_env_file_path,
+            patient_id, bsn, json_advice);
+    } catch (e) {
+        return {
+            error: "Failed to write to portal",
+            caught: e,
+        };
     }
 
-    let rv = null;
+    let rv = {};
     if (read_back) {
         rv = await read_from_portal_db(portal_db_env_file_path, patient_id);
     }
