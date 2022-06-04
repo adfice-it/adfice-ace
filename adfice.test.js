@@ -956,15 +956,13 @@ test('export db not available', async () => {
     let freetexts = null;
     await adfice.set_advice_for_patient(patient, doctor_id, new_advice, freetexts);
 
-    // jest.setTimeout(20 * 1000);
-
     const bogus_db_contents = `# Bogus DB contents
 DB_HOST=127.0.0.1
 DB_PORT=54242
 DB_USER=bogus
 DB_NAME=bogus
 DB_PASSWORD=bogus
-# 2 seconds
+# 1 second
 DB_ACQUIRE_TIMEOUT=1000
 DB_CONNECT_TIMEOUT=1000
 DB_INITIALIZATION_TIMEOUT=1000
