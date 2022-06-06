@@ -24,9 +24,11 @@ while [ $i -lt 10 ]; do
 	fi
 done
 
-if [ ${DB_BACKUP_PATH} ]; then
-	now=`date +"%Y-%m-%d"`
-#	mysqldump --opt --user=${DB_USER} --password=${pw} ${DB_SCHEMA_NAME} > ${DB_BACKUP_PATH}backup${now}.sql
+if [ ${DB_BACKUP_DIR} ]; then
+	DB_BACKUP_FILE="${DB_BACKUP_DIR}/backup-`date '+%Y%m%d_%H%M%S'`.sql"
+	echo "backup to $DB_BACKUP_FILE"
+	$DB_DUMP_CMD > $DB_BACKUP_FILE || echo "unable to backup"
+	ls -l $DB_BACKUP_FILE || echo "no $DB_BACKUP_FILE"
 fi
 
 echo '# load schema'

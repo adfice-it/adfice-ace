@@ -9,9 +9,6 @@ The function that calls these functions is commented out in adfice.js.
 * make sure this matches the json that is created by the etl
 
 Important:
-* add a mysqldump to the SQL scripts
- -- something like: if path for db backups is specified, back up the database before dropping tables.
- -- placeholder added to db-create-tables.sh
 * an alert is added which should show if the "renew" fails (re-extraction of data via het EPD) but testing it will require altering stub_etl to fail to renew a specific patient.
 * Display MRN instead of patient ID.
 * Add back button to Lees meer page
@@ -24,7 +21,7 @@ Mid Priority:
 * Getting data out of EHR
   * Look into free FHIR servers and see if we can create a version of the ETL that can be included in the main repo
     https://confluence.hl7.org/display/FHIR/Public+Test+Servers
-  * stub-etl will always succeed; 
+  * stub-etl will always succeed;
     consider adding code which simulates a failed retrieval to test failure states
 * change separation of labor so adfice-ace writes to the database and adfice-xxx-etl returns a JSON with the needed data rather than writing directly to the DB (move SQL code from etl to adfice-ace and have etl build a json without the SQL)
 * consider removing birth date entirely from the data; we only need age
@@ -76,7 +73,7 @@ Low Priority:
   * open a bug with a tiny reproducible example
 * the "debounce" of typing input does not work reliably with headless test-cafe
   * adding a "speed:0.1" worked around it, but we should do better
-  
+
 ---------------------------------------------------------
 Requested (not required) changes to rules:
 * Rule 50: Split to personalize by age
@@ -92,4 +89,3 @@ Important, but unable to do yet:
 * Sending data to research database (right now we have some tables in our own database that mimic the research db tables)
 * Users wanted a "close this tab" button on each refpage that closes the tab. However, the method that works on IE is considered bad practice, and might not work in the actual deployment environment. We can look into this in the actual deployment enviornment.
 ---------------------------------------------------------
-
