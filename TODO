@@ -1,13 +1,23 @@
+WIP:
+Moving database functions from ETL to adfice.
+The functions that build the SQL transactions have been moved from etl to adfice.js.
+The function that calls these functions is commented out in adfice.js.
+* uncomment the caller function in adfice.js
+* build a test for the caller function
+* change stub_etl to produce json that can be passed to this caller
+* change the code that calls the etl to pass the resulting json to the caller
+* make sure this matches the json that is created by the etl
+
 Important:
-* Display MRN instead of patient ID.
 * add a mysqldump to the SQL scripts
  -- something like: if path for db backups is specified, back up the database before dropping tables.
-* Show appropriate errors when someone attempts to access system and:
-        - if the page renew fails, it should notify the user in some way
+ -- placeholder added to db-create-tables.sh
+* an alert is added which should show if the "renew" fails (re-extraction of data via het EPD) but testing it will require altering stub_etl to fail to renew a specific patient.
+* Display MRN instead of patient ID.
 * Add back button to Lees meer page
 * make changes to ICD-10 mapping
 * Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
-* Stubborn caching in IE means that browser must be closed and reopened to get new data to load after Vernieuwen or Verstuur (sending hand-entered prediction model data). All the headers that are supposed to control this have been added. I can't figure out anything else to try to make this work. Apparently it partly depends on browser settings; see what happens in the real deploy.
+* Stubborn caching in IE means that browser must be closed and reopened to get new data to load after Vernieuwen or Verstuur (sending hand-entered prediction model data). All the headers that are supposed to control this have been added. I can't figure out anything else to try to make this work. Apparently it partly depends on browser settings; see what happens in the real deploy. Check if this is also a problem in Edge.
 
 
 Mid Priority:

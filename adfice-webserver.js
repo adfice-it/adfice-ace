@@ -120,7 +120,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         if (!id) {
             try {
                 let etl_opts = await autil.from_json_file(etl_opts_path);
+				// TODO change etl to return json
                 id = await etl.etl(mrn, participant_number, etl_opts);
+				// TODO pass the json to adfice
             } catch (err) {
                 encoded_err = encodeURIComponent('' + err);
             }

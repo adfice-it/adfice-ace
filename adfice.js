@@ -69,6 +69,166 @@ async function get_table_sizes() {
     return await this.sql_select(sql, params);
 }
 
+/* async function write_patient_from_json(etl_json){
+	let patient_id = crypto.randomBytes(16).toString('hex');
+	let etl_patient = JSON.parse(etl_json);
+	let list_of_transactions = [];
+//	list_of_transactions.push(...(patientListOfInserts(patient_id, etl_patient.patient, participant_number)));
+//	list_of_transactions.push(...(medListOfInserts(patient_id, etl_patient.medications)));
+//	list_of_transactions.push(...(probListOfInserts(problems)));
+//	list_of_transactions.push(...(labListOfInserts(labs)));
+//	list_of_transactions.push(...(measListOfInserts(measurements)));
+
+}
+*/
+function patientListOfInserts(patient_id, patient, participant_number){
+	let list_of_transactions = [];
+	let age = calculateAge(patient);
+	let sql1 = '/* adfice.patientListOfInserts */ INSERT INTO patient ' +
+		'(patient_id, participant_number, birth_date, age, is_final) ' +
+		'VALUES (?,?,?,?,0)';
+	list_of_transactions.push([sql1, [patient_id, participant_number, patient['birth_date'], age]]);
+	let sql2 = '/* adfice.patientListOfInserts */ INSERT INTO etl_bsn_patient ' +
+		'(patient_id, bsn) ' +
+		"VALUES (?,?)";
+	list_of_transactions.push([sql2, [patient_id, patient['bsn']]]);
+	return list_of_transactions;
+}
+
+function calculateAge(patient){
+	let diff = new Date().getTime() - new Date(patient['birth_date']).getTime();   
+	return (diff / 31536000000).toFixed(0);
+}
+
+function nowString() {
+    return dateString(new Date());
+}
+
+function dateString(date_obj){
+	if(date_obj == null){
+		return null;
+	}
+	let date_str = date_obj.getFullYear() +
+        '-' + (date_obj.getMonth() + 1) +
+        '-' + date_obj.getDate() +
+        ' ' + date_obj.getHours() +
+        ":" + date_obj.getMinutes() +
+        ":" + date_obj.getSeconds();
+    return date_str;
+}
+
+function medListOfInserts(patient_id, medications) {
+    let list_of_inserts = [];
+    for (let i = 0; i < medications.length; ++i) {
+        let medication = medications[i];
+        let sql = `/* adfice.medListOfInserts */
+			INSERT INTO patient_medication` +
+            ' (patient_id, date_retrieved';
+        let values = ") VALUES (?,?";
+        let params = [patient_id, nowString()];
+        if (medication['display_name'] != null) {
+            sql += ", medication_name";
+            params.push(medication['display_name']);
+            values += ',?';
+        }
+        if (medication['generic_name'] != null) {
+            sql += ", generic_name";
+            params.push(medication['generic_name']);
+            values += ',?';
+        }
+        if (medication['ATC'] != null) {
+            sql += ", ATC_code";
+            params.push(medication['ATC']);
+            values += ',?';
+        }
+        if (medication['start_date'] != null) {
+            let start_date = medication['start_date'].toString();
+            start_date = start_date.replace('T', ' ');
+            start_date = start_date.replace('Z', '');
+            sql += ", start_date";
+            params.push(start_date);
+            values += ',?';
+        }
+        if (medication['dose_text'] != null) {
+            sql += ", dose";
+            params.push(medication['dose_text']);
+            values += ',?';
+        }
+        sql = sql + values + ")";
+        if (params.length > 2) {
+            list_of_inserts.push([sql, params]);
+        }
+    }
+    return list_of_inserts;
+}
+
+function probListOfInserts(patient_id, problems) {
+    let list_of_inserts = [];
+    let problem_list = Object.keys(problems);
+    for (let i = 0; i < problem_list.length; ++i) {
+        let sql = `/* adfice.probListOfInserts */
+			INSERT INTO patient_problem` +
+            ' (patient_id, date_retrieved, name, icd_10';
+        let values = ") VALUES (?,?,?,?";
+        let params = [patient_id, nowString(), problem_list[i],
+            problems[problem_list[i]]['icd_10']
+        ];
+        if (problems[problem_list[i]]['ehr_text'] != null &&
+            problems[problem_list[i]]['ehr_text'] != '') {
+            sql += ", ehr_text";
+            params.push(problems[problem_list[i]]['ehr_text']);
+            values += ',?';
+        }
+        if (problems[problem_list[i]]['start_date'] != null) {
+            sql += ", start_date";
+            params.push(problems[problem_list[i]]['start_date']);
+            values += ',?';
+        }
+        sql = sql + values + ")";
+        list_of_inserts.push([sql, params]);
+    }
+    return list_of_inserts;
+}
+
+function labListOfInserts(patient_id, labs) {
+    let list_of_inserts = [];
+    let lab_list = Object.keys(labs);
+    for (let i = 0; i < lab_list.length; ++i) {
+        let sql = 
+			'/* adfice.labListOfInserts */ INSERT INTO patient_lab ' +
+			'(patient_id, date_retrieved, date_measured, lab_test_name, ' +
+			'lab_test_code, lab_test_result, lab_test_units) ' +
+			'VALUES (?,?,?,?,?,?,?)';
+        let params = [patient_id, nowString(), labs[lab_list[i]]['date_measured'],
+		lab_list[i],labs[lab_list[i]]['lab_test_code'],
+		labs[lab_list[i]]['lab_test_result'],labs[lab_list[i]]['lab_test_units']
+        ];
+        list_of_inserts.push([sql, params]);
+    }
+    return list_of_inserts;
+}
+
+function measListOfInserts(patient_id, measurements){
+    let sql = 
+		'/* adfice.measListOfInserts */ INSERT INTO patient_measurement ' +
+		'(patient_id, date_retrieved,systolic_bp_mmHg,bp_date_measured,' +
+		'height_cm,height_date_measured,weight_kg,weight_date_measured,' +
+		'smoking, smoking_date_measured) VALUES (?,?,?,?,?,?,?,?,?,?)';
+	let params = [patient_id, nowString()
+		,measurements['systolic_bp_mmHg']
+		,dateString(measurements['bp_date_measured'])
+		,measurements['height_cm']
+		,dateString(measurements['height_date_measured'])
+		,measurements['weight_kg']
+		,dateString(measurements['weight_date_measured'])
+		,measurements['smoking']
+		,dateString(measurements['smoking_date_measured'])];
+
+	let list_of_inserts = [[sql, params]];
+
+    return list_of_inserts;
+}
+
 async function get_all_advice_texts_checkboxes() {
     var sql = `/* adfice.get_all_advice_texts_checkboxes */
         SELECT m.medication_criteria_id
@@ -679,6 +839,8 @@ async function get_all_labs() {
 }
 
 // called from adfice-webserver-runner
+// returns a JSON representation of all the data we have on this patient
+// note that this is NOT the function that populates the patient_advice column in the portal
 async function get_advice_for_patient(patient_id) {
     let patient = await this.get_patient_by_id(patient_id);
     if (patient.patient_id != patient_id) {
@@ -1178,8 +1340,13 @@ function adfice_init(db) {
         get_sql_condition: get_sql_condition,
         get_table_sizes: get_table_sizes,
         is_sql_condition_true: is_sql_condition_true,
+		labListOfInserts: labListOfInserts,
         logFiredRules: logFiredRules,
-        selection_states_to_box_states: selection_states_to_box_states,
+		measListOfInserts: measListOfInserts,
+        medListOfInserts: medListOfInserts,
+		patientListOfInserts: patientListOfInserts,
+		probListOfInserts: probListOfInserts,
+		selection_states_to_box_states: selection_states_to_box_states,
         sql_select: sql_select,
         structure_meas: structure_meas,
         update_prediction_result: update_prediction_result,
