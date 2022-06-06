@@ -201,7 +201,8 @@ test('Test selecting views', async t => {
     await t.expect(rowOther.visible).ok();
 
     // try switching to the advise view
-    await change_view(t, button_advise_view, `${BASE_URL}/advise?id=${patient_id}`);
+    await change_view(t, button_advise_view,
+        `${BASE_URL}/advise?id=${patient_id}`);
     await t.expect(div_advice_M01AB05.visible).notOk();
     await t.expect(div_ehr_box.visible).notOk();
     // the patient texts are only visible if checked in prep view
@@ -210,21 +211,24 @@ test('Test selecting views', async t => {
     await t.expect(patientOther.visible).notOk();
 
     // try switching to the consult view
-    await change_view(t, button_consult_view, `${BASE_URL}/consult?id=${patient_id}`);
+    await change_view(t, button_consult_view,
+        `${BASE_URL}/consult?id=${patient_id}`);
     await t.expect(div_advice_M01AB05.visible).notOk();
     await t.expect(div_ehr_box.visible).notOk();
     await t.expect(row0.visible).notOk();
     await t.expect(row1.visible).ok();
 
     // try switching back to the prep view
-    await change_view(t, button_prep_view, `${BASE_URL}/prep?id=${patient_id}`);
+    await change_view(t, button_prep_view,
+        `${BASE_URL}/prep?id=${patient_id}`);
     await t.expect(div_advice_M01AB05.visible).ok();
     await t.expect(div_ehr_box.visible).notOk();
     await t.expect(row0.visible).ok();
     await t.expect(row1.visible).ok();
     await t.expect(rowOther.visible).ok();
 
-    await change_view(t, button_finalize_view, `${BASE_URL}/finalize?id=${patient_id}`);
+    await change_view(t, button_finalize_view,
+        `${BASE_URL}/finalize?id=${patient_id}`);
     // the ehr texts are only ever visible if checked
     await t.expect(div_ehr_box.visible).ok();
     await t.expect(ehr0.visible).notOk();
@@ -502,12 +506,16 @@ test('Test user entering values', async t => {
 
     let smoking_cell = Selector("#d_user_smoking");
     await t.expect(smoking_cell.exists).ok();
-    // For some reason this test does not pass, but performing the steps manually works.
+    // For some reason this test does not pass, but performing the steps
+    // manually works.
     //	await t.expect(smoking_cell.withText("1").exists).ok();
 
-    // there is currently no way to clear the user-entered data via the UI, so this test can't clean up after itself.
-    // Right now the test is written so that it does not check the negative state (i.e. it does not check to see that Roker is null at the start)
-    // but if we add functionality to clear values then we can add the negative checks
+    // there is currently no way to clear the user-entered data via the UI,
+    // so this test can't clean up after itself.
+    // Right now the test is written so that it does not check the negative
+    // state (i.e. it does not check to see that Roker is null at the start)
+    // but if we add functionality to clear values then we can add the negative
+    // checks
 });
 
 test('Test reload data', async t => {
@@ -522,7 +530,8 @@ test('Test reload data', async t => {
 
     let cb_levo_stop = Selector('#cb_N04BA01_27_2');
     await t.click(cb_levo_stop);
-    console.log("Test cannot clean up after itself. This test will fail on 2nd run.");
+    console.log("Test cannot clean up after itself.",
+        "This test will fail on 2nd run.");
     await t.expect(cb_levo_stop.checked).ok();
     let cb_diaz_stop = Selector('#cb_N05BA01_6e_1');
     await t.expect(cb_diaz_stop.exists).notOk();
@@ -674,7 +683,8 @@ test('Other med advice box', async t => {
     await t.click(button_prep_view);
     await change_flex_style_to_inline(t);
     await t.click(other_text_box);
-    await t.pressKey('ctrl+a delete'); //apparently this is what you have to do to clear the text box
+    // apparently this is what you have to do to clear the text box:
+    await t.pressKey('ctrl+a delete');
     await t.expect(cb_selector.visible).ok();
     other_is_checked = await cb_selector.checked;
     if (other_is_checked) {
@@ -721,7 +731,8 @@ test('Redirect to error page if invalid navigation is attempted', async t => {
 });
 
 test('Redirect to error page if doctor_id is lost', async t => {
-    // attempt to navigate directly to a patient page without going via Load first
+    // attempt to navigate directly to a patient page without going via the
+    // "/load" page first
     let url_not_redirected =
         `${BASE_URL}/start` +
         `?id=00000000-0000-4000-8000-100000000172`;
@@ -745,7 +756,8 @@ test('Redirect to error page if patient_id is bad', async t => {
         `${BASE_URL}/start` +
         `?id=00000000-0000-4000-8000-000000000000`;
     window1 = await t.navigateTo(url_bad_patient_id);
-    // Will sometimes show "session is lost" (verloren) error instead if we don't wait. So we wait.
+    // Will sometimes show "session is lost" (verloren) error instead if we do
+    // not wait. So we wait:
     await t.wait(3000);
     let getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
@@ -756,7 +768,7 @@ test('Redirect to error page if patient_id is bad', async t => {
     await t.expect(body.withText('DummyMRN-000000172').exists).notOk();
 });
 
-test('Redirect to error page if multiple mrns or user_ids are in URL', async t => {
+test('Redirect to error page if URL has multiple mrns or user_ids', async t => {
     let mrn = 'DummyMRN-000000160';
     let participant = 10160;
     let window1 = await load(t, mrn, participant);
@@ -766,7 +778,8 @@ test('Redirect to error page if multiple mrns or user_ids are in URL', async t =
         `?mrn=DummyMRN-000000143&user=dr_bob&participant=10143` +
         `?mrn=DummyMRN-000000144&user=dr_alice&participant=10144`;
     window1 = await t.navigateTo(url_duplicate);
-    // Will sometimes show "session is lost" (verloren) error instead if we don't wait. So we wait.
+    // Will sometimes show "session is lost" (verloren) error instead if we do
+    // not wait. So we wait.
     await t.wait(3000);
     let getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
@@ -783,12 +796,12 @@ test('Fail portal export if patient has no BSN', async t => {
     await t.click(button_finalize_view);
     let button_definitive = Selector('button#definitive');
     await t.setNativeDialogHandler(() => true);
-    // I think the dialog handler actually persists between tests. Maybe better to put it as a constant for the suite?
+    // I think the dialog handler actually persists between tests.
+    // Maybe better to put it as a constant for the suite?
     await t.click(button_definitive);
     let alertHistory = await t.getNativeDialogHistory();
 
     await t.expect(alertHistory[0].text).contains('Valportaal');
-
 });
 
 
