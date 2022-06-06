@@ -81,34 +81,34 @@ async function get_table_sizes() {
 
 }
 */
-function patientListOfInserts(patient_id, patient, participant_number){
-	let list_of_transactions = [];
-	let age = calculateAge(patient);
-	let sql1 = '/* adfice.patientListOfInserts */ INSERT INTO patient ' +
-		'(patient_id, participant_number, birth_date, age, is_final) ' +
-		'VALUES (?,?,?,?,0)';
-	list_of_transactions.push([sql1, [patient_id, participant_number, patient['birth_date'], age]]);
-	let sql2 = '/* adfice.patientListOfInserts */ INSERT INTO etl_bsn_patient ' +
-		'(patient_id, bsn) ' +
-		"VALUES (?,?)";
-	list_of_transactions.push([sql2, [patient_id, patient['bsn']]]);
-	return list_of_transactions;
+function patientListOfInserts(patient_id, patient, participant_number) {
+    let list_of_transactions = [];
+    let age = calculateAge(patient);
+    let sql1 = '/* adfice.patientListOfInserts */ INSERT INTO patient ' +
+        '(patient_id, participant_number, birth_date, age, is_final) ' +
+        'VALUES (?,?,?,?,0)';
+    list_of_transactions.push([sql1, [patient_id, participant_number, patient['birth_date'], age]]);
+    let sql2 = '/* adfice.patientListOfInserts */ INSERT INTO etl_bsn_patient ' +
+        '(patient_id, bsn) ' +
+        "VALUES (?,?)";
+    list_of_transactions.push([sql2, [patient_id, patient['bsn']]]);
+    return list_of_transactions;
 }
 
-function calculateAge(patient){
-	let diff = new Date().getTime() - new Date(patient['birth_date']).getTime();   
-	return (diff / 31536000000).toFixed(0);
+function calculateAge(patient) {
+    let diff = new Date().getTime() - new Date(patient['birth_date']).getTime();
+    return (diff / 31536000000).toFixed(0);
 }
 
 function nowString() {
     return dateString(new Date());
 }
 
-function dateString(date_obj){
-	if(date_obj == null){
-		return null;
-	}
-	let date_str = date_obj.getFullYear() +
+function dateString(date_obj) {
+    if (date_obj == null) {
+        return null;
+    }
+    let date_str = date_obj.getFullYear() +
         '-' + (date_obj.getMonth() + 1) +
         '-' + date_obj.getDate() +
         ' ' + date_obj.getHours() +
@@ -194,37 +194,31 @@ function labListOfInserts(patient_id, labs) {
     let list_of_inserts = [];
     let lab_list = Object.keys(labs);
     for (let i = 0; i < lab_list.length; ++i) {
-        let sql = 
-			'/* adfice.labListOfInserts */ INSERT INTO patient_lab ' +
-			'(patient_id, date_retrieved, date_measured, lab_test_name, ' +
-			'lab_test_code, lab_test_result, lab_test_units) ' +
-			'VALUES (?,?,?,?,?,?,?)';
+        let sql =
+            '/* adfice.labListOfInserts */ INSERT INTO patient_lab ' +
+            '(patient_id, date_retrieved, date_measured, lab_test_name, ' +
+            'lab_test_code, lab_test_result, lab_test_units) ' +
+            'VALUES (?,?,?,?,?,?,?)';
         let params = [patient_id, nowString(), labs[lab_list[i]]['date_measured'],
-		lab_list[i],labs[lab_list[i]]['lab_test_code'],
-		labs[lab_list[i]]['lab_test_result'],labs[lab_list[i]]['lab_test_units']
+            lab_list[i], labs[lab_list[i]]['lab_test_code'],
+            labs[lab_list[i]]['lab_test_result'], labs[lab_list[i]]['lab_test_units']
         ];
         list_of_inserts.push([sql, params]);
     }
     return list_of_inserts;
 }
 
-function measListOfInserts(patient_id, measurements){
-    let sql = 
-		'/* adfice.measListOfInserts */ INSERT INTO patient_measurement ' +
-		'(patient_id, date_retrieved,systolic_bp_mmHg,bp_date_measured,' +
-		'height_cm,height_date_measured,weight_kg,weight_date_measured,' +
-		'smoking, smoking_date_measured) VALUES (?,?,?,?,?,?,?,?,?,?)';
-	let params = [patient_id, nowString()
-		,measurements['systolic_bp_mmHg']
-		,dateString(measurements['bp_date_measured'])
-		,measurements['height_cm']
-		,dateString(measurements['height_date_measured'])
-		,measurements['weight_kg']
-		,dateString(measurements['weight_date_measured'])
-		,measurements['smoking']
-		,dateString(measurements['smoking_date_measured'])];
+function measListOfInserts(patient_id, measurements) {
+    let sql =
+        '/* adfice.measListOfInserts */ INSERT INTO patient_measurement ' +
+        '(patient_id, date_retrieved,systolic_bp_mmHg,bp_date_measured,' +
+        'height_cm,height_date_measured,weight_kg,weight_date_measured,' +
+        'smoking, smoking_date_measured) VALUES (?,?,?,?,?,?,?,?,?,?)';
+    let params = [patient_id, nowString(), measurements['systolic_bp_mmHg'], dateString(measurements['bp_date_measured']), measurements['height_cm'], dateString(measurements['height_date_measured']), measurements['weight_kg'], dateString(measurements['weight_date_measured']), measurements['smoking'], dateString(measurements['smoking_date_measured'])];
 
-	let list_of_inserts = [[sql, params]];
+    let list_of_inserts = [
+        [sql, params]
+    ];
 
     return list_of_inserts;
 }
@@ -1340,13 +1334,13 @@ function adfice_init(db) {
         get_sql_condition: get_sql_condition,
         get_table_sizes: get_table_sizes,
         is_sql_condition_true: is_sql_condition_true,
-		labListOfInserts: labListOfInserts,
+        labListOfInserts: labListOfInserts,
         logFiredRules: logFiredRules,
-		measListOfInserts: measListOfInserts,
+        measListOfInserts: measListOfInserts,
         medListOfInserts: medListOfInserts,
-		patientListOfInserts: patientListOfInserts,
-		probListOfInserts: probListOfInserts,
-		selection_states_to_box_states: selection_states_to_box_states,
+        patientListOfInserts: patientListOfInserts,
+        probListOfInserts: probListOfInserts,
+        selection_states_to_box_states: selection_states_to_box_states,
         sql_select: sql_select,
         structure_meas: structure_meas,
         update_prediction_result: update_prediction_result,

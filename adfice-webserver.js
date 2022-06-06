@@ -120,9 +120,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         if (!id) {
             try {
                 let etl_opts = await autil.from_json_file(etl_opts_path);
-				// TODO change etl to return json
+                // TODO change etl to return json
                 id = await etl.etl(mrn, participant_number, etl_opts);
-				// TODO pass the json to adfice
+                // TODO pass the json to adfice
             } catch (err) {
                 encoded_err = encodeURIComponent('' + err);
             }
@@ -140,12 +140,12 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         let doctor_id = await adfice.doctor_id_for_user(user_id);
         log_debug(server, 'setting doctor id:', doctor_id);
         req.session.doctor_id = doctor_id;
-		
-		// For testing, allow the session timeout to be set to a shorter value. It cannot be set to a longer value.
-		let tsec = req.query.tsec;
-		if(tsec < max_session_ms/1000){
-			req.session.cookie.maxAge = tsec * 1000;
-		}
+
+        // For testing, allow the session timeout to be set to a shorter value. It cannot be set to a longer value.
+        let tsec = req.query.tsec;
+        if (tsec < max_session_ms / 1000) {
+            req.session.cookie.maxAge = tsec * 1000;
+        }
 
         res.redirect('/start?id=' + id);
     });

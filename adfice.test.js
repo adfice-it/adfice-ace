@@ -1062,18 +1062,22 @@ test('access log', async () => {
 });
 
 test('test get patient table sql and params', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
-	let patient = {'ehr_pid': 'DummyMRN-000000175', 'bsn': '000-00-0000', 'birth_date': '1930-01-01'};
-	let list_of_inserts = adfice.patientListOfInserts(patient_id, patient, 100175);
-	expect(list_of_inserts.length).toBe(2);
-	expect(list_of_inserts[0][0]).toContain("INSERT INTO patient (patient_id, participant_number, birth_date, age, is_final) VALUES (?,?,?,?,0)");
-	expect(list_of_inserts[0][1].length).toBe(4);
-	expect(list_of_inserts[1][0]).toContain("INSERT INTO etl_bsn_patient (patient_id, bsn) VALUES (?,?)");
-	expect(list_of_inserts[1][1].length).toBe(2);
+    let patient_id = "00000000-0000-4000-8000-100000000175";
+    let patient = {
+        'ehr_pid': 'DummyMRN-000000175',
+        'bsn': '000-00-0000',
+        'birth_date': '1930-01-01'
+    };
+    let list_of_inserts = adfice.patientListOfInserts(patient_id, patient, 100175);
+    expect(list_of_inserts.length).toBe(2);
+    expect(list_of_inserts[0][0]).toContain("INSERT INTO patient (patient_id, participant_number, birth_date, age, is_final) VALUES (?,?,?,?,0)");
+    expect(list_of_inserts[0][1].length).toBe(4);
+    expect(list_of_inserts[1][0]).toContain("INSERT INTO etl_bsn_patient (patient_id, bsn) VALUES (?,?)");
+    expect(list_of_inserts[1][1].length).toBe(2);
 });
 
 test('test get med sql and params', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
+    let patient_id = "00000000-0000-4000-8000-100000000175";
     let medications = [{
         'ATC': 'B0GU501',
         'generic_name': 'testdrug',
@@ -1088,7 +1092,7 @@ test('test get med sql and params', async function() {
 });
 
 test('test get med sql and params with some nulls', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
+    let patient_id = "00000000-0000-4000-8000-100000000175";
     let medications = [{
         'ATC': 'B0GU501',
         'display_name': 'Test Drug'
@@ -1113,7 +1117,7 @@ test('test get med sql and params with some nulls', async function() {
 
 
 test('test removal of empty entries', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
+    let patient_id = "00000000-0000-4000-8000-100000000175";
     let medications = [{
         'ATC': 'B0GU501',
         'generic_name': null,
@@ -1128,7 +1132,7 @@ test('test removal of empty entries', async function() {
 });
 
 test('test get problem sql and params', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
+    let patient_id = "00000000-0000-4000-8000-100000000175";
     let found_problems = {
         'diabetes': {
             'icd_10': 'E11.9',
@@ -1141,7 +1145,7 @@ test('test get problem sql and params', async function() {
             'start_date': '2021-06-01'
         }
     };
-    let list_of_inserts = adfice.probListOfInserts(patient_id,found_problems);
+    let list_of_inserts = adfice.probListOfInserts(patient_id, found_problems);
     expect(list_of_inserts.length).toBe(2);
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10, ehr_text, start_date) VALUES (?,?,?,?,?,?)');
     expect(list_of_inserts[0][1].length).toBe(6);
@@ -1165,19 +1169,19 @@ test('test get problem sql and params', async function() {
 });
 
 test('test get lab sql and params', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
+    let patient_id = "00000000-0000-4000-8000-100000000175";
     let found_labs = {
         'eGFR': {
             'date_measured': '2021-01-01 15:20:48',
             'lab_test_code': '33914-3',
             'lab_test_result': '> 60',
-			'lab_test_units': 'ml/min/1.73m2'
+            'lab_test_units': 'ml/min/1.73m2'
         },
         'kalium': {
             'date_measured': '2021-05-05 10:20:48',
             'lab_test_code': '2823-3',
             'lab_test_result': '4',
-			'lab_test_units': 'mmol/L'
+            'lab_test_units': 'mmol/L'
         }
     };
     let list_of_inserts = adfice.labListOfInserts(patient_id, found_labs);
@@ -1187,8 +1191,8 @@ test('test get lab sql and params', async function() {
 });
 
 test('test measListOfInserts', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
-	let found_meas = {
+    let patient_id = "00000000-0000-4000-8000-100000000175";
+    let found_meas = {
         'systolic_bp_mmHg': 120,
         'bp_date_measured': new Date('2012-11-29 22:47:00.000'),
         'height_cm': 130,
@@ -1197,10 +1201,10 @@ test('test measListOfInserts', async function() {
         'weight_date_measured': new Date('2020-01-27 21:06:00.000'),
         'smoking': 0,
         'smoking_date_measured': new Date('2021-08-05 05:00:00.000'),
-        };
-	let measListOfInserts = adfice.measListOfInserts(patient_id,found_meas);
-	
-	found_meas = {
+    };
+    let measListOfInserts = adfice.measListOfInserts(patient_id, found_meas);
+
+    found_meas = {
         'systolic_bp_mmHg': null,
         'bp_date_measured': null,
         'height_cm': 130,
@@ -1209,10 +1213,10 @@ test('test measListOfInserts', async function() {
         'weight_date_measured': new Date('2020-01-27 21:06:00.000'),
         'smoking': 0,
         'smoking_date_measured': new Date('2021-08-05 05:00:00.000'),
-        };
-	let measListOfInserts2 = adfice.measListOfInserts(patient_id, found_meas);
+    };
+    let measListOfInserts2 = adfice.measListOfInserts(patient_id, found_meas);
 
-	found_meas = {
+    found_meas = {
         'systolic_bp_mmHg': 120,
         'bp_date_measured': null,
         'height_cm': 130,
@@ -1221,10 +1225,10 @@ test('test measListOfInserts', async function() {
         'weight_date_measured': new Date('2020-01-27 21:06:00.000'),
         'smoking': 0,
         'smoking_date_measured': new Date('2021-08-05 05:00:00.000'),
-        };
-	let measListOfInserts3 = adfice.measListOfInserts(patient_id, found_meas);
+    };
+    let measListOfInserts3 = adfice.measListOfInserts(patient_id, found_meas);
 
-	expect(measListOfInserts[0][1][2]).toBe(120);
-	expect(measListOfInserts2[0][1][2]).toBe(null);
-	expect(measListOfInserts3[0][1][3]).toBe(null);
+    expect(measListOfInserts[0][1][2]).toBe(120);
+    expect(measListOfInserts2[0][1][2]).toBe(null);
+    expect(measListOfInserts3[0][1][3]).toBe(null);
 });

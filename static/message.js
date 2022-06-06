@@ -392,9 +392,9 @@ function ws_on_message(event) {
         message_globals.logger.log(JSON.stringify(message, null, 4));
         if (message.text.includes("Portal write error")) {
             alert("Er was een probleem optreden met het verzending naar het Valportaal. Print het advies a.u.b. uit vanuit het Advies pagina, en geef het aan de patiënt op papier. U kunt het versturen naar het Valportaal later opnieuw proberen.");
-        } else if(message.text.includes("etl_renew")){
-			alert("Er was een fout optreden met het vernieuwen van data uit het EPD. Als u wil het nogmaals proberen, probeer de connectie met het EPD te verversen door sluiten van dit browser window, klikken opnieuw het link in het EPD, en daarna nogmaals het Vernieuwen knop te klikken.")
-		} else {
+        } else if (message.text.includes("etl_renew")) {
+            alert("Er was een fout optreden met het vernieuwen van data uit het EPD. Als u wil het nogmaals proberen, probeer de connectie met het EPD te verversen door sluiten van dit browser window, klikken opnieuw het link in het EPD, en daarna nogmaals het Vernieuwen knop te klikken.")
+        } else {
             let url = "/load-error";
             if (message.text == 'No doctor_id in session') {
                 url += "?err=Verbinding met server is verloren."
@@ -415,11 +415,11 @@ function ws_on_message(event) {
         } else if (remaining < two_minutes) {
             let expiration_div = document.getElementById("expiration");
             expiration_div.style.display = 'block';
-			let timeout_div = document.getElementById("timeout-time");
-			let currentDate = new Date();
-			let expire_time = currentDate.getHours() + ":" + (currentDate.getMinutes()+2);
-			console.log(expire_time);
-			timeout_div.innerHTML = "Sessie gaat verlopen om " + expire_time;
+            let timeout_div = document.getElementById("timeout-time");
+            let currentDate = new Date();
+            let expire_time = currentDate.getHours() + ":" + (currentDate.getMinutes() + 2);
+            console.log(expire_time);
+            timeout_div.innerHTML = "Sessie gaat verlopen om " + expire_time;
         } else {
             let expiration_div = document.getElementById("expiration");
             expiration_div.style.display = 'none';
