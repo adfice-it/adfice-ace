@@ -6,6 +6,16 @@ JS setup:
 Testing:
 The "make check" target will load the test data in a local instance.
 
+Running:
+node adfice-webserver-runner.js
+will start an instance running on 8080. 
+Accepted arguments are:
+[2] port
+[3] ETL library
+[4] ETL options.json
+for example:
+node adfice-webserver-runner.js 8081 ./real-etl ./real-etl-options.json
+
 Assuming the test patients are in the system, first go to the "load"
 page, as if sent there by the EHR.
 
