@@ -1,5 +1,8 @@
 Important:
-* Add some functionality for session timeout/redirect to error page. We will need this if I can't get the EHR's built-in browser to work. 
+* Session timeout/redirect to error page:
+  -- needs tests (to be testable, will need to inject a shorter timeout: probably the best way is to have an optional url parameter that allows a *shorter* timeout to be set
+  -- timeout warning needs some styling
+  -- would be nice to add a countdown or expire time to the timeout warning
 * Display MRN instead of patient ID.
 * Figure out "on update" statements for research tables
 * Check "on duplicate key" statements for other tables - does it make sense to be using viewer_id?

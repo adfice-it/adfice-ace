@@ -15,6 +15,14 @@ PASS=XXX
 mysqldump --opt --user=${USER} --password=${PASS} adfice research_patient research_initial_rules_fired research_last_rules_fired research_initial_checkboxes research_last_checkboxes research_initial_patient_measurement research_last_patient_measurement > $(date "+%b_%d_%Y_%H_%M_%S")adfice_${LOCATION}.sql
 */
 
+truncate table research_patient;
+truncate table research_initial_rules_fired;
+truncate table research_last_rules_fired;
+truncate table research_initial_checkboxes;
+truncate table research_last_checkboxes;
+truncate table research_initial_patient_measurement;
+truncate table research_last_patient_measurement;
+
 /* TODO figure out the "on duplicate key" syntax and the "unique key" syntax.
 It is meant to update the row if the unique keys are the same. */
 
@@ -38,24 +46,37 @@ SELECT
 	null,
 	@location_id, -- location_id; will be different for each location
 	patient.participant_number, 
-	if(printed_pid is null,0,1), -- was_printed
+	if(printed_pid is null,0,1) as was_printed,
 	printed_rc, -- time_printed
-	if(copied_pid is null,0,1), -- was_copied
-
+	if(copied_pid is null,0,1) as was_copied,
 	copied_rc, -- time_copied
-	if(ehr_copy_pid is null,0,1), -- ehr_text_was_copied
-
+	if(ehr_copy_pid is null,0,1) as ehr_text_was_copied,
 	ehr_copy_rc, -- time_ehr_text_copied
-	if(patient.is_final,1,0), -- was_sent_to_portal
-
-	(if(patient.is_final,patient.row_updated,null)) -- time_sent_to_portal
+	if(patient.is_final,1,0) as was_sent_to_portal,
+	(if(patient.is_final,patient.row_updated,null)) as time_sent_to_portal
 from patient 
-    left join (select patient_id as printed_pid, row_created as printed_rc from logged_events where event_type = 1) as printed on patient.id = printed_pid
-    left join (select patient_id as copied_pid, row_created as copied_rc from logged_events where event_type = 2) as copied on patient.id = copied_pid
-	left join (select patient_id as ehr_copy_pid, row_created as ehr_copy_rc from logged_events where event_type = 3) as ehr_copy on patient.id = ehr_copy_pid
-
-WHERE patient.is_final != 1 or patient.row_updated >= @lookback;
--- ON DUPLICATE KEY UPDATE location_id=location_id, participant_number=participant_number;
+    left join (select patient_id as printed_pid, row_created as printed_rc 
+		from logged_events 
+		where event_type = 1 order by row_created desc limit 1) as printed 
+		on patient.patient_id = printed_pid
+    left join (select patient_id as copied_pid, row_created as copied_rc 
+		from logged_events 
+		where event_type = 2 order by row_created desc limit 1) as copied 
+		on patient.patient_id = copied_pid
+	left join (select patient_id as ehr_copy_pid, row_created as ehr_copy_rc 
+		from logged_events 
+		where event_type = 3 order by row_created desc limit 1) as ehr_copy 
+		on patient.patient_id = ehr_copy_pid
+WHERE patient.is_final != 1 or patient.row_updated >= @lookback
+ON DUPLICATE KEY UPDATE 
+	was_printed = if(printed_pid is null,0,1),
+	time_printed = printed_rc,
+	was_copied = if(copied_pid is null,0,1),
+	time_copied = copied_rc,
+	ehr_text_was_copied = if(ehr_copy_pid is null,0,1),
+	time_ehr_text_copied = ehr_copy_rc,
+	was_sent_to_portal = if(patient.is_final,1,0),
+	time_sent_to_portal = (if(patient.is_final,patient.row_updated,null));
 
 INSERT INTO research_initial_rules_fired (
   id,
@@ -73,9 +94,11 @@ SELECT
 	rules_fired,
 	initial_rules.row_created
 FROM patient 
-join (select rules_fired.* from rules_fired join (select patient_id, min(row_created) as minRC from rules_fired group by patient_id) as first_date on rules_fired.patient_id = first_date.patient_id and rules_fired.row_created = first_date.minRC) as initial_rules
-
-on patient.id = initial_rules.patient_id
+join (select rules_fired.* from rules_fired 
+	join (select patient_id, min(row_created) as minRC 
+		from rules_fired group by patient_id) as first_date 
+	on rules_fired.patient_id = first_date.patient_id and rules_fired.row_created = first_date.minRC) as initial_rules
+on patient.patient_id = initial_rules.patient_id
 WHERE initial_rules.row_created >= @lookback;
 
 INSERT INTO research_last_rules_fired (
@@ -95,12 +118,15 @@ SELECT
 	rules_fired,
 	last_rules.row_created
 FROM patient 
-join (select rules_fired.* from rules_fired join (select patient_id, max(row_created) as maxRC from rules_fired group by patient_id) as last_date on rules_fired.patient_id = last_date.patient_id and rules_fired.row_created = last_date.maxRC) as last_rules
-on patient.id = last_rules.patient_id
+join (select rules_fired.* from rules_fired 
+	join (select patient_id, max(row_created) as maxRC from rules_fired group by patient_id) as last_date 
+	on rules_fired.patient_id = last_date.patient_id and rules_fired.row_created = last_date.maxRC) as last_rules
+on patient.patient_id = last_rules.patient_id
 WHERE last_rules.row_created >= @lookback;
 /* TODO since there are multiple rows in the initial state, check whether the row_updated time can be off by a few millis for the same UI event */
 /* TODO check that duplicate entries work as expected: duplicates are dropped on the floor but non-duplicates in the same statement are inserted */
 /* TODO check that the initial checkbox state is actually recorded */
+
 INSERT INTO research_initial_checkboxes (
   row_id,
   location_id,
@@ -116,15 +142,19 @@ SELECT
 	null,
 	@location_id, -- location_id; will be different for each location
 	patient.participant_number, 
-	sha2(initial_checkboxes.doctor_id,224),
+	if(initial_checkboxes.doctor_id is null,0,sha2(initial_checkboxes.doctor_id,224)),
 	initial_checkboxes.ATC_code,
 	initial_checkboxes.medication_criteria_id,
 	initial_checkboxes.select_box_num,
 	initial_checkboxes.selected,
 	initial_checkboxes.row_created
-FROM patient join 
-(select patient_advice_selection_history.* from patient_advice_selection_history join (select patient_id, min(row_created) as minRC from patient_advice_selection_history group by patient_id) as first_date on patient_advice_selection_history.patient_id = first_date.patient_id and patient_advice_selection_history.row_created = first_date.minRC) as initial_checkboxes
-on patient.id = initial_checkboxes.patient_id
+FROM patient 
+	join (select patient_advice_selection_history.* from patient_advice_selection_history 
+		join (select patient_id, min(row_created) as minRC 
+	from patient_advice_selection_history group by patient_id) as first_date 
+		on patient_advice_selection_history.patient_id = first_date.patient_id 
+	and patient_advice_selection_history.row_created = first_date.minRC) as initial_checkboxes
+		on patient.patient_id = initial_checkboxes.patient_id
 WHERE initial_checkboxes.row_created >= @lookback;
 -- no need to look for freetext; the initial state is machine-generated and does not have freetext.
 
@@ -147,14 +177,14 @@ SELECT
 	null,
 	@location_id, -- location_id; will be different for each location
 	patient.participant_number, 
-	sha2(patient_advice_selection.doctor_id,224),
+	if(patient_advice_selection.doctor_id is null,0,sha2(patient_advice_selection.doctor_id,224)),
 	patient_advice_selection.ATC_code,
 	patient_advice_selection.medication_criteria_id,
 	patient_advice_selection.select_box_num,
 	patient_advice_selection.selected,
     if(patient_advice_freetext.freetext is null,0,1), -- was freetext box used
 	patient_advice_selection.row_created
-FROM patient join patient_advice_selection on patient.id = patient_advice_selection.patient_id
+FROM patient join patient_advice_selection on patient.patient_id = patient_advice_selection.patient_id
 left join patient_advice_freetext on 
 	patient_advice_selection.patient_id = patient_advice_freetext.patient_id AND
 	patient_advice_selection.ATC_code = patient_advice_freetext.ATC_code AND
@@ -246,8 +276,10 @@ SELECT
   prediction_result,
   initial_measurements.row_created
 FROM patient 
-left join (select patient_measurement_history.* from patient_measurement_history join (select patient_id, min(row_created) as minRC from patient_measurement_history group by patient_id) as first_date on patient_measurement_history.patient_id = first_date.patient_id and patient_measurement_history.row_created = first_date.minRC) as initial_measurements
-on patient.id = initial_measurements.patient_id
+left join (select patient_measurement_history.* from patient_measurement_history 
+	join (select patient_id, min(row_created) as minRC from patient_measurement_history group by patient_id) as first_date 
+	on patient_measurement_history.patient_id = first_date.patient_id and patient_measurement_history.row_created = first_date.minRC) as initial_measurements
+on patient.patient_id = initial_measurements.patient_id
 WHERE initial_measurements.row_created >= @lookback;
 -- Omitted user-entered values, since these will always initially be null.
 
@@ -354,10 +386,8 @@ SELECT
   user_values_updated,
   patient_measurement.row_created,
   patient_measurement.row_updated
-from patient left join patient_measurement on patient.id = patient_measurement.patient_id
+from patient 
+left join patient_measurement 
+on patient.patient_id = patient_measurement.patient_id
 where patient_measurement.row_created >= @lookback or patient_measurement.row_updated >= @lookback;
-/*
-ON DUPLICATE KEY UPDATE 
-	location_id=location_id, 
-	participant_number=participant_number
-*/
+-- TODO this should have an "on duplicate key" statement
