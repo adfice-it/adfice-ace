@@ -26,6 +26,7 @@ fixture `Adfice`;
 fixture `TestController.setNativeDialogHandler`;
 
 
+
 const getLocation = ClientFunction(() => document.location.href);
 
 // for some reason, display: flex makes the checkboxes invisible to TestCafe.
@@ -696,7 +697,8 @@ test('Redirect to error page if invalid navigation is attempted', async t => {
     let mrn = 'DummyMRN-000000172';
     let user = 'dr_bob';
     let participant = '10172';
-    /* URL with null participant is (at least temporarily) accepted
+    // URL with null participant is (at least temporarily) accepted
+	if(0){	
         let url_no_participant =
             `${BASE_URL}/load` +
             `?mrn=${mrn}` +
@@ -708,7 +710,7 @@ test('Redirect to error page if invalid navigation is attempted', async t => {
         let body = Selector('body');
         await t.expect(body.withText('Error').exists).ok();
         await t.expect(body.withText('DummyMRN-000000172').exists).ok();
-    */
+	}
     let url_no_user =
         `${BASE_URL}/load` +
         `?mrn=${mrn}` +
@@ -804,6 +806,51 @@ test('Fail portal export if patient has no BSN', async t => {
     await t.expect(alertHistory[0].text).contains('Valportaal');
 });
 
+test('Show session timeout warning 2m before session timeout; session reset if button is clicked', async t => {
+    let mrn = 'DummyMRN-000000160';
+    let participant = 10160;
+    let window1 = await load(t, mrn, participant);
+	let expiration = Selector('#expiration');
+	await t.expect(expiration.visible).notOk();
+	
+    let url_short =
+        `${BASE_URL}/load` +
+        `?mrn=DummyMRN-000000160&user=dr_bob&participant=10160` +
+        `&tsec=121`;
+    window1 = await t.navigateTo(url_short);
+    await t.wait(1100); //wait a bit more than 1 sec
+	expiration = Selector('#expiration');
+	await t.expect(expiration.visible).ok();
+
+	let tbutton = Selector('#button-reset-timeout');
+	await t.click(tbutton);
+	expiration = Selector('#expiration');
+	await t.expect(expiration.visible).notOk();
+	
+	// TODO is there a way to check that the timeout has been correctly reset?
+	// fixture `[API] Get Cookies`;
+	// should have a method getCookies() that allows us to inspect cookies, but this does not seem to work.
+});
+
+test('Session expires if time <10s', async t => {
+    let mrn = 'DummyMRN-000000160';
+    let participant = 10160;
+    let window1 = await load(t, mrn, participant);
+	let expiration = Selector('#expiration');
+	await t.expect(expiration.visible).notOk();
+	
+    let url_short =
+        `${BASE_URL}/load` +
+        `?mrn=DummyMRN-000000160&user=dr_bob&participant=10160` +
+        `&tsec=11`;
+    window1 = await t.navigateTo(url_short);
+    await t.wait(4000); //wait 4 sec for next ping
+	let getLocation = ClientFunction(() => document.location.href);
+    await t.expect(getLocation()).contains('load-error');
+    let body = Selector('body');
+    await t.expect(body.withText('Error').exists).ok();
+
+});
 
 // slow tests run last
 test('Check multiple viewers making changes', async t => {

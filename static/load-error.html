@@ -24,7 +24,11 @@ function load_error_page_load() {
 	}
     let err = url_param('err');
     if (err) {
-        content += '<p>' + err + '</p>\n';
+        if(err.includes('Session expired')){
+			content += 'Uw sessie is verlopen.';
+		} else {
+			content += '<p>' + err + '</p>\n';
+			}
     }
     elem.innerHTML=content;
 }

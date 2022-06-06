@@ -411,11 +411,16 @@ function ws_on_message(event) {
             url += "?err=Session expired."
             window.location = url;
         } else if (remaining < two_minutes) {
-            let div = document.getElementById("expiration");
-            div.style.display = 'block';
+            let expiration_div = document.getElementById("expiration");
+            expiration_div.style.display = 'block';
+			let timeout_div = document.getElementById("timeout-time");
+			let currentDate = new Date();
+			let expire_time = currentDate.getHours() + ":" + (currentDate.getMinutes()+2);
+			console.log(expire_time);
+			timeout_div.innerHTML = "Sessie gaat verlopen om " + expire_time;
         } else {
-            let div = document.getElementById("expiration");
-            div.style.display = 'none';
+            let expiration_div = document.getElementById("expiration");
+            expiration_div.style.display = 'none';
         }
     }
 }

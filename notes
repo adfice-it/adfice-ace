@@ -48,3 +48,6 @@ The test data "users" of the system are "dr_alice" and "dr_bob"
 To look at test patient 167, the URL would look like this:
 
 http://localhost:8080/load?mrn=DummyMRN-000000167&user=dr_bob&participant=10167
+
+For testing purposes, a shorter session timeout can be set:
+http://localhost:8080/load?mrn=DummyMRN-000000167&user=dr_bob&participant=10167&tsec=125
