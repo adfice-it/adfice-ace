@@ -72,6 +72,8 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     app.use("/static", express.static('static'));
     app.use("/assets", express.static('static'));
 
+    app.use('/favicon.ico', express.static('static/favicon.ico'));
+
     app.use("/start", express.static('static/start.html'));
 
     app.use("/prep", express.static('static/prep.html'));
