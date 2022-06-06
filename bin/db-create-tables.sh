@@ -24,6 +24,11 @@ while [ $i -lt 10 ]; do
 	fi
 done
 
+if [ ${DB_BACKUP_PATH} ]; then
+	now=`date +"%Y-%m-%d"`
+#	mysqldump --opt --user=${DB_USER} --password=${pw} ${DB_SCHEMA_NAME} > ${DB_BACKUP_PATH}backup${now}.sql
+fi
+
 echo '# load schema'
 for SQL in \
 	drop_all_tables.sql \
