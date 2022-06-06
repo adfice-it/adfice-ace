@@ -12,6 +12,7 @@ something going wrong.
 The bash script should be something like:
 USER=XXX
 PASS=XXX
+LOCATION=XXX
 mysqldump --opt --user=${USER} --password=${PASS} adfice research_patient research_initial_rules_fired research_last_rules_fired research_initial_checkboxes research_last_checkboxes research_initial_patient_measurement research_last_patient_measurement > $(date "+%b_%d_%Y_%H_%M_%S")adfice_${LOCATION}.sql
 */
 
@@ -23,8 +24,22 @@ truncate table research_last_checkboxes;
 truncate table research_initial_patient_measurement;
 truncate table research_last_patient_measurement;
 
-/* TODO figure out the "on duplicate key" syntax and the "unique key" syntax.
-It is meant to update the row if the unique keys are the same. */
+CREATE TABLE `research_map` (
+  `participant_number` int unsigned NOT NULL,
+  `mrn` varchar(50) NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- This is a placeholder for a query that must be hand-edited each time this script is run. It will ensure that we only get data from participants, not other patients. For test purposes we'll put a few values here.
+INSERT INTO research_map (participant_number, mrn) VALUES
+(100001,'DummyMRN-000000001'),
+(100068,'DummyMRN-000000068'),
+(100172,'DummyMRN-000000172');
+
+UPDATE patient set participant_number = 
+	(select participant_number 
+	 from reserach_map 
+		join etl_mrn_patient on research_map.mrn = etl_mrn_patient.mrn 
+	 where etl_mrn_patient.patient_id = patient.patient_id);
 
 SET @location_id = if(@location_id is null, 0, @location_id);
 SET @lookback = if(@lookback is null, NOW() - INTERVAL 7 DAY, @lookback);
@@ -67,7 +82,7 @@ from patient
 		from logged_events 
 		where event_type = 3 order by row_created desc limit 1) as ehr_copy 
 		on patient.patient_id = ehr_copy_pid
-WHERE patient.is_final != 1 or patient.row_updated >= @lookback
+WHERE patient.participant_number is not null and (patient.is_final != 1 or patient.row_updated >= @lookback)
 ON DUPLICATE KEY UPDATE 
 	was_printed = if(printed_pid is null,0,1),
 	time_printed = printed_rc,
@@ -99,7 +114,7 @@ join (select rules_fired.* from rules_fired
 		from rules_fired group by patient_id) as first_date 
 	on rules_fired.patient_id = first_date.patient_id and rules_fired.row_created = first_date.minRC) as initial_rules
 on patient.patient_id = initial_rules.patient_id
-WHERE initial_rules.row_created >= @lookback;
+WHERE initial_rules.row_created >= @lookback and patient.participant_number is not null;
 
 INSERT INTO research_last_rules_fired (
   id,
@@ -109,7 +124,6 @@ INSERT INTO research_last_rules_fired (
   last_rules_fired,
   last_row_created
 )
-
 SELECT 
 	null,
 	@location_id,
@@ -122,10 +136,7 @@ join (select rules_fired.* from rules_fired
 	join (select patient_id, max(row_created) as maxRC from rules_fired group by patient_id) as last_date 
 	on rules_fired.patient_id = last_date.patient_id and rules_fired.row_created = last_date.maxRC) as last_rules
 on patient.patient_id = last_rules.patient_id
-WHERE last_rules.row_created >= @lookback;
-/* TODO since there are multiple rows in the initial state, check whether the row_updated time can be off by a few millis for the same UI event */
-/* TODO check that duplicate entries work as expected: duplicates are dropped on the floor but non-duplicates in the same statement are inserted */
-/* TODO check that the initial checkbox state is actually recorded */
+WHERE last_rules.row_created >= @lookback and patient.participant_number is not null;
 
 INSERT INTO research_initial_checkboxes (
   row_id,
@@ -147,20 +158,20 @@ SELECT
 	initial_checkboxes.medication_criteria_id,
 	initial_checkboxes.select_box_num,
 	initial_checkboxes.selected,
-	initial_checkboxes.row_created
+	initial_checkboxes.log_row_created
 FROM patient 
 	join (select patient_advice_selection_history.* from patient_advice_selection_history 
-		join (select patient_id, min(row_created) as minRC 
-	from patient_advice_selection_history group by patient_id) as first_date 
+		join (select patient_id, min(log_row_created) as minRC 
+			from patient_advice_selection_history group by patient_id) as first_date 
 		on patient_advice_selection_history.patient_id = first_date.patient_id 
-	and patient_advice_selection_history.row_created = first_date.minRC) as initial_checkboxes
-		on patient.patient_id = initial_checkboxes.patient_id
-WHERE initial_checkboxes.row_created >= @lookback;
+		and patient_advice_selection_history.log_row_created = first_date.minRC
+		ORDER BY patient_advice_selection_history.log_id) as initial_checkboxes
+	on patient.patient_id = initial_checkboxes.patient_id
+WHERE initial_checkboxes.log_row_created >= @lookback and patient.participant_number is not null;
 -- no need to look for freetext; the initial state is machine-generated and does not have freetext.
+-- use row_updated here instead of row_created; in the history table row_created is the timestamp of the original creation, and row_updated has the timestamp of the latest change.
+-- Checkbox 42b-2 is initially selected by more than one rule, so it has more than one entry with the same time stamp. We might actually want to know about this, so I have removed the unique-key constraint from this table.
 
-/* TODO check that duplicates are handled as expected: if it's the same patient, ATC, etc. then update,
-if it's different then insert. 
-This means that if data is reloaded from Epic there's a chance of some stale entries, but the timestamp should make that discernable */
 INSERT INTO research_last_checkboxes (
   `row_id`,
   `location_id`,
@@ -184,22 +195,15 @@ SELECT
 	patient_advice_selection.selected,
     if(patient_advice_freetext.freetext is null,0,1), -- was freetext box used
 	patient_advice_selection.row_created
-FROM patient join patient_advice_selection on patient.patient_id = patient_advice_selection.patient_id
+FROM patient 
+join patient_advice_selection on patient.patient_id = patient_advice_selection.patient_id
 left join patient_advice_freetext on 
 	patient_advice_selection.patient_id = patient_advice_freetext.patient_id AND
 	patient_advice_selection.ATC_code = patient_advice_freetext.ATC_code AND
 	patient_advice_selection.medication_criteria_id = patient_advice_freetext.medication_criteria_id AND
 	patient_advice_selection.select_box_num = patient_advice_freetext.select_box_num
-WHERE patient_advice_selection.row_created >= @lookback;
-
-/*
-ON DUPLICATE KEY UPDATE 
-	location_id=location_id, 
-	participant_number=participant_number, 
-	last_ATC_code = last_ATC_code,
-	last_medication_criteria_id = last_medication_criteria_id,
-	last_select_box_num = last_select_box_num;
-*/
+WHERE patient_advice_selection.row_created >= @lookback and patient.participant_number is not null;
+-- This ought to have only the latest advice, so should not be any duplicates here.
 
 INSERT INTO research_initial_patient_measurement (
   id,
@@ -270,18 +274,21 @@ SELECT
   smoking,
   smoking_date_measured,
   has_antiepileptica,
-
   has_ca_blocker,
   has_incont_med,
   prediction_result,
-  initial_measurements.row_created
+  initial_measurements.row_updated
 FROM patient 
 left join (select patient_measurement_history.* from patient_measurement_history 
-	join (select patient_id, min(row_created) as minRC from patient_measurement_history group by patient_id) as first_date 
-	on patient_measurement_history.patient_id = first_date.patient_id and patient_measurement_history.row_created = first_date.minRC) as initial_measurements
+	join (select patient_id, min(row_updated) as minRU 
+		from patient_measurement_history group by patient_id) as first_date 
+	on patient_measurement_history.patient_id = first_date.patient_id and patient_measurement_history.row_created = first_date.minRU
+	order by patient_measurement_history.log_id) as initial_measurements
 on patient.patient_id = initial_measurements.patient_id
-WHERE initial_measurements.row_created >= @lookback;
+WHERE initial_measurements.row_created >= @lookback and patient.participant_number is not null;
 -- Omitted user-entered values, since these will always initially be null.
+-- Use row-updated here - row_created in the history tables records the initial creation date of the row; row_updated has the timestamp of the latest change
+-- We get duplicate entries in the test data, but I think this is because the patient is used in tests that occur in the same second as the data is created. I think this won't happen in real data. In any case, the order-by ought to ensure we get the initial state.
 
 INSERT INTO research_last_patient_measurement (
   id,
@@ -389,5 +396,5 @@ SELECT
 from patient 
 left join patient_measurement 
 on patient.patient_id = patient_measurement.patient_id
-where patient_measurement.row_created >= @lookback or patient_measurement.row_updated >= @lookback;
--- TODO this should have an "on duplicate key" statement
+where (patient_measurement.row_created >= @lookback or patient_measurement.row_updated >= @lookback) and patient.participant_number is not null;
+-- Should not be any duplicates here; this table should have one row per patient.

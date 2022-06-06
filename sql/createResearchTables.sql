@@ -61,7 +61,6 @@ CREATE TABLE `research_initial_checkboxes` (
   `initial_selected` tinyint(1) NOT NULL,
   `initial_row_created` datetime DEFAULT NULL,
    PRIMARY KEY (`row_id`),
-   UNIQUE KEY `participant-box`(location_id,participant_number,initial_ATC_code,initial_medication_criteria_id,initial_select_box_num)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `research_last_checkboxes` (
