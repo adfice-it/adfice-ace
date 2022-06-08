@@ -1062,14 +1062,18 @@ test('access log', async () => {
 });
 
 test('test get patient table sql and params', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
-	let patient = {ehr_pid: 'DummyMRN-000000175', bsn: '000-00-0000', birth_date: '1930-01-01'};
-	let list_of_inserts = adfice.patientListOfInserts(patient_id, patient, 100175);
-	expect(list_of_inserts.length).toBe(2);
-	expect(list_of_inserts[0][0]).toContain("INSERT INTO patient (patient_id, participant_number, birth_date, age, is_final) VALUES (?,?,?,?,0)");
-	expect(list_of_inserts[0][1].length).toBe(4);
-	expect(list_of_inserts[1][0]).toContain("INSERT INTO etl_bsn_patient (patient_id, bsn) VALUES (?,?)");
-	expect(list_of_inserts[1][1].length).toBe(2);
+    let patient_id = "00000000-0000-4000-8000-100000000175";
+    let patient = {
+        ehr_pid: 'DummyMRN-000000175',
+        bsn: '000-00-0000',
+        birth_date: '1930-01-01'
+    };
+    let list_of_inserts = adfice.patientListOfInserts(patient_id, patient, 100175);
+    expect(list_of_inserts.length).toBe(2);
+    expect(list_of_inserts[0][0]).toContain("INSERT INTO patient (patient_id, participant_number, birth_date, age, is_final) VALUES (?,?,?,?,0)");
+    expect(list_of_inserts[0][1].length).toBe(4);
+    expect(list_of_inserts[1][0]).toContain("INSERT INTO etl_bsn_patient (patient_id, bsn) VALUES (?,?)");
+    expect(list_of_inserts[1][1].length).toBe(2);
 });
 
 test('test get med sql and params', async function() {
@@ -1128,35 +1132,35 @@ test('test removal of empty entries', async function() {
 });
 
 test('test get problem sql and params', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
-    let found_problems = [
-		{
-		name: 'diabetes',
-		icd_10: 'E11.9',
-		ehr_text: 'Diabetes mellitus (CMS/HCC)',
-		start_date: '2012-11-29',
+    let patient_id = "00000000-0000-4000-8000-100000000175";
+    let found_problems = [{
+            name: 'diabetes',
+            icd_10: 'E11.9',
+            ehr_text: 'Diabetes mellitus (CMS/HCC)',
+            start_date: '2012-11-29',
         },
         {
-		name: 'angststoornis',
-		icd_10: 'F41.2',
-		ehr_text: 'Gemengde angststoornis en depressieve stoornis',
-		start_date: '2021-06-01',
+            name: 'angststoornis',
+            icd_10: 'F41.2',
+            ehr_text: 'Gemengde angststoornis en depressieve stoornis',
+            start_date: '2021-06-01',
         }
-	];
-    let list_of_inserts = adfice.probListOfInserts(patient_id,found_problems);
+    ];
+    let list_of_inserts = adfice.probListOfInserts(patient_id, found_problems);
     expect(list_of_inserts.length).toBe(2);
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10, ehr_text, start_date) VALUES (?,?,?,?,?,?)');
     expect(list_of_inserts[0][1].length).toBe(6);
-    found_problems = [
-		{name: 'arrhythmia',
-         icd_10: 'I49.1',
-         ehr_text: '',
-         start_date: null
+    found_problems = [{
+            name: 'arrhythmia',
+            icd_10: 'I49.1',
+            ehr_text: '',
+            start_date: null
         },
-        {name: 'angststoornis',
-         icd_10: 'F41.2',
-         ehr_text: 'Gemengde angststoornis en depressieve stoornis',
-         start_date: '2021-06-01'
+        {
+            name: 'angststoornis',
+            icd_10: 'F41.2',
+            ehr_text: 'Gemengde angststoornis en depressieve stoornis',
+            start_date: '2021-06-01'
         }
     ];
     list_of_inserts = adfice.probListOfInserts(patient_id, found_problems);
@@ -1166,19 +1170,20 @@ test('test get problem sql and params', async function() {
 });
 
 test('test get lab sql and params', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
-    let found_labs = [
-        {name: 'eGFR',
-         date_measured: '2021-01-01 15:20:48',
-         lab_test_code: '33914-3',
-         lab_test_result: '> 60',
-		 lab_test_units: 'ml/min/1.73m2'
+    let patient_id = "00000000-0000-4000-8000-100000000175";
+    let found_labs = [{
+            name: 'eGFR',
+            date_measured: '2021-01-01 15:20:48',
+            lab_test_code: '33914-3',
+            lab_test_result: '> 60',
+            lab_test_units: 'ml/min/1.73m2'
         },
-        {name: 'kalium',
-         date_measured: '2021-05-05 10:20:48',
-         lab_test_code: '2823-3',
-         lab_test_result: '4',
-		 lab_test_units: 'mmol/L'
+        {
+            name: 'kalium',
+            date_measured: '2021-05-05 10:20:48',
+            lab_test_code: '2823-3',
+            lab_test_result: '4',
+            lab_test_units: 'mmol/L'
         }
     ];
     let list_of_inserts = adfice.labListOfInserts(patient_id, found_labs);
@@ -1188,8 +1193,8 @@ test('test get lab sql and params', async function() {
 });
 
 test('test measListOfInserts', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
-	let found_meas = {
+    let patient_id = "00000000-0000-4000-8000-100000000175";
+    let found_meas = {
         systolic_bp_mmHg: 120,
         bp_date_measured: '2012-11-29 22:47',
         height_cm: 130,
@@ -1198,11 +1203,11 @@ test('test measListOfInserts', async function() {
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
         smoking_date_measured: '2021-08-05 05:00',
-        };
-		//TODO add the rest of the measurements
-	let measListOfInserts = adfice.measListOfInserts(patient_id,found_meas);
-	
-	found_meas = {
+    };
+    //TODO add the rest of the measurements
+    let measListOfInserts = adfice.measListOfInserts(patient_id, found_meas);
+
+    found_meas = {
         systolic_bp_mmHg: null,
         bp_date_measured: null,
         height_cm: 130,
@@ -1211,10 +1216,10 @@ test('test measListOfInserts', async function() {
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
         smoking_date_measured: '2021-08-05 05:00',
-        };
-	let measListOfInserts2 = adfice.measListOfInserts(patient_id, found_meas);
+    };
+    let measListOfInserts2 = adfice.measListOfInserts(patient_id, found_meas);
 
-	found_meas = {
+    found_meas = {
         systolic_bp_mmHg: 120,
         bp_date_measured: null,
         height_cm: 130,
@@ -1223,59 +1228,63 @@ test('test measListOfInserts', async function() {
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
         smoking_date_measured: '2021-08-05 05:00',
-        };
-	let measListOfInserts3 = adfice.measListOfInserts(patient_id, found_meas);
+    };
+    let measListOfInserts3 = adfice.measListOfInserts(patient_id, found_meas);
 
-	expect(measListOfInserts[0][1][2]).toBe(120);
-	expect(measListOfInserts2[0][1][2]).toBe(null);
-	expect(measListOfInserts3[0][1][3]).toBe(null);
+    expect(measListOfInserts[0][1][2]).toBe(120);
+    expect(measListOfInserts2[0][1][2]).toBe(null);
+    expect(measListOfInserts3[0][1][3]).toBe(null);
 });
 
 test('test writePatientFromJSON', async function() {
-	let fake_pid =  Math.random().toString().substr(2, 10);
-	let fake_bsn = 
-		fake_pid.substr(0, 2) + '-' +
-		fake_pid.substr(3, 4) + '-' +
-		fake_pid.substr(5, 7);
-	let fake_participant = fake_pid.substr(5, 10);
-	
-	let patient = {ehr_pid: fake_pid, bsn: fake_bsn, birth_date: '1930-01-01'};
-	patient.medications = [{
+    let fake_pid = Math.random().toString().substr(2, 10);
+    let fake_bsn =
+        fake_pid.substr(0, 2) + '-' +
+        fake_pid.substr(3, 4) + '-' +
+        fake_pid.substr(5, 7);
+    let fake_participant = fake_pid.substr(5, 10);
+
+    let patient = {
+        ehr_pid: fake_pid,
+        bsn: fake_bsn,
+        birth_date: '1930-01-01'
+    };
+    patient.medications = [{
         ATC: 'B0GU501',
         generic_name: 'testdrug',
         display_name: 'Test Drug',
         start_date: '2021-01-01',
         dose_text: 'My instructions'
     }];
-	patient.problems = [
-		{
-		name: 'diabetes',
-		icd_10: 'E11.9',
-		ehr_text: 'Diabetes mellitus (CMS/HCC)',
-		start_date: '2012-11-29'
+    patient.problems = [{
+            name: 'diabetes',
+            icd_10: 'E11.9',
+            ehr_text: 'Diabetes mellitus (CMS/HCC)',
+            start_date: '2012-11-29'
         },
-		{
-        name: 'angststoornis',
-		icd_10: 'F41.2',
-		ehr_text: 'Gemengde angststoornis en depressieve stoornis',
-		start_date: '2021-06-01'
+        {
+            name: 'angststoornis',
+            icd_10: 'F41.2',
+            ehr_text: 'Gemengde angststoornis en depressieve stoornis',
+            start_date: '2021-06-01'
         }
     ];
-	patient.labs = [
-		{name: 'eGFR',
-         date_measured: '2021-01-01 15:20:48',
-         lab_test_code: '33914-3',
-         lab_test_result: '> 60',
-		 lab_test_units: 'ml/min/1.73m2'
+    patient.labs = [{
+            name: 'eGFR',
+            date_measured: '2021-01-01 15:20:48',
+            lab_test_code: '33914-3',
+            lab_test_result: '> 60',
+            lab_test_units: 'ml/min/1.73m2'
         },
-        {name: 'kalium',
-         date_measured: '2021-05-05 10:20:48',
-         lab_test_code: '2823-3',
-         lab_test_result: '4',
-		 lab_test_units: 'mmol/L'
+        {
+            name: 'kalium',
+            date_measured: '2021-05-05 10:20:48',
+            lab_test_code: '2823-3',
+            lab_test_result: '4',
+            lab_test_units: 'mmol/L'
         }
     ];
-	patient.measurements = {
+    patient.measurements = {
         systolic_bp_mmHg: 120,
         bp_date_measured: '2012-11-29 22:47',
         height_cm: 130,
@@ -1284,25 +1293,25 @@ test('test writePatientFromJSON', async function() {
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
         smoking_date_measured: '2021-08-05 05:00'
-        };
-	//TODO add the rest of the measurements
-	let patient_id = await adfice.write_patient_from_json(patient, fake_participant);
-	let retrieved_patient = await adfice.get_patient_by_id(patient_id);
-	let retrieved_meds = await adfice.get_meds(patient_id);
-	let retrieved_probs = await adfice.get_problems(patient_id);
-	let retrieved_labs = await adfice.get_labs(patient_id);
-	let retrieved_meas = await adfice.get_patient_measurements(patient_id);
+    };
+    //TODO add the rest of the measurements
+    let patient_id = await adfice.write_patient_from_json(patient, fake_participant);
+    let retrieved_patient = await adfice.get_patient_by_id(patient_id);
+    let retrieved_meds = await adfice.get_meds(patient_id);
+    let retrieved_probs = await adfice.get_problems(patient_id);
+    let retrieved_labs = await adfice.get_labs(patient_id);
+    let retrieved_meas = await adfice.get_patient_measurements(patient_id);
 
-	expect(retrieved_patient['birth_date'].toString().includes('Wed Jan 01 1930 00:00:00 GMT+0019')).toBe(true);
-	// oddly, when you console.log the date object you get 1929-12-31T23:40:28.000Z . I'm sure there's a reason.
-	expect(retrieved_patient['participant_number']).toBe(parseInt(fake_pid.substr(5, 10)));
-	expect(retrieved_meds.length).toBe(1);
-	expect(retrieved_meds[0]['ATC_code']).toBe('B0GU501');
-	expect(retrieved_probs.length).toBe(2);
-	expect(retrieved_probs[1]['display_name']).toBe('Angststoornis');
-	expect(retrieved_labs.length).toBe(2);
-	expect(retrieved_labs[1]['lab_test_result']).toBe('4');
-	expect(retrieved_meas[0]['user_education_hml']).toBe(null);
-	expect(retrieved_meas[0]['systolic_bp_mmHg']).toBe(120);
-	expect(retrieved_meas[0]['smoking']).toBe(0);
+    expect(retrieved_patient['birth_date'].toString().includes('Wed Jan 01 1930 00:00:00 GMT+0019')).toBe(true);
+    // oddly, when you console.log the date object you get 1929-12-31T23:40:28.000Z . I'm sure there's a reason.
+    expect(retrieved_patient['participant_number']).toBe(parseInt(fake_pid.substr(5, 10)));
+    expect(retrieved_meds.length).toBe(1);
+    expect(retrieved_meds[0]['ATC_code']).toBe('B0GU501');
+    expect(retrieved_probs.length).toBe(2);
+    expect(retrieved_probs[1]['display_name']).toBe('Angststoornis');
+    expect(retrieved_labs.length).toBe(2);
+    expect(retrieved_labs[1]['lab_test_result']).toBe('4');
+    expect(retrieved_meas[0]['user_education_hml']).toBe(null);
+    expect(retrieved_meas[0]['systolic_bp_mmHg']).toBe(120);
+    expect(retrieved_meas[0]['smoking']).toBe(0);
 });

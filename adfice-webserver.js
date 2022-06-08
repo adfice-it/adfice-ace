@@ -121,7 +121,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             try {
                 let etl_opts = await autil.from_json_file(etl_opts_path);
                 let etl_patient = await etl.etl(mrn, etl_opts);
-				id = await adfice.write_patient_from_json(etl_patient, participant_number);
+                id = await adfice.write_patient_from_json(etl_patient, participant_number);
             } catch (err) {
                 encoded_err = encodeURIComponent('' + err);
             }
@@ -233,10 +233,10 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             }
         } else if (message.type == 'patient_renew') {
             await adfice.add_log_event_renew(doctor_id, patient_id);
-			let etl_opts = await autil.from_json_file(etl_opts_path);
-			let mrn = await adfice.mrn_for_id(patient_id);
-			let etl_patient = await etl.etl(mrn, etl_opts);
-			let returned_patient = await adfice.renew_patient(patient_id, etl_patient);
+            let etl_opts = await autil.from_json_file(etl_opts_path);
+            let mrn = await adfice.mrn_for_id(patient_id);
+            let etl_patient = await etl.etl(mrn, etl_opts);
+            let returned_patient = await adfice.renew_patient(patient_id, etl_patient);
             if (returned_patient != patient_id) {
                 let err_text_en = "etl_renew( " +
                     patient_id +
