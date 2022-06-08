@@ -281,7 +281,7 @@ centos-vm/Makefile: submodules-update
 	@echo "SUCCESS $@"
 
 tidy:
-	js-beautify --replace --end-with-newline \
+	node_modules/.bin/js-beautify --replace --end-with-newline \
 		*.js \
 		bin/*.js \
 		static/*.js

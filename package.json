@@ -4,6 +4,7 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
+    "js-beautify": "^1.14.3",
     "mariadb": "^2.5.3",
     "showdown": "^1.9.1"
   },
