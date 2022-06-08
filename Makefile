@@ -89,14 +89,19 @@ endef
 default: check
 
 
+node_modules/.bin/js-beautify:
+	npm install
+	ls -l $@
+	@echo "$@ complete"
+
 node_modules/ws/lib/websocket-server.js:
 	npm install
-	ls -l node_modules/ws/lib/websocket-server.js
+	ls -l $@
 	@echo "$@ complete"
 
 node_modules/.bin/testcafe:
 	npm install
-	ls -l node_modules/.bin/testcafe
+	ls -l $@
 	@echo "$@ complete"
 
 node_modules/showdown/dist/showdown.min.js: node_modules/.bin/testcafe
@@ -187,7 +192,7 @@ ADFICE_TAR_CONTENTS=COPYING \
 		notes \
 		package.json \
 		README.md \
-		$(shell find bin prediction sql static views -type f) \
+		$(shell find bin sql static views -type f) \
 		$(shell find static views -type l) \
 		system.db-scripts.env \
 		testingNotes.txt \
@@ -280,7 +285,7 @@ centos-vm/Makefile: submodules-update
 	ls -l centos-vm/Makefile
 	@echo "SUCCESS $@"
 
-tidy:
+tidy: node_modules/.bin/js-beautify
 	node_modules/.bin/js-beautify --replace --end-with-newline \
 		*.js \
 		bin/*.js \
