@@ -1241,11 +1241,11 @@ test('test writePatientFromJSON', async function() {
 	
 	let patient = {ehr_pid: fake_pid, bsn: fake_bsn, birth_date: '1930-01-01'};
 	patient.medications = [{
-        'ATC': 'B0GU501',
-        'generic_name': 'testdrug',
-        'display_name': 'Test Drug',
-        'start_date': '2021-01-01',
-        'dose_text': 'My instructions'
+        ATC: 'B0GU501',
+        generic_name: 'testdrug',
+        display_name: 'Test Drug',
+        start_date: '2021-01-01',
+        dose_text: 'My instructions'
     }];
 	patient.problems = [
 		{

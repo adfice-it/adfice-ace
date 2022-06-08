@@ -84,6 +84,32 @@ async function get_table_sizes() {
 	return patient_id;
 }
 
+async function renew_patient(patient_id, etl_patient){
+	let params = [patient_id];
+	let list_of_transactions = [];
+	list_of_transactions.push(...(patientListOfUpdates(etl_patient, patient_id)));
+	let sql = "DELETE FROM patient_medication where patient_id = ?"
+	list_of_transactions.push([sql, params]);
+    list_of_transactions.push(...(medListOfInserts(patient_id, etl_patient.medications)));
+	sql = "DELETE FROM patient_problem where patient_id = ?"
+	list_of_transactions.push([sql, params]);
+    list_of_transactions.push(...(probListOfInserts(patient_id, etl_patient.problems)));
+	sql = "DELETE FROM patient_lab where patient_id = ?"
+	list_of_transactions.push([sql, params]);
+	list_of_transactions.push(...(labListOfInserts(patient_id, etl_patient.labs)));
+	sql = "DELETE FROM patient_measurement where patient_id = ?"
+	list_of_transactions.push([sql, params]);
+	list_of_transactions.push(...(measListOfInserts(patient_id, etl_patient.measurements)));
+	sql = "DELETE FROM patient_advice_selection where patient_id = ?"
+	list_of_transactions.push([sql, params]);
+	sql = "DELETE FROM patient_advice_freetext where patient_id = ?"
+	list_of_transactions.push([sql, params]);
+
+	await this.db.as_sql_transaction(list_of_transactions);
+	//if successful?
+	return patient_id;
+}
+
 function patientListOfInserts(patient_id, patient, participant_number){
 	let list_of_transactions = [];
 	let age = calculateAge(patient);
@@ -98,20 +124,34 @@ function patientListOfInserts(patient_id, patient, participant_number){
 	return list_of_transactions;
 }
 
-function calculateAge(patient) {
-    let diff = new Date().getTime() - new Date(patient['birth_date']).getTime();
-    return (diff / 31536000000).toFixed(0);
+function patientListOfUpdates(patient, patient_id){
+	let list_of_transactions = [];
+	let age = calculateAge(patient);
+	let sql1 = '/* epic_etl.patientListOfUpdates */ UPDATE patient ' +
+		'SET birth_date = ?, age = ?, is_final = 0 ' +
+		"WHERE patient_id = '" + patient_id + "'";
+	list_of_transactions.push([sql1, [patient['birth_date'], age]]);
+	let sql2 = '/* epic_etl.patientListOfUpdates */ UPDATE etl_bsn_patient ' +
+		"SET bsn = ? WHERE patient_id = '" + patient_id + "'";
+	list_of_transactions.push([sql2, [patient['bsn']]]);
+	return list_of_transactions;
+}
+
+function calculateAge(patient){
+	let diff = new Date().getTime() - new Date(patient['birth_date']).getTime();   
+	return (diff / 31536000000).toFixed(0);
 }
 
 function nowString() {
     return dateString(new Date());
 }
 
-function dateString(date_obj) {
-    if (date_obj == null) {
-        return null;
-    }
-    let date_str = date_obj.getFullYear() +
+function dateString(date_obj){
+	/* istanbul ignore next */
+	if(date_obj == null){
+		return null;
+	}
+	let date_str = date_obj.getFullYear() +
         '-' + (date_obj.getMonth() + 1) +
         '-' + date_obj.getDate() +
         ' ' + date_obj.getHours() +
@@ -1298,6 +1338,19 @@ async function id_for_mrn(mrn) {
     return results[0].patient_id;
 }
 
+async function mrn_for_id(patient_id) {
+    if (!patient_id) {
+        return null;
+    }
+    let sql = 'SELECT mrn FROM etl_mrn_patient WHERE patient_id=?';
+    let params = [patient_id];
+    let results = await this.sql_select(sql, params);
+    if (results.length == 0) {
+        return null;
+    }
+    return results[0].mrn;
+}
+
 async function doctor_id_for_user(user_id) {
     if (!user_id) {
         return null;
@@ -1374,7 +1427,9 @@ function adfice_init(db) {
         get_advice_texts_checkboxes: get_advice_texts_checkboxes,
         get_patient_measurements: get_patient_measurements,
         id_for_mrn: id_for_mrn,
-        set_advice_for_patient: set_advice_for_patient,
+        mrn_for_id: mrn_for_id,
+		renew_patient: renew_patient,
+		set_advice_for_patient: set_advice_for_patient,
         shutdown: shutdown,
 		write_patient_from_json: write_patient_from_json,
     };
