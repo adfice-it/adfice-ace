@@ -299,7 +299,25 @@ test('update_prediction_with_user_values, update all missing data', async () => 
 
     // clean up
     let params = [patient_id];
-    let sql = 'UPDATE patient_measurement SET user_GDS_score = null, user_grip_kg = null, user_walking_speed_m_per_s = null, user_height_cm = null, user_weight_kg = null, user_systolic_bp_mmHg = null, user_number_of_limitations = null, user_nr_falls_12m = null, user_nr_falls_12m = null, user_smoking = null, user_education_hml = null, user_fear0 = null, user_fear1 = null, user_fear2 = null, prediction_result = null, user_values_updated = null WHERE patient_id = ?';
+    let sql = `/* adfice.test.js cleanup patient_measurement */
+     UPDATE patient_measurement
+        SET user_GDS_score = null
+          , user_grip_kg = null
+          , user_walking_speed_m_per_s = null
+          , user_height_cm = null
+          , user_weight_kg = null
+          , user_systolic_bp_mmHg = null
+          , user_number_of_limitations = null
+          , user_nr_falls_12m = null
+          , user_nr_falls_12m = null
+          , user_smoking = null
+          , user_education_hml = null
+          , user_fear0 = null
+          , user_fear1 = null
+          , user_fear2 = null
+          , prediction_result = null
+          , user_values_updated = null
+      WHERE patient_id = ?`;
     await adfice.sql_select(sql, params);
 })
 
