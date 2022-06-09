@@ -127,11 +127,11 @@ function patientListOfInserts(patient_id, patient, participant_number) {
 function patientListOfUpdates(patient, patient_id) {
     let list_of_transactions = [];
     let age = calculateAge(patient);
-    let sql1 = '/* epic_etl.patientListOfUpdates */ UPDATE patient ' +
+    let sql1 = '/* adfice.patientListOfUpdates */ UPDATE patient ' +
         'SET birth_date = ?, age = ?, is_final = 0 ' +
         "WHERE patient_id = '" + patient_id + "'";
     list_of_transactions.push([sql1, [patient['birth_date'], age]]);
-    let sql2 = '/* epic_etl.patientListOfUpdates */ UPDATE etl_bsn_patient ' +
+    let sql2 = '/* adfice.patientListOfUpdates */ UPDATE etl_bsn_patient ' +
         "SET bsn = ? WHERE patient_id = '" + patient_id + "'";
     list_of_transactions.push([sql2, [patient['bsn']]]);
     return list_of_transactions;
