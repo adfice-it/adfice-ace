@@ -1302,7 +1302,7 @@ test('test writePatientFromJSON', async function() {
     let retrieved_labs = await adfice.get_labs(patient_id);
     let retrieved_meas = await adfice.get_patient_measurements(patient_id);
 
-    expect(retrieved_patient['birth_date'].toString().includes('Wed Jan 01 1930 00:00:00 GMT+0019')).toBe(true);
+    expect(retrieved_patient['birth_date'].toString().includes('1930')).toBe(true);
     // oddly, when you console.log the date object you get 1929-12-31T23:40:28.000Z . I'm sure there's a reason.
     expect(retrieved_patient['participant_number']).toBe(parseInt(fake_pid.substr(5, 10)));
     expect(retrieved_meds.length).toBe(1);
