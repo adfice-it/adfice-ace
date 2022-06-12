@@ -87,7 +87,7 @@ async function write_patient_from_json(etl_patient, participant_number) {
 async function renew_patient(patient_id, etl_patient) {
     let params = [patient_id];
     let list_of_transactions = [];
-    list_of_transactions.push(...(patientListOfUpdates(etl_patient, patient_id)));
+    list_of_transactions.push(...(patientListOfUpdates(patient_id, etl_patient)));
     let sql = "DELETE FROM patient_medication where patient_id = ?"
     list_of_transactions.push([sql, params]);
     list_of_transactions.push(...(medListOfInserts(patient_id, etl_patient.medications)));
@@ -124,7 +124,7 @@ function patientListOfInserts(patient_id, patient, participant_number) {
     return list_of_transactions;
 }
 
-function patientListOfUpdates(patient, patient_id) {
+function patientListOfUpdates(patient_id, patient) {
     let list_of_transactions = [];
     let age = calculateAge(patient);
     let sql1 = '/* adfice.patientListOfUpdates */ UPDATE patient ' +

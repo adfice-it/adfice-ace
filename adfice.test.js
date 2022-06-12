@@ -55,6 +55,24 @@ test('test patient_id for missing mrn', async () => {
     expect(patient_id).toBe(null);
 });
 
+test('test mrn for valid patient_id', async () => {
+    let patient_id = "00000000-0000-4000-8000-100000000163";
+	let mrn =  await adfice.mrn_for_id(patient_id);
+    expect(mrn).toBe("DummyMRN-000000163");
+});
+
+test('test mrn for null patient_id', async () => {
+    let patient_id = null;
+	let mrn =  await adfice.mrn_for_id(patient_id);
+    expect(mrn).toBe(null);
+});
+
+test('test mrn for invalid patient_id', async () => {
+    let patient_id = "SirNotAppearing";
+	let mrn =  await adfice.mrn_for_id(patient_id);
+    expect(mrn).toBe(null);
+});
+
 test('test doctor_id for user_id', async () => {
     let user_id = 'dr_bob';
     let doctor_id = await adfice.doctor_id_for_user(user_id);
@@ -1333,4 +1351,140 @@ test('test writePatientFromJSON', async function() {
     expect(retrieved_meas[0]['user_education_hml']).toBe(null);
     expect(retrieved_meas[0]['systolic_bp_mmHg']).toBe(120);
     expect(retrieved_meas[0]['smoking']).toBe(0);
+});
+
+test('test renew_patient', async function() {
+	// create a patient to renew
+    let fake_pid = Math.random().toString().substr(2, 10);
+    let fake_bsn =
+        fake_pid.substr(0, 2) + '-' +
+        fake_pid.substr(3, 4) + '-' +
+        fake_pid.substr(5, 7);
+    let fake_participant = fake_pid.substr(5, 10);
+
+    let patient = {
+        ehr_pid: fake_pid,
+        bsn: fake_bsn,
+        birth_date: '1930-01-01'
+    };
+    patient.medications = [{
+        ATC: 'B0GU501',
+        generic_name: 'testdrug',
+        display_name: 'Test Drug',
+        start_date: '2021-01-01',
+        dose_text: 'My instructions'
+    }];
+    patient.problems = [{
+            name: 'diabetes',
+            icd_10: 'E11.9',
+            ehr_text: 'Diabetes mellitus (CMS/HCC)',
+            start_date: '2012-11-29'
+        },
+        {
+            name: 'angststoornis',
+            icd_10: 'F41.2',
+            ehr_text: 'Gemengde angststoornis en depressieve stoornis',
+            start_date: '2021-06-01'
+        }
+    ];
+    patient.labs = [{
+            name: 'eGFR',
+            date_measured: '2021-01-01 15:20:48',
+            lab_test_code: '33914-3',
+            lab_test_result: '> 60',
+            lab_test_units: 'ml/min/1.73m2'
+        },
+        {
+            name: 'kalium',
+            date_measured: '2021-05-05 10:20:48',
+            lab_test_code: '2823-3',
+            lab_test_result: '4',
+            lab_test_units: 'mmol/L'
+        }
+    ];
+    patient.measurements = {
+        systolic_bp_mmHg: 120,
+        bp_date_measured: '2012-11-29 22:47',
+        height_cm: 130,
+        height_date_measured: '2020-01-27 21:06',
+        weight_kg: 32,
+        weight_date_measured: '2020-01-27 21:06',
+        smoking: 0,
+        smoking_date_measured: '2021-08-05 05:00'
+    };
+    //TODO add the rest of the measurements
+	
+	//create data to renew them with
+	let etl_patient = {
+        ehr_pid: fake_pid,
+        bsn: fake_bsn,
+        birth_date: '1931-01-01'
+    };
+    etl_patient.medications = [{
+        ATC: 'B0GU502',
+        generic_name: 'bogusdrug',
+        display_name: 'Bogus1 Drug',
+        start_date: '2022-01-01',
+        dose_text: 'Do not take this medication'
+    }];
+    etl_patient.problems = [{
+            name: 'myocardinfarct',
+            icd_10: 'I21.0',
+            ehr_text: 'Acuut transmuraal myocardinfarct van voorwand',
+            start_date: '2020-03-20'
+        }
+    ];
+    etl_patient.labs = [{
+            name: 'eGFR',
+            date_measured: '2021-01-01 15:20:48',
+            lab_test_code: '33914-3',
+            lab_test_result: '> 60',
+            lab_test_units: 'ml/min/1.73m2'
+        },
+        {
+            name: 'kalium',
+            date_measured: '2021-05-05 10:20:48',
+            lab_test_code: '2823-3',
+            lab_test_result: '4',
+            lab_test_units: 'mmol/L'
+        },
+		{
+            name: 'calcium',
+            date_measured: '2021-05-05 10:20:48',
+            lab_test_code: 'xxx',
+            lab_test_result: '3.0',
+            lab_test_units: 'mmol/L'
+        }
+    ];
+    etl_patient.measurements = {
+        systolic_bp_mmHg: 120,
+        bp_date_measured: '2021-11-29 22:47',
+        height_cm: 130,
+        height_date_measured: '2022-01-27 21:06',
+        weight_kg: 32,
+        weight_date_measured: '2022-01-27 21:06',
+        smoking: 1,
+        smoking_date_measured: '2022-05-05 05:00'
+    };
+	
+    let patient_id = await adfice.write_patient_from_json(patient, fake_participant);
+	let patient_id2 = await adfice.renew_patient(patient_id, etl_patient);
+    let retrieved_patient = await adfice.get_patient_by_id(patient_id2);
+    let retrieved_meds = await adfice.get_meds(patient_id2);
+    let retrieved_probs = await adfice.get_problems(patient_id2);
+    let retrieved_labs = await adfice.get_labs(patient_id2);
+    let retrieved_meas = await adfice.get_patient_measurements(patient_id2);
+
+    expect(retrieved_patient['birth_date'].toString().includes('1931')).toBe(true);
+    // oddly, when you console.log the date object you get 1929-12-31T23:40:28.000Z . I'm sure there's a reason.
+    expect(retrieved_meds.length).toBe(1);
+    expect(retrieved_meds[0]['ATC_code']).toBe('B0GU502');
+    expect(retrieved_probs.length).toBe(1);
+    expect(retrieved_probs[0]['display_name']).toBe('Myocardinfarct');
+    expect(retrieved_labs.length).toBe(3);
+    expect(retrieved_labs[1]['lab_test_result']).toBe('4');
+	expect(retrieved_labs[2]['lab_test_result']).toBe('3.0');
+    expect(retrieved_meas[0]['user_education_hml']).toBe(null);
+    expect(retrieved_meas[0]['systolic_bp_mmHg']).toBe(120);
+    expect(retrieved_meas[0]['smoking']).toBe(1);
 });
