@@ -25,7 +25,6 @@ default: check
 
 check: thirdparty check-unit
 	./acceptance-test-patient-validation.sh
-	./acceptance-test-cafe.sh
 	@echo "SUCCESS $@"
 
 thirdparty: node_modules/ws/lib/websocket-server.js \
@@ -37,17 +36,13 @@ check-unit: adfice-dbsetup grep-ie-bad-words
 	npm test adfice
 	@echo "SUCCESS $@"
 
-adfice-dbsetup: npmsetup db-scripts.env
+adfice-dbsetup: npmsetup
 	bin/db-create-tables.sh db-scripts.env
 	bin/load-synthetic-data.sh db-scripts.env
 	@echo "$@ complete"
 
 npmsetup: node_modules/ws/lib/websocket-server.js
 	@echo "$@ complete"
-
-db-scripts.env:
-#	ln -sv docker.db-scripts.env db-scripts.env
-# this is obviously wrong, but what is right?
 
 IE_BADWORDS_RE='await\|async\|forEach\|=>\|'\`
 BROWSER_JS := $(shell ls static/*js)
