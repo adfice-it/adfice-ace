@@ -24,6 +24,13 @@ while [ $i -lt 10 ]; do
 	fi
 done
 
+if [ ${DB_BACKUP_DIR} ]; then
+	DB_BACKUP_FILE="${DB_BACKUP_DIR}/backup-portal-`date '+%Y%m%d_%H%M%S'`.sql"
+	echo "backup to $DB_BACKUP_FILE"
+	$DB_DUMP_CMD > $DB_BACKUP_FILE || echo "unable to backup"
+	ls -l $DB_BACKUP_FILE || echo "no $DB_BACKUP_FILE"
+fi
+
 echo '# load schema'
 for SQL in \
 	createPortalTables.sql

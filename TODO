@@ -1,21 +1,13 @@
-WIP:
-Moving database functions from ETL to adfice.
-The functions that build the SQL transactions have been moved from etl to adfice.js.
-The function that calls these functions is commented out in adfice.js.
-* uncomment the caller function in adfice.js
-* build a test for the caller function
-* change stub_etl to produce json that can be passed to this caller
-* change the code that calls the etl to pass the resulting json to the caller
-* make sure this matches the json that is created by the etl
-
 Important:
 * an alert is added which should show if the "renew" fails (re-extraction of data via het EPD) but testing it will require altering stub_etl to fail to renew a specific patient.
 * Display MRN instead of patient ID.
 * Add back button to Lees meer page
 * make changes to ICD-10 mapping
 * Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
-* Stubborn caching in IE means that browser must be closed and reopened to get new data to load after Vernieuwen or Verstuur (sending hand-entered prediction model data). All the headers that are supposed to control this have been added. I can't figure out anything else to try to make this work. Apparently it partly depends on browser settings; see what happens in the real deploy. Check if this is also a problem in Edge.
-
+* Stubborn caching in IE means that browser must be closed and reopened to get new data to load after Vernieuwen or Verstuur (sending hand-entered prediction model data). 
+  -- try adding headers to all pages, not just load page
+  -- Apparently it partly depends on browser settings; see what happens in the real deploy. Check if this is also a problem in Edge.
+* Consider moving bin/db-create-portal-tables.sh to the valportaal repo. The tables actually belong to the valportaal, although symlinking them to adfice is handy since adfice needs to write to those tables as well."
 
 Mid Priority:
 * Getting data out of EHR
@@ -23,14 +15,11 @@ Mid Priority:
     https://confluence.hl7.org/display/FHIR/Public+Test+Servers
   * stub-etl will always succeed;
     consider adding code which simulates a failed retrieval to test failure states
-* change separation of labor so adfice-ace writes to the database and adfice-xxx-etl returns a JSON with the needed data rather than writing directly to the DB (move SQL code from etl to adfice-ace and have etl build a json without the SQL)
 * consider removing birth date entirely from the data; we only need age
-* fix testcafe acceptance tests to work with testcafe v1.16.1
 * figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
-* figure out why TestCafe "Nonmed headers display correctly on patient page" fails
+* figure out if TestCafe "Nonmed headers display correctly on patient page" still fails
 * See if we can get rid of <span> headers in nonmed advice. (I think they are not used any more.)
 * Can we write any meaningful test for fivepages.js print_page()? It has one job...
-* automate tests for CDSS working on IE11
 * Add a way to clear user-entered prediction model data. This can be used by the TestCafe test to clean up after itself.
 * Each acceptance test should start an instance of adfice-webserver
   * refactor adfice-webserver-runner to be more testable
@@ -65,6 +54,7 @@ Mid Priority:
 * make black-and-white printer-friendly css
 
 Low Priority:
+* Rewrite system to work with EHR's proprietary browser - seems to not support web sockets. Or wait 'til 2024 when browser should be upgraded to a 21st-century browser.
 * naming consistency thoughout the css
 * naming consistency thoughout the javascript
 * naming consistency thoughout the html
