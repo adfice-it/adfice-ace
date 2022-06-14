@@ -1124,8 +1124,11 @@ test('test get med sql and params', async function() {
     }];
     let list_of_inserts = adfice.medListOfInserts(patient_id, medications)
     expect(list_of_inserts.length).toBe(1);
+	// SQL should be: 'INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date, dose) VALUES (?,?,?,?,?,?,?)'
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_medication');
     expect(list_of_inserts[0][1].length).toBe(7);
+	expect(list_of_inserts[0][1][2]).toBe('Test Drug');
+	expect(list_of_inserts[0][1][5]).toBe('2021-01-01');
 });
 
 test('test get med sql and params with some nulls', async function() {
@@ -1135,8 +1138,11 @@ test('test get med sql and params with some nulls', async function() {
         display_name: 'Test Drug'
     }];
     let list_of_inserts = adfice.medListOfInserts(patient_id, medications)
+	// SQL should be: 'INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, ATC_code) VALUES (?,?,?,?)'
+	// Note that this changes depending on whether the medication data is complete.
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_medication');
     expect(list_of_inserts[0][1].length).toBe(4);
+	expect(list_of_inserts[0][1][2]).toBe('Test Drug');
 
     medications = [{
         generic_name: 'testdrug',
@@ -1144,8 +1150,11 @@ test('test get med sql and params with some nulls', async function() {
         dose_text: 'My instructions'
     }];
     list_of_inserts = adfice.medListOfInserts(patient_id, medications);
+	// SQL should be: 'INSERT INTO patient_medication (patient_id, date_retrieved, generic_name, start_date, dose) VALUES (?,?,?,?,?)'
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_medication');
     expect(list_of_inserts[0][1].length).toBe(5);
+	expect(list_of_inserts[0][1][2]).toBe('testdrug');
+	expect(list_of_inserts[0][1][3]).toBe('2021-01-01');
 
     medications = [{}];
     list_of_inserts = adfice.medListOfInserts(patient_id, medications);
@@ -1164,8 +1173,10 @@ test('test removal of empty entries', async function() {
     }];
     let list_of_inserts = adfice.medListOfInserts(patient_id, medications)
     expect(list_of_inserts.length).toBe(1);
+	// SQL should be: 'INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, ATC_code) VALUES (?,?,?,?)'
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_medication');
     expect(list_of_inserts[0][1].length).toBe(4);
+	expect(list_of_inserts[0][1][3]).toBe('B0GU501');
 });
 
 test('test get problem sql and params', async function() {
@@ -1185,8 +1196,11 @@ test('test get problem sql and params', async function() {
     ];
     let list_of_inserts = adfice.probListOfInserts(patient_id, found_problems);
     expect(list_of_inserts.length).toBe(2);
+	// SQL should be: 'INSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10, ehr_text, start_date) VALUES (?,?,?,?,?,?)'
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_problem');
     expect(list_of_inserts[0][1].length).toBe(6);
+	expect(list_of_inserts[0][1][5]).toBe('2012-11-29');
+	
     found_problems = [{
             name: 'arrhythmia',
             icd_10: 'I49.1',
@@ -1202,8 +1216,10 @@ test('test get problem sql and params', async function() {
     ];
     list_of_inserts = adfice.probListOfInserts(patient_id, found_problems);
     expect(list_of_inserts.length).toBe(2);
+	//SQL should be: 'INSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10) VALUES (?,?,?,?)'
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_problem');
     expect(list_of_inserts[0][1].length).toBe(4);
+	expect(list_of_inserts[0][1][2]).toBe('arrhythmia');
 });
 
 test('test get lab sql and params', async function() {
@@ -1225,8 +1241,10 @@ test('test get lab sql and params', async function() {
     ];
     let list_of_inserts = adfice.labListOfInserts(patient_id, found_labs);
     expect(list_of_inserts.length).toBe(2);
+	//SQL should be: 'INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_code, lab_test_result, lab_test_units) VALUES (?,?,?,?,?,?,?)'
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_lab');
     expect(list_of_inserts[0][1].length).toBe(7);
+	expect(list_of_inserts[0][1][3]).toBe('eGFR');
 });
 
 test('test measListOfInserts', async function() {
