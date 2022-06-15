@@ -5,9 +5,11 @@ CREATE TABLE `etl_mrn_patient` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `patient_id` varchar(36) NOT NULL,
   `mrn` varchar(50) DEFAULT NULL,
+  `fhir` varchar(50) DEFAULT NULL,
    PRIMARY KEY (`id`),
    UNIQUE KEY (`patient_id`),
-   UNIQUE KEY (`mrn`)
+   UNIQUE KEY (`mrn`),
+   UNIQUE KEY (`fhir`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `etl_bsn_patient` (

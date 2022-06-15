@@ -58,12 +58,19 @@ async function change_view(t, button, url_fragment) {
     await change_flex_style_to_inline(t);
 }
 
-async function load(t, mrn, participant) {
+async function load(t, mrn, fhir, participant) {
     let user = 'dr_bob';
+	let study = 'studyid';
+	let iss = 'https://fake.iss.example.com';
+	let launch = 'BOGUSLAUNCH1';
     let url = `${BASE_URL}/load` +
         `?mrn=${mrn}` +
+		`&fhir=${fhir}` +
         `&user=${user}` +
-        `&participant=${participant}`;
+		`&study=${study}` +
+        `&participant=${participant}` +
+		`&iss=${iss}` +
+		`&launch=${launch}`;
     // console.log("load:", url);
     return await t.openWindow(url);
 }
@@ -72,8 +79,9 @@ const getWindowLocation = ClientFunction(() => window.location);
 
 test('Automatic selection of free text checkbox when text entered', async t => {
     let mrn = 'DummyMRN-000000024';
+	let fhir = 'DummyFHIR-000000024';
     let participant = 10024;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000024";
     let url = `${BASE_URL}/prep?id=${patient_id}`;
     await t.navigateTo(url);
@@ -100,11 +108,10 @@ test('Automatic selection of free text checkbox when text entered', async t => {
 // TODO: have each test launch a different adfice instance on a different port
 
 test('test incoming link from EHR', async t => {
-    let participant = 100;
-    let user = 'dr_bob';
-    let url = `${BASE_URL}/load?mrn=DummyMRN-000000163` +
-        `&user=${user}&participant=${participant}`;
-    let window1 = await t.openWindow(url);
+    let mrn = 'DummyMRN-000000163';
+	let fhir = 'DummyFHIR-000000163';
+	let participant = 100163;
+    let window1 = await load(t, mrn, fhir, participant);
     const getLocation = ClientFunction(() => document.location.href);
 
     await t.expect(getLocation()).contains('/start?');
@@ -112,8 +119,9 @@ test('test incoming link from EHR', async t => {
 
 test('Test selecting views', async t => {
     let mrn = 'DummyMRN-000000085';
+	let fhir = 'DummyFHIR-000000085';
     let participant = 10085;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000085";
     let url = `${BASE_URL}/prep?id=${patient_id}`;
     await t.navigateTo(url);
@@ -237,8 +245,8 @@ test('Test selecting views', async t => {
     await t.expect(ehrOther.visible).notOk();
 });
 
-async function check_checkbox_and_freetext(t, mrn, participant, id) {
-    await load(t, mrn, participant);
+async function check_checkbox_and_freetext(t, mrn, fhir, participant, id) {
+    await load(t, mrn, fhir, participant);
     // ensure our cb is selected
     let cb_id = Selector('#cb_' + id);
     if (!(await cb_id.checked)) {
@@ -265,32 +273,35 @@ async function check_checkbox_and_freetext(t, mrn, participant, id) {
 
 test('Test free text fields', async t => {
     let mrn = 'DummyMRN-000000023';
+	let fhir = 'DummyFHIR-000000023';
     let participant = 10023;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000023";
     let url = `${BASE_URL}/prep?id=${patient_id}`;
     await t.navigateTo(url);
 
     let id = 'N05AD01_16_2';
-    check_checkbox_and_freetext(t, mrn, participant, id);
+    check_checkbox_and_freetext(t, mrn, fhir, participant, id);
 });
 
 test('Test non-med free text fields', async t => {
     let mrn = 'DummyMRN-000000010';
+	let fhir = 'DummyFHIR-000000010';
     let participant = 10010;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000010";
     let url = `${BASE_URL}/prep?id=${patient_id}`;
     await t.navigateTo(url);
 
     let id = 'NONMED_D_1';
-    check_checkbox_and_freetext(t, id);
+    check_checkbox_and_freetext(t, mrn, fhir, participant, id);
 });
 
 test('Test med lists', async t => {
     let mrn = 'DummyMRN-000000009';
+	let fhir = 'DummyFHIR-000000009';
     let participant = 10009;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000009";
     let url = `${BASE_URL}/prep?id=${patient_id}`;
     await t.navigateTo(url);
@@ -307,8 +318,9 @@ test('Test med lists', async t => {
 
 test('Checkbox preselected', async t => {
     let mrn = 'DummyMRN-000000051';
+	let fhir = 'DummyFHIR-000000051';
     let participant = 10051;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000051";
     let url = `${BASE_URL}/prep?id=${patient_id}`;
     await t.navigateTo(url);
@@ -328,10 +340,11 @@ test('Checkbox preselected', async t => {
     await t.expect(checked_checkbox.checked).ok();
 });
 
-test('Test finalize and renew', async t => {
+test('Test finalize (with renew to reset the patient)', async t => {
     let mrn = 'DummyMRN-000000167';
+	let fhir = 'DummyFHIR-000000167';
     let participant = 10167;
-    let window0 = await load(t, mrn, participant);
+    let window0 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000167";
     let url = `${BASE_URL}/prep?id=${patient_id}`;
     await t.navigateTo(url);
@@ -370,8 +383,9 @@ test('Test finalize and renew', async t => {
 
 test('Check "Geen advies"', async t => {
     let mrn = 'DummyMRN-000000162';
+	let fhir = 'DummyFHIR-000000162';
     let participant = 10162;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000162";
     let url = `${BASE_URL}/prep?id=${patient_id}`;
     await t.navigateTo(url);
@@ -416,8 +430,9 @@ test('Check "Geen advies"', async t => {
 
 test('Test problem list', async t => {
     let mrn = 'DummyMRN-000000005';
+	let fhir = 'DummyFHIR-000000005';
     let participant = 10005;
-    let window0 = await load(t, mrn, participant);
+    let window0 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000005";
     let url = `${BASE_URL}/start?id=${patient_id}`;
     await t.navigateTo(url);
@@ -430,8 +445,9 @@ test('Test problem list', async t => {
 
 test('Test lab list', async t => {
     let mrn = 'DummyMRN-000000027';
+    let fhir = 'DummyFHIR-000000027';	
     let participant = 10027;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000027";
     let url = `${BASE_URL}/start?id=${patient_id}`;
     await t.navigateTo(url);
@@ -443,8 +459,9 @@ test('Test lab list', async t => {
 
 test('Test prediction values missing', async t => {
     let mrn = 'DummyMRN-000000027';
+	let fhir = 'DummyFHIR-000000027';
     let participant = 10027;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000027";
     let url = `${BASE_URL}/start?id=${patient_id}`;
     await t.navigateTo(url);
@@ -456,8 +473,9 @@ test('Test prediction values missing', async t => {
 
 test('Test prediction values present', async t => {
     let mrn = 'DummyMRN-000000002';
+	let fhir = 'DummyFHIR-000000002';
     let participant = 10002;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000002";
     let url = `${BASE_URL}/start?id=${patient_id}`;
     await t.navigateTo(url);
@@ -469,8 +487,9 @@ test('Test prediction values present', async t => {
 
 test('Test prediction values present when user-entered', async t => {
     let mrn = 'DummyMRN-000000170';
+	let fhir = 'DummyFHIR-000000170';
     let participant = 10170;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000170";
     let url = `${BASE_URL}/start?id=${patient_id}`;
     await t.navigateTo(url);
@@ -482,8 +501,9 @@ test('Test prediction values present when user-entered', async t => {
 
 test('Test user entering values', async t => {
     let mrn = 'DummyMRN-000000173';
+	let fhir = 'DummyFHIR-000000173';
     let participant = 10173;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000173";
     let url = `${BASE_URL}/start?id=${patient_id}`;
     await t.navigateTo(url);
@@ -521,8 +541,9 @@ test('Test user entering values', async t => {
 
 test('Test reload data', async t => {
     let mrn = 'DummyMRN-000000174';
+	let fhir = 'DummyFHIR-000000174';
     let participant = 10174;
-    let window0 = await load(t, mrn, participant);
+    let window0 = await load(t, mrn, fhir, participant);
     //this test assumes we are using the stub_etl
     let patient_id = "00000000-0000-4000-8000-100000000174";
     let url = `${BASE_URL}/prep?id=${patient_id}`;
@@ -554,8 +575,9 @@ test('Test reload data', async t => {
 
 test('Test load new patient data', async t => {
     let mrn = 'DummyMRN-000000175';
+	let fhir = 'DummyFHIR-000000175';
     let participant = 10175;
-    let window0 = await load(t, mrn, participant);
+    let window0 = await load(t, mrn, fhir, participant);
     //this test assumes we are using the stub_etl
 
     let lab_table = Selector("#lab_table");
@@ -567,8 +589,9 @@ test('Test load new patient data', async t => {
 
 test('Nonmed headers display correctly', async t => {
     let mrn = 'DummyMRN-000000160';
+	let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     // check some nonmed advice
     let patient_id = "00000000-0000-4000-8000-100000000160";
     let url = `${BASE_URL}/prep?id=${patient_id}`;
@@ -628,8 +651,9 @@ test('Nonmed headers display correctly', async t => {
 
 test('Other med advice box', async t => {
     let mrn = 'DummyMRN-000000160';
+	let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
 
     //check that Other-other box is not visible to start
     let button_consult_view = Selector('button#button-consult-view');
@@ -695,41 +719,55 @@ test('Other med advice box', async t => {
 
 test('Redirect to error page if invalid navigation is attempted', async t => {
     let mrn = 'DummyMRN-000000172';
+	let fhir = 'DummyFHIR-000000172';
     let user = 'dr_bob';
     let participant = '10172';
-    // URL with null participant is (at least temporarily) accepted
-    if (0) {
-        let url_no_participant =
-            `${BASE_URL}/load` +
-            `?mrn=${mrn}` +
-            `&user=${user}`;
+    let url_no_participant =
+			`${BASE_URL}/load` +
+			`?mrn=${mrn}` +
+			`&fhir=${fhir}` +
+			`&user=${user}` +
+			`&study=` +
+			`&participant=` +
+			`&iss=https%3A%2F%2Fbogus.example.com%2FInterconnect-Oauth2-POC%2Fapi%2FFHIR%2FDSTU2` +
+			`&launch=BOGUSLAUNCH`;
+
         let window1 = await t.openWindow(url_no_participant);
 
         let getLocation = ClientFunction(() => document.location.href);
-        await t.expect(getLocation()).contains('load-error');
+	// URL with null participant is (at least temporarily) accepted
+    //    await t.expect(getLocation()).contains('load-error');
         let body = Selector('body');
-        await t.expect(body.withText('Error').exists).ok();
-        await t.expect(body.withText('DummyMRN-000000172').exists).ok();
-    }
+        await t.expect(body.withText('Error').exists).notOk();
+    //    await t.expect(body.withText('DummyMRN-000000172').exists).ok();
     let url_no_user =
-        `${BASE_URL}/load` +
-        `?mrn=${mrn}` +
-        `&participant=${participant}`;
+        	`${BASE_URL}/load` +
+			`?mrn=${mrn}` +
+			`&fhir=${fhir}` +
+			`&user=` +
+			`&study=studynr` +
+			`&participant=${participant}` +
+			`&iss=https%3A%2F%2Fbogus.example.com%2FInterconnect-Oauth2-POC%2Fapi%2FFHIR%2FDSTU2` +
+			`&launch=BOGUSLAUNCH`;
     let window2 = await t.openWindow(url_no_user);
-    await t.expect(getLocation()).contains('load-error');
-    let body = Selector('body');
-    await t.expect(body.withText('Error').exists).ok();
-    await t.expect(body.withText('DummyMRN-000000172').exists).ok();
-
-    let url_no_mrn =
-        `${BASE_URL}/load` +
-        `?user=${user}` +
-        `&participant=${participant}`;
-    let window3 = await t.openWindow(url_no_mrn);
     await t.expect(getLocation()).contains('load-error');
     body = Selector('body');
     await t.expect(body.withText('Error').exists).ok();
-    await t.expect(body.withText('DummyMRN-000000172').exists).notOk();
+
+    let url_no_mrn_no_fhir =
+        	`${BASE_URL}/load` +
+			`?mrn=` +
+			`&fhir=` +
+			`&user=${user}` +
+			`&study=studynr` +
+			`&participant=${participant}` +
+			`&iss=https%3A%2F%2Fbogus.example.com%2FInterconnect-Oauth2-POC%2Fapi%2FFHIR%2FDSTU2` +
+			`&launch=BOGUSLAUNCH`;
+    let window3 = await t.openWindow(url_no_mrn_no_fhir);
+    await t.expect(getLocation()).contains('load-error');
+    body = Selector('body');
+    await t.expect(body.withText('Error').exists).ok();
+    await t.expect(body.withText('DummyMRN-000000172').exists).notOk();	
 });
 
 test('Redirect to error page if doctor_id is lost', async t => {
@@ -751,8 +789,9 @@ test('Redirect to error page if doctor_id is lost', async t => {
 
 test('Redirect to error page if patient_id is bad', async t => {
     let mrn = 'DummyMRN-000000160';
+	let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     // attempt to navigate directly to a different (invalid) patient page
     let url_bad_patient_id =
         `${BASE_URL}/start` +
@@ -772,8 +811,9 @@ test('Redirect to error page if patient_id is bad', async t => {
 
 test('Redirect to error page if URL has multiple mrns or user_ids', async t => {
     let mrn = 'DummyMRN-000000160';
+	let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     // attempt to navigate directly to a different (invalid) patient page
     let url_duplicate =
         `${BASE_URL}/load` +
@@ -792,8 +832,9 @@ test('Redirect to error page if URL has multiple mrns or user_ids', async t => {
 
 test('Fail portal export if patient has no BSN', async t => {
     let mrn = 'DummyMRN-000000161';
+	let fhir = 'DummyFHIR-000000161';
     let participant = 10161;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let button_finalize_view = Selector('button#button-finalize-view');
     await t.click(button_finalize_view);
     let button_definitive = Selector('button#definitive');
@@ -808,8 +849,9 @@ test('Fail portal export if patient has no BSN', async t => {
 
 test('Show session timeout warning 2m before session timeout; session reset if button is clicked', async t => {
     let mrn = 'DummyMRN-000000160';
+	let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let expiration = Selector('#expiration');
     await t.expect(expiration.visible).notOk();
 
@@ -834,8 +876,9 @@ test('Show session timeout warning 2m before session timeout; session reset if b
 
 test('Session expires if time <10s', async t => {
     let mrn = 'DummyMRN-000000160';
+	let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let expiration = Selector('#expiration');
     await t.expect(expiration.visible).notOk();
 
@@ -855,8 +898,9 @@ test('Session expires if time <10s', async t => {
 // slow tests run last
 test('Check multiple viewers making changes', async t => {
     let mrn = 'DummyMRN-000000068';
+	let fhir = 'DummyFHIR-000000068';
     let participant = 10068;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000068";
     let url = `${BASE_URL}/prep?id=${patient_id}`;
     await t.navigateTo(url);
@@ -949,8 +993,9 @@ test('Check multiple viewers making changes', async t => {
 
 test('Checkbox persistence', async t => {
     let mrn = 'DummyMRN-000000078';
+	let fhir = 'DummyFHIR-000000078';
     let participant = 10078;
-    let window1 = await load(t, mrn, participant);
+    let window1 = await load(t, mrn, fhir, participant);
     let checkbox_id = "cb_N02AA01_76_1";
     let checkbox_css_selector = `input#${checkbox_id}`;
     let patient_id = "00000000-0000-4000-8000-100000000078";

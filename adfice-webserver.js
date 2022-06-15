@@ -103,26 +103,37 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         res.set('Expires', '-1');
 
         let mrn = req.query.mrn;
+		let fhir = req.query.fhir;
         let user_id = req.query.user;
 		// study number and participant number are strings
         let participant_number = req.query.study + req.query.participant;
+		let iss = req.query.iss;
+		let launch = req.query.launch;
 		
-        if (mrn == null || typeof(mrn) != 'string' /* 2 MRNs in URL */ ) {
-            res.redirect('/load-error');
-            return;
-        }
+		if (fhir == null || fhir=='' || typeof(fhir) != 'string' /* 2 FHIRs in URL */ ) {
+			fhir == null;
+			if (mrn == null || mrn == '' || typeof(mrn) != 'string' /* 2 MRNs in URL */ ) {
+				res.redirect('/load-error');
+				return;
+			}
+		}
         if (user_id == null || typeof(user_id) != 'string' /* 2 user */ ) {
             let p_str = '?mrn=' + mrn;
             res.redirect('/load-error' + p_str);
             return;
         }
-        let id = await adfice.id_for_mrn(mrn);
+		let id = null;
+		if(fhir){
+			id = await adfice.id_for_fhir(fhir);
+		} else {
+			id = await adfice.id_for_mrn(mrn);
+		};
 
         let encoded_err = null;
         if (!id) {
             try {
                 let etl_opts = await autil.from_json_file(etl_opts_path);
-                let etl_patient = await etl.etl(mrn, etl_opts);
+                let etl_patient = await etl.etl(mrn, fhir, etl_opts);
                 id = await adfice.write_patient_from_json(etl_patient, participant_number);
             } catch (err) {
                 encoded_err = encodeURIComponent('' + err);
@@ -236,8 +247,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         } else if (message.type == 'patient_renew') {
             await adfice.add_log_event_renew(doctor_id, patient_id);
             let etl_opts = await autil.from_json_file(etl_opts_path);
-            let mrn = await adfice.mrn_for_id(patient_id);
-            let etl_patient = await etl.etl(mrn, etl_opts);
+			let mrn = await adfice.mrn_for_id(patient_id);
+            let fhir = await adfice.fhir_for_id(patient_id);
+            let etl_patient = await etl.etl(mrn, fhir, etl_opts);
             let returned_patient = await adfice.renew_patient(patient_id, etl_patient);
             if (returned_patient != patient_id) {
                 let err_text_en = "etl_renew( " +

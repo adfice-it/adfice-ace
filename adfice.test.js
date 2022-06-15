@@ -55,6 +55,24 @@ test('test patient_id for missing mrn', async () => {
     expect(patient_id).toBe(null);
 });
 
+test('test patient_id for valid fhir', async () => {
+    let fhir = 'DummyFHIR-000000163';
+    let patient_id = await adfice.id_for_fhir(fhir);
+    expect(patient_id).toBe("00000000-0000-4000-8000-100000000163");
+});
+
+test('test patient_id for no fhir', async () => {
+    let fhir = null;
+    let patient_id = await adfice.id_for_fhir(fhir);
+    expect(patient_id).toBe(null);
+});
+
+test('test patient_id for missing fhir', async () => {
+    let fhir = 'DummyFHIR-SirNotAppearing-000000163';
+    let patient_id = await adfice.id_for_fhir(fhir);
+    expect(patient_id).toBe(null);
+});
+
 test('test mrn for valid patient_id', async () => {
     let patient_id = "00000000-0000-4000-8000-100000000163";
 	let mrn =  await adfice.mrn_for_id(patient_id);
@@ -71,6 +89,24 @@ test('test mrn for invalid patient_id', async () => {
     let patient_id = "SirNotAppearing";
 	let mrn =  await adfice.mrn_for_id(patient_id);
     expect(mrn).toBe(null);
+});
+
+test('test fhir for valid patient_id', async () => {
+    let patient_id = "00000000-0000-4000-8000-100000000163";
+	let fhir =  await adfice.fhir_for_id(patient_id);
+    expect(fhir).toBe("DummyFHIR-000000163");
+});
+
+test('test fhir for null patient_id', async () => {
+    let patient_id = null;
+	let fhir =  await adfice.fhir_for_id(patient_id);
+    expect(fhir).toBe(null);
+});
+
+test('test fhir for invalid patient_id', async () => {
+    let patient_id = "SirNotAppearing";
+	let fhir =  await adfice.fhir_for_id(patient_id);
+    expect(fhir).toBe(null);
 });
 
 test('test doctor_id for user_id', async () => {
@@ -1100,17 +1136,18 @@ test('access log', async () => {
 test('test get patient table sql and params', async function() {
     let patient_id = "00000000-0000-4000-8000-100000000175";
     let patient = {
-        ehr_pid: 'DummyMRN-000000175',
+        ehr_pid: 'DummyFHIR-000000175',
+		mrn: 'DummyMRN-000000175',
         bsn: '000-00-0000',
         birth_date: '1930-01-01'
     };
     let list_of_inserts = adfice.patientListOfInserts(patient_id, patient, 100175);
-    expect(list_of_inserts.length).toBe(2);
-    expect(list_of_inserts[0][0]).toContain("INSERT INTO patient");
-    expect(list_of_inserts[0][0]).toContain("is_final) VALUES (?,?,?,?,0)");
-    expect(list_of_inserts[0][1].length).toBe(4);
-    expect(list_of_inserts[1][0]).toContain("INSERT INTO etl_bsn_patient");
-    expect(list_of_inserts[1][1].length).toBe(2);
+    expect(list_of_inserts.length).toBe(3);
+    expect(list_of_inserts[1][0]).toContain("INSERT INTO patient");
+    expect(list_of_inserts[1][0]).toContain("is_final) VALUES (?,?,?,?,0)");
+    expect(list_of_inserts[1][1].length).toBe(4);
+    expect(list_of_inserts[2][0]).toContain("INSERT INTO etl_bsn_patient");
+    expect(list_of_inserts[2][1].length).toBe(2);
 });
 
 test('test get med sql and params', async function() {
@@ -1293,6 +1330,7 @@ test('test measListOfInserts', async function() {
 
 test('test writePatientFromJSON', async function() {
     let fake_pid = Math.random().toString().substr(2, 10);
+	let fake_mrn = 'mrn' + fake_pid;
     let fake_bsn =
         fake_pid.substr(0, 2) + '-' +
         fake_pid.substr(3, 4) + '-' +
@@ -1301,6 +1339,7 @@ test('test writePatientFromJSON', async function() {
 
     let patient = {
         ehr_pid: fake_pid,
+		mrn: fake_mrn,
         bsn: fake_bsn,
         birth_date: '1930-01-01'
     };
@@ -1374,6 +1413,7 @@ test('test writePatientFromJSON', async function() {
 test('test renew_patient', async function() {
 	// create a patient to renew
     let fake_pid = Math.random().toString().substr(2, 10);
+	let fake_mrn = 'mrn' + fake_pid;
     let fake_bsn =
         fake_pid.substr(0, 2) + '-' +
         fake_pid.substr(3, 4) + '-' +
@@ -1382,6 +1422,7 @@ test('test renew_patient', async function() {
 
     let patient = {
         ehr_pid: fake_pid,
+		mrn: fake_mrn,
         bsn: fake_bsn,
         birth_date: '1930-01-01'
     };
@@ -1435,6 +1476,7 @@ test('test renew_patient', async function() {
 	//create data to renew them with
 	let etl_patient = {
         ehr_pid: fake_pid,
+		mrn: fake_mrn,
         bsn: fake_bsn,
         birth_date: '1931-01-01'
     };
