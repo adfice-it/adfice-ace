@@ -1297,7 +1297,7 @@ test('test writePatientFromJSON', async function() {
         fake_pid.substr(0, 2) + '-' +
         fake_pid.substr(3, 4) + '-' +
         fake_pid.substr(5, 7);
-    let fake_participant = fake_pid.substr(5, 10);
+    let fake_participant = 'study' + fake_pid.substr(5, 10);
 
     let patient = {
         ehr_pid: fake_pid,
@@ -1359,7 +1359,7 @@ test('test writePatientFromJSON', async function() {
 
     expect(retrieved_patient['birth_date'].toString().includes('1930')).toBe(true);
     // oddly, when you console.log the date object you get 1929-12-31T23:40:28.000Z . I'm sure there's a reason.
-    expect(retrieved_patient['participant_number']).toBe(parseInt(fake_pid.substr(5, 10)));
+    expect(retrieved_patient['participant_number']).toBe('study' + fake_pid.substr(5, 10));
     expect(retrieved_meds.length).toBe(1);
     expect(retrieved_meds[0]['ATC_code']).toBe('B0GU501');
     expect(retrieved_probs.length).toBe(2);

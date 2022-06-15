@@ -104,7 +104,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 
         let mrn = req.query.mrn;
         let user_id = req.query.user;
-        let participant_number = req.query.participant;
+		// study number and participant number are strings
+        let participant_number = req.query.study + req.query.participant;
+		
         if (mrn == null || typeof(mrn) != 'string' /* 2 MRNs in URL */ ) {
             res.redirect('/load-error');
             return;
