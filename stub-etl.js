@@ -15,7 +15,7 @@ The adfice web server will get the MRN from the URL and then check to see
 if the MRN is already in our DB. If not, it calls "etl(...)" which will
 load the patient data into the DB and assign an adfice patient_id.
 */
-async function etl(mrn, fhir, options) {
+async function etl(mrn, fhir, options, launch, iss) {
     let fake_bsn = Math.floor(Math.random() * 999999998) + 1;
 
     let patient_json = {
