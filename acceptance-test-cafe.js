@@ -729,16 +729,16 @@ test('Redirect to error page if invalid navigation is attempted', async t => {
 			`&user=${user}` +
 			`&study=` +
 			`&participant=` +
-			`&iss=https%3A%2F%2Fbogus.example.com%2FInterconnect-Oauth2-POC%2Fapi%2FFHIR%2FDSTU2` +
+			`&iss=https%3A%2F%2Fbogus.example.com` +
 			`&launch=BOGUSLAUNCH`;
 
-        let window1 = await t.openWindow(url_no_participant);
+    let window1 = await t.openWindow(url_no_participant);
 
-        let getLocation = ClientFunction(() => document.location.href);
+    let getLocation = ClientFunction(() => document.location.href);
 	// URL with null participant is (at least temporarily) accepted
     //    await t.expect(getLocation()).contains('load-error');
-        let body = Selector('body');
-        await t.expect(body.withText('Error').exists).notOk();
+    let body = Selector('body');
+    await t.expect(body.withText('Error').exists).notOk();
     //    await t.expect(body.withText('DummyMRN-000000172').exists).ok();
     let url_no_user =
         	`${BASE_URL}/load` +
@@ -747,7 +747,7 @@ test('Redirect to error page if invalid navigation is attempted', async t => {
 			`&user=` +
 			`&study=studynr` +
 			`&participant=${participant}` +
-			`&iss=https%3A%2F%2Fbogus.example.com%2FInterconnect-Oauth2-POC%2Fapi%2FFHIR%2FDSTU2` +
+			`&iss=https%3A%2F%2Fbogus.example.com` +
 			`&launch=BOGUSLAUNCH`;
     let window2 = await t.openWindow(url_no_user);
     await t.expect(getLocation()).contains('load-error');
@@ -761,7 +761,7 @@ test('Redirect to error page if invalid navigation is attempted', async t => {
 			`&user=${user}` +
 			`&study=studynr` +
 			`&participant=${participant}` +
-			`&iss=https%3A%2F%2Fbogus.example.com%2FInterconnect-Oauth2-POC%2Fapi%2FFHIR%2FDSTU2` +
+			`&iss=https%3A%2F%2Fbogus.example.com` +
 			`&launch=BOGUSLAUNCH`;
     let window3 = await t.openWindow(url_no_mrn_no_fhir);
     await t.expect(getLocation()).contains('load-error');

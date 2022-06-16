@@ -117,7 +117,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 				return;
 			}
 		}
-        if (user_id == null || typeof(user_id) != 'string' /* 2 user */ ) {
+        if (user_id == null || user_id=='' || typeof(user_id) != 'string' /* 2 user */ ) {
             let p_str = '?mrn=' + mrn;
             res.redirect('/load-error' + p_str);
             return;
