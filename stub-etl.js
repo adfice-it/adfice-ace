@@ -7,12 +7,28 @@
 
 const autil = require('./adfice-util');
 
-async function getAuth(options, launch_code, iss, adfice_url, req_params) {
-    return adfice_url;
+async function getAuth(options, launch_code, iss, adfice_url, req_url) {
+    let url = new URL('http://example.org' + req_url);
+    let mrn = url.searchParams.mrn;
+    let fhir = url.searchParams.fhir;
+    let state_obj = {
+        user: url.searchParams.get('user'),
+        mrn: url.searchParams.get('mrn'),
+        fhir: url.searchParams.get('fhir'),
+    };
+    let state_json = JSON.stringify(state_obj);
+    let state_base64 = btoa(state_json);
+
+    let redir_url = new URL(adfice_url);
+    redir_url.searchParams.append('code', 'fake_code');
+    redir_url.searchParams.append('state', state_base64);
+    redir_url.protocol = 'http';
+    let rv = { url: redir_url.toString(), headers: {} };
+    return rv;
 }
 
 async function getToken(code, state, adfice_url, options){
-    return { user: 'dr_bob', };
+    return JSON.parse(atob(state));
 }
 
 /*
@@ -128,4 +144,6 @@ async function etl(token_json, etl_opts) {
 
 module.exports = {
     etl: etl,
+    getAuth: getAuth,
+    getToken: getToken,
 };

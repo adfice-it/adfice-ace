@@ -69,7 +69,7 @@ async function load(t, mrn, fhir, participant) {
         `&user=${user}` +
 		`&study=${study}` +
         `&participant=${participant}` +
-		`&iss=${iss}` +
+		`&iss=` + encodeURIComponent(iss) +
 		`&launch=${launch}`;
     // console.log("load:", url);
     return await t.openWindow(url);
@@ -574,9 +574,6 @@ test('Test reload data', async t => {
 });
 
 test('Test load new patient data', async t => {
-console.log('TEST DISABLED', 'Test load new patient data');
-return;
-
     let mrn = 'DummyMRN-000000175';
 	let fhir = 'DummyFHIR-000000175';
     let participant = 10175;
@@ -588,7 +585,6 @@ return;
     await t.expect(lab_table.withText("135").exists).ok();
 
 });
-
 
 test('Nonmed headers display correctly', async t => {
     let mrn = 'DummyMRN-000000160';

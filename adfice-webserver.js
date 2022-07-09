@@ -98,29 +98,29 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     app.use("/load-error", express.static('static/load-error.html'));
 
     app.get('/auth', async function(req, res) {
-console.log("We are in /auth");
+// console.log("We are in /auth");
         let code = req.query.code;
         let state = req.query.state;
         let etl_opts = await autil.from_json_file(etl_opts_path);
         let adfice_url = 'https://' + req.get('host') + '/auth';
 
-        if(code){
             let token_json = await etl.getToken(code, state, adfice_url, etl_opts);
             let user_id = token_json.user;
+
             let etl_patient = await etl.etl(token_json, etl_opts);
             let id = await adfice.write_patient_from_json(etl_patient);
             let mrn = etl_patient.mrn;
             let fhir = etl_patient.ehr_pid;
-console.log("The code under /auth has been executed");
-//            res.redirect('https://' + req.get('host') + '/load-error');
-            res.redirect('https://' + req.get('host') + '/load?mrn=' + mrn + '&fhir=' + fhir + '&user=' + user_id +'&marker=WasRedirected');
-        }
+            let load_url = '/load?mrn=' + mrn + '&fhir=' + fhir + '&user=' + user_id;
+            res.redirect(load_url);
     });
 
     app.get('/load', async function(req, res) {
         res.set('Cache-Control', 'no-cache, must-revalidate, max-age=-1');
         res.set('Pragma', 'no-cache, must-revalidate');
         res.set('Expires', '-1');
+
+// console.log('/load', req.query);
 
         let mrn = req.query.mrn;
 	let fhir = req.query.fhir;
@@ -133,7 +133,7 @@ console.log("The code under /auth has been executed");
         // launch code to exchange for a token
 	let launch_code = req.query.launch;
 
-console.log(JSON.stringify({ mrn: mrn, fhir: fhir, user_id: user_id, participant_number: participant_number, iss: iss, launch_code: launch_code }, null, 4));
+        // console.log(JSON.stringify({ mrn: mrn, fhir: fhir, user_id: user_id, participant_number: participant_number, iss: iss, launch_code: launch_code }, null, 4));
         
         let etl_opts = await autil.from_json_file(etl_opts_path);
         let adfice_url = 'https://' + req.get('host') + '/auth';
@@ -149,6 +149,7 @@ console.log(JSON.stringify({ mrn: mrn, fhir: fhir, user_id: user_id, participant
             error_str += "no MRN ";
 	}
         if (user_id == null || user_id=='' || typeof(user_id) != 'string' /* 2 user */ ) {
+            user_id = null;
             error_str += "no user ID";
         }
         if((!fhir && !mrn) || !user_id){
@@ -163,18 +164,14 @@ console.log(JSON.stringify({ mrn: mrn, fhir: fhir, user_id: user_id, participant
 		    id = await adfice.id_for_mrn(mrn);
 		};
 
-console.log("id:", id);
-
         let encoded_err = null;
 
         if (!id) {
             try {
-// this works
-//                res.redirect('/load-error' + req.url.substring(4));
-// but this doesn't redirect the browser
-//                res.redirect('/static/loading.html?' + req.url.substring(6));
-                let auth_url = etl.getAuth(options, launch_code, iss, adfice_url, req_params);
-                res.redirect(auth_url);
+                let etl_opts = await autil.from_json_file(etl_opts_path);
+                let auth = await etl.getAuth(etl_opts, launch_code, iss, adfice_url, req.url);
+                res.set(auth.headers);
+                res.redirect(auth.url);
             } catch (err) {
                 encoded_err = encodeURIComponent('' + err);
                 res.redirect('/load-error?error=' + encoded_err);

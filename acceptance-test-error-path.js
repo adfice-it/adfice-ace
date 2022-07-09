@@ -69,7 +69,7 @@ async function load(t, mrn, fhir, participant) {
         `&user=${user}` +
 		`&study=${study}` +
         `&participant=${participant}` +
-		`&iss=${iss}` +
+		`&iss=` + encodeURIComponent(iss) +
 		`&launch=${launch}`;
     // console.log("load:", url);
     return await t.openWindow(url);
