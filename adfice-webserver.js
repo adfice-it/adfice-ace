@@ -97,69 +97,95 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 
     app.use("/load-error", express.static('static/load-error.html'));
 
+    app.get('/auth', async function(req, res) {
+console.log("We are in /auth");
+        let code = req.query.code;
+        let state = req.query.state;
+        let etl_opts = await autil.from_json_file(etl_opts_path);
+        let adfice_url = 'https://' + req.get('host') + '/auth';
+
+        if(code){
+            let token_json = await etl.getToken(code, state, adfice_url, etl_opts);
+            let user_id = token_json.user;
+            let etl_patient = await etl.etl(token_json, etl_opts);
+            let id = await adfice.write_patient_from_json(etl_patient);
+            let mrn = etl_patient.mrn;
+            let fhir = etl_patient.ehr_pid;
+console.log("The code under /auth has been executed");
+//            res.redirect('https://' + req.get('host') + '/load-error');
+            res.redirect('https://' + req.get('host') + '/load?mrn=' + mrn + '&fhir=' + fhir + '&user=' + user_id +'&marker=WasRedirected');
+        }
+    });
+
     app.get('/load', async function(req, res) {
         res.set('Cache-Control', 'no-cache, must-revalidate, max-age=-1');
         res.set('Pragma', 'no-cache, must-revalidate');
         res.set('Expires', '-1');
 
         let mrn = req.query.mrn;
-		let fhir = req.query.fhir;
+	let fhir = req.query.fhir;
         let user_id = req.query.user;
-		// study number and participant number are strings
+	// study number and participant number are strings
         let participant_number = req.query.study + req.query.participant;
-		let iss = req.query.iss;
-		let launch = req.query.launch;
-		
-		if (fhir == null || fhir=='' || typeof(fhir) != 'string' /* 2 FHIRs in URL */ ) {
-			fhir == null;
-			if (mrn == null || mrn == '' || typeof(mrn) != 'string' /* 2 MRNs in URL */ ) {
-				res.redirect('/load-error');
-				return;
-			}
-		}
+	
+        let iss = req.query.iss;
+	let launch = req.query.launch;
+        
+        let etl_opts = await autil.from_json_file(etl_opts_path);
+        let adfice_url = 'https://' + req.get('host') + '/auth';
+        let id = null;
+        let error_str = '';
+        
+        if (fhir == null || fhir=='' || typeof(fhir) != 'string' /* 2 FHIRs in URL */ ) {
+            fhir = null;
+            error_string += "no FHIR id ";
+        }
+    	if (mrn == null || mrn == '' || typeof(mrn) != 'string' /* 2 MRNs in URL */ ) {
+            mrn = null;
+            error_string += "no MRN ";
+	}
         if (user_id == null || user_id=='' || typeof(user_id) != 'string' /* 2 user */ ) {
-            let p_str = '?mrn=' + mrn;
+            error_string += "no user ID";
+        }
+        if((!fhir && !mrn) || !user_id){
+            let p_str = '?error=' + error_string;
             res.redirect('/load-error' + p_str);
             return;
         }
-		let id = null;
-		if(fhir){
-			id = await adfice.id_for_fhir(fhir);
+
+        if(fhir){
+    		    id = await adfice.id_for_fhir(fhir);
 		} else {
-			id = await adfice.id_for_mrn(mrn);
+		    id = await adfice.id_for_mrn(mrn);
 		};
 
         let encoded_err = null;
+
         if (!id) {
             try {
-                let etl_opts = await autil.from_json_file(etl_opts_path);
-                let etl_patient = await etl.etl(mrn, fhir, etl_opts, launch, iss);
-                id = await adfice.write_patient_from_json(etl_patient, participant_number);
+// this works
+//                res.redirect('/load-error' + req.url.substring(4));
+// but this doesn't redirect the browser
+//                res.redirect('/static/loading.html?' + req.url.substring(6));
+                await etl.getAuth(etl_opts, launch, iss, adfice_url, req.url);
+                return;
             } catch (err) {
                 encoded_err = encodeURIComponent('' + err);
             }
-        }
-        if (!id) {
-            let param_str = '?mrn=' + mrn;
-            if (encoded_err !== null) {
-                param_str += '&err=' + encoded_err;
+        } else {
+            await adfice.add_log_event_access(user_id, id);
+            let doctor_id = await adfice.doctor_id_for_user(user_id);
+            log_debug(server, 'setting doctor id:', doctor_id);
+            req.session.doctor_id = doctor_id;
+
+            // For testing, allow the session timeout to be set to a shorter value. It cannot be set to a longer value.
+            let tsec = req.query.tsec;
+            if (tsec < max_session_ms / 1000) {
+                req.session.cookie.maxAge = tsec * 1000;
             }
-            res.redirect('/load-error' + param_str);
-            return;
+
+            res.redirect('https://' + req.get('host') + '/start?id=' + id);
         }
-
-        await adfice.add_log_event_access(user_id, id);
-        let doctor_id = await adfice.doctor_id_for_user(user_id);
-        log_debug(server, 'setting doctor id:', doctor_id);
-        req.session.doctor_id = doctor_id;
-
-        // For testing, allow the session timeout to be set to a shorter value. It cannot be set to a longer value.
-        let tsec = req.query.tsec;
-        if (tsec < max_session_ms / 1000) {
-            req.session.cookie.maxAge = tsec * 1000;
-        }
-
-        res.redirect('/start?id=' + id);
     });
 
     // // sketch of post support
