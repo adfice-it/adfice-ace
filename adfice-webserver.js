@@ -127,9 +127,13 @@ console.log("The code under /auth has been executed");
         let user_id = req.query.user;
 	// study number and participant number are strings
         let participant_number = req.query.study + req.query.participant;
-	
+
+        // ISSuer identifier authorization server
         let iss = req.query.iss;
-	let launch = req.query.launch;
+        // launch code to exchange for a token
+	let launch_code = req.query.launch;
+
+console.log(JSON.stringify({ mrn: mrn, fhir: fhir, user_id: user_id, participant_number: participant_number, iss: iss, launch_code: launch_code }, null, 4));
         
         let etl_opts = await autil.from_json_file(etl_opts_path);
         let adfice_url = 'https://' + req.get('host') + '/auth';
@@ -138,17 +142,17 @@ console.log("The code under /auth has been executed");
         
         if (fhir == null || fhir=='' || typeof(fhir) != 'string' /* 2 FHIRs in URL */ ) {
             fhir = null;
-            error_string += "no FHIR id ";
+            error_str += "no FHIR id ";
         }
     	if (mrn == null || mrn == '' || typeof(mrn) != 'string' /* 2 MRNs in URL */ ) {
             mrn = null;
-            error_string += "no MRN ";
+            error_str += "no MRN ";
 	}
         if (user_id == null || user_id=='' || typeof(user_id) != 'string' /* 2 user */ ) {
-            error_string += "no user ID";
+            error_str += "no user ID";
         }
         if((!fhir && !mrn) || !user_id){
-            let p_str = '?error=' + error_string;
+            let p_str = '?error=' + error_str;
             res.redirect('/load-error' + p_str);
             return;
         }
@@ -159,6 +163,8 @@ console.log("The code under /auth has been executed");
 		    id = await adfice.id_for_mrn(mrn);
 		};
 
+console.log("id:", id);
+
         let encoded_err = null;
 
         if (!id) {
@@ -167,10 +173,11 @@ console.log("The code under /auth has been executed");
 //                res.redirect('/load-error' + req.url.substring(4));
 // but this doesn't redirect the browser
 //                res.redirect('/static/loading.html?' + req.url.substring(6));
-                await etl.getAuth(etl_opts, launch, iss, adfice_url, req.url);
-                return;
+                let auth_url = etl.getAuth(options, launch_code, iss, adfice_url, req_params);
+                res.redirect(auth_url);
             } catch (err) {
                 encoded_err = encodeURIComponent('' + err);
+                res.redirect('/load-error?error=' + encoded_err);
             }
         } else {
             await adfice.add_log_event_access(user_id, id);
@@ -184,7 +191,7 @@ console.log("The code under /auth has been executed");
                 req.session.cookie.maxAge = tsec * 1000;
             }
 
-            res.redirect('https://' + req.get('host') + '/start?id=' + id);
+            res.redirect('/start?id=' + id);
         }
     });
 

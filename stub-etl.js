@@ -7,6 +7,13 @@
 
 const autil = require('./adfice-util');
 
+async function getAuth(options, launch_code, iss, adfice_url, req_params) {
+    return adfice_url;
+}
+
+async function getToken(code, state, adfice_url, options){
+    return { user: 'dr_bob', };
+}
 
 /*
 We assume that there will be a link in the EHR that launches our page with the
@@ -15,7 +22,9 @@ The adfice web server will get the MRN from the URL and then check to see
 if the MRN is already in our DB. If not, it calls "etl(...)" which will
 load the patient data into the DB and assign an adfice patient_id.
 */
-async function etl(mrn, fhir, options, launch, iss) {
+async function etl(token_json, etl_opts) {
+    let mrn = token_json.mrn;
+    let fhir = token_json.fhir;
     let fake_bsn = Math.floor(Math.random() * 999999998) + 1;
 
     let patient_json = {

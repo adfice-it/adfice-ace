@@ -71,6 +71,9 @@ async function get_table_sizes() {
 }
 
 async function write_patient_from_json(etl_patient, participant_number) {
+    if (participant_number == undefined) {
+        participant_number = null;
+    }
     let patient_id = crypto.randomBytes(16).toString('hex');
     let list_of_transactions = [];
     list_of_transactions.push(...(patientListOfInserts(patient_id, etl_patient, participant_number)));
@@ -110,7 +113,7 @@ async function renew_patient(patient_id, etl_patient) {
     return patient_id;
 }
 
-function patientListOfInserts(patient_id, patient) {
+function patientListOfInserts(patient_id, patient, participant_number) {
     let list_of_transactions = [];
     let age = calculateAge(patient);
 	let sql = "INSERT INTO etl_mrn_patient (patient_id, mrn, fhir) VALUES (?,?,?)";
@@ -118,7 +121,7 @@ function patientListOfInserts(patient_id, patient) {
     let sql1 = '/* adfice.patientListOfInserts */ INSERT INTO patient ' +
         '(patient_id, participant_number, birth_date, age, is_final) ' +
         'VALUES (?,?,?,?,0)';
-    list_of_transactions.push([sql1, [patient_id, patient['participant_number'], patient['birth_date'], age]]);
+    list_of_transactions.push([sql1, [patient_id, participant_number, patient['birth_date'], age]]);
     let sql2 = '/* adfice.patientListOfInserts */ INSERT INTO etl_bsn_patient ' +
         '(patient_id, bsn) ' +
         "VALUES (?,?)";

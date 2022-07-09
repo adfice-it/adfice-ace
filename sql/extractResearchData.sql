@@ -25,7 +25,7 @@ truncate table research_initial_patient_measurement;
 truncate table research_last_patient_measurement;
 
 CREATE TABLE `research_map` (
-  `participant_number` int unsigned NOT NULL,
+  `participant_number` int unsigned,
   `mrn` varchar(50) NOT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
