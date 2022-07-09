@@ -179,7 +179,8 @@ check-unit: dbsetup grep-ie-bad-words
 
 check: thirdparty check-unit
 	./acceptance-test-patient-validation.sh
-	./acceptance-test-cafe.sh
+	./acceptance-test-cafe.sh acceptance-test-normal-path.js
+	#./acceptance-test-cafe.sh acceptance-test-error-path.js
 	@echo "SUCCESS $@"
 
 ADFICE_TAR_CONTENTS=COPYING \

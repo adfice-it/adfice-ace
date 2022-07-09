@@ -13,7 +13,7 @@ sleep 1
 
 ./node_modules/.bin/testcafe \
  "firefox:headless" \
- acceptance-test-cafe.js $BASE_URL
+ $1 $BASE_URL
 EXIT_CODE=$?
 
 kill $CHILD_PID
