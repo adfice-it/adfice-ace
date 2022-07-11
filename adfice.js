@@ -143,6 +143,9 @@ function patientListOfUpdates(patient_id, patient) {
 }
 
 function calculateAge(patient) {
+	if(patient['birth_date'] == null){
+		return null;
+	}
     let diff = new Date().getTime() - new Date(patient['birth_date']).getTime();
     return (diff / 31536000000).toFixed(0);
 }

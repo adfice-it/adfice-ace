@@ -1150,6 +1150,23 @@ test('test get patient table sql and params', async function() {
     expect(list_of_inserts[2][1].length).toBe(2);
 });
 
+test('test get patient table sql and params with nulls', async function() {
+    let patient_id = "00000000-0000-4000-8000-100000000175";
+    let patient = {
+        ehr_pid: 'DummyFHIR-000000175',
+		mrn: 'DummyMRN-000000175',
+        bsn: null,
+        birth_date: null
+    };
+    let list_of_inserts = adfice.patientListOfInserts(patient_id, patient, 100175);
+    expect(list_of_inserts.length).toBe(3);
+    expect(list_of_inserts[1][0]).toContain("INSERT INTO patient");
+    expect(list_of_inserts[1][0]).toContain("is_final) VALUES (?,?,?,?,0)");
+    expect(list_of_inserts[1][1].length).toBe(4);
+    expect(list_of_inserts[2][0]).toContain("INSERT INTO etl_bsn_patient");
+    expect(list_of_inserts[2][1].length).toBe(2);
+});
+
 test('test get med sql and params', async function() {
     let patient_id = "00000000-0000-4000-8000-100000000175";
     let medications = [{

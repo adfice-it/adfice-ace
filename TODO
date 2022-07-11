@@ -1,5 +1,6 @@
 Important:
 * an alert is added which should show if the "renew" fails (re-extraction of data via het EPD) but testing it will require altering stub_etl to fail to renew a specific patient.
+* if BSN is null, refuse to export to portal (show error)
 * Display MRN instead of patient ID.
 * Add back button to Lees meer page
 * make changes to ICD-10 mapping
@@ -7,7 +8,7 @@ Important:
 * Stubborn caching in IE means that browser must be closed and reopened to get new data to load after Vernieuwen or Verstuur (sending hand-entered prediction model data). 
   -- try adding headers to all pages, not just load page
   -- Apparently it partly depends on browser settings; see what happens in the real deploy. Check if this is also a problem in Edge.
-* Consider moving bin/db-create-portal-tables.sh to the valportaal repo. The tables actually belong to the valportaal, although symlinking them to adfice is handy since adfice needs to write to those tables as well."
+* Consider moving bin/db-create-portal-tables.sh to the valportaal repo. The tables actually belong to the valportaal, although symlinking them to adfice is handy since adfice needs to write to those tables as well.
 
 Mid Priority:
 * Getting data out of EHR
