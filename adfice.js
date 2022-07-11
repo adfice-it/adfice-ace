@@ -116,8 +116,8 @@ async function renew_patient(patient_id, etl_patient) {
 function patientListOfInserts(patient_id, patient, participant_number) {
     let list_of_transactions = [];
     let age = calculateAge(patient);
-	let sql = "INSERT INTO etl_mrn_patient (patient_id, mrn, fhir) VALUES (?,?,?)";
-	list_of_transactions.push([sql, [patient_id, patient['mrn'], patient['ehr_pid']]]);
+    let sql = "INSERT INTO etl_mrn_patient (patient_id, mrn, fhir) VALUES (?,?,?)";
+    list_of_transactions.push([sql, [patient_id, patient['mrn'], patient['ehr_pid']]]);
     let sql1 = '/* adfice.patientListOfInserts */ INSERT INTO patient ' +
         '(patient_id, participant_number, birth_date, age, is_final) ' +
         'VALUES (?,?,?,?,0)';
@@ -143,7 +143,7 @@ function patientListOfUpdates(patient_id, patient) {
 }
 
 function calculateAge(patient) {
-    if(patient['birth_date'] == null){
+    if (patient['birth_date'] == null) {
         return null;
     }
     let diff = new Date().getTime() - new Date(patient['birth_date']).getTime();
@@ -1458,12 +1458,12 @@ function adfice_init(db) {
         add_log_event_copy_patient_text: add_log_event_copy_patient_text,
         add_log_event_copy_ehr_text: add_log_event_copy_ehr_text,
         doctor_id_for_user: doctor_id_for_user,
-		fhir_for_id: fhir_for_id,
+        fhir_for_id: fhir_for_id,
         finalize_and_export: finalize_and_export,
         get_advice_for_patient: get_advice_for_patient,
         get_advice_texts_checkboxes: get_advice_texts_checkboxes,
         get_patient_measurements: get_patient_measurements,
-		id_for_fhir: id_for_fhir,
+        id_for_fhir: id_for_fhir,
         id_for_mrn: id_for_mrn,
         mrn_for_id: mrn_for_id,
         renew_patient: renew_patient,

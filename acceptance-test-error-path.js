@@ -60,17 +60,17 @@ async function change_view(t, button, url_fragment) {
 
 async function load(t, mrn, fhir, participant) {
     let user = 'dr_bob';
-	let study = 'studyid';
-	let iss = 'https://fake.iss.example.com';
-	let launch = 'BOGUSLAUNCH1';
+    let study = 'studyid';
+    let iss = 'https://fake.iss.example.com';
+    let launch = 'BOGUSLAUNCH1';
     let url = `${BASE_URL}/load` +
         `?mrn=${mrn}` +
-		`&fhir=${fhir}` +
+        `&fhir=${fhir}` +
         `&user=${user}` +
-		`&study=${study}` +
+        `&study=${study}` +
         `&participant=${participant}` +
-		`&iss=` + encodeURIComponent(iss) +
-		`&launch=${launch}`;
+        `&iss=` + encodeURIComponent(iss) +
+        `&launch=${launch}`;
     // console.log("load:", url);
     return await t.openWindow(url);
 }
@@ -105,55 +105,55 @@ async function check_checkbox_and_freetext(t, mrn, fhir, participant, id) {
 
 test('Redirect to error page if invalid navigation is attempted', async t => {
     let mrn = 'DummyMRN-000000172';
-	let fhir = 'DummyFHIR-000000172';
+    let fhir = 'DummyFHIR-000000172';
     let user = 'dr_bob';
     let participant = '10172';
     let url_no_participant =
-			`${BASE_URL}/load` +
-			`?mrn=${mrn}` +
-			`&fhir=${fhir}` +
-			`&user=${user}` +
-			`&study=` +
-			`&participant=` +
-			`&iss=https%3A%2F%2Fbogus.example.com` +
-			`&launch=BOGUSLAUNCH`;
+        `${BASE_URL}/load` +
+        `?mrn=${mrn}` +
+        `&fhir=${fhir}` +
+        `&user=${user}` +
+        `&study=` +
+        `&participant=` +
+        `&iss=https%3A%2F%2Fbogus.example.com` +
+        `&launch=BOGUSLAUNCH`;
 
     let window1 = await t.openWindow(url_no_participant);
 
     let getLocation = ClientFunction(() => document.location.href);
-	// URL with null participant is (at least temporarily) accepted
+    // URL with null participant is (at least temporarily) accepted
     //    await t.expect(getLocation()).contains('load-error');
     let body = Selector('body');
     await t.expect(body.withText('Error').exists).notOk();
     //    await t.expect(body.withText('DummyMRN-000000172').exists).ok();
     let url_no_user =
-        	`${BASE_URL}/load` +
-			`?mrn=${mrn}` +
-			`&fhir=${fhir}` +
-			`&user=` +
-			`&study=studynr` +
-			`&participant=${participant}` +
-			`&iss=https%3A%2F%2Fbogus.example.com` +
-			`&launch=BOGUSLAUNCH`;
+        `${BASE_URL}/load` +
+        `?mrn=${mrn}` +
+        `&fhir=${fhir}` +
+        `&user=` +
+        `&study=studynr` +
+        `&participant=${participant}` +
+        `&iss=https%3A%2F%2Fbogus.example.com` +
+        `&launch=BOGUSLAUNCH`;
     let window2 = await t.openWindow(url_no_user);
     await t.expect(getLocation()).contains('load-error');
     body = Selector('body');
     await t.expect(body.withText('Error').exists).ok();
 
     let url_no_mrn_no_fhir =
-        	`${BASE_URL}/load` +
-			`?mrn=` +
-			`&fhir=` +
-			`&user=${user}` +
-			`&study=studynr` +
-			`&participant=${participant}` +
-			`&iss=https%3A%2F%2Fbogus.example.com` +
-			`&launch=BOGUSLAUNCH`;
+        `${BASE_URL}/load` +
+        `?mrn=` +
+        `&fhir=` +
+        `&user=${user}` +
+        `&study=studynr` +
+        `&participant=${participant}` +
+        `&iss=https%3A%2F%2Fbogus.example.com` +
+        `&launch=BOGUSLAUNCH`;
     let window3 = await t.openWindow(url_no_mrn_no_fhir);
     await t.expect(getLocation()).contains('load-error');
     body = Selector('body');
     await t.expect(body.withText('Error').exists).ok();
-    await t.expect(body.withText('DummyMRN-000000172').exists).notOk();	
+    await t.expect(body.withText('DummyMRN-000000172').exists).notOk();
 });
 
 test('Redirect to error page if doctor_id is lost', async t => {
@@ -175,7 +175,7 @@ test('Redirect to error page if doctor_id is lost', async t => {
 
 test('Redirect to error page if patient_id is bad', async t => {
     let mrn = 'DummyMRN-000000160';
-	let fhir = 'DummyFHIR-000000160';
+    let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
     let window1 = await load(t, mrn, fhir, participant);
     // attempt to navigate directly to a different (invalid) patient page
@@ -197,7 +197,7 @@ test('Redirect to error page if patient_id is bad', async t => {
 
 test('Redirect to error page if URL has multiple mrns or user_ids', async t => {
     let mrn = 'DummyMRN-000000160';
-	let fhir = 'DummyFHIR-000000160';
+    let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
     let window1 = await load(t, mrn, fhir, participant);
     // attempt to navigate directly to a different (invalid) patient page
@@ -218,7 +218,7 @@ test('Redirect to error page if URL has multiple mrns or user_ids', async t => {
 
 test('Fail portal export if patient has no BSN', async t => {
     let mrn = 'DummyMRN-000000161';
-	let fhir = 'DummyFHIR-000000161';
+    let fhir = 'DummyFHIR-000000161';
     let participant = 10161;
     let window1 = await load(t, mrn, fhir, participant);
     let button_finalize_view = Selector('button#button-finalize-view');
@@ -232,4 +232,3 @@ test('Fail portal export if patient has no BSN', async t => {
 
     await t.expect(alertHistory[0].text).contains('Valportaal');
 });
-

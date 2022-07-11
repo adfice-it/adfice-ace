@@ -60,17 +60,17 @@ async function change_view(t, button, url_fragment) {
 
 async function load(t, mrn, fhir, participant) {
     let user = 'dr_bob';
-	let study = 'studyid';
-	let iss = 'https://fake.iss.example.com';
-	let launch = 'BOGUSLAUNCH1';
+    let study = 'studyid';
+    let iss = 'https://fake.iss.example.com';
+    let launch = 'BOGUSLAUNCH1';
     let url = `${BASE_URL}/load` +
         `?mrn=${mrn}` +
-		`&fhir=${fhir}` +
+        `&fhir=${fhir}` +
         `&user=${user}` +
-		`&study=${study}` +
+        `&study=${study}` +
         `&participant=${participant}` +
-		`&iss=` + encodeURIComponent(iss) +
-		`&launch=${launch}`;
+        `&iss=` + encodeURIComponent(iss) +
+        `&launch=${launch}`;
     // console.log("load:", url);
     return await t.openWindow(url);
 }
@@ -105,7 +105,7 @@ async function check_checkbox_and_freetext(t, mrn, fhir, participant, id) {
 
 test('Automatic selection of free text checkbox when text entered', async t => {
     let mrn = 'DummyMRN-000000024';
-	let fhir = 'DummyFHIR-000000024';
+    let fhir = 'DummyFHIR-000000024';
     let participant = 10024;
     let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000024";
@@ -135,8 +135,8 @@ test('Automatic selection of free text checkbox when text entered', async t => {
 
 test('test incoming link from EHR', async t => {
     let mrn = 'DummyMRN-000000163';
-	let fhir = 'DummyFHIR-000000163';
-	let participant = 100163;
+    let fhir = 'DummyFHIR-000000163';
+    let participant = 100163;
     let window1 = await load(t, mrn, fhir, participant);
     const getLocation = ClientFunction(() => document.location.href);
 
@@ -145,7 +145,7 @@ test('test incoming link from EHR', async t => {
 
 test('Test selecting views', async t => {
     let mrn = 'DummyMRN-000000085';
-	let fhir = 'DummyFHIR-000000085';
+    let fhir = 'DummyFHIR-000000085';
     let participant = 10085;
     let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000085";
@@ -273,7 +273,7 @@ test('Test selecting views', async t => {
 
 test('Test free text fields', async t => {
     let mrn = 'DummyMRN-000000023';
-	let fhir = 'DummyFHIR-000000023';
+    let fhir = 'DummyFHIR-000000023';
     let participant = 10023;
     let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000023";
@@ -286,7 +286,7 @@ test('Test free text fields', async t => {
 
 test('Test non-med free text fields', async t => {
     let mrn = 'DummyMRN-000000010';
-	let fhir = 'DummyFHIR-000000010';
+    let fhir = 'DummyFHIR-000000010';
     let participant = 10010;
     let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000010";
@@ -299,7 +299,7 @@ test('Test non-med free text fields', async t => {
 
 test('Test med lists', async t => {
     let mrn = 'DummyMRN-000000009';
-	let fhir = 'DummyFHIR-000000009';
+    let fhir = 'DummyFHIR-000000009';
     let participant = 10009;
     let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000009";
@@ -318,7 +318,7 @@ test('Test med lists', async t => {
 
 test('Checkbox preselected', async t => {
     let mrn = 'DummyMRN-000000051';
-	let fhir = 'DummyFHIR-000000051';
+    let fhir = 'DummyFHIR-000000051';
     let participant = 10051;
     let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000051";
@@ -342,7 +342,7 @@ test('Checkbox preselected', async t => {
 
 test('Test finalize (with renew to reset the patient)', async t => {
     let mrn = 'DummyMRN-000000167';
-	let fhir = 'DummyFHIR-000000167';
+    let fhir = 'DummyFHIR-000000167';
     let participant = 10167;
     let window0 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000167";
@@ -383,7 +383,7 @@ test('Test finalize (with renew to reset the patient)', async t => {
 
 test('Check "Geen advies"', async t => {
     let mrn = 'DummyMRN-000000162';
-	let fhir = 'DummyFHIR-000000162';
+    let fhir = 'DummyFHIR-000000162';
     let participant = 10162;
     let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000162";
@@ -430,7 +430,7 @@ test('Check "Geen advies"', async t => {
 
 test('Test problem list', async t => {
     let mrn = 'DummyMRN-000000005';
-	let fhir = 'DummyFHIR-000000005';
+    let fhir = 'DummyFHIR-000000005';
     let participant = 10005;
     let window0 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000005";
@@ -445,7 +445,7 @@ test('Test problem list', async t => {
 
 test('Test lab list', async t => {
     let mrn = 'DummyMRN-000000027';
-    let fhir = 'DummyFHIR-000000027';	
+    let fhir = 'DummyFHIR-000000027';
     let participant = 10027;
     let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000027";
@@ -459,7 +459,7 @@ test('Test lab list', async t => {
 
 test('Test prediction values missing', async t => {
     let mrn = 'DummyMRN-000000027';
-	let fhir = 'DummyFHIR-000000027';
+    let fhir = 'DummyFHIR-000000027';
     let participant = 10027;
     let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000027";
@@ -473,7 +473,7 @@ test('Test prediction values missing', async t => {
 
 test('Test prediction values present', async t => {
     let mrn = 'DummyMRN-000000002';
-	let fhir = 'DummyFHIR-000000002';
+    let fhir = 'DummyFHIR-000000002';
     let participant = 10002;
     let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000002";
@@ -487,7 +487,7 @@ test('Test prediction values present', async t => {
 
 test('Test prediction values present when user-entered', async t => {
     let mrn = 'DummyMRN-000000170';
-	let fhir = 'DummyFHIR-000000170';
+    let fhir = 'DummyFHIR-000000170';
     let participant = 10170;
     let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000170";
@@ -501,7 +501,7 @@ test('Test prediction values present when user-entered', async t => {
 
 test('Test user entering values', async t => {
     let mrn = 'DummyMRN-000000173';
-	let fhir = 'DummyFHIR-000000173';
+    let fhir = 'DummyFHIR-000000173';
     let participant = 10173;
     let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000173";
@@ -541,7 +541,7 @@ test('Test user entering values', async t => {
 
 test('Test reload data', async t => {
     let mrn = 'DummyMRN-000000174';
-	let fhir = 'DummyFHIR-000000174';
+    let fhir = 'DummyFHIR-000000174';
     let participant = 10174;
     let window0 = await load(t, mrn, fhir, participant);
     //this test assumes we are using the stub_etl
@@ -575,7 +575,7 @@ test('Test reload data', async t => {
 
 test('Test load new patient data', async t => {
     let mrn = 'DummyMRN-000000175';
-	let fhir = 'DummyFHIR-000000175';
+    let fhir = 'DummyFHIR-000000175';
     let participant = 10175;
     let window0 = await load(t, mrn, fhir, participant);
     //this test assumes we are using the stub_etl
@@ -588,7 +588,7 @@ test('Test load new patient data', async t => {
 
 test('Nonmed headers display correctly', async t => {
     let mrn = 'DummyMRN-000000160';
-	let fhir = 'DummyFHIR-000000160';
+    let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
     let window1 = await load(t, mrn, fhir, participant);
     // check some nonmed advice
@@ -650,7 +650,7 @@ test('Nonmed headers display correctly', async t => {
 
 test('Other med advice box', async t => {
     let mrn = 'DummyMRN-000000160';
-	let fhir = 'DummyFHIR-000000160';
+    let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
     let window1 = await load(t, mrn, fhir, participant);
 
@@ -718,7 +718,7 @@ test('Other med advice box', async t => {
 
 test('Show session timeout warning 2m before session timeout; session reset if button is clicked', async t => {
     let mrn = 'DummyMRN-000000160';
-	let fhir = 'DummyFHIR-000000160';
+    let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
     let window1 = await load(t, mrn, fhir, participant);
     let expiration = Selector('#expiration');
@@ -745,7 +745,7 @@ test('Show session timeout warning 2m before session timeout; session reset if b
 
 test('Session expires if time <10s', async t => {
     let mrn = 'DummyMRN-000000160';
-	let fhir = 'DummyFHIR-000000160';
+    let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
     let window1 = await load(t, mrn, fhir, participant);
     let expiration = Selector('#expiration');
@@ -767,7 +767,7 @@ test('Session expires if time <10s', async t => {
 // slow tests run last
 test('Check multiple viewers making changes', async t => {
     let mrn = 'DummyMRN-000000068';
-	let fhir = 'DummyFHIR-000000068';
+    let fhir = 'DummyFHIR-000000068';
     let participant = 10068;
     let window1 = await load(t, mrn, fhir, participant);
     let patient_id = "00000000-0000-4000-8000-100000000068";
@@ -862,7 +862,7 @@ test('Check multiple viewers making changes', async t => {
 
 test('Checkbox persistence', async t => {
     let mrn = 'DummyMRN-000000078';
-	let fhir = 'DummyFHIR-000000078';
+    let fhir = 'DummyFHIR-000000078';
     let participant = 10078;
     let window1 = await load(t, mrn, fhir, participant);
     let checkbox_id = "cb_N02AA01_76_1";

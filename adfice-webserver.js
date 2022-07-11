@@ -119,43 +119,43 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         res.set('Expires', '-1');
 
         let mrn = req.query.mrn;
-	let fhir = req.query.fhir;
+        let fhir = req.query.fhir;
         let user_id = req.query.user;
-	// study number and participant number are strings
+        // study number and participant number are strings
         let participant_number = req.query.study + req.query.participant;
-	// ISSuer identifier authorization server
+        // ISSuer identifier authorization server
         let iss = req.query.iss;
-	// launch code to exchange for a token
-		let launch_code = req.query.launch;
-        
+        // launch code to exchange for a token
+        let launch_code = req.query.launch;
+
         let etl_opts = await autil.from_json_file(etl_opts_path);
         let adfice_url = 'https://' + req.get('host') + '/auth';
         let id = null;
         let error_string = '';
-        
-        if (fhir == null || fhir=='' || typeof(fhir) != 'string' /* 2 FHIRs in URL */ ) {
+
+        if (fhir == null || fhir == '' || typeof(fhir) != 'string' /* 2 FHIRs in URL */ ) {
             fhir = null;
             error_string += "no FHIR id ";
         }
-    	if (mrn == null || mrn == '' || typeof(mrn) != 'string' /* 2 MRNs in URL */ ) {
+        if (mrn == null || mrn == '' || typeof(mrn) != 'string' /* 2 MRNs in URL */ ) {
             mrn = null;
             error_string += "no MRN ";
-	}
-        if (user_id == null || user_id=='' || typeof(user_id) != 'string' /* 2 user */ ) {
-            user_id = null;
-			error_string += "no user ID";
         }
-        if((!fhir && !mrn) || !user_id){
+        if (user_id == null || user_id == '' || typeof(user_id) != 'string' /* 2 user */ ) {
+            user_id = null;
+            error_string += "no user ID";
+        }
+        if ((!fhir && !mrn) || !user_id) {
             let p_str = '?error=' + error_string;
             res.redirect('/load-error' + p_str);
             return;
         }
 
-        if(fhir){
-    		id = await adfice.id_for_fhir(fhir);
-		} else {
-		    id = await adfice.id_for_mrn(mrn);
-		};
+        if (fhir) {
+            id = await adfice.id_for_fhir(fhir);
+        } else {
+            id = await adfice.id_for_mrn(mrn);
+        };
 
         let encoded_err = null;
 
@@ -270,7 +270,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         } else if (message.type == 'patient_renew') {
             await adfice.add_log_event_renew(doctor_id, patient_id);
             let etl_opts = await autil.from_json_file(etl_opts_path);
-			let mrn = await adfice.mrn_for_id(patient_id);
+            let mrn = await adfice.mrn_for_id(patient_id);
             let fhir = await adfice.fhir_for_id(patient_id);
             let etl_patient = await etl.etl(mrn, fhir, etl_opts);
             let returned_patient = await adfice.renew_patient(patient_id, etl_patient);

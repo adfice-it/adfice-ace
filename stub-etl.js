@@ -23,11 +23,14 @@ async function getAuth(options, launch_code, iss, adfice_url, req_url) {
     redir_url.searchParams.append('code', 'fake_code');
     redir_url.searchParams.append('state', state_base64);
     redir_url.protocol = 'http';
-    let rv = { url: redir_url.toString(), headers: {} };
+    let rv = {
+        url: redir_url.toString(),
+        headers: {}
+    };
     return rv;
 }
 
-async function getToken(code, state, adfice_url, options){
+async function getToken(code, state, adfice_url, options) {
     return JSON.parse(atob(state));
 }
 
@@ -45,7 +48,7 @@ async function etl(token_json, etl_opts) {
 
     let patient_json = {
         ehr_pid: fhir,
-		mrn: mrn,
+        mrn: mrn,
         bsn: fake_bsn,
         birth_date: '1930-01-01',
         medications: [{

@@ -75,37 +75,37 @@ test('test patient_id for missing fhir', async () => {
 
 test('test mrn for valid patient_id', async () => {
     let patient_id = "00000000-0000-4000-8000-100000000163";
-	let mrn =  await adfice.mrn_for_id(patient_id);
+    let mrn = await adfice.mrn_for_id(patient_id);
     expect(mrn).toBe("DummyMRN-000000163");
 });
 
 test('test mrn for null patient_id', async () => {
     let patient_id = null;
-	let mrn =  await adfice.mrn_for_id(patient_id);
+    let mrn = await adfice.mrn_for_id(patient_id);
     expect(mrn).toBe(null);
 });
 
 test('test mrn for invalid patient_id', async () => {
     let patient_id = "SirNotAppearing";
-	let mrn =  await adfice.mrn_for_id(patient_id);
+    let mrn = await adfice.mrn_for_id(patient_id);
     expect(mrn).toBe(null);
 });
 
 test('test fhir for valid patient_id', async () => {
     let patient_id = "00000000-0000-4000-8000-100000000163";
-	let fhir =  await adfice.fhir_for_id(patient_id);
+    let fhir = await adfice.fhir_for_id(patient_id);
     expect(fhir).toBe("DummyFHIR-000000163");
 });
 
 test('test fhir for null patient_id', async () => {
     let patient_id = null;
-	let fhir =  await adfice.fhir_for_id(patient_id);
+    let fhir = await adfice.fhir_for_id(patient_id);
     expect(fhir).toBe(null);
 });
 
 test('test fhir for invalid patient_id', async () => {
     let patient_id = "SirNotAppearing";
-	let fhir =  await adfice.fhir_for_id(patient_id);
+    let fhir = await adfice.fhir_for_id(patient_id);
     expect(fhir).toBe(null);
 });
 
@@ -1137,7 +1137,7 @@ test('test get patient table sql and params', async function() {
     let patient_id = "00000000-0000-4000-8000-100000000175";
     let patient = {
         ehr_pid: 'DummyFHIR-000000175',
-		mrn: 'DummyMRN-000000175',
+        mrn: 'DummyMRN-000000175',
         bsn: '000-00-0000',
         birth_date: '1930-01-01'
     };
@@ -1154,7 +1154,7 @@ test('test get patient table sql and params with nulls', async function() {
     let patient_id = "00000000-0000-4000-8000-100000000175";
     let patient = {
         ehr_pid: 'DummyFHIR-000000175',
-		mrn: 'DummyMRN-000000175',
+        mrn: 'DummyMRN-000000175',
         bsn: null,
         birth_date: null
     };
@@ -1178,11 +1178,11 @@ test('test get med sql and params', async function() {
     }];
     let list_of_inserts = adfice.medListOfInserts(patient_id, medications)
     expect(list_of_inserts.length).toBe(1);
-	// SQL should be: 'INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date, dose) VALUES (?,?,?,?,?,?,?)'
+    // SQL should be: 'INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date, dose) VALUES (?,?,?,?,?,?,?)'
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_medication');
     expect(list_of_inserts[0][1].length).toBe(7);
-	expect(list_of_inserts[0][1][2]).toBe('Test Drug');
-	expect(list_of_inserts[0][1][5]).toBe('2021-01-01');
+    expect(list_of_inserts[0][1][2]).toBe('Test Drug');
+    expect(list_of_inserts[0][1][5]).toBe('2021-01-01');
 });
 
 test('test get med sql and params with some nulls', async function() {
@@ -1192,11 +1192,11 @@ test('test get med sql and params with some nulls', async function() {
         display_name: 'Test Drug'
     }];
     let list_of_inserts = adfice.medListOfInserts(patient_id, medications)
-	// SQL should be: 'INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, ATC_code) VALUES (?,?,?,?)'
-	// Note that this changes depending on whether the medication data is complete.
+    // SQL should be: 'INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, ATC_code) VALUES (?,?,?,?)'
+    // Note that this changes depending on whether the medication data is complete.
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_medication');
     expect(list_of_inserts[0][1].length).toBe(4);
-	expect(list_of_inserts[0][1][2]).toBe('Test Drug');
+    expect(list_of_inserts[0][1][2]).toBe('Test Drug');
 
     medications = [{
         generic_name: 'testdrug',
@@ -1204,11 +1204,11 @@ test('test get med sql and params with some nulls', async function() {
         dose_text: 'My instructions'
     }];
     list_of_inserts = adfice.medListOfInserts(patient_id, medications);
-	// SQL should be: 'INSERT INTO patient_medication (patient_id, date_retrieved, generic_name, start_date, dose) VALUES (?,?,?,?,?)'
+    // SQL should be: 'INSERT INTO patient_medication (patient_id, date_retrieved, generic_name, start_date, dose) VALUES (?,?,?,?,?)'
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_medication');
     expect(list_of_inserts[0][1].length).toBe(5);
-	expect(list_of_inserts[0][1][2]).toBe('testdrug');
-	expect(list_of_inserts[0][1][3]).toBe('2021-01-01');
+    expect(list_of_inserts[0][1][2]).toBe('testdrug');
+    expect(list_of_inserts[0][1][3]).toBe('2021-01-01');
 
     medications = [{}];
     list_of_inserts = adfice.medListOfInserts(patient_id, medications);
@@ -1227,10 +1227,10 @@ test('test removal of empty entries', async function() {
     }];
     let list_of_inserts = adfice.medListOfInserts(patient_id, medications)
     expect(list_of_inserts.length).toBe(1);
-	// SQL should be: 'INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, ATC_code) VALUES (?,?,?,?)'
+    // SQL should be: 'INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, ATC_code) VALUES (?,?,?,?)'
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_medication');
     expect(list_of_inserts[0][1].length).toBe(4);
-	expect(list_of_inserts[0][1][3]).toBe('B0GU501');
+    expect(list_of_inserts[0][1][3]).toBe('B0GU501');
 });
 
 test('test get problem sql and params', async function() {
@@ -1250,11 +1250,11 @@ test('test get problem sql and params', async function() {
     ];
     let list_of_inserts = adfice.probListOfInserts(patient_id, found_problems);
     expect(list_of_inserts.length).toBe(2);
-	// SQL should be: 'INSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10, ehr_text, start_date) VALUES (?,?,?,?,?,?)'
+    // SQL should be: 'INSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10, ehr_text, start_date) VALUES (?,?,?,?,?,?)'
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_problem');
     expect(list_of_inserts[0][1].length).toBe(6);
-	expect(list_of_inserts[0][1][5]).toBe('2012-11-29');
-	
+    expect(list_of_inserts[0][1][5]).toBe('2012-11-29');
+
     found_problems = [{
             name: 'arrhythmia',
             icd_10: 'I49.1',
@@ -1270,10 +1270,10 @@ test('test get problem sql and params', async function() {
     ];
     list_of_inserts = adfice.probListOfInserts(patient_id, found_problems);
     expect(list_of_inserts.length).toBe(2);
-	//SQL should be: 'INSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10) VALUES (?,?,?,?)'
+    //SQL should be: 'INSERT INTO patient_problem (patient_id, date_retrieved, name, icd_10) VALUES (?,?,?,?)'
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_problem');
     expect(list_of_inserts[0][1].length).toBe(4);
-	expect(list_of_inserts[0][1][2]).toBe('arrhythmia');
+    expect(list_of_inserts[0][1][2]).toBe('arrhythmia');
 });
 
 test('test get lab sql and params', async function() {
@@ -1295,10 +1295,10 @@ test('test get lab sql and params', async function() {
     ];
     let list_of_inserts = adfice.labListOfInserts(patient_id, found_labs);
     expect(list_of_inserts.length).toBe(2);
-	//SQL should be: 'INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_code, lab_test_result, lab_test_units) VALUES (?,?,?,?,?,?,?)'
+    //SQL should be: 'INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_code, lab_test_result, lab_test_units) VALUES (?,?,?,?,?,?,?)'
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_lab');
     expect(list_of_inserts[0][1].length).toBe(7);
-	expect(list_of_inserts[0][1][3]).toBe('eGFR');
+    expect(list_of_inserts[0][1][3]).toBe('eGFR');
 });
 
 test('test measListOfInserts', async function() {
@@ -1347,7 +1347,7 @@ test('test measListOfInserts', async function() {
 
 test('test writePatientFromJSON', async function() {
     let fake_pid = Math.random().toString().substr(2, 10);
-	let fake_mrn = 'mrn' + fake_pid;
+    let fake_mrn = 'mrn' + fake_pid;
     let fake_bsn =
         fake_pid.substr(0, 2) + '-' +
         fake_pid.substr(3, 4) + '-' +
@@ -1356,7 +1356,7 @@ test('test writePatientFromJSON', async function() {
 
     let patient = {
         ehr_pid: fake_pid,
-		mrn: fake_mrn,
+        mrn: fake_mrn,
         bsn: fake_bsn,
         birth_date: '1930-01-01'
     };
@@ -1428,9 +1428,9 @@ test('test writePatientFromJSON', async function() {
 });
 
 test('test renew_patient', async function() {
-	// create a patient to renew
+    // create a patient to renew
     let fake_pid = Math.random().toString().substr(2, 10);
-	let fake_mrn = 'mrn' + fake_pid;
+    let fake_mrn = 'mrn' + fake_pid;
     let fake_bsn =
         fake_pid.substr(0, 2) + '-' +
         fake_pid.substr(3, 4) + '-' +
@@ -1439,7 +1439,7 @@ test('test renew_patient', async function() {
 
     let patient = {
         ehr_pid: fake_pid,
-		mrn: fake_mrn,
+        mrn: fake_mrn,
         bsn: fake_bsn,
         birth_date: '1930-01-01'
     };
@@ -1489,11 +1489,11 @@ test('test renew_patient', async function() {
         smoking_date_measured: '2021-08-05 05:00'
     };
     //TODO add the rest of the measurements
-	
-	//create data to renew them with
-	let etl_patient = {
+
+    //create data to renew them with
+    let etl_patient = {
         ehr_pid: fake_pid,
-		mrn: fake_mrn,
+        mrn: fake_mrn,
         bsn: fake_bsn,
         birth_date: '1931-01-01'
     };
@@ -1505,12 +1505,11 @@ test('test renew_patient', async function() {
         dose_text: 'Do not take this medication'
     }];
     etl_patient.problems = [{
-            name: 'myocardinfarct',
-            icd_10: 'I21.0',
-            ehr_text: 'Acuut transmuraal myocardinfarct van voorwand',
-            start_date: '2020-03-20'
-        }
-    ];
+        name: 'myocardinfarct',
+        icd_10: 'I21.0',
+        ehr_text: 'Acuut transmuraal myocardinfarct van voorwand',
+        start_date: '2020-03-20'
+    }];
     etl_patient.labs = [{
             name: 'eGFR',
             date_measured: '2021-01-01 15:20:48',
@@ -1525,7 +1524,7 @@ test('test renew_patient', async function() {
             lab_test_result: '4',
             lab_test_units: 'mmol/L'
         },
-		{
+        {
             name: 'calcium',
             date_measured: '2021-05-05 10:20:48',
             lab_test_code: 'xxx',
@@ -1543,9 +1542,9 @@ test('test renew_patient', async function() {
         smoking: 1,
         smoking_date_measured: '2022-05-05 05:00'
     };
-	
+
     let patient_id = await adfice.write_patient_from_json(patient, fake_participant);
-	let patient_id2 = await adfice.renew_patient(patient_id, etl_patient);
+    let patient_id2 = await adfice.renew_patient(patient_id, etl_patient);
     let retrieved_patient = await adfice.get_patient_by_id(patient_id2);
     let retrieved_meds = await adfice.get_meds(patient_id2);
     let retrieved_probs = await adfice.get_problems(patient_id2);
@@ -1560,7 +1559,7 @@ test('test renew_patient', async function() {
     expect(retrieved_probs[0]['display_name']).toBe('Myocardinfarct');
     expect(retrieved_labs.length).toBe(3);
     expect(retrieved_labs[1]['lab_test_result']).toBe('4');
-	expect(retrieved_labs[2]['lab_test_result']).toBe('3.0');
+    expect(retrieved_labs[2]['lab_test_result']).toBe('3.0');
     expect(retrieved_meas[0]['user_education_hml']).toBe(null);
     expect(retrieved_meas[0]['systolic_bp_mmHg']).toBe(120);
     expect(retrieved_meas[0]['smoking']).toBe(1);
