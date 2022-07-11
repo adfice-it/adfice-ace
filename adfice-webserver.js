@@ -98,21 +98,19 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     app.use("/load-error", express.static('static/load-error.html'));
 
     app.get('/auth', async function(req, res) {
-// console.log("We are in /auth");
         let code = req.query.code;
         let state = req.query.state;
         let etl_opts = await autil.from_json_file(etl_opts_path);
         let adfice_url = 'https://' + req.get('host') + '/auth';
 
-            let token_json = await etl.getToken(code, state, adfice_url, etl_opts);
-            let user_id = token_json.user;
-
-            let etl_patient = await etl.etl(token_json, etl_opts);
-            let id = await adfice.write_patient_from_json(etl_patient);
-            let mrn = etl_patient.mrn;
-            let fhir = etl_patient.ehr_pid;
-            let load_url = '/load?mrn=' + mrn + '&fhir=' + fhir + '&user=' + user_id;
-            res.redirect(load_url);
+        let token_json = await etl.getToken(code, state, adfice_url, etl_opts);
+        let user_id = token_json.user;
+        let etl_patient = await etl.etl(token_json, etl_opts);
+        let id = await adfice.write_patient_from_json(etl_patient);
+        let mrn = etl_patient.mrn;
+        let fhir = etl_patient.ehr_pid;
+        let load_url = '/load?mrn=' + mrn + '&fhir=' + fhir + '&user=' + user_id;
+        res.redirect(load_url);
     });
 
     app.get('/load', async function(req, res) {
@@ -120,46 +118,41 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         res.set('Pragma', 'no-cache, must-revalidate');
         res.set('Expires', '-1');
 
-// console.log('/load', req.query);
-
         let mrn = req.query.mrn;
 	let fhir = req.query.fhir;
         let user_id = req.query.user;
 	// study number and participant number are strings
         let participant_number = req.query.study + req.query.participant;
-
-        // ISSuer identifier authorization server
+	// ISSuer identifier authorization server
         let iss = req.query.iss;
-        // launch code to exchange for a token
-	let launch_code = req.query.launch;
-
-        // console.log(JSON.stringify({ mrn: mrn, fhir: fhir, user_id: user_id, participant_number: participant_number, iss: iss, launch_code: launch_code }, null, 4));
+	// launch code to exchange for a token
+		let launch_code = req.query.launch;
         
         let etl_opts = await autil.from_json_file(etl_opts_path);
         let adfice_url = 'https://' + req.get('host') + '/auth';
         let id = null;
-        let error_str = '';
+        let error_string = '';
         
         if (fhir == null || fhir=='' || typeof(fhir) != 'string' /* 2 FHIRs in URL */ ) {
             fhir = null;
-            error_str += "no FHIR id ";
+            error_string += "no FHIR id ";
         }
     	if (mrn == null || mrn == '' || typeof(mrn) != 'string' /* 2 MRNs in URL */ ) {
             mrn = null;
-            error_str += "no MRN ";
+            error_string += "no MRN ";
 	}
         if (user_id == null || user_id=='' || typeof(user_id) != 'string' /* 2 user */ ) {
             user_id = null;
-            error_str += "no user ID";
+			error_string += "no user ID";
         }
         if((!fhir && !mrn) || !user_id){
-            let p_str = '?error=' + error_str;
+            let p_str = '?error=' + error_string;
             res.redirect('/load-error' + p_str);
             return;
         }
 
         if(fhir){
-    		    id = await adfice.id_for_fhir(fhir);
+    		id = await adfice.id_for_fhir(fhir);
 		} else {
 		    id = await adfice.id_for_mrn(mrn);
 		};

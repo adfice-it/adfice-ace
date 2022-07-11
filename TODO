@@ -1,4 +1,8 @@
 Important:
+* Compare lines 163-165 of github version vs server version of adfice-webserver.js. I think the stub-etl version will be sufficient once the options are pulled from a file, but check if any other params need to be passed up from etl to adfice-webserver.
+* make renew work with oauth flow
+* change mock-ehr in etl repo to reflect now-known behavior of EHR; make sure errors and missing data are handled
+* change participant to tolerate nulls and duplicates
 * an alert is added which should show if the "renew" fails (re-extraction of data via het EPD) but testing it will require altering stub_etl to fail to renew a specific patient.
 * if BSN is null, refuse to export to portal (show error)
 * Display MRN instead of patient ID.
