@@ -580,7 +580,7 @@ test('Test load new patient data', async t => {
     let window0 = await load(t, mrn, fhir, participant);
     //this test assumes we are using the stub_etl
 
-    let lab_table = Selector("#lab_table");
+    let lab_table = Selector("#lab_table", { timeout: 10000 });
     await t.expect(lab_table.withText("natrium").exists).ok();
     await t.expect(lab_table.withText("135").exists).ok();
 
