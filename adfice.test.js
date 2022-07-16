@@ -91,22 +91,22 @@ test('test mrn for invalid patient_id', async () => {
     expect(mrn).toBe(null);
 });
 
-test('test fhir for valid patient_id', async () => {
+test('test refresh_data for valid patient_id', async () => {
     let patient_id = "00000000-0000-4000-8000-100000000163";
-    let fhir = await adfice.fhir_for_id(patient_id);
-    expect(fhir).toBe("DummyFHIR-000000163");
+    let refresh_data = await adfice.get_refresh_data(patient_id);
+    expect(refresh_data.fhir).toBe("DummyFHIR-000000163");
 });
 
-test('test fhir for null patient_id', async () => {
+test('test refresh_data for null patient_id', async () => {
     let patient_id = null;
-    let fhir = await adfice.fhir_for_id(patient_id);
-    expect(fhir).toBe(null);
+    let refresh_data = await adfice.get_refresh_data(patient_id);
+    expect(refresh_data).toBe(null);
 });
 
-test('test fhir for invalid patient_id', async () => {
+test('test refresh_data for invalid patient_id', async () => {
     let patient_id = "SirNotAppearing";
-    let fhir = await adfice.fhir_for_id(patient_id);
-    expect(fhir).toBe(null);
+    let refresh_data = await adfice.get_refresh_data(patient_id);
+    expect(refresh_data).toBe(null);
 });
 
 test('test doctor_id for user_id', async () => {
@@ -1348,6 +1348,7 @@ test('test measListOfInserts', async function() {
 test('test writePatientFromJSON', async function() {
     let fake_pid = Math.random().toString().substr(2, 10);
     let fake_mrn = 'mrn' + fake_pid;
+	let fake_refresh = 'bogus_token';
     let fake_bsn =
         fake_pid.substr(0, 2) + '-' +
         fake_pid.substr(3, 4) + '-' +
@@ -1357,6 +1358,7 @@ test('test writePatientFromJSON', async function() {
     let patient = {
         ehr_pid: fake_pid,
         mrn: fake_mrn,
+		refresh_token: fake_refresh,
         bsn: fake_bsn,
         birth_date: '1930-01-01'
     };
@@ -1431,6 +1433,7 @@ test('test renew_patient', async function() {
     // create a patient to renew
     let fake_pid = Math.random().toString().substr(2, 10);
     let fake_mrn = 'mrn' + fake_pid;
+	let fake_refresh = 'bogus_token';
     let fake_bsn =
         fake_pid.substr(0, 2) + '-' +
         fake_pid.substr(3, 4) + '-' +
@@ -1440,6 +1443,7 @@ test('test renew_patient', async function() {
     let patient = {
         ehr_pid: fake_pid,
         mrn: fake_mrn,
+		refresh_token: fake_refresh,
         bsn: fake_bsn,
         birth_date: '1930-01-01'
     };
@@ -1494,6 +1498,7 @@ test('test renew_patient', async function() {
     let etl_patient = {
         ehr_pid: fake_pid,
         mrn: fake_mrn,
+		refresh_token: fake_refresh,
         bsn: fake_bsn,
         birth_date: '1931-01-01'
     };

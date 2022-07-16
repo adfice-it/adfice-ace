@@ -34,6 +34,13 @@ async function getToken(code, state, adfice_url, options) {
     return JSON.parse(atob(state));
 }
 
+async function renew(refresh_data, etl_opts){
+	// the actual etl will need to do stuff with the refresh_token from the refresh_data,
+	// but the only vars stub cares about are mrn and fhir, 
+	// which are the same in token_json and refresh_data
+	return etl(refresh_data, etl_opts);
+}
+
 /*
 We assume that there will be a link in the EHR that launches our page with the
 required URL parameters to the adfice web server.
@@ -49,6 +56,7 @@ async function etl(token_json, etl_opts) {
     let patient_json = {
         ehr_pid: fhir,
         mrn: mrn,
+		refresh_token: 'bogus_token',
         bsn: fake_bsn,
         birth_date: '1930-01-01',
         medications: [{
@@ -147,6 +155,7 @@ async function etl(token_json, etl_opts) {
 
 module.exports = {
     etl: etl,
+	renew: renew,
     getAuth: getAuth,
     getToken: getToken,
 };

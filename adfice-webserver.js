@@ -271,8 +271,8 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             await adfice.add_log_event_renew(doctor_id, patient_id);
             let etl_opts = await autil.from_json_file(etl_opts_path);
             let mrn = await adfice.mrn_for_id(patient_id);
-            let fhir = await adfice.fhir_for_id(patient_id);
-            let etl_patient = await etl.etl(mrn, fhir, etl_opts);
+            let refresh_data = await adfice.get_refresh_data(patient_id);
+            let etl_patient = await etl.renew(refresh_data, etl_opts);
             let returned_patient = await adfice.renew_patient(patient_id, etl_patient);
             if (returned_patient != patient_id) {
                 let err_text_en = "etl_renew( " +

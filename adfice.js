@@ -116,8 +116,8 @@ async function renew_patient(patient_id, etl_patient) {
 function patientListOfInserts(patient_id, patient, participant_number) {
     let list_of_transactions = [];
     let age = calculateAge(patient);
-    let sql = "INSERT INTO etl_mrn_patient (patient_id, mrn, fhir) VALUES (?,?,?)";
-    list_of_transactions.push([sql, [patient_id, patient['mrn'], patient['ehr_pid']]]);
+    let sql = "INSERT INTO etl_mrn_patient (patient_id, mrn, fhir, refresh_token) VALUES (?,?,?,?)";
+    list_of_transactions.push([sql, [patient_id, patient['mrn'], patient['ehr_pid'], patient['refresh_token']]]);
     let sql1 = '/* adfice.patientListOfInserts */ INSERT INTO patient ' +
         '(patient_id, participant_number, birth_date, age, is_final) ' +
         'VALUES (?,?,?,?,0)';
@@ -1374,17 +1374,22 @@ async function mrn_for_id(patient_id) {
     return results[0].mrn;
 }
 
-async function fhir_for_id(patient_id) {
+async function get_refresh_data(patient_id) {
     if (!patient_id) {
         return null;
     }
-    let sql = 'SELECT fhir FROM etl_mrn_patient WHERE patient_id=?';
+    let sql = 'SELECT mrn, fhir, refresh_token FROM etl_mrn_patient WHERE patient_id=?';
     let params = [patient_id];
     let results = await this.sql_select(sql, params);
     if (results.length == 0) {
         return null;
     }
-    return results[0].fhir;
+	let result = {
+		mrn: results[0].mrn,
+		fhir: results[0].fhir,
+		refresh_token: results[0].refresh_token
+	}
+    return result;
 }
 
 async function doctor_id_for_user(user_id) {
@@ -1458,11 +1463,11 @@ function adfice_init(db) {
         add_log_event_copy_patient_text: add_log_event_copy_patient_text,
         add_log_event_copy_ehr_text: add_log_event_copy_ehr_text,
         doctor_id_for_user: doctor_id_for_user,
-        fhir_for_id: fhir_for_id,
         finalize_and_export: finalize_and_export,
         get_advice_for_patient: get_advice_for_patient,
         get_advice_texts_checkboxes: get_advice_texts_checkboxes,
         get_patient_measurements: get_patient_measurements,
+		get_refresh_data: get_refresh_data,
         id_for_fhir: id_for_fhir,
         id_for_mrn: id_for_mrn,
         mrn_for_id: mrn_for_id,
