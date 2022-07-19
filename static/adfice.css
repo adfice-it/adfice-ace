@@ -40,6 +40,11 @@ body {
 	color: #ffffff;
 }
 
+#button_submit_missings{
+	background-color: #0033BB;
+	color: #ffffff;
+}
+
 .button{
 	border-radius: 8px;
 	padding: 0.3em;

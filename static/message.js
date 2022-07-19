@@ -113,6 +113,25 @@ function update_meas() {
     window.location.reload(true);
 }
 
+function delete_user_entered(to_be_deleted){
+	if (!message_globals.ws) {
+        message_globals.logger.error(
+            'got a submit_missings (delete_user_entered) event but websocket is null');
+        ++message_globals.weirdness;
+        return;
+    }
+
+    send_message('submit_missings', function(message) {
+        message.patient_id = message_globals.patient_id;
+
+        message['submit_missings'] = {};
+        message['submit_missings'][to_be_deleted] = null;
+        console.log(message);
+    });
+    localStorage.clear();
+    window.location.reload(true);
+}
+
 
 
 function send_freetext(textfield_id) {

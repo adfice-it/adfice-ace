@@ -375,6 +375,62 @@ test('update_prediction_with_user_values, update all missing data', async () => 
     await adfice.sql_select(sql, params);
 })
 
+test('update_prediction_with_user_values, delete some data after prediction', async () => {
+    let patient_id = "00000000-0000-4000-8000-100000000172";
+    let form_data = {};
+    form_data['user_GDS_score'] = '1';
+    form_data['user_grip_kg'] = '15';
+    form_data['user_walking_speed_m_per_s'] = '0.2';
+    form_data['user_height_cm'] = '160';
+    form_data['user_weight_kg'] = '60';
+    form_data['user_systolic_bp_mmHg'] = '120';
+    form_data['user_number_of_limitations'] = '2';
+    form_data['user_nr_falls_12m'] = '2';
+    form_data['user_smoking'] = '0';
+    form_data['user_education_hml'] = '2';
+    form_data['fear_dropdown'] = '2';
+    let measurements = await adfice.get_patient_measurements(patient_id);
+    let measurement = measurements[0];
+    expect(measurement['prediction_result']).toBeFalsy();
+    expect(measurement['user_grip_kg']).toBeFalsy();
+    await adfice.update_prediction_with_user_values(patient_id, form_data);
+    measurements = await adfice.get_patient_measurements(patient_id);
+    measurement = measurements[0];
+    expect(measurement['prediction_result']).toBeGreaterThan(10);
+    expect(measurement['user_grip_kg']).toBe(15);
+
+	//simulate user deleting an item
+	form_data = {};
+    form_data['user_GDS_score'] = null;
+	await adfice.update_prediction_with_user_values(patient_id, form_data);
+	measurements = await adfice.get_patient_measurements(patient_id);
+    measurement = measurements[0];
+	expect(measurement['prediction_result']).toBeFalsy;
+	
+    // clean up
+    let params = [patient_id];
+    let sql = `/* adfice.test.js cleanup patient_measurement */
+     UPDATE patient_measurement
+        SET user_GDS_score = null
+          , user_grip_kg = null
+          , user_walking_speed_m_per_s = null
+          , user_height_cm = null
+          , user_weight_kg = null
+          , user_systolic_bp_mmHg = null
+          , user_number_of_limitations = null
+          , user_nr_falls_12m = null
+          , user_nr_falls_12m = null
+          , user_smoking = null
+          , user_education_hml = null
+          , user_fear0 = null
+          , user_fear1 = null
+          , user_fear2 = null
+          , prediction_result = null
+          , user_values_updated = null
+      WHERE patient_id = ?`;
+    await adfice.sql_select(sql, params);
+})
+
 test('get_advice_for_patient(27), with labs and problems', async () => {
     //console.log('27');
     let patient_id = "00000000-0000-4000-8000-100000000027";

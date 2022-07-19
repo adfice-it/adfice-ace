@@ -41,7 +41,8 @@ has_ca_blocker,has_incont_med,user_values_updated, prediction_result) VALUES
 INSERT INTO patient_measurement
 (patient_id,date_retrieved,BMI,BMI_date_measured, smoking, smoking_date_measured,has_antiepileptica,
 has_ca_blocker,has_incont_med) VALUES
-("00000000-0000-4000-8000-100000000172", (select NOW()),25,(select NOW()),1, (select NOW()),0,0,0);
+("00000000-0000-4000-8000-100000000172", (select NOW()),25,(select NOW()),1, (select NOW()),0,0,0),
+("00000000-0000-4000-8000-100000000176", (select NOW()),25,(select NOW()),1, (select NOW()),0,0,0);
 
 INSERT INTO patient_measurement
 (patient_id, date_retrieved, education_hml, height_cm, height_date_measured, weight_kg,

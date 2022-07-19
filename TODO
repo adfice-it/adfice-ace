@@ -5,12 +5,14 @@ Important:
 * if BSN is null, refuse to export to portal (show error)
 * Display MRN instead of patient ID.
 * Add back button to Lees meer page
+* Figure out why commented-out testcafe tests for user-entered prediction model data fail.
 * make changes to ICD-10 mapping
 * Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
 * Stubborn caching in IE means that browser must be closed and reopened to get new data to load after Vernieuwen or Verstuur (sending hand-entered prediction model data). 
   -- try adding headers to all pages, not just load page
   -- Apparently it partly depends on browser settings; see what happens in the real deploy. Check if this is also a problem in Edge.
 * Consider moving bin/db-create-portal-tables.sh to the valportaal repo. The tables actually belong to the valportaal, although symlinking them to adfice is handy since adfice needs to write to those tables as well.
+
 
 Mid Priority:
 * Getting data out of EHR
@@ -19,6 +21,7 @@ Mid Priority:
   * stub-etl will always succeed;
     consider adding code which simulates a failed retrieval to test failure states
 * consider removing birth date entirely from the data; we only need age
+* tidy test data; e.g. a patient with no meas can't happen in Real Life.
 * figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
 * figure out if TestCafe "Nonmed headers display correctly on patient page" still fails
 * See if we can get rid of <span> headers in nonmed advice. (I think they are not used any more.)
