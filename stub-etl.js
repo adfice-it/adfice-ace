@@ -7,17 +7,21 @@
 
 const autil = require('./adfice-util');
 
-async function getAuth(options, launch_code, iss, adfice_url, req_url) {
+async function getAuth(options, adfice_url, req_url) {
     let url = new URL('http://example.org' + req_url);
-    let mrn = url.searchParams.mrn;
-    let fhir = url.searchParams.fhir;
+    let launch = url.searchParams.get('launch');
+    let iss = url.searchParams.get('iss');
     let state_obj = {
-        user: url.searchParams.get('user'),
+        token_url: 'http://example.org/token',
+        iss: iss,
         mrn: url.searchParams.get('mrn'),
         fhir: url.searchParams.get('fhir'),
+        user: url.searchParams.get('user'),
+        study: url.searchParams.get('study'),
+        participant: url.searchParams.get('participant')
     };
     let state_json = JSON.stringify(state_obj);
-    let state_base64 = btoa(state_json);
+    let state_base64 = Buffer.from(state_json).toString('base64');
 
     let redir_url = new URL(adfice_url);
     redir_url.searchParams.append('code', 'fake_code');
@@ -31,14 +35,25 @@ async function getAuth(options, launch_code, iss, adfice_url, req_url) {
 }
 
 async function getToken(code, state, adfice_url, options) {
-    return JSON.parse(atob(state));
+    let decoded_state = Buffer.from(state, 'base64').toString('utf-8');
+    let state_json = JSON.parse(decoded_state);
+    let token_json = {};
+	token_json.state = state;
+	token_json.user = state_json.user;
+	return token_json;
+	
 }
 
 async function renew(refresh_data, etl_opts){
+	let refresh_json = JSON.stringify(refresh_data);
+console.log(refresh_json);	
 	// the actual etl will need to do stuff with the refresh_token from the refresh_data,
 	// but the only vars stub cares about are mrn and fhir, 
 	// which are the same in token_json and refresh_data
-	return etl(refresh_data, etl_opts);
+	let encoded_state = Buffer.from(refresh_json).toString('base64');
+	let token_json = refresh_data;
+	token_json.state = encoded_state;
+	return etl(token_json, etl_opts);
 }
 
 /*
@@ -49,8 +64,11 @@ if the MRN is already in our DB. If not, it calls "etl(...)" which will
 load the patient data into the DB and assign an adfice patient_id.
 */
 async function etl(token_json, etl_opts) {
-    let mrn = token_json.mrn;
-    let fhir = token_json.fhir;
+	let state = token_json.state;
+    let decoded_state = Buffer.from(state, 'base64').toString('utf-8');
+    let state_json = JSON.parse(decoded_state);
+    let mrn = state_json.mrn;
+    let fhir = state_json.fhir;
     let fake_bsn = Math.floor(Math.random() * 999999998) + 1;
 
     let patient_json = {

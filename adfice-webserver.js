@@ -18,6 +18,9 @@ const cookie_secret = autil.uuid4_new_string();
 const DEBUG = ((process.env.DEBUG !== undefined) &&
     (process.env.DEBUG !== "0"));
 
+// this is actually a kind of constant, but we can "check" it on each page load
+var iss = "";
+
 function log_debug(server, msg) {
     if (DEBUG) {
         server.logger.log(msg);
@@ -121,12 +124,8 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         let mrn = req.query.mrn;
         let fhir = req.query.fhir;
         let user_id = req.query.user;
-        // study number and participant number are strings
-        let participant_number = req.query.study + req.query.participant;
         // ISSuer identifier authorization server
-        let iss = req.query.iss;
-        // launch code to exchange for a token
-        let launch_code = req.query.launch;
+        iss = req.query.iss;
 
         let etl_opts = await autil.from_json_file(etl_opts_path);
         let adfice_url = 'https://' + req.get('host') + '/auth';
@@ -162,7 +161,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         if (!id) {
             try {
                 let etl_opts = await autil.from_json_file(etl_opts_path);
-                let auth = await etl.getAuth(etl_opts, launch_code, iss, adfice_url, req.url);
+                let auth = await etl.getAuth(etl_opts, adfice_url, req.url);
                 res.set(auth.headers);
                 res.redirect(auth.url);
             } catch (err) {

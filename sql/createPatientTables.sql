@@ -6,7 +6,7 @@ CREATE TABLE `etl_mrn_patient` (
   `patient_id` varchar(36) NOT NULL,
   `mrn` varchar(50) DEFAULT NULL,
   `fhir` varchar(50) DEFAULT NULL,
-  `refresh_token` varchar(255) DEFAULT NULL,
+  `refresh_token` varchar(1056) DEFAULT NULL,
    PRIMARY KEY (`id`),
    UNIQUE KEY (`patient_id`),
    UNIQUE KEY (`mrn`),
