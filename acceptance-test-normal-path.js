@@ -637,6 +637,45 @@ test('Test load new patient data', async t => {
 
 });
 
+test('Test load new patient data with duplicated participant number', async t => {
+    let mrn = 'DummyMRN-000000177';
+    let fhir = 'DummyFHIR-000000177';
+    let participant = 10175;
+    let window0 = await load(t, mrn, fhir, participant);
+    //this test assumes we are using the stub_etl
+
+    let lab_table = Selector("#lab_table", { timeout: 1000 });
+    await t.expect(lab_table.withText("natrium").exists).ok();
+    await t.expect(lab_table.withText("135").exists).ok();
+
+});
+
+test('Test load new patient data with null participant number', async t => {
+    let mrn = 'DummyMRN-000000178';
+    let fhir = 'DummyFHIR-000000178';
+	let user = 'dr_bob';
+    let study = '';
+	let participant = '';
+    let iss = 'https://fake.iss.example.com';
+    let launch = 'BOGUSLAUNCH1';
+    let url = `${BASE_URL}/load` +
+        `?mrn=${mrn}` +
+        `&fhir=${fhir}` +
+        `&user=${user}` +
+        `&study=${study}` +
+        `&participant=${participant}` +
+        `&iss=` + encodeURIComponent(iss) +
+        `&launch=${launch}`;
+    // console.log("load:", url);
+    let window0 =  await t.openWindow(url);
+    //this test assumes we are using the stub_etl
+
+    let lab_table = Selector("#lab_table", { timeout: 1000 });
+    await t.expect(lab_table.withText("natrium").exists).ok();
+    await t.expect(lab_table.withText("135").exists).ok();
+
+});
+
 test('Nonmed headers display correctly', async t => {
     let mrn = 'DummyMRN-000000160';
     let fhir = 'DummyFHIR-000000160';

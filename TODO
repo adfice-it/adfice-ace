@@ -1,5 +1,4 @@
 Important:
-* change participant to tolerate nulls and duplicates
 * an alert is added which should show if the "renew" fails (re-extraction of data via het EPD) but testing it will require altering stub_etl to fail to renew a specific patient.
 * if BSN is null, refuse to export to portal (show error)
 * Display MRN instead of patient ID.
