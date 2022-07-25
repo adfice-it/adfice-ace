@@ -508,9 +508,9 @@ async function get_problems(patient_id) {
 
 async function get_patient_by_id(patient_id) {
     var sql = `/* adfice.get_patient_by_id */
-        SELECT *
-          FROM patient
-         WHERE patient_id=?`;
+        SELECT patient.*, etl_mrn_patient.mrn
+          FROM patient join etl_mrn_patient on patient.patient_id = etl_mrn_patient.patient_id
+         WHERE patient.patient_id=?`;
     let params = [patient_id];
     let results = await this.sql_select(sql, params);
     let patient;
@@ -905,7 +905,7 @@ async function get_advice_for_patient(patient_id) {
     }
 
     let age = patient.age;
-    let is_final = false;
+	let is_final = false;
     if (patient.is_final) {
         is_final = true;
     }
@@ -1020,6 +1020,7 @@ async function get_advice_for_patient(patient_id) {
     let patient_advice = {};
     patient_advice.patient_id = patient_id;
     patient_advice.age = age;
+	patient_advice.mrn = patient.mrn;
     patient_advice.is_final = is_final;
     patient_advice.labs = lab_rows;
     patient_advice.medications = meds;

@@ -41,9 +41,6 @@ function page_load(before_socket) {
 
     document.title = 'Patient ' + five_pages.patient_id;
 
-    let el_pi_id = document.getElementById('patient-info-id');
-    el_pi_id.innerText = five_pages.patient_id;
-
     let json_url = get_base_url() + 'advice?id=' + five_pages.patient_id;
     // json_data is populated by get_advice_for_patient() in adfice.js
     get_json(json_url, function(err, json_data) {
@@ -69,6 +66,9 @@ function page_load(before_socket) {
                 five_pages: five_pages
             }, null, 4));
         }
+		
+		let el_pi_id = document.getElementById('patient-info-id');
+		el_pi_id.innerText = five_pages.data.patient_advice.mrn;
 
         before_socket();
 

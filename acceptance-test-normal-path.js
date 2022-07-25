@@ -139,8 +139,11 @@ test('test incoming link from EHR', async t => {
     let participant = 100163;
     let window1 = await load(t, mrn, fhir, participant);
     const getLocation = ClientFunction(() => document.location.href);
+	let patient_id_span = Selector('span#patient-info-id');
 
     await t.expect(getLocation()).contains('/start?');
+	await t.expect(patient_id_span.withText("DummyMRN-000000163").exists).ok();
+	
 });
 
 test('Test selecting views', async t => {
