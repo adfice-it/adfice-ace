@@ -46,7 +46,6 @@ async function getToken(code, state, adfice_url, options) {
 
 async function renew(refresh_data, etl_opts){
 	let refresh_json = JSON.stringify(refresh_data);
-console.log(refresh_json);	
 	// the actual etl will need to do stuff with the refresh_token from the refresh_data,
 	// but the only vars stub cares about are mrn and fhir, 
 	// which are the same in token_json and refresh_data
@@ -70,6 +69,8 @@ async function etl(token_json, etl_opts) {
     let mrn = state_json.mrn;
     let fhir = state_json.fhir;
     let fake_bsn = Math.floor(Math.random() * 999999998) + 1;
+	let study = state_json.study;
+    let participant = state_json.participant;
 
     let patient_json = {
         ehr_pid: fhir,
@@ -77,6 +78,7 @@ async function etl(token_json, etl_opts) {
 		refresh_token: 'bogus_token',
         bsn: fake_bsn,
         birth_date: '1930-01-01',
+		participant_number: study + participant,
         medications: [{
                 ATC: 'N05BA01',
                 generic_name: 'diazepam',

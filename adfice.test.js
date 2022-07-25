@@ -1416,7 +1416,8 @@ test('test writePatientFromJSON', async function() {
         mrn: fake_mrn,
 		refresh_token: fake_refresh,
         bsn: fake_bsn,
-        birth_date: '1930-01-01'
+        birth_date: '1930-01-01',
+		participant_number: fake_participant
     };
     patient.medications = [{
         ATC: 'B0GU501',
@@ -1464,7 +1465,7 @@ test('test writePatientFromJSON', async function() {
         smoking_date_measured: '2021-08-05 05:00'
     };
     //TODO add the rest of the measurements
-    let patient_id = await adfice.write_patient_from_json(patient, fake_participant);
+    let patient_id = await adfice.write_patient_from_json(patient);
     let retrieved_patient = await adfice.get_patient_by_id(patient_id);
     let retrieved_meds = await adfice.get_meds(patient_id);
     let retrieved_probs = await adfice.get_problems(patient_id);
@@ -1501,7 +1502,8 @@ test('test renew_patient', async function() {
         mrn: fake_mrn,
 		refresh_token: fake_refresh,
         bsn: fake_bsn,
-        birth_date: '1930-01-01'
+        birth_date: '1930-01-01',
+		participant_number: fake_participant
     };
     patient.medications = [{
         ATC: 'B0GU501',
@@ -1556,7 +1558,8 @@ test('test renew_patient', async function() {
         mrn: fake_mrn,
 		refresh_token: fake_refresh,
         bsn: fake_bsn,
-        birth_date: '1931-01-01'
+        birth_date: '1931-01-01',
+		participant_number: fake_participant
     };
     etl_patient.medications = [{
         ATC: 'B0GU502',
@@ -1604,7 +1607,7 @@ test('test renew_patient', async function() {
         smoking_date_measured: '2022-05-05 05:00'
     };
 
-    let patient_id = await adfice.write_patient_from_json(patient, fake_participant);
+    let patient_id = await adfice.write_patient_from_json(patient);
     let patient_id2 = await adfice.renew_patient(patient_id, etl_patient);
     let retrieved_patient = await adfice.get_patient_by_id(patient_id2);
     let retrieved_meds = await adfice.get_meds(patient_id2);
