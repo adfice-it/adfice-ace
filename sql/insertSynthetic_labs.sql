@@ -33,4 +33,5 @@ INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_nam
 
 /* fake patient for data reload test */
 INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_result, lab_test_units) VALUES
-("00000000-0000-4000-8000-100000000174",(select NOW()),(select NOW()),"eGFR",40,"mL/min/1.73 m²");
+("00000000-0000-4000-8000-100000000174",(select NOW()),(select NOW()),"eGFR",40,"mL/min/1.73 m²"),
+("00000000-0000-4000-8000-100000000179",(select NOW()),(select NOW()),"eGFR",40,"mL/min/1.73 m²");

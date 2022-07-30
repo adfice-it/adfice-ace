@@ -1241,6 +1241,19 @@ test('test get med sql and params', async function() {
     expect(list_of_inserts[0][1][5]).toBe('2021-01-01');
 });
 
+test('test empty meds', async function() {
+    let patient_id = "00000000-0000-4000-8000-100000000175";
+    let medications = [];
+    let list_of_inserts = adfice.medListOfInserts(patient_id, medications)
+    expect(list_of_inserts.length).toBe(0);
+	
+	let patient = {};
+	patient.medications = medications;
+	
+	let list_of_inserts2 = adfice.medListOfInserts(patient_id, patient.medications);
+	expect(list_of_inserts2.length).toBe(0);
+});
+
 test('test get med sql and params with some nulls', async function() {
     let patient_id = "00000000-0000-4000-8000-100000000175";
     let medications = [{
@@ -1332,6 +1345,19 @@ test('test get problem sql and params', async function() {
     expect(list_of_inserts[0][1][2]).toBe('arrhythmia');
 });
 
+test('test empty probs', async function() {
+    let patient_id = "00000000-0000-4000-8000-100000000175";
+    let problems = [];
+    let list_of_inserts = adfice.probListOfInserts(patient_id, problems)
+    expect(list_of_inserts.length).toBe(0);
+	
+	let patient = {};
+	patient.problems = problems;
+	
+	let list_of_inserts2 = adfice.probListOfInserts(patient_id, patient.problems);
+	expect(list_of_inserts2.length).toBe(0);
+});
+
 test('test get lab sql and params', async function() {
     let patient_id = "00000000-0000-4000-8000-100000000175";
     let found_labs = [{
@@ -1355,6 +1381,19 @@ test('test get lab sql and params', async function() {
     expect(list_of_inserts[0][0]).toContain('INSERT INTO patient_lab');
     expect(list_of_inserts[0][1].length).toBe(7);
     expect(list_of_inserts[0][1][3]).toBe('eGFR');
+});
+
+test('test empty labs', async function() {
+    let patient_id = "00000000-0000-4000-8000-100000000175";
+    let labs = [];
+    let list_of_inserts = adfice.labListOfInserts(patient_id, labs)
+    expect(list_of_inserts.length).toBe(0);
+	
+	let patient = {};
+	patient.labs = labs;
+	
+	let list_of_inserts2 = adfice.labListOfInserts(patient_id, patient.labs);
+	expect(list_of_inserts2.length).toBe(0);
 });
 
 test('test measListOfInserts', async function() {
@@ -1400,6 +1439,20 @@ test('test measListOfInserts', async function() {
     expect(measListOfInserts2[0][1][2]).toBe(null);
     expect(measListOfInserts3[0][1][3]).toBe(null);
 });
+
+test('test empty meas', async function() {
+    let patient_id = "00000000-0000-4000-8000-100000000175";
+    let meas = {};
+    let list_of_inserts = adfice.measListOfInserts(patient_id, meas)
+    expect(list_of_inserts.length).toBe(1);
+	
+	let patient = {};
+	patient.meas = meas;
+	
+	let list_of_inserts2 = adfice.measListOfInserts(patient_id, patient.meas);
+	expect(list_of_inserts2.length).toBe(1);
+});
+
 
 test('test writePatientFromJSON', async function() {
     let fake_pid = Math.random().toString().substr(2, 10);

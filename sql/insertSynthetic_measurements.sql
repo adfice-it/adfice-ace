@@ -57,4 +57,5 @@ has_incont_med) VALUES
 ("00000000-0000-4000-8000-100000000173", (select NOW()), 3, 160, (select NOW()), 55, (select NOW()),  21.5,(select NOW()), 1, (select NOW()), 21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 1, (select NOW()), 0, 0, 1, (select NOW()), 3, (select NOW()),0,0,1),
 
 /* fake patient for data reload test */
-("00000000-0000-4000-8000-100000000174", (select NOW()), 3, 160, (select NOW()), 55, (select NOW()),  21.5,(select NOW()), 1, (select NOW()), 21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 1, (select NOW()), 0, 0, 1, (select NOW()), 3, (select NOW()),0,0,1);
+("00000000-0000-4000-8000-100000000174", (select NOW()), 3, 160, (select NOW()), 55, (select NOW()),  21.5,(select NOW()), 1, (select NOW()), 21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 1, (select NOW()), 0, 0, 1, (select NOW()), 3, (select NOW()),0,0,1),
+("00000000-0000-4000-8000-100000000179", (select NOW()), 3, 160, (select NOW()), 55, (select NOW()),  21.5,(select NOW()), 1, (select NOW()), 21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 1, (select NOW()), 0, 0, 1, (select NOW()), 3, (select NOW()),0,0,1);

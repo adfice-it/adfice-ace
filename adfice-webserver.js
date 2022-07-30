@@ -109,11 +109,15 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         let token_json = await etl.getToken(code, state, adfice_url, etl_opts);
         let user_id = token_json.user;
         let etl_patient = await etl.etl(token_json, etl_opts);
-        let id = await adfice.write_patient_from_json(etl_patient);
-        let mrn = etl_patient.mrn;
-        let fhir = etl_patient.ehr_pid;
-        let load_url = '/load?mrn=' + mrn + '&fhir=' + fhir + '&user=' + user_id;
-        res.redirect(load_url);
+		if(!etl_patient || Object.keys(etl_patient).length ===0){
+			res.redirect('/load-error?Error%20met%20laden%20van%20patientdata');
+		} else {
+			let id = await adfice.write_patient_from_json(etl_patient);
+			let mrn = etl_patient.mrn;
+			let fhir = etl_patient.ehr_pid;
+			let load_url = '/load?mrn=' + mrn + '&fhir=' + fhir + '&user=' + user_id;
+			res.redirect(load_url);
+		}
     });
 
     app.get('/load', async function(req, res) {
@@ -272,20 +276,25 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             let mrn = await adfice.mrn_for_id(patient_id);
             let refresh_data = await adfice.get_refresh_data(patient_id);
             let etl_patient = await etl.renew(refresh_data, etl_opts);
-            let returned_patient = await adfice.renew_patient(patient_id, etl_patient);
-            if (returned_patient != patient_id) {
-                let err_text_en = "etl_renew( " +
-                    patient_id +
-                    " ) unexpectedly returned " +
-                    returned_patient;
-                console.log(err_text_en);
-                send_error(ws, err_text_en, kind, patient_id);
-            } else {
-                let new_msg = await patient_advice_message(kind,
-                    patient_id);
-                // console.log(new_msg);
-                send_all(kind, patient_id, new_msg);
-            }
+			if(!etl_patient || Object.keys(etl_patient).length == 0){
+				let err_text_en = "etl_renew failed to retrieve new patient data for " + patient_id;
+				send_error(ws, err_text_en, kind, patient_id);
+			} else {
+				let returned_patient = await adfice.renew_patient(patient_id, etl_patient);
+				if (returned_patient != patient_id) {
+					let err_text_en = "etl_renew( " +
+						patient_id +
+						" ) unexpectedly returned " +
+						returned_patient;
+					console.log(err_text_en);
+					send_error(ws, err_text_en, kind, patient_id);
+				} else {
+					let new_msg = await patient_advice_message(kind,
+						patient_id);
+					// console.log(new_msg);
+					send_all(kind, patient_id, new_msg);
+				}
+			}
         } else if (message.type == 'was_printed') {
             await adfice.add_log_event_print(doctor_id, patient_id);
         } else if (message.type == 'was_copied_patient') {

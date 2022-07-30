@@ -167,6 +167,9 @@ function dateString(date_obj) {
 
 function medListOfInserts(patient_id, medications) {
     let list_of_inserts = [];
+	if(!medications || medications.length < 1){
+		return list_of_inserts;
+	}
     for (let i = 0; i < medications.length; ++i) {
         let medication = medications[i];
         let sql = `/* adfice.medListOfInserts */
@@ -212,6 +215,9 @@ function medListOfInserts(patient_id, medications) {
 
 function probListOfInserts(patient_id, problems) {
     let list_of_inserts = [];
+	if(!problems || problems.length < 1){
+		return list_of_inserts;
+	}
     for (let i = 0; i < problems.length; ++i) {
         let sql = `/* adfice.probListOfInserts */
 			INSERT INTO patient_problem` +
@@ -240,6 +246,9 @@ function probListOfInserts(patient_id, problems) {
 
 function labListOfInserts(patient_id, labs) {
     let list_of_inserts = [];
+	if(!labs || labs.length < 1){
+		return list_of_inserts;
+	}
     for (let i = 0; i < labs.length; ++i) {
         let lab = labs[i];
         let sql =
@@ -262,6 +271,12 @@ function labListOfInserts(patient_id, labs) {
 }
 
 function measListOfInserts(patient_id, measurements) {
+	if(!measurements || Object.keys(measurements).length < 1){
+		let sql = '/* adfice.measListOfInserts */ INSERT INTO patient_measurement ' +
+        '(patient_id, date_retrieved) VALUES (?,?)';
+		let params = [patient_id, nowString()]
+		return [[sql, params]];
+	}
     let sql =
         '/* adfice.measListOfInserts */ INSERT INTO patient_measurement ' +
         '(patient_id, date_retrieved,systolic_bp_mmHg,bp_date_measured,' +

@@ -71,15 +71,8 @@ async function etl(token_json, etl_opts) {
     let fake_bsn = Math.floor(Math.random() * 999999998) + 1;
 	let study = state_json.study;
     let participant = state_json.participant;
-
-    let patient_json = {
-        ehr_pid: fhir,
-        mrn: mrn,
-		refresh_token: 'bogus_token',
-        bsn: fake_bsn,
-        birth_date: '1930-01-01',
-		participant_number: study + participant,
-        medications: [{
+	
+	let medications = [{
                 ATC: 'N05BA01',
                 generic_name: 'diazepam',
                 display_name: 'Diazepam',
@@ -114,8 +107,8 @@ async function etl(token_json, etl_opts) {
                 start_date: '2021-01-27 10:10:00.000',
                 dose_text: '4x daily'
             }
-        ],
-        problems: [{
+        ];
+	let problems = [{
                 name: 'hypertensie',
                 icd_10: 'I10',
                 ehr_text: 'Essentiële (primaire) hypertensie',
@@ -133,8 +126,8 @@ async function etl(token_json, etl_opts) {
                 ehr_text: null,
                 start_date: '2022-1-7 13:9:35'
             }
-        ],
-        labs: [{
+        ];
+	let labs = [{
                 name: 'eGFR',
                 date_measured: '2022-01-07 10:18:00',
                 lab_test_code: '33914-3',
@@ -155,8 +148,8 @@ async function etl(token_json, etl_opts) {
                 lab_test_result: '3.5',
                 lab_test_units: 'mmol/l'
             }
-        ],
-        measurements: {
+        ];
+	let meas = {
             systolic_bp_mmHg: 120,
             bp_date_measured: '2012-11-29',
             height_cm: 130,
@@ -165,7 +158,84 @@ async function etl(token_json, etl_opts) {
             weight_date_measured: '2020-01-27',
             smoking: 0,
             smoking_date_measured: '2021-08-05',
-        }
+        };
+
+	// mock error states
+	if(mrn == "sir_not_appearing" || mrn == "sir_no_renew"){
+		return {};
+	}
+	if(mrn == "sir_no_med"){
+		let patient_json = {
+        ehr_pid: fhir,
+        mrn: mrn,
+		refresh_token: 'bogus_token',
+        bsn: fake_bsn,
+        birth_date: '1930-01-01',
+		participant_number: study + participant,
+        medications: [],
+        problems: problems,
+        labs: labs,
+        measurements: meas
+		};
+		return patient_json;
+	}
+	if(mrn == "sir_no_prob"){
+		let patient_json = {
+        ehr_pid: fhir,
+        mrn: mrn,
+		refresh_token: 'bogus_token',
+        bsn: fake_bsn,
+        birth_date: '1930-01-01',
+		participant_number: study + participant,
+        medications: medications,
+        problems: [],
+        labs: labs,
+        measurements: meas
+		};
+		return patient_json;
+	}
+	if(mrn == "sir_no_lab"){
+		let patient_json = {
+        ehr_pid: fhir,
+        mrn: mrn,
+		refresh_token: 'bogus_token',
+        bsn: fake_bsn,
+        birth_date: '1930-01-01',
+		participant_number: study + participant,
+        medications: medications,
+        problems: problems,
+        labs: [],
+        measurements: meas
+		};
+		return patient_json;
+	}
+	if(mrn == "sir_no_meas"){
+		let patient_json = {
+        ehr_pid: fhir,
+        mrn: mrn,
+		refresh_token: 'bogus_token',
+        bsn: fake_bsn,
+        birth_date: '1930-01-01',
+		participant_number: study + participant,
+        medications: medications,
+        problems: problems,
+        labs: labs,
+        measurements: {}
+		};
+		return patient_json;
+	}
+
+    let patient_json = {
+        ehr_pid: fhir,
+        mrn: mrn,
+		refresh_token: 'bogus_token',
+        bsn: fake_bsn,
+        birth_date: '1930-01-01',
+		participant_number: study + participant,
+        medications: medications,
+        problems: problems,
+        labs: labs,
+        measurements: meas
     };
 
     return patient_json;

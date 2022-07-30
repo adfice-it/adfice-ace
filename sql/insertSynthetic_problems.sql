@@ -75,4 +75,5 @@ INSERT INTO patient_problem (patient_id, date_retrieved, start_date, name) VALUE
 
 /* fake patient for data reload test */
 ("00000000-0000-4000-8000-100000000174",(select NOW()),'2019-02-11',"parkinson"),
-("00000000-0000-4000-8000-100000000174",(select NOW()),'2019-02-11',"orthostatische-hypotensie");
+("00000000-0000-4000-8000-100000000174",(select NOW()),'2019-02-11',"orthostatische-hypotensie"),
+("00000000-0000-4000-8000-100000000179",(select NOW()),'2019-02-11',"orthostatische-hypotensie");
