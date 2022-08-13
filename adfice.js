@@ -281,7 +281,9 @@ function measListOfInserts(patient_id, measurements) {
         '/* adfice.measListOfInserts */ INSERT INTO patient_measurement ' +
         '(patient_id, date_retrieved,systolic_bp_mmHg,bp_date_measured,' +
         'height_cm,height_date_measured,weight_kg,weight_date_measured,' +
-        'smoking, smoking_date_measured) VALUES (?,?,?,?,?,?,?,?,?,?)';
+        'smoking, smoking_date_measured,GDS_score,GDS_date_measured, ' +
+		'grip_kg, grip_date_measured) ' +
+		'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     let params = [
         patient_id,
         nowString(),
@@ -292,7 +294,11 @@ function measListOfInserts(patient_id, measurements) {
         measurements['weight_kg'],
         measurements['weight_date_measured'],
         measurements['smoking'],
-        measurements['smoking_date_measured']
+        measurements['smoking_date_measured'],
+		measurements['GDS_score'],
+        measurements['GDS_date_measured'],
+		measurements['grip_kg'],
+        measurements['grip_date_measured']
     ];
 
     let list_of_inserts = [

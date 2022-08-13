@@ -1407,6 +1407,10 @@ test('test measListOfInserts', async function() {
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
         smoking_date_measured: '2021-08-05 05:00',
+		GDS_score: 2,
+		GDS_date_measured: '2022-6-24 06:00:00',
+		grip_kg: 3,
+		grip_date_measured: '2022-2-18 12:00:00'
     };
     //TODO add the rest of the measurements
     let measListOfInserts = adfice.measListOfInserts(patient_id, found_meas);
@@ -1420,6 +1424,10 @@ test('test measListOfInserts', async function() {
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
         smoking_date_measured: '2021-08-05 05:00',
+		GDS_score: 2,
+		GDS_date_measured: '2022-6-24 06:00:00',
+		grip_kg: 3,
+		grip_date_measured: '2022-2-18 12:00:00'
     };
     let measListOfInserts2 = adfice.measListOfInserts(patient_id, found_meas);
 
@@ -1432,6 +1440,10 @@ test('test measListOfInserts', async function() {
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
         smoking_date_measured: '2021-08-05 05:00',
+		GDS_score: 2,
+		GDS_date_measured: '2022-6-24 06:00:00',
+		grip_kg: 3,
+		grip_date_measured: '2022-2-18 12:00:00'
     };
     let measListOfInserts3 = adfice.measListOfInserts(patient_id, found_meas);
 
@@ -1515,7 +1527,11 @@ test('test writePatientFromJSON', async function() {
         weight_kg: 32,
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
-        smoking_date_measured: '2021-08-05 05:00'
+        smoking_date_measured: '2021-08-05 05:00',
+		GDS_score: 2,
+		GDS_date_measured: '2022-6-24 06:00:00',
+		grip_kg: 3,
+		grip_date_measured: '2022-2-18 12:00:00'
     };
     //TODO add the rest of the measurements
     let patient_id = await adfice.write_patient_from_json(patient);
@@ -1537,6 +1553,8 @@ test('test writePatientFromJSON', async function() {
     expect(retrieved_meas[0]['user_education_hml']).toBe(null);
     expect(retrieved_meas[0]['systolic_bp_mmHg']).toBe(120);
     expect(retrieved_meas[0]['smoking']).toBe(0);
+	expect(retrieved_meas[0]['GDS_score']).toBe(2);
+	expect(retrieved_meas[0]['grip_kg']).toBe(3);
 });
 
 test('test renew_patient', async function() {
@@ -1601,7 +1619,11 @@ test('test renew_patient', async function() {
         weight_kg: 32,
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
-        smoking_date_measured: '2021-08-05 05:00'
+        smoking_date_measured: '2021-08-05 05:00',
+		GDS_score: 2,
+		GDS_date_measured: '2022-6-24 06:00:00',
+		grip_kg: 3,
+		grip_date_measured: '2022-2-18 12:00:00'
     };
     //TODO add the rest of the measurements
 
@@ -1657,7 +1679,11 @@ test('test renew_patient', async function() {
         weight_kg: 32,
         weight_date_measured: '2022-01-27 21:06',
         smoking: 1,
-        smoking_date_measured: '2022-05-05 05:00'
+        smoking_date_measured: '2022-05-05 05:00',
+		GDS_score: 2,
+		GDS_date_measured: '2022-6-24 06:00:00',
+		grip_kg: 3,
+		grip_date_measured: '2022-2-18 12:00:00'
     };
 
     let patient_id = await adfice.write_patient_from_json(patient);

@@ -166,6 +166,10 @@ async function etl(token_json, etl_opts) {
             weight_date_measured: '2020-01-27',
             smoking: 0,
             smoking_date_measured: '2021-08-05',
+			GDS_score: 2,
+			GDS_date_measured: '2022-6-24 06:00:00',
+			grip_kg: 3,
+			grip_date_measured: '2022-2-18 12:00:00'
         };
 
 	// mock error states

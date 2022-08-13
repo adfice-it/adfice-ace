@@ -988,3 +988,6 @@ test('Checkbox persistence', async t => {
     let checkbox3 = Selector('#cb_N02AA01_76_1');
     await t.expect(checkbox3.checked).ok();
 });
+
+//TODO check what etl returns when some meas are missing, and make sure adfice handles this correctly.
+//JSON tends to just delete null values; make sure this doesn't cause problems.
