@@ -1,7 +1,5 @@
 Important:
-* make changes to ICD-10 mapping
-* Check if ATC updates will require any changes (see https://www.whocc.no/filearchive/documents/atc_ddd_new_and_alterations_2021.xlsx )
-
+done
 
 Mid Priority:
 * Consider moving bin/db-create-portal-tables.sh to the valportaal repo. The tables actually belong to the valportaal, although symlinking them to adfice is handy since adfice needs to write to those tables as well.
