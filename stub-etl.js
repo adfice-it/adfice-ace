@@ -9,6 +9,10 @@ const autil = require('./adfice-util');
 
 async function getAuth(options, adfice_url, req_url) {
     let url = new URL('http://example.org' + req_url);
+	//allows us to simulate an authorization failure
+	if(url.searchParams.get('mrn').startsWith("AuthFail")){
+		return {};
+	}
     let launch = url.searchParams.get('launch');
     let iss = url.searchParams.get('iss');
     let state_obj = {
@@ -37,6 +41,10 @@ async function getAuth(options, adfice_url, req_url) {
 async function getToken(code, state, adfice_url, options) {
     let decoded_state = Buffer.from(state, 'base64').toString('utf-8');
     let state_json = JSON.parse(decoded_state);
+	//allows us to simulate failure to return a valid token
+	if(state_json.mrn.startsWith("TokenFail")){
+		return {};
+	}		
     let token_json = {};
 	token_json.state = state;
 	token_json.user = state_json.user;

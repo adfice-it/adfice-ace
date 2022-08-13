@@ -30,7 +30,7 @@ that the "mrn", and the adfice patient id all are roughly matched.
 The mrn values for the test users are of the form: DummyMRN-000000xxx
 where the "xxx" is a number greater than zero.
 
-The patient_id is of the test users are of the from:
+The patient_id is of the test patients are of the form:
 00000000-0000-4000-8000-100000000xxx
 where the "xxx" of the patient_id matches the "xxx" of the mrn.
 
@@ -41,13 +41,16 @@ fills the last three positions. If we create fake-random UUIDs for
 something other than a patient, we can put a different value than
 "1" in the 21st position.
 
-The participant number is typically NULL, or 10xxx where "xxx" matches.
+The participant number is typically NULL, or 10xxx where "xxx" matches
+the "xxx" of the mrn and patient_id.
 
-The test data "users" of the system are "dr_alice" and "dr_bob"
+The test data "users" of the system are "dr_alice" and "dr_bob".
 
 To look at test patient 167, the URL would look like this:
 
 http://localhost:8080/load?mrn=DummyMRN-000000167&user=dr_bob&participant=10167
+or, with all parameters:
+http://localhost:8080/load?mrn=DummyMRN-000000167&fhir=DummyFHIR-000000167&user=dr_bob&study=studynr&participant=10167&iss=http%3A%2F%2Fexample.org%2Fapi%2FFHIR%2FSTU3&launch=boguslaunch
 
 For testing purposes, a shorter session timeout can be set:
 http://localhost:8080/load?mrn=DummyMRN-000000167&user=dr_bob&participant=10167&tsec=125

@@ -107,16 +107,20 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         let adfice_url = 'https://' + req.get('host') + '/auth';
 
         let token_json = await etl.getToken(code, state, adfice_url, etl_opts);
-        let user_id = token_json.user;
-        let etl_patient = await etl.etl(token_json, etl_opts);
-		if(!etl_patient || Object.keys(etl_patient).length ===0){
-			res.redirect('/load-error?Error%20met%20laden%20van%20patientdata');
+        if(!token_json || Object.keys(token_json).length === 0){
+			res.redirect('/load-error?err=Authorisatiefout');
 		} else {
-			let id = await adfice.write_patient_from_json(etl_patient);
-			let mrn = etl_patient.mrn;
-			let fhir = etl_patient.ehr_pid;
-			let load_url = '/load?mrn=' + mrn + '&fhir=' + fhir + '&user=' + user_id;
-			res.redirect(load_url);
+			let user_id = token_json.user;
+        	let etl_patient = await etl.etl(token_json, etl_opts);
+			if(!etl_patient || Object.keys(etl_patient).length === 0){
+				res.redirect('/load-error?err=Error%20met%20laden%20van%20patientdata');
+			} else {
+				let id = await adfice.write_patient_from_json(etl_patient);
+				let mrn = etl_patient.mrn;
+				let fhir = etl_patient.ehr_pid;
+				let load_url = '/load?mrn=' + mrn + '&fhir=' + fhir + '&user=' + user_id;
+				res.redirect(load_url);
+			}
 		}
     });
 
@@ -149,7 +153,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             error_string += "no user ID";
         }
         if ((!fhir && !mrn) || !user_id) {
-            let p_str = '?error=' + error_string;
+            let p_str = '?err=' + error_string;
             res.redirect('/load-error' + p_str);
             return;
         }
@@ -166,11 +170,15 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             try {
                 let etl_opts = await autil.from_json_file(etl_opts_path);
                 let auth = await etl.getAuth(etl_opts, adfice_url, req.url);
-                res.set(auth.headers);
-                res.redirect(auth.url);
+				if(Object.keys(auth).length == 0){
+                    res.redirect('/load-error?err=authorisatiefout');
+                } else {
+					res.set(auth.headers);
+					res.redirect(auth.url);
+				}
             } catch (err) {
                 encoded_err = encodeURIComponent('' + err);
-                res.redirect('/load-error?error=' + encoded_err);
+                res.redirect('/load-error?err=' + encoded_err);
             }
         } else {
             await adfice.add_log_event_access(user_id, id);
@@ -273,7 +281,6 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         } else if (message.type == 'patient_renew') {
             await adfice.add_log_event_renew(doctor_id, patient_id);
             let etl_opts = await autil.from_json_file(etl_opts_path);
-            let mrn = await adfice.mrn_for_id(patient_id);
             let refresh_data = await adfice.get_refresh_data(patient_id);
             let etl_patient = await etl.renew(refresh_data, etl_opts);
 			if(!etl_patient || Object.keys(etl_patient).length == 0){

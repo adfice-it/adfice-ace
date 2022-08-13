@@ -303,8 +303,8 @@ test('Test fail to reload data', async t => {
     let button_start_view = Selector('button#button-start-view');
     await t.click(button_start_view);
     await change_flex_style_to_inline(t);
-    let page_renew = Selector('#page_renew');
-    await t.click(page_renew);
+    let patient_renew = Selector('#patient_renew');
+    await t.click(patient_renew);
     let button_prep_view = Selector('button#button-prep-view');
     await t.click(button_prep_view);
     await change_flex_style_to_inline(t);
@@ -313,4 +313,44 @@ test('Test fail to reload data', async t => {
 	
 	//todo can we test whether a popup showed?
 
+});
+
+test('Test getAuth failure', async t => {
+    //this test assumes we are using the stub_etl
+    let user = 'dr_bob';
+    let study = 'studyid';
+    let iss = 'https://fake.iss.example.com';
+    let launch = 'BOGUSLAUNCH1';
+	let thisrnd = Math.floor(Math.random() * 1000);
+    let url = `${BASE_URL}/load` +
+        `?mrn=AuthFail` + thisrnd +
+        `&fhir=AuthFail` + thisrnd +
+        `&user=${user}` +
+        `&study=${study}` +
+        `&participant=1` + thisrnd +
+        `&iss=` + encodeURIComponent(iss) +
+        `&launch=${launch}`;
+    return await t.openWindow(url);
+	let getLocation = ClientFunction(() => document.location.href);
+    await t.expect(getLocation()).contains('load-error');
+});
+
+test('Test getToken failure', async t => {
+    //this test assumes we are using the stub_etl
+    let user = 'dr_bob';
+    let study = 'studyid';
+    let iss = 'https://fake.iss.example.com';
+    let launch = 'BOGUSLAUNCH1';
+	let thisrnd = Math.floor(Math.random() * 1000);
+    let url = `${BASE_URL}/load` +
+        `?mrn=TokenFail` + thisrnd +
+        `&fhir=TokenFail` + thisrnd +
+        `&user=${user}` +
+        `&study=${study}` +
+        `&participant=1` + thisrnd +
+        `&iss=` + encodeURIComponent(iss) +
+        `&launch=${launch}`;
+    return await t.openWindow(url);
+	let getLocation = ClientFunction(() => document.location.href);
+    await t.expect(getLocation()).contains('load-error');
 });

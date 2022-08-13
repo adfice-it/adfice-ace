@@ -375,7 +375,7 @@ test('Test finalize (with renew to reset the patient)', async t => {
     let button_start_view = Selector('button#button-start-view');
     await t.click(button_start_view);
 
-    let button_renew = Selector('button#page_renew');
+    let button_renew = Selector('button#patient_renew');
     await t.expect(button_renew.exists).ok();
     await t.click(button_renew);
 
@@ -614,8 +614,8 @@ test('Test reload data', async t => {
     let button_start_view = Selector('button#button-start-view');
     await t.click(button_start_view);
     await change_flex_style_to_inline(t);
-    let page_renew = Selector('#page_renew');
-    await t.click(page_renew);
+    let patient_renew = Selector('#patient_renew');
+    await t.click(patient_renew);
     let button_prep_view = Selector('button#button-prep-view');
     await t.click(button_prep_view);
     await change_flex_style_to_inline(t);
