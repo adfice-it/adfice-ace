@@ -171,7 +171,15 @@ async function etl(token_json, etl_opts) {
 			grip_kg: 3,
 			grip_date_measured: '2022-2-18 12:00:00',
 			walking_speed_m_per_s: 0.6,
-			walking_date_measured: '2022-2-18 13:00:00'
+			walking_date_measured: '2022-2-18 13:00:00',
+			fear0: 0,
+			fear1: 1,
+			fear2: 0,
+			fear_of_falls_date_measured: '2022-2-18 13:00:00',
+			number_of_limitations: null, 
+			functional_limit_date_measured: null,
+			nr_falls_12m: null, 
+			nr_falls_date_measured: null
         };
 
 	// mock error states

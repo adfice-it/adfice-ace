@@ -282,8 +282,10 @@ function measListOfInserts(patient_id, measurements) {
         '(patient_id, date_retrieved,systolic_bp_mmHg,bp_date_measured,' +
         'height_cm,height_date_measured,weight_kg,weight_date_measured,' +
         'smoking, smoking_date_measured,GDS_score,GDS_date_measured, ' +
-		'grip_kg, grip_date_measured,walking_speed_m_per_s,walking_date_measured) ' +
-		'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+		'grip_kg, grip_date_measured,walking_speed_m_per_s,walking_date_measured, ' +
+		'fear0, fear1, fear2, fear_of_falls_date_measured, ' +
+		'number_of_limitations, functional_limit_date_measured, nr_falls_12m, nr_falls_date_measured) ' +
+		'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     let params = [
         patient_id,
         nowString(),
@@ -300,7 +302,15 @@ function measListOfInserts(patient_id, measurements) {
 		measurements['grip_kg'],
         measurements['grip_date_measured'],
 		measurements['walking_speed_m_per_s'],
-        measurements['walking_date_measured']
+        measurements['walking_date_measured'],
+		measurements['fear0'],
+        measurements['fear1'],
+		measurements['fear2'],
+        measurements['fear_of_falls_date_measured'],
+		measurements['number_of_limitations'],
+        measurements['functional_limit_date_measured'],
+		measurements['nr_falls_12m'],
+        measurements['nr_falls_date_measured']
     ];
 
     let list_of_inserts = [

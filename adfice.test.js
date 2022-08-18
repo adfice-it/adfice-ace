@@ -1410,9 +1410,19 @@ test('test measListOfInserts', async function() {
 		GDS_score: 2,
 		GDS_date_measured: '2022-6-24 06:00:00',
 		grip_kg: 3,
-		grip_date_measured: '2022-2-18 12:00:00'
+		grip_date_measured: '2022-2-18 12:00:00',
+		walking_speed_m_per_s: 0.6,
+        walking_date_measured: '2022-2-18 13:00:00',
+		fear0: 0,
+        fear1: 1,
+        fear2: 0,
+        fear_of_falls_date_measured: '2022-2-18 13:00:00',
+		number_of_limitations: null, 
+		functional_limit_date_measured: null,
+		nr_falls_12m: null, 
+		nr_falls_date_measured: null
     };
-    //TODO add the rest of the measurements
+    //TODO add education level
     let measListOfInserts = adfice.measListOfInserts(patient_id, found_meas);
 
     found_meas = {
@@ -1427,7 +1437,17 @@ test('test measListOfInserts', async function() {
 		GDS_score: 2,
 		GDS_date_measured: '2022-6-24 06:00:00',
 		grip_kg: 3,
-		grip_date_measured: '2022-2-18 12:00:00'
+		grip_date_measured: '2022-2-18 12:00:00',
+		walking_speed_m_per_s: 0.6,
+        walking_date_measured: '2022-2-18 13:00:00',
+		fear0: 0,
+        fear1: 1,
+        fear2: 0,
+        fear_of_falls_date_measured: '2022-2-18 13:00:00',
+		number_of_limitations: null, 
+		functional_limit_date_measured: null,
+		nr_falls_12m: null, 
+		nr_falls_date_measured: null
     };
     let measListOfInserts2 = adfice.measListOfInserts(patient_id, found_meas);
 
@@ -1443,7 +1463,17 @@ test('test measListOfInserts', async function() {
 		GDS_score: 2,
 		GDS_date_measured: '2022-6-24 06:00:00',
 		grip_kg: 3,
-		grip_date_measured: '2022-2-18 12:00:00'
+		grip_date_measured: '2022-2-18 12:00:00',
+		walking_speed_m_per_s: 0.6,
+        walking_date_measured: '2022-2-18 13:00:00',
+		fear0: 0,
+        fear1: 1,
+        fear2: 0,
+        fear_of_falls_date_measured: '2022-2-18 13:00:00',
+		number_of_limitations: null, 
+		functional_limit_date_measured: null,
+		nr_falls_12m: null, 
+		nr_falls_date_measured: null
     };
     let measListOfInserts3 = adfice.measListOfInserts(patient_id, found_meas);
 
@@ -1533,7 +1563,15 @@ test('test writePatientFromJSON', async function() {
 		grip_kg: 3,
 		grip_date_measured: '2022-2-18 12:00:00',
 		walking_speed_m_per_s: 0.6,
-        walking_date_measured: '2022-2-18 13:00:00'
+        walking_date_measured: '2022-2-18 13:00:00',
+		fear0: 0,
+        fear1: 1,
+        fear2: 0,
+        fear_of_falls_date_measured: '2022-2-18 13:00:00',
+		number_of_limitations: null, 
+		functional_limit_date_measured: null,
+		nr_falls_12m: null, 
+		nr_falls_date_measured: null
     };
     //TODO add the rest of the measurements
     let patient_id = await adfice.write_patient_from_json(patient);
@@ -1558,6 +1596,9 @@ test('test writePatientFromJSON', async function() {
 	expect(retrieved_meas[0]['GDS_score']).toBe(2);
 	expect(retrieved_meas[0]['grip_kg']).toBe(3);
 	expect(retrieved_meas[0]['walking_speed_m_per_s']).toBe(0.6);
+	expect(retrieved_meas[0]['fear1']).toBe(1);
+	expect(retrieved_meas[0]['number_of_limitations']).toBe(null);
+	expect(retrieved_meas[0]['nr_falls_12m']).toBe(null);
 });
 
 test('test renew_patient', async function() {
@@ -1628,9 +1669,17 @@ test('test renew_patient', async function() {
 		grip_kg: 3,
 		grip_date_measured: '2022-2-18 12:00:00',
 		walking_speed_m_per_s: 0.6,
-        walking_date_measured: '2022-2-18 13:00:00'
+        walking_date_measured: '2022-2-18 13:00:00',
+		fear0: 0,
+        fear1: 1,
+        fear2: 0,
+        fear_of_falls_date_measured: '2022-2-18 13:00:00',
+		number_of_limitations: null, 
+		functional_limit_date_measured: null,
+		nr_falls_12m: null, 
+		nr_falls_date_measured: null
     };
-    //TODO add the rest of the measurements
+    //TODO add education level
 
     //create data to renew them with
     let etl_patient = {
@@ -1690,7 +1739,15 @@ test('test renew_patient', async function() {
 		grip_kg: 3,
 		grip_date_measured: '2022-2-18 12:00:00',
 		walking_speed_m_per_s: 0.6,
-        walking_date_measured: '2022-2-18 13:00:00'
+        walking_date_measured: '2022-2-18 13:00:00',
+		fear0: 0,
+        fear1: 1,
+        fear2: 0,
+        fear_of_falls_date_measured: '2022-2-18 13:00:00',
+		number_of_limitations: null, 
+		functional_limit_date_measured: null,
+		nr_falls_12m: null, 
+		nr_falls_date_measured: null
     };
 
     let patient_id = await adfice.write_patient_from_json(patient);
