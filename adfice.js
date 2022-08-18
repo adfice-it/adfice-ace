@@ -282,8 +282,8 @@ function measListOfInserts(patient_id, measurements) {
         '(patient_id, date_retrieved,systolic_bp_mmHg,bp_date_measured,' +
         'height_cm,height_date_measured,weight_kg,weight_date_measured,' +
         'smoking, smoking_date_measured,GDS_score,GDS_date_measured, ' +
-		'grip_kg, grip_date_measured) ' +
-		'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+		'grip_kg, grip_date_measured,walking_speed_m_per_s,walking_date_measured) ' +
+		'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     let params = [
         patient_id,
         nowString(),
@@ -298,7 +298,9 @@ function measListOfInserts(patient_id, measurements) {
 		measurements['GDS_score'],
         measurements['GDS_date_measured'],
 		measurements['grip_kg'],
-        measurements['grip_date_measured']
+        measurements['grip_date_measured'],
+		measurements['walking_speed_m_per_s'],
+        measurements['walking_date_measured']
     ];
 
     let list_of_inserts = [

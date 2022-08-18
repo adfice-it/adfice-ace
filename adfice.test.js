@@ -1531,7 +1531,9 @@ test('test writePatientFromJSON', async function() {
 		GDS_score: 2,
 		GDS_date_measured: '2022-6-24 06:00:00',
 		grip_kg: 3,
-		grip_date_measured: '2022-2-18 12:00:00'
+		grip_date_measured: '2022-2-18 12:00:00',
+		walking_speed_m_per_s: 0.6,
+        walking_date_measured: '2022-2-18 13:00:00'
     };
     //TODO add the rest of the measurements
     let patient_id = await adfice.write_patient_from_json(patient);
@@ -1555,6 +1557,7 @@ test('test writePatientFromJSON', async function() {
     expect(retrieved_meas[0]['smoking']).toBe(0);
 	expect(retrieved_meas[0]['GDS_score']).toBe(2);
 	expect(retrieved_meas[0]['grip_kg']).toBe(3);
+	expect(retrieved_meas[0]['walking_speed_m_per_s']).toBe(0.6);
 });
 
 test('test renew_patient', async function() {
@@ -1623,7 +1626,9 @@ test('test renew_patient', async function() {
 		GDS_score: 2,
 		GDS_date_measured: '2022-6-24 06:00:00',
 		grip_kg: 3,
-		grip_date_measured: '2022-2-18 12:00:00'
+		grip_date_measured: '2022-2-18 12:00:00',
+		walking_speed_m_per_s: 0.6,
+        walking_date_measured: '2022-2-18 13:00:00'
     };
     //TODO add the rest of the measurements
 
@@ -1683,7 +1688,9 @@ test('test renew_patient', async function() {
 		GDS_score: 2,
 		GDS_date_measured: '2022-6-24 06:00:00',
 		grip_kg: 3,
-		grip_date_measured: '2022-2-18 12:00:00'
+		grip_date_measured: '2022-2-18 12:00:00',
+		walking_speed_m_per_s: 0.6,
+        walking_date_measured: '2022-2-18 13:00:00'
     };
 
     let patient_id = await adfice.write_patient_from_json(patient);
