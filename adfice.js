@@ -80,7 +80,11 @@ async function write_patient_from_json(etl_patient) {
     list_of_transactions.push(...(measListOfInserts(patient_id, etl_patient.measurements)));
 
     let result = await this.db.as_sql_transaction(list_of_transactions);
-    // if successful?
+    
+	let meds = await this.get_meds(patient_id);
+	let meas_update = measListOfUpdatesMeds(patient_id, meds);
+	let update_result = await this.db.as_sql_transaction(meas_update);
+	
     return patient_id;
 }
 
@@ -106,7 +110,11 @@ async function renew_patient(patient_id, etl_patient) {
     list_of_transactions.push([sql, params]);
 
     await this.db.as_sql_transaction(list_of_transactions);
-    //if successful?
+    
+	let meds = await this.get_meds(patient_id);
+	let meas_update = measListOfUpdatesMeds(patient_id, meds);
+	let update_result = await this.db.as_sql_transaction(meas_update);
+	
     return patient_id;
 }
 
@@ -317,6 +325,35 @@ function measListOfInserts(patient_id, measurements) {
         [sql, params]
     ];
     return list_of_inserts;
+}
+
+function measListOfUpdatesMeds(patient_id, meds) {
+	let has_antiepileptica = 0;
+    let has_ca_blocker = 0;
+    let has_incont_med = 0;
+	for (let i = 0; i < meds.length; ++i) {
+		if(meds[i]['ATC_code']){
+			if(meds[i]['ATC_code'].startsWith('N03') && 
+				meds[i]['ATC_code'] != 'N03AX12' &&
+				meds[i]['ATC_code'] != 'N03AX16'){
+					has_antiepileptica = 1;
+			}
+			if(meds[i]['ATC_code'].startsWith('C08')){
+					has_ca_blocker = 1;
+			}
+			if(meds[i]['ATC_code'].startsWith('G04BD') || 
+				meds[i]['ATC_code'] === 'G04CA53'){
+					has_incont_med = 1;
+			}
+		}
+	}
+	
+	let list_of_transactions = [];
+    let sql = '/* adfice.measListOfUpdatesMeds */ UPDATE patient_measurement ' +
+        'SET has_antiepileptica = ?, has_ca_blocker = ?, has_incont_med = ? ' +
+        "WHERE patient_id = '" + patient_id + "'";
+    list_of_transactions.push([sql, [has_antiepileptica, has_ca_blocker, has_incont_med]]);
+	return list_of_transactions;
 }
 
 async function get_all_advice_texts_checkboxes() {
@@ -1478,6 +1515,7 @@ function adfice_init(db) {
         labListOfInserts: labListOfInserts,
         logFiredRules: logFiredRules,
         measListOfInserts: measListOfInserts,
+		measListOfUpdatesMeds: measListOfUpdatesMeds,
         medListOfInserts: medListOfInserts,
         patientListOfInserts: patientListOfInserts,
         probListOfInserts: probListOfInserts,

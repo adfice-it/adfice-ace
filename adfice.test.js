@@ -1485,7 +1485,7 @@ test('test measListOfInserts', async function() {
 test('test empty meas', async function() {
     let patient_id = "00000000-0000-4000-8000-100000000175";
     let meas = {};
-    let list_of_inserts = adfice.measListOfInserts(patient_id, meas)
+    let list_of_inserts = adfice.measListOfInserts(patient_id, meas);
     expect(list_of_inserts.length).toBe(1);
 	
 	let patient = {};
@@ -1495,6 +1495,94 @@ test('test empty meas', async function() {
 	expect(list_of_inserts2.length).toBe(1);
 });
 
+test('test measListOfUpdatesMeds', async function() {
+	let patient_id = "00000000-0000-4000-8000-100000000175";
+    let meds = [{
+        ATC_code: 'N03AA01',
+        generic_name: 'testAntiEp',
+        display_name: 'Test Antiepileptic',
+        start_date: '2021-01-01',
+        dose_text: 'My instructions'
+		},
+		{
+        ATC_code: 'C08AA01',
+        generic_name: 'testCaBlocker',
+        display_name: 'Test Ca blocker',
+        start_date: '2021-01-01',
+        dose_text: 'My instructions'
+		},
+		{
+        ATC_code: 'G04BD01',
+        generic_name: 'testIncont',
+        display_name: 'Test Incont Med',
+        start_date: '2021-01-01',
+        dose_text: 'My instructions'
+	}];
+	let list_of_updates = adfice.measListOfUpdatesMeds(patient_id, meds);
+	expect(list_of_updates.length).toBe(1);
+	expect(list_of_updates[0][1][0]).toBe(1);
+	expect(list_of_updates[0][1][1]).toBe(1);
+	expect(list_of_updates[0][1][2]).toBe(1);
+});
+
+test('test measListOfUpdatesMeds: empty meds', async function() {
+	let patient_id = "00000000-0000-4000-8000-100000000175";
+    let meds = [{
+        ATC_code: null,
+        generic_name: 'sticking plaster',
+        display_name: 'bandaid',
+        start_date: '2021-01-01',
+        dose_text: 'My instructions'
+		},
+		{
+        generic_name: 'schrodinger',
+        display_name: 'Schrodingers med',
+        start_date: '2021-01-01',
+        dose_text: 'My instructions'
+		}];
+	let list_of_updates = adfice.measListOfUpdatesMeds(patient_id, meds);
+	expect(list_of_updates.length).toBe(1);
+	expect(list_of_updates[0][1][0]).toBe(0);
+	expect(list_of_updates[0][1][1]).toBe(0);
+	expect(list_of_updates[0][1][2]).toBe(0);
+	
+	meds = [];
+	list_of_updates = adfice.measListOfUpdatesMeds(patient_id, meds);
+	expect(list_of_updates.length).toBe(1);
+	expect(list_of_updates[0][1][0]).toBe(0);
+	expect(list_of_updates[0][1][1]).toBe(0);
+	expect(list_of_updates[0][1][2]).toBe(0);
+});
+
+test('test measListOfUpdatesMeds: test exceptions', async function() {
+	let patient_id = "00000000-0000-4000-8000-100000000175";
+    let meds = [{
+        ATC_code: 'N03AX12',
+        generic_name: 'testNotAntiEp',
+        display_name: 'Test Not Antiepileptic',
+        start_date: '2021-01-01',
+        dose_text: 'My instructions'
+		},
+		{
+        ATC_code: 'C09AA01',
+        generic_name: 'testNotany',
+        display_name: 'Test Not Any',
+        start_date: '2021-01-01',
+        dose_text: 'My instructions'
+		},
+		{
+        ATC_code: 'G04CA53',
+        generic_name: 'testOtherIncont',
+        display_name: 'Test Other Incont Med',
+        start_date: '2021-01-01',
+        dose_text: 'My instructions'
+	}];
+	let list_of_updates = adfice.measListOfUpdatesMeds(patient_id, meds);
+	expect(list_of_updates.length).toBe(1);
+	expect(list_of_updates[0][1][0]).toBe(0);
+	expect(list_of_updates[0][1][1]).toBe(0);
+	expect(list_of_updates[0][1][2]).toBe(1);
+});
 
 test('test writePatientFromJSON', async function() {
     let fake_pid = Math.random().toString().substr(2, 10);
@@ -1599,6 +1687,7 @@ test('test writePatientFromJSON', async function() {
 	expect(retrieved_meas[0]['fear1']).toBe(1);
 	expect(retrieved_meas[0]['number_of_limitations']).toBe(null);
 	expect(retrieved_meas[0]['nr_falls_12m']).toBe(null);
+	expect(retrieved_meas[0]['has_incont_med']).toBe(0);
 });
 
 test('test renew_patient', async function() {
