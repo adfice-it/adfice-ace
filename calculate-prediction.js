@@ -7,7 +7,6 @@ function calculate_prediction_db(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
     systolic_bp_mmHg, number_of_limitations, nr_falls_12m, smoking,
     has_antiepileptica, has_ca_blocker, has_incont_med, education_hml, fear1,
     fear2) {
-
     if (GDS_score == null ||
         grip_kg == null ||
         walking_speed_m_per_s == null ||

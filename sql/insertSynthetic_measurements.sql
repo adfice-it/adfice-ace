@@ -17,7 +17,9 @@ has_incont_med) VALUES
 
 ("00000000-0000-4000-8000-100000000142", (select NOW()), 3, 160, (select NOW()), 55, (select NOW()),  21.5,(select NOW()), 1, (select NOW()), 21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 1, (select NOW()), 0, 0, 1, (select NOW()), 3, (select NOW()), 1, (select NOW()),0,0,1),
 
-("00000000-0000-4000-8000-100000000143", (select NOW()), 3, 160, (select NOW()), 55, (select NOW()),  21.5,(select NOW()), 1, (select NOW()), 21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 1, (select NOW()), 0, 0, 1, (select NOW()), 3, (select NOW()), 1, (select NOW()),0,0,1);
+("00000000-0000-4000-8000-100000000143", (select NOW()), 3, 160, (select NOW()), 55, (select NOW()),  21.5,(select NOW()), 1, (select NOW()), 21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 1, (select NOW()), 0, 0, 1, (select NOW()), 3, (select NOW()), 1, (select NOW()),0,0,1),
+-- bmi is null:
+("00000000-0000-4000-8000-100000000181", (select NOW()), 3, 160, (select NOW()), 55, (select NOW()),  null,null, 1, (select NOW()), 21.5, (select NOW()), 0.6, (select NOW()), 140, (select NOW()), 1, (select NOW()), 0, 0, 1, (select NOW()), 3, (select NOW()), 1, (select NOW()),0,0,1);
 
 -- complete data, user-entered
 INSERT INTO patient_measurement

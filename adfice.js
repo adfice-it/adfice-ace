@@ -669,12 +669,14 @@ async function calculate_store_prediction_result(patient_id) {
     return measurements[0];
 }
 
+//TODO the call to get_patient_measurements can probably be factored out of this
 async function calculate_prediction_result(patient_id) {
     let measurements = await this.get_patient_measurements(patient_id);
     if (measurements == null || !measurements.length) {
         return null;
     }
     let measurement = measurements[0];
+	//any value that can be = 0 cannot use the || syntax
     let GDS_score = measurement['GDS_score'];
     if (GDS_score == null) {
         GDS_score = measurement['user_GDS_score'];
@@ -682,13 +684,24 @@ async function calculate_prediction_result(patient_id) {
     let grip_kg = measurement['grip_kg'] || measurement['user_grip_kg'];
     let walking_speed_m_per_s = measurement['walking_speed_m_per_s'] ||
         measurement['user_walking_speed_m_per_s'];
-    let user_BMI = null;
-    if (measurement['user_height_cm'] != null &&
-        measurement['user_weight_kg'] != null) {
-        user_BMI = measurement['user_weight_kg'] /
-            ((measurement['user_height_cm']) ^ 2);
-    }
-    let BMI = measurement['BMI'] || user_BMI;
+    //prefer BMI calculated by EHR; then calculated from EHR height and weight, then user-entered
+    let BMI = measurement['BMI'];
+	let user_BMI = null;
+	if(!BMI){
+		if (measurement['height_cm'] != null &&
+			measurement['weight_kg'] != null) {
+			BMI = measurement['weight_kg'] /
+				((measurement['height_cm']) ^ 2);
+		} else {
+			/* istanbul ignore else */
+			if (measurement['user_height_cm'] != null &&
+			measurement['user_weight_kg'] != null) {
+			user_BMI = measurement['user_weight_kg'] /
+				((measurement['user_height_cm']) ^ 2);
+			} // else user_BMI stays null
+			BMI = user_BMI;
+		}
+	}
     let systolic_bp_mmHg = measurement['systolic_bp_mmHg'] ||
         measurement['user_systolic_bp_mmHg'];
     let number_of_limitations = measurement['number_of_limitations'];

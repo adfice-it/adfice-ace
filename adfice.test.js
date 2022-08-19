@@ -954,6 +954,20 @@ test('Get prediction model result from DB', async () => {
     expect(prediction).toBe(75);
 });
 
+test('Get prediction model result from DB', async () => {
+    let patient = "00000000-0000-4000-8000-100000000181"
+
+    // clear any saved result
+    let measurements = await adfice.get_patient_measurements(patient);
+    let measurement = measurements[0];
+    let row_id = measurement.id;
+    await adfice.update_prediction_result(row_id, null);
+
+    // add prediction result to database on first fetch if not present
+    let prediction = await adfice.get_prediction_result(patient);
+    expect(prediction).toBe(82);
+});
+
 test('Get empty result set from measurements', async () => {
     let patient_id = "00000000-0000-4000-8000-100000000001";
     let measurements = await adfice.get_patient_measurements(patient_id);
