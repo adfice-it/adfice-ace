@@ -71,7 +71,7 @@ function calculate_prediction(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
     systolic_bp_mmHg, number_of_limitations, nrFall1, nrFall2, smoking,
     has_antiepileptica, has_ca_blocker, has_incont_med, edu2, edu3, fear1,
     fear2) {
-    var p = -0.043 +
+    var p = -0.218 +
         0.068 * (GDS_score - 1.4401) / 1.9419 +
         -0.148 * (grip_kg - 32.4838) / 10.8414 +
         0.088 * (walking_speed_m_per_s - 0.9417) / 0.2760 +
