@@ -198,20 +198,14 @@ function prediction_start() {
     let measurements = get_patient_advice().measurements || {};
     // for some unholy reason, measurements.prediction_result is null in IE when the page first loads. We'll use risk_score, which is not null.
     let risk_score = get_patient_advice().risk_score;
-    if (risk_score == null) {
-        // if we do not have a prediction result, 
-        // let the user enter prediction model data and hide the prediction model info
+	prediction_data_start(measurements);
+    if (risk_score == null || measurements.user_values_updated != null) {
+        // if we do not have a prediction result or the prediction uses user-entered data, 
+        // let the user enter/change prediction model data
         missing_data_form(measurements);
-        document.getElementById('prediction_data_container').style.display = 'none';
     } else {
-        prediction_data_start(measurements);
-        // if we have a prediction model result but it came from user-entered data, allow the user to change it
-        if (measurements.user_values_updated != null) {
-            missing_data_form(measurements);
-        } else {
-            // if we actually got complete data from the EHR, don't let the user change it
-            document.getElementById('prediction_missing_container').style.display = 'none';
-        }
+        // if we actually got complete data from the EHR, don't let the user change it
+        document.getElementById('prediction_missing_container').style.display = 'none';
     }
 }
 
@@ -320,7 +314,8 @@ function missing_data_form(measurements) {
             html += '2';
         }
         html += '</td><td class="prediction_missing"><select id="fear_dropdown" name = "fear_dropdown"><option value = ""></option><option value = "0">0: niet bang</option><option value = "1">1: een beetje/redelijk</option><option value = "2">2: erg bezorgd</option></select></td><td><button type="button" id="del_fear" onclick="delete_user_entered(\'fear0\');delete_user_entered(\'fear1\');delete_user_entered(\'fear2\')">Verwijder</button> </td>';
-        footnote += '***Kies 2 als de pati&euml;nt \'Erg bezorgd\' heeft beantwoord bij tenminste 1 van de items. <br/>Kies 1 als de pati&euml;nt \'Een beetje bezorgd\' of \'Redelijk bezorgd\' heeft beantwoord bij tenminste 1 van de items. <br/>Kies 0 als de pati&euml;nt \'helemaal niet bang\' heeft beantwoord bij alle items op de FES-I-SF7.';
+		  footnote += '***Kies 0 als de patient \'Helemaal niet bezorgd\' heeft beantwoord bij alle FES vragen. Kies 1 als het totaalscore van de FES 1-7 is. Kies 2 als het totaalscore 8 of hoger is.';
+//        footnote += '***Kies 2 als de pati&euml;nt \'Erg bezorgd\' heeft beantwoord bij tenminste 1 van de items. <br/>Kies 1 als de pati&euml;nt \'Een beetje bezorgd\' of \'Redelijk bezorgd\' heeft beantwoord bij tenminste 1 van de items. <br/>Kies 0 als de pati&euml;nt \'helemaal niet bang\' heeft beantwoord bij alle items op de FES-I-SF7.';
     }
     html += '</table><input id="button_submit_missings" type="button" onclick="update_meas()" value="Verstuur"></form>';
     html += '<div id="footnote_missing">' + footnote + '</div><!-- footnote_missing -->';
@@ -330,32 +325,32 @@ function missing_data_form(measurements) {
 function prediction_data_start(measurements) {
     document.getElementById('GDS_score').innerHTML = nice_value(measurements.GDS_score);
     document.getElementById('d_user_GDS_score').innerHTML = nice_value(measurements.user_GDS_score);
-    document.getElementById('GDS_date_measured').innerHTML = nice_date(measurements.GDS_date_measured);
+    document.getElementById('GDS_date_measured').innerHTML = old_date(nice_date(measurements.GDS_date_measured));
     document.getElementById('grip_kg').innerHTML = nice_value(measurements.grip_kg);
     document.getElementById('d_user_grip_kg').innerHTML = nice_value(measurements.user_grip_kg);
-    document.getElementById('grip_date_measured').innerHTML = nice_date(measurements.grip_date_measured);
+    document.getElementById('grip_date_measured').innerHTML = old_date(nice_date(measurements.grip_date_measured));
     document.getElementById('walking_speed_m_per_s').innerHTML = nice_value(measurements.walking_speed_m_per_s);
     document.getElementById('d_user_walking_speed_m_per_s').innerHTML = nice_value(measurements.user_walking_speed_m_per_s);
-    document.getElementById('walking_date_measured').innerHTML = nice_date(measurements.walking_date_measured);
+    document.getElementById('walking_date_measured').innerHTML = old_date(nice_date(measurements.walking_date_measured));
     let user_BMI = null;
     if (measurements.user_weight_kg != null && measurements.user_height_cm != null) {
         user_BMI = measurements.user_weight_kg / ((measurements.user_height_cm / 100) ^ 2);
     }
     document.getElementById('BMI').innerHTML = nice_value(measurements.BMI);
     document.getElementById('d_user_bmi_calc').innerHTML = nice_value(user_BMI);
-    document.getElementById('BMI_date_measured').innerHTML = nice_date(measurements.BMI_date_measured);
+    document.getElementById('BMI_date_measured').innerHTML = old_date(nice_date(measurements.BMI_date_measured));
     document.getElementById('systolic_bp_mmHg').innerHTML = nice_value(measurements.systolic_bp_mmHg);
     document.getElementById('d_user_systolic_bp_mmHg').innerHTML = nice_value(measurements.user_systolic_bp_mmHg);
-    document.getElementById('bp_date_measured').innerHTML = nice_date(measurements.bp_date_measured);
+    document.getElementById('bp_date_measured').innerHTML = old_date(nice_date(measurements.bp_date_measured));
     document.getElementById('number_of_limitations').innerHTML = nice_value(measurements.number_of_limitations);
     document.getElementById('d_user_number_of_limitations').innerHTML = nice_value(measurements.user_number_of_limitations);
-    document.getElementById('functional_limit_date_measured').innerHTML = nice_date(measurements.functional_limit_date_measured);
+    document.getElementById('functional_limit_date_measured').innerHTML = old_date(nice_date(measurements.functional_limit_date_measured));
     document.getElementById('nr_falls_12m').innerHTML = nice_value(measurements.nr_falls_12m);
     document.getElementById('d_user_nr_falls_12m').innerHTML = nice_value(measurements.user_nr_falls_12m);
-    document.getElementById('nr_falls_date_measured').innerHTML = nice_date(measurements.nr_falls_date_measured);
+    document.getElementById('nr_falls_date_measured').innerHTML = old_date(nice_date(measurements.nr_falls_date_measured));
     document.getElementById('smoking').innerHTML = nice_value(measurements.smoking);
     document.getElementById('d_user_smoking').innerHTML = nice_value(measurements.user_smoking);
-    document.getElementById('smoking_date_measured').innerHTML = nice_date(measurements.smoking_date_measured);
+    document.getElementById('smoking_date_measured').innerHTML = old_date(nice_date(measurements.smoking_date_measured));
     document.getElementById('has_antiepileptica').innerHTML = nice_value(measurements.has_antiepileptica);
     document.getElementById('has_ca_blocker').innerHTML = nice_value(measurements.has_ca_blocker);
     document.getElementById('has_incont_med').innerHTML = nice_value(measurements.has_incont_med);
@@ -383,7 +378,7 @@ function prediction_data_start(measurements) {
         fear = 2;
     }
     document.getElementById('d_user_fear').innerHTML = fear;
-    document.getElementById('fear_of_falls_date_measured').innerHTML = nice_date(measurements.fear_of_falls_date_measured);
+    document.getElementById('fear_of_falls_date_measured').innerHTML = old_date(nice_date(measurements.fear_of_falls_date_measured));
     if (measurements.user_values_updated != null) {
         document.getElementById('user_values_updated').innerHTML = nice_date(measurements.user_values_updated);
     }
@@ -819,6 +814,21 @@ function nice_date(dtstring) {
     } else {
         return 'onbekend';
     }
+}
+
+//expects to get a nice_date
+function old_date(nice_d){
+	// nice_d is in dd-mm-yyyy
+	let dateParts = nice_d.split("-");
+	let niceDateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]); 
+let diff = (new Date() - niceDateObject) / (1000 * 3600 * 24);
+	if (!nice_d.match(/^([0-9]{2}.[0-9]{2}.[0-9]{4})$/) ||
+		!diff || diff < 30) // <30 days old
+		{
+		return '<span class="date_okay">'+ nice_d + '</span>';
+	} else {
+		return '<span class="date_old">' +  nice_d + '</span>';
+	}
 }
 
 // Workaround for IE literally displaying "null" for null values

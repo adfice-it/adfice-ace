@@ -530,7 +530,6 @@ test('Test user entering values', async t => {
     let missing_table = await Selector("#prediction_missing_container");
 	let prediction = await Selector("#patient_info", { timeout: 1000 });
 	await t.expect(prediction.withText("onbekend").exists).ok();
-    await t.expect(missing_table.withText("1").exists).notOk();
     await t.expect(missing_table.withText("roker").exists).ok();
     await t.expect(missing_table.visible).ok();
 	
