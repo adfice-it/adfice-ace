@@ -77,7 +77,7 @@ function calculate_prediction(GDS_score, grip_kg, walking_speed_m_per_s, BMI,
         0.088 * (walking_speed_m_per_s - 0.9417) / 0.2760 +
         -0.018 * BMI +
         -0.003 * systolic_bp_mmHg +
-        0.125 * (number_of_limitations - 1.2088) / 1.5286 +
+        0.125 * (number_of_limitations - 0.5308057) / 0.9666971 +
         nrFall1 * 0.426 +
         nrFall2 * 0.597 +
         smoking * -0.252 +

@@ -267,16 +267,11 @@ function missing_data_form(measurements) {
         }
         html += '</td><td class="prediction_missing"><select id="user_number_of_limitations" name = "ADL_dropdown">';
         html += '<option value = ""></option>';
-        for (let i = 0; i <= 5; ++i) {
+        for (let i = 0; i <= 6; ++i) {
             html += '<option value = "' + i + '">' + i + '</option>'
         }
         html += '</select></td><td><button type="button" id="del_number_of_limitations" onclick="delete_user_entered(\'user_number_of_limitations\')">Verwijder</button> </td>';
-        footnote += '*Aantal van de volgende handelingen die de patiënt niet kan uitvoeren of waarmee de patiënt enige moeite mee heeft:\n';
-        footnote += '<ol><li>Kunt u een trap van 15 treden op- en aflopen zonder stil te moeten staan?</li>\n';
-        footnote += '<li>Kunt u zich aan- en uitkleden?</li>\n';
-        footnote += '<li>Kunt u gaan zitten en opstaan uit een stoel?</li>\n';
-        footnote += '<li>Kunt u de nagels van uw tenen knippen?</li>\n';
-        footnote += '<li>Kunt u buitenshuis vijf minuten aan &eacute;&eacute;n stuk lopen zonder stil te staan?</li></ol>';
+        footnote += '*Totaalscore van KATZ-ADL-6';
     }
     if (measurements.nr_falls_12m == null) {
         html += '<tr><td class="prediction_missing">aantal valincidenten laatste 12 maanden</td><td class="prediction_missing" id="user_nr_falls_12m_db">';

@@ -34,7 +34,7 @@ background-color: #dddddd;
 <li>Loopsnelheid van 0.51 m/s<sup>b</sup></li>
 <li>BMI van 26.8</li>
 <li>Systolische bloeddruk van 128 mmHg<sup>c</sup></li>
-<li>3 functionele beperkingen<sup>d</sup></li>
+<li>1 functionele beperking<sup>d</sup></li>
 <li>4 valincidenten in de afgelopen 12 maanden</li>
 <li>Maakt gebruik van incontinentie medicijnen</li>
 <li>Hoogst behaalde opleiding: middelbaarberoepsonderwijs<sup>e-g</sup></li>
@@ -47,7 +47,7 @@ background-color: #dddddd;
 <br>0.088	* (0.51 - 0.9417) / 0.2760 +
 <br>-0.018 * 26.8 +
 <br>-0.003 * 128 +
-<br>0.125	* (3 - 1.2088) / 1.5286 +
+<br>0.125 * (1 - 0.5308057) / 0.9666971 +
 <br>0.426 * 1 +
 <br>0.597 * 1 +
 <br>-0.252 * 0 +
@@ -57,10 +57,10 @@ background-color: #dddddd;
 <br>0.173 * 0 +
 <br>0.324 * 0 +
 <br>0.199 * 0 +
-<br>0.195 * 1 = 0.8410895
-<br>exp(0.8410895) / (1 + exp(0.8410895)) = 0.699 = 70%
+<br>0.195 * 1 =  0.7552854
+<br>exp(0.7552854) / (1 + exp(0.7552854)) = 0.6803293 = 68%
 </p>
-<p>De pati&euml;nt heeft 70% kans om &eacute;&eacute;n keer of vaker te vallen in de komende 12 maanden.
+<p>De pati&euml;nt heeft 68% kans om &eacute;&eacute;n keer of vaker te vallen in de komende 12 maanden.
 </p>
 
 <h2>Gebruik van model</h2>
@@ -75,28 +75,13 @@ Voor het ontwikkelen van het model, waren de volgende regels gebruikt:
 <br><sup>a</sup> Hoogst behaalde meting
 <br><sup>b</sup> Deze snelheid is gebaseerd op een looptest waarin wordt gevraagd zo snel mogelijk te lopen
 <br><sup>c</sup> In het geval van meerdere metingen moet het gemiddelde genomen worden
-<br><sup>d</sup> Functionele beperkingen heeft de volgende items:
-<ol>
-<li>Kunt u een trap van 15 treden op- en aflopen zonder stil te moeten staan?</li>
-<li>Kunt u zich aan- en uitkleden?</li>
-<li>Kunt u gaan zitten en opstaan uit een stoel?</li>
-<li>Kunt u de nagels van uw tenen knippen?</li>
-<li>Kunt u buitenshuis vijf minuten aan &eacute;&eacute;n stuk lopen zonder stil te staan?</li>
-</ol>
-Met de volgende antwoordopties:
-<ol>
-<li>ja, zonder moeite</li>
-<li>ja, met enige moeite</li>
-<li>ja, met veel moeite</li>
-<li>alleen met hulp / nee, dat kan ik niet</li>
-</ol>
-Ieder item waarop de pati&euml;nt antwoord met antwoordopties 2, 3, of 4 telt als &eacute;&eacute;n functionele beperking. De maximum score voor deze variabele is dan ook 5. Het minimum is 0.
+<br><sup>d</sup> Score op KATZ-ADL-6. De maximum score voor deze variabele is dan 6. Het minimum is 0.
 <br><sup>e</sup> Laag: lager beroepsonderwijs: LTS, LHNO, LEAO, handels(dag)school, huishoudschool, agrarische school, praktijkdiploma, middenstandsonderwijs
 <br><sup>f</sup> Midden: middelbaarberoepsonderwijs: MBA, LO-akten, MTS, MEAO
 <br><sup>g</sup> Hoog: Hoger beroepsonderwijs: HTS, HEAO, MO-opleiding, kweekschool, sociale/pedagogische academie
 <br><sup>h</sup> Niveau 0: Helemaal niet bang: <q>Helemaal niet bezorgd</q> op alle items van de FES
-<br><sup>i</sup> Niveau 1: Een beetje bang: <q>Een beetje bezorgd</q> of <q>redelijk bezorgd</q> op een van de items van de FES
-<br><sup>j</sup> Niveau 2: Heel erg bang: <q>Erg bezorgd</q> op een van de items van de FES<br>
+<br><sup>i</sup> Niveau 1: Score van 1-7 op FES.
+<br><sup>j</sup> Niveau 2: Score van 8 of hoger op FES<br>
 <br>Afkortingen: GDS; Geriatric Depression Scale (0-15), FES; Falls Efficacy Scale
 </p>
 

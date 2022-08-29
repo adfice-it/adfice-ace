@@ -39,7 +39,7 @@ test('calculate_prediction', () => {
         edu3,
         fear1,
         fear2);
-    expect(prediction).toBe(69);
+    expect(prediction).toBe(70);
 })
 
 test('calculate_prediction_db good data', () => {
@@ -72,7 +72,7 @@ test('calculate_prediction_db good data', () => {
         education_hml,
         fear1,
         fear2);
-    expect(prediction).toBe(72);
+    expect(prediction).toBe(73);
 
     nr_falls_12m = 0;
     education_hml = 1;
@@ -91,7 +91,7 @@ test('calculate_prediction_db good data', () => {
         education_hml,
         fear1,
         fear2);
-    expect(prediction).toBe(40);
+    expect(prediction).toBe(42);
 
     nr_falls_12m = 1;
     education_hml = 2;
@@ -110,7 +110,7 @@ test('calculate_prediction_db good data', () => {
         education_hml,
         fear1,
         fear2);
-    expect(prediction).toBe(55);
+    expect(prediction).toBe(56);
 })
 
 test('calculate_prediction_db bad data', () => {
