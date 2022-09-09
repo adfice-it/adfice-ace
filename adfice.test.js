@@ -131,6 +131,23 @@ test('test doctor_id for nonexistant user_id', async () => {
     expect(doctor_id.length).toBe(36);
 });
 
+test('test remove_med', async () => {
+    let patient_id = '00000000-0000-4000-8000-100000000162';
+	let atc = 'M01AB01';
+	let sql = "INSERT INTO patient_medication " +
+	"(patient_id, ATC_code) VALUES (?,?);"
+	let params = [patient_id,atc];
+	await adfice.sql_select(sql, params);
+
+    let pre_meds = await adfice.get_meds(patient_id);
+	await adfice.remove_med(atc, patient_id);
+	let post_meds = await adfice.get_meds(patient_id);
+	
+	expect(pre_meds.length).toBe(2);
+	expect(post_meds.length).toBe(1);
+	expect(post_meds[0]['ATC_code']).not.toBe(atc);
+});
+
 test('test advice text 6e', async () => {
     //console.log('6e');
     var rule_numbers = ["6e"];

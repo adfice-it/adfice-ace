@@ -591,6 +591,14 @@ function innerTextVisibleOnly(element) {
     return result;
 }
 
+function remove_med(atc_code){
+	send_message('remove_med', function(msg) {
+        msg.atc_code = atc_code;
+    });
+    window.location.reload(true);
+    return true;
+}
+
 function copy_ehr_text_to_clipboard() {
     var allEHRText = document.getElementById("div_all_ehr_text");
     var displayed_inner_text = innerTextVisibleOnly(allEHRText);

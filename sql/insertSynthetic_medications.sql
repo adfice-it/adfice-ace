@@ -223,6 +223,7 @@ INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, gen
 ("00000000-0000-4000-8000-100000000159",(select NOW()),"dapagliflozin","dapagliflozin","A10BK01",'2019-02-11'),
 ("00000000-0000-4000-8000-100000000159",(select NOW()),"salmeterol","salmeterol","R03AC12",'2019-02-11'),
 
+("00000000-0000-4000-8000-100000000160",(select NOW()),"levodopa","levodopa","N04BA01",'2019-02-11'),
 ("00000000-0000-4000-8000-100000000162",(select NOW()),"levodopa","levodopa","N04BA01",'2019-02-11'),
 ("00000000-0000-4000-8000-100000000168",(select NOW()),"methocarbamol","methocarbamol","M03BA03",'2019-02-11'),
 

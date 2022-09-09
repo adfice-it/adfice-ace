@@ -594,6 +594,24 @@ test('Test user entering incomplete values', async t => {
 
 });
 
+test('Test remove a medication', async t => {
+	let mrn = 'DummyMRN-000000160';
+    let fhir = 'DummyFHIR-000000160';
+    let participant = 10160;
+    let window0 = await load(t, mrn, fhir, participant);
+	await change_flex_style_to_inline(t);
+	let meds = Selector ('#meds-with-rules');
+	await t.expect(meds.withText("Levodopa").exists).ok();
+	
+	let remove_levo = Selector('#remove_N04BA01');
+	await t.click(remove_levo);
+	
+	let meds2 = Selector ('#meds-with-rules');
+	await t.expect(meds2.withText("Levodopa").exists).notOk();
+	
+	// test cannot clean up after itself. Will only run correctly the first time.
+});
+
 test('Test reload data', async t => {
     let mrn = 'DummyMRN-000000174';
     let fhir = 'DummyFHIR-000000174';

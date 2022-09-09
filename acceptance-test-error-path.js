@@ -270,7 +270,7 @@ test('Test patients with no meds, probs, labs, or meas', async t => {
     let participant3 = 20002;
     let window3 = await load(t, mrn3, fhir3, participant3);
 	
-	let meds = Selector("span#meds-with-rules", { timeout: 1000 });
+	let meds = Selector("#meds-with-rules", { timeout: 1000 });
     await t.expect(meds.withText("LevoDOPA").exists).ok();
     	
 	let mrn4 = 'sir_no_meas';

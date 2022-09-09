@@ -181,14 +181,18 @@ function patient_info_lab_start() {
 }
 
 function patient_info_meds_with_rules_start() {
+	console.log("Contents of get_patient_advice");
+	console.log(get_patient_advice());
+	console.log("end get_patient_advice()");
     let rule_meds = get_patient_advice().meds_with_rules || [];
-    let html = '';
+    let html = '<table><tr><th>Medicatie</th><th>Verwijderen</th></tr>';
     for (let i = 0; i < rule_meds.length; ++i) {
         let med = rule_meds[i];
-        if (i) {
-            html += ', '
-        }
+        html += '<tr id="start_row_' + med.ATC_code + '"><td>'
         html += ucfirst(med.medication_name).trim();
+		html += '</td><td><button id="remove_' + med.ATC_code +
+			'" onclick="remove_med(\'' + med.ATC_code + 
+			'\')">Niet actueel</button></td></tr>'
     }
     html += '<br>';
     document.getElementById('meds-with-rules').innerHTML = html;

@@ -278,7 +278,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                     patient_id);
                 send_all(kind, patient_id, new_msg);
             }
-        } else if (message.type == 'patient_renew') {
+        } else if (message.type == 'remove_med') {
+			await adfice.remove_med(message.atc_code, patient_id);
+		} else if (message.type == 'patient_renew') {
             await adfice.add_log_event_renew(doctor_id, patient_id);
             let etl_opts = await autil.from_json_file(etl_opts_path);
             let refresh_data = await adfice.get_refresh_data(patient_id);
