@@ -1,7 +1,6 @@
 Important:
 * Session handling does not work correctly - session expires even if "renew session" is clicked
-* Clinicians requested that system allows medications with duplicate ATC codes (e.g. diazepam 5mg and diazepam 10mg would be listed separately)
-* Check for any possible crash-on-error spots in ETL and protect with try-catch
+* Div backgrounds do not print. Change gradient and risk bar to not use backgrounds for coloring.
 
 Mid Priority:
 * Consider moving bin/db-create-portal-tables.sh to the valportaal repo. The tables actually belong to the valportaal, although symlinking them to adfice is handy since adfice needs to write to those tables as well.
@@ -61,6 +60,12 @@ Low Priority:
   * open a bug with a tiny reproducible example
 * the "debounce" of typing input does not work reliably with headless test-cafe
   * adding a "speed:0.1" worked around it, but we should do better
+
+---------------------------------------------------------
+Requested changes (deferred to a later version):
+1. System displays different formulations with the same ATC as different medications.
+  - Since the advice is the same but the actions might be different, consider combining the display somehow
+2. Medications are usually changed gradually over multiple visits. Ideally the system would support multiple visits and changes over time.
 
 ---------------------------------------------------------
 Requested (not required) changes to rules:
