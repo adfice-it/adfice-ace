@@ -52,7 +52,7 @@ Information that is commonly provided in handouts can be selected by the clinici
 
 The Consult view gives a compact view of the options that were selected in the checkboxes on the previous page. This gives the clinician a handy place to go over the options with the patient, and make the final selection of choices.
 
-<img src = "static/screenshot_advice.png">
+<img src = "static/screenshot_advies.png">
 
 Each checkbox that the doctor selects will result in accompanying text appearing in the patient-friendly view. The doctor can go over this information with the patient, print a copy for the patient to take home.
 
