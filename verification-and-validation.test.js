@@ -407,6 +407,16 @@ test('verification2: conforms to spec', async () => {
     expect(fired0).toBe("41,42,42b,44,45");
     let fired1 = patientAdvice.medication_advice[1].fired.toString();
     expect(fired1).toBe("45,63,63b");
+	fired0 = null;
+    patientAdvice = null;
+    patient_id = "00000000-0000-4000-8000-100000000681";
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("41,42,42b,44,45");
+    fired1 = patientAdvice.medication_advice[1].fired.toString();
+	expect(fired1).toBe("45,46,48a,51a,53");
+	let fired2 = patientAdvice.medication_advice[2].fired.toString();
+    expect(fired2).toBe("45,63,63b");
     fired0 = null;
     fired1 = null;
     patientAdvice = null;
@@ -778,6 +788,8 @@ test('verification3: conforms to spec', async () => {
     patientAdvice = await adfice.get_advice_for_patient(patient_id);
     fired0 = patientAdvice.medication_advice[0].fired.toString();
     expect(fired0).toBe("78,80a,81,84,117,118");
+	
+
 });
 
 /*
