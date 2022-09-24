@@ -47,3 +47,22 @@ test('test socket env', async () => {
 
     await delete_faux_config();
 });
+
+test('test transactionality', async () => {
+	let pid = '';
+	let sql1 = "INSERT INTO patient (patient_id) VALUES (?)";
+	let p1 = ['foo'];
+	let sql2 = "INSERT INTO patient_medication (patient_id, ATC_code) VALUES (?,?)";
+	let p2 = ['foo','A01AA01'];
+	let list_of_transactions = [[sql1, p1], [sql2, p2], [sql2, p2]]; //2nd query is repeated, should throw a duplicate error
+	let db = await adb.init();
+	try{
+		db.as_sql_transaction(list_of_transactions);
+	} catch (error){
+		console.log(error); //expect a duplicate key error
+	}
+	let sql3 = 'SELECT * from patient where patient_id = ?';
+	let db2 = await adb.init();
+	let result = db2.sql_query(sql3, p1);
+	// expect(result.length).toBe(0); // expect whole transaction to fail
+});

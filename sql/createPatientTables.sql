@@ -517,7 +517,8 @@ CREATE TABLE `patient_medication` (
   `dose` varchar(100) DEFAULT NULL,
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `patient_id` (`patient_id`,`medication_name`),
+  UNIQUE KEY `patient_id-med-name` (`patient_id`,`medication_name`),
+  UNIQUE KEY `patient_id-atc` (`patient_id`,`ATC_code`),
   INDEX (`patient_id`, `ATC_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

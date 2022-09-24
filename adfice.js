@@ -78,13 +78,18 @@ async function write_patient_from_json(etl_patient) {
     list_of_transactions.push(...(probListOfInserts(patient_id, etl_patient.problems)));
     list_of_transactions.push(...(labListOfInserts(patient_id, etl_patient.labs)));
     list_of_transactions.push(...(measListOfInserts(patient_id, etl_patient.measurements)));
-
-    let result = await this.db.as_sql_transaction(list_of_transactions);
+	let result = null;
+	try{
+		result = await this.db.as_sql_transaction(list_of_transactions);
+		let meds = await this.get_meds(patient_id);
+		let meas_update = measListOfUpdatesMeds(patient_id, meds);
+		let update_result = await this.db.as_sql_transaction(meas_update);
+	} catch (error){
+		/* istanbul ignore next */
+		console.log(error);
+		console.log(JSON.stringify(list_of_transactions,null,4));
+	}
     
-	let meds = await this.get_meds(patient_id);
-	let meas_update = measListOfUpdatesMeds(patient_id, meds);
-	let update_result = await this.db.as_sql_transaction(meas_update);
-	
     return patient_id;
 }
 
