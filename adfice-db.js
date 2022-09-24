@@ -168,7 +168,7 @@ async function as_sql_transaction(sqls_and_params) {
         for (let i = 0; i < sqls_and_params.length; ++i) {
             let sql = sqls_and_params[i][0];
             let params = sqls_and_params[i][1];
-            conn.query(sql, params);
+            let rv = await conn.query(sql, params);
         }
         rs = await conn.commit();
     } finally {

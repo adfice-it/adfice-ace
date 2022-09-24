@@ -49,6 +49,10 @@ test('test socket env', async () => {
 });
 
 test('test transactionality', async () => {
+    let db = await adb.init();
+    db.sql_query("delete from patient where patient_id = 'foo'");
+    db.sql_query("delete from patient_medication where patient_id = 'foo'");
+
     let pid = '';
     let sql1 = "INSERT INTO patient (patient_id) VALUES (?)";
     let p1 = ['foo'];
@@ -59,14 +63,31 @@ test('test transactionality', async () => {
         [sql2, p2],
         [sql2, p2]
     ]; //2nd query is repeated, should throw a duplicate error
-    let db = await adb.init();
+
+    let rv = null;
+    let err = null;
     try {
-        db.as_sql_transaction(list_of_transactions);
+        rv = await db.as_sql_transaction(list_of_transactions);
+        await db.close();
+        db = null;
     } catch (error) {
-        console.log(error); //expect a duplicate key error
+        // expect a duplicate key error
+        // console.log(JSON.stringify({ note: "as_sql_transaction threw",
+        // error: error }, null, 4));
+        err = error;
     }
+    if (db) {
+        db.close();
+        db = null;
+    }
+
+    expect(err).toEqual(expect.anything());
+
     let sql3 = 'SELECT * from patient where patient_id = ?';
     let db2 = await adb.init();
-    let result = db2.sql_query(sql3, p1);
-    // expect(result.length).toBe(0); // expect whole transaction to fail
+    let result = await db2.sql_query(sql3, p1);
+    await db2.close();
+    db2 = null;
+
+    expect(result.length).toBe(0);
 });
