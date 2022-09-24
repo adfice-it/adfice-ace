@@ -1,5 +1,9 @@
 Important:
-* Session handling does not work correctly - session expires even if "renew session" is clicked
+* Double-clicking on link in EHR will cause a 2nd etl extract to launch, which will throw a crashing error when it tries to write to the DB.
+* Session handling does not work correctly 
+  - session expires even if "renew session" is clicked
+  - session sometimes expires early, seems related to loading/viewing another page, including refpages
+* medications seem to be logged twice on load
 * Div backgrounds do not print. Change gradient and risk bar to not use backgrounds for coloring.
 * Printed advies is too small. Increase font size.
 * Check for additional SQL errors similar to Wednesday's; add tests to check double meds etc. 
