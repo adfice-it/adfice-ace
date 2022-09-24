@@ -133,19 +133,19 @@ test('test doctor_id for nonexistant user_id', async () => {
 
 test('test remove_med', async () => {
     let patient_id = '00000000-0000-4000-8000-100000000162';
-	let atc = 'M01AB01';
-	let sql = "INSERT INTO patient_medication " +
-	"(patient_id, ATC_code) VALUES (?,?);"
-	let params = [patient_id,atc];
-	await adfice.sql_select(sql, params);
+    let atc = 'M01AB01';
+    let sql = "INSERT INTO patient_medication " +
+        "(patient_id, ATC_code) VALUES (?,?);"
+    let params = [patient_id, atc];
+    await adfice.sql_select(sql, params);
 
     let pre_meds = await adfice.get_meds(patient_id);
-	await adfice.remove_med(atc, patient_id);
-	let post_meds = await adfice.get_meds(patient_id);
-	
-	expect(pre_meds.length).toBe(2);
-	expect(post_meds.length).toBe(1);
-	expect(post_meds[0]['ATC_code']).not.toBe(atc);
+    await adfice.remove_med(atc, patient_id);
+    let post_meds = await adfice.get_meds(patient_id);
+
+    expect(pre_meds.length).toBe(2);
+    expect(post_meds.length).toBe(1);
+    expect(post_meds[0]['ATC_code']).not.toBe(atc);
 });
 
 test('test advice text 6e', async () => {
@@ -416,14 +416,14 @@ test('update_prediction_with_user_values, delete some data after prediction', as
     expect(measurement['prediction_result']).toBeGreaterThan(10);
     expect(measurement['user_grip_kg']).toBe(15);
 
-	//simulate user deleting an item
-	form_data = {};
+    //simulate user deleting an item
+    form_data = {};
     form_data['user_GDS_score'] = null;
-	await adfice.update_prediction_with_user_values(patient_id, form_data);
-	measurements = await adfice.get_patient_measurements(patient_id);
+    await adfice.update_prediction_with_user_values(patient_id, form_data);
+    measurements = await adfice.get_patient_measurements(patient_id);
     measurement = measurements[0];
-	expect(measurement['prediction_result']).toBeFalsy;
-	
+    expect(measurement['prediction_result']).toBeFalsy;
+
     // clean up
     let params = [patient_id];
     let sql = `/* adfice.test.js cleanup patient_measurement */
@@ -1277,12 +1277,12 @@ test('test empty meds', async function() {
     let medications = [];
     let list_of_inserts = adfice.medListOfInserts(patient_id, medications)
     expect(list_of_inserts.length).toBe(0);
-	
-	let patient = {};
-	patient.medications = medications;
-	
-	let list_of_inserts2 = adfice.medListOfInserts(patient_id, patient.medications);
-	expect(list_of_inserts2.length).toBe(0);
+
+    let patient = {};
+    patient.medications = medications;
+
+    let list_of_inserts2 = adfice.medListOfInserts(patient_id, patient.medications);
+    expect(list_of_inserts2.length).toBe(0);
 });
 
 test('test get med sql and params with some nulls', async function() {
@@ -1381,12 +1381,12 @@ test('test empty probs', async function() {
     let problems = [];
     let list_of_inserts = adfice.probListOfInserts(patient_id, problems)
     expect(list_of_inserts.length).toBe(0);
-	
-	let patient = {};
-	patient.problems = problems;
-	
-	let list_of_inserts2 = adfice.probListOfInserts(patient_id, patient.problems);
-	expect(list_of_inserts2.length).toBe(0);
+
+    let patient = {};
+    patient.problems = problems;
+
+    let list_of_inserts2 = adfice.probListOfInserts(patient_id, patient.problems);
+    expect(list_of_inserts2.length).toBe(0);
 });
 
 test('test get lab sql and params', async function() {
@@ -1419,12 +1419,12 @@ test('test empty labs', async function() {
     let labs = [];
     let list_of_inserts = adfice.labListOfInserts(patient_id, labs)
     expect(list_of_inserts.length).toBe(0);
-	
-	let patient = {};
-	patient.labs = labs;
-	
-	let list_of_inserts2 = adfice.labListOfInserts(patient_id, patient.labs);
-	expect(list_of_inserts2.length).toBe(0);
+
+    let patient = {};
+    patient.labs = labs;
+
+    let list_of_inserts2 = adfice.labListOfInserts(patient_id, patient.labs);
+    expect(list_of_inserts2.length).toBe(0);
 });
 
 test('test measListOfInserts', async function() {
@@ -1438,20 +1438,20 @@ test('test measListOfInserts', async function() {
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
         smoking_date_measured: '2021-08-05 05:00',
-		GDS_score: 2,
-		GDS_date_measured: '2022-6-24 06:00:00',
-		grip_kg: 3,
-		grip_date_measured: '2022-2-18 12:00:00',
-		walking_speed_m_per_s: 0.6,
+        GDS_score: 2,
+        GDS_date_measured: '2022-6-24 06:00:00',
+        grip_kg: 3,
+        grip_date_measured: '2022-2-18 12:00:00',
+        walking_speed_m_per_s: 0.6,
         walking_date_measured: '2022-2-18 13:00:00',
-		fear0: 0,
+        fear0: 0,
         fear1: 1,
         fear2: 0,
         fear_of_falls_date_measured: '2022-2-18 13:00:00',
-		number_of_limitations: null, 
-		functional_limit_date_measured: null,
-		nr_falls_12m: null, 
-		nr_falls_date_measured: null
+        number_of_limitations: null,
+        functional_limit_date_measured: null,
+        nr_falls_12m: null,
+        nr_falls_date_measured: null
     };
     //TODO add education level
     let measListOfInserts = adfice.measListOfInserts(patient_id, found_meas);
@@ -1465,20 +1465,20 @@ test('test measListOfInserts', async function() {
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
         smoking_date_measured: '2021-08-05 05:00',
-		GDS_score: 2,
-		GDS_date_measured: '2022-6-24 06:00:00',
-		grip_kg: 3,
-		grip_date_measured: '2022-2-18 12:00:00',
-		walking_speed_m_per_s: 0.6,
+        GDS_score: 2,
+        GDS_date_measured: '2022-6-24 06:00:00',
+        grip_kg: 3,
+        grip_date_measured: '2022-2-18 12:00:00',
+        walking_speed_m_per_s: 0.6,
         walking_date_measured: '2022-2-18 13:00:00',
-		fear0: 0,
+        fear0: 0,
         fear1: 1,
         fear2: 0,
         fear_of_falls_date_measured: '2022-2-18 13:00:00',
-		number_of_limitations: null, 
-		functional_limit_date_measured: null,
-		nr_falls_12m: null, 
-		nr_falls_date_measured: null
+        number_of_limitations: null,
+        functional_limit_date_measured: null,
+        nr_falls_12m: null,
+        nr_falls_date_measured: null
     };
     let measListOfInserts2 = adfice.measListOfInserts(patient_id, found_meas);
 
@@ -1491,20 +1491,20 @@ test('test measListOfInserts', async function() {
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
         smoking_date_measured: '2021-08-05 05:00',
-		GDS_score: 2,
-		GDS_date_measured: '2022-6-24 06:00:00',
-		grip_kg: 3,
-		grip_date_measured: '2022-2-18 12:00:00',
-		walking_speed_m_per_s: 0.6,
+        GDS_score: 2,
+        GDS_date_measured: '2022-6-24 06:00:00',
+        grip_kg: 3,
+        grip_date_measured: '2022-2-18 12:00:00',
+        walking_speed_m_per_s: 0.6,
         walking_date_measured: '2022-2-18 13:00:00',
-		fear0: 0,
+        fear0: 0,
         fear1: 1,
         fear2: 0,
         fear_of_falls_date_measured: '2022-2-18 13:00:00',
-		number_of_limitations: null, 
-		functional_limit_date_measured: null,
-		nr_falls_12m: null, 
-		nr_falls_date_measured: null
+        number_of_limitations: null,
+        functional_limit_date_measured: null,
+        nr_falls_12m: null,
+        nr_falls_date_measured: null
     };
     let measListOfInserts3 = adfice.measListOfInserts(patient_id, found_meas);
 
@@ -1518,107 +1518,110 @@ test('test empty meas', async function() {
     let meas = {};
     let list_of_inserts = adfice.measListOfInserts(patient_id, meas);
     expect(list_of_inserts.length).toBe(1);
-	
-	let patient = {};
-	patient.meas = meas;
-	
-	let list_of_inserts2 = adfice.measListOfInserts(patient_id, patient.meas);
-	expect(list_of_inserts2.length).toBe(1);
+
+    let patient = {};
+    patient.meas = meas;
+
+    let list_of_inserts2 = adfice.measListOfInserts(patient_id, patient.meas);
+    expect(list_of_inserts2.length).toBe(1);
 });
 
 test('test measListOfUpdatesMeds', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
+    let patient_id = "00000000-0000-4000-8000-100000000175";
     let meds = [{
-        ATC_code: 'N03AA01',
-        generic_name: 'testAntiEp',
-        display_name: 'Test Antiepileptic',
-        start_date: '2021-01-01',
-        dose_text: 'My instructions'
-		},
-		{
-        ATC_code: 'C08AA01',
-        generic_name: 'testCaBlocker',
-        display_name: 'Test Ca blocker',
-        start_date: '2021-01-01',
-        dose_text: 'My instructions'
-		},
-		{
-        ATC_code: 'G04BD01',
-        generic_name: 'testIncont',
-        display_name: 'Test Incont Med',
-        start_date: '2021-01-01',
-        dose_text: 'My instructions'
-	}];
-	let list_of_updates = adfice.measListOfUpdatesMeds(patient_id, meds);
-	expect(list_of_updates.length).toBe(1);
-	expect(list_of_updates[0][1][0]).toBe(1);
-	expect(list_of_updates[0][1][1]).toBe(1);
-	expect(list_of_updates[0][1][2]).toBe(1);
+            ATC_code: 'N03AA01',
+            generic_name: 'testAntiEp',
+            display_name: 'Test Antiepileptic',
+            start_date: '2021-01-01',
+            dose_text: 'My instructions'
+        },
+        {
+            ATC_code: 'C08AA01',
+            generic_name: 'testCaBlocker',
+            display_name: 'Test Ca blocker',
+            start_date: '2021-01-01',
+            dose_text: 'My instructions'
+        },
+        {
+            ATC_code: 'G04BD01',
+            generic_name: 'testIncont',
+            display_name: 'Test Incont Med',
+            start_date: '2021-01-01',
+            dose_text: 'My instructions'
+        }
+    ];
+    let list_of_updates = adfice.measListOfUpdatesMeds(patient_id, meds);
+    expect(list_of_updates.length).toBe(1);
+    expect(list_of_updates[0][1][0]).toBe(1);
+    expect(list_of_updates[0][1][1]).toBe(1);
+    expect(list_of_updates[0][1][2]).toBe(1);
 });
 
 test('test measListOfUpdatesMeds: empty meds', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
+    let patient_id = "00000000-0000-4000-8000-100000000175";
     let meds = [{
-        ATC_code: null,
-        generic_name: 'sticking plaster',
-        display_name: 'bandaid',
-        start_date: '2021-01-01',
-        dose_text: 'My instructions'
-		},
-		{
-        generic_name: 'schrodinger',
-        display_name: 'Schrodingers med',
-        start_date: '2021-01-01',
-        dose_text: 'My instructions'
-		}];
-	let list_of_updates = adfice.measListOfUpdatesMeds(patient_id, meds);
-	expect(list_of_updates.length).toBe(1);
-	expect(list_of_updates[0][1][0]).toBe(0);
-	expect(list_of_updates[0][1][1]).toBe(0);
-	expect(list_of_updates[0][1][2]).toBe(0);
-	
-	meds = [];
-	list_of_updates = adfice.measListOfUpdatesMeds(patient_id, meds);
-	expect(list_of_updates.length).toBe(1);
-	expect(list_of_updates[0][1][0]).toBe(0);
-	expect(list_of_updates[0][1][1]).toBe(0);
-	expect(list_of_updates[0][1][2]).toBe(0);
+            ATC_code: null,
+            generic_name: 'sticking plaster',
+            display_name: 'bandaid',
+            start_date: '2021-01-01',
+            dose_text: 'My instructions'
+        },
+        {
+            generic_name: 'schrodinger',
+            display_name: 'Schrodingers med',
+            start_date: '2021-01-01',
+            dose_text: 'My instructions'
+        }
+    ];
+    let list_of_updates = adfice.measListOfUpdatesMeds(patient_id, meds);
+    expect(list_of_updates.length).toBe(1);
+    expect(list_of_updates[0][1][0]).toBe(0);
+    expect(list_of_updates[0][1][1]).toBe(0);
+    expect(list_of_updates[0][1][2]).toBe(0);
+
+    meds = [];
+    list_of_updates = adfice.measListOfUpdatesMeds(patient_id, meds);
+    expect(list_of_updates.length).toBe(1);
+    expect(list_of_updates[0][1][0]).toBe(0);
+    expect(list_of_updates[0][1][1]).toBe(0);
+    expect(list_of_updates[0][1][2]).toBe(0);
 });
 
 test('test measListOfUpdatesMeds: test exceptions', async function() {
-	let patient_id = "00000000-0000-4000-8000-100000000175";
+    let patient_id = "00000000-0000-4000-8000-100000000175";
     let meds = [{
-        ATC_code: 'N03AX12',
-        generic_name: 'testNotAntiEp',
-        display_name: 'Test Not Antiepileptic',
-        start_date: '2021-01-01',
-        dose_text: 'My instructions'
-		},
-		{
-        ATC_code: 'C09AA01',
-        generic_name: 'testNotany',
-        display_name: 'Test Not Any',
-        start_date: '2021-01-01',
-        dose_text: 'My instructions'
-		},
-		{
-        ATC_code: 'G04CA53',
-        generic_name: 'testOtherIncont',
-        display_name: 'Test Other Incont Med',
-        start_date: '2021-01-01',
-        dose_text: 'My instructions'
-	}];
-	let list_of_updates = adfice.measListOfUpdatesMeds(patient_id, meds);
-	expect(list_of_updates.length).toBe(1);
-	expect(list_of_updates[0][1][0]).toBe(0);
-	expect(list_of_updates[0][1][1]).toBe(0);
-	expect(list_of_updates[0][1][2]).toBe(1);
+            ATC_code: 'N03AX12',
+            generic_name: 'testNotAntiEp',
+            display_name: 'Test Not Antiepileptic',
+            start_date: '2021-01-01',
+            dose_text: 'My instructions'
+        },
+        {
+            ATC_code: 'C09AA01',
+            generic_name: 'testNotany',
+            display_name: 'Test Not Any',
+            start_date: '2021-01-01',
+            dose_text: 'My instructions'
+        },
+        {
+            ATC_code: 'G04CA53',
+            generic_name: 'testOtherIncont',
+            display_name: 'Test Other Incont Med',
+            start_date: '2021-01-01',
+            dose_text: 'My instructions'
+        }
+    ];
+    let list_of_updates = adfice.measListOfUpdatesMeds(patient_id, meds);
+    expect(list_of_updates.length).toBe(1);
+    expect(list_of_updates[0][1][0]).toBe(0);
+    expect(list_of_updates[0][1][1]).toBe(0);
+    expect(list_of_updates[0][1][2]).toBe(1);
 });
 
 test('test writePatientFromJSON', async function() {
     let fake_pid = Math.random().toString().substr(2, 10);
     let fake_mrn = 'mrn' + fake_pid;
-	let fake_refresh = 'bogus_token';
+    let fake_refresh = 'bogus_token';
     let fake_bsn =
         fake_pid.substr(0, 2) + '-' +
         fake_pid.substr(3, 4) + '-' +
@@ -1628,10 +1631,10 @@ test('test writePatientFromJSON', async function() {
     let patient = {
         ehr_pid: fake_pid,
         mrn: fake_mrn,
-		refresh_token: fake_refresh,
+        refresh_token: fake_refresh,
         bsn: fake_bsn,
         birth_date: '1930-01-01',
-		participant_number: fake_participant
+        participant_number: fake_participant
     };
     patient.medications = [{
         ATC: 'B0GU501',
@@ -1677,20 +1680,20 @@ test('test writePatientFromJSON', async function() {
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
         smoking_date_measured: '2021-08-05 05:00',
-		GDS_score: 2,
-		GDS_date_measured: '2022-6-24 06:00:00',
-		grip_kg: 3,
-		grip_date_measured: '2022-2-18 12:00:00',
-		walking_speed_m_per_s: 0.6,
+        GDS_score: 2,
+        GDS_date_measured: '2022-6-24 06:00:00',
+        grip_kg: 3,
+        grip_date_measured: '2022-2-18 12:00:00',
+        walking_speed_m_per_s: 0.6,
         walking_date_measured: '2022-2-18 13:00:00',
-		fear0: 0,
+        fear0: 0,
         fear1: 1,
         fear2: 0,
         fear_of_falls_date_measured: '2022-2-18 13:00:00',
-		number_of_limitations: null, 
-		functional_limit_date_measured: null,
-		nr_falls_12m: null, 
-		nr_falls_date_measured: null
+        number_of_limitations: null,
+        functional_limit_date_measured: null,
+        nr_falls_12m: null,
+        nr_falls_date_measured: null
     };
     //TODO add the rest of the measurements
     let patient_id = await adfice.write_patient_from_json(patient);
@@ -1712,20 +1715,20 @@ test('test writePatientFromJSON', async function() {
     expect(retrieved_meas[0]['user_education_hml']).toBe(null);
     expect(retrieved_meas[0]['systolic_bp_mmHg']).toBe(120);
     expect(retrieved_meas[0]['smoking']).toBe(0);
-	expect(retrieved_meas[0]['GDS_score']).toBe(2);
-	expect(retrieved_meas[0]['grip_kg']).toBe(3);
-	expect(retrieved_meas[0]['walking_speed_m_per_s']).toBe(0.6);
-	expect(retrieved_meas[0]['fear1']).toBe(1);
-	expect(retrieved_meas[0]['number_of_limitations']).toBe(null);
-	expect(retrieved_meas[0]['nr_falls_12m']).toBe(null);
-	expect(retrieved_meas[0]['has_incont_med']).toBe(0);
+    expect(retrieved_meas[0]['GDS_score']).toBe(2);
+    expect(retrieved_meas[0]['grip_kg']).toBe(3);
+    expect(retrieved_meas[0]['walking_speed_m_per_s']).toBe(0.6);
+    expect(retrieved_meas[0]['fear1']).toBe(1);
+    expect(retrieved_meas[0]['number_of_limitations']).toBe(null);
+    expect(retrieved_meas[0]['nr_falls_12m']).toBe(null);
+    expect(retrieved_meas[0]['has_incont_med']).toBe(0);
 });
 
 test('test renew_patient', async function() {
     // create a patient to renew
     let fake_pid = Math.random().toString().substr(2, 10);
     let fake_mrn = 'mrn' + fake_pid;
-	let fake_refresh = 'bogus_token';
+    let fake_refresh = 'bogus_token';
     let fake_bsn =
         fake_pid.substr(0, 2) + '-' +
         fake_pid.substr(3, 4) + '-' +
@@ -1735,10 +1738,10 @@ test('test renew_patient', async function() {
     let patient = {
         ehr_pid: fake_pid,
         mrn: fake_mrn,
-		refresh_token: fake_refresh,
+        refresh_token: fake_refresh,
         bsn: fake_bsn,
         birth_date: '1930-01-01',
-		participant_number: fake_participant
+        participant_number: fake_participant
     };
     patient.medications = [{
         ATC: 'B0GU501',
@@ -1784,20 +1787,20 @@ test('test renew_patient', async function() {
         weight_date_measured: '2020-01-27 21:06',
         smoking: 0,
         smoking_date_measured: '2021-08-05 05:00',
-		GDS_score: 2,
-		GDS_date_measured: '2022-6-24 06:00:00',
-		grip_kg: 3,
-		grip_date_measured: '2022-2-18 12:00:00',
-		walking_speed_m_per_s: 0.6,
+        GDS_score: 2,
+        GDS_date_measured: '2022-6-24 06:00:00',
+        grip_kg: 3,
+        grip_date_measured: '2022-2-18 12:00:00',
+        walking_speed_m_per_s: 0.6,
         walking_date_measured: '2022-2-18 13:00:00',
-		fear0: 0,
+        fear0: 0,
         fear1: 1,
         fear2: 0,
         fear_of_falls_date_measured: '2022-2-18 13:00:00',
-		number_of_limitations: null, 
-		functional_limit_date_measured: null,
-		nr_falls_12m: null, 
-		nr_falls_date_measured: null
+        number_of_limitations: null,
+        functional_limit_date_measured: null,
+        nr_falls_12m: null,
+        nr_falls_date_measured: null
     };
     //TODO add education level
 
@@ -1805,10 +1808,10 @@ test('test renew_patient', async function() {
     let etl_patient = {
         ehr_pid: fake_pid,
         mrn: fake_mrn,
-		refresh_token: fake_refresh,
+        refresh_token: fake_refresh,
         bsn: fake_bsn,
         birth_date: '1931-01-01',
-		participant_number: fake_participant
+        participant_number: fake_participant
     };
     etl_patient.medications = [{
         ATC: 'B0GU502',
@@ -1854,20 +1857,20 @@ test('test renew_patient', async function() {
         weight_date_measured: '2022-01-27 21:06',
         smoking: 1,
         smoking_date_measured: '2022-05-05 05:00',
-		GDS_score: 2,
-		GDS_date_measured: '2022-6-24 06:00:00',
-		grip_kg: 3,
-		grip_date_measured: '2022-2-18 12:00:00',
-		walking_speed_m_per_s: 0.6,
+        GDS_score: 2,
+        GDS_date_measured: '2022-6-24 06:00:00',
+        grip_kg: 3,
+        grip_date_measured: '2022-2-18 12:00:00',
+        walking_speed_m_per_s: 0.6,
         walking_date_measured: '2022-2-18 13:00:00',
-		fear0: 0,
+        fear0: 0,
         fear1: 1,
         fear2: 0,
         fear_of_falls_date_measured: '2022-2-18 13:00:00',
-		number_of_limitations: null, 
-		functional_limit_date_measured: null,
-		nr_falls_12m: null, 
-		nr_falls_date_measured: null
+        number_of_limitations: null,
+        functional_limit_date_measured: null,
+        nr_falls_12m: null,
+        nr_falls_date_measured: null
     };
 
     let patient_id = await adfice.write_patient_from_json(patient);

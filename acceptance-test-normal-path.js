@@ -139,11 +139,11 @@ test('test incoming link from EHR', async t => {
     let participant = 100163;
     let window1 = await load(t, mrn, fhir, participant);
     const getLocation = ClientFunction(() => document.location.href);
-	let patient_id_span = Selector('span#patient-info-id');
+    let patient_id_span = Selector('span#patient-info-id');
 
     await t.expect(getLocation()).contains('/start?');
-	await t.expect(patient_id_span.withText("DummyMRN-000000163").exists).ok();
-	
+    await t.expect(patient_id_span.withText("DummyMRN-000000163").exists).ok();
+
 });
 
 test('Test selecting views', async t => {
@@ -500,8 +500,8 @@ test('Test prediction values present when user-entered', async t => {
     let prediction_table = Selector("#prediction_data_container");
     await t.expect(prediction_table.withText("16.6").exists).ok();
     await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
-	
-	let missing_table = Selector("#prediction_missing_container");
+
+    let missing_table = Selector("#prediction_missing_container");
     await t.expect(missing_table.withText("roker").exists).ok();
 });
 
@@ -526,13 +526,15 @@ test('Test user entering values', async t => {
     await t.navigateTo(url);
     await change_flex_style_to_inline(t);
 
-// Selectors that are used to check state should be awaited
+    // Selectors that are used to check state should be awaited
     let missing_table = await Selector("#prediction_missing_container");
-	let prediction = await Selector("#patient_info", { timeout: 1000 });
-	await t.expect(prediction.withText("onbekend").exists).ok();
+    let prediction = await Selector("#patient_info", {
+        timeout: 1000
+    });
+    await t.expect(prediction.withText("onbekend").exists).ok();
     await t.expect(missing_table.withText("roker").exists).ok();
     await t.expect(missing_table.visible).ok();
-	
+
     let smoking_dropdown = Selector("#user_smoking");
     await t.expect(smoking_dropdown.visible).ok();
     await t
@@ -542,19 +544,25 @@ test('Test user entering values', async t => {
         }));
     let submit_button = Selector('#button_submit_missings');
     await t.click(submit_button);
-	
-	let prediction2 = await Selector("#patient_info", { timeout: 1000 });
-	// await t.expect(prediction2.withText("75").exists).ok();
-	let missing_table2 = await Selector("#prediction_missing_container", { timeout: 1000 });
+
+    let prediction2 = await Selector("#patient_info", {
+        timeout: 1000
+    });
+    // await t.expect(prediction2.withText("75").exists).ok();
+    let missing_table2 = await Selector("#prediction_missing_container", {
+        timeout: 1000
+    });
     // await t.expect(missing_table2.withText(1).exists, { timeout: 1000 }).ok();
-	
-	let smoking_delete = Selector("#del_smoking");
-	await t.click(smoking_delete);
-	
-	let missing_table3 = await Selector("#prediction_missing_container");
+
+    let smoking_delete = Selector("#del_smoking");
+    await t.click(smoking_delete);
+
+    let missing_table3 = await Selector("#prediction_missing_container");
     await t.expect(missing_table3.withText("1").exists).notOk();
-	let prediction3 = await Selector("#gpatient_info", { timeout: 1000 });
-//	await t.expect(prediction3.withText("onbekend").exists).ok();
+    let prediction3 = await Selector("#gpatient_info", {
+        timeout: 1000
+    });
+    //	await t.expect(prediction3.withText("onbekend").exists).ok();
 
 });
 
@@ -568,7 +576,9 @@ test('Test user entering incomplete values', async t => {
     await t.navigateTo(url);
     await change_flex_style_to_inline(t);
 
-    let missing_table = await Selector("#prediction_missing_container", { timeout: 1000 });
+    let missing_table = await Selector("#prediction_missing_container", {
+        timeout: 1000
+    });
     await t.expect(missing_table.withText("GDS").exists).ok();
     await t.expect(missing_table.visible).ok();
 
@@ -585,31 +595,31 @@ test('Test user entering incomplete values', async t => {
 
     let missing_table2 = await Selector("#prediction_missing_container");
     await t.expect(missing_table2.withText("1").exists).ok();
-	
-	let GDS_delete = Selector("#del_GDS_score");
-	await t.click(GDS_delete);
-	
-	let missing_table3 = await Selector("#prediction_missing_container");
-//    await t.expect(missing_table3.withText("1").exists).notOk();
+
+    let GDS_delete = Selector("#del_GDS_score");
+    await t.click(GDS_delete);
+
+    let missing_table3 = await Selector("#prediction_missing_container");
+    //    await t.expect(missing_table3.withText("1").exists).notOk();
 
 });
 
 test('Test remove a medication', async t => {
-	let mrn = 'DummyMRN-000000160';
+    let mrn = 'DummyMRN-000000160';
     let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
     let window0 = await load(t, mrn, fhir, participant);
-	await change_flex_style_to_inline(t);
-	let meds = Selector ('#meds-with-rules');
-	await t.expect(meds.withText("Levodopa").exists).ok();
-	
-	let remove_levo = Selector('#remove_N04BA01');
-	await t.click(remove_levo);
-	
-	let meds2 = Selector ('#meds-with-rules');
-	await t.expect(meds2.withText("Levodopa").exists).notOk();
-	
-	// test cannot clean up after itself. Will only run correctly the first time.
+    await change_flex_style_to_inline(t);
+    let meds = Selector('#meds-with-rules');
+    await t.expect(meds.withText("Levodopa").exists).ok();
+
+    let remove_levo = Selector('#remove_N04BA01');
+    await t.click(remove_levo);
+
+    let meds2 = Selector('#meds-with-rules');
+    await t.expect(meds2.withText("Levodopa").exists).notOk();
+
+    // test cannot clean up after itself. Will only run correctly the first time.
 });
 
 test('Test reload data', async t => {
@@ -651,7 +661,9 @@ test('Test load new patient data', async t => {
     let window0 = await load(t, mrn, fhir, participant);
     //this test assumes we are using the stub_etl
 
-    let lab_table = Selector("#lab_table", { timeout: 1000 });
+    let lab_table = Selector("#lab_table", {
+        timeout: 1000
+    });
     await t.expect(lab_table.withText("natrium").exists).ok();
     await t.expect(lab_table.withText("135").exists).ok();
 
@@ -664,7 +676,9 @@ test('Test load new patient data with duplicated participant number', async t =>
     let window0 = await load(t, mrn, fhir, participant);
     //this test assumes we are using the stub_etl
 
-    let lab_table = Selector("#lab_table", { timeout: 1000 });
+    let lab_table = Selector("#lab_table", {
+        timeout: 1000
+    });
     await t.expect(lab_table.withText("natrium").exists).ok();
     await t.expect(lab_table.withText("135").exists).ok();
 
@@ -673,9 +687,9 @@ test('Test load new patient data with duplicated participant number', async t =>
 test('Test load new patient data with null participant number', async t => {
     let mrn = 'DummyMRN-000000178';
     let fhir = 'DummyFHIR-000000178';
-	let user = 'dr_bob';
+    let user = 'dr_bob';
     let study = '';
-	let participant = '';
+    let participant = '';
     let iss = 'https://fake.iss.example.com';
     let launch = 'BOGUSLAUNCH1';
     let url = `${BASE_URL}/load` +
@@ -687,10 +701,12 @@ test('Test load new patient data with null participant number', async t => {
         `&iss=` + encodeURIComponent(iss) +
         `&launch=${launch}`;
     // console.log("load:", url);
-    let window0 =  await t.openWindow(url);
+    let window0 = await t.openWindow(url);
     //this test assumes we are using the stub_etl
 
-    let lab_table = Selector("#lab_table", { timeout: 1000 });
+    let lab_table = Selector("#lab_table", {
+        timeout: 1000
+    });
     await t.expect(lab_table.withText("natrium").exists).ok();
     await t.expect(lab_table.withText("135").exists).ok();
 

@@ -240,7 +240,7 @@ test('Test redirect to error page if etl failed', async t => {
     let window0 = await load(t, mrn, fhir, participant);
     //this test assumes we are using the stub_etl
 
-	let getLocation = ClientFunction(() => document.location.href);
+    let getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
 
 });
@@ -251,37 +251,45 @@ test('Test patients with no meds, probs, labs, or meas', async t => {
     let participant1 = 20000;
     let window1 = await load(t, mrn1, fhir1, participant1);
     //this test assumes we are using the stub_etl
-	
-	let lab_table1 = Selector("#lab_table", { timeout: 1000 });
+
+    let lab_table1 = Selector("#lab_table", {
+        timeout: 1000
+    });
     await t.expect(lab_table1.withText("natrium").exists).ok();
     await t.expect(lab_table1.withText("135").exists).ok();
-	
-	let mrn2 = 'sir_no_prob';
+
+    let mrn2 = 'sir_no_prob';
     let fhir2 = 'sir_no_prob';
     let participant2 = 20001;
     let window2 = await load(t, mrn2, fhir2, participant2);
-	
-	let lab_table2 = Selector("#lab_table", { timeout: 1000 });
+
+    let lab_table2 = Selector("#lab_table", {
+        timeout: 1000
+    });
     await t.expect(lab_table2.withText("natrium").exists).ok();
     await t.expect(lab_table2.withText("135").exists).ok();
-	
-	let mrn3 = 'sir_no_lab';
+
+    let mrn3 = 'sir_no_lab';
     let fhir3 = 'sir_no_lab';
     let participant3 = 20002;
     let window3 = await load(t, mrn3, fhir3, participant3);
-	
-	let meds = Selector("#meds-with-rules", { timeout: 1000 });
+
+    let meds = Selector("#meds-with-rules", {
+        timeout: 1000
+    });
     await t.expect(meds.withText("LevoDOPA").exists).ok();
-    	
-	let mrn4 = 'sir_no_meas';
+
+    let mrn4 = 'sir_no_meas';
     let fhir4 = 'sir_no_meas';
     let participant4 = 20003;
     let window4 = await load(t, mrn4, fhir4, participant4);
-	
-	let lab_table4 = Selector("#lab_table", { timeout: 1000 });
+
+    let lab_table4 = Selector("#lab_table", {
+        timeout: 1000
+    });
     await t.expect(lab_table4.withText("natrium").exists).ok();
     await t.expect(lab_table4.withText("135").exists).ok();
-	
+
 });
 
 test('Test fail to reload data', async t => {
@@ -290,14 +298,14 @@ test('Test fail to reload data', async t => {
     let participant = 10179;
     let window0 = await load(t, mrn, fhir, participant);
     //this test assumes we are using the stub_etl
-	
+
     let patient_id = "00000000-0000-4000-8000-100000000179";
     let url = `${BASE_URL}/prep?id=${patient_id}`;
     await t.navigateTo(url);
     await change_flex_style_to_inline(t);
 
     let cb_levo_stop = Selector('#cb_N04BA01_27_2');
-	await t.expect(cb_levo_stop.exists).ok();
+    await t.expect(cb_levo_stop.exists).ok();
     let cb_diaz_stop = Selector('#cb_N05BA01_6e_1');
     await t.expect(cb_diaz_stop.exists).notOk();
     let button_start_view = Selector('button#button-start-view');
@@ -310,8 +318,8 @@ test('Test fail to reload data', async t => {
     await change_flex_style_to_inline(t);
     await t.expect(cb_levo_stop.exists).ok();
     await t.expect(cb_diaz_stop.exists).notOk();
-	
-	//todo can we test whether a popup showed?
+
+    //todo can we test whether a popup showed?
 
 });
 
@@ -321,7 +329,7 @@ test('Test getAuth failure', async t => {
     let study = 'studyid';
     let iss = 'https://fake.iss.example.com';
     let launch = 'BOGUSLAUNCH1';
-	let thisrnd = Math.floor(Math.random() * 1000);
+    let thisrnd = Math.floor(Math.random() * 1000);
     let url = `${BASE_URL}/load` +
         `?mrn=AuthFail` + thisrnd +
         `&fhir=AuthFail` + thisrnd +
@@ -331,7 +339,7 @@ test('Test getAuth failure', async t => {
         `&iss=` + encodeURIComponent(iss) +
         `&launch=${launch}`;
     return await t.openWindow(url);
-	let getLocation = ClientFunction(() => document.location.href);
+    let getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
 });
 
@@ -341,7 +349,7 @@ test('Test getToken failure', async t => {
     let study = 'studyid';
     let iss = 'https://fake.iss.example.com';
     let launch = 'BOGUSLAUNCH1';
-	let thisrnd = Math.floor(Math.random() * 1000);
+    let thisrnd = Math.floor(Math.random() * 1000);
     let url = `${BASE_URL}/load` +
         `?mrn=TokenFail` + thisrnd +
         `&fhir=TokenFail` + thisrnd +
@@ -351,6 +359,6 @@ test('Test getToken failure', async t => {
         `&iss=` + encodeURIComponent(iss) +
         `&launch=${launch}`;
     return await t.openWindow(url);
-	let getLocation = ClientFunction(() => document.location.href);
+    let getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
 });

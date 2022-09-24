@@ -78,18 +78,18 @@ async function write_patient_from_json(etl_patient) {
     list_of_transactions.push(...(probListOfInserts(patient_id, etl_patient.problems)));
     list_of_transactions.push(...(labListOfInserts(patient_id, etl_patient.labs)));
     list_of_transactions.push(...(measListOfInserts(patient_id, etl_patient.measurements)));
-	let result = null;
-	try{
-		result = await this.db.as_sql_transaction(list_of_transactions);
-		let meds = await this.get_meds(patient_id);
-		let meas_update = measListOfUpdatesMeds(patient_id, meds);
-		let update_result = await this.db.as_sql_transaction(meas_update);
-	} catch (error){
-		/* istanbul ignore next */
-		console.log(error);
-		console.log(JSON.stringify(list_of_transactions,null,4));
-	}
-    
+    let result = null;
+    try {
+        result = await this.db.as_sql_transaction(list_of_transactions);
+        let meds = await this.get_meds(patient_id);
+        let meas_update = measListOfUpdatesMeds(patient_id, meds);
+        let update_result = await this.db.as_sql_transaction(meas_update);
+    } catch (error) {
+        /* istanbul ignore next */
+        console.log(error);
+        console.log(JSON.stringify(list_of_transactions, null, 4));
+    }
+
     return patient_id;
 }
 
@@ -115,11 +115,11 @@ async function renew_patient(patient_id, etl_patient) {
     list_of_transactions.push([sql, params]);
 
     await this.db.as_sql_transaction(list_of_transactions);
-    
-	let meds = await this.get_meds(patient_id);
-	let meas_update = measListOfUpdatesMeds(patient_id, meds);
-	let update_result = await this.db.as_sql_transaction(meas_update);
-	
+
+    let meds = await this.get_meds(patient_id);
+    let meas_update = measListOfUpdatesMeds(patient_id, meds);
+    let update_result = await this.db.as_sql_transaction(meas_update);
+
     return patient_id;
 }
 
@@ -180,9 +180,9 @@ function dateString(date_obj) {
 
 function medListOfInserts(patient_id, medications) {
     let list_of_inserts = [];
-	if(!medications || medications.length < 1){
-		return list_of_inserts;
-	}
+    if (!medications || medications.length < 1) {
+        return list_of_inserts;
+    }
     for (let i = 0; i < medications.length; ++i) {
         let medication = medications[i];
         let sql = `/* adfice.medListOfInserts */
@@ -228,9 +228,9 @@ function medListOfInserts(patient_id, medications) {
 
 function probListOfInserts(patient_id, problems) {
     let list_of_inserts = [];
-	if(!problems || problems.length < 1){
-		return list_of_inserts;
-	}
+    if (!problems || problems.length < 1) {
+        return list_of_inserts;
+    }
     for (let i = 0; i < problems.length; ++i) {
         let sql = `/* adfice.probListOfInserts */
 			INSERT INTO patient_problem` +
@@ -259,9 +259,9 @@ function probListOfInserts(patient_id, problems) {
 
 function labListOfInserts(patient_id, labs) {
     let list_of_inserts = [];
-	if(!labs || labs.length < 1){
-		return list_of_inserts;
-	}
+    if (!labs || labs.length < 1) {
+        return list_of_inserts;
+    }
     for (let i = 0; i < labs.length; ++i) {
         let lab = labs[i];
         let sql =
@@ -284,21 +284,23 @@ function labListOfInserts(patient_id, labs) {
 }
 
 function measListOfInserts(patient_id, measurements) {
-	if(!measurements || Object.keys(measurements).length < 1){
-		let sql = '/* adfice.measListOfInserts */ INSERT INTO patient_measurement ' +
-        '(patient_id, date_retrieved) VALUES (?,?)';
-		let params = [patient_id, nowString()]
-		return [[sql, params]];
-	}
+    if (!measurements || Object.keys(measurements).length < 1) {
+        let sql = '/* adfice.measListOfInserts */ INSERT INTO patient_measurement ' +
+            '(patient_id, date_retrieved) VALUES (?,?)';
+        let params = [patient_id, nowString()]
+        return [
+            [sql, params]
+        ];
+    }
     let sql =
         '/* adfice.measListOfInserts */ INSERT INTO patient_measurement ' +
         '(patient_id, date_retrieved,systolic_bp_mmHg,bp_date_measured,' +
         'height_cm,height_date_measured,weight_kg,weight_date_measured,' +
         'smoking, smoking_date_measured,GDS_score,GDS_date_measured, ' +
-		'grip_kg, grip_date_measured,walking_speed_m_per_s,walking_date_measured, ' +
-		'fear0, fear1, fear2, fear_of_falls_date_measured, ' +
-		'number_of_limitations, functional_limit_date_measured, nr_falls_12m, nr_falls_date_measured) ' +
-		'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+        'grip_kg, grip_date_measured,walking_speed_m_per_s,walking_date_measured, ' +
+        'fear0, fear1, fear2, fear_of_falls_date_measured, ' +
+        'number_of_limitations, functional_limit_date_measured, nr_falls_12m, nr_falls_date_measured) ' +
+        'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     let params = [
         patient_id,
         nowString(),
@@ -310,19 +312,19 @@ function measListOfInserts(patient_id, measurements) {
         measurements['weight_date_measured'],
         measurements['smoking'],
         measurements['smoking_date_measured'],
-		measurements['GDS_score'],
+        measurements['GDS_score'],
         measurements['GDS_date_measured'],
-		measurements['grip_kg'],
+        measurements['grip_kg'],
         measurements['grip_date_measured'],
-		measurements['walking_speed_m_per_s'],
+        measurements['walking_speed_m_per_s'],
         measurements['walking_date_measured'],
-		measurements['fear0'],
+        measurements['fear0'],
         measurements['fear1'],
-		measurements['fear2'],
+        measurements['fear2'],
         measurements['fear_of_falls_date_measured'],
-		measurements['number_of_limitations'],
+        measurements['number_of_limitations'],
         measurements['functional_limit_date_measured'],
-		measurements['nr_falls_12m'],
+        measurements['nr_falls_12m'],
         measurements['nr_falls_date_measured']
     ];
 
@@ -333,42 +335,42 @@ function measListOfInserts(patient_id, measurements) {
 }
 
 function measListOfUpdatesMeds(patient_id, meds) {
-	let has_antiepileptica = 0;
+    let has_antiepileptica = 0;
     let has_ca_blocker = 0;
     let has_incont_med = 0;
-	for (let i = 0; i < meds.length; ++i) {
-		if(meds[i]['ATC_code']){
-			if(meds[i]['ATC_code'].startsWith('N03') && 
-				meds[i]['ATC_code'] != 'N03AX12' &&
-				meds[i]['ATC_code'] != 'N03AX16'){
-					has_antiepileptica = 1;
-			}
-			if(meds[i]['ATC_code'].startsWith('C08')){
-					has_ca_blocker = 1;
-			}
-			if(meds[i]['ATC_code'].startsWith('G04BD') || 
-				meds[i]['ATC_code'] === 'G04CA53'){
-					has_incont_med = 1;
-			}
-		}
-	}
-	
-	let list_of_transactions = [];
+    for (let i = 0; i < meds.length; ++i) {
+        if (meds[i]['ATC_code']) {
+            if (meds[i]['ATC_code'].startsWith('N03') &&
+                meds[i]['ATC_code'] != 'N03AX12' &&
+                meds[i]['ATC_code'] != 'N03AX16') {
+                has_antiepileptica = 1;
+            }
+            if (meds[i]['ATC_code'].startsWith('C08')) {
+                has_ca_blocker = 1;
+            }
+            if (meds[i]['ATC_code'].startsWith('G04BD') ||
+                meds[i]['ATC_code'] === 'G04CA53') {
+                has_incont_med = 1;
+            }
+        }
+    }
+
+    let list_of_transactions = [];
     let sql = '/* adfice.measListOfUpdatesMeds */ UPDATE patient_measurement ' +
         'SET has_antiepileptica = ?, has_ca_blocker = ?, has_incont_med = ? ' +
         "WHERE patient_id = '" + patient_id + "'";
     list_of_transactions.push([sql, [has_antiepileptica, has_ca_blocker, has_incont_med]]);
-	return list_of_transactions;
+    return list_of_transactions;
 }
 
-async function remove_med(atc_code, patient_id){
-	var sql = `/* adfice.remove_med */
+async function remove_med(atc_code, patient_id) {
+    var sql = `/* adfice.remove_med */
         DELETE
         FROM patient_medication
         WHERE ATC_code = ? AND patient_id = ?;`;
-	var params = [atc_code, patient_id];
+    var params = [atc_code, patient_id];
     let deleted = await this.db.sql_query(sql, params);;
-	return deleted;
+    return deleted;
 }
 
 async function get_all_advice_texts_checkboxes() {
@@ -691,7 +693,7 @@ async function calculate_prediction_result(patient_id) {
         return null;
     }
     let measurement = measurements[0];
-	//any value that can be = 0 cannot use the || syntax
+    //any value that can be = 0 cannot use the || syntax
     let GDS_score = measurement['GDS_score'];
     if (GDS_score == null) {
         GDS_score = measurement['user_GDS_score'];
@@ -701,22 +703,22 @@ async function calculate_prediction_result(patient_id) {
         measurement['user_walking_speed_m_per_s'];
     //prefer BMI calculated by EHR; then calculated from EHR height and weight, then user-entered
     let BMI = measurement['BMI'];
-	let user_BMI = null;
-	if(!BMI){
-		if (measurement['height_cm'] != null &&
-			measurement['weight_kg'] != null) {
-			BMI = measurement['weight_kg'] /
-				((measurement['height_cm']) ^ 2);
-		} else {
-			/* istanbul ignore else */
-			if (measurement['user_height_cm'] != null &&
-			measurement['user_weight_kg'] != null) {
-			user_BMI = measurement['user_weight_kg'] /
-				((measurement['user_height_cm']) ^ 2);
-			} // else user_BMI stays null
-			BMI = user_BMI;
-		}
-	}
+    let user_BMI = null;
+    if (!BMI) {
+        if (measurement['height_cm'] != null &&
+            measurement['weight_kg'] != null) {
+            BMI = measurement['weight_kg'] /
+                ((measurement['height_cm']) ^ 2);
+        } else {
+            /* istanbul ignore else */
+            if (measurement['user_height_cm'] != null &&
+                measurement['user_weight_kg'] != null) {
+                user_BMI = measurement['user_weight_kg'] /
+                    ((measurement['user_height_cm']) ^ 2);
+            } // else user_BMI stays null
+            BMI = user_BMI;
+        }
+    }
     let systolic_bp_mmHg = measurement['systolic_bp_mmHg'] ||
         measurement['user_systolic_bp_mmHg'];
     let number_of_limitations = measurement['number_of_limitations'];
@@ -1003,7 +1005,7 @@ async function get_advice_for_patient(patient_id) {
     }
 
     let age = patient.age;
-	let is_final = false;
+    let is_final = false;
     if (patient.is_final) {
         is_final = true;
     }
@@ -1118,7 +1120,7 @@ async function get_advice_for_patient(patient_id) {
     let patient_advice = {};
     patient_advice.patient_id = patient_id;
     patient_advice.age = age;
-	patient_advice.mrn = patient.mrn;
+    patient_advice.mrn = patient.mrn;
     patient_advice.is_final = is_final;
     patient_advice.labs = lab_rows;
     patient_advice.medications = meds;
@@ -1480,11 +1482,11 @@ async function get_refresh_data(patient_id) {
     if (results.length == 0) {
         return null;
     }
-	let result = {
-		mrn: results[0].mrn,
-		fhir: results[0].fhir,
-		refresh_token: results[0].refresh_token
-	}
+    let result = {
+        mrn: results[0].mrn,
+        fhir: results[0].fhir,
+        refresh_token: results[0].refresh_token
+    }
     return result;
 }
 
@@ -1543,7 +1545,7 @@ function adfice_init(db) {
         labListOfInserts: labListOfInserts,
         logFiredRules: logFiredRules,
         measListOfInserts: measListOfInserts,
-		measListOfUpdatesMeds: measListOfUpdatesMeds,
+        measListOfUpdatesMeds: measListOfUpdatesMeds,
         medListOfInserts: medListOfInserts,
         patientListOfInserts: patientListOfInserts,
         probListOfInserts: probListOfInserts,
@@ -1564,11 +1566,11 @@ function adfice_init(db) {
         get_advice_for_patient: get_advice_for_patient,
         get_advice_texts_checkboxes: get_advice_texts_checkboxes,
         get_patient_measurements: get_patient_measurements,
-		get_refresh_data: get_refresh_data,
+        get_refresh_data: get_refresh_data,
         id_for_fhir: id_for_fhir,
         id_for_mrn: id_for_mrn,
         mrn_for_id: mrn_for_id,
-		remove_med: remove_med,
+        remove_med: remove_med,
         renew_patient: renew_patient,
         set_advice_for_patient: set_advice_for_patient,
         shutdown: shutdown,

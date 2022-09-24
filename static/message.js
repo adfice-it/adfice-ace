@@ -113,8 +113,8 @@ function update_meas() {
     window.location.reload(true);
 }
 
-function delete_user_entered(to_be_deleted){
-	if (!message_globals.ws) {
+function delete_user_entered(to_be_deleted) {
+    if (!message_globals.ws) {
         message_globals.logger.error(
             'got a submit_missings (delete_user_entered) event but websocket is null');
         ++message_globals.weirdness;
@@ -591,8 +591,8 @@ function innerTextVisibleOnly(element) {
     return result;
 }
 
-function remove_med(atc_code){
-	send_message('remove_med', function(msg) {
+function remove_med(atc_code) {
+    send_message('remove_med', function(msg) {
         msg.atc_code = atc_code;
     });
     window.location.reload(true);

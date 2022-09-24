@@ -66,9 +66,9 @@ function page_load(before_socket) {
                 five_pages: five_pages
             }, null, 4));
         }
-		
-		let el_pi_id = document.getElementById('patient-info-id');
-		el_pi_id.innerText = five_pages.data.patient_advice.mrn;
+
+        let el_pi_id = document.getElementById('patient-info-id');
+        el_pi_id.innerText = five_pages.data.patient_advice.mrn;
 
         before_socket();
 
@@ -181,18 +181,18 @@ function patient_info_lab_start() {
 }
 
 function patient_info_meds_with_rules_start() {
-	console.log("Contents of get_patient_advice");
-	console.log(get_patient_advice());
-	console.log("end get_patient_advice()");
+    console.log("Contents of get_patient_advice");
+    console.log(get_patient_advice());
+    console.log("end get_patient_advice()");
     let rule_meds = get_patient_advice().meds_with_rules || [];
     let html = '<table><tr><th>Medicatie</th><th>Verwijderen</th></tr>';
     for (let i = 0; i < rule_meds.length; ++i) {
         let med = rule_meds[i];
         html += '<tr id="start_row_' + med.ATC_code + '"><td>'
         html += ucfirst(med.medication_name).trim();
-		html += '</td><td><button id="remove_' + med.ATC_code +
-			'" onclick="remove_med(\'' + med.ATC_code + 
-			'\')">Niet actueel</button></td></tr>'
+        html += '</td><td><button id="remove_' + med.ATC_code +
+            '" onclick="remove_med(\'' + med.ATC_code +
+            '\')">Niet actueel</button></td></tr>'
     }
     html += '<br>';
     document.getElementById('meds-with-rules').innerHTML = html;
@@ -202,7 +202,7 @@ function prediction_start() {
     let measurements = get_patient_advice().measurements || {};
     // for some unholy reason, measurements.prediction_result is null in IE when the page first loads. We'll use risk_score, which is not null.
     let risk_score = get_patient_advice().risk_score;
-	prediction_data_start(measurements);
+    prediction_data_start(measurements);
     if (risk_score == null || measurements.user_values_updated != null) {
         // if we do not have a prediction result or the prediction uses user-entered data, 
         // let the user enter/change prediction model data
@@ -313,8 +313,8 @@ function missing_data_form(measurements) {
             html += '2';
         }
         html += '</td><td class="prediction_missing"><select id="fear_dropdown" name = "fear_dropdown"><option value = ""></option><option value = "0">0: niet bang</option><option value = "1">1: een beetje/redelijk</option><option value = "2">2: erg bezorgd</option></select></td><td><button type="button" id="del_fear" onclick="delete_user_entered(\'fear0\');delete_user_entered(\'fear1\');delete_user_entered(\'fear2\')">Verwijder</button> </td>';
-		  footnote += '***Kies 0 als de patient \'Helemaal niet bezorgd\' heeft beantwoord bij alle FES vragen. Kies 1 als het totaalscore van de FES 1-7 is. Kies 2 als het totaalscore 8 of hoger is.';
-//        footnote += '***Kies 2 als de pati&euml;nt \'Erg bezorgd\' heeft beantwoord bij tenminste 1 van de items. <br/>Kies 1 als de pati&euml;nt \'Een beetje bezorgd\' of \'Redelijk bezorgd\' heeft beantwoord bij tenminste 1 van de items. <br/>Kies 0 als de pati&euml;nt \'helemaal niet bang\' heeft beantwoord bij alle items op de FES-I-SF7.';
+        footnote += '***Kies 0 als de patient \'Helemaal niet bezorgd\' heeft beantwoord bij alle FES vragen. Kies 1 als het totaalscore van de FES 1-7 is. Kies 2 als het totaalscore 8 of hoger is.';
+        //        footnote += '***Kies 2 als de pati&euml;nt \'Erg bezorgd\' heeft beantwoord bij tenminste 1 van de items. <br/>Kies 1 als de pati&euml;nt \'Een beetje bezorgd\' of \'Redelijk bezorgd\' heeft beantwoord bij tenminste 1 van de items. <br/>Kies 0 als de pati&euml;nt \'helemaal niet bang\' heeft beantwoord bij alle items op de FES-I-SF7.';
     }
     html += '</table><input id="button_submit_missings" type="button" onclick="update_meas()" value="Verstuur"></form>';
     html += '<div id="footnote_missing">' + footnote + '</div><!-- footnote_missing -->';
@@ -816,18 +816,18 @@ function nice_date(dtstring) {
 }
 
 //expects to get a nice_date
-function old_date(nice_d){
-	// nice_d is in dd-mm-yyyy
-	let dateParts = nice_d.split("-");
-	let niceDateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]); 
-let diff = (new Date() - niceDateObject) / (1000 * 3600 * 24);
-	if (!nice_d.match(/^([0-9]{2}.[0-9]{2}.[0-9]{4})$/) ||
-		!diff || diff < 30) // <30 days old
-		{
-		return '<span class="date_okay">'+ nice_d + '</span>';
-	} else {
-		return '<span class="date_old">' +  nice_d + '</span>';
-	}
+function old_date(nice_d) {
+    // nice_d is in dd-mm-yyyy
+    let dateParts = nice_d.split("-");
+    let niceDateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+    let diff = (new Date() - niceDateObject) / (1000 * 3600 * 24);
+    if (!nice_d.match(/^([0-9]{2}.[0-9]{2}.[0-9]{4})$/) ||
+        !diff || diff < 30) // <30 days old
+    {
+        return '<span class="date_okay">' + nice_d + '</span>';
+    } else {
+        return '<span class="date_old">' + nice_d + '</span>';
+    }
 }
 
 // Workaround for IE literally displaying "null" for null values
