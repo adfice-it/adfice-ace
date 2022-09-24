@@ -50,8 +50,8 @@ test('test socket env', async () => {
 
 test('test transactionality', async () => {
     let db = await adb.init();
-    db.sql_query("delete from patient where patient_id = 'foo'");
-    db.sql_query("delete from patient_medication where patient_id = 'foo'");
+    await db.sql_query("delete from patient where patient_id = 'foo'");
+    await db.sql_query("delete from patient_medication where patient_id = 'foo'");
 
     let pid = '';
     let sql1 = "INSERT INTO patient (patient_id) VALUES (?)";
