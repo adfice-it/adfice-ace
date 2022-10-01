@@ -2,9 +2,8 @@ Important:
 * Session handling does not work correctly
   - session expires even if "renew session" is clicked
   - session sometimes expires early, seems related to loading/viewing another page, including refpages
+* It would be better if OAuth2 authentication is required to start the session, regardless of whether data is pulled
 * medications seem to be logged twice on load
-* Div backgrounds do not print. Change gradient and risk bar to not use backgrounds for coloring.
-* Printed advies is too small. Increase font size.
 * Check for additional SQL errors similar to Wednesday's; add tests to check double meds etc.
 
 
