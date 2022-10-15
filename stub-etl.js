@@ -7,7 +7,8 @@
 
 const autil = require('./adfice-util');
 
-async function getAuth(options, adfice_url, req_url) {
+//id and tsec are optional params
+async function getAuth(options, adfice_url, req_url, id, tsec) {
     let url = new URL('http://example.org' + req_url);
     //allows us to simulate an authorization failure
     if (url.searchParams.get('mrn').startsWith("AuthFail")) {
@@ -22,13 +23,19 @@ async function getAuth(options, adfice_url, req_url) {
         fhir: url.searchParams.get('fhir'),
         user: url.searchParams.get('user'),
         study: url.searchParams.get('study'),
-        participant: url.searchParams.get('participant')
+        participant: url.searchParams.get('participant'),
+		patient_id: id,
+		tsec: tsec
     };
     let state_json = JSON.stringify(state_obj);
     let state_base64 = Buffer.from(state_json).toString('base64');
 
     let redir_url = new URL(adfice_url);
-    redir_url.searchParams.append('code', 'fake_code');
+	if(url.searchParams.get('user') == 'dr_bad'){
+		redir_url.searchParams.append('code', 'bad_code');
+	} else {
+		redir_url.searchParams.append('code', 'fake_code');
+	}
     redir_url.searchParams.append('state', state_base64);
     redir_url.protocol = 'http';
     let rv = {
@@ -42,7 +49,7 @@ async function getToken(code, state, adfice_url, options) {
     let decoded_state = Buffer.from(state, 'base64').toString('utf-8');
     let state_json = JSON.parse(decoded_state);
     //allows us to simulate failure to return a valid token
-    if (state_json.mrn.startsWith("TokenFail")) {
+    if (state_json.mrn.startsWith("TokenFail") || code == 'bad_code') {
         return {};
     }
     let token_json = {};

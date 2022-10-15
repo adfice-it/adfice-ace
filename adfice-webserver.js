@@ -58,7 +58,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 
     let app = express();
 
-    let max_session_ms = 15 * 60 * 1000; // 15 minutes
+    let max_session_ms = 8 * 60 * 60 * 1000; // 8 hours
     var session_manager = session({
         secret: cookie_secret,
         cookie: {
@@ -107,20 +107,44 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         let adfice_url = 'https://' + req.get('host') + '/auth';
 
         let token_json = await etl.getToken(code, state, adfice_url, etl_opts);
+		let id = null;
+		let mrn = null;
+		let fhir = null;
         if (!token_json || Object.keys(token_json).length === 0) {
             res.redirect('/load-error?err=Authorisatiefout');
         } else {
+			let decoded_state = Buffer.from(state, 'base64').toString('utf-8');
+			let state_json = JSON.parse(decoded_state);
             let user_id = token_json.user;
-            let etl_patient = await etl.etl(token_json, etl_opts);
-            if (!etl_patient || Object.keys(etl_patient).length === 0) {
-                res.redirect('/load-error?err=Error%20met%20laden%20van%20patientdata');
-            } else {
-                let id = await adfice.write_patient_from_json(etl_patient);
-                let mrn = etl_patient.mrn;
-                let fhir = etl_patient.ehr_pid;
-                let load_url = '/load?mrn=' + mrn + '&fhir=' + fhir + '&user=' + user_id;
-                res.redirect(load_url);
+			if(state_json.patient_id){
+				id = state_json.patient_id;
+				mrn = state_json.mrn;
+				fhir = state_json.ehr_pid;
+			} else {
+				let etl_patient = await etl.etl(token_json, etl_opts);
+				if (!etl_patient || Object.keys(etl_patient).length === 0) {
+					res.redirect('/load-error?err=Error%20met%20laden%20van%20patientdata');
+				} else {
+					id = await adfice.write_patient_from_json(etl_patient);
+					mrn = etl_patient.mrn;
+					fhir = etl_patient.ehr_pid;
+				}
             }
+			if(id){ //otherwise it will try to run this even if etl fails
+				await adfice.add_log_event_access(user_id, id);
+				let doctor_id = await adfice.doctor_id_for_user(user_id);
+				log_debug(server, 'setting doctor id:', doctor_id);
+				req.session.doctor_id = doctor_id;
+
+				// For testing, allow the session timeout to be set to a shorter value. It cannot be set to a longer value.
+				let tsec = state_json.tsec;
+				if (tsec < max_session_ms / 1000) {
+					req.session.cookie.maxAge = tsec * 1000;
+				}
+
+				res.redirect('/start?id=' + id);
+			}
+
         }
     });
 
@@ -166,34 +190,19 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 
         let encoded_err = null;
 
-        if (!id) {
-            try {
-                let etl_opts = await autil.from_json_file(etl_opts_path);
-                let auth = await etl.getAuth(etl_opts, adfice_url, req.url);
-                if (Object.keys(auth).length == 0) {
-                    res.redirect('/load-error?err=authorisatiefout');
-                } else {
-                    res.set(auth.headers);
-                    res.redirect(auth.url);
-                }
-            } catch (err) {
-                encoded_err = encodeURIComponent('' + err);
-                res.redirect('/load-error?err=' + encoded_err);
-            }
-        } else {
-            await adfice.add_log_event_access(user_id, id);
-            let doctor_id = await adfice.doctor_id_for_user(user_id);
-            log_debug(server, 'setting doctor id:', doctor_id);
-            req.session.doctor_id = doctor_id;
-
-            // For testing, allow the session timeout to be set to a shorter value. It cannot be set to a longer value.
-            let tsec = req.query.tsec;
-            if (tsec < max_session_ms / 1000) {
-                req.session.cookie.maxAge = tsec * 1000;
-            }
-
-            res.redirect('/start?id=' + id);
-        }
+		try {
+			let etl_opts = await autil.from_json_file(etl_opts_path);
+			let auth = await etl.getAuth(etl_opts, adfice_url, req.url, id, req.query.tsec);
+			if (Object.keys(auth).length == 0) {
+				res.redirect('/load-error?err=authorisatiefout');
+			} else {
+				res.set(auth.headers);
+				res.redirect(auth.url);
+			}
+		} catch (err) {
+			encoded_err = encodeURIComponent('' + err);
+			res.redirect('/load-error?err=' + encoded_err);
+		}
     });
 
     // // sketch of post support

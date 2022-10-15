@@ -362,3 +362,23 @@ test('Test getToken failure', async t => {
     let getLocation = ClientFunction(() => document.location.href);
     await t.expect(getLocation()).contains('load-error');
 });
+
+test('Test unauthorized user', async t => {
+    //this test assumes we are using the stub_etl
+    let user = 'dr_bad';
+    let study = 'studyid';
+    let iss = 'https://fake.iss.example.com';
+    let launch = 'BOGUSLAUNCH1';
+    let thisrnd = Math.floor(Math.random() * 1000);
+    let url = `${BASE_URL}/load` +
+        `?mrn= thisrnd` +
+        `&fhir= thisrnd` +
+        `&user=${user}` +
+        `&study=${study}` +
+        `&participant=1` + thisrnd +
+        `&iss=` + encodeURIComponent(iss) +
+        `&launch=${launch}`;
+    return await t.openWindow(url);
+    let getLocation = ClientFunction(() => document.location.href);
+    await t.expect(getLocation()).contains('load-error');
+});
