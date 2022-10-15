@@ -871,7 +871,7 @@ test('Show session timeout warning 2m before session timeout; session reset if b
     // fixture `[API] Get Cookies`;
     // should have a method getCookies() that allows us to inspect cookies, but this does not seem to work.
 });
-if(0){
+
 test('Session expires if time <10s', async t => {
     let mrn = 'DummyMRN-000000160';
     let fhir = 'DummyFHIR-000000160';
@@ -1027,4 +1027,3 @@ test('Checkbox persistence', async t => {
 
 //TODO check what etl returns when some meas are missing, and make sure adfice handles this correctly.
 //JSON tends to just delete null values; make sure this doesn't cause problems.
-}
