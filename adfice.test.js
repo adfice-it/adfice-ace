@@ -1894,3 +1894,47 @@ test('test renew_patient', async function() {
     expect(retrieved_meas[0]['systolic_bp_mmHg']).toBe(120);
     expect(retrieved_meas[0]['smoking']).toBe(1);
 });
+
+test('test writePatientFromJSON bad data', async function() {
+    let fake_pid = Math.random().toString().substr(2, 10);
+    let fake_mrn = 'mrn' + fake_pid;
+    let fake_refresh = 'bogus_token';
+    let fake_bsn =
+        fake_pid.substr(0, 2) + '-' +
+        fake_pid.substr(3, 4) + '-' +
+        fake_pid.substr(5, 7);
+    let fake_participant = 'study' + fake_pid.substr(5, 10);
+
+    let patient = {
+        ehr_pid: fake_pid,
+        mrn: fake_mrn,
+        refresh_token: fake_refresh,
+        bsn: fake_bsn,
+        birth_date: '1930-01-01',
+        participant_number: fake_participant
+    };
+    patient.medications = [
+    {
+        ATC: 'B0GU501',
+        generic_name: 'testdrug',
+        display_name: 'Test Drug',
+        start_date: '2021-01-01',
+        dose_text: 'My instructions'
+    },
+    {
+        ATC: 'STOP',
+        generic_name: 'testdrug',
+        display_name: 'Test Drug',
+        start_date: '2021-01-01',
+        dose_text: 'My instructions'
+    },
+    ];
+
+    let caught = null;
+    try {
+        let patient_id = await adfice.write_patient_from_json(patient);
+    } catch (error) {
+        caught = error;
+    }
+    expect(caught).not.toBe(null);
+});

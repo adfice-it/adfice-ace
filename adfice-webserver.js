@@ -125,7 +125,11 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 				if (!etl_patient || Object.keys(etl_patient).length === 0) {
 					res.redirect('/load-error?err=Error%20met%20laden%20van%20patientdata');
 				} else {
-					id = await adfice.write_patient_from_json(etl_patient);
+                                        try {
+					    id = await adfice.write_patient_from_json(etl_patient);
+                                        } catch (error) {
+					    res.redirect('/load-error?err=Error%20met%20laden%20van%20patientdata');
+                                        }
 					mrn = etl_patient.mrn;
 					fhir = etl_patient.ehr_pid;
 				}
