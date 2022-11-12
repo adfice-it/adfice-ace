@@ -112,44 +112,46 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         let fhir = null;
         if (!token_json || Object.keys(token_json).length === 0) {
             res.redirect('/load-error?err=Authorisatiefout');
-        } else {
-            let decoded_state = Buffer.from(state, 'base64').toString('utf-8');
-            let state_json = JSON.parse(decoded_state);
-            let user_id = token_json.user;
-            if (state_json.patient_id) {
-                id = state_json.patient_id;
-                mrn = state_json.mrn;
-                fhir = state_json.ehr_pid;
-            } else {
-                let etl_patient = await etl.etl(token_json, etl_opts);
-                if (!etl_patient || Object.keys(etl_patient).length === 0) {
-                    res.redirect('/load-error?err=Error%20met%20laden%20van%20patientdata');
-                } else {
-                    try {
-                        id = await adfice.write_patient_from_json(etl_patient);
-                    } catch (error) {
-                        res.redirect('/load-error?err=Error%20met%20laden%20van%20patientdata');
-                    }
-                    mrn = etl_patient.mrn;
-                    fhir = etl_patient.ehr_pid;
-                }
-            }
-            if (id) { //otherwise it will try to run this even if etl fails
-                await adfice.add_log_event_access(user_id, id);
-                let doctor_id = await adfice.doctor_id_for_user(user_id);
-                log_debug(server, 'setting doctor id:', doctor_id);
-                req.session.doctor_id = doctor_id;
-
-                // For testing, allow the session timeout to be set to a shorter value. It cannot be set to a longer value.
-                let tsec = state_json.tsec;
-                if (tsec < max_session_ms / 1000) {
-                    req.session.cookie.maxAge = tsec * 1000;
-                }
-
-                res.redirect('/start?id=' + id);
-            }
-
+            return;
         }
+        let decoded_state = Buffer.from(state, 'base64').toString('utf-8');
+        let state_json = JSON.parse(decoded_state);
+        let user_id = token_json.user;
+        if (state_json.patient_id) {
+            id = state_json.patient_id;
+            mrn = state_json.mrn;
+            fhir = state_json.ehr_pid;
+        } else {
+            let etl_patient = await etl.etl(token_json, etl_opts);
+            if (!etl_patient || Object.keys(etl_patient).length === 0) {
+                res.redirect('/load-error?err=Error%20met%20laden%20van%20patientdata');
+                return;
+            }
+            try {
+                id = await adfice.write_patient_from_json(etl_patient);
+                mrn = etl_patient.mrn;
+                fhir = etl_patient.ehr_pid;
+            } catch (error) {
+                res.redirect('/load-error?err=Error%20met%20laden%20van%20patientdata');
+                return;
+            }
+        }
+        if (!id) {
+            res.redirect('/load-error?err=Error%20met%20laden%20van%20patientdata');
+            return;
+        }
+        await adfice.add_log_event_access(user_id, id);
+        let doctor_id = await adfice.doctor_id_for_user(user_id);
+        log_debug(server, 'setting doctor id:', doctor_id);
+        req.session.doctor_id = doctor_id;
+
+        // For testing, allow the session timeout to be set to a shorter value. It cannot be set to a longer value.
+        let tsec = state_json.tsec;
+        if (tsec < max_session_ms / 1000) {
+            req.session.cookie.maxAge = tsec * 1000;
+        }
+
+        res.redirect('/start?id=' + id);
     });
 
     app.get('/load', async function(req, res) {
