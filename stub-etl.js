@@ -253,6 +253,36 @@ async function etl(token_json, etl_opts) {
         };
         return patient_json;
     }
+    if (mrn == "sir_bad_meds") {
+        let bad_meds = [{
+                ATC: 'N05BA01',
+                generic_name: 'diazepam',
+                display_name: 'Diazepam',
+                start_date: '2022-1-7 13:09:35',
+                dose_text: 'Take twice daily'
+            },
+            {
+                ATC: 'STOP',
+                generic_name: 'diazepam',
+                display_name: 'Diazepam',
+                start_date: '2022-1-7 13:09:35',
+                dose_text: 'Take twice daily'
+            },
+        ];
+        let patient_json = {
+            ehr_pid: fhir,
+            mrn: mrn,
+            refresh_token: 'bogus_token',
+            bsn: fake_bsn,
+            birth_date: '1930-01-01',
+            participant_number: study + participant,
+            medications: bad_meds,
+            problems: problems,
+            labs: labs,
+            measurements: {}
+        };
+        return patient_json;
+    }
 
     let patient_json = {
         ehr_pid: fhir,

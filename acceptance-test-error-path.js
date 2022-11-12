@@ -245,6 +245,17 @@ test('Test redirect to error page if etl failed', async t => {
 
 });
 
+test('Test redirect to error page if sql write failed', async t => {
+    let mrn = 'sir_bad_meds';
+    let fhir = 'sir_bad_meds';
+    let participant = 10000;
+    let window0 = await load(t, mrn, fhir, participant);
+    //this test assumes we are using the stub_etl
+
+    let getLocation = ClientFunction(() => document.location.href);
+    await t.expect(getLocation()).contains('load-error');
+});
+
 test('Test patients with no meds, probs, labs, or meas', async t => {
     let mrn1 = 'sir_no_med';
     let fhir1 = 'sir_no_med';
