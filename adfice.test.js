@@ -1913,21 +1913,20 @@ test('test writePatientFromJSON bad data', async function() {
         birth_date: '1930-01-01',
         participant_number: fake_participant
     };
-    patient.medications = [
-    {
-        ATC: 'B0GU501',
-        generic_name: 'testdrug',
-        display_name: 'Test Drug',
-        start_date: '2021-01-01',
-        dose_text: 'My instructions'
-    },
-    {
-        ATC: 'STOP',
-        generic_name: 'testdrug',
-        display_name: 'Test Drug',
-        start_date: '2021-01-01',
-        dose_text: 'My instructions'
-    },
+    patient.medications = [{
+            ATC: 'B0GU501',
+            generic_name: 'testdrug',
+            display_name: 'Test Drug',
+            start_date: '2021-01-01',
+            dose_text: 'My instructions'
+        },
+        {
+            ATC: 'STOP',
+            generic_name: 'testdrug',
+            display_name: 'Test Drug',
+            start_date: '2021-01-01',
+            dose_text: 'My instructions'
+        },
     ];
 
     let caught = null;

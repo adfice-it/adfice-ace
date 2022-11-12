@@ -606,7 +606,7 @@ test('Test user entering incomplete values', async t => {
 });
 
 test('Test remove a medication', async t => {
-console.log('Test remove a medication can only run correctly once.');
+    console.log('Test remove a medication can only run correctly once.');
     let mrn = 'DummyMRN-000000160';
     let fhir = 'DummyFHIR-000000160';
     let participant = 10160;
@@ -625,7 +625,7 @@ console.log('Test remove a medication can only run correctly once.');
 });
 
 test('Test reload data', async t => {
-	console.log('Test reload data can only run correctly once.');
+    console.log('Test reload data can only run correctly once.');
     let mrn = 'DummyMRN-000000174';
     let fhir = 'DummyFHIR-000000174';
     let participant = 10174;

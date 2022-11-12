@@ -24,18 +24,18 @@ async function getAuth(options, adfice_url, req_url, id, tsec) {
         user: url.searchParams.get('user'),
         study: url.searchParams.get('study'),
         participant: url.searchParams.get('participant'),
-		patient_id: id,
-		tsec: tsec
+        patient_id: id,
+        tsec: tsec
     };
     let state_json = JSON.stringify(state_obj);
     let state_base64 = Buffer.from(state_json).toString('base64');
 
     let redir_url = new URL(adfice_url);
-	if(url.searchParams.get('user') == 'dr_bad'){
-		redir_url.searchParams.append('code', 'bad_code');
-	} else {
-		redir_url.searchParams.append('code', 'fake_code');
-	}
+    if (url.searchParams.get('user') == 'dr_bad') {
+        redir_url.searchParams.append('code', 'bad_code');
+    } else {
+        redir_url.searchParams.append('code', 'fake_code');
+    }
     redir_url.searchParams.append('state', state_base64);
     redir_url.protocol = 'http';
     let rv = {
