@@ -158,6 +158,11 @@ span.patient_nonmed_category{
 	display: none;
 }
 
+span.valportaal{
+	color: #f28931;
+	font-weight: bold;
+}
+
 #patient_warning{
 	background-color: #ffef16;
 	margin-top: 30px;
