@@ -25,19 +25,18 @@ truncate table research_initial_patient_measurement;
 truncate table research_last_patient_measurement;
 
 CREATE TABLE `research_map` (
-  `participant_number` int unsigned,
-  `mrn` varchar(50) NOT NULL,
+  `participant_number` varchar(50) DEFAULT NULL,
+  `mrn` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- This is a placeholder for a query that must be hand-edited each time this script is run. It will ensure that we only get data from participants, not other patients. For test purposes we'll put a few values here.
 INSERT INTO research_map (participant_number, mrn) VALUES
-(100001,'DummyMRN-000000001'),
-(100068,'DummyMRN-000000068'),
-(100172,'DummyMRN-000000172');
+('participant11','DummyMRN-000000142'),
+('participant3','DummyMRN-000000143');
 
 UPDATE patient set participant_number = 
 	(select participant_number 
-	 from reserach_map 
+	 from research_map 
 		join etl_mrn_patient on research_map.mrn = etl_mrn_patient.mrn 
 	 where etl_mrn_patient.patient_id = patient.patient_id);
 

@@ -17,7 +17,7 @@
 CREATE TABLE `research_patient` (
   `research_patient_id` int unsigned NOT NULL AUTO_INCREMENT,
   `location_id` int unsigned NOT NULL,
-  `participant_number` int unsigned NOT NULL,
+  `participant_number` varchar(50) DEFAULT NULL,
   `was_printed` tinyint(1) NOT NULL,
   `time_printed` datetime DEFAULT NULL,
   `was_copied` tinyint(1) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE `research_patient` (
 CREATE TABLE `research_initial_rules_fired` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `location_id` int unsigned NOT NULL,
-  `participant_number` int unsigned NOT NULL,
+  `participant_number` varchar(50) DEFAULT NULL,
   `initial_ATC_code` varchar(10) DEFAULT NULL,
   `initial_rules_fired` varchar(100) DEFAULT NULL,
   `initial_row_created` datetime DEFAULT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE `research_initial_rules_fired` (
 CREATE TABLE `research_last_rules_fired` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `location_id` int unsigned NOT NULL,
-  `participant_number` int unsigned NOT NULL,
+  `participant_number` varchar(50) DEFAULT NULL,
   `last_ATC_code` varchar(10) DEFAULT NULL,
   `last_rules_fired` varchar(100) DEFAULT NULL,
   `last_row_created` datetime DEFAULT NULL,
@@ -53,20 +53,20 @@ CREATE TABLE `research_last_rules_fired` (
 CREATE TABLE `research_initial_checkboxes` (
   `row_id` int unsigned NOT NULL AUTO_INCREMENT,
   `location_id` int unsigned NOT NULL,
-  `participant_number` int unsigned NOT NULL,
+  `participant_number` varchar(50) DEFAULT NULL,
   `initial_user_hash` char(56) NOT NULL,
   `initial_ATC_code` varchar(10) NOT NULL,
   `initial_medication_criteria_id` varchar(8) NOT NULL,
   `initial_select_box_num` smallint unsigned NOT NULL,
   `initial_selected` tinyint(1) NOT NULL,
   `initial_row_created` datetime DEFAULT NULL,
-   PRIMARY KEY (`row_id`),
+   PRIMARY KEY (`row_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `research_last_checkboxes` (
   `row_id` int unsigned NOT NULL AUTO_INCREMENT,
   `location_id` int unsigned NOT NULL,
-  `participant_number` int unsigned NOT NULL,
+  `participant_number` varchar(50) DEFAULT NULL,
   `last_user_hash` char(56) NOT NULL,
   `last_ATC_code` varchar(10) NOT NULL,
   `last_medication_criteria_id` varchar(8) NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE `research_last_checkboxes` (
 CREATE TABLE `research_initial_patient_measurement` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `location_id` int unsigned NOT NULL,
-  `participant_number` int unsigned NOT NULL,
+  `participant_number` varchar(50) DEFAULT NULL,
   `initial_date_retrieved` datetime DEFAULT NULL,
   `initial_education_hml` smallint unsigned DEFAULT NULL,
   `initial_height_cm` decimal(5,2) DEFAULT NULL,
@@ -121,7 +121,7 @@ CREATE TABLE `research_initial_patient_measurement` (
 CREATE TABLE `research_last_patient_measurement` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `location_id` int unsigned NOT NULL,
-  `participant_number` int unsigned NOT NULL,
+  `participant_number` varchar(50) DEFAULT NULL,
   `last_date_retrieved` datetime DEFAULT NULL,
   `last_user_education_hml` smallint unsigned DEFAULT NULL,
   `last_education_hml` smallint unsigned DEFAULT NULL,
