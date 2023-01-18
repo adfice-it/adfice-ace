@@ -49,7 +49,7 @@ CREATE TABLE `patient_history` (
   `log_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `log_row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `log_op` tinyint NOT NULL,
-  `id` int unsigned NOT NULL,
+  `id` int unsigned NOT NULL, -- note that this tracks id (the PK) not patient_id. Adding patient_id might be a good idea in the future.
   `display_name` varchar(100) DEFAULT NULL,
   `participant_number` varchar(50) DEFAULT NULL,
   `birth_date` date,
