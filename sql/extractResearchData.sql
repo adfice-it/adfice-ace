@@ -5,10 +5,6 @@
 /*
 This SQL file should *not* be run with the others.
 
-This file is meant to be run 1x or a few x per day by a cron job.
-It should eventually be pointed to another database entirely.
-The lookback is set to 7 days so it will be resiliant to 1 week of
-something going wrong.
 The bash script should be something like:
 USER=XXX
 PASS=XXX
@@ -43,7 +39,7 @@ SET patient_id = (select patient_id from etl_mrn_patient where etl_mrn_patient.m
 UPDATE patient set participant_number = 
      (select participant_number 
       from research_map 
-      where research_map.patient_id = patient.patient_id);
+      where research_map.patient_id = patient.patient_id) where participant_number is null;
 
 SET @location_id = if(@location_id is null, 0, @location_id);
 SET @lookback = if(@lookback is null, '2022-08-01', @lookback); 
