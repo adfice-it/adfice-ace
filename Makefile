@@ -186,7 +186,6 @@ check: thirdparty check-unit
 ADFICE_TAR_CONTENTS=COPYING \
 		$(shell ls *.js *.sh) \
 		example.nginx.conf \
-		export-to-portal \
 		INSTALL.md \
 		Makefile \
 		Makefile.basic \
