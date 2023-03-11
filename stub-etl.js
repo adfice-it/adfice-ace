@@ -37,9 +37,8 @@ async function getAuth(options, adfice_url, req_url, id, tsec) {
         redir_url.searchParams.append('code', 'fake_code');
     }
     redir_url.searchParams.append('state', state_base64);
-    redir_url.protocol = 'http';
     let rv = {
-        url: redir_url.toString(),
+        url: redir_url.pathname + redir_url.search,
         headers: {}
     };
     return rv;

@@ -605,58 +605,6 @@ test('Test user entering incomplete values', async t => {
 
 });
 
-test('Test remove a medication', async t => {
-    console.log('Test remove a medication can only run correctly once.');
-    let mrn = 'DummyMRN-000000160';
-    let fhir = 'DummyFHIR-000000160';
-    let participant = 10160;
-    let window0 = await load(t, mrn, fhir, participant);
-    await change_flex_style_to_inline(t);
-    let meds = Selector('#meds-with-rules');
-    await t.expect(meds.withText("Levodopa").exists).ok();
-
-    let remove_levo = Selector('#remove_N04BA01');
-    await t.click(remove_levo);
-
-    let meds2 = Selector('#meds-with-rules');
-    await t.expect(meds2.withText("Levodopa").exists).notOk();
-
-    // test cannot clean up after itself. Will only run correctly the first time.
-});
-
-test('Test reload data', async t => {
-    console.log('Test reload data can only run correctly once.');
-    let mrn = 'DummyMRN-000000174';
-    let fhir = 'DummyFHIR-000000174';
-    let participant = 10174;
-    let window0 = await load(t, mrn, fhir, participant);
-    //this test assumes we are using the stub_etl
-    let patient_id = "00000000-0000-4000-8000-100000000174";
-    let url = `${BASE_URL}/prep?id=${patient_id}`;
-    await t.navigateTo(url);
-    await change_flex_style_to_inline(t);
-
-    let cb_levo_stop = Selector('#cb_N04BA01_27_2');
-    await t.click(cb_levo_stop);
-    await t.expect(cb_levo_stop.checked).ok();
-    let cb_diaz_stop = Selector('#cb_N05BA01_6e_1');
-    await t.expect(cb_diaz_stop.exists).notOk();
-    let button_start_view = Selector('button#button-start-view');
-    await t.click(button_start_view);
-    await change_flex_style_to_inline(t);
-    let patient_renew = Selector('#patient_renew');
-    await t.click(patient_renew);
-    let button_prep_view = Selector('button#button-prep-view');
-    await t.click(button_prep_view);
-    await change_flex_style_to_inline(t);
-    await t.expect(cb_levo_stop.checked).notOk();
-    await t.expect(cb_diaz_stop.exists).ok();
-
-
-    // test cannot clean up after itself; will only run correctly 1x
-
-});
-
 test('Test load new patient data', async t => {
     let mrn = 'DummyMRN-000000175';
     let fhir = 'DummyFHIR-000000175';

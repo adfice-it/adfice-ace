@@ -18,7 +18,7 @@ mysql --defaults-file=$ADFICE_INSTALL_DIR/adfice.my.cnf \
   --execute="CREATE DATABASE adfice;"
 echo
 echo "# create the 'valportaal' database schema"
-mysql --defaults-file=$ADFICE_INSTALL_DIR/adfice.my.cnf \
+mysql --defaults-file=$ADFICE_INSTALL_DIR/adficeportaal.my.cnf \
   --execute="CREATE DATABASE valportaal;"
 
 echo
@@ -33,9 +33,15 @@ npm install
 echo "# is the DB up?"
 node ping-db.js && echo "#    yes, DB is up"
 
-echo "# initializing database tables"
+echo "# create the adfice db-scripts.env"
 ln -sv system.db-scripts.env db-scripts.env
+echo "# initializing adfice database tables"
 source bin/db-create-tables.sh
+echo
+echo "# create the adfice db-scripts.env"
+ln -sv system.portal-db-scripts.env portal-db-scripts.env
+echo "# initializing valportaal database tables"
+source bin/db-create-portal-tables.sh
 echo
 echo "# load synthetic data"
 source bin/load-synthetic-data.sh

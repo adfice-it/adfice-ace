@@ -61,7 +61,7 @@ define vm-launch
 	{ qemu-system-x86_64 -hda $(1) \
 		-m $(KVM_RAM) \
 		-smp $(KVM_CORES) \
-		-machine type=pc,accel=kvm \
+		-machine type=q35,accel=kvm:tcg \
 		-display none \
 		-nic $(VM_NIC) & \
 		echo "$$!" > '$(1).pid' ; }
@@ -77,11 +77,22 @@ define vm-launch
 	@echo '$(1) ssh via: $(shell cat $(1).ssh)'
 endef
 
+MAX_SLEEP_TO_SHUTDOWN=20
 define vm-shutdown
-	$(VM_SSH) 'shutdown -h -t 2 now & exit'
-	{ while kill -0 `cat $(1).pid`; do \
-		echo "waiting for $(1) pid `cat $(1).pid` to terminate"; \
-		sleep 1; done }
+	$(VM_SSH) 'shutdown -h now & exit'
+	{ \
+	PID=`cat $(1).pid`; \
+	COUNT=0; \
+	while kill -0 $$PID && [ $$COUNT -lt $(MAX_SLEEP_TO_SHUTDOWN) ]; do \
+		echo "$$COUNT waiting for $(1) pid $$PID to terminate"; \
+		sleep 1; \
+		COUNT=$$(( 1 + $$COUNT )); \
+	done; \
+	if kill -0 $$PID ; then \
+		echo "kill -9 $$PID to terminate with force"; \
+		kill -9 $$PID ; \
+	fi \
+	}
 	rm -v $(1).nic $(1).ssh $(1).pid
 	sleep 2
 endef
@@ -180,6 +191,7 @@ check-unit: dbsetup grep-ie-bad-words
 check: thirdparty check-unit
 	./acceptance-test-patient-validation.sh
 	./acceptance-test-cafe.sh acceptance-test-normal-path.js
+	./acceptance-test-cafe.sh acceptance-test-only-once.js
 	./acceptance-test-cafe.sh acceptance-test-error-path.js
 	@echo "SUCCESS $@"
 
@@ -195,6 +207,7 @@ ADFICE_TAR_CONTENTS=COPYING \
 		$(shell find bin sql static views -type f) \
 		$(shell find static views -type l) \
 		system.db-scripts.env \
+		system.portal-db-scripts.env \
 		testingNotes.txt \
 		$(shell ls *etl-options.json) \
 		TODO
@@ -253,7 +266,15 @@ vm-check: adfice-rocky-8.5-vm.qcow2 node_modules/.bin/testcafe
 	$(VM_SSH_ADFICE) "bash -c 'cd /data/webapps/adfice; npm test'"
 	@echo "Make sure it works before a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
-		acceptance-test-cafe.js https://127.0.0.1:$(VM_PORT_HTTPS)
+		acceptance-test-normal-path.js \
+		https://127.0.0.1:$(VM_PORT_HTTPS)
+	./node_modules/.bin/testcafe "firefox:headless" \
+		acceptance-test-only-once.js \
+		https://127.0.0.1:$(VM_PORT_HTTPS)
+	./node_modules/.bin/testcafe "firefox:headless" \
+		acceptance-test-error-path.js \
+		https://127.0.0.1:$(VM_PORT_HTTPS)
+	@echo
 	@echo
 	@echo "shutting down, to Make sure it works after a restart"
 	$(call vm-shutdown,test-adfice-rocky-8.5-vm.qcow2)
@@ -263,7 +284,8 @@ vm-check: adfice-rocky-8.5-vm.qcow2 node_modules/.bin/testcafe
 	$(call vm-launch,test-adfice-rocky-8.5-vm.qcow2)
 	@echo "Make sure it works after a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
-		acceptance-test-cafe.js https://127.0.0.1:$(VM_PORT_HTTPS)
+		acceptance-test-normal-path.js \
+		https://127.0.0.1:$(VM_PORT_HTTPS)
 	@echo
 	@echo "Make sure it automatically restarts if the service crashes"
 	$(VM_SSH) "bash -c 'ps aux | grep -e adfice-[w]ebserver'"
@@ -273,7 +295,8 @@ vm-check: adfice-rocky-8.5-vm.qcow2 node_modules/.bin/testcafe
 	sleep 5
 	$(VM_SSH) "bash -c 'ps aux | grep -e adfice-[w]ebserver'"
 	./node_modules/.bin/testcafe "firefox:headless" \
-		acceptance-test-cafe.js https://127.0.0.1:$(VM_PORT_HTTPS)
+		acceptance-test-normal-path.js \
+		https://127.0.0.1:$(VM_PORT_HTTPS)
 	$(call vm-shutdown,test-adfice-rocky-8.5-vm.qcow2)
 	@echo "SUCCESS $@"
 

@@ -106,6 +106,38 @@ DB_NAME=adfice
 DB_PW_FILE=$ADFICE_INSTALL_DIR/mariadb_user_password
 EOF
 
+echo '# generating random password for adficeportaal database user'
+touch $ADFICE_INSTALL_DIR/mariadb_adficeportaal_password
+cat /dev/urandom \
+	| tr --delete --complement 'a-zA-Z0-9' \
+	| fold --width=32 \
+	| head --lines=1 \
+	> $ADFICE_INSTALL_DIR/mariadb_adficeportaal_password
+chmod -v 600 $ADFICE_INSTALL_DIR/mariadb_adficeportaal_password
+DB_ADFICEPORTAAL_PASSWORD=`cat $ADFICE_INSTALL_DIR/mariadb_adficeportaal_password | xargs`
+
+echo '# generating adfice.my.cnf for the db commandline client'
+touch $ADFICE_INSTALL_DIR/adficeportaal.my.cnf
+chmod -v 600 $ADFICE_INSTALL_DIR/adficeportaal.my.cnf
+cat > $ADFICE_INSTALL_DIR/adficeportaal.my.cnf << EOF
+# for use with:
+# mysql --defaults-file=$ADFICE_INSTALL_DIR/adficeportaal.my.cnf
+[client]
+user=adficeportaal
+password=$DB_ADFICEPORTAAL_PASSWORD
+EOF
+
+echo '# generating portal-dbconfig.env for the application db connection'
+touch $ADFICE_INSTALL_DIR/portal-dbconfig.env
+chmod -v 600 $ADFICE_INSTALL_DIR/portal-dbconfig.env
+cat > $ADFICE_INSTALL_DIR/portal-dbconfig.env << EOF
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USER=adficeportaal
+DB_NAME=valportaal
+DB_PW_FILE=$ADFICE_INSTALL_DIR/mariadb_adficeportaal_password
+EOF
+
 echo '# generating random password for valportaal database user'
 touch $ADFICE_INSTALL_DIR/mariadb_valportaal_password
 cat /dev/urandom \
@@ -164,15 +196,23 @@ DELETE FROM mysql.global_priv WHERE User='';
 -- DELETE FROM mysql.user WHERE User='';
 --
 --
+-- Note: for testing we will use the same instance of mariadb database,
+-- but separate schemas for both adfice and valpotaal, however in production
+-- these will be on different machines
+--
 -- create the adfice user
 --
 CREATE USER adfice IDENTIFIED BY '$DB_USER_PASSWORD';
 GRANT ALL PRIVILEGES ON \`adfice\`.* TO \`adfice\`@\`%\`;
 GRANT ALL PRIVILEGES ON \`adfice_%\`.* TO \`adfice\`@\`%\`;
-GRANT ALL PRIVILEGES ON \`valportaal\`.* TO \`adfice\`@\`%\`;
-GRANT ALL PRIVILEGES ON \`valportaal_%\`.* TO \`adfice\`@\`%\`;
 --
--- create the adfice user
+-- create the adficeportaal user
+--
+CREATE USER adficeportaal IDENTIFIED BY '$DB_ADFICEPORTAAL_PASSWORD';
+GRANT ALL PRIVILEGES ON \`valportaal\`.* TO \`adficeportaal\`@\`%\`;
+GRANT ALL PRIVILEGES ON \`valportaal_%\`.* TO \`adficeportaal\`@\`%\`;
+--
+-- create the valportaal user
 --
 CREATE USER valportaal IDENTIFIED BY '$DB_PORTAL_PASSWORD';
 GRANT SELECT ON \`valportaal\`.* TO \`valportaal\`@\`%\`;
