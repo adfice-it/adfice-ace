@@ -303,6 +303,7 @@ test('Test patients with no meds, probs, labs, or meas', async t => {
 
 });
 
+
 test('Test fail to reload data', async t => {
     let mrn = 'sir_no_renew';
     let fhir = 'sir_no_renew';
@@ -323,7 +324,8 @@ test('Test fail to reload data', async t => {
     await t.click(button_start_view);
     await change_flex_style_to_inline(t);
     let patient_renew = Selector('#patient_renew');
-    await t.click(patient_renew);
+    await t.setNativeDialogHandler(
+        (type, text, url) => {}).click(patient_renew);
     let button_prep_view = Selector('button#button-prep-view');
     await t.click(button_prep_view);
     await change_flex_style_to_inline(t);
