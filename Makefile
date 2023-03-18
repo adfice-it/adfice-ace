@@ -80,9 +80,8 @@ define vm-launch
 	{ lsof -i:$(VM_PORT_HTTPS); if [ $$? -eq 0 ]; then \
 		echo "VM_PORT_HTTPS $(VM_PORT_HTTPS) not free"; false; fi; }
 	echo 'launching $(1)'
-	# -display none \
-	#
 	{ qemu-system-x86_64 -hda $(1) \
+		-display none \
 		-m $(KVM_RAM) \
 		-smp $(KVM_CORES) \
 		-machine type=q35,accel=kvm:tcg \
