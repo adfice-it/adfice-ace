@@ -1,15 +1,15 @@
 {
   "dependencies": {
-    "dotenv": "^10.0.0",
-    "ejs": "^3.1.6",
-    "express": "^4.17.1",
-    "express-session": "^1.17.2",
+    "dotenv": ">10.0.0",
+    "ejs": ">3.1.6",
+    "express": ">4.17.1",
+    "express-session": ">1.17.2",
     "mariadb": "^2.5.3",
-    "showdown": "^1.9.1"
+    "showdown": ">1.9.1"
   },
   "devDependencies": {
-    "js-beautify": "^1.14.3",
-    "jest": "^27.0.4",
+    "js-beautify": ">1.14.3",
+    "jest": ">27.0.4",
     "testcafe": "1.18.2"
   },
   "scripts": {
