@@ -235,6 +235,8 @@ ADFICE_TAR_CONTENTS=COPYING \
 		notes \
 		package.json \
 		README.md \
+		static/thirdparty/showdown.min.js \
+		static/thirdparty/showdown.min.js.map \
 		$(shell find bin sql static views -type f) \
 		$(shell find static views -type l) \
 		system.db-scripts.env \
@@ -333,7 +335,7 @@ vm-check: adfice-$(ROCKY_VERSION)-vm.qcow2 node_modules/.bin/testcafe
 	$(VM_SSH) "bash -c \"\
 		kill \$$(ps -aux | grep -e adfice-[w]ebserver | tr -s ' ' \
 		| cut -d ' ' -f 2)\""
-	sleep 5
+	sleep 20
 	$(VM_SSH) "bash -c 'ps aux | grep -e adfice-[w]ebserver'"
 	./node_modules/.bin/testcafe $(TEST_BROWSER) \
 		acceptance-test-normal-path.js \
