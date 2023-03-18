@@ -1,18 +1,18 @@
 name: ci-test
 on:
-  - push
-  - pull_request
-#  - schedule:
-#               ┌───────────── minute (0 - 59)
-#               │  ┌───────────── hour (0 - 23)
-#               │  │ ┌───────────── day of the month (1 - 31)
-#               │  │ │ ┌───────────── month (1 - 12 or JAN-DEC)
-#               │  │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
-#               │  │ │ │ │
-#               │  │ │ │ │
-#               │  │ │ │ │
-#               *  * * * *
-#     - cron:  '7 10 * * 6' # every Saturday at 09:07 UTC
+  push: {}
+  pull_request: {}
+  schedule:
+#           ┌───────────── minute (0 - 59)
+#           │  ┌───────────── hour (0 - 23)
+#           │  │ ┌───────────── day of the month (1 - 31)
+#           │  │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+#           │  │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+#           │  │ │ │ │
+#           │  │ │ │ │
+#           │  │ │ │ │
+#           *  * * * *
+    cron:  '7 10 * * 6' # every Saturday at 09:07 UTC
 
 defaults:
   run:
@@ -41,9 +41,9 @@ jobs:
           VM_PORT_HTTP=55080
           VM_PORT_HTTPS=55443
           make check
-#      - run: >
-#          TEST_BROWSER="chrome:headless"
-#          VM_PORT_SSH=55022
-#          VM_PORT_HTTP=55080
-#          VM_PORT_HTTPS=55443
-#          make -j1 vm-check
+      - run: >
+          TEST_BROWSER="chrome:headless"
+          VM_PORT_SSH=55022
+          VM_PORT_HTTP=55080
+          VM_PORT_HTTPS=55443
+          make -j1 vm-check
