@@ -20,10 +20,29 @@
 
 SHELL=/bin/bash
 ADFICE_VERSION=0.0.0
+ROCKY_VERSION=rocky-8.7
 
-VM_PORT_SSH ?= $(shell bin/free-port)
-VM_PORT_HTTP ?= $(shell bin/free-port)
-VM_PORT_HTTPS ?= $(shell bin/free-port)
+VM_PORT_SSH := $(shell \
+	if [ -z "$${VM_PORT_SSH}" ]; then \
+		bin/free-port; \
+	else \
+		echo "$${VM_PORT_SSH}"; \
+	fi \
+)
+VM_PORT_HTTP := $(shell \
+	if [ -z "$${VM_PORT_HTTP}" ]; then \
+		bin/free-port; \
+	else \
+		echo "$${VM_PORT_HTTP}"; \
+	fi \
+)
+VM_PORT_HTTPS := $(shell \
+	if [ -z "$${VM_PORT_HTTPS}" ]; then \
+		bin/free-port; \
+	else \
+		echo "$${VM_PORT_HTTPS}"; \
+	fi \
+)
 
 SSH_PARAMS=-oNoHostAuthenticationForLocalhost=yes \
 	   -i ./centos-vm/id_rsa_tmp
@@ -51,18 +70,20 @@ VM_NIC=$(shell echo 'user \
 	| sed -e's/\s\s*/,/g')
 
 define vm-launch
+	echo 'enter vm-launch $(1)'
 	{ lsof -i:$(VM_PORT_SSH); if [ $$? -eq 0 ]; then \
 		echo "VM_PORT_SSH $(VM_PORT_SSH) not free"; false; fi; }
 	{ lsof -i:$(VM_PORT_HTTP); if [ $$? -eq 0 ]; then \
 		echo "VM_PORT_HTTP $(VM_PORT_HTTP) not free"; false; fi; }
 	{ lsof -i:$(VM_PORT_HTTPS); if [ $$? -eq 0 ]; then \
 		echo "VM_PORT_HTTPS $(VM_PORT_HTTPS) not free"; false; fi; }
-	@echo 'launching $(1)'
+	echo 'launching $(1)'
+	# -display none \
+	#
 	{ qemu-system-x86_64 -hda $(1) \
 		-m $(KVM_RAM) \
 		-smp $(KVM_CORES) \
 		-machine type=q35,accel=kvm:tcg \
-		-display none \
 		-nic $(VM_NIC) & \
 		echo "$$!" > '$(1).pid' ; }
 	echo "$(VM_NIC)" > '$(1).nic'
@@ -72,9 +93,11 @@ define vm-launch
 	chmod +x '$(1).ssh'
 	ssh-keyscan -p$(VM_PORT_SSH) 127.0.0.1 \
                 | grep `cat ./centos-vm/id_rsa_host_tmp.pub | cut -f2 -d' '`
-	@echo "$(1).nic: $(shell cat $(1).nic)"
-	@echo '$(1) running, PID: $(shell cat $(1).pid)'
-	@echo '$(1) ssh via: $(shell cat $(1).ssh)'
+	echo "We are here: $(1)"
+	echo "$(1).nic: $(shell cat $(1).nic)"
+	echo '$(1) running, PID: $(shell cat $(1).pid)'
+	echo '$(1) ssh via: $(shell cat $(1).ssh)'
+	echo "exit vm-launch $(1)"
 endef
 
 MAX_SLEEP_TO_SHUTDOWN=20
@@ -236,25 +259,25 @@ adfice-user.env:
 	echo 'ADFICE_TAR_FILE=/home/adfice/adfice-ace.tar.gz' >> $@
 	echo 'ADFICE_HTTP_PORT=8081' >> $@
 
-centos-vm/basic-rocky-8.5-vm.qcow2: centos-vm/Makefile
+centos-vm/basic-$(ROCKY_VERSION)-vm.qcow2: centos-vm/Makefile
 	@echo "begin $@"
 	pushd centos-vm \
-		&& make basic-rocky-8.5-vm.qcow2 \
+		&& make basic-$(ROCKY_VERSION)-vm.qcow2 \
 		&& popd
 	@echo "SUCCESS $@"
 
-basic-rocky-8.5-vm.qcow2: centos-vm/basic-rocky-8.5-vm.qcow2
+basic-$(ROCKY_VERSION)-vm.qcow2: centos-vm/basic-$(ROCKY_VERSION)-vm.qcow2
 	@echo "begin $@"
-	cp -v centos-vm/basic-rocky-8.5-vm.qcow2 basic-rocky-8.5-vm.qcow2
-	chmod -v a-w basic-rocky-8.5-vm.qcow2
+	cp -v centos-vm/basic-$(ROCKY_VERSION)-vm.qcow2 basic-$(ROCKY_VERSION)-vm.qcow2
+	chmod -v a-w basic-$(ROCKY_VERSION)-vm.qcow2
 	@echo "SUCCESS $@"
 
-adfice-rocky-8.5-vm.qcow2: basic-rocky-8.5-vm.qcow2 \
+adfice-$(ROCKY_VERSION)-vm.qcow2: basic-$(ROCKY_VERSION)-vm.qcow2 \
 		bin/vm-init.sh \
 		adfice-ace.tar.gz \
 		adfice-user.env
 	qemu-img create -f qcow2 -F qcow2 \
-		-b basic-rocky-8.5-vm.qcow2 \
+		-b basic-$(ROCKY_VERSION)-vm.qcow2 \
 		tmp-x-vm.qcow2
 	$(call vm-launch,tmp-x-vm.qcow2)
 	$(VM_SCP) bin/vm-init.sh \
@@ -265,13 +288,13 @@ adfice-rocky-8.5-vm.qcow2: basic-rocky-8.5-vm.qcow2 \
 	$(call vm-shutdown,tmp-x-vm.qcow2)
 	mv -v tmp-x-vm.qcow2 $@
 
-vm-check: adfice-rocky-8.5-vm.qcow2 node_modules/.bin/testcafe
+vm-check: adfice-$(ROCKY_VERSION)-vm.qcow2 node_modules/.bin/testcafe
 	date
 	qemu-img create -f qcow2 -F qcow2 \
-		-b adfice-rocky-8.5-vm.qcow2 \
-		test-adfice-rocky-8.5-vm.qcow2
+		-b adfice-$(ROCKY_VERSION)-vm.qcow2 \
+		test-adfice-$(ROCKY_VERSION)-vm.qcow2
 	date
-	$(call vm-launch,test-adfice-rocky-8.5-vm.qcow2)
+	$(call vm-launch,test-adfice-$(ROCKY_VERSION)-vm.qcow2)
 	date
 	$(VM_SSH_ADFICE) "bash -c 'cd /data/webapps/adfice; npm test'"
 	date
@@ -291,12 +314,12 @@ vm-check: adfice-rocky-8.5-vm.qcow2 node_modules/.bin/testcafe
 	@echo
 	@echo
 	@echo "shutting down, to Make sure it works after a restart"
-	$(call vm-shutdown,test-adfice-rocky-8.5-vm.qcow2)
+	$(call vm-shutdown,test-adfice-$(ROCKY_VERSION)-vm.qcow2)
 	date
 	@echo
-	@echo 'launch #2 test-adfice-rocky-8.5-vm.qcow2'
+	@echo 'launch #2 test-adfice-$(ROCKY_VERSION)-vm.qcow2'
 	@echo
-	$(call vm-launch,test-adfice-rocky-8.5-vm.qcow2)
+	$(call vm-launch,test-adfice-$(ROCKY_VERSION)-vm.qcow2)
 	date
 	@echo "Make sure it works after a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
@@ -314,7 +337,7 @@ vm-check: adfice-rocky-8.5-vm.qcow2 node_modules/.bin/testcafe
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-normal-path.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
-	$(call vm-shutdown,test-adfice-rocky-8.5-vm.qcow2)
+	$(call vm-shutdown,test-adfice-$(ROCKY_VERSION)-vm.qcow2)
 	date
 	@echo "SUCCESS $@"
 
