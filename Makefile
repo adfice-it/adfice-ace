@@ -21,9 +21,9 @@
 SHELL=/bin/bash
 ADFICE_VERSION=0.0.0
 
-VM_PORT_SSH := $(shell bin/free-port)
-VM_PORT_HTTP := $(shell bin/free-port)
-VM_PORT_HTTPS := $(shell bin/free-port)
+VM_PORT_SSH ?= $(shell bin/free-port)
+VM_PORT_HTTP ?= $(shell bin/free-port)
+VM_PORT_HTTPS ?= $(shell bin/free-port)
 
 SSH_PARAMS=-oNoHostAuthenticationForLocalhost=yes \
 	   -i ./centos-vm/id_rsa_tmp
@@ -184,15 +184,22 @@ grep-ie-bad-words: $(BROWSER_JS)
 	done
 	@echo "$@ complete"
 
-check-unit: dbsetup grep-ie-bad-words
+check-unit: node_modules/.bin/testcafe dbsetup grep-ie-bad-words
+	date
 	npm test adfice
+	date
 	@echo "SUCCESS $@"
 
 check: thirdparty check-unit
+	date
 	./acceptance-test-patient-validation.sh
+	date
 	./acceptance-test-cafe.sh acceptance-test-normal-path.js
+	date
 	./acceptance-test-cafe.sh acceptance-test-only-once.js
+	date
 	./acceptance-test-cafe.sh acceptance-test-error-path.js
+	date
 	@echo "SUCCESS $@"
 
 ADFICE_TAR_CONTENTS=COPYING \
@@ -259,34 +266,44 @@ adfice-rocky-8.5-vm.qcow2: basic-rocky-8.5-vm.qcow2 \
 	mv -v tmp-x-vm.qcow2 $@
 
 vm-check: adfice-rocky-8.5-vm.qcow2 node_modules/.bin/testcafe
+	date
 	qemu-img create -f qcow2 -F qcow2 \
 		-b adfice-rocky-8.5-vm.qcow2 \
 		test-adfice-rocky-8.5-vm.qcow2
+	date
 	$(call vm-launch,test-adfice-rocky-8.5-vm.qcow2)
+	date
 	$(VM_SSH_ADFICE) "bash -c 'cd /data/webapps/adfice; npm test'"
+	date
 	@echo "Make sure it works before a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-normal-path.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
+	date
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-only-once.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
+	date
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-error-path.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
+	date
 	@echo
 	@echo
 	@echo "shutting down, to Make sure it works after a restart"
 	$(call vm-shutdown,test-adfice-rocky-8.5-vm.qcow2)
+	date
 	@echo
 	@echo 'launch #2 test-adfice-rocky-8.5-vm.qcow2'
 	@echo
 	$(call vm-launch,test-adfice-rocky-8.5-vm.qcow2)
+	date
 	@echo "Make sure it works after a restart"
 	./node_modules/.bin/testcafe "firefox:headless" \
 		acceptance-test-normal-path.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
 	@echo
+	date
 	@echo "Make sure it automatically restarts if the service crashes"
 	$(VM_SSH) "bash -c 'ps aux | grep -e adfice-[w]ebserver'"
 	$(VM_SSH) "bash -c \"\
@@ -298,6 +315,7 @@ vm-check: adfice-rocky-8.5-vm.qcow2 node_modules/.bin/testcafe
 		acceptance-test-normal-path.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
 	$(call vm-shutdown,test-adfice-rocky-8.5-vm.qcow2)
+	date
 	@echo "SUCCESS $@"
 
 submodules-update:
