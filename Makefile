@@ -22,6 +22,8 @@ SHELL=/bin/bash
 ADFICE_VERSION=0.0.0
 ROCKY_VERSION=rocky-8.7
 
+TEST_BROWSER ?= "firefox:headless"
+
 VM_PORT_SSH := $(shell \
 	if [ -z "$${VM_PORT_SSH}" ]; then \
 		bin/free-port; \
@@ -299,15 +301,15 @@ vm-check: adfice-$(ROCKY_VERSION)-vm.qcow2 node_modules/.bin/testcafe
 	$(VM_SSH_ADFICE) "bash -c 'cd /data/webapps/adfice; npm test'"
 	date
 	@echo "Make sure it works before a restart"
-	./node_modules/.bin/testcafe "firefox:headless" \
+	./node_modules/.bin/testcafe $(TEST_BROWSER) \
 		acceptance-test-normal-path.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
 	date
-	./node_modules/.bin/testcafe "firefox:headless" \
+	./node_modules/.bin/testcafe $(TEST_BROWSER) \
 		acceptance-test-only-once.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
 	date
-	./node_modules/.bin/testcafe "firefox:headless" \
+	./node_modules/.bin/testcafe $(TEST_BROWSER) \
 		acceptance-test-error-path.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
 	date
@@ -322,7 +324,7 @@ vm-check: adfice-$(ROCKY_VERSION)-vm.qcow2 node_modules/.bin/testcafe
 	$(call vm-launch,test-adfice-$(ROCKY_VERSION)-vm.qcow2)
 	date
 	@echo "Make sure it works after a restart"
-	./node_modules/.bin/testcafe "firefox:headless" \
+	./node_modules/.bin/testcafe $(TEST_BROWSER) \
 		acceptance-test-normal-path.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
 	@echo
@@ -334,7 +336,7 @@ vm-check: adfice-$(ROCKY_VERSION)-vm.qcow2 node_modules/.bin/testcafe
 		| cut -d ' ' -f 2)\""
 	sleep 5
 	$(VM_SSH) "bash -c 'ps aux | grep -e adfice-[w]ebserver'"
-	./node_modules/.bin/testcafe "firefox:headless" \
+	./node_modules/.bin/testcafe $(TEST_BROWSER) \
 		acceptance-test-normal-path.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
 	$(call vm-shutdown,test-adfice-$(ROCKY_VERSION)-vm.qcow2)
