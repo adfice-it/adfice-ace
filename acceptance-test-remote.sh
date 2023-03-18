@@ -11,8 +11,13 @@ if [ "_${ADFICE_URL}_" == "__" ]; then
 	ADFICE_URL="https://adfice.openelectronicslab.org"
 fi
 
+if [ "_${BROWSER_INIT_TIMEOUT_MS}_" == "__" ]; then
+BROWSER_INIT_TIMEOUT_MS=$(( 5 * 60 * 1000 ))
+fi
+
 set -x
 ./node_modules/.bin/testcafe \
+	--browser-init-timeout $BROWSER_INIT_TIMEOUT_MS \
 	"firefox:headless" \
 	acceptance-test-cafe.js \
 	$ADFICE_URL
