@@ -25,11 +25,13 @@ jobs:
       - run: echo 'foo' > valportaal_mariadb_root_password
       - run: echo 'foo' > valportaal_mariadb_user_password
       - run: >
+          TEST_BROWSER="chrome:headless"
           VM_PORT_SSH=55022
           VM_PORT_HTTP=55080
           VM_PORT_HTTPS=55443
           make check
       - run: >
+          TEST_BROWSER="chrome:headless"
           VM_PORT_SSH=55022
           VM_PORT_HTTP=55080
           VM_PORT_HTTPS=55443

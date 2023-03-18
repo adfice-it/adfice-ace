@@ -28,9 +28,13 @@ if [ "_${BROWSER_INIT_TIMEOUT_MS}_" == "__" ]; then
 BROWSER_INIT_TIMEOUT_MS=$(( 5 * 60 * 1000 ))
 fi
 
+if [ "_${TEST_BROWSER}_" == "__" ]; then
+	TEST_BROWSER="firefox:headless"
+fi
+
 date
 ./node_modules/.bin/testcafe \
- "firefox:headless" \
+ $TEST_BROWSER \
  $1 $BASE_URL \
  --browser-init-timeout $BROWSER_INIT_TIMEOUT_MS
 EXIT_CODE=$?
