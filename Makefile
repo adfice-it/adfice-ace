@@ -95,9 +95,9 @@ define vm-launch
 	ssh-keyscan -p$(VM_PORT_SSH) 127.0.0.1 \
                 | grep `cat ./centos-vm/id_rsa_host_tmp.pub | cut -f2 -d' '`
 	echo "We are here: $(1)"
-	echo "$(1).nic: $(shell cat $(1).nic)"
-	echo '$(1) running, PID: $(shell cat $(1).pid)'
-	echo '$(1) ssh via: $(shell cat $(1).ssh)'
+	echo -n "$(1).nic: " | cat - $(1).nic
+	echo -n "$(1) running, PID: " | cat - $(1).pid
+	echo -n "$(1) ssh via: " | cat - $(1).ssh
 	echo "exit vm-launch $(1)"
 endef
 
@@ -218,6 +218,8 @@ check: thirdparty check-unit
 	date
 	./acceptance-test-patient-validation.sh
 	date
+	./acceptance-test-cafe.sh acceptance-test-basic-start.js
+	date
 	./acceptance-test-cafe.sh acceptance-test-normal-path.js
 	date
 	./acceptance-test-cafe.sh acceptance-test-only-once.js
@@ -302,6 +304,11 @@ vm-check: adfice-$(ROCKY_VERSION)-vm.qcow2 node_modules/.bin/testcafe
 	$(VM_SSH_ADFICE) "bash -c 'cd /data/webapps/adfice; npm test'"
 	date
 	@echo "Make sure it works before a restart"
+	date
+	./node_modules/.bin/testcafe $(TEST_BROWSER) \
+		acceptance-test-basic-start.js \
+		https://127.0.0.1:$(VM_PORT_HTTPS)
+	date
 	./node_modules/.bin/testcafe $(TEST_BROWSER) \
 		acceptance-test-normal-path.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
@@ -326,7 +333,7 @@ vm-check: adfice-$(ROCKY_VERSION)-vm.qcow2 node_modules/.bin/testcafe
 	date
 	@echo "Make sure it works after a restart"
 	./node_modules/.bin/testcafe $(TEST_BROWSER) \
-		acceptance-test-normal-path.js \
+		acceptance-test-basic-start.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
 	@echo
 	date
@@ -338,7 +345,7 @@ vm-check: adfice-$(ROCKY_VERSION)-vm.qcow2 node_modules/.bin/testcafe
 	sleep 20
 	$(VM_SSH) "bash -c 'ps aux | grep -e adfice-[w]ebserver'"
 	./node_modules/.bin/testcafe $(TEST_BROWSER) \
-		acceptance-test-normal-path.js \
+		acceptance-test-basic-start.js \
 		https://127.0.0.1:$(VM_PORT_HTTPS)
 	$(call vm-shutdown,test-adfice-$(ROCKY_VERSION)-vm.qcow2)
 	date
@@ -363,3 +370,6 @@ jest:
 	@echo 'if this fails, consider "make check"'
 	npm test adfice
 	@echo "SUCCESS $@"
+
+clean:
+	rm -rfv *qcow2* *.tar.*

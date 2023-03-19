@@ -106,19 +106,6 @@ async function check_checkbox_and_freetext(t, mrn, fhir, participant, id) {
 // TODO: make launching of the adfice-webserver the job of the test
 // TODO: have each test launch a different adfice instance on a different port
 
-test('test incoming link from EHR', async t => {
-    let mrn = 'DummyMRN-000000163';
-    let fhir = 'DummyFHIR-000000163';
-    let participant = 100163;
-    let window1 = await load(t, mrn, fhir, participant);
-    const getLocation = ClientFunction(() => document.location.href);
-    let patient_id_span = Selector('span#patient-info-id');
-
-    await t.expect(getLocation()).contains('/start?');
-    await t.expect(patient_id_span.withText("DummyMRN-000000163").exists).ok();
-
-});
-
 test('Automatic selection of free text checkbox when text entered', async t => {
     let mrn = 'DummyMRN-000000024';
     let fhir = 'DummyFHIR-000000024';
