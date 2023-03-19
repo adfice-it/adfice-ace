@@ -28,6 +28,8 @@ jobs:
            build-essential
            docker-compose
            genisoimage
+           qemu-system-x86
+           qemu-utils
       - uses: actions/setup-node@v1
         with:
           node-version: '16'
