@@ -41,6 +41,7 @@ jobs:
           VM_PORT_HTTP=55080
           VM_PORT_HTTPS=55443
           make check
+      - run: echo 'foo' > centos/vm_root_password
       - run: >
           TEST_BROWSER="chrome:headless"
           VM_PORT_SSH=55022
