@@ -41,6 +41,7 @@ jobs:
           VM_PORT_HTTP=55080
           VM_PORT_HTTPS=55443
           make check
+      - run: git submodule update --init --recursive
       - run: echo 'foo' > centos-vm/vm_root_password
       - run: >
           TEST_BROWSER="chrome:headless"
