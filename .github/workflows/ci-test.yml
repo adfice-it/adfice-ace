@@ -23,6 +23,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: cat /proc/cpuinfo
+      - name: check-for-nested-virtualization
+        run: grep -E '^flags.*(vmx|svm)' /proc/cpuinfo
+          && echo "looks we can nest virtual machines"
+          || echo "nested virtual machines unlikely to work"
+      - name: try-to-modprobe
+        run: sudo modprobe kvm-intel || sudo modprobe kvm-amd || true
       - name: apt-get deps
         run: sudo apt-get install -y
            build-essential
