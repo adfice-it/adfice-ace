@@ -30,7 +30,11 @@ jobs:
           || echo "nested virtual machines unlikely to work"
       - name: try-to-modprobe
         run: sudo modprobe kvm-intel || sudo modprobe kvm-amd || true
-      - name: apt-get deps
+      - name: apt-get-update
+        run: sudo apt-get update
+      - name: apt-get-upgrade
+        run: sudo apt-get upgrade -y
+      - name: apt-get-install-deps
         run: sudo apt-get install -y
            build-essential
            docker-compose
