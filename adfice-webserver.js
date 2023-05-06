@@ -38,9 +38,11 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     async function get_data_for_patient(req, res) {
         let patient_id = req.query.id || req.query.patient || 0;
         let patient_advice = await adfice.get_advice_for_patient(patient_id);
+		let help_phone = await adfice.get_help_phone();
         let data = {
             patient_id: patient_id,
             patient_advice: patient_advice,
+			help_phone: help_phone,
         };
         return data;
     }

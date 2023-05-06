@@ -5,6 +5,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const dotenv = require('dotenv');
 const autil = require('./adfice-util');
 const ae = require('./adfice-evaluator');
 const cp = require('./calculate-prediction');
@@ -1500,6 +1501,20 @@ async function doctor_id_for_user(user_id) {
     return results[0].doctor_id;
 }
 
+async function get_help_phone(local_env_file_path){
+	 if (!local_env_file_path) {
+        local_env_file_path = './local.env';
+    }
+	var envfile = {};
+    try {
+        envfile = await dotenv.parse(fs.readFileSync(local_env_file_path));
+    } catch (error) /* istanbul ignore next */ {
+        console.log(error);
+    }
+	let help_phone = envfile.HELP_PHONE || '';
+	return help_phone;
+}
+
 function adfice_init(db) {
     let adfice = {
         /* private variables */
@@ -1559,6 +1574,7 @@ function adfice_init(db) {
         finalize_and_export: finalize_and_export,
         get_advice_for_patient: get_advice_for_patient,
         get_advice_texts_checkboxes: get_advice_texts_checkboxes,
+		get_help_phone: get_help_phone,
         get_patient_measurements: get_patient_measurements,
         get_refresh_data: get_refresh_data,
         id_for_fhir: id_for_fhir,

@@ -42,7 +42,8 @@ function page_load(before_socket) {
     document.title = 'Patient ' + five_pages.patient_id;
 
     let json_url = get_base_url() + 'advice?id=' + five_pages.patient_id;
-    // json_data is populated by get_advice_for_patient() in adfice.js
+	// json_data is populated by get_data_for_patient() in adfice_webserver.js
+    // json_data.patient_advice is populated by get_advice_for_patient() in adfice.js
     get_json(json_url, function(err, json_data) {
         console.log(json_data);
         if (err) {
@@ -75,6 +76,11 @@ function page_load(before_socket) {
         // message.js defines connect_web_socket_and_keep_alive()
         connect_web_socket_and_keep_alive();
     });
+}
+
+function fill_help_phone() {
+    let phone = five_pages.data.help_phone || []; 
+    document.getElementById('phone_container').innerHTML = phone;
 }
 
 function meds_with_rules_as_html(rule_meds) {
@@ -851,7 +857,8 @@ function print_page() {
 // and see: function page_load(before_socket)
 
 function start_page_setup() {
-    patient_info_age();
+    fill_help_phone();
+	patient_info_age();
     gauge_risk_score();
     patient_info_problem_start();
     patient_info_lab_start();
@@ -862,6 +869,7 @@ function start_page_setup() {
 }
 
 function prep_page_setup() {
+	fill_help_phone();
     patient_info_age();
     patient_info_meds_with_rules();
     patient_info_meds_without_rules();
@@ -875,6 +883,7 @@ function prep_page_setup() {
 }
 
 function consult_page_setup() {
+	fill_help_phone();
     patient_info_age();
     patient_info_meds_with_rules();
     patient_info_meds_without_rules();
@@ -897,6 +906,7 @@ function advise_page_setup() {
 }
 
 function finalize_page_setup() {
+	fill_help_phone();
     patient_info_age(); // is this needed?
     gauge_risk_score();
     div_all_ehr_text();
