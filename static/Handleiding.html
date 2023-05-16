@@ -12,6 +12,9 @@
   margin-right: auto;
   width: 75%;
 }
+.smaller{
+  max-width: 30%;
+}
 p.handleiding {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20px;
@@ -76,6 +79,10 @@ h4.handleiding {
 #toc_container li, #toc_container ul, #toc_container ul li{
     list-style: outside none none !important;
 }
+
+div.hl_warning{
+	border: 3px solid #f55;
+}
 </style>
 </head>
 
@@ -83,6 +90,13 @@ h4.handleiding {
 
 <body>
 <h2 class="handleiding">Handleiding</h2>
+
+<h3 class="handleiding" id="questions">Vragen of problemen?</h3>
+<p class="handleiding">Ervaart u technische problemen tijdens het werken met de AD<i>F</i>ICE_IT Beslissingsondersteuning? Of heeft u andere vragen?
+Neem dan vooral contact met ons op! U kunt ons direct bereiken door ons op de mobiele studietelefoon te bellen. 
+Wilt u liever een mail sturen? Ook dat is mogelijk. Stuur uw bericht naar <a href="mailto:adfice-it@amsterdamumc.nl">adfice-it@amsterdamumc.nl</a>.
+Tot slot heeft onze onderzoekslijn ook een eigen website. Hier vindt u de laatste nieuwtjes en meer informatie. Bezoek de website op <a href="www.onderzoeknaarvallen.nl">www.onderzoeknaarvallen.nl</a>.
+</p>
 
 <div id="toc_container">
 <p class="toc_title handleiding">Inhoudsopgave</p>
@@ -109,13 +123,6 @@ h4.handleiding {
 <li><a href="#4">4. Consult-scherm</a></li>
 <li><a href="#5">5. Advies-scherm</a></li>
 <li><a href="#6">6. Afrond-scherm</a></li>
-<li><a href="#7">7. Pati&euml;ntenportaal: Valportaal</a></li>
-  <ul>
-    <li><a href="#7.1">7.1. Informatiebrochures en bibliotheek</a></li>
-    <li><a href="#7.2">7.2. Pati&euml;ntvriendelijk advies</a></li>
-	<li><a href="#7.3">7.3. Contactgegevens valpoli en informatie over het AD<i>F</i>CE_IT project</a></li>
-  </ul>
-<li><a href="#8">8. Vragen of problemen?</a></li>
 </ul>
 </div>
 
@@ -126,106 +133,110 @@ h4.handleiding {
 
 
 <h4 class="handleiding" id="1.1">1.1. Pati&euml;ntgegevens</h4>
-<p class="handleiding">Bovenaan het scherm vindt u aan de linkerkant de pati&euml;ntinformatie met de gegevens waar u de pati&euml;nt aan kunt herkennen, zoals naam en geboortedatum. Daarnaast vindt u bovenaan het scherm de knop <i><q>Handleiding</q></i>. Als u hierop klikt, komt u op deze pagina terecht. 
-</p>
 <img id="start" class="instruction_image" src="slide5.png">
 
+<p class="handleiding">Bovenaan het scherm vindt u aan de linkerkant de pati&euml;ntinformatie met de gegevens waar u de pati&euml;nt aan kunt herkennen, zoals ID nummer en geboortedatum. Daarnaast vindt u bovenaan het scherm de knop <i><q>Handleiding</q></i>. Als u hierop klikt, komt u op deze pagina terecht. 
+</p>
+
 <h4 class="handleiding" id="1.2">1.2. Navigatiebalk</h4>
+<img id="start" class="instruction_image" src="slide6.png">
 <p class="handleiding">Onderaan het scherm vindt u de navigatiebalk. De AD<i>F</i>ICE_IT Beslissingsondersteuning kent 5 weergaven: 1) Start, 2) Voorbereiding, 3) Consult, 4) Advies, en 5) Afronden. U selecteert &eacute;&eacute;n van deze weergaven door op de desbetreffende knop te klikken. Met de knop <i><q>Naar boven</q></i> scrollt de pagina automatisch naar boven. 
 </p>
-<img id="start" class="instruction_image" src="slide6.png">
-
-
-
 
 <h3 class="handleiding" id="2">2. Startscherm</h3>
 <img id="start" class="instruction_image" src="slide7.png">
 
-
 <h4 class="handleiding" id="2.1">2.1. Valrisico</h4>
+<img id="start" class="instruction_image" src="slide8.png">
 <p class="handleiding">Onder de pati&euml;ntinformatie vindt u het valrisico van de pati&euml;nt. De valkans (in procenten) is in het rood, oranje of groen gekleurd en gevisualiseerd op de balk door middel van een streep. De kleur van de balk geeft de ernst van het valrisico weer. Wilt u meer weten over hoe het valrisico berekend is? Klik dan op de link <i><q>Lees meer over het predictiemodel</q></i>.   
 </p>
-<img id="start" class="instruction_image" src="slide8.png">
 
 
 <h4 class="handleiding" id="2.2">2.2. Data uit het EPD</h4>
-<p class="handleiding">Onder het valrisico vindt u de data uit het EPD. Deze controleert u op juistheid en volledigheid. Het is belangrijk om deze gegevens te controleren, aangezien dit een veiligheidscheck is of alle relevante gegevens van de pati&euml;nt wel goed opgehaald worden vanuit het EPD. Mocht dit namelijk niet het geval zijn kan dit de adviezen beïnvloeden. Indien nodig, vult u de juiste gegevens aan in het EPD en klikt u op <i><q>vernieuwen</q></i>. <br><br>Let op: als u op deze knop klikt, dan verwijdert u eerder gemaakte selecties. Voer de controle daarom altijd als eerste stap uit!
-<br><br>De data waar het om gaat is: 1) Gedecteerde relevante aandoeningen, zoals hypertensie en delier, 2) Lab-waarden, zoals natrium en kalium, 3) Alle relevante medicijnen (FRIDs) en andere medicijnen die de pati&euml;nt gebruikt.
-</p>
 <img id="start" class="instruction_image" src="slide9.png">
+<p class="handleiding">De eerste weergave is het ‘Start’ scherm. Dit scherm geeft in één oogopslag situatie van de patiënt weer. Onder het valrisico vindt u de data uit het EPD. Deze controleert u op juistheid en volledigheid. Het is belangrijk om deze gegevens te controleren, aangezien dit een veiligheidscheck is of alle relevante gegevens van de patiënt wel goed opgehaald worden vanuit het EPD. Mocht dit namelijk niet het geval zijn kan dit de adviezen beïnvloeden. </p>
+<p class="handleiding">Een erg belangrijke knop is de ‘vernieuwen’ knop. Mocht een patiënt een wijziging hebben in zijn of haar medicijngebruik, dan moet u deze nieuwe informatie updaten uit het EPD. Door op de ‘haal gewijzigde patiëntdata op’ knop te klikken, haalt u deze nieuwe informatie naar het CDSS. Let op: als u op deze knop klikt, dan verwijdert u eerder gemaakte selecties. De keuzes die u bijvoorbeeld al aangevinkt maar nog niet opgeslagen had, worden dan gewist. Voer de controle daarom altijd als eerste stap uit!</p>
+<p class="handleiding">Controleer op het startscherm dus de data uit het EPD. De data waar het om gaat is: 1) Gedetecteerde relevante aandoeningen, zoals hypertensie en delier; 2) Lab-waarden, zoals natrium en kalium; en 3) Alle relevante en andere medicijnen die de patiënt gebruikt. Controleer deze data goed. 
+</p>
 
+
+<div class="hl_warning">
+<p class="handleiding">LET OP: de ADFICE_IT Beslissingsondersteuning toont alleen de medicijnen die ons systeem uit het EPD kan halen. Het is daarom belangrijk dat u goed controleert of de juiste medicijnen gedetecteerd zijn.</p>
+<p class="handleiding">In sommige gevallen kan het voorkomen dat een eerder gestopt middel alsnog in het beslissingsondersteuningssysteem wordt benoemd bij de lijst van medicijnen. Wanneer dit optreed kunt u het medicijn handmatig verwijderen uit de lijst bij de <q>start</q>-pagina. </p>
+<p class="handleiding">Ook kan het zijn dat het systeem niet de thuismediatie detecteert die is voorgeschreven tijdens het bezoek. In dit geval is het goed om de vrije tekst box (<q>Ander medicatie-gerelateerde advies</q>) te gebruiken op het <q>voorbereiding</q>-pagina om de pati&euml;nt informatie te geven over het betreffende medicijn.</p>
+</div>
 
 <h4 class="handleiding" id="2.3">2.3. Predictiemodel</h4>
+<img id="start" class="instruction_image" src="slide10.png">
 <p class="handleiding">Onder de in het EPD gedecteerde waardes, vindt u de data die we voor het predictiemodel van het valrisico gebruiken. De AD<i>F</i>ICE_IT Beslissingsondersteuning haalt waarden uit het EPD om het valrisico te berekenen. Als de AD<i>F</i>ICE_IT Beslissingsondersteuning aangeeft dat er geen predictie van het valrisico mogelijk is vanwege ontbrekende waarden, dan zijn deze in rood aangegeven. Deze kunt u dan zelf handmatig invoeren. 
 </p>
-<img id="start" class="instruction_image" src="slide10.png">
 
 <h4 class="handleiding" id="2.4">2.4. Gezamenlijke besluitvorming</h4>
-<p class="handleiding">Het overzicht <i><q>Gezamenlijk besluitvormingsmodel om betrokkenheid te stimuleren</q></i> geeft een overzicht van het gezamenlijk besluitvormingsmodel weer, zoals we deze in module 3 hebben doorgenomen. Klik op de hyperlink <i><q>lees meer</q></i> om naar het wetenschappelijke artikel te gaan.  
+<img id="start" class="instruction_image smaller" src="slide11.png">
+<p class="handleiding">Het overzicht <i><q>Gezamenlijk besluitvormingsmodel om betrokkenheid te stimuleren</q></i> geeft een overzicht van het gezamenlijk besluitvormingsmodel dat we gebruiken in ons onderzoek. Dit model is gebaseerd op samen beslissen met ouderen en visualiseert met simpele stappen hoe een zo optimaal mogelijk gezamenlijke besluitvorming met de patiënt (en eventuele mantelzorger) te creëren en te stimuleren tijdens het eindgesprek. Klik op de hyperlink <i><q>lees meer</q></i> om naar het wetenschappelijke artikel te gaan. Naast elke stap in het model staat aangegeven welke weergave van de beslissingsondersteuning daarbij gebruikt wordt.
 </p>
-<img id="start" class="instruction_image" src="slide11.png">
-
-
 
 <h3 class="handleiding" id="3">3. Voorbereidingsscherm</h3>
-<p class="handleiding">U gaat verder in het scherm <i><q>Voorbereiding</q></i>. U gebruikt deze weergave vaak tijdens het MDO, maar in ieder geval vóór het eindgesprek met de pati&euml;nt. 
-In de voorbereidingsweergave vindt u boven in de grijze balk ook weer de pati&euml;ntinformatie en het valrisico. Onder het valrisico vindt u directe hyperlinks naar medicijnen met adviezen en andere adviezen. Klik op een hyperlink om direct naar het desbetreffende onderwerp te gaan. <br><br>Goed om te weten: de AD<i>F</i>ICE_IT Beslissingsondersteuning toont alleen de medicijnen die ons systeem uit het EPD kan halen. Het is daarom belangrijk dat u in het vorige scherm goed controleert of de juiste medicijnen gedetecteerd zijn.  
-</p>
 <img id="start" class="instruction_image" src="slide12.png">
+<p class="handleiding">U gaat verder in het scherm <i><q>Voorbereiding</q></i>. U gebruikt deze weergave vaak tijdens het MDO, maar in ieder geval v&oacute;&oacute;r het eindgesprek met de pati&euml;nt. 
+In de voorbereidingsweergave vindt u boven in de grijze balk ook weer de pati&euml;ntinformatie en het valrisico. Onder het valrisico vindt u directe hyperlinks naar <q>medicijnen met adviezen</q> en <q>andere adviezen</q>. Klik op een hyperlink om direct naar het desbetreffende onderwerp te gaan. <br><br>Goed om te weten: de AD<i>F</i>ICE_IT Beslissingsondersteuning toont alleen de medicijnen die ons systeem uit het EPD kan halen. Het is daarom belangrijk dat u in het vorige scherm goed controleert of de juiste medicijnen gedetecteerd zijn.  
+</p>
 
 <h4 class="handleiding" id="3.1">3.1. Medicatiefactoren</h4>
+<img id="start" class="instruction_image" src="slide13.png">
 <p class="handleiding"> Onder het kopje <i><q>Medicatiefactoren</q></i> vindt u eerst de medicatie met aanbevolen maatregelen. Wilt u meer informatie over een medicijn? Naast de medicatienaam kan er via de knop <i><q>FK</q></i> doorgeklikt worden naar de website van het Farmacotherapeutisch Kompas. Onder de medicijnnaam, in de groene box, vindt u het advies. De bron(nen) van deze aanbevelingen staan rechts boven aangegeven als cijfers. U kunt hier op klikken als u de bron van het advies wilt weten.<br><br>
 Voor elke medicatie- of overige factor, zijn vaak meerdere maatregelen mogelijk. Sommige maatregelen zijn alvast aangekruist: in dat geval worden deze wetenschappelijk aanbevolen. Dit betekent niet dat u daarvan niet mag afwijken. U kunt bijvoorbeeld, in samenspraak met de pati&euml;nt, kiezen voor een andere optie. Als u dit wilt wijzigen, (de)selecteert u de maatregelen die u van toepassing vindt op de pati&euml;nt.<br><br>  
-In de AD<i>F</i>ICE_IT Beslissingsondersteuning vindt u vaak vrije tekstvelden. Hier kunt u zelf tekst invullen. Bijvoorbeeld wanneer u aan de pati&euml;nt wilt meegeven dat zij alleen temazepam hoeven in te nemen wanneer dit nodig is en niet meer dan eenmaal per week. <br><Br>Let op: Deze tekst wordt &eacute;&eacute;n-op-&eacute;&eacute;n overgenomen naar de adviestekst voor de pati&euml;nt. Vul hier dus geen opmerkingen in die bestemd zijn voor uzelf of collega</q>s. <br><br>
+In de AD<i>F</i>ICE_IT Beslissingsondersteuning vindt u vaak vrije tekstvelden. Hier kunt u zelf tekst invullen. Bijvoorbeeld wanneer u aan de pati&euml;nt wilt meegeven dat zij alleen temazepam hoeven in te nemen wanneer dit nodig is en niet meer dan eenmaal per week. <br><Br>Let op: Deze tekst wordt &eacute;&eacute;n-op-&eacute;&eacute;n overgenomen naar de adviestekst voor de pati&euml;nt. Vul hier dus geen opmerkingen in die bestemd zijn voor uzelf of collega's. <br><br>
 Ook goed om te weten: als een valrisicoverhogend medicijn geen advies lijkt te hebben, dan betekent dit dat de AD<i>F</i>ICE_IT Beslissingsondersteuning het medicijn niet kan identificeren. Indien dat het geval is neem dan contact met ons op, zodat dit bijgehouden kan worden.  
+Tot slot, het komt regelmatig voor dat er medicatie stapsgewijs afgebouwd wordt (eerst medicijn 1, daarna medicijn 2 en daarna pas medicijn 3). Voor ons onderzoek is het belangrijk om dit ook in kaart te brengen. Selecteer in zo’n geval bij het medicijn de optie ‘overige’ en noteer bijvoorbeeld: <q>de volgende keer als we de cardioloog hebben gesproken, dan komen we hier op terug</q>. 
 </p>
-<img id="start" class="instruction_image" src="slide13.png">
 
 <h4 class="handleiding" id="3.2">3.2. Ander medicatie-gerelateerd advies</h4>
-<p class="handleiding">Stel dat u advies wilt geven over een medicijn dat niet in de AD<i>F</i>ICE_IT Beslissingsondersteuning getoond wordt. U wilt bijvoorbeeld de pati&euml;nt vitamine D voorschrijven. Deze kunt u dan invullen onder <i><q>Ander medicatie-gerelateerd advies</q></i>. U vinkt dan het selectiehokje aan en noteert de medicatienaam en startdatum. Hetzelfde kunt u doen voor het stoppen van medicijnen of voor andere acties. Let erop dat ook deze informatie &eacute;&eacute;n-op-&eacute;&eacute;n wordt overgenomen naar het pati&euml;ntenadvies.  
-</p>
 <img id="start" class="instruction_image" src="slide14.png">
+<p class="handleiding">
+Stel dat u advies wilt geven over een medicijn dat niet in de AD<i>F</i>ICE_IT Beslissingsondersteuning getoond wordt. U wilt bijvoorbeeld de pati&euml;nt vitamine D voorschrijven. Deze kunt u dan invullen onder <i><q>Ander medicatie-gerelateerd advies</q></i>. U vinkt dan het selectiehokje aan en noteert de medicatienaam en startdatum. Hetzelfde kunt u doen voor het stoppen van medicijnen of voor andere acties. Let erop dat ook deze informatie &eacute;&eacute;n-op-&eacute;&eacute;n wordt overgenomen naar het pati&euml;ntenadvies.  
+</p>
 
 <h4 class="handleiding" id="3.3">3.3. Andere adviezen</h4>
+<img id="start" class="instruction_image" src="slide15.png">
 <p class="handleiding">Tot slot kunt u andere adviezen selecteren. Ook hier vindt u vrije tekstvelden, welke &eacute;&eacute;n-op-&eacute;&eacute;n worden overgenomen naar het pati&euml;ntvriendelijk advies. 
 </p>
-<img id="start" class="instruction_image" src="slide15.png">
-
 
 
 <h3 class="handleiding" id="4">4. Consult-scherm</h3>
+<img id="start" class="instruction_image" src="slide16.png">
 <p class="handleiding">Heeft u voor alle medicatie- en overige factoren &eacute;&eacute;n of meer maatregelen geselecteerd? Dan selecteert u in de navigatiebalk de <i><q>Consult</q></i> weergave. U gebruikt dit scherm tijdens het eindgesprek met de pati&euml;nt. 
 De <i><q>consult</q></i> weergave is hetzelfde scherm als de <i><q>voorbereiding</q></i>, maar minus de adviezen en de niet-geselecteerde maatregelen. Dit scherm is daarom korter en gebruiksvriendelijker. Samen met de pati&euml;nt kunt u gemakkelijk de verschillende medicatie- en overige factoren en bijbehorende maatregelen doorlopen. Besluit u samen met de pati&euml;nt om veranderingen in de maatregelen aan te brengen? Dan de-selecteert u gemakkelijk het selectiehokje.
 </p>
-<img id="start" class="instruction_image" src="slide16.png">
-
-
 
 
 <h3 class="handleiding" id="5">5. Advies-scherm</h3>
-<p class="handleiding">Vervolgens gaat u naar de <i><q>Advies</q></i> weergave. Deze toont het pati&euml;ntvriendelijke advies zoals deze ook in het Valportaal getoond zal worden. 
-Met de <i><q>Print deze pagina</q></i> knop print u het advies uit, zodat u deze aan de pati&euml;nt als hand-out mee kunt geven. Herinner de pati&euml;nt er ook aan dat het advies in het Valportaal te vinden is. Ook is het advies te kopi&euml;ren.  
-</p>
 <img id="start" class="instruction_image" src="slide17.png">
+<p class="handleiding">Vervolgens gaat u naar de <i><q>Advies</q></i> weergave. Deze toont het pati&euml;ntvriendelijke advies zoals deze ook in het Valportaal getoond zal worden. 
+Met de <i><q>Print deze pagina</q></i> knop print u het advies uit, zodat u deze aan de pati&euml;nt als hand-out mee kunt geven. <!-- Herinner de pati&euml;nt er ook aan dat het advies in het Valportaal te vinden is. --> Ook is het advies te kopi&euml;ren.  
+</p>
+
 
 
 
 <h3 class="handleiding" id="6">6. Afrond-scherm</h3>
-<p class="handleiding">Tot slot rond u het proces af via <i><q>Afronden</q></i>. 
-Als u op de <i><q>Kopieer tekst</q></i> knop klikt, kopieert u een samenvatting van de maatregelen en adviezen naar het klembord van de computer. U kunt deze dan gemakkelijk in het EPD plakken, zodat u niet alles hoeft uit te typen.
-Vervolgens klikt u op de knop <i><q>Verstuur & vergrendelen</q></i>. Hiermee worden alle aangevinkte adviezen doorgestuurd naar het valportaal van de pati&euml;nten. Wees er dan dus wel op bedacht dat aanpassingen in het systeem dan niet meer mogelijk zijn. Ook stuurt u hiermee uw gemaakte keuzes naar onze onderzoeksdatabase. Voor het onderzoek is dit daarom de belangrijkste stap!
-</p>
 <img id="start" class="instruction_image" src="slide18.png">
+<p class="handleiding">Tot slot rond u het proces af via de weergave <i><q>Afronden</q></i>. 
+Als u op de <i><q>Kopieer tekst</q></i> knop klikt, kopieert u een samenvatting van de maatregelen en adviezen naar het klembord van de computer. U kunt deze dan gemakkelijk in het EPD plakken, zodat u niet alles hoeft uit te typen.
+Vervolgens klikt u op de knop <i><q>Verstuur & vergrendelen</q></i>. Hiermee worden alle aangevinkte adviezen doorgestuurd naar het valportaal van de pati&euml;nten. Wees er dan dus wel op bedacht dat aanpassingen in het systeem dan niet meer mogelijk zijn. Let op: dit slaat de gegevens niet op naar het EPD. Als u wilt dat deze adviezen in het EPD opgeslagen worden, moet u de informatie in het EPD vak kopi&euml;ren en in het EPD opslaan.
+</p>
 
 
 
+<!--
 <h3 class="handleiding" id="7">7. Pati&euml;ntenportaal: Valportaal</h3>
 <p class="handleiding">Zoals u weet, bestaat de AD<i>F</i>ICE_IT interventie uit twee delen: de beslissingsondersteuning voor u, de artsen, en een pati&euml;ntenportaal voor de pati&euml;nten. Dit portaal noemen we het Valportaal. 
 De pati&euml;nten krijgen voordat zij naar de valpoli komen toegang tot het Valportaal. Hier wordt hen informatie geboden over vallen en valpreventie, zodat zij zich op het consult met u kunnen voorbereiden. 
 </p>
+ -->
 <!-- <img id="start" class="instruction_image" src="slide19.png"> -->
 
-
+<!--
 <h4 class="handleiding" id="7.1">7.1. Informatiebrochures en bibliotheek</h4>
 <p class="handleiding">Zo biedt het Valportaal bijvoorbeeld informatie in de vorm van te downloaden informatiebrochures en een bibliotheek.  
 </p>
@@ -257,13 +268,7 @@ De pati&euml;nten krijgen voordat zij naar de valpoli komen toegang tot het Valp
 <p class="handleiding">Tot slot biedt het Valportaal ook een overzicht van de contactgegevens van de poli en informatie over dit project. U kunt een demo van het Valportaal <a href="https://xd.adobe.com/view/3f7428b5-ecb5-43ed-73e9-bdc192a29766-4945/?fullscreen">hier</a> zelf bezoeken. 
 </p>
 <img id="start" class="instruction_image" src="slide25.png">
+-->
 
-<h3 class="handleiding" id="8">8. Vragen of problemen?</h3>
-<p class="handleiding">Ervaart u technische problemen tijdens het werken met de AD<i>F</i>ICE_IT Beslissingsondersteuning? Of heeft u andere vragen?
-Neem dan vooral contact met ons op! U kunt ons direct bereiken door ons op de mobiele studietelefoon te bellen op <b>O6 - <span class="ph">l</span>5 3&#55;&#55; O8&#50;</b>. 
-Wilt u liever een mail sturen? Ook dat is mogelijk. Stuur uw bericht naar <a href="mailto:adfice-it@amsterdamumc.nl">adfice-it@amsterdamumc.nl</a>.
-Tot slot heeft onze onderzoekslijn ook een eigen website. Hier vindt u de laatste nieuwtjes en meer informatie. Bezoek de website op <a href="www.onderzoeknaarvallen.nl">www.onderzoeknaarvallen.nl</a>.
-<br><br><br><br><br><br><br><br><br><br>
-</p>
 </body>
 </html>
