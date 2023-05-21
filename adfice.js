@@ -1502,16 +1502,17 @@ async function doctor_id_for_user(user_id) {
 }
 
 async function get_help_phone(local_env_file_path){
-	 if (!local_env_file_path) {
+	if (!local_env_file_path) {
         local_env_file_path = './local.env';
     }
 	var envfile = {};
+	let help_phone = '';
     try {
         envfile = await dotenv.parse(fs.readFileSync(local_env_file_path));
+		help_phone = envfile.HELP_PHONE;
     } catch (error) /* istanbul ignore next */ {
         console.log(error);
     }
-	let help_phone = envfile.HELP_PHONE || '';
 	return help_phone;
 }
 

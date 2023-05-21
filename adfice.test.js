@@ -7,6 +7,7 @@ const adfice_factory = require('./adfice');
 const autil = require('./adfice-util');
 const util = require("util");
 const fs = require('fs');
+const dotenv = require('dotenv');
 
 var adfice = adfice_factory.adfice_init();
 afterAll(async () => {
@@ -1936,4 +1937,23 @@ test('test writePatientFromJSON bad data', async function() {
         caught = error;
     }
     expect(caught).not.toBe(null);
+});
+
+test('test get_help_phone', async function() {
+	let local_env_file_path = './local.env';
+	var envfile = {};
+    try {
+        envfile = await dotenv.parse(fs.readFileSync(local_env_file_path));
+    } catch (error) /* istanbul ignore next */ {
+        console.log(error);
+    }
+	let test_help_phone = envfile.HELP_PHONE || '';
+	let adfice_help_phone = await adfice.get_help_phone();
+	expect(adfice_help_phone).toBe(test_help_phone);
+	
+	adfice_help_phone = await adfice.get_help_phone(local_env_file_path);
+	expect(adfice_help_phone).toBe(test_help_phone);
+	
+	adfice_help_phone = await adfice.get_help_phone('./doesNotExist.env');
+	expect(adfice_help_phone).toBe('');
 });

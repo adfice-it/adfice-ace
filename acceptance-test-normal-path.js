@@ -960,5 +960,37 @@ test('Checkbox persistence', async t => {
     await t.expect(checkbox3.checked).ok();
 });
 
+
+
+test('Test that contact phone displays', async t => {
+    let mrn = 'DummyMRN-000000085';
+    let fhir = 'DummyFHIR-000000085';
+    let participant = 10085;
+    let window1 = await load(t, mrn, fhir, participant);
+    let patient_id = "00000000-0000-4000-8000-100000000085";
+    let url = `${BASE_URL}/start?id=${patient_id}`;
+    await t.navigateTo(url);
+
+    let button_prep_view = Selector('button#button-prep-view');
+    let button_advise_view = Selector('button#button-advise-view');
+
+    await change_flex_style_to_inline(t);
+	let div_help_box = Selector('div#help_container');
+    await t.expect(div_help_box.withText('06').exists).ok();
+
+//	await change_view(t, button_prep_view,        `${BASE_URL}/prep?id=${patient_id}`);
+	await t.click(button_prep_view);
+	await change_flex_style_to_inline(t);
+	div_help_box = Selector('div#help_container');
+    await t.expect(div_help_box.withText('06').exists).ok();
+
+//    await change_view(t, button_advise_view,         `${BASE_URL}/advise?id=${patient_id}`);
+	await t.click(button_advise_view);
+    await change_flex_style_to_inline(t);
+	div_help_box = Selector('div#help_container');
+    await t.expect(div_help_box.exists).notOk();
+
+
+});
 //TODO check what etl returns when some meas are missing, and make sure adfice handles this correctly.
 //JSON tends to just delete null values; make sure this doesn't cause problems.
