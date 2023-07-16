@@ -1509,9 +1509,39 @@ test('test measListOfInserts', async function() {
     };
     let measListOfInserts3 = adfice.measListOfInserts(patient_id, found_meas);
 
+	found_meas = {
+        systolic_bp_mmHg: 120,
+        bp_date_measured: null,
+        height_cm: '130,1',
+        height_date_measured: '2020-01-27 21:06',
+        weight_kg: '32,1',
+        weight_date_measured: '2020-01-27 21:06',
+        smoking: 0,
+        smoking_date_measured: '2021-08-05 05:00',
+        GDS_score: 2,
+        GDS_date_measured: '2022-6-24 06:00:00',
+        grip_kg: '3,0',
+        grip_date_measured: '2022-2-18 12:00:00',
+        walking_speed_m_per_s: '0,6',
+        walking_date_measured: '2022-2-18 13:00:00',
+        fear0: 0,
+        fear1: 1,
+        fear2: 0,
+        fear_of_falls_date_measured: '2022-2-18 13:00:00',
+        number_of_limitations: null,
+        functional_limit_date_measured: null,
+        nr_falls_12m: null,
+        nr_falls_date_measured: null
+    };
+    let measListOfInserts4 = adfice.measListOfInserts(patient_id, found_meas);
+
     expect(measListOfInserts[0][1][2]).toBe(120);
     expect(measListOfInserts2[0][1][2]).toBe(null);
     expect(measListOfInserts3[0][1][3]).toBe(null);
+	expect(measListOfInserts4[0][1][4]).toBe('130.1');
+	expect(measListOfInserts4[0][1][6]).toBe('32.1');
+	expect(measListOfInserts4[0][1][12]).toBe('3.0');
+	expect(measListOfInserts4[0][1][14]).toBe('0.6');
 });
 
 test('test empty meas', async function() {

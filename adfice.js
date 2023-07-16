@@ -296,22 +296,38 @@ function measListOfInserts(patient_id, measurements) {
         'fear0, fear1, fear2, fear_of_falls_date_measured, ' +
         'number_of_limitations, functional_limit_date_measured, nr_falls_12m, nr_falls_date_measured) ' +
         'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    let params = [
+	let height_cm = null;
+	if(measurements['height_cm'].toString().includes(',')){
+			height_cm = measurements['height_cm'].toString().replace(",", ".");
+		} else {height_cm = measurements['height_cm'];}
+	let weight_kg = null;
+	if(measurements['weight_kg'].toString().includes(',')){
+			weight_kg = measurements['weight_kg'].toString().replace(",", ".");
+		} else {weight_kg = measurements['weight_kg'];}
+	let grip_kg = null;
+	if(measurements['grip_kg'].toString().includes(',')){
+			grip_kg = measurements['grip_kg'].toString().replace(",", ".");
+		} else {grip_kg = measurements['grip_kg'];}
+	let walking_speed_m_per_s = null;
+	if(measurements['walking_speed_m_per_s'].toString().includes(',')){
+			walking_speed_m_per_s = measurements['walking_speed_m_per_s'].toString().replace(",", ".");
+		} else {walking_speed_m_per_s = measurements['walking_speed_m_per_s'];}
+	let params = [
         patient_id,
         nowString(),
         measurements['systolic_bp_mmHg'],
         measurements['bp_date_measured'],
-        measurements['height_cm'],
+        height_cm,
         measurements['height_date_measured'],
-        measurements['weight_kg'],
+        weight_kg,
         measurements['weight_date_measured'],
         measurements['smoking'],
         measurements['smoking_date_measured'],
         measurements['GDS_score'],
         measurements['GDS_date_measured'],
-        measurements['grip_kg'],
+        grip_kg,
         measurements['grip_date_measured'],
-        measurements['walking_speed_m_per_s'],
+        walking_speed_m_per_s,
         measurements['walking_date_measured'],
         measurements['fear0'],
         measurements['fear1'],

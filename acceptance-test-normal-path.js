@@ -593,6 +593,7 @@ test('Test user entering incomplete values', async t => {
 });
 
 test('Test load new patient data', async t => {
+	// http://127.0.0.1:8080/load?mrn=DummyMRN-000000175&fhir=DummyFHIR-000000175&user=dr_bob&study=AMC2021_061&participant=10175
     let mrn = 'DummyMRN-000000175';
     let fhir = 'DummyFHIR-000000175';
     let participant = 10175;
@@ -604,6 +605,11 @@ test('Test load new patient data', async t => {
     });
     await t.expect(lab_table.withText("natrium").exists).ok();
     await t.expect(lab_table.withText("135").exists).ok();
+	
+	let pred_table = Selector("#prediction_data_table", {
+        timeout: 1000
+    });
+	await t.expect(pred_table.withText("0.6").exists).ok();
 
 });
 
