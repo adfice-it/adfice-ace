@@ -719,13 +719,13 @@ async function calculate_prediction_result(patient_id) {
         if (measurement['height_cm'] != null &&
             measurement['weight_kg'] != null) {
             BMI = measurement['weight_kg'] /
-                ((measurement['height_cm']) ^ 2);
+                ((measurement['height_cm']/100)*(measurement['height_cm']/100));
         } else {
             /* istanbul ignore else */
             if (measurement['user_height_cm'] != null &&
                 measurement['user_weight_kg'] != null) {
                 user_BMI = measurement['user_weight_kg'] /
-                    ((measurement['user_height_cm']) ^ 2);
+                    ((measurement['user_height_cm']/100)*(measurement['user_height_cm']/100));
             } // else user_BMI stays null
             BMI = user_BMI;
         }
