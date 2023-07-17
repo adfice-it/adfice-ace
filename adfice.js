@@ -296,23 +296,43 @@ function measListOfInserts(patient_id, measurements) {
         'fear0, fear1, fear2, fear_of_falls_date_measured, ' +
         'number_of_limitations, functional_limit_date_measured, nr_falls_12m, nr_falls_date_measured) ' +
         'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-	let height_cm = null;
-	if(measurements['height_cm'].toString().includes(',')){
-			height_cm = measurements['height_cm'].toString().replace(",", ".");
-		} else {height_cm = measurements['height_cm'];}
-	let weight_kg = null;
-	if(measurements['weight_kg'].toString().includes(',')){
-			weight_kg = measurements['weight_kg'].toString().replace(",", ".");
-		} else {weight_kg = measurements['weight_kg'];}
-	let grip_kg = null;
-	if(measurements['grip_kg'].toString().includes(',')){
-			grip_kg = measurements['grip_kg'].toString().replace(",", ".");
-		} else {grip_kg = measurements['grip_kg'];}
-	let walking_speed_m_per_s = null;
-	if(measurements['walking_speed_m_per_s'].toString().includes(',')){
-			walking_speed_m_per_s = measurements['walking_speed_m_per_s'].toString().replace(",", ".");
-		} else {walking_speed_m_per_s = measurements['walking_speed_m_per_s'];}
-	let params = [
+	let height_cm = measurements['height_cm'];
+        if(typeof height_cm === 'string' || height_cm instanceof String){
+            height_cm = height_cm.replace(',','.');
+            height_cm = parseFloat(height_cm);
+			/* istanbul ignore next */
+			if(isNaN(height_cm)){
+				height_cm = measurements['height_cm'];
+			}
+        }
+	let weight_kg = measurements['weight_kg'];
+        if(typeof weight_kg === 'string' || weight_kg instanceof String){
+            weight_kg = weight_kg.replace(',','.');
+            weight_kg = parseFloat(weight_kg);
+			/* istanbul ignore next */
+			if(isNaN(weight_kg)){
+				weight_kg = measurements['weight_kg'];
+			}
+        }
+	let grip_kg = measurements['grip_kg'];
+        if(typeof grip_kg === 'string' || grip_kg instanceof String){
+            grip_kg = grip_kg.replace(',','.');
+            grip_kg = parseFloat(grip_kg);
+			/* istanbul ignore next */
+			if(isNaN(grip_kg)){
+				grip_kg = measurements['grip_kg'];
+			}
+        }
+	let walking_speed_m_per_s = measurements['walking_speed_m_per_s'];
+        if(typeof walking_speed_m_per_s === 'string' || walking_speed_m_per_s instanceof String){
+            walking_speed_m_per_s = walking_speed_m_per_s.replace(',','.');
+            walking_speed_m_per_s = parseFloat(walking_speed_m_per_s);
+			/* istanbul ignore next */
+			if(isNaN(walking_speed_m_per_s)){
+				walking_speed_m_per_s = measurements['walking_speed_m_per_s'];
+			}
+        }	
+    let params = [
         patient_id,
         nowString(),
         measurements['systolic_bp_mmHg'],

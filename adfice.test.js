@@ -1538,10 +1538,10 @@ test('test measListOfInserts', async function() {
     expect(measListOfInserts[0][1][2]).toBe(120);
     expect(measListOfInserts2[0][1][2]).toBe(null);
     expect(measListOfInserts3[0][1][3]).toBe(null);
-	expect(measListOfInserts4[0][1][4]).toBe('130.1');
-	expect(measListOfInserts4[0][1][6]).toBe('32.1');
-	expect(measListOfInserts4[0][1][12]).toBe('3.0');
-	expect(measListOfInserts4[0][1][14]).toBe('0.6');
+	expect(measListOfInserts4[0][1][4]).toBe(130.1);
+	expect(measListOfInserts4[0][1][6]).toBe(32.1);
+	expect(measListOfInserts4[0][1][12]).toBe(3.0);
+	expect(measListOfInserts4[0][1][14]).toBe(0.6);
 });
 
 test('test empty meas', async function() {
