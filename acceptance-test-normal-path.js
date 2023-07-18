@@ -525,9 +525,8 @@ test('Test user entering values', async t => {
 
     let smoking_dropdown = Selector("#user_smoking");
     await t.expect(smoking_dropdown.visible).ok();
-    await t
-        .click(smoking_dropdown)
-        .click(Selector('option', {
+    await t.click(smoking_dropdown);
+    await t.click(Selector("#user_smoking_1", {
             text: 'Ja'
         }));
     let submit_button = Selector('#button_submit_missings');
@@ -536,21 +535,24 @@ test('Test user entering values', async t => {
     let prediction2 = await Selector("#patient_info", {
         timeout: 1000
     });
-    // await t.expect(prediction2.withText("75").exists).ok();
-    let missing_table2 = await Selector("#prediction_missing_container", {
+    await t.expect(prediction2.withText("73").exists).ok();
+    let user_smoking_mis1 = await Selector("#user_smoking_mis", {
         timeout: 1000
     });
-    // await t.expect(missing_table2.withText(1).exists, { timeout: 1000 }).ok();
+    await t.expect(user_smoking_mis1.withText("1").exists, { timeout: 1000 }).ok();
 
-    let smoking_delete = Selector("#del_smoking");
+    let smoking_delete = await Selector("#del_smoking");
     await t.click(smoking_delete);
-
-    let missing_table3 = await Selector("#prediction_missing_container");
-    await t.expect(missing_table3.withText("1").exists).notOk();
-    let prediction3 = await Selector("#gpatient_info", {
+	
+	await t.wait(1000);
+    let user_smoking_mis2 = await Selector("#user_smoking_mis", {
         timeout: 1000
     });
-    //	await t.expect(prediction3.withText("onbekend").exists).ok();
+    await t.expect(user_smoking_mis2.withText("1").exists).notOk();
+    let prediction3 = await Selector("#patient_info", {
+        timeout: 1000
+    });
+    await t.expect(prediction3.withText("onbekend").exists).ok();
 
 });
 
@@ -572,23 +574,22 @@ test('Test user entering incomplete values', async t => {
 
     let GDS_dropdown = Selector("#user_GDS_score");
     await t.expect(GDS_dropdown.visible).ok();
-    await t
-        .click(GDS_dropdown)
-        .click(Selector('option', {
+    await t.click(GDS_dropdown)
+    await t.click(Selector('#GDS_dropdown_1', {
             text: '1'
         }));
 
     let submit_button = Selector('#button_submit_missings');
     await t.click(submit_button);
 
-    let missing_table2 = await Selector("#prediction_missing_container");
-    await t.expect(missing_table2.withText("1").exists).ok();
+    let user_GDS_score_mis1 = await Selector("#user_GDS_score_mis");
+    await t.expect(user_GDS_score_mis1.withText("1").exists).ok();
 
     let GDS_delete = Selector("#del_GDS_score");
     await t.click(GDS_delete);
 
-    let missing_table3 = await Selector("#prediction_missing_container");
-    //    await t.expect(missing_table3.withText("1").exists).notOk();
+    let user_GDS_score_mis2 = await Selector("#user_GDS_score_mis");
+    await t.expect(user_GDS_score_mis2.withText("1").exists).notOk();
 
 });
 

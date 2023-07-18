@@ -778,6 +778,10 @@ async function calculate_prediction_result_meas(measurement){
     if (measurement['user_fear2'] == 1 || measurement['fear2'] == 1) {
         fear2 = 1;
     }
+	
+	let has_antiepileptica = measurement['has_antiepileptica'] || 0;
+    let has_ca_blocker = measurement['has_ca_blocker'] || 0;
+    let has_incont_med = measurement['has_incont_med'] || 0;
 
     let prediction = cp.calculate_prediction_db(
         GDS_score,
@@ -788,9 +792,9 @@ async function calculate_prediction_result_meas(measurement){
         number_of_limitations,
         nr_falls_12m,
         smoking,
-        measurement['has_antiepileptica'],
-        measurement['has_ca_blocker'],
-        measurement['has_incont_med'],
+        has_antiepileptica,
+        has_ca_blocker,
+        has_incont_med,
         education_hml,
         fear1,
         fear2);
