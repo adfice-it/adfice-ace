@@ -717,61 +717,65 @@ async function calculate_store_prediction_result(patient_id) {
     return measurements[0];
 }
 
-//TODO the call to get_patient_measurements can probably be factored out of this
 async function calculate_prediction_result(patient_id) {
     let measurements = await this.get_patient_measurements(patient_id);
     if (measurements == null || !measurements.length) {
         return null;
     }
     let measurement = measurements[0];
-    //any value that can be = 0 cannot use the || syntax
-    let GDS_score = measurement['GDS_score'];
+	measurement = calculate_prediction_result_meas(measurement);
+	return measurement;
+}
+
+async function calculate_prediction_result_meas(measurement){
+	//any value that can be = 0 cannot use the || syntax
+    let GDS_score = measurement['user_GDS_score'];
     if (GDS_score == null) {
-        GDS_score = measurement['user_GDS_score'];
+        GDS_score = measurement['GDS_score'];
     }
-    let grip_kg = measurement['grip_kg'] || measurement['user_grip_kg'];
-    let walking_speed_m_per_s = measurement['walking_speed_m_per_s'] ||
-        measurement['user_walking_speed_m_per_s'];
+    let grip_kg = measurement['user_grip_kg'] || measurement['grip_kg'];
+    let walking_speed_m_per_s = measurement['user_walking_speed_m_per_s'] ||
+        measurement['walking_speed_m_per_s'];
     //prefer BMI calculated by EHR; then calculated from EHR height and weight, then user-entered
-    let BMI = measurement['BMI'];
-    let user_BMI = null;
-    if (!BMI) {
+    let BMI = null;
+	if (measurement['user_height_cm'] != null &&
+        measurement['user_weight_kg'] != null) {
+        BMI = measurement['user_weight_kg'] /
+			((measurement['user_height_cm']/100)*(measurement['user_height_cm']/100));
+		} else {
+			BMI = measurement['BMI'];
+		}
+	/* istanbul ignore else */ 
+	if (!BMI) {
+		/* istanbul ignore else */ 
         if (measurement['height_cm'] != null &&
             measurement['weight_kg'] != null) {
             BMI = measurement['weight_kg'] /
                 ((measurement['height_cm']/100)*(measurement['height_cm']/100));
-        } else {
-            /* istanbul ignore else */
-            if (measurement['user_height_cm'] != null &&
-                measurement['user_weight_kg'] != null) {
-                user_BMI = measurement['user_weight_kg'] /
-                    ((measurement['user_height_cm']/100)*(measurement['user_height_cm']/100));
-            } // else user_BMI stays null
-            BMI = user_BMI;
-        }
-    }
-    let systolic_bp_mmHg = measurement['systolic_bp_mmHg'] ||
-        measurement['user_systolic_bp_mmHg'];
-    let number_of_limitations = measurement['number_of_limitations'];
+        } // else BMI stays null
+    } // else BMI stays at the value set previously
+    let systolic_bp_mmHg = measurement['user_systolic_bp_mmHg'] ||
+        measurement['systolic_bp_mmHg'];
+    let number_of_limitations = measurement['user_number_of_limitations'];
     if (number_of_limitations == null) {
-        number_of_limitations = measurement['user_number_of_limitations'];
+        number_of_limitations = measurement['number_of_limitations'];
     }
-    let nr_falls_12m = measurement['nr_falls_12m'];
+    let nr_falls_12m = measurement['user_nr_falls_12m'];
     if (nr_falls_12m == null) {
-        nr_falls_12m = measurement['user_nr_falls_12m'];
+        nr_falls_12m = measurement['nr_falls_12m'];
     }
-    let smoking = measurement['smoking'];
+    let smoking = measurement['user_smoking'];
     if (smoking == null) {
-        smoking = measurement['user_smoking'];
+        smoking = measurement['smoking'];
     }
-    let education_hml = measurement['education_hml'] ||
-        measurement['user_education_hml'];
+    let education_hml = measurement['user_education_hml'] ||
+        measurement['education_hml'];
     let fear1 = 0;
-    if (measurement['fear1'] == 1 || measurement['user_fear1'] == 1) {
+    if (measurement['user_fear1'] == 1 || measurement['fear1'] == 1) {
         fear1 = 1;
     }
     let fear2 = 0;
-    if (measurement['fear2'] == 1 || measurement['user_fear2'] == 1) {
+    if (measurement['user_fear2'] == 1 || measurement['fear2'] == 1) {
         fear2 = 1;
     }
 
@@ -1562,6 +1566,7 @@ function adfice_init(db) {
         box_states_to_selection_states: box_states_to_selection_states,
         calculate_store_prediction_result: calculate_store_prediction_result,
         calculate_prediction_result: calculate_prediction_result,
+		calculate_prediction_result_meas: calculate_prediction_result_meas,
         db_init: db_init,
         determine_preselected_checkboxes: determine_preselected_checkboxes,
         evaluate_sql: evaluate_sql,

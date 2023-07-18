@@ -1022,10 +1022,45 @@ test('Calculate prediction based on DB data', async () => {
     expect(measurement).toBe(null);
 });
 
-test('Calculate prediction based on user-entered data', async () => {
+test('Calculate prediction based on user-entered DB data', async () => {
     let patient_id = "00000000-0000-4000-8000-100000000170";
     let measurement = await adfice.calculate_prediction_result(patient_id);
     expect(measurement.prediction_result).toBeGreaterThan(10);
+});
+
+test('Calculate prediction favors user-entered data', async () => {
+	let measurement = {};
+	measurement['user_GDS_score'] = 1;
+    measurement['GDS_score'] = 0;
+    measurement['user_grip_kg'] = 21.5;
+	measurement['grip_kg'] = 6.5;
+    measurement['user_walking_speed_m_per_s'] = 0.6;
+    measurement['walking_speed_m_per_s'] = 1.2;
+	measurement['user_height_cm'] = 160;
+    measurement['user_weight_kg'] = 55;
+	measurement['height_cm']= 180;
+    measurement['weight_kg'] = 80;
+    measurement['user_systolic_bp_mmHg'] = 140;
+    measurement['systolic_bp_mmHg'] = 150;
+    measurement['user_number_of_limitations'] = 1;
+    measurement['number_of_limitations'] = 2;
+    measurement['user_nr_falls_12m'] = 3;
+    measurement['nr_falls_12m'] = 5;
+    measurement['user_smoking'] = 1;
+    measurement['smoking'] = 1;
+    measurement['user_education_hml'] = 3;
+    measurement['education_hml'] = 1;
+	measurement['user_fear0'] = 0;
+	measurement['fear0'] = 1;
+    measurement['user_fear1'] = 0;
+	measurement['fear1'] = 0;
+	measurement['user_fear2'] = 1;
+	measurement['fear2'] = 0;
+	measurement['has_antiepileptica'] = 0;
+    measurement['has_ca_blocker'] = 0;
+    measurement['has_incont_med'] = 1;
+	let meas = await adfice.calculate_prediction_result_meas(measurement);
+	expect(meas.prediction_result).toBe(73);
 });
 
 test('Update prediction', async () => {
