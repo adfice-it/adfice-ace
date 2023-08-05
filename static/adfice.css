@@ -347,6 +347,10 @@ span.date_old{
 	color: #f48800;
 }
 
+span.missing{
+	color: #f48800;
+}
+
 #footnote_missing{
 	font-size: 0.8em;
 }
@@ -355,6 +359,11 @@ span.date_old{
 	background-color: #EEEEEE;
 	margin: 1em;
 	padding: 1em;
+}
+
+.predict_user{
+	color: #009900;
+	font-weight: 900;
 }
 
 .predict_data{

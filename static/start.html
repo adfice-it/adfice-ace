@@ -83,11 +83,11 @@ Leeftijd: <span id="patient-info-age"></span><br/>
 </div><!-- patient_data -->
 
 <div id="prediction_data_container">
-<h3>Data voor predictiemodel</h3>
+<h3>Predictiemodel berekening</h3>
 <table class="predict_data" id="prediction_data_table">
-<tr><th class="predict_data">variabel</th><th class="predict_data">waarde</th><th class="predict_data">datum gemeten</th><th class="predict_data">ingetypte waarde</th><th class="predict_data">co&euml;ffici&euml;nt</th></tr>
+<tr><th class="predict_data">variabel</th><th class="predict_data">waarde uit EPD</th><th class="predict_data">datum gemeten</th><th class="predict_data">ingetypte waarde</th><th class="predict_data">co&euml;ffici&euml;nt</th></tr>
 <tr><td class="predict_data">Intercept</td><td class="predict_data"></td><td class="predict_data"></td><td class="predict_data"></td><td class="predict_data">-0.2047 +</td></tr>
-<tr><td class="predict_data">Z-score depressie (GDS)</td><td class = "predict_data predict_db"><div id = "GDS_score"></div></td><td class = "predict_data predict_db"><div id = "GDS_date_measured"></div><td class = "predict_data predict_user"><div id = "d_user_GDS_score"></div></td></td><td class="predict_data"> 0.0778  * (GDS - 1.4401) / 1.9419 +</td></tr>
+<tr><td class="predict_data">Z-score depressie (GDS)</td><td class = "predict_data predict_db"><div id = "GDS_score"></div></td><td class = "predict_data predict_db"><div id = "GDS_date_measured"></div><td class = "predict_data predict_user" ><div id = "d_user_GDS_score"></div></td></td><td class="predict_data"> 0.0778  * (GDS - 1.4401) / 1.9419 +</td></tr>
 <tr><td class="predict_data">Z-score grijpkracht</td><td class = "predict_data predict_db"><div id = "grip_kg"><div></td><td class = "predict_data predict_db"><div id = "grip_date_measured"></div></td><td class = "predict_data predict_user"><div id = "d_user_grip_kg"></div></td><td class="predict_data"> -0.1678  * (kga  - 32.4838) / 10.8414 +</td></tr>
 <tr><td class="predict_data">Z-score loopsnelheid</td><td class = "predict_data predict_db"><div id = "walking_speed_m_per_s"></div></td><td class = "predict_data predict_db"><div id = "walking_date_measured"></div></td><td class = "predict_data predict_user"><div id = "d_user_walking_speed_m_per_s"></div></td><td class="predict_data"> 0.0997 * (m/sb - 0.9417) / 0.2760 +</td></tr>
 <tr><td class="predict_data">BMI </td><td class = "predict_data predict_db"><div id = "BMI"></div></td><td class = "predict_data predict_db"><div id = "BMI_date_measured"></div></td><td class = "predict_data predict_user"><div id = "d_user_bmi_calc"></div></td><td class="predict_data"> -0.0204 * kg/m2 +</td></tr>
@@ -112,7 +112,7 @@ FES 8 of hoger = 0.2222</td></tr>
 <em>Data toegevoegd door gebruiker op: <span id="user_values_updated">nvt</span></em>
 </div><!-- prediction_data_container -->
 
-<div id="prediction_missing_container"><h3>Data voor predictiemodel</h3><p>Vul de onderstaande gegevens in om het valrisico te (her)berekenen.</p>				<form id="missing_data_form">				<table class="prediction_missing" id="prediction_missing_table">				<tbody>
+<div id="prediction_missing_container"><h3>Data invoeren voor predictiemodel</h3><p>Vul de onderstaande gegevens in om het valrisico te (her)berekenen.</p>				<form id="missing_data_form">				<table class="prediction_missing" id="prediction_missing_table">				<tbody>
 <tr><th class="prediction_missing">variabel</th><th class="prediction_missing">huidige waarde</th><th class="prediction_missing">nieuwe waarde</th><th class="prediction_missing">verwijder waarde</th></tr>
 <tr>
 <td class="prediction_missing">GDS score</td>

@@ -736,15 +736,29 @@ async function calculate_prediction_result_meas(measurement){
     let grip_kg = measurement['user_grip_kg'] || measurement['grip_kg'];
     let walking_speed_m_per_s = measurement['user_walking_speed_m_per_s'] ||
         measurement['walking_speed_m_per_s'];
-    //prefer BMI calculated by EHR; then calculated from EHR height and weight, then user-entered
+    // prefer BMI from user-entered values, then from EHR, then from EHR height/weight
     let BMI = null;
-	if (measurement['user_height_cm'] != null &&
-        measurement['user_weight_kg'] != null) {
-        BMI = measurement['user_weight_kg'] /
+	if (measurement['user_height_cm'] != null){
+		if (measurement['user_weight_kg'] != null){
+			BMI = measurement['user_weight_kg'] /
 			((measurement['user_height_cm']/100)*(measurement['user_height_cm']/100));
-		} else {
-			BMI = measurement['BMI'];
+		} else 
+			/* istanbul ignore else */ 
+			if (measurement['weight_kg'] != null){
+			BMI = measurement['weight_kg'] /
+			((measurement['user_height_cm']/100)*(measurement['user_height_cm']/100));
 		}
+	} else if (measurement['user_weight_kg'] != null){
+		/* istanbul ignore else */ 
+		if (measurement['height_cm'] != null){
+			BMI = measurement['user_weight_kg'] /
+			((measurement['height_cm']/100)*(measurement['height_cm']/100));
+		}
+	}
+	/* istanbul ignore else */ 
+	if (!BMI){
+		BMI = measurement['BMI'];
+	} // else BMI stays at the value set previously
 	/* istanbul ignore else */ 
 	if (!BMI) {
 		/* istanbul ignore else */ 
@@ -770,15 +784,29 @@ async function calculate_prediction_result_meas(measurement){
     }
     let education_hml = measurement['user_education_hml'] ||
         measurement['education_hml'];
-    let fear1 = 0;
-    if (measurement['user_fear1'] == 1 || measurement['fear1'] == 1) {
-        fear1 = 1;
-    }
-    let fear2 = 0;
-    if (measurement['user_fear2'] == 1 || measurement['fear2'] == 1) {
-        fear2 = 1;
-    }
-	
+	let fear1 = 0;
+	let fear2 = 0;
+	if (measurement['user_fear0'] || measurement['user_fear1'] || measurement['user_fear2']){
+		/* istanbul ignore else */ 
+		if (measurement['user_fear1'] == 1) {
+			fear1 = 1;
+		} // else do not change it
+		/* istanbul ignore else */ 
+		if (measurement['user_fear2'] == 1) {
+			fear2 = 1;
+		} // else do not change it
+	} else 
+		/* istanbul ignore else */ 
+		if (measurement['fear0'] || measurement['fear1'] || measurement['fear2']){
+		/* istanbul ignore else */ 
+		if (measurement['fear1'] == 1) {
+			fear1 = 1;
+		} // else do not change it
+		/* istanbul ignore else */ 	
+		if (measurement['fear2'] == 1) {
+			fear2 = 1;
+		} // else do not change it
+	} // else do not change it
 	let has_antiepileptica = measurement['has_antiepileptica'] || 0;
     let has_ca_blocker = measurement['has_ca_blocker'] || 0;
     let has_incont_med = measurement['has_incont_med'] || 0;
@@ -870,7 +898,6 @@ async function set_advice_for_patient(patient_id, doctor,
 }
 
 async function update_prediction_with_user_values(patient_id, form_data) {
-
     let fields = Object.keys(form_data);
 
     let sql = `/* adfice.update_prediction_with_user_values */

@@ -1063,6 +1063,52 @@ test('Calculate prediction favors user-entered data', async () => {
 	expect(meas.prediction_result).toBe(73);
 });
 
+test('Calculate prediction can use user_height_cm with weight_kg', async () => {
+	let measurement = {};
+	measurement['user_GDS_score'] = 1;
+	measurement['grip_kg'] = 21.5;
+    measurement['walking_speed_m_per_s'] = 0.6;
+	measurement['user_height_cm'] = 200;
+	measurement['height_cm']= 160;
+    measurement['weight_kg'] = 55;
+    measurement['systolic_bp_mmHg'] = 140;
+    measurement['number_of_limitations'] = 1;
+    measurement['nr_falls_12m'] = 3;
+    measurement['smoking'] = 1;
+    measurement['education_hml'] = 3;
+	measurement['fear0'] = 0;
+	measurement['fear1'] = 0;
+	measurement['fear2'] = 1;
+	measurement['has_antiepileptica'] = 0;
+    measurement['has_ca_blocker'] = 0;
+    measurement['has_incont_med'] = 1;
+	let meas = await adfice.calculate_prediction_result_meas(measurement);
+	expect(meas.prediction_result).toBe(76);
+});
+
+test('Calculate prediction can use user_height_cm with weight_kg', async () => {
+	let measurement = {};
+	measurement['user_GDS_score'] = 1;
+	measurement['grip_kg'] = 21.5;
+    measurement['walking_speed_m_per_s'] = 0.6;
+	measurement['height_cm']= 160;
+	measurement['user_weight_kg'] = 85;
+    measurement['weight_kg'] = 55;
+    measurement['systolic_bp_mmHg'] = 140;
+    measurement['number_of_limitations'] = 1;
+    measurement['nr_falls_12m'] = 3;
+    measurement['smoking'] = 1;
+    measurement['education_hml'] = 3;
+	measurement['fear0'] = 0;
+	measurement['fear1'] = 1;
+	measurement['fear2'] = 0;
+	measurement['has_antiepileptica'] = 0;
+    measurement['has_ca_blocker'] = 0;
+    measurement['has_incont_med'] = 1;
+	let meas = await adfice.calculate_prediction_result_meas(measurement);
+	expect(meas.prediction_result).toBe(69);
+});
+
 test('Update prediction', async () => {
     let patient = "00000000-0000-4000-8000-100000000002";
     let precheck = await adfice.get_patient_measurements(patient);

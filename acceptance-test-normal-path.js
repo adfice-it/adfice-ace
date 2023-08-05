@@ -486,7 +486,7 @@ test('Test prediction values present when user-entered', async t => {
     await t.navigateTo(url);
 
     let prediction_table = Selector("#prediction_data_container");
-    await t.expect(prediction_table.withText("16.6").exists).ok();
+    await t.expect(prediction_table.withText("120").exists).ok();
     await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
 
     let missing_table = Selector("#prediction_missing_container");
