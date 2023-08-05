@@ -2,9 +2,16 @@ Important:
 * Session handling does not work correctly
   - session expires even if "renew session" is clicked
   - session sometimes expires early, seems related to loading/viewing another page, including refpages
-* It would be better if OAuth2 authentication is required to start the session, regardless of whether data is pulled
-* medications seem to be logged twice on load
-* Check for additional SQL errors similar to Wednesday's; add tests to check double meds etc.
+* Entering wildly incorrect values in the start page UI causes a crash:
+  text: "Out of range value for column 'user_height_cm' at row 1",
+  sql: '/* adfice.update_prediction_with_user_values */\n' +
+    '        UPDATE patient_measurement\n' +
+    "           SET user_height_cm=?,user_values_updated = (select now()) WHERE patient_id = ?  - parameters:['2000','0881d83980f8855292ee8d38eeb03526']",
+  fatal: false,
+  errno: 1264,
+  sqlState: '22003',
+  code: 'ER_WARN_DATA_OUT_OF_RANGE'
+  I guess at some point we set limits for the database fields, but didn't build those limits into the software.
 
 
 Mid Priority:
@@ -65,6 +72,7 @@ Low Priority:
   * open a bug with a tiny reproducible example
 * the "debounce" of typing input does not work reliably with headless test-cafe
   * adding a "speed:0.1" worked around it, but we should do better
+* medications seem to be logged twice on load
 
 ---------------------------------------------------------
 Requested changes (deferred to a later version):
