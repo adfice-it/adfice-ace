@@ -72,7 +72,8 @@ async function get_table_sizes() {
 }
 
 async function write_patient_from_json(etl_patient) {
-    let patient_id = crypto.randomBytes(16).toString('hex');
+    let db = await this.db_init();
+	let patient_id = crypto.randomBytes(16).toString('hex');
     let list_of_transactions = [];
     list_of_transactions.push(...(patientListOfInserts(patient_id, etl_patient)));
     list_of_transactions.push(...(medListOfInserts(patient_id, etl_patient.medications)));

@@ -101,6 +101,37 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     app.get("/patient-validation", render_validation_advice);
 
     app.use("/load-error", express.static('static/load-error.html'));
+	
+	app.use("/dataentry", express.static('static/dataentry.html')); // gets basic info to create session and patient
+	app.use("/dataentry2", express.static('static/dataentry2.html')); // allow user to add data about patient
+	
+	app.get('/user-entered', async function(req, res) {
+		let id = null;
+		let mrn = req.query.mrn;
+		let birth_date = req.query.birthdate;
+		let participant = req.query.participant;
+		let patient = {
+			mrn: mrn,
+			ehr_pid: 'none',
+			bsn: null,
+			refresh_token: 'none',
+			birth_date: birth_date,
+			participant_number: participant
+		};
+		try {
+				id = await adfice.write_patient_from_json(patient);
+            } catch (error) {
+				console.log(error);
+// TODO add error message for user
+                res.redirect('/dataentry');
+                return;
+            }
+		let user_id = req.query.user;
+		let doctor_id = await adfice.doctor_id_for_user(user_id);
+        log_debug(server, 'setting doctor id:', doctor_id);
+        req.session.doctor_id = doctor_id;
+		res.redirect('/dataentry2?id=' + id); // TODO go to second data entry page to handle rest of patient data
+	});
 
     app.get('/auth', async function(req, res) {
         let code = req.query.code;
