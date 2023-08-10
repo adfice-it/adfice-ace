@@ -39,7 +39,7 @@ SET patient_id = (select patient_id from etl_mrn_patient where etl_mrn_patient.m
 UPDATE patient set participant_number = 
      (select participant_number 
       from research_map 
-      where research_map.patient_id = patient.patient_id) where participant_number is null;
+      where research_map.patient_id = patient.patient_id) where participant_number is null OR participant_number = '';
 
 SET @location_id = if(@location_id is null, 0, @location_id);
 SET @lookback = if(@lookback is null, '2022-08-01', @lookback); 
@@ -82,7 +82,7 @@ from patient
           from logged_events 
           where event_type = 3 order by row_created desc limit 1) as ehr_copy 
           on patient.patient_id = ehr_copy_pid
-WHERE patient.participant_number is not null and patient.row_updated >= @lookback;
+WHERE patient.participant_number is not null and patient.participant_number != '' and patient.row_updated >= @lookback;
 -- I'm not sure why I had an "on duplicate key" here....
 /* ON DUPLICATE KEY UPDATE 
      was_printed = if(printed_pid is null,0,1),
@@ -120,7 +120,7 @@ join (select rules_fired.* from rules_fired
           from rules_fired group by patient_id) as first_date 
      on rules_fired.patient_id = first_date.patient_id and rules_fired.row_created = first_date.minRC) as initial_rules
 on patient.patient_id = initial_rules.patient_id
-WHERE initial_rules.row_created >= @lookback and patient.participant_number is not null;
+WHERE initial_rules.row_created >= @lookback and patient.participant_number is not null and participant_number != '';
 
 INSERT INTO research_last_rules_fired (
   id,
@@ -142,7 +142,7 @@ join (select rules_fired.* from rules_fired
      join (select patient_id, max(row_created) as maxRC from rules_fired group by patient_id) as last_date 
      on rules_fired.patient_id = last_date.patient_id and rules_fired.row_created = last_date.maxRC) as last_rules
 on patient.patient_id = last_rules.patient_id
-WHERE last_rules.row_created >= @lookback and patient.participant_number is not null;
+WHERE last_rules.row_created >= @lookback and patient.participant_number is not null and participant_number != '';
 
 INSERT INTO research_initial_checkboxes (
   row_id,
@@ -173,7 +173,7 @@ FROM patient
           and patient_advice_selection_history.log_row_created = first_date.minRC
           ORDER BY patient_advice_selection_history.log_id) as initial_checkboxes
      on patient.patient_id = initial_checkboxes.patient_id
-WHERE initial_checkboxes.log_row_created >= @lookback and patient.participant_number is not null;
+WHERE initial_checkboxes.log_row_created >= @lookback and patient.participant_number is not null and participant_number != '';
 -- no need to look for freetext; the initial state is machine-generated and does not have freetext.
 -- in the history table row_created is the timestamp of the original creation, and row_updated has the timestamp of the latest change.
 -- Checkbox 42b-2 is initially selected by more than one rule, so it has more than one entry with the same time stamp. We might actually want to know about this, so I have removed the unique-key constraint from this table.
@@ -208,7 +208,7 @@ left join patient_advice_freetext on
      patient_advice_selection.ATC_code = patient_advice_freetext.ATC_code AND
      patient_advice_selection.medication_criteria_id = patient_advice_freetext.medication_criteria_id AND
      patient_advice_selection.select_box_num = patient_advice_freetext.select_box_num
-WHERE patient_advice_selection.row_created >= @lookback and patient.participant_number is not null;
+WHERE patient_advice_selection.row_created >= @lookback and patient.participant_number is not null and participant_number != '';
 -- This ought to have only the latest advice, so should not be any duplicates here.
 
 INSERT INTO research_initial_patient_measurement (
@@ -290,7 +290,7 @@ left join (select patient_measurement_history.* from patient_measurement_history
           from patient_measurement_history group by patient_id) as first_date 
      on patient_measurement_history.patient_id = first_date.patient_id and patient_measurement_history.row_updated = first_date.minRU and patient_measurement_history.log_id = minLI) as initial_measurements
 on patient.patient_id = initial_measurements.patient_id
-WHERE initial_measurements.row_updated >= @lookback and patient.participant_number is not null;
+WHERE initial_measurements.row_updated >= @lookback and patient.participant_number is not null and participant_number != '';
 -- Omitted user-entered values, since these will always initially be null.
 -- Use row-updated here - row_created in the history tables records the initial creation date of the row; row_updated has the timestamp of the latest change
 -- We get duplicate entries in the test data, but I think this is because the patient is used in tests that occur in the same second as the data is created. I think this won't happen in real data. In any case, the order-by ought to ensure we get the initial state.
@@ -401,7 +401,7 @@ SELECT
 from patient 
 left join patient_measurement 
 on patient.patient_id = patient_measurement.patient_id
-where patient_measurement.row_created >= @lookback and patient.participant_number is not null;
+where patient_measurement.row_created >= @lookback and patient.participant_number is not null and participant_number != '';
 -- Should not be any duplicates here; this table should have one row per patient.
 
 drop table research_map;
