@@ -101,7 +101,8 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     app.get("/patient-validation", render_validation_advice);
 
     app.use("/load-error", express.static('static/load-error.html'));
-	
+    let standalone_flag = await adfice.get_env_var('STANDALONE');
+    if (standalone_flag) {
 	app.use("/dataentry", express.static('static/dataentry.html')); // gets basic info to create session and patient
 	app.use("/dataentry2", express.static('static/dataentry2.html')); // allow user to add data about patient
 	
@@ -132,6 +133,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         req.session.doctor_id = doctor_id;
 		res.redirect('/dataentry2?id=' + id); // TODO go to second data entry page to handle rest of patient data
 	});
+    }
 
     app.get('/auth', async function(req, res) {
         let code = req.query.code;
