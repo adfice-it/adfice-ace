@@ -527,8 +527,8 @@ test('Test user entering values', async t => {
     await t.expect(smoking_dropdown.visible).ok();
     await t.click(smoking_dropdown);
     await t.click(Selector("#user_smoking_1", {
-            text: 'Ja'
-        }));
+        text: 'Ja'
+    }));
     let submit_button = Selector('#button_submit_missings');
     await t.click(submit_button);
 
@@ -539,12 +539,14 @@ test('Test user entering values', async t => {
     let user_smoking_mis1 = await Selector("#user_smoking_mis", {
         timeout: 1000
     });
-    await t.expect(user_smoking_mis1.withText("1").exists, { timeout: 1000 }).ok();
+    await t.expect(user_smoking_mis1.withText("1").exists, {
+        timeout: 1000
+    }).ok();
 
     let smoking_delete = await Selector("#del_smoking");
     await t.click(smoking_delete);
-	
-	await t.wait(1000);
+
+    await t.wait(1000);
     let user_smoking_mis2 = await Selector("#user_smoking_mis", {
         timeout: 1000
     });
@@ -576,8 +578,8 @@ test('Test user entering incomplete values', async t => {
     await t.expect(GDS_dropdown.visible).ok();
     await t.click(GDS_dropdown)
     await t.click(Selector('#GDS_dropdown_1', {
-            text: '1'
-        }));
+        text: '1'
+    }));
 
     let submit_button = Selector('#button_submit_missings');
     await t.click(submit_button);
@@ -594,7 +596,7 @@ test('Test user entering incomplete values', async t => {
 });
 
 test('Test load new patient data', async t => {
-	// http://127.0.0.1:8080/load?mrn=DummyMRN-000000175&fhir=DummyFHIR-000000175&user=dr_bob&study=AMC2021_061&participant=10175
+    // http://127.0.0.1:8080/load?mrn=DummyMRN-000000175&fhir=DummyFHIR-000000175&user=dr_bob&study=AMC2021_061&participant=10175
     let mrn = 'DummyMRN-000000175';
     let fhir = 'DummyFHIR-000000175';
     let participant = 10175;
@@ -606,11 +608,11 @@ test('Test load new patient data', async t => {
     });
     await t.expect(lab_table.withText("natrium").exists).ok();
     await t.expect(lab_table.withText("135").exists).ok();
-	
-	let pred_table = Selector("#prediction_data_table", {
+
+    let pred_table = Selector("#prediction_data_table", {
         timeout: 1000
     });
-	await t.expect(pred_table.withText("0.6").exists).ok();
+    await t.expect(pred_table.withText("0.6").exists).ok();
 
 });
 
@@ -982,19 +984,19 @@ test('Test that contact phone displays', async t => {
     let button_advise_view = Selector('button#button-advise-view');
 
     await change_flex_style_to_inline(t);
-	let div_help_box = Selector('div#help_container');
+    let div_help_box = Selector('div#help_container');
     await t.expect(div_help_box.withText('06').exists).ok();
 
-//	await change_view(t, button_prep_view,        `${BASE_URL}/prep?id=${patient_id}`);
-	await t.click(button_prep_view);
-	await change_flex_style_to_inline(t);
-	div_help_box = Selector('div#help_container');
-    await t.expect(div_help_box.withText('06').exists).ok();
-
-//    await change_view(t, button_advise_view,         `${BASE_URL}/advise?id=${patient_id}`);
-	await t.click(button_advise_view);
+    //	await change_view(t, button_prep_view,        `${BASE_URL}/prep?id=${patient_id}`);
+    await t.click(button_prep_view);
     await change_flex_style_to_inline(t);
-	div_help_box = Selector('div#help_container');
+    div_help_box = Selector('div#help_container');
+    await t.expect(div_help_box.withText('06').exists).ok();
+
+    //    await change_view(t, button_advise_view,         `${BASE_URL}/advise?id=${patient_id}`);
+    await t.click(button_advise_view);
+    await change_flex_style_to_inline(t);
+    div_help_box = Selector('div#help_container');
     await t.expect(div_help_box.exists).notOk();
 
 

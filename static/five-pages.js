@@ -42,7 +42,7 @@ function page_load(before_socket) {
     document.title = 'Patient ' + five_pages.patient_id;
 
     let json_url = get_base_url() + 'advice?id=' + five_pages.patient_id;
-	// json_data is populated by get_data_for_patient() in adfice_webserver.js
+    // json_data is populated by get_data_for_patient() in adfice_webserver.js
     // json_data.patient_advice is populated by get_advice_for_patient() in adfice.js
     get_json(json_url, function(err, json_data) {
         console.log(json_data);
@@ -79,7 +79,7 @@ function page_load(before_socket) {
 }
 
 function fill_help_phone() {
-    let phone = five_pages.data.help_phone || []; 
+    let phone = five_pages.data.help_phone || [];
     document.getElementById('phone_container').innerHTML = phone;
 }
 
@@ -215,61 +215,62 @@ function prediction_data_start(measurements) {
     document.getElementById('GDS_score').innerHTML = nice_value(measurements.GDS_score);
     document.getElementById('d_user_GDS_score').innerHTML = nice_value(measurements.user_GDS_score);
     document.getElementById('GDS_date_measured').innerHTML = old_date(nice_date(measurements.GDS_date_measured));
-	document.getElementById('user_GDS_score_mis').innerHTML = nice_value(measurements.user_GDS_score) || nice_value(measurements.GDS_score) || '<span class =\'missing\'>invoeren</span>';
-	
+    document.getElementById('user_GDS_score_mis').innerHTML = nice_value(measurements.user_GDS_score) || nice_value(measurements.GDS_score) || '<span class =\'missing\'>invoeren</span>';
+
     document.getElementById('grip_kg').innerHTML = nice_value(measurements.grip_kg);
     document.getElementById('d_user_grip_kg').innerHTML = nice_value(measurements.user_grip_kg);
     document.getElementById('grip_date_measured').innerHTML = old_date(nice_date(measurements.grip_date_measured));
-	document.getElementById('user_grip_kg_mis').innerHTML = nice_value(measurements.user_grip_kg) || nice_value(measurements.grip_kg) || '<span class =\'missing\'>invoeren</span>';
-	
+    document.getElementById('user_grip_kg_mis').innerHTML = nice_value(measurements.user_grip_kg) || nice_value(measurements.grip_kg) || '<span class =\'missing\'>invoeren</span>';
+
     document.getElementById('walking_speed_m_per_s').innerHTML = nice_value(measurements.walking_speed_m_per_s);
     document.getElementById('d_user_walking_speed_m_per_s').innerHTML = nice_value(measurements.user_walking_speed_m_per_s);
     document.getElementById('walking_date_measured').innerHTML = old_date(nice_date(measurements.walking_date_measured));
-	document.getElementById('user_walking_speed_m_per_s_mis').innerHTML = nice_value(measurements.user_walking_speed_m_per_s) || nice_value(measurements.walking_speed_m_per_s) || '<span class =\'missing\'>invoeren</span>';
-	
+    document.getElementById('user_walking_speed_m_per_s_mis').innerHTML = nice_value(measurements.user_walking_speed_m_per_s) || nice_value(measurements.walking_speed_m_per_s) || '<span class =\'missing\'>invoeren</span>';
+
     let user_BMI = null;
     if (measurements.user_weight_kg != null && measurements.user_height_cm != null) {
         user_BMI = measurements.user_weight_kg / ((measurements.user_height_cm / 100) * (measurements.user_height_cm / 100));
     }
-	let BMI = null;
-	if (!user_BMI){
-		if (measurements.weight_kg != null && measurements.height_cm != null) {
-			BMI = measurements.weight_kg / ((measurements.height_cm / 100) * (measurements.user_height_cm / 100));
-    }}
+    let BMI = null;
+    if (!user_BMI) {
+        if (measurements.weight_kg != null && measurements.height_cm != null) {
+            BMI = measurements.weight_kg / ((measurements.height_cm / 100) * (measurements.user_height_cm / 100));
+        }
+    }
     document.getElementById('BMI').innerHTML = nice_value(measurements.BMI) || nice_value(BMI);
     document.getElementById('d_user_bmi_calc').innerHTML = nice_value(user_BMI);
     document.getElementById('BMI_date_measured').innerHTML = old_date(nice_date(measurements.BMI_date_measured));
-	document.getElementById('user_height_cm_mis').innerHTML = nice_value(measurements.user_height_cm) || nice_value(measurements.height_cm) || '<span class =\'missing\'>invoeren</span>';
-	document.getElementById('user_weight_kg_mis').innerHTML = nice_value(measurements.user_weight_kg) || nice_value(measurements.weight_kg) || '<span class =\'missing\'>invoeren</span>';
-	
+    document.getElementById('user_height_cm_mis').innerHTML = nice_value(measurements.user_height_cm) || nice_value(measurements.height_cm) || '<span class =\'missing\'>invoeren</span>';
+    document.getElementById('user_weight_kg_mis').innerHTML = nice_value(measurements.user_weight_kg) || nice_value(measurements.weight_kg) || '<span class =\'missing\'>invoeren</span>';
+
     document.getElementById('systolic_bp_mmHg').innerHTML = nice_value(measurements.systolic_bp_mmHg);
     document.getElementById('d_user_systolic_bp_mmHg').innerHTML = nice_value(measurements.user_systolic_bp_mmHg);
     document.getElementById('bp_date_measured').innerHTML = old_date(nice_date(measurements.bp_date_measured));
-	document.getElementById('user_systolic_bp_mmHg_mis').innerHTML = nice_value(measurements.user_systolic_bp_mmHg) || nice_value(measurements.systolic_bp_mmHg) || '<span class =\'missing\'>invoeren</span>';
-	
+    document.getElementById('user_systolic_bp_mmHg_mis').innerHTML = nice_value(measurements.user_systolic_bp_mmHg) || nice_value(measurements.systolic_bp_mmHg) || '<span class =\'missing\'>invoeren</span>';
+
     document.getElementById('number_of_limitations').innerHTML = nice_value(measurements.number_of_limitations);
     document.getElementById('d_user_number_of_limitations').innerHTML = nice_value(measurements.user_number_of_limitations);
     document.getElementById('functional_limit_date_measured').innerHTML = old_date(nice_date(measurements.functional_limit_date_measured));
-	document.getElementById('user_number_of_limitations_mis').innerHTML = nice_value(measurements.user_number_of_limitations) || nice_value(measurements.number_of_limitations) || '<span class =\'missing\'>invoeren</span>';
-	
+    document.getElementById('user_number_of_limitations_mis').innerHTML = nice_value(measurements.user_number_of_limitations) || nice_value(measurements.number_of_limitations) || '<span class =\'missing\'>invoeren</span>';
+
     document.getElementById('nr_falls_12m').innerHTML = nice_value(measurements.nr_falls_12m);
     document.getElementById('d_user_nr_falls_12m').innerHTML = nice_value(measurements.user_nr_falls_12m);
     document.getElementById('nr_falls_date_measured').innerHTML = old_date(nice_date(measurements.nr_falls_date_measured));
-	document.getElementById('user_nr_falls_12m_mis').innerHTML = nice_value(measurements.user_nr_falls_12m) || nice_value(measurements.nr_falls_12m) || '<span class =\'missing\'>invoeren</span>';
-	
+    document.getElementById('user_nr_falls_12m_mis').innerHTML = nice_value(measurements.user_nr_falls_12m) || nice_value(measurements.nr_falls_12m) || '<span class =\'missing\'>invoeren</span>';
+
     document.getElementById('smoking').innerHTML = nice_value(measurements.smoking);
     document.getElementById('d_user_smoking').innerHTML = nice_value(measurements.user_smoking);
     document.getElementById('smoking_date_measured').innerHTML = old_date(nice_date(measurements.smoking_date_measured));
-	document.getElementById('user_smoking_mis').innerHTML = nice_value(measurements.user_smoking) || nice_value(measurements.smoking) || '<span class =\'missing\'>invoeren</span>';
-	
+    document.getElementById('user_smoking_mis').innerHTML = nice_value(measurements.user_smoking) || nice_value(measurements.smoking) || '<span class =\'missing\'>invoeren</span>';
+
     document.getElementById('has_antiepileptica').innerHTML = nice_value(measurements.has_antiepileptica);
     document.getElementById('has_ca_blocker').innerHTML = nice_value(measurements.has_ca_blocker);
     document.getElementById('has_incont_med').innerHTML = nice_value(measurements.has_incont_med);
-    
-	document.getElementById('education_hml').innerHTML = nice_value(measurements.education_hml);
+
+    document.getElementById('education_hml').innerHTML = nice_value(measurements.education_hml);
     document.getElementById('d_user_education_hml').innerHTML = nice_value(measurements.user_education_hml);
-	document.getElementById('user_education_hml_mis').innerHTML = nice_value(measurements.user_education_hml) || nice_value(measurements.education_hml) || '<span class =\'missing\'>invoeren</span>';
-	
+    document.getElementById('user_education_hml_mis').innerHTML = nice_value(measurements.user_education_hml) || nice_value(measurements.education_hml) || '<span class =\'missing\'>invoeren</span>';
+
     let fear = '';
     if (measurements.fear0) {
         fear = 0;
@@ -281,28 +282,28 @@ function prediction_data_start(measurements) {
         fear = 2;
     }
     document.getElementById('fear').innerHTML = fear;
-	let user_fear = null;
+    let user_fear = null;
     if (measurements.user_fear0) {
         fear = 0;
-		user_fear = 0;
+        user_fear = 0;
     }
     if (measurements.user_fear1) {
         fear = 1;
-		user_fear = 1;
+        user_fear = 1;
     }
     if (measurements.user_fear2) {
         fear = 2;
-		user_fear = 2;
+        user_fear = 2;
     }
     document.getElementById('d_user_fear').innerHTML = fear;
     document.getElementById('fear_of_falls_date_measured').innerHTML = old_date(nice_date(measurements.fear_of_falls_date_measured));
-	if (!fear){
-		document.getElementById('user_fear_mis').innerHTML = '<span class =\'missing\'>invoeren</span>';
-	} else {
-		document.getElementById('user_fear_mis').innerHTML = fear;
-	}
-	
-	if (measurements.user_values_updated != null) {
+    if (!fear) {
+        document.getElementById('user_fear_mis').innerHTML = '<span class =\'missing\'>invoeren</span>';
+    } else {
+        document.getElementById('user_fear_mis').innerHTML = fear;
+    }
+
+    if (measurements.user_values_updated != null) {
         document.getElementById('user_values_updated').innerHTML = nice_date(measurements.user_values_updated);
     }
 }
@@ -776,7 +777,7 @@ function print_page() {
 
 function start_page_setup() {
     fill_help_phone();
-	patient_info_age();
+    patient_info_age();
     gauge_risk_score();
     patient_info_problem_start();
     patient_info_lab_start();
@@ -787,7 +788,7 @@ function start_page_setup() {
 }
 
 function prep_page_setup() {
-	fill_help_phone();
+    fill_help_phone();
     patient_info_age();
     patient_info_meds_with_rules();
     patient_info_meds_without_rules();
@@ -801,7 +802,7 @@ function prep_page_setup() {
 }
 
 function consult_page_setup() {
-	fill_help_phone();
+    fill_help_phone();
     patient_info_age();
     patient_info_meds_with_rules();
     patient_info_meds_without_rules();
@@ -824,7 +825,7 @@ function advise_page_setup() {
 }
 
 function finalize_page_setup() {
-	fill_help_phone();
+    fill_help_phone();
     patient_info_age(); // is this needed?
     gauge_risk_score();
     div_all_ehr_text();

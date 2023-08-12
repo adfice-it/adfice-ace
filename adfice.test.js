@@ -1029,16 +1029,16 @@ test('Calculate prediction based on user-entered DB data', async () => {
 });
 
 test('Calculate prediction favors user-entered data', async () => {
-	let measurement = {};
-	measurement['user_GDS_score'] = 1;
+    let measurement = {};
+    measurement['user_GDS_score'] = 1;
     measurement['GDS_score'] = 0;
     measurement['user_grip_kg'] = 21.5;
-	measurement['grip_kg'] = 6.5;
+    measurement['grip_kg'] = 6.5;
     measurement['user_walking_speed_m_per_s'] = 0.6;
     measurement['walking_speed_m_per_s'] = 1.2;
-	measurement['user_height_cm'] = 160;
+    measurement['user_height_cm'] = 160;
     measurement['user_weight_kg'] = 55;
-	measurement['height_cm']= 180;
+    measurement['height_cm'] = 180;
     measurement['weight_kg'] = 80;
     measurement['user_systolic_bp_mmHg'] = 140;
     measurement['systolic_bp_mmHg'] = 150;
@@ -1050,63 +1050,63 @@ test('Calculate prediction favors user-entered data', async () => {
     measurement['smoking'] = 1;
     measurement['user_education_hml'] = 3;
     measurement['education_hml'] = 1;
-	measurement['user_fear0'] = 0;
-	measurement['fear0'] = 1;
+    measurement['user_fear0'] = 0;
+    measurement['fear0'] = 1;
     measurement['user_fear1'] = 0;
-	measurement['fear1'] = 0;
-	measurement['user_fear2'] = 1;
-	measurement['fear2'] = 0;
-	measurement['has_antiepileptica'] = 0;
+    measurement['fear1'] = 0;
+    measurement['user_fear2'] = 1;
+    measurement['fear2'] = 0;
+    measurement['has_antiepileptica'] = 0;
     measurement['has_ca_blocker'] = 0;
     measurement['has_incont_med'] = 1;
-	let meas = await adfice.calculate_prediction_result_meas(measurement);
-	expect(meas.prediction_result).toBe(73);
+    let meas = await adfice.calculate_prediction_result_meas(measurement);
+    expect(meas.prediction_result).toBe(73);
 });
 
 test('Calculate prediction can use user_height_cm with weight_kg', async () => {
-	let measurement = {};
-	measurement['user_GDS_score'] = 1;
-	measurement['grip_kg'] = 21.5;
+    let measurement = {};
+    measurement['user_GDS_score'] = 1;
+    measurement['grip_kg'] = 21.5;
     measurement['walking_speed_m_per_s'] = 0.6;
-	measurement['user_height_cm'] = 200;
-	measurement['height_cm']= 160;
+    measurement['user_height_cm'] = 200;
+    measurement['height_cm'] = 160;
     measurement['weight_kg'] = 55;
     measurement['systolic_bp_mmHg'] = 140;
     measurement['number_of_limitations'] = 1;
     measurement['nr_falls_12m'] = 3;
     measurement['smoking'] = 1;
     measurement['education_hml'] = 3;
-	measurement['fear0'] = 0;
-	measurement['fear1'] = 0;
-	measurement['fear2'] = 1;
-	measurement['has_antiepileptica'] = 0;
+    measurement['fear0'] = 0;
+    measurement['fear1'] = 0;
+    measurement['fear2'] = 1;
+    measurement['has_antiepileptica'] = 0;
     measurement['has_ca_blocker'] = 0;
     measurement['has_incont_med'] = 1;
-	let meas = await adfice.calculate_prediction_result_meas(measurement);
-	expect(meas.prediction_result).toBe(76);
+    let meas = await adfice.calculate_prediction_result_meas(measurement);
+    expect(meas.prediction_result).toBe(76);
 });
 
 test('Calculate prediction can use user_height_cm with weight_kg', async () => {
-	let measurement = {};
-	measurement['user_GDS_score'] = 1;
-	measurement['grip_kg'] = 21.5;
+    let measurement = {};
+    measurement['user_GDS_score'] = 1;
+    measurement['grip_kg'] = 21.5;
     measurement['walking_speed_m_per_s'] = 0.6;
-	measurement['height_cm']= 160;
-	measurement['user_weight_kg'] = 85;
+    measurement['height_cm'] = 160;
+    measurement['user_weight_kg'] = 85;
     measurement['weight_kg'] = 55;
     measurement['systolic_bp_mmHg'] = 140;
     measurement['number_of_limitations'] = 1;
     measurement['nr_falls_12m'] = 3;
     measurement['smoking'] = 1;
     measurement['education_hml'] = 3;
-	measurement['fear0'] = 0;
-	measurement['fear1'] = 1;
-	measurement['fear2'] = 0;
-	measurement['has_antiepileptica'] = 0;
+    measurement['fear0'] = 0;
+    measurement['fear1'] = 1;
+    measurement['fear2'] = 0;
+    measurement['has_antiepileptica'] = 0;
     measurement['has_ca_blocker'] = 0;
     measurement['has_incont_med'] = 1;
-	let meas = await adfice.calculate_prediction_result_meas(measurement);
-	expect(meas.prediction_result).toBe(69);
+    let meas = await adfice.calculate_prediction_result_meas(measurement);
+    expect(meas.prediction_result).toBe(69);
 });
 
 test('Update prediction', async () => {
@@ -1590,7 +1590,7 @@ test('test measListOfInserts', async function() {
     };
     let measListOfInserts3 = adfice.measListOfInserts(patient_id, found_meas);
 
-	found_meas = {
+    found_meas = {
         systolic_bp_mmHg: 120,
         bp_date_measured: null,
         height_cm: '130,1',
@@ -1619,10 +1619,10 @@ test('test measListOfInserts', async function() {
     expect(measListOfInserts[0][1][2]).toBe(120);
     expect(measListOfInserts2[0][1][2]).toBe(null);
     expect(measListOfInserts3[0][1][3]).toBe(null);
-	expect(measListOfInserts4[0][1][4]).toBe(130.1);
-	expect(measListOfInserts4[0][1][6]).toBe(32.1);
-	expect(measListOfInserts4[0][1][12]).toBe(3.0);
-	expect(measListOfInserts4[0][1][14]).toBe(0.6);
+    expect(measListOfInserts4[0][1][4]).toBe(130.1);
+    expect(measListOfInserts4[0][1][6]).toBe(32.1);
+    expect(measListOfInserts4[0][1][12]).toBe(3.0);
+    expect(measListOfInserts4[0][1][14]).toBe(0.6);
 });
 
 test('test empty meas', async function() {
@@ -2051,45 +2051,45 @@ test('test writePatientFromJSON bad data', async function() {
 });
 
 test('test get_help_phone', async function() {
-	let local_env_file_path = './local.env';
-	var envfile = {};
+    let local_env_file_path = './local.env';
+    var envfile = {};
     try {
         envfile = await dotenv.parse(fs.readFileSync(local_env_file_path));
     } catch (error) /* istanbul ignore next */ {
         console.log(error);
     }
-	let test_help_phone = envfile.HELP_PHONE || '';
-	let adfice_help_phone = await adfice.get_help_phone();
-	expect(adfice_help_phone).toBe(test_help_phone);
+    let test_help_phone = envfile.HELP_PHONE || '';
+    let adfice_help_phone = await adfice.get_help_phone();
+    expect(adfice_help_phone).toBe(test_help_phone);
 
-	adfice_help_phone = await adfice.get_help_phone(local_env_file_path);
-	expect(adfice_help_phone).toBe(test_help_phone);
+    adfice_help_phone = await adfice.get_help_phone(local_env_file_path);
+    expect(adfice_help_phone).toBe(test_help_phone);
 
-        let messages = [];
-        let logger = {
-            log: function(msg) {
-                messages.push(msg);
-            },
-        };
-	adfice_help_phone = await adfice.get_help_phone('./doesNotExist.env', logger);
-	expect(adfice_help_phone).toBe('');
+    let messages = [];
+    let logger = {
+        log: function(msg) {
+            messages.push(msg);
+        },
+    };
+    adfice_help_phone = await adfice.get_help_phone('./doesNotExist.env', logger);
+    expect(adfice_help_phone).toBe('');
 });
 
 test('test feature_flag', async function() {
-        let messages = [];
-        let logger = {
-            log: function(msg) {
-                messages.push(msg);
-            },
-        };
-        let tmp_env_path = autil.tmp_path('empty', '.env');
-        let flag_name = 'FOO';
-	let flag = await adfice.get_env_var(flag_name, tmp_env_path, logger);
-	expect(flag).toBeFalsy();
+    let messages = [];
+    let logger = {
+        log: function(msg) {
+            messages.push(msg);
+        },
+    };
+    let tmp_env_path = autil.tmp_path('empty', '.env');
+    let flag_name = 'FOO';
+    let flag = await adfice.get_env_var(flag_name, tmp_env_path, logger);
+    expect(flag).toBeFalsy();
 
-        await autil.to_file(tmp_env_path, `${flag_name}=true`);
-	flag = await adfice.get_env_var(flag_name, tmp_env_path);
-	expect(flag).toBeTruthy();
+    await autil.to_file(tmp_env_path, `${flag_name}=true`);
+    flag = await adfice.get_env_var(flag_name, tmp_env_path);
+    expect(flag).toBeTruthy();
 
-        fs.unlinkSync(tmp_env_path);
+    fs.unlinkSync(tmp_env_path);
 });

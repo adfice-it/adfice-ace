@@ -38,11 +38,11 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     async function get_data_for_patient(req, res) {
         let patient_id = req.query.id || req.query.patient || 0;
         let patient_advice = await adfice.get_advice_for_patient(patient_id);
-		let help_phone = await adfice.get_help_phone();
+        let help_phone = await adfice.get_help_phone();
         let data = {
             patient_id: patient_id,
             patient_advice: patient_advice,
-			help_phone: help_phone,
+            help_phone: help_phone,
         };
         return data;
     }
@@ -103,36 +103,42 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     app.use("/load-error", express.static('static/load-error.html'));
     let standalone_flag = await adfice.get_env_var('STANDALONE');
     if (standalone_flag) {
-	app.use("/dataentry", express.static('static/dataentry.html')); // gets basic info to create session and patient
-	app.use("/dataentry2", express.static('static/dataentry2.html')); // allow user to add data about patient
-	
-	app.get('/user-entered', async function(req, res) {
-		let id = null;
-		let mrn = req.query.mrn;
-		let birth_date = req.query.birthdate;
-		let participant = req.query.participant;
-		let patient = {
-			mrn: mrn,
-			ehr_pid: 'none',
-			bsn: null,
-			refresh_token: 'none',
-			birth_date: birth_date,
-			participant_number: participant
-		};
-		try {
-				id = await adfice.write_patient_from_json(patient);
+
+        // gets basic info to create session and patient
+        app.use("/dataentry", express.static('static/dataentry.html'));
+
+        // allow user to add data about patient
+        app.use("/dataentry2", express.static('static/dataentry2.html'));
+
+        app.get('/user-entered', async function(req, res) {
+            let id = null;
+            let mrn = req.query.mrn;
+            let birth_date = req.query.birthdate;
+            let participant = req.query.participant;
+            let patient = {
+                mrn: mrn,
+                ehr_pid: 'none',
+                bsn: null,
+                refresh_token: 'none',
+                birth_date: birth_date,
+                participant_number: participant
+            };
+            try {
+                id = await adfice.write_patient_from_json(patient);
             } catch (error) {
-				console.log(error);
+                console.log(error);
 // TODO add error message for user
                 res.redirect('/dataentry');
                 return;
             }
-		let user_id = req.query.user;
-		let doctor_id = await adfice.doctor_id_for_user(user_id);
-        log_debug(server, 'setting doctor id:', doctor_id);
-        req.session.doctor_id = doctor_id;
-		res.redirect('/dataentry2?id=' + id); // TODO go to second data entry page to handle rest of patient data
-	});
+            let user_id = req.query.user;
+            let doctor_id = await adfice.doctor_id_for_user(user_id);
+            log_debug(server, 'setting doctor id:', doctor_id);
+            req.session.doctor_id = doctor_id;
+
+// TODO go to second data entry page to handle rest of patient data
+            res.redirect('/dataentry2?id=' + id);
+        });
     }
 
     app.get('/auth', async function(req, res) {

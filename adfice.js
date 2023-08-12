@@ -73,7 +73,7 @@ async function get_table_sizes() {
 
 async function write_patient_from_json(etl_patient) {
     let db = await this.db_init();
-	let patient_id = crypto.randomBytes(16).toString('hex');
+    let patient_id = crypto.randomBytes(16).toString('hex');
     let list_of_transactions = [];
     list_of_transactions.push(...(patientListOfInserts(patient_id, etl_patient)));
     list_of_transactions.push(...(medListOfInserts(patient_id, etl_patient.medications)));
@@ -297,42 +297,42 @@ function measListOfInserts(patient_id, measurements) {
         'fear0, fear1, fear2, fear_of_falls_date_measured, ' +
         'number_of_limitations, functional_limit_date_measured, nr_falls_12m, nr_falls_date_measured) ' +
         'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-	let height_cm = measurements['height_cm'];
-        if(typeof height_cm === 'string' || height_cm instanceof String){
-            height_cm = height_cm.replace(',','.');
-            height_cm = parseFloat(height_cm);
-			/* istanbul ignore next */
-			if(isNaN(height_cm)){
-				height_cm = measurements['height_cm'];
-			}
+    let height_cm = measurements['height_cm'];
+    if (typeof height_cm === 'string' || height_cm instanceof String) {
+        height_cm = height_cm.replace(',', '.');
+        height_cm = parseFloat(height_cm);
+        /* istanbul ignore next */
+        if (isNaN(height_cm)) {
+            height_cm = measurements['height_cm'];
         }
-	let weight_kg = measurements['weight_kg'];
-        if(typeof weight_kg === 'string' || weight_kg instanceof String){
-            weight_kg = weight_kg.replace(',','.');
-            weight_kg = parseFloat(weight_kg);
-			/* istanbul ignore next */
-			if(isNaN(weight_kg)){
-				weight_kg = measurements['weight_kg'];
-			}
+    }
+    let weight_kg = measurements['weight_kg'];
+    if (typeof weight_kg === 'string' || weight_kg instanceof String) {
+        weight_kg = weight_kg.replace(',', '.');
+        weight_kg = parseFloat(weight_kg);
+        /* istanbul ignore next */
+        if (isNaN(weight_kg)) {
+            weight_kg = measurements['weight_kg'];
         }
-	let grip_kg = measurements['grip_kg'];
-        if(typeof grip_kg === 'string' || grip_kg instanceof String){
-            grip_kg = grip_kg.replace(',','.');
-            grip_kg = parseFloat(grip_kg);
-			/* istanbul ignore next */
-			if(isNaN(grip_kg)){
-				grip_kg = measurements['grip_kg'];
-			}
+    }
+    let grip_kg = measurements['grip_kg'];
+    if (typeof grip_kg === 'string' || grip_kg instanceof String) {
+        grip_kg = grip_kg.replace(',', '.');
+        grip_kg = parseFloat(grip_kg);
+        /* istanbul ignore next */
+        if (isNaN(grip_kg)) {
+            grip_kg = measurements['grip_kg'];
         }
-	let walking_speed_m_per_s = measurements['walking_speed_m_per_s'];
-        if(typeof walking_speed_m_per_s === 'string' || walking_speed_m_per_s instanceof String){
-            walking_speed_m_per_s = walking_speed_m_per_s.replace(',','.');
-            walking_speed_m_per_s = parseFloat(walking_speed_m_per_s);
-			/* istanbul ignore next */
-			if(isNaN(walking_speed_m_per_s)){
-				walking_speed_m_per_s = measurements['walking_speed_m_per_s'];
-			}
-        }	
+    }
+    let walking_speed_m_per_s = measurements['walking_speed_m_per_s'];
+    if (typeof walking_speed_m_per_s === 'string' || walking_speed_m_per_s instanceof String) {
+        walking_speed_m_per_s = walking_speed_m_per_s.replace(',', '.');
+        walking_speed_m_per_s = parseFloat(walking_speed_m_per_s);
+        /* istanbul ignore next */
+        if (isNaN(walking_speed_m_per_s)) {
+            walking_speed_m_per_s = measurements['walking_speed_m_per_s'];
+        }
+    }
     let params = [
         patient_id,
         nowString(),
@@ -724,12 +724,12 @@ async function calculate_prediction_result(patient_id) {
         return null;
     }
     let measurement = measurements[0];
-	measurement = calculate_prediction_result_meas(measurement);
-	return measurement;
+    measurement = calculate_prediction_result_meas(measurement);
+    return measurement;
 }
 
-async function calculate_prediction_result_meas(measurement){
-	//any value that can be = 0 cannot use the || syntax
+async function calculate_prediction_result_meas(measurement) {
+    //any value that can be = 0 cannot use the || syntax
     let GDS_score = measurement['user_GDS_score'];
     if (GDS_score == null) {
         GDS_score = measurement['GDS_score'];
@@ -739,34 +739,34 @@ async function calculate_prediction_result_meas(measurement){
         measurement['walking_speed_m_per_s'];
     // prefer BMI from user-entered values, then from EHR, then from EHR height/weight
     let BMI = null;
-	if (measurement['user_height_cm'] != null){
-		if (measurement['user_weight_kg'] != null){
-			BMI = measurement['user_weight_kg'] /
-			((measurement['user_height_cm']/100)*(measurement['user_height_cm']/100));
-		} else 
-			/* istanbul ignore else */ 
-			if (measurement['weight_kg'] != null){
-			BMI = measurement['weight_kg'] /
-			((measurement['user_height_cm']/100)*(measurement['user_height_cm']/100));
-		}
-	} else if (measurement['user_weight_kg'] != null){
-		/* istanbul ignore else */ 
-		if (measurement['height_cm'] != null){
-			BMI = measurement['user_weight_kg'] /
-			((measurement['height_cm']/100)*(measurement['height_cm']/100));
-		}
-	}
-	/* istanbul ignore else */ 
-	if (!BMI){
-		BMI = measurement['BMI'];
-	} // else BMI stays at the value set previously
-	/* istanbul ignore else */ 
-	if (!BMI) {
-		/* istanbul ignore else */ 
+    if (measurement['user_height_cm'] != null) {
+        if (measurement['user_weight_kg'] != null) {
+            BMI = measurement['user_weight_kg'] /
+                ((measurement['user_height_cm'] / 100) * (measurement['user_height_cm'] / 100));
+        } else
+            /* istanbul ignore else */
+            if (measurement['weight_kg'] != null) {
+                BMI = measurement['weight_kg'] /
+                    ((measurement['user_height_cm'] / 100) * (measurement['user_height_cm'] / 100));
+            }
+    } else if (measurement['user_weight_kg'] != null) {
+        /* istanbul ignore else */
+        if (measurement['height_cm'] != null) {
+            BMI = measurement['user_weight_kg'] /
+                ((measurement['height_cm'] / 100) * (measurement['height_cm'] / 100));
+        }
+    }
+    /* istanbul ignore else */
+    if (!BMI) {
+        BMI = measurement['BMI'];
+    } // else BMI stays at the value set previously
+    /* istanbul ignore else */
+    if (!BMI) {
+        /* istanbul ignore else */
         if (measurement['height_cm'] != null &&
             measurement['weight_kg'] != null) {
             BMI = measurement['weight_kg'] /
-                ((measurement['height_cm']/100)*(measurement['height_cm']/100));
+                ((measurement['height_cm'] / 100) * (measurement['height_cm'] / 100));
         } // else BMI stays null
     } // else BMI stays at the value set previously
     let systolic_bp_mmHg = measurement['user_systolic_bp_mmHg'] ||
@@ -785,30 +785,30 @@ async function calculate_prediction_result_meas(measurement){
     }
     let education_hml = measurement['user_education_hml'] ||
         measurement['education_hml'];
-	let fear1 = 0;
-	let fear2 = 0;
-	if (measurement['user_fear0'] || measurement['user_fear1'] || measurement['user_fear2']){
-		/* istanbul ignore else */ 
-		if (measurement['user_fear1'] == 1) {
-			fear1 = 1;
-		} // else do not change it
-		/* istanbul ignore else */ 
-		if (measurement['user_fear2'] == 1) {
-			fear2 = 1;
-		} // else do not change it
-	} else 
-		/* istanbul ignore else */ 
-		if (measurement['fear0'] || measurement['fear1'] || measurement['fear2']){
-		/* istanbul ignore else */ 
-		if (measurement['fear1'] == 1) {
-			fear1 = 1;
-		} // else do not change it
-		/* istanbul ignore else */ 	
-		if (measurement['fear2'] == 1) {
-			fear2 = 1;
-		} // else do not change it
-	} // else do not change it
-	let has_antiepileptica = measurement['has_antiepileptica'] || 0;
+    let fear1 = 0;
+    let fear2 = 0;
+    if (measurement['user_fear0'] || measurement['user_fear1'] || measurement['user_fear2']) {
+        /* istanbul ignore else */
+        if (measurement['user_fear1'] == 1) {
+            fear1 = 1;
+        } // else do not change it
+        /* istanbul ignore else */
+        if (measurement['user_fear2'] == 1) {
+            fear2 = 1;
+        } // else do not change it
+    } else
+        /* istanbul ignore else */
+        if (measurement['fear0'] || measurement['fear1'] || measurement['fear2']) {
+            /* istanbul ignore else */
+            if (measurement['fear1'] == 1) {
+                fear1 = 1;
+            } // else do not change it
+            /* istanbul ignore else */
+            if (measurement['fear2'] == 1) {
+                fear2 = 1;
+            } // else do not change it
+        } // else do not change it
+    let has_antiepileptica = measurement['has_antiepileptica'] || 0;
     let has_ca_blocker = measurement['has_ca_blocker'] || 0;
     let has_incont_med = measurement['has_incont_med'] || 0;
 
@@ -1581,7 +1581,7 @@ async function get_env_var(var_name, local_env_file_path, err_logger) {
     let var_val = '';
     try {
         envfile = await dotenv.parse(fs.readFileSync(local_env_file_path));
-	var_val = envfile[var_name];
+        var_val = envfile[var_name];
     } catch (error) /* istanbul ignore next */ {
         if (!err_logger) {
             err_logger = console;
@@ -1592,7 +1592,7 @@ async function get_env_var(var_name, local_env_file_path, err_logger) {
 }
 
 async function get_help_phone(local_env_file_path, err_logger) {
-        return await get_env_var('HELP_PHONE', local_env_file_path, err_logger);
+    return await get_env_var('HELP_PHONE', local_env_file_path, err_logger);
 }
 
 function adfice_init(db) {
@@ -1605,7 +1605,7 @@ function adfice_init(db) {
         box_states_to_selection_states: box_states_to_selection_states,
         calculate_store_prediction_result: calculate_store_prediction_result,
         calculate_prediction_result: calculate_prediction_result,
-		calculate_prediction_result_meas: calculate_prediction_result_meas,
+        calculate_prediction_result_meas: calculate_prediction_result_meas,
         db_init: db_init,
         determine_preselected_checkboxes: determine_preselected_checkboxes,
         evaluate_sql: evaluate_sql,
@@ -1655,8 +1655,8 @@ function adfice_init(db) {
         finalize_and_export: finalize_and_export,
         get_advice_for_patient: get_advice_for_patient,
         get_advice_texts_checkboxes: get_advice_texts_checkboxes,
-        get_env_var:get_env_var,
-	get_help_phone: get_help_phone,
+        get_env_var: get_env_var,
+        get_help_phone: get_help_phone,
         get_patient_measurements: get_patient_measurements,
         get_refresh_data: get_refresh_data,
         id_for_fhir: id_for_fhir,
