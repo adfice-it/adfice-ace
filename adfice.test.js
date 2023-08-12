@@ -2061,10 +2061,35 @@ test('test get_help_phone', async function() {
 	let test_help_phone = envfile.HELP_PHONE || '';
 	let adfice_help_phone = await adfice.get_help_phone();
 	expect(adfice_help_phone).toBe(test_help_phone);
-	
+
 	adfice_help_phone = await adfice.get_help_phone(local_env_file_path);
 	expect(adfice_help_phone).toBe(test_help_phone);
-	
-	adfice_help_phone = await adfice.get_help_phone('./doesNotExist.env');
+
+        let messages = [];
+        let logger = {
+            log: function(msg) {
+                messages.push(msg);
+            },
+        };
+	adfice_help_phone = await adfice.get_help_phone('./doesNotExist.env', logger);
 	expect(adfice_help_phone).toBe('');
+});
+
+test('test feature_flag', async function() {
+        let messages = [];
+        let logger = {
+            log: function(msg) {
+                messages.push(msg);
+            },
+        };
+        let tmp_env_path = autil.tmp_path('empty', '.env');
+        let flag_name = 'FOO';
+	let flag = await adfice.get_env_var(tmp_env_path, flag_name, logger);
+	expect(flag).toBeFalsy();
+
+        await autil.to_file(tmp_env_path, `${flag_name}=true`);
+	flag = await adfice.get_env_var(tmp_env_path, flag_name);
+	expect(flag).toBeTruthy();
+
+        fs.unlinkSync(tmp_env_path);
 });

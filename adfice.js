@@ -1573,19 +1573,26 @@ async function doctor_id_for_user(user_id) {
     return results[0].doctor_id;
 }
 
-async function get_help_phone(local_env_file_path){
-	if (!local_env_file_path) {
+async function get_env_var(local_env_file_path, var_name, err_logger) {
+    if (!local_env_file_path) {
         local_env_file_path = './local.env';
     }
-	var envfile = {};
-	let help_phone = '';
+    var envfile = {};
+    let var_val = '';
     try {
         envfile = await dotenv.parse(fs.readFileSync(local_env_file_path));
-		help_phone = envfile.HELP_PHONE;
+	var_val = envfile[var_name];
     } catch (error) /* istanbul ignore next */ {
-        console.log(error);
+        if (!err_logger) {
+            err_logger = console;
+        }
+        err_logger.log(error);
     }
-	return help_phone;
+    return var_val;
+}
+
+async function get_help_phone(local_env_file_path, err_logger) {
+        return await get_env_var(local_env_file_path, 'HELP_PHONE', err_logger);
 }
 
 function adfice_init(db) {
@@ -1648,7 +1655,8 @@ function adfice_init(db) {
         finalize_and_export: finalize_and_export,
         get_advice_for_patient: get_advice_for_patient,
         get_advice_texts_checkboxes: get_advice_texts_checkboxes,
-		get_help_phone: get_help_phone,
+        get_env_var:get_env_var,
+	get_help_phone: get_help_phone,
         get_patient_measurements: get_patient_measurements,
         get_refresh_data: get_refresh_data,
         id_for_fhir: id_for_fhir,
