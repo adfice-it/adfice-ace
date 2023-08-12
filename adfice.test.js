@@ -2084,11 +2084,11 @@ test('test feature_flag', async function() {
         };
         let tmp_env_path = autil.tmp_path('empty', '.env');
         let flag_name = 'FOO';
-	let flag = await adfice.get_env_var(tmp_env_path, flag_name, logger);
+	let flag = await adfice.get_env_var(flag_name, tmp_env_path, logger);
 	expect(flag).toBeFalsy();
 
         await autil.to_file(tmp_env_path, `${flag_name}=true`);
-	flag = await adfice.get_env_var(tmp_env_path, flag_name);
+	flag = await adfice.get_env_var(flag_name, tmp_env_path);
 	expect(flag).toBeTruthy();
 
         fs.unlinkSync(tmp_env_path);

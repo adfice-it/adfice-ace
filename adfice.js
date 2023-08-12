@@ -1573,7 +1573,7 @@ async function doctor_id_for_user(user_id) {
     return results[0].doctor_id;
 }
 
-async function get_env_var(local_env_file_path, var_name, err_logger) {
+async function get_env_var(var_name, local_env_file_path, err_logger) {
     if (!local_env_file_path) {
         local_env_file_path = './local.env';
     }
@@ -1592,7 +1592,7 @@ async function get_env_var(local_env_file_path, var_name, err_logger) {
 }
 
 async function get_help_phone(local_env_file_path, err_logger) {
-        return await get_env_var(local_env_file_path, 'HELP_PHONE', err_logger);
+        return await get_env_var('HELP_PHONE', local_env_file_path, err_logger);
 }
 
 function adfice_init(db) {
