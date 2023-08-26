@@ -725,6 +725,24 @@ function gauge_risk_score() {
     }
 }
 
+function data_entry_medications(){
+	let meds = get_patient_advice().medications;
+	let html = '';
+	if(meds.length > 0){
+		html += '<table><tr><th>ATC</th><th>naam</th><th>startdatum</th></tr>';
+		for (let i = 0; i < meds.length; ++i) {
+			html += '<tr><td>' + meds[i].ATC_code + '</td>'
+				+ '<td>' + meds[i].medication_name + '</td>'
+				+ '<td>' + nice_date(meds[i].start_date) + '</td></tr>'
+		}
+		html += '</table>';
+	} else {
+		html += 'Geen geneesmiddelen gevonden.'
+	}
+	set_element_inner('data_entry_med_list',html);
+}
+
+
 function nice_date(dtstring) {
     if (dtstring == null) {
         return '';
@@ -832,6 +850,11 @@ function finalize_page_setup() {
     is_final();
 }
 
+function data_entry_page_setup() {
+	data_entry_medications();
+	// TODO: age, problems, labs, meas
+}
+
 // These functions will be called from the web page, e.g.:
 // <script>
 // window.addEventListener('load', function(event) { start_page_load(); });
@@ -857,6 +880,10 @@ function finalize_page_load() {
     page_load(finalize_page_setup);
 }
 
+function data_entry_page_load() {
+    page_load(data_entry_page_setup);
+}
+
 function top_function() {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
@@ -878,6 +905,7 @@ if (typeof module !== 'undefined') {
         consult_page_load: consult_page_load,
         advise_page_load: advise_page_load,
         finalize_page_load: finalize_page_load,
+		data_entry_page_load: data_entry_page_load,
         get_five_pages: get_five_pages
     }
 }

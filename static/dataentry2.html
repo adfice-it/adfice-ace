@@ -38,14 +38,67 @@ function user_entered_patient() {
  Meld een probleem via <a href="mailto:"adfice-it@amsterdamumc.nl">email</a> of telefoon <span id="phone_container"></span>
 </div><!-- help_container -->
 
-<div><p>Vul de onderstaande gegevens in.</p>				
+<p>Patient: <span id="patient-info-id"></span><br/></p>
+<p>Vul de onderstaande gegevens in.</p>
 
-<form id="data_entry_form">				
+<form id="edit_birthdate_form">				
+<div id = "data_entry_age"></div><br><br>
+corrigeer geboortedatum <input id = "single_med_startdate" type = "date"><br>
+<input id="button_submit_birthdate" type="button" onclick="user_entered_birthdate()" value="Verstuur"></form>
+<br><br><br>				
+
+<form id="single_med_form">				
+<h3>Medicatie</h3>
+<div id = "data_entry_med_list"></div><br><br>
+ATC <input id = "single_med_atc" type = "text" size="10"><br>
+naam <input id = "single_med_name" type = "text" size = "160"><br>
+start datum <input id = "single_med_startdate" type = "date"><br>
+(Als de startdatum onbekend is, gebruik 01-01 van de geschat startjaar.)<br>
+<input id="button_submit_single_med" type="button" onclick="user_entered_single_med()" value="Verstuur"></form>
+<br><br><br>
+
+<!-- <form id="multiple_med_form">				
+TODO
+<input id="button_submit_meds" type="button" onclick="user_entered_meds()" value="Verstuur"></form>
+<br>
+-->
+
+<form id="problems_form">				
 TODO
 
-<input id="button_submit_patient" type="button" onclick="user_entered_patient()" value="Verstuur"></form>
-</div>
-</body>
+<input id="button_submit_problems" type="button" onclick="user_entered_problems()" value="Verstuur"></form>
+<br><br><br>
 
+<form id="labs_form">				
+TODO
+
+<input id="button_submit_labs" type="button" onclick="user_entered_labs()" value="Verstuur"></form>
+<br><br><br>
+
+<form id="meas_form">				
+TODO
+
+<input id="button_submit_meas" type="button" onclick="user_entered_meas()" value="Verstuur"></form>
+<br><br><br>
+
+<br>
+<input id="button_submit_all" type="button" onclick="user_entered_all()" value="Verstuur alles & afmaken">
+<br>
+<input id="button_submit_done" type="button" onclick="user_entered_meas()" value="Afmaken">
+
+
+
+
+<div id="expiration">
+	<p>Het lijkt dat niemand aanwezig is. Klik op de onderstaande knop om uw sessie te vernieuwen.</p>
+	<div id="timeout-time"></div>
+	<br><br>
+</body>
+<script src="assets/basic-utils.js"></script>
+<script src="assets/message.js"></script>
+<script src="assets/five-pages.js"></script>
+<script>
+window.addEventListener('load', function(event) { data_entry_page_load(); });
+</script>
 
 </html>

@@ -102,8 +102,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 
     app.use("/load-error", express.static('static/load-error.html'));
     let standalone_flag = await adfice.get_env_var('STANDALONE');
-    if (standalone_flag) {
-
+    if (standalone_flag) { // note that any value for STANDALONE seems to evaluate to TRUE
         // gets basic info to create session and patient
         app.use("/dataentry", express.static('static/dataentry.html'));
 
@@ -117,7 +116,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             let participant = req.query.participant;
             let patient = {
                 mrn: mrn,
-                ehr_pid: 'none',
+                ehr_pid: null,
                 bsn: null,
                 refresh_token: 'none',
                 birth_date: birth_date,
@@ -136,8 +135,15 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             log_debug(server, 'setting doctor id:', doctor_id);
             req.session.doctor_id = doctor_id;
 
-// TODO go to second data entry page to handle rest of patient data
-            res.redirect('/dataentry2?id=' + id);
+            res.redirect('/dataentry2?id=' + id); // TODO go to second data entry page to handle rest of patient data
+        });
+		
+		app.get('/user-entered-patients', async function(req, res) {
+            let user_id = req.query.user;
+            let doctor_id = await adfice.doctor_id_for_user(user_id);
+            log_debug(server, 'setting doctor id:', doctor_id);
+            req.session.doctor_id = doctor_id;
+			// TODO create page that lists existing patients            
         });
     }
 
@@ -383,7 +389,10 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         } else if (message.type == 'submit_missings') {
             await adfice.update_prediction_with_user_values(
                 patient_id, message['submit_missings']);
-        } else {
+        } else if (message.type == 'submit_single_med') {
+			await adfice.add_single_med(
+                patient_id, message['submit_single_med']);
+		} else {
             send_all(kind, patient_id, message);
         }
     }

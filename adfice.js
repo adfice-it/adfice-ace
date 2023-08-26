@@ -941,6 +941,16 @@ async function update_prediction_with_user_values(patient_id, form_data) {
     }
 }
 
+async function add_single_med(patient_id, form_data) {
+	let sql = `/* adfice.add_single_med */
+         INSERT INTO patient_medication (id, patient_id, ATC_code, medication_name, start_date)
+		 VALUES(null,?,?,?,?)`;
+	let params = [];
+    params.push(patient_id,form_data['single_med_atc'],form_data['single_med_name'],form_data['single_med_startdate']);
+	let db = await this.db_init();
+	await db.sql_query(sql,params);
+}
+
 async function get_selections(patient_id) {
     var sql = `/* adfice.get_selections */
         SELECT patient_id
@@ -1651,6 +1661,7 @@ function adfice_init(db) {
         add_log_event_renew: add_log_event_renew,
         add_log_event_copy_patient_text: add_log_event_copy_patient_text,
         add_log_event_copy_ehr_text: add_log_event_copy_ehr_text,
+		add_single_med: add_single_med,
         doctor_id_for_user: doctor_id_for_user,
         finalize_and_export: finalize_and_export,
         get_advice_for_patient: get_advice_for_patient,

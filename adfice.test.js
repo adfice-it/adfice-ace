@@ -449,6 +449,21 @@ test('update_prediction_with_user_values, delete some data after prediction', as
     await adfice.sql_select(sql, params);
 })
 
+test('add_single_med', async () => {
+	let patient_id = '00000000-0000-4000-8000-100000000172';
+	let meds = await adfice.get_meds(patient_id);
+	expect(meds.length).toBe(0);
+	let form_data = {};
+    form_data['single_med_atc'] = 'B0GU501';
+	form_data['single_med_name'] = 'bogus name';
+	form_data['single_med_startdate'] = '1970-01-01';
+	await adfice.add_single_med(patient_id, form_data);
+	meds = await adfice.get_meds(patient_id);
+	expect(meds.length).toBe(1);
+	//cleanup
+	await adfice.sql_select('delete from patient_medication where patient_id = ' + patient_id);
+})
+
 test('get_advice_for_patient(27), with labs and problems', async () => {
     //console.log('27');
     let patient_id = "00000000-0000-4000-8000-100000000027";
