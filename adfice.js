@@ -951,6 +951,26 @@ async function add_single_med(patient_id, form_data) {
 	await db.sql_query(sql,params);
 }
 
+async function add_problems(patient_id, form_data) {
+	let sql1 = 'DELETE FROM patient_problem where patient_id = "' + patient_id + '";';
+	let problem_names = Object.keys(form_data);
+	let sql2 = `/* adfice.add_problems */
+         INSERT INTO patient_problem (patient_id, date_retrieved, name) 
+		 VALUES (?,?,?);`;
+	let list_of_inserts = [];
+	for (let i = 0; i < problem_names.length; ++i) {
+		let params = [];
+		let problem_name = problem_names[i].replace('_rb_y','');
+		params.push(patient_id,nowString(),problem_name);
+		list_of_inserts.push([sql2, params]);
+	}
+	
+	let db = await this.db_init();
+	await db.sql_query(sql1,[]);
+	await this.db.as_sql_transaction(list_of_inserts);
+}
+
+
 async function get_selections(patient_id) {
     var sql = `/* adfice.get_selections */
         SELECT patient_id
@@ -1662,6 +1682,7 @@ function adfice_init(db) {
         add_log_event_copy_patient_text: add_log_event_copy_patient_text,
         add_log_event_copy_ehr_text: add_log_event_copy_ehr_text,
 		add_single_med: add_single_med,
+		add_problems: add_problems,
         doctor_id_for_user: doctor_id_for_user,
         finalize_and_export: finalize_and_export,
         get_advice_for_patient: get_advice_for_patient,

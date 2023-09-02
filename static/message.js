@@ -138,6 +138,38 @@ function user_entered_single_med() {
     window.location.reload(true);
 }
 
+function user_entered_problems() {
+    if (!message_globals.ws) {
+        message_globals.logger.error(
+            'got a submit problems request but websocket is null');
+        ++message_globals.weirdness;
+        return;
+    }
+
+    send_message('submit_problems', function(message) {
+        message.patient_id = message_globals.patient_id;
+
+        message['submit_problems'] = {};
+        let form = document.getElementById('problems_form');
+        for (let i = 0; i < form.elements.length; ++i) {
+            if (form.elements[i].id != "button_submit_problems") {
+                let val = form.elements[i].value;
+				if(val == 'Ja'){
+					let radio_button = document.getElementById(form.elements[i].id);
+console.log(form.elements[i].id);
+console.log(radio_button.checked);
+					if(radio_button.checked){
+						message['submit_problems'][form.elements[i].id] = val;
+					}
+				}
+            }
+        }
+        console.log(message);
+    });
+    localStorage.clear();
+    window.location.reload(true);
+}
+
 function delete_user_entered(to_be_deleted) {
     if (!message_globals.ws) {
         message_globals.logger.error(

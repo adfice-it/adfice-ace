@@ -464,6 +464,34 @@ test('add_single_med', async () => {
 	await adfice.sql_select('delete from patient_medication where patient_id = ' + patient_id);
 })
 
+test('add_problems', async () => {
+	let patient_id = '00000000-0000-4000-8000-100000000172';
+	let problems = await adfice.get_problems(patient_id);
+	expect(problems.length).toBe(0);
+	let form_data = {};
+    form_data['hypertensie_rb_y'] = 'Ja';
+	form_data['jicht_rb_y'] = 'Ja';
+	form_data['orthostatische-hypotensie_rb_y'] = 'Ja';
+	await adfice.add_problems(patient_id, form_data);
+	problems = await adfice.get_problems(patient_id);
+console.log(problems);	
+	expect(problems.length).toBe(3);
+	
+	// check removal of problems
+	form_data = {};
+    form_data['hypertensie_rb_y'] = 'Ja';
+	form_data['orthostatische-hypotensie_rb_y'] = 'Ja';
+	await adfice.add_problems(patient_id, form_data);
+	problems = await adfice.get_problems(patient_id);
+	expect(problems.length).toBe(2);
+	
+	// check submitting empty problems, which convieniently also cleans up
+	form_data = {};
+	await adfice.add_problems(patient_id, form_data);
+	problems = await adfice.get_problems(patient_id);
+	expect(problems.length).toBe(0);
+})
+
 test('get_advice_for_patient(27), with labs and problems', async () => {
     //console.log('27');
     let patient_id = "00000000-0000-4000-8000-100000000027";

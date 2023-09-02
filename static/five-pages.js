@@ -742,6 +742,27 @@ function data_entry_medications(){
 	set_element_inner('data_entry_med_list',html);
 }
 
+function data_entry_problem_list() {
+    let all_problems = get_patient_advice().all_problems || {};
+	let all_problem_names = Object.keys(all_problems);
+	let problems = get_patient_advice().problems;
+	let html = '<table><tr><th>Aandoening</th><th>Ja</th><th>Nee</th></tr>';
+	for (let i = 0; i < all_problem_names.length; ++i) {
+		let display_name = all_problems[all_problem_names[i]];
+		html += '<tr><td>' + display_name + '</td>';
+		html += '<td><input type="radio" name="' + all_problem_names[i] + '_rb" id="' + all_problem_names[i] + '_rb_y" value="Ja"></td>'
+		html += '<td><input type="radio" name="' + all_problem_names[i] + '_rb" id="' + all_problem_names[i] + '_rb_n" value="Nee" checked = "checked"></td></tr>'
+	}
+	html += '</table>';
+	document.getElementById('data_entry_problems').innerHTML = html;
+	for (let i = 0; i < problems.length; ++i) {
+		let radio_button = document.getElementById(problems[i].name + '_rb_y');
+		radio_button.checked = true;
+	}
+}
+
+
+
 
 function nice_date(dtstring) {
     if (dtstring == null) {
@@ -852,6 +873,7 @@ function finalize_page_setup() {
 
 function data_entry_page_setup() {
 	data_entry_medications();
+	data_entry_problem_list();
 	// TODO: age, problems, labs, meas
 }
 
