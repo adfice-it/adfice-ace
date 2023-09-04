@@ -970,6 +970,25 @@ async function add_problems(patient_id, form_data) {
 	await this.db.as_sql_transaction(list_of_inserts);
 }
 
+async function add_labs(patient_id, form_data) {
+	let sql1 = `/* adfice.add_labs */
+		DELETE FROM patient_lab WHERE patient_id = "` + patient_id + '";';
+	let lab_names = Object.keys(form_data);
+	let sql2 = `/* adfice.add_labs */
+         INSERT INTO patient_lab (patient_id, date_retrieved, lab_test_name, lab_test_result) 
+		 VALUES (?,?,?,?);`;
+	let list_of_inserts = [];
+	for (let i = 0; i < lab_names.length; ++i) {
+		let params = [];
+		params.push(patient_id,nowString(),lab_names[i], form_data[lab_names[i]]);
+		list_of_inserts.push([sql2, params]);
+	}
+
+	let db = await this.db_init();
+	await db.sql_query(sql1,[]);
+	await this.db.as_sql_transaction(list_of_inserts);
+}
+
 
 async function get_selections(patient_id) {
     var sql = `/* adfice.get_selections */
@@ -1681,8 +1700,9 @@ function adfice_init(db) {
         add_log_event_renew: add_log_event_renew,
         add_log_event_copy_patient_text: add_log_event_copy_patient_text,
         add_log_event_copy_ehr_text: add_log_event_copy_ehr_text,
-		add_single_med: add_single_med,
+		add_labs: add_labs,
 		add_problems: add_problems,
+		add_single_med: add_single_med,
         doctor_id_for_user: doctor_id_for_user,
         finalize_and_export: finalize_and_export,
         get_advice_for_patient: get_advice_for_patient,

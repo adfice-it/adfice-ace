@@ -761,6 +761,32 @@ function data_entry_problem_list() {
 	}
 }
 
+function data_entry_labs(){
+	let labs = get_patient_advice().labs;
+	let lab_keys = Object.keys(labs);
+	for (let i = 0; i < lab_keys.length; ++i) {
+		if(labs[i].lab_test_name == "natrium"){
+			document.getElementById('labs_natrium').value = labs[i].lab_test_result;
+		}
+		if(labs[i].lab_test_name == "kalium"){
+			document.getElementById('labs_kalium').value = labs[i].lab_test_result;
+		}
+		if(labs[i].lab_test_name == "calcium"){
+			document.getElementById('labs_calcium').value = labs[i].lab_test_result;
+		}
+		if(labs[i].lab_test_name == "kreatinine"){
+			document.getElementById('labs_kreatinine').value = labs[i].lab_test_result;
+		}
+		if(labs[i].lab_test_name == "eGFR"){
+			if(labs[i].lab_test_result == ">60"){
+				document.getElementById('labs_egfr_n').checked = true;
+			} else {
+				document.getElementById('labs_egfr').value = labs[i].lab_test_result;
+			}
+		}
+		
+	}
+}
 
 
 
@@ -874,6 +900,7 @@ function finalize_page_setup() {
 function data_entry_page_setup() {
 	data_entry_medications();
 	data_entry_problem_list();
+	data_entry_labs();
 	// TODO: age, problems, labs, meas
 }
 

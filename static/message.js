@@ -156,14 +156,46 @@ function user_entered_problems() {
                 let val = form.elements[i].value;
 				if(val == 'Ja'){
 					let radio_button = document.getElementById(form.elements[i].id);
-console.log(form.elements[i].id);
-console.log(radio_button.checked);
 					if(radio_button.checked){
 						message['submit_problems'][form.elements[i].id] = val;
 					}
 				}
             }
         }
+        console.log(message);
+    });
+    localStorage.clear();
+    window.location.reload(true);
+}
+
+function user_entered_labs() {
+    if (!message_globals.ws) {
+        message_globals.logger.error(
+            'got a submit labs request but websocket is null');
+        ++message_globals.weirdness;
+        return;
+    }
+
+    send_message('submit_labs', function(message) {
+        message.patient_id = message_globals.patient_id;
+
+        message['submit_labs'] = {};
+        let form = document.getElementById('labs_form');
+		let radio_button = document.getElementById("labs_egfr_n");
+		let numeric_egfr = false;
+        for (let i = 0; i < form.elements.length; ++i) {
+            if (form.elements[i].id != "button_submit_labs" 
+				&& form.elements[i].id != "labs_egfr_n") {
+				let val = form.elements[i].value;
+				if(val > 0){
+					message['submit_labs'][form.elements[i].name] = val;
+					if(form.elements[i].name == 'eGFR'){ numeric_egfr = true;}
+				}
+			}
+        }
+		if(radio_button.checked && !numeric_egfr){ // if there is a numeric eGFR then the radio button is overridden
+			message['submit_labs']["eGFR"] = radio_button.value;
+		}
         console.log(message);
     });
     localStorage.clear();
