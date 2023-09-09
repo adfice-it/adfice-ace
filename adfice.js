@@ -980,7 +980,7 @@ async function add_single_med(patient_id, form_data) {
 	if(params_pmeds.length > 0){
 		let existing_meas = await this.get_patient_measurements(patient_id);
 		if(!existing_meas){
-			await create_new_meas_entry(patient_id, db); 
+			await this.create_new_meas_entry(patient_id);
 		}
 		await db.sql_query(sql_pmeds,params_pmeds);
 	}
@@ -1031,17 +1031,13 @@ async function add_meas(patient_id, form_data) {
 	let sql_values = '';
 	let params = [];
 	if (!existing_meas){
-		await create_new_meas_entry(patient_id, db);
+		await this.create_new_meas_entry(patient_id);
 	}
-	await update_prediction_with_user_values(patient_id, form_data);
+	await this.update_prediction_with_user_values(patient_id, form_data);
 }
 
-async function create_new_meas_entry(patient_id, db){
-	/* if
+async function create_new_meas_entry(patient_id) {
 	let db = await this.db_init();
-	is in this function, it throws the error "TypeError: Cannot read properties of undefined (reading 'db_init')"
-	Why? In any case, passing db in as a param seems to work.
-	*/
 	let sql = `/* adfice.create_new_meas_entry */
 				INSERT INTO patient_measurement (patient_id, date_retrieved,has_antiepileptica,has_ca_blocker, has_incont_med)
 				VALUES (?,?,0,0,0)`; // A new meas entry starts with the med vars set to 0, so they can be updated individually
