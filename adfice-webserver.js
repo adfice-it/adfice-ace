@@ -114,22 +114,29 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             let mrn = req.query.mrn;
             let birth_date = req.query.birthdate;
             let participant = req.query.participant;
-            let patient = {
-                mrn: mrn,
-                ehr_pid: null,
-                bsn: null,
-                refresh_token: 'none',
-                birth_date: birth_date,
-                participant_number: participant
-            };
-            try {
-                id = await adfice.write_patient_from_json(patient);
-            } catch (error) {
-                console.log(error);
-// TODO add error message for user
-                res.redirect('/dataentry');
-                return;
-            }
+            try{
+				id = await adfice.id_for_mrn(mrn);
+			} catch (error) {
+				console.log(error);
+			}
+			if(!id){
+				let patient = {
+					mrn: mrn,
+					ehr_pid: null,
+					bsn: null,
+					refresh_token: 'none',
+					birth_date: birth_date,
+					participant_number: participant
+				};
+				try {
+					id = await adfice.write_patient_from_json(patient);
+				} catch (error) {
+					console.log(error);
+	// TODO add error message for user
+					res.redirect('/dataentry');
+					return;
+				}
+			}
             let user_id = req.query.user;
             let doctor_id = await adfice.doctor_id_for_user(user_id);
             log_debug(server, 'setting doctor id:', doctor_id);

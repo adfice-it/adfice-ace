@@ -14,6 +14,7 @@ Important:
   I guess at some point we set limits for the database fields, but didn't build those limits into the software.
 
 Mid Priority:
+* Standalone: A medication start date entered as 01-01-1970 gets displayed as 31-12-1969. Guessing this has to do with UTC conversion. Might also happen with dates imported from Epic - check.
 * Standalone can have a better medication entry interface by making use of this table: https://www.geneesmiddeleninformatiebank.nl/metadata.csv (as far as I can tell, this list agrees with farmacotherapeutische kompas).
 * Add ability to delete meds/labs to standalone interface
 * Add ability to find existing patients in standalone interface
