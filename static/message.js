@@ -100,9 +100,9 @@ function update_meas() {
         message.patient_id = message_globals.patient_id;
 
         message['submit_missings'] = {};
-        let form = document.getElementById('missing_data_form');
+        let form = document.getElementById('prediction_missing_form');
         for (let i = 0; i < form.elements.length; ++i) {
-            if (form.elements[i].id != "button_submit_missings") {
+            if (form.elements[i].id != "button_submit_prediction_missing") {
                 let val = form.elements[i].value;
                 message['submit_missings'][form.elements[i].id] = val;
             }
@@ -196,6 +196,31 @@ function user_entered_labs() {
 		if(radio_button.checked && !numeric_egfr){ // if there is a numeric eGFR then the radio button is overridden
 			message['submit_labs']["eGFR"] = radio_button.value;
 		}
+        console.log(message);
+    });
+    localStorage.clear();
+    window.location.reload(true);
+}
+
+function user_entered_meas(){
+	if (!message_globals.ws) {
+        message_globals.logger.error(
+            'got a submit_meas event but websocket is null');
+        ++message_globals.weirdness;
+        return;
+    }
+
+    send_message('submit_meas', function(message) {
+        message.patient_id = message_globals.patient_id;
+
+        message['submit_meas'] = {};
+        let form = document.getElementById('user_entered_meas_form');
+        for (let i = 0; i < form.elements.length; ++i) {
+            if (form.elements[i].id != "button_submit_user_entered_meas") {
+                let val = form.elements[i].value;
+                message['submit_meas'][form.elements[i].id] = val;
+            }
+        }
         console.log(message);
     });
     localStorage.clear();

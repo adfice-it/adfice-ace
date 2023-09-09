@@ -397,7 +397,10 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                 patient_id, message['submit_problems']);		
 		} else if (message.type == 'submit_labs') {
 			await adfice.add_labs(
-                patient_id, message['submit_labs']);	
+                patient_id, message['submit_labs']);
+		} else if (message.type == 'submit_meas') {
+			await adfice.add_meas(
+                patient_id, message['submit_meas']);				
 		} else {
             send_all(kind, patient_id, message);
         }

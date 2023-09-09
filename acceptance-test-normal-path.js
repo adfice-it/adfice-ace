@@ -457,7 +457,7 @@ test('Test prediction values missing', async t => {
     let url = `${BASE_URL}/start?id=${patient_id}`;
     await t.navigateTo(url);
 
-    let missing_table = Selector("#prediction_missing_container");
+    let missing_table = Selector("#prediction_missing_form_container");
     await t.expect(missing_table.withText("grijpkracht").exists).ok();
     await t.expect(missing_table.withText("anti-epileptica").exists).notOk();
 });
@@ -489,7 +489,7 @@ test('Test prediction values present when user-entered', async t => {
     await t.expect(prediction_table.withText("120").exists).ok();
     await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
 
-    let missing_table = Selector("#prediction_missing_container");
+    let missing_table = Selector("#prediction_missing_form_container");
     await t.expect(missing_table.withText("roker").exists).ok();
 });
 
@@ -515,7 +515,7 @@ test('Test user entering values', async t => {
     await change_flex_style_to_inline(t);
 
     // Selectors that are used to check state should be awaited
-    let missing_table = await Selector("#prediction_missing_container");
+    let missing_table = await Selector("#prediction_missing_form_container");
     let prediction = await Selector("#patient_info", {
         timeout: 1000
     });
@@ -529,7 +529,7 @@ test('Test user entering values', async t => {
     await t.click(Selector("#user_smoking_1", {
         text: 'Ja'
     }));
-    let submit_button = Selector('#button_submit_missings');
+    let submit_button = Selector('#button_submit_prediction_missing');
     await t.click(submit_button);
 
     let prediction2 = await Selector("#patient_info", {
@@ -568,7 +568,7 @@ test('Test user entering incomplete values', async t => {
     await t.navigateTo(url);
     await change_flex_style_to_inline(t);
 
-    let missing_table = await Selector("#prediction_missing_container", {
+    let missing_table = await Selector("#prediction_missing_form_container", {
         timeout: 1000
     });
     await t.expect(missing_table.withText("GDS").exists).ok();
@@ -581,7 +581,7 @@ test('Test user entering incomplete values', async t => {
         text: '1'
     }));
 
-    let submit_button = Selector('#button_submit_missings');
+    let submit_button = Selector('#button_submit_prediction_missing');
     await t.click(submit_button);
 
     let user_GDS_score_mis1 = await Selector("#user_GDS_score_mis");

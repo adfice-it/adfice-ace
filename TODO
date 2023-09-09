@@ -15,6 +15,9 @@ Important:
 
 Mid Priority:
 * Standalone can have a better medication entry interface by making use of this table: https://www.geneesmiddeleninformatiebank.nl/metadata.csv (as far as I can tell, this list agrees with farmacotherapeutische kompas).
+* Add ability to delete meds to standalone interface
+* Add ability to find existing patients in standalone interface
+* Add instructions +/- additional convenience scripts for extracting research data from standalone system
 * Consider moving bin/db-create-portal-tables.sh to the valportaal repo. The tables actually belong to the valportaal, although symlinking them to adfice is handy since adfice needs to write to those tables as well.
 * Can we implment a better fake OAuth for testing?
 

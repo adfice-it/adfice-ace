@@ -464,6 +464,47 @@ test('add_single_med', async () => {
 	await adfice.sql_select('delete from patient_medication where patient_id = "' + patient_id + '";');
 })
 
+test('add_single_med affecting prediction data', async () => {
+	let patient_id = 'test_single_med';
+await adfice.sql_select('delete from patient_medication where patient_id = "' + patient_id + '";');
+await adfice.sql_select('delete from patient_measurement where patient_id = "' + patient_id + '";');
+	
+	let meds = await adfice.get_meds(patient_id);
+	let meas = await adfice.get_patient_measurements(patient_id);
+	expect(meds.length).toBe(0);
+	expect(meas).toBe(null);
+	let form_data = {};
+    form_data['single_med_atc'] = 'N03B0G5';
+	form_data['single_med_name'] = 'bogus name';
+	form_data['single_med_startdate'] = '1970-01-01';
+	await adfice.add_single_med(patient_id, form_data);
+	meds = await adfice.get_meds(patient_id);
+	meas = await adfice.get_patient_measurements(patient_id);
+	expect(meds.length).toBe(1);
+	expect(meas[0]['has_antiepileptica']).toBe(1);
+	
+	form_data['single_med_atc'] = 'C08B0G5';
+	form_data['single_med_name'] = 'bogus name2';
+	await adfice.add_single_med(patient_id, form_data);
+	meds = await adfice.get_meds(patient_id);
+	meas = await adfice.get_patient_measurements(patient_id);
+	expect(meds.length).toBe(2);
+	expect(meas[0]['has_antiepileptica']).toBe(1);
+	expect(meas[0]['has_ca_blocker']).toBe(1);
+	
+	form_data['single_med_atc'] = 'G04BDG5';
+	form_data['single_med_name'] = 'bogus name3';
+	await adfice.add_single_med(patient_id, form_data);
+	meds = await adfice.get_meds(patient_id);
+	meas = await adfice.get_patient_measurements(patient_id);
+	expect(meds.length).toBe(3);
+	expect(meas[0]['has_incont_med']).toBe(1);
+	
+	//cleanup
+	await adfice.sql_select('delete from patient_medication where patient_id = "' + patient_id + '";');
+	await adfice.sql_select('delete from patient_measurement where patient_id = "' + patient_id + '";');
+})
+
 test('add_problems', async () => {
 	let patient_id = '00000000-0000-4000-8000-100000000172';
 	let problems = await adfice.get_problems(patient_id);
@@ -521,7 +562,37 @@ test('add_labs', async () => {
 	await adfice.add_labs(patient_id, form_data);
 	
 })
-
+/*
+test('add_meas', async () => {
+	let patient_id = 'test_add_meas';
+	let meas = await adfice.get_patient_measurements(patient_id);
+	expect(meas).toBe(null);
+	let form_data = {};
+    form_data['user_GDS_score'] = '1';
+    form_data['user_grip_kg'] = '15';
+    form_data['user_walking_speed_m_per_s'] = '0.2';
+    form_data['user_height_cm'] = '160';
+    form_data['user_weight_kg'] = '60';
+    form_data['user_systolic_bp_mmHg'] = '120';
+    form_data['user_number_of_limitations'] = '2';
+    form_data['user_nr_falls_12m'] = '2';
+	await adfice.add_meas(patient_id, form_data);
+	meas = await adfice.get_patient_measurements(patient_id);
+	expect(meas[0]['has_antiepileptica']).toBe(0);
+	expect(meas[0]['user_number_of_limitations']).toBe(2);
+	
+	form_data = {};
+	form_data['user_smoking'] = '0';
+    form_data['user_education_hml'] = '2';
+    form_data['fear_dropdown'] = '2';
+	await adfice.add_meas(patient_id, form_data);
+	meas = await adfice.get_patient_measurements(patient_id);
+	expect(meas[0]['fear2']).toBe(1);
+	
+	// cleanup
+	await adfice.sql_select('delete from patient_measurement where patient_id = "' + patient_id + '";');
+})
+*/
 test('get_advice_for_patient(27), with labs and problems', async () => {
     //console.log('27');
     let patient_id = "00000000-0000-4000-8000-100000000027";

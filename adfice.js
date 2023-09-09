@@ -367,7 +367,17 @@ function measListOfInserts(patient_id, measurements) {
 }
 
 function measListOfUpdatesMeds(patient_id, meds) {
-    let has_antiepileptica = 0;
+    let prediction_meds = checkPredictionMeds(meds);
+    let list_of_transactions = [];
+    let sql = '/* adfice.measListOfUpdatesMeds */ UPDATE patient_measurement ' +
+        'SET has_antiepileptica = ?, has_ca_blocker = ?, has_incont_med = ? ' +
+        "WHERE patient_id = '" + patient_id + "'";
+    list_of_transactions.push([sql, [prediction_meds['has_antiepileptica'], prediction_meds['has_ca_blocker'], prediction_meds['has_incont_med']]]);
+    return list_of_transactions;
+}
+
+function checkPredictionMeds(meds){
+	let has_antiepileptica = 0;
     let has_ca_blocker = 0;
     let has_incont_med = 0;
     for (let i = 0; i < meds.length; ++i) {
@@ -386,13 +396,11 @@ function measListOfUpdatesMeds(patient_id, meds) {
             }
         }
     }
-
-    let list_of_transactions = [];
-    let sql = '/* adfice.measListOfUpdatesMeds */ UPDATE patient_measurement ' +
-        'SET has_antiepileptica = ?, has_ca_blocker = ?, has_incont_med = ? ' +
-        "WHERE patient_id = '" + patient_id + "'";
-    list_of_transactions.push([sql, [has_antiepileptica, has_ca_blocker, has_incont_med]]);
-    return list_of_transactions;
+	return {
+		'has_antiepileptica': has_antiepileptica,
+		'has_ca_blocker': has_ca_blocker,
+		'has_incont_med': has_incont_med
+	}
 }
 
 async function remove_med(atc_code, patient_id) {
@@ -401,7 +409,8 @@ async function remove_med(atc_code, patient_id) {
         FROM patient_medication
         WHERE ATC_code = ? AND patient_id = ?;`;
     var params = [atc_code, patient_id];
-    let deleted = await this.db.sql_query(sql, params);;
+    let deleted = await this.db.sql_query(sql, params);
+	// TODO should also check and update prediction model data
     return deleted;
 }
 
@@ -949,6 +958,32 @@ async function add_single_med(patient_id, form_data) {
     params.push(patient_id,form_data['single_med_atc'],form_data['single_med_name'],form_data['single_med_startdate']);
 	let db = await this.db_init();
 	await db.sql_query(sql,params);
+	
+	// if med changes a variable in the prediction model, add this info to the patient_measurements table
+	let meds = [{'ATC_code': form_data['single_med_atc']}];
+	let prediction_meds = checkPredictionMeds(meds);
+	let sql_pmeds = "/* adfice.add_single_med */ UPDATE patient_measurement ";
+	let params_pmeds = [];
+	if(prediction_meds['has_antiepileptica'] != 0){
+		sql_pmeds += "SET has_antiepileptica = ? ";
+		params_pmeds.push(prediction_meds['has_antiepileptica']);
+	}
+	if(prediction_meds['has_ca_blocker'] != 0){
+		sql_pmeds += "SET has_ca_blocker = ? ";
+		params_pmeds.push(prediction_meds['has_ca_blocker']);
+	}
+	if(prediction_meds['has_incont_med'] != 0){
+		sql_pmeds += "SET has_incont_med = ? ";
+		params_pmeds.push(prediction_meds['has_incont_med']);
+	}
+	sql_pmeds += "WHERE patient_id = '" + patient_id + "';";
+	if(params_pmeds.length > 0){
+		let existing_meas = await this.get_patient_measurements(patient_id);
+		if(!existing_meas){
+			await create_new_meas_entry(patient_id, db); 
+		}
+		await db.sql_query(sql_pmeds,params_pmeds);
+	}
 }
 
 async function add_problems(patient_id, form_data) {
@@ -989,6 +1024,31 @@ async function add_labs(patient_id, form_data) {
 	await this.db.as_sql_transaction(list_of_inserts);
 }
 
+async function add_meas(patient_id, form_data) {
+	let db = await this.db_init();
+	let existing_meas = await this.get_patient_measurements(patient_id);
+	let sql = '';
+	let sql_values = '';
+	let params = [];
+	if (!existing_meas){
+		await create_new_meas_entry(patient_id, db);
+	}
+	await update_prediction_with_user_values(patient_id, form_data);
+}
+
+async function create_new_meas_entry(patient_id, db){
+	/* if
+	let db = await this.db_init();
+	is in this function, it throws the error "TypeError: Cannot read properties of undefined (reading 'db_init')"
+	Why? In any case, passing db in as a param seems to work.
+	*/
+	let sql = `/* adfice.create_new_meas_entry */
+				INSERT INTO patient_measurement (patient_id, date_retrieved,has_antiepileptica,has_ca_blocker, has_incont_med)
+				VALUES (?,?,0,0,0)`; // A new meas entry starts with the med vars set to 0, so they can be updated individually
+	let params = [];
+	params.push(patient_id,nowString());
+	await db.sql_query(sql,params);
+}
 
 async function get_selections(patient_id) {
     var sql = `/* adfice.get_selections */
@@ -1655,6 +1715,7 @@ function adfice_init(db) {
         calculate_store_prediction_result: calculate_store_prediction_result,
         calculate_prediction_result: calculate_prediction_result,
         calculate_prediction_result_meas: calculate_prediction_result_meas,
+		create_new_meas_entry: create_new_meas_entry,
         db_init: db_init,
         determine_preselected_checkboxes: determine_preselected_checkboxes,
         evaluate_sql: evaluate_sql,
@@ -1701,6 +1762,7 @@ function adfice_init(db) {
         add_log_event_copy_patient_text: add_log_event_copy_patient_text,
         add_log_event_copy_ehr_text: add_log_event_copy_ehr_text,
 		add_labs: add_labs,
+		add_meas: add_meas,
 		add_problems: add_problems,
 		add_single_med: add_single_med,
         doctor_id_for_user: doctor_id_for_user,

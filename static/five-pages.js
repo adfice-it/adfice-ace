@@ -208,24 +208,26 @@ function prediction_start() {
     let measurements = get_patient_advice().measurements || {};
     // for some unholy reason, measurements.prediction_result is null in IE when the page first loads. We'll use risk_score, which is not null.
     let risk_score = get_patient_advice().risk_score;
+	let html = create_meas_user_entered_html();
+	document.getElementById('prediction_missing_form_container').innerHTML = html;
+	let footnote = create_meas_footnote_html();
+	document.getElementById('footnote_missing').innerHTML = footnote;
     prediction_data_start(measurements);
+	fill_user_entered_meas(measurements);
 }
 
 function prediction_data_start(measurements) {
     document.getElementById('GDS_score').innerHTML = nice_value(measurements.GDS_score);
     document.getElementById('d_user_GDS_score').innerHTML = nice_value(measurements.user_GDS_score);
     document.getElementById('GDS_date_measured').innerHTML = old_date(nice_date(measurements.GDS_date_measured));
-    document.getElementById('user_GDS_score_mis').innerHTML = nice_value(measurements.user_GDS_score) || nice_value(measurements.GDS_score) || '<span class =\'missing\'>invoeren</span>';
 
     document.getElementById('grip_kg').innerHTML = nice_value(measurements.grip_kg);
     document.getElementById('d_user_grip_kg').innerHTML = nice_value(measurements.user_grip_kg);
     document.getElementById('grip_date_measured').innerHTML = old_date(nice_date(measurements.grip_date_measured));
-    document.getElementById('user_grip_kg_mis').innerHTML = nice_value(measurements.user_grip_kg) || nice_value(measurements.grip_kg) || '<span class =\'missing\'>invoeren</span>';
 
     document.getElementById('walking_speed_m_per_s').innerHTML = nice_value(measurements.walking_speed_m_per_s);
     document.getElementById('d_user_walking_speed_m_per_s').innerHTML = nice_value(measurements.user_walking_speed_m_per_s);
     document.getElementById('walking_date_measured').innerHTML = old_date(nice_date(measurements.walking_date_measured));
-    document.getElementById('user_walking_speed_m_per_s_mis').innerHTML = nice_value(measurements.user_walking_speed_m_per_s) || nice_value(measurements.walking_speed_m_per_s) || '<span class =\'missing\'>invoeren</span>';
 
     let user_BMI = null;
     if (measurements.user_weight_kg != null && measurements.user_height_cm != null) {
@@ -240,28 +242,22 @@ function prediction_data_start(measurements) {
     document.getElementById('BMI').innerHTML = nice_value(measurements.BMI) || nice_value(BMI);
     document.getElementById('d_user_bmi_calc').innerHTML = nice_value(user_BMI);
     document.getElementById('BMI_date_measured').innerHTML = old_date(nice_date(measurements.BMI_date_measured));
-    document.getElementById('user_height_cm_mis').innerHTML = nice_value(measurements.user_height_cm) || nice_value(measurements.height_cm) || '<span class =\'missing\'>invoeren</span>';
-    document.getElementById('user_weight_kg_mis').innerHTML = nice_value(measurements.user_weight_kg) || nice_value(measurements.weight_kg) || '<span class =\'missing\'>invoeren</span>';
 
     document.getElementById('systolic_bp_mmHg').innerHTML = nice_value(measurements.systolic_bp_mmHg);
     document.getElementById('d_user_systolic_bp_mmHg').innerHTML = nice_value(measurements.user_systolic_bp_mmHg);
     document.getElementById('bp_date_measured').innerHTML = old_date(nice_date(measurements.bp_date_measured));
-    document.getElementById('user_systolic_bp_mmHg_mis').innerHTML = nice_value(measurements.user_systolic_bp_mmHg) || nice_value(measurements.systolic_bp_mmHg) || '<span class =\'missing\'>invoeren</span>';
 
     document.getElementById('number_of_limitations').innerHTML = nice_value(measurements.number_of_limitations);
     document.getElementById('d_user_number_of_limitations').innerHTML = nice_value(measurements.user_number_of_limitations);
     document.getElementById('functional_limit_date_measured').innerHTML = old_date(nice_date(measurements.functional_limit_date_measured));
-    document.getElementById('user_number_of_limitations_mis').innerHTML = nice_value(measurements.user_number_of_limitations) || nice_value(measurements.number_of_limitations) || '<span class =\'missing\'>invoeren</span>';
 
     document.getElementById('nr_falls_12m').innerHTML = nice_value(measurements.nr_falls_12m);
     document.getElementById('d_user_nr_falls_12m').innerHTML = nice_value(measurements.user_nr_falls_12m);
     document.getElementById('nr_falls_date_measured').innerHTML = old_date(nice_date(measurements.nr_falls_date_measured));
-    document.getElementById('user_nr_falls_12m_mis').innerHTML = nice_value(measurements.user_nr_falls_12m) || nice_value(measurements.nr_falls_12m) || '<span class =\'missing\'>invoeren</span>';
 
     document.getElementById('smoking').innerHTML = nice_value(measurements.smoking);
     document.getElementById('d_user_smoking').innerHTML = nice_value(measurements.user_smoking);
     document.getElementById('smoking_date_measured').innerHTML = old_date(nice_date(measurements.smoking_date_measured));
-    document.getElementById('user_smoking_mis').innerHTML = nice_value(measurements.user_smoking) || nice_value(measurements.smoking) || '<span class =\'missing\'>invoeren</span>';
 
     document.getElementById('has_antiepileptica').innerHTML = nice_value(measurements.has_antiepileptica);
     document.getElementById('has_ca_blocker').innerHTML = nice_value(measurements.has_ca_blocker);
@@ -269,7 +265,6 @@ function prediction_data_start(measurements) {
 
     document.getElementById('education_hml').innerHTML = nice_value(measurements.education_hml);
     document.getElementById('d_user_education_hml').innerHTML = nice_value(measurements.user_education_hml);
-    document.getElementById('user_education_hml_mis').innerHTML = nice_value(measurements.user_education_hml) || nice_value(measurements.education_hml) || '<span class =\'missing\'>invoeren</span>';
 
     let fear = '';
     if (measurements.fear0) {
@@ -297,15 +292,107 @@ function prediction_data_start(measurements) {
     }
     document.getElementById('d_user_fear').innerHTML = fear;
     document.getElementById('fear_of_falls_date_measured').innerHTML = old_date(nice_date(measurements.fear_of_falls_date_measured));
-    if (!fear) {
-        document.getElementById('user_fear_mis').innerHTML = '<span class =\'missing\'>invoeren</span>';
-    } else {
-        document.getElementById('user_fear_mis').innerHTML = fear;
-    }
 
     if (measurements.user_values_updated != null) {
         document.getElementById('user_values_updated').innerHTML = nice_date(measurements.user_values_updated);
     }
+}
+
+function fill_user_entered_meas(measurements){
+	document.getElementById('user_GDS_score_mis').innerHTML = nice_value(measurements.user_GDS_score) || nice_value(measurements.GDS_score) || '<span class =\'missing\'>invoeren</span>';
+	document.getElementById('user_grip_kg_mis').innerHTML = nice_value(measurements.user_grip_kg) || nice_value(measurements.grip_kg) || '<span class =\'missing\'>invoeren</span>';
+	document.getElementById('user_walking_speed_m_per_s_mis').innerHTML = nice_value(measurements.user_walking_speed_m_per_s) || nice_value(measurements.walking_speed_m_per_s) || '<span class =\'missing\'>invoeren</span>';
+	document.getElementById('user_height_cm_mis').innerHTML = nice_value(measurements.user_height_cm) || nice_value(measurements.height_cm) || '<span class =\'missing\'>invoeren</span>';
+	document.getElementById('user_weight_kg_mis').innerHTML = nice_value(measurements.user_weight_kg) || nice_value(measurements.weight_kg) || '<span class =\'missing\'>invoeren</span>';
+	document.getElementById('user_systolic_bp_mmHg_mis').innerHTML = nice_value(measurements.user_systolic_bp_mmHg) || nice_value(measurements.systolic_bp_mmHg) || '<span class =\'missing\'>invoeren</span>';
+	document.getElementById('user_number_of_limitations_mis').innerHTML = nice_value(measurements.user_number_of_limitations) || nice_value(measurements.number_of_limitations) || '<span class =\'missing\'>invoeren</span>';
+	document.getElementById('user_nr_falls_12m_mis').innerHTML = nice_value(measurements.user_nr_falls_12m) || nice_value(measurements.nr_falls_12m) || '<span class =\'missing\'>invoeren</span>';
+	document.getElementById('user_smoking_mis').innerHTML = nice_value(measurements.user_smoking) || nice_value(measurements.smoking) || '<span class =\'missing\'>invoeren</span>';
+	document.getElementById('user_education_hml_mis').innerHTML = nice_value(measurements.user_education_hml) || nice_value(measurements.education_hml) || '<span class =\'missing\'>invoeren</span>';
+	let user_fear = null;
+		if (measurements.user_fear0) {
+			user_fear = 0;
+		}
+		if (measurements.user_fear1) {
+			user_fear = 1;
+		}
+		if (measurements.user_fear2) {
+			user_fear = 2;
+		}
+		if (!user_fear) {
+			document.getElementById('user_fear_mis').innerHTML = '<span class =\'missing\'>invoeren</span>';
+		} else {
+			document.getElementById('user_fear_mis').innerHTML = user_fear;
+		}
+}
+
+function create_meas_user_entered_html(){
+	let html = '<table class="meas_user_entered" id="meas_user_entered_table">'
+		+ '<tbody>'
+		+ '	<tr><th class="meas_user_entered">variabel</th><th class="meas_user_entered">huidige waarde</th><th class="meas_user_entered">nieuwe waarde</th><th class="meas_user_entered">verwijder waarde</th></tr>'
+		+ '	<tr>'
+		+ '		<td class="meas_user_entered">GDS score</td>'
+		+ '		<td class="meas_user_entered" id="user_GDS_score_db"><div id="user_GDS_score_mis"></div></td>'
+		+ '		<td class="meas_user_entered"><select id="user_GDS_score" name="GDS_dropdown"><option id="GDS_dropdown_null" value=""></option><option id="GDS_dropdown_0" value="0">0</option><option id="GDS_dropdown_1" value="1">1</option><option id="GDS_dropdown_2" value="2">2</option><option id="GDS_dropdown_3" value="3">3</option><option id="GDS_dropdown_4" value="4">4</option><option id="GDS_dropdown_5" value="5">5</option><option id="GDS_dropdown_6" value="6">6</option><option id="GDS_dropdown_7" value="7">7</option><option id="GDS_dropdown_8" value="8">8</option><option id="GDS_dropdown_9" value="9">9</option><option id="GDS_dropdown_10" value="10">10</option><option id="GDS_dropdown_11" value="11">11</option><option id="GDS_dropdown_12" value="12">12</option><option id="GDS_dropdown_13" value="13">13</option><option id="GDS_dropdown_14" value="14">14</option><option id="GDS_dropdown_15" value="15">15</option><option id="GDS_dropdown_16" value="16">16</option><option id="GDS_dropdown_17" value="17">17</option><option id="GDS_dropdown_18" value="18">18</option><option id="GDS_dropdown_19" value="19">19</option><option id="GDS_dropdown_20" value="20">20</option><option id="GDS_dropdown_21" value="21">21</option><option id="GDS_dropdown_22" value="22">22</option><option id="GDS_dropdown_23" value="23">23</option><option id="GDS_dropdown_24" value="24">24</option><option id="GDS_dropdown_25" value="25">25</option><option id="GDS_dropdown_26" value="26">26</option><option id="GDS_dropdown_27" value="27">27</option><option id="GDS_dropdown_28" value="28">28</option><option id="GDS_dropdown_29" value="29">29</option><option id="GDS_dropdown_30" value="30">30</option></select></td>'
+		+ '		<td><button type="button" id="del_GDS_score" onclick="delete_user_entered(\'user_GDS_score\')">Verwijder</button> </td></tr>'
+		+ '	<tr>'
+		+ '		<td class="meas_user_entered">grijpkracht kg (hoogste meting)</td>'
+		+ '		<td class="meas_user_entered" id="user_grip_kg_db"><div id="user_grip_kg_mis"></div></td>'
+		+ '		<td class="meas_user_entered"><input id="user_grip_kg" type="number" min="0.00" max="99.99"></td>'
+		+ '		<td><button type="button" id="del_grip_kg" onclick="delete_user_entered(\'user_grip_kg\')">Verwijder</button> </td></tr>'
+		+ '	<tr>'
+		+ '		<td class="meas_user_entered">loopsnelheid m/s (zo snel mogelijk)</td>'
+		+ '		<td class="meas_user_entered" id="user_walking_speed_m_per_s_db"><div id="user_walking_speed_m_per_s_mis"></div></td>'
+		+ '		<td class="meas_user_entered"><input id="user_walking_speed_m_per_s" type="number" min="0.00" max="99.99"></td>'
+		+ '		<td><button type="button" id="del_walking_speed" onclick="delete_user_entered(\'user_walking_speed_m_per_s\')">Verwijder</button> </td></tr>'
+		+ '	<tr>'
+		+ '		<td class="meas_user_entered">lengte cm</td>'
+		+ '		<td class="meas_user_entered" id="user_height_cm_db"><div id="user_height_cm_mis"></div></td>'
+		+ '		<td class="meas_user_entered"><input id="user_height_cm" type="number" min="40" max="250"></td>'
+		+ '		<td><button type="button" id="del_height_cm" onclick="delete_user_entered(\'user_height_cm\')">Verwijder</button> </td></tr>'
+		+ '	<tr>'
+		+ '		<td class="meas_user_entered">gewicht kg</td>'
+		+ '		<td class="meas_user_entered" id="user_weight_kg_db"><div id="user_weight_kg_mis"></div></td></td>'
+		+ '		<td class="meas_user_entered"><input id="user_weight_kg" type="number" min="20" max="500"></td>'
+		+ '		<td><button type="button" id="del_weight_kg" onclick="delete_user_entered(\'user_weight_kg\')">Verwijder</button> </td></tr>'
+		+ '	<tr>'
+		+ '		<td class="meas_user_entered">systolische bloeddruk mmHg</td>'
+		+ '		<td class="meas_user_entered" id="user_systolic_bp_mmHg_db"><div id="user_systolic_bp_mmHg_mis"></div></td>'
+		+ '		<td class="meas_user_entered"><input id="user_systolic_bp_mmHg" type="number" min="20" max="250"></td>'
+		+ '		<td><button type="button" id="del_systolic_bp_mmHg" onclick="delete_user_entered(\'user_systolic_bp_mmHg\')">Verwijder</button> </td></tr>'
+		+ '	<tr>'
+		+ '		<td class="meas_user_entered">aantal functionele beperkingen*</td>'
+		+ '		<td class="meas_user_entered" id="user_number_of_limitations_db"><div id="user_number_of_limitations_mis"></div></td>'
+		+ '		<td class="meas_user_entered"><select id="user_number_of_limitations" name="ADL_dropdown"><option value=""></option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></td>'
+		+ '		<td><button type="button" id="del_number_of_limitations" onclick="delete_user_entered(\'user_number_of_limitations\')">Verwijder</button> </td></tr>'
+		+ '	<tr>'
+		+ '		<td class="meas_user_entered">aantal valincidenten laatste 12 maanden</td>'
+		+ '		<td class="meas_user_entered" id="user_nr_falls_12m_db"><div id="user_nr_falls_12m_mis"></div></td>'
+		+ '		<td class="meas_user_entered"><input id="user_nr_falls_12m" type="number" min="0" max="1000"></td>'
+		+ '		<td><button type="button" id="del_nr_falls_12m" onclick="delete_user_entered(\'user_nr_falls_12m\')">Verwijder</button> </td></tr>'
+		+ '	<tr>'
+		+ '		<td class="meas_user_entered">roker</td>'
+		+ '		<td class="meas_user_entered" id="user_smoking_db"><div id="user_smoking_mis"></div></td>'
+		+ '		<td class="meas_user_entered"><select id="user_smoking" name="smoking_dropdown"><option id="user_smoking_null" value=""></option><option id="user_smoking_1" value="1">Ja</option><option id="user_smoking_0" value="0">Nee </option></select></td>'
+		+ '		<td><button type="button" id="del_smoking" onclick="delete_user_entered(\'user_smoking\')">Verwijder</button> </td></tr>'
+		+ '	<tr>'
+		+ '		<td class="meas_user_entered">opleidingsniveau**</td>'
+		+ '		<td class="meas_user_entered" id="user_education_hml_db"><div id="user_education_hml_mis"></div></td>'
+		+ '		<td class="meas_user_entered"><select id="user_education_hml" name="education_dropdown"><option value=""></option><option value="1">Laag</option><option value="2">Midden</option><option value="3">Hoog</option></select></td>'
+		+ '		<td><button type="button" id="del_education_hml" onclick="delete_user_entered(\'user_education_hml\')">Verwijder</button> </td></tr>'
+		+ '	<tr>'
+		+ '		<td class="meas_user_entered">angst om te vallen***</td>'
+		+ '		<td class="meas_user_entered" id="fear_db"><div id="user_fear_mis"></div></td>'
+		+ '		<td class="meas_user_entered"><select id="fear_dropdown" name="fear_dropdown"><option value=""></option><option value="0">0: niet bang</option><option value="1">1: een beetje/redelijk</option><option value="2">2: erg bezorgd</option></select></td>'
+		+ '		<td><button type="button" id="del_fear" onclick="delete_user_entered(\'fear0\');delete_user_entered(\'fear1\');delete_user_entered(\'fear2\')">Verwijder</button> </td>'
+		+ '		</tr>'
+		+ '</tbody></table>'
+	return html;
+}
+
+function create_meas_footnote_html(){
+	let html = '*Totaalscore van KATZ-ADL-6 <br>** Kies uit:<br>Laag: lager beroepsonderwijs: LTS, LHNO, LEAO, handels(dag)school, huishoudschool, agrarische school, praktijkdiploma, middenstandsonderwijs<br>Midden: middelbaarberoepsonderwijs: MBA, LO-akten, MTS, MEAO<br>Hoog: hoger beroepsonderwijs: HTS, HEAO, MO-opleiding, kweekschool, sociale/pedagogische academie<br>***Kies 0 als de patient \'Helemaal niet bezorgd\' heeft beantwoord bij alle FES vragen. Kies 1 als het totaalscore van de FES 1-7 is. Kies 2 als het totaalscore 8 of hoger is.';
+	return html;
 }
 
 
@@ -788,6 +875,18 @@ function data_entry_labs(){
 	}
 }
 
+function data_entry_meas(){
+	let html = create_meas_user_entered_html();
+	document.getElementById('user_entered_meas_container').innerHTML = html;
+	let footnote = create_meas_footnote_html();
+	document.getElementById('footnote_meas').innerHTML = footnote;
+	let measurements = get_patient_advice().measurements || {};
+	fill_user_entered_meas(measurements);
+}
+
+function data_entry_done(){
+	//TODO
+}
 
 
 function nice_date(dtstring) {
@@ -901,7 +1000,8 @@ function data_entry_page_setup() {
 	data_entry_medications();
 	data_entry_problem_list();
 	data_entry_labs();
-	// TODO: age, problems, labs, meas
+	data_entry_meas();
+	// TODO: age
 }
 
 // These functions will be called from the web page, e.g.:

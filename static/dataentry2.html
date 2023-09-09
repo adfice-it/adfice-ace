@@ -68,7 +68,7 @@ TODO
 <input id="button_submit_problems" type="button" onclick="user_entered_problems()" value="Verstuur"></form>
 <br><br><br>
 
-<h3>Labs</h3>
+<h3>Lab</h3>
 <form id="labs_form">				
 Natrium: <input type="number" id="labs_natrium" name="natrium" min="0" max="1000"><br>
 Kalium: <input type="number" id="labs_kalium" name="kalium" min="0" max="100" step="0.01"><br>
@@ -80,16 +80,18 @@ eGFR >60: <input type="radio" id="labs_egfr_n" id="eGFR_normal" name="eGFR_norma
 <input id="button_submit_labs" type="button" onclick="user_entered_labs()" value="Verstuur"></form>
 <br><br><br>
 
-<form id="meas_form">				
-TODO
+<h3>Metingen</h3>
+<form id="user_entered_meas_form">
+<div id="user_entered_meas_container">
+<!-- filled by five_pages.js -->
+</div> <!-- end user_entered_meas_container -->
+<input id="button_submit_user_entered_meas" type="button" onclick="user_entered_meas()" value="Verstuur"></form>
+<div id="footnote_meas"></div><!-- footnote_meas -->
 
-<input id="button_submit_meas" type="button" onclick="user_entered_meas()" value="Verstuur"></form>
 <br><br><br>
 
 <br>
-<input id="button_submit_all" type="button" onclick="user_entered_all()" value="Verstuur alles & afmaken">
-<br>
-<input id="button_submit_done" type="button" onclick="user_entered_meas()" value="Afmaken">
+<input id="button_submit_done" type="button" onclick="data_entry_done()" value="Afmaken">
 
 
 
