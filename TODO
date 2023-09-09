@@ -76,6 +76,9 @@ Low Priority:
 * the "debounce" of typing input does not work reliably with headless test-cafe
   * adding a "speed:0.1" worked around it, but we should do better
 * medications seem to be logged twice on load
+* in adfice.js move functions into objects such that if they are called without
+  a "this", then a 'not defined' error is thrown right away rather than failing
+  at some point in the middle of the function
 
 ---------------------------------------------------------
 Requested changes (deferred to a later version):
