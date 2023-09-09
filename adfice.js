@@ -952,10 +952,10 @@ async function update_prediction_with_user_values(patient_id, form_data) {
 
 async function add_single_med(patient_id, form_data) {
     let sql = `/* adfice.add_single_med */
-         INSERT INTO patient_medication (id, patient_id, ATC_code, medication_name, start_date)
-		 VALUES(null,?,?,?,?)`;
+         INSERT INTO patient_medication (id, patient_id, ATC_code, medication_name, generic_name, start_date)
+		 VALUES(null,?,?,?,?,?)`;
     let params = [];
-    params.push(patient_id, form_data['single_med_atc'], form_data['single_med_name'], form_data['single_med_startdate']);
+    params.push(patient_id, form_data['single_med_atc'], form_data['single_med_name'], form_data['single_med_name'], form_data['single_med_startdate']);
     let db = await this.db_init();
     await db.sql_query(sql, params);
 
