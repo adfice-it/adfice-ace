@@ -137,13 +137,13 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 
             res.redirect('/dataentry2?id=' + id); // TODO go to second data entry page to handle rest of patient data
         });
-		
-		app.get('/user-entered-patients', async function(req, res) {
+
+        app.get('/user-entered-patients', async function(req, res) {
             let user_id = req.query.user;
             let doctor_id = await adfice.doctor_id_for_user(user_id);
             log_debug(server, 'setting doctor id:', doctor_id);
             req.session.doctor_id = doctor_id;
-			// TODO create page that lists existing patients            
+            // TODO create page that lists existing patients            
         });
     }
 
@@ -390,18 +390,18 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             await adfice.update_prediction_with_user_values(
                 patient_id, message['submit_missings']);
         } else if (message.type == 'submit_single_med') {
-			await adfice.add_single_med(
+            await adfice.add_single_med(
                 patient_id, message['submit_single_med']);
-		} else if (message.type == 'submit_problems') {
-			await adfice.add_problems(
-                patient_id, message['submit_problems']);		
-		} else if (message.type == 'submit_labs') {
-			await adfice.add_labs(
+        } else if (message.type == 'submit_problems') {
+            await adfice.add_problems(
+                patient_id, message['submit_problems']);
+        } else if (message.type == 'submit_labs') {
+            await adfice.add_labs(
                 patient_id, message['submit_labs']);
-		} else if (message.type == 'submit_meas') {
-			await adfice.add_meas(
-                patient_id, message['submit_meas']);				
-		} else {
+        } else if (message.type == 'submit_meas') {
+            await adfice.add_meas(
+                patient_id, message['submit_meas']);
+        } else {
             send_all(kind, patient_id, message);
         }
     }

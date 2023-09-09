@@ -376,8 +376,8 @@ function measListOfUpdatesMeds(patient_id, meds) {
     return list_of_transactions;
 }
 
-function checkPredictionMeds(meds){
-	let has_antiepileptica = 0;
+function checkPredictionMeds(meds) {
+    let has_antiepileptica = 0;
     let has_ca_blocker = 0;
     let has_incont_med = 0;
     for (let i = 0; i < meds.length; ++i) {
@@ -396,11 +396,11 @@ function checkPredictionMeds(meds){
             }
         }
     }
-	return {
-		'has_antiepileptica': has_antiepileptica,
-		'has_ca_blocker': has_ca_blocker,
-		'has_incont_med': has_incont_med
-	}
+    return {
+        'has_antiepileptica': has_antiepileptica,
+        'has_ca_blocker': has_ca_blocker,
+        'has_incont_med': has_incont_med
+    }
 }
 
 async function remove_med(atc_code, patient_id) {
@@ -410,7 +410,7 @@ async function remove_med(atc_code, patient_id) {
         WHERE ATC_code = ? AND patient_id = ?;`;
     var params = [atc_code, patient_id];
     let deleted = await this.db.sql_query(sql, params);
-	// TODO should also check and update prediction model data
+    // TODO should also check and update prediction model data
     return deleted;
 }
 
@@ -951,99 +951,101 @@ async function update_prediction_with_user_values(patient_id, form_data) {
 }
 
 async function add_single_med(patient_id, form_data) {
-	let sql = `/* adfice.add_single_med */
+    let sql = `/* adfice.add_single_med */
          INSERT INTO patient_medication (id, patient_id, ATC_code, medication_name, start_date)
 		 VALUES(null,?,?,?,?)`;
-	let params = [];
-    params.push(patient_id,form_data['single_med_atc'],form_data['single_med_name'],form_data['single_med_startdate']);
-	let db = await this.db_init();
-	await db.sql_query(sql,params);
-	
-	// if med changes a variable in the prediction model, add this info to the patient_measurements table
-	let meds = [{'ATC_code': form_data['single_med_atc']}];
-	let prediction_meds = checkPredictionMeds(meds);
-	let sql_pmeds = "/* adfice.add_single_med */ UPDATE patient_measurement ";
-	let params_pmeds = [];
-	if(prediction_meds['has_antiepileptica'] != 0){
-		sql_pmeds += "SET has_antiepileptica = ? ";
-		params_pmeds.push(prediction_meds['has_antiepileptica']);
-	}
-	if(prediction_meds['has_ca_blocker'] != 0){
-		sql_pmeds += "SET has_ca_blocker = ? ";
-		params_pmeds.push(prediction_meds['has_ca_blocker']);
-	}
-	if(prediction_meds['has_incont_med'] != 0){
-		sql_pmeds += "SET has_incont_med = ? ";
-		params_pmeds.push(prediction_meds['has_incont_med']);
-	}
-	sql_pmeds += "WHERE patient_id = '" + patient_id + "';";
-	if(params_pmeds.length > 0){
-		let existing_meas = await this.get_patient_measurements(patient_id);
-		if(!existing_meas){
-			await this.create_new_meas_entry(patient_id);
-		}
-		await db.sql_query(sql_pmeds,params_pmeds);
-	}
+    let params = [];
+    params.push(patient_id, form_data['single_med_atc'], form_data['single_med_name'], form_data['single_med_startdate']);
+    let db = await this.db_init();
+    await db.sql_query(sql, params);
+
+    // if med changes a variable in the prediction model, add this info to the patient_measurements table
+    let meds = [{
+        'ATC_code': form_data['single_med_atc']
+    }];
+    let prediction_meds = checkPredictionMeds(meds);
+    let sql_pmeds = "/* adfice.add_single_med */ UPDATE patient_measurement ";
+    let params_pmeds = [];
+    if (prediction_meds['has_antiepileptica'] != 0) {
+        sql_pmeds += "SET has_antiepileptica = ? ";
+        params_pmeds.push(prediction_meds['has_antiepileptica']);
+    }
+    if (prediction_meds['has_ca_blocker'] != 0) {
+        sql_pmeds += "SET has_ca_blocker = ? ";
+        params_pmeds.push(prediction_meds['has_ca_blocker']);
+    }
+    if (prediction_meds['has_incont_med'] != 0) {
+        sql_pmeds += "SET has_incont_med = ? ";
+        params_pmeds.push(prediction_meds['has_incont_med']);
+    }
+    sql_pmeds += "WHERE patient_id = '" + patient_id + "';";
+    if (params_pmeds.length > 0) {
+        let existing_meas = await this.get_patient_measurements(patient_id);
+        if (!existing_meas) {
+            await this.create_new_meas_entry(patient_id);
+        }
+        await db.sql_query(sql_pmeds, params_pmeds);
+    }
 }
 
 async function add_problems(patient_id, form_data) {
-	let sql1 = 'DELETE FROM patient_problem where patient_id = "' + patient_id + '";';
-	let problem_names = Object.keys(form_data);
-	let sql2 = `/* adfice.add_problems */
+    let sql1 = 'DELETE FROM patient_problem where patient_id = "' + patient_id + '";';
+    let problem_names = Object.keys(form_data);
+    let sql2 = `/* adfice.add_problems */
          INSERT INTO patient_problem (patient_id, date_retrieved, name) 
 		 VALUES (?,?,?);`;
-	let list_of_inserts = [];
-	for (let i = 0; i < problem_names.length; ++i) {
-		let params = [];
-		let problem_name = problem_names[i].replace('_rb_y','');
-		params.push(patient_id,nowString(),problem_name);
-		list_of_inserts.push([sql2, params]);
-	}
-	
-	let db = await this.db_init();
-	await db.sql_query(sql1,[]);
-	await this.db.as_sql_transaction(list_of_inserts);
+    let list_of_inserts = [];
+    for (let i = 0; i < problem_names.length; ++i) {
+        let params = [];
+        let problem_name = problem_names[i].replace('_rb_y', '');
+        params.push(patient_id, nowString(), problem_name);
+        list_of_inserts.push([sql2, params]);
+    }
+
+    let db = await this.db_init();
+    await db.sql_query(sql1, []);
+    await this.db.as_sql_transaction(list_of_inserts);
 }
 
 async function add_labs(patient_id, form_data) {
-	let sql1 = `/* adfice.add_labs */
+    let sql1 = `/* adfice.add_labs */
 		DELETE FROM patient_lab WHERE patient_id = "` + patient_id + '";';
-	let lab_names = Object.keys(form_data);
-	let sql2 = `/* adfice.add_labs */
+    let lab_names = Object.keys(form_data);
+    let sql2 = `/* adfice.add_labs */
          INSERT INTO patient_lab (patient_id, date_retrieved, lab_test_name, lab_test_result) 
 		 VALUES (?,?,?,?);`;
-	let list_of_inserts = [];
-	for (let i = 0; i < lab_names.length; ++i) {
-		let params = [];
-		params.push(patient_id,nowString(),lab_names[i], form_data[lab_names[i]]);
-		list_of_inserts.push([sql2, params]);
-	}
+    let list_of_inserts = [];
+    for (let i = 0; i < lab_names.length; ++i) {
+        let params = [];
+        params.push(patient_id, nowString(), lab_names[i], form_data[lab_names[i]]);
+        list_of_inserts.push([sql2, params]);
+    }
 
-	let db = await this.db_init();
-	await db.sql_query(sql1,[]);
-	await this.db.as_sql_transaction(list_of_inserts);
+    let db = await this.db_init();
+    await db.sql_query(sql1, []);
+    await this.db.as_sql_transaction(list_of_inserts);
 }
 
 async function add_meas(patient_id, form_data) {
-	let db = await this.db_init();
-	let existing_meas = await this.get_patient_measurements(patient_id);
-	let sql = '';
-	let sql_values = '';
-	let params = [];
-	if (!existing_meas){
-		await this.create_new_meas_entry(patient_id);
-	}
-	await this.update_prediction_with_user_values(patient_id, form_data);
+    let db = await this.db_init();
+    let existing_meas = await this.get_patient_measurements(patient_id);
+    let sql = '';
+    let sql_values = '';
+    let params = [];
+    if (!existing_meas) {
+        await this.create_new_meas_entry(patient_id);
+    }
+    await this.update_prediction_with_user_values(patient_id, form_data);
 }
 
 async function create_new_meas_entry(patient_id) {
-	let db = await this.db_init();
-	let sql = `/* adfice.create_new_meas_entry */
+    let db = await this.db_init();
+    let sql = `/* adfice.create_new_meas_entry */
 				INSERT INTO patient_measurement (patient_id, date_retrieved,has_antiepileptica,has_ca_blocker, has_incont_med)
 				VALUES (?,?,0,0,0)`; // A new meas entry starts with the med vars set to 0, so they can be updated individually
-	let params = [];
-	params.push(patient_id,nowString());
-	await db.sql_query(sql,params);
+    let params = [];
+    params.push(patient_id, nowString());
+    await db.sql_query(sql, params);
 }
 
 async function get_selections(patient_id) {
@@ -1711,7 +1713,7 @@ function adfice_init(db) {
         calculate_store_prediction_result: calculate_store_prediction_result,
         calculate_prediction_result: calculate_prediction_result,
         calculate_prediction_result_meas: calculate_prediction_result_meas,
-		create_new_meas_entry: create_new_meas_entry,
+        create_new_meas_entry: create_new_meas_entry,
         db_init: db_init,
         determine_preselected_checkboxes: determine_preselected_checkboxes,
         evaluate_sql: evaluate_sql,
@@ -1757,10 +1759,10 @@ function adfice_init(db) {
         add_log_event_renew: add_log_event_renew,
         add_log_event_copy_patient_text: add_log_event_copy_patient_text,
         add_log_event_copy_ehr_text: add_log_event_copy_ehr_text,
-		add_labs: add_labs,
-		add_meas: add_meas,
-		add_problems: add_problems,
-		add_single_med: add_single_med,
+        add_labs: add_labs,
+        add_meas: add_meas,
+        add_problems: add_problems,
+        add_single_med: add_single_med,
         doctor_id_for_user: doctor_id_for_user,
         finalize_and_export: finalize_and_export,
         get_advice_for_patient: get_advice_for_patient,

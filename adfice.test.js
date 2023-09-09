@@ -450,117 +450,117 @@ test('update_prediction_with_user_values, delete some data after prediction', as
 })
 
 test('add_single_med', async () => {
-	let patient_id = '00000000-0000-4000-8000-100000000172';
-	let meds = await adfice.get_meds(patient_id);
-	expect(meds.length).toBe(0);
-	let form_data = {};
+    let patient_id = '00000000-0000-4000-8000-100000000172';
+    let meds = await adfice.get_meds(patient_id);
+    expect(meds.length).toBe(0);
+    let form_data = {};
     form_data['single_med_atc'] = 'B0GU501';
-	form_data['single_med_name'] = 'bogus name';
-	form_data['single_med_startdate'] = '1970-01-01';
-	await adfice.add_single_med(patient_id, form_data);
-	meds = await adfice.get_meds(patient_id);
-	expect(meds.length).toBe(1);
-	//cleanup
-	await adfice.sql_select('delete from patient_medication where patient_id = "' + patient_id + '";');
+    form_data['single_med_name'] = 'bogus name';
+    form_data['single_med_startdate'] = '1970-01-01';
+    await adfice.add_single_med(patient_id, form_data);
+    meds = await adfice.get_meds(patient_id);
+    expect(meds.length).toBe(1);
+    //cleanup
+    await adfice.sql_select('delete from patient_medication where patient_id = "' + patient_id + '";');
 })
 
 test('add_single_med affecting prediction data', async () => {
-	let patient_id = 'test_single_med';
-await adfice.sql_select('delete from patient_medication where patient_id = "' + patient_id + '";');
-await adfice.sql_select('delete from patient_measurement where patient_id = "' + patient_id + '";');
-	
-	let meds = await adfice.get_meds(patient_id);
-	let meas = await adfice.get_patient_measurements(patient_id);
-	expect(meds.length).toBe(0);
-	expect(meas).toBe(null);
-	let form_data = {};
+    let patient_id = 'test_single_med';
+    await adfice.sql_select('delete from patient_medication where patient_id = "' + patient_id + '";');
+    await adfice.sql_select('delete from patient_measurement where patient_id = "' + patient_id + '";');
+
+    let meds = await adfice.get_meds(patient_id);
+    let meas = await adfice.get_patient_measurements(patient_id);
+    expect(meds.length).toBe(0);
+    expect(meas).toBe(null);
+    let form_data = {};
     form_data['single_med_atc'] = 'N03B0G5';
-	form_data['single_med_name'] = 'bogus name';
-	form_data['single_med_startdate'] = '1970-01-01';
-	await adfice.add_single_med(patient_id, form_data);
-	meds = await adfice.get_meds(patient_id);
-	meas = await adfice.get_patient_measurements(patient_id);
-	expect(meds.length).toBe(1);
-	expect(meas[0]['has_antiepileptica']).toBe(1);
-	
-	form_data['single_med_atc'] = 'C08B0G5';
-	form_data['single_med_name'] = 'bogus name2';
-	await adfice.add_single_med(patient_id, form_data);
-	meds = await adfice.get_meds(patient_id);
-	meas = await adfice.get_patient_measurements(patient_id);
-	expect(meds.length).toBe(2);
-	expect(meas[0]['has_antiepileptica']).toBe(1);
-	expect(meas[0]['has_ca_blocker']).toBe(1);
-	
-	form_data['single_med_atc'] = 'G04BDG5';
-	form_data['single_med_name'] = 'bogus name3';
-	await adfice.add_single_med(patient_id, form_data);
-	meds = await adfice.get_meds(patient_id);
-	meas = await adfice.get_patient_measurements(patient_id);
-	expect(meds.length).toBe(3);
-	expect(meas[0]['has_incont_med']).toBe(1);
-	
-	//cleanup
-	await adfice.sql_select('delete from patient_medication where patient_id = "' + patient_id + '";');
-	await adfice.sql_select('delete from patient_measurement where patient_id = "' + patient_id + '";');
+    form_data['single_med_name'] = 'bogus name';
+    form_data['single_med_startdate'] = '1970-01-01';
+    await adfice.add_single_med(patient_id, form_data);
+    meds = await adfice.get_meds(patient_id);
+    meas = await adfice.get_patient_measurements(patient_id);
+    expect(meds.length).toBe(1);
+    expect(meas[0]['has_antiepileptica']).toBe(1);
+
+    form_data['single_med_atc'] = 'C08B0G5';
+    form_data['single_med_name'] = 'bogus name2';
+    await adfice.add_single_med(patient_id, form_data);
+    meds = await adfice.get_meds(patient_id);
+    meas = await adfice.get_patient_measurements(patient_id);
+    expect(meds.length).toBe(2);
+    expect(meas[0]['has_antiepileptica']).toBe(1);
+    expect(meas[0]['has_ca_blocker']).toBe(1);
+
+    form_data['single_med_atc'] = 'G04BDG5';
+    form_data['single_med_name'] = 'bogus name3';
+    await adfice.add_single_med(patient_id, form_data);
+    meds = await adfice.get_meds(patient_id);
+    meas = await adfice.get_patient_measurements(patient_id);
+    expect(meds.length).toBe(3);
+    expect(meas[0]['has_incont_med']).toBe(1);
+
+    //cleanup
+    await adfice.sql_select('delete from patient_medication where patient_id = "' + patient_id + '";');
+    await adfice.sql_select('delete from patient_measurement where patient_id = "' + patient_id + '";');
 })
 
 test('add_problems', async () => {
-	let patient_id = '00000000-0000-4000-8000-100000000172';
-	let problems = await adfice.get_problems(patient_id);
-	expect(problems.length).toBe(0);
-	let form_data = {};
+    let patient_id = '00000000-0000-4000-8000-100000000172';
+    let problems = await adfice.get_problems(patient_id);
+    expect(problems.length).toBe(0);
+    let form_data = {};
     form_data['hypertensie_rb_y'] = 'Ja';
-	form_data['jicht_rb_y'] = 'Ja';
-	form_data['orthostatische-hypotensie_rb_y'] = 'Ja';
-	await adfice.add_problems(patient_id, form_data);
-	problems = await adfice.get_problems(patient_id);
-	expect(problems.length).toBe(3);
-	
-	// check removal of problems
-	form_data = {};
+    form_data['jicht_rb_y'] = 'Ja';
+    form_data['orthostatische-hypotensie_rb_y'] = 'Ja';
+    await adfice.add_problems(patient_id, form_data);
+    problems = await adfice.get_problems(patient_id);
+    expect(problems.length).toBe(3);
+
+    // check removal of problems
+    form_data = {};
     form_data['hypertensie_rb_y'] = 'Ja';
-	form_data['orthostatische-hypotensie_rb_y'] = 'Ja';
-	await adfice.add_problems(patient_id, form_data);
-	problems = await adfice.get_problems(patient_id);
-	expect(problems.length).toBe(2);
-	
-	// check submitting empty problems, which convieniently also cleans up
-	form_data = {};
-	await adfice.add_problems(patient_id, form_data);
-	problems = await adfice.get_problems(patient_id);
-	expect(problems.length).toBe(0);
+    form_data['orthostatische-hypotensie_rb_y'] = 'Ja';
+    await adfice.add_problems(patient_id, form_data);
+    problems = await adfice.get_problems(patient_id);
+    expect(problems.length).toBe(2);
+
+    // check submitting empty problems, which convieniently also cleans up
+    form_data = {};
+    await adfice.add_problems(patient_id, form_data);
+    problems = await adfice.get_problems(patient_id);
+    expect(problems.length).toBe(0);
 })
 
 test('add_labs', async () => {
-	let patient_id = '00000000-0000-4000-8000-100000000172';
-	let labs = await adfice.get_labs(patient_id);
-	expect(labs.length).toBe(0);
-	let form_data = {};
-	form_data['natrium'] = 111;
-	form_data['kalium'] = 3.1;
-	form_data['calcium'] = 1.1;
-	form_data['kreatinine'] = 111;
-	form_data['eGFR'] = 30;
-	await adfice.add_labs(patient_id, form_data);
-	labs = await adfice.get_labs(patient_id);
-	expect(labs.length).toBe(5);
-	
-	form_data = {}; //  check that it can handle an empty form
-	await adfice.add_labs(patient_id, form_data);
-	labs = await adfice.get_labs(patient_id);
-	expect(labs.length).toBe(0);
-	
-	form_data = {}; // check that it handles the string value for eGFR
-	form_data['eGFR'] = ">60";
-	await adfice.add_labs(patient_id, form_data);
-	labs = await adfice.get_labs(patient_id);
-	expect(labs.length).toBe(1);
-	
-	// cleanup
-	form_data = {};
-	await adfice.add_labs(patient_id, form_data);
-	
+    let patient_id = '00000000-0000-4000-8000-100000000172';
+    let labs = await adfice.get_labs(patient_id);
+    expect(labs.length).toBe(0);
+    let form_data = {};
+    form_data['natrium'] = 111;
+    form_data['kalium'] = 3.1;
+    form_data['calcium'] = 1.1;
+    form_data['kreatinine'] = 111;
+    form_data['eGFR'] = 30;
+    await adfice.add_labs(patient_id, form_data);
+    labs = await adfice.get_labs(patient_id);
+    expect(labs.length).toBe(5);
+
+    form_data = {}; //  check that it can handle an empty form
+    await adfice.add_labs(patient_id, form_data);
+    labs = await adfice.get_labs(patient_id);
+    expect(labs.length).toBe(0);
+
+    form_data = {}; // check that it handles the string value for eGFR
+    form_data['eGFR'] = ">60";
+    await adfice.add_labs(patient_id, form_data);
+    labs = await adfice.get_labs(patient_id);
+    expect(labs.length).toBe(1);
+
+    // cleanup
+    form_data = {};
+    await adfice.add_labs(patient_id, form_data);
+
 })
 /*
 test('add_meas', async () => {
