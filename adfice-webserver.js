@@ -347,8 +347,6 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                     patient_id);
                 send_all(kind, patient_id, new_msg);
             }
-        } else if (message.type == 'remove_med') {
-            await adfice.remove_med(message.atc_code, patient_id);
         } else if (message.type == 'patient_renew') {
             await adfice.add_log_event_renew(doctor_id, patient_id);
             let etl_opts = await autil.from_json_file(etl_opts_path);
@@ -402,6 +400,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 		} else if (message.type == 'submit_single_med') {
             await adfice.add_single_med(
                 patient_id, message['submit_single_med']);
+		} else if (message.type == 'remove_med') {
+            await adfice.remove_med(
+                message['remove_med']['atc_code'], patient_id);
         } else if (message.type == 'submit_problems') {
             await adfice.add_problems(
                 patient_id, message['submit_problems']);

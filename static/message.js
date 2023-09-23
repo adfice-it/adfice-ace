@@ -152,11 +152,31 @@ function user_entered_single_med() {
         message['submit_single_med'] = {};
         let form = document.getElementById('single_med_form');
         for (let i = 0; i < form.elements.length; ++i) {
-            if (form.elements[i].id != "button_submit_single_med") {
+            if (form.elements[i].id != "button_submit_single_med" 
+				&& !form.elements[i].id.includes('remove')) {
                 let val = form.elements[i].value;
                 message['submit_single_med'][form.elements[i].id] = val;
             }
         }
+        console.log(message);
+    });
+    localStorage.clear();
+    window.location.reload(true);
+}
+
+function remove_med(atc_code) {
+    if (!message_globals.ws) {
+        message_globals.logger.error(
+            'got a remove_med request but websocket is null');
+        ++message_globals.weirdness;
+        return;
+    }
+
+    send_message('remove_med', function(message) {
+        message.patient_id = message_globals.patient_id;
+        message['remove_med'] = {};
+		message['remove_med']['atc_code'] = atc_code;
+        
         console.log(message);
     });
     localStorage.clear();
@@ -728,14 +748,6 @@ function innerTextVisibleOnly(element) {
         }
     }
     return result;
-}
-
-function remove_med(atc_code) {
-    send_message('remove_med', function(msg) {
-        msg.atc_code = atc_code;
-    });
-    window.location.reload(true);
-    return true;
 }
 
 function copy_ehr_text_to_clipboard() {

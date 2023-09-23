@@ -821,12 +821,15 @@ function data_entry_age(){
 function data_entry_medications() {
     let meds = get_patient_advice().medications;
     let html = '';
-    if (meds.length > 0) {
-        html += '<table><tr><th>ATC</th><th>naam</th><th>startdatum</th></tr>';
+    if (meds && meds.length > 0) {
+        html += '<table><tr><th>ATC</th><th>naam</th><th>startdatum</th><th></th></tr>';
         for (let i = 0; i < meds.length; ++i) {
             html += '<tr><td>' + meds[i].ATC_code + '</td>' +
                 '<td>' + meds[i].medication_name + '</td>' +
-                '<td>' + nice_date(meds[i].start_date) + '</td></tr>'
+                '<td>' + nice_date(meds[i].start_date) + '</td>' + 
+				'</td><td><button id="remove_' + meds[i].ATC_code +
+				'" onclick="remove_med(\'' + meds[i].ATC_code +
+				'\')">Verwijder</button></td></tr>'
         }
         html += '</table>';
     } else {
@@ -848,36 +851,39 @@ function data_entry_problem_list() {
     }
     html += '</table>';
     document.getElementById('data_entry_problems').innerHTML = html;
-    for (let i = 0; i < problems.length; ++i) {
-        let radio_button = document.getElementById(problems[i].name + '_rb_y');
-        radio_button.checked = true;
-    }
+    if(problems){
+		for (let i = 0; i < problems.length; ++i) {
+			let radio_button = document.getElementById(problems[i].name + '_rb_y');
+			radio_button.checked = true;
+		}
+	}
 }
 
 function data_entry_labs() {
     let labs = get_patient_advice().labs;
-    let lab_keys = Object.keys(labs);
-    for (let i = 0; i < lab_keys.length; ++i) {
-        if (labs[i].lab_test_name == "natrium") {
-            document.getElementById('labs_natrium').value = labs[i].lab_test_result;
-        }
-        if (labs[i].lab_test_name == "kalium") {
-            document.getElementById('labs_kalium').value = labs[i].lab_test_result;
-        }
-        if (labs[i].lab_test_name == "calcium") {
-            document.getElementById('labs_calcium').value = labs[i].lab_test_result;
-        }
-        if (labs[i].lab_test_name == "kreatinine") {
-            document.getElementById('labs_kreatinine').value = labs[i].lab_test_result;
-        }
-        if (labs[i].lab_test_name == "eGFR") {
-            if (labs[i].lab_test_result == ">60") {
-                document.getElementById('labs_egfr_n').checked = true;
-            } else {
-                document.getElementById('labs_egfr').value = labs[i].lab_test_result;
-            }
-        }
-
+	if(labs){
+		let lab_keys = Object.keys(labs);
+		for (let i = 0; i < lab_keys.length; ++i) {
+			if (labs[i].lab_test_name == "natrium") {
+				document.getElementById('labs_natrium').value = labs[i].lab_test_result;
+			}
+			if (labs[i].lab_test_name == "kalium") {
+				document.getElementById('labs_kalium').value = labs[i].lab_test_result;
+			}
+			if (labs[i].lab_test_name == "calcium") {
+				document.getElementById('labs_calcium').value = labs[i].lab_test_result;
+			}
+			if (labs[i].lab_test_name == "kreatinine") {
+				document.getElementById('labs_kreatinine').value = labs[i].lab_test_result;
+			}
+			if (labs[i].lab_test_name == "eGFR") {
+				if (labs[i].lab_test_result == ">60") {
+					document.getElementById('labs_egfr_n').checked = true;
+				} else {
+					document.getElementById('labs_egfr').value = labs[i].lab_test_result;
+				}
+			}
+		}
     }
 }
 
