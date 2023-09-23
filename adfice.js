@@ -950,6 +950,17 @@ async function update_prediction_with_user_values(patient_id, form_data) {
     }
 }
 
+async function update_birthdate(patient_id, form_data){
+	let patient = {birth_date: form_data['age_birthdate']}
+	let age = calculateAge(patient);
+	let sql = `/* adfice.update_birthdate */
+         UPDATE patient SET birth_date = ?, age = ?
+		 WHERE patient_id = ?`;
+	let params = [form_data['age_birthdate'], age, patient_id];
+	let db = await this.db_init();
+    await db.sql_query(sql, params);
+}
+
 async function add_single_med(patient_id, form_data) {
     let sql = `/* adfice.add_single_med */
          INSERT INTO patient_medication (id, patient_id, ATC_code, medication_name, generic_name, start_date)
@@ -1778,6 +1789,7 @@ function adfice_init(db) {
         renew_patient: renew_patient,
         set_advice_for_patient: set_advice_for_patient,
         shutdown: shutdown,
+		update_birthdate: update_birthdate,
         write_patient_from_json: write_patient_from_json,
     };
     return adfice;

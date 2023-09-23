@@ -449,6 +449,21 @@ test('update_prediction_with_user_values, delete some data after prediction', as
     await adfice.sql_select(sql, params);
 })
 
+test('update_birthdate', async () => {
+	
+	let patient_id = '00000000-0000-4000-8000-100000000172';
+	let patient = await adfice.get_patient_by_id(patient_id);
+	expect(patient['birth_date'].toString().includes('1940')).toBe(true);
+	let form_data = {};
+    form_data['age_birthdate'] = '1945-01-01';
+	await adfice.update_birthdate(patient_id, form_data);
+	patient = await adfice.get_patient_by_id(patient_id);
+	expect(patient['birth_date'].toString().includes('1945')).toBe(true);
+	//cleanup
+	form_data['age_birthdate'] = '1940-06-15';
+	await adfice.update_birthdate(patient_id, form_data);
+})
+
 test('add_single_med', async () => {
 	let patient_id = '00000000-0000-4000-8000-100000000172';
 	let meds = await adfice.get_meds(patient_id);

@@ -113,6 +113,31 @@ function update_meas() {
     window.location.reload(true);
 }
 
+function user_entered_birthdate(){
+	if (!message_globals.ws) {
+        message_globals.logger.error(
+            'got a submit_birthdate request but websocket is null');
+        ++message_globals.weirdness;
+        return;
+    }
+
+    send_message('submit_birthdate', function(message) {
+        message.patient_id = message_globals.patient_id;
+
+        message['submit_birthdate'] = {};
+        let form = document.getElementById('edit_birthdate_form');
+        for (let i = 0; i < form.elements.length; ++i) {
+            if (form.elements[i].id != "button_submit_single_med") {
+                let val = form.elements[i].value;
+                message['button_submit_birthdate'][form.elements[i].id] = val;
+            }
+        }
+        console.log(message);
+    });
+    localStorage.clear();
+    window.location.reload(true);
+}
+
 function user_entered_single_med() {
     if (!message_globals.ws) {
         message_globals.logger.error(

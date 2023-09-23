@@ -812,6 +812,12 @@ function gauge_risk_score() {
     }
 }
 
+function data_entry_age(){
+	let age = get_patient_advice().age;
+	let agediv = document.getElementById('data_entry_age');
+	agediv.innerHTML = "Leeftijd: " + age;
+}
+
 function data_entry_medications() {
     let meds = get_patient_advice().medications;
     let html = '';
@@ -997,6 +1003,7 @@ function finalize_page_setup() {
 }
 
 function data_entry_page_setup() {
+	data_entry_age();
     data_entry_medications();
     data_entry_problem_list();
     data_entry_labs();
