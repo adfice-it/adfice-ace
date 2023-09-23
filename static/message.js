@@ -273,8 +273,6 @@ function delete_user_entered(to_be_deleted) {
     window.location.reload(true);
 }
 
-
-
 function send_freetext(textfield_id) {
     if (!message_globals.ws) {
         message_globals.logger.error('got a freetext event for ', textfield,

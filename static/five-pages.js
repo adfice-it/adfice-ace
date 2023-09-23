@@ -891,7 +891,7 @@ function data_entry_meas() {
 }
 
 function data_entry_done() {
-    //TODO
+	window.location.href='start?id=' + five_pages.patient_id;
 }
 
 
@@ -940,6 +940,7 @@ function print_page() {
     window_print();
     document.getElementById('div-footer-id').style.display = 'block';
 }
+
 
 // the following functions specify the needed elements which vary
 // between pages and need to be populated on load
@@ -1008,7 +1009,6 @@ function data_entry_page_setup() {
     data_entry_problem_list();
     data_entry_labs();
     data_entry_meas();
-    // TODO: age
 }
 
 // These functions will be called from the web page, e.g.:
