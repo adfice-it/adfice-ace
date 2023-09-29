@@ -546,6 +546,7 @@ test('add_problems', async () => {
 
 test('add_labs', async () => {
 	let patient_id = '00000000-0000-4000-8000-100000000172';
+		
 	let labs = await adfice.get_labs(patient_id);
 	expect(labs.length).toBe(0);
 	let form_data = {};
@@ -568,6 +569,30 @@ test('add_labs', async () => {
 	await adfice.add_labs(patient_id, form_data);
 	labs = await adfice.get_labs(patient_id);
 	expect(labs.length).toBe(1);
+	
+	// cleanup
+	form_data = {};
+	await adfice.add_labs(patient_id, form_data);
+	
+})
+
+test('remove_labs', async () => {
+	let patient_id = '00000000-0000-4000-8000-100000000172';
+	let labs = await adfice.get_labs(patient_id);
+	expect(labs.length).toBe(0);
+	let form_data = {};
+	form_data['natrium'] = 111;
+	form_data['kalium'] = 3.1;
+	form_data['calcium'] = 1.1;
+	form_data['kreatinine'] = 111;
+	form_data['eGFR'] = ">60";
+	await adfice.add_labs(patient_id, form_data);
+	labs = await adfice.get_labs(patient_id);
+	expect(labs.length).toBe(5);
+	
+	await adfice.remove_lab('eGFR', patient_id);
+	labs = await adfice.get_labs(patient_id);
+	expect(labs.length).toBe(4);
 	
 	// cleanup
 	form_data = {};

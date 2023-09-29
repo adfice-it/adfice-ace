@@ -293,6 +293,25 @@ function delete_user_entered(to_be_deleted) {
     window.location.reload(true);
 }
 
+function remove_lab(lab_name) {
+    if (!message_globals.ws) {
+        message_globals.logger.error(
+            'got a remove_lab request but websocket is null');
+        ++message_globals.weirdness;
+        return;
+    }
+
+    send_message('remove_lab', function(message) {
+        message.patient_id = message_globals.patient_id;
+        message['remove_lab'] = {};
+		message['remove_lab']['lab_test_name'] = lab_name;
+        
+        console.log(message);
+    });
+    localStorage.clear();
+    window.location.reload(true);
+}
+
 function send_freetext(textfield_id) {
     if (!message_globals.ws) {
         message_globals.logger.error('got a freetext event for ', textfield,

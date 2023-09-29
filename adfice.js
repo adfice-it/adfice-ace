@@ -414,6 +414,16 @@ async function remove_med(atc_code, patient_id) {
     return deleted;
 }
 
+async function remove_lab(lab_test_name, patient_id) {
+    var sql = `/* adfice.remove_lab */
+        DELETE
+        FROM patient_lab
+        WHERE lab_test_name = ? AND patient_id = ?;`;
+    var params = [lab_test_name, patient_id];
+    let deleted = await this.db.sql_query(sql, params);
+    return deleted;
+}
+
 async function get_all_advice_texts_checkboxes() {
     var sql = `/* adfice.get_all_advice_texts_checkboxes */
         SELECT m.medication_criteria_id
@@ -1785,6 +1795,7 @@ function adfice_init(db) {
         id_for_fhir: id_for_fhir,
         id_for_mrn: id_for_mrn,
         mrn_for_id: mrn_for_id,
+		remove_lab: remove_lab,
         remove_med: remove_med,
         renew_patient: renew_patient,
         set_advice_for_patient: set_advice_for_patient,

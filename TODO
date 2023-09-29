@@ -16,8 +16,7 @@ Important:
 Mid Priority:
 * Standalone: A medication start date entered as 01-01-1970 gets displayed as 31-12-1969. Guessing this has to do with UTC conversion. Might also happen with dates imported from Epic - check.
 * Standalone can have a better medication entry interface by making use of this table: https://www.geneesmiddeleninformatiebank.nl/metadata.csv (as far as I can tell, this list agrees with farmacotherapeutische kompas).
-* Add ability to delete meds/labs to standalone interface
-* Add ability to find existing patients in standalone interface
+* Remove MRN from standalone interface (not needed, thus should not be collected)
 * Add instructions +/- additional convenience scripts for extracting research data from standalone system
 * Consider moving bin/db-create-portal-tables.sh to the valportaal repo. The tables actually belong to the valportaal, although symlinking them to adfice is handy since adfice needs to write to those tables as well.
 * Can we implment a better fake OAuth for testing?
@@ -25,15 +24,11 @@ Mid Priority:
 * Getting data out of EHR
   * Look into free FHIR servers and see if we can create a version of the ETL that can be included in the main repo
     https://confluence.hl7.org/display/FHIR/Public+Test+Servers
-* Figure out why commented-out testcafe tests for user-entered prediction model data fail.
 * Can we test whether the popups appear?
-* consider removing birth date entirely from the data; we only need age
 * tidy test data; e.g. a patient with no meas can't happen in Real Life.
-* figure out why last test in "Test user entering values" (TestCafe) fails, even though performing the actions manually gives the correct result.
-* figure out if TestCafe "Nonmed headers display correctly on patient page" still fails
 * See if we can get rid of <span> headers in nonmed advice. (I think they are not used any more.)
 * Can we write any meaningful test for fivepages.js print_page()? It has one job...
-* Add a way to clear user-entered prediction model data. This can be used by the TestCafe test to clean up after itself.
+
 * Each acceptance test should start an instance of adfice-webserver
   * refactor adfice-webserver-runner to be more testable
   * refactor the client js (static/patient.js) to be more testable
@@ -67,6 +62,7 @@ Mid Priority:
 * make black-and-white printer-friendly css
 
 Low Priority:
+* functions created for dataentry2 in message.js have a lot of duplicate code that can probably be refactored
 * Rewrite system to work with EHR's proprietary browser - seems to not support web sockets. Or wait 'til 2024 when browser should be upgraded to a 21st-century browser.
 * naming consistency thoughout the css
 * naming consistency thoughout the javascript
