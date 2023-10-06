@@ -20,10 +20,9 @@
 <script>
 function user_entered_patient() {
 	let doctor_field = document.getElementById("doctor_field").value;
-	let mrn = document.getElementById("mrn").value;
 	let birthdate = document.getElementById("birthdate").value;
 	let participant = document.getElementById("participant").value;
-	window.location.href = '/user-entered?user=' + doctor_field +  '&mrn=' + mrn + '&birthdate=' + birthdate + '&participant=' + participant;
+	window.location.href = '/user-entered?user=' + doctor_field + '&birthdate=' + birthdate + '&participant=' + participant;
 /*	window.location.href = 'http://127.0.0.1:8080/load?mrn=DummyMRN-000000170&fhir=DummyFHIR-000000170&user=dr_bob&study=AMC2021_061&participant=10170&launch=BOGUSLAUNCH&iss=http%3A%2F%2Fexample.org';
 */
 }
@@ -44,13 +43,12 @@ function user_entered_patient() {
  Meld een probleem via <a href="mailto:"adfice-it@amsterdamumc.nl">email</a> of telefoon <span id="phone_container"></span>
 </div><!-- help_container -->
 
-<div><p>Vul de onderstaande gegevens in.</p>				
+<div id = "dataentry1"><p>Vul de onderstaande gegevens in.</p>				
 
 <form id="data_entry_form">				
 Laatste naam arts: <input type="text" id="doctor_field" required /><br>
-Patient MRN: <input type="text" id="mrn" required /><br>
-Patient participant nr: <input type="text" id="participant" /><br>
-Patient geboortedatum: <input type="date" id="birthdate" min="1903-01-01" max="1973-12-31" required /><br>
+Patient participant nr: <input type="text" id="participant" required /><br>
+Patient geboortedatum: <input type="date" id="birthdate" min="1903-01-01" max="1973-12-31" /><br>
 <input id="button_submit_patient" type="button" onclick="user_entered_patient()" value="Verstuur"></form>
 </div>
 </body>

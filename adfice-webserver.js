@@ -111,9 +111,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 
         app.get('/user-entered', async function(req, res) {
             let id = null;
-            let mrn = req.query.mrn;
             let birth_date = req.query.birthdate;
             let participant = req.query.participant;
+			let mrn = 'Deelnemer-' + participant;
             try{
 				id = await adfice.id_for_mrn(mrn);
 			} catch (error) {
@@ -137,8 +137,8 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 					return;
 				}
 			}
-            let user_id = req.query.user;
-            let doctor_id = await adfice.doctor_id_for_user(user_id);
+            let user_id = autil.string_to_hash(req.query.user);
+			let doctor_id = await adfice.doctor_id_for_user(user_id);
             log_debug(server, 'setting doctor id:', doctor_id);
             req.session.doctor_id = doctor_id;
 
@@ -150,7 +150,6 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             let doctor_id = await adfice.doctor_id_for_user(user_id);
             log_debug(server, 'setting doctor id:', doctor_id);
             req.session.doctor_id = doctor_id;
-            // TODO create page that lists existing patients            
         });
     }
 

@@ -172,6 +172,12 @@ function uuid_bytes_to_string(bytes) {
     return uuid_str;
 }
 
+function string_to_hash(input_string){
+	// SHA1 is good enough for this purpose, and produces output of a convenient length
+	let hash = crypto.createHash('sha1').update(input_string).digest('hex');
+	return hash;
+}
+
 /* istanbul ignore next */
 function assert_array_has_16_bytes(bytes) {
     assert(((bytes instanceof Uint8Array) ||
@@ -189,6 +195,7 @@ module.exports = {
     dump: dump,
     from_json_file: from_json_file,
     split_freetext: split_freetext,
+	string_to_hash: string_to_hash,
     tmp_path: tmp_path,
     to_file: to_file,
     to_json_file: to_json_file,

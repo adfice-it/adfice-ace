@@ -159,3 +159,12 @@ test('tmp_path defaults', function() {
     let path = autil.tmp_path(prefix, suffix);
     expect(path).toMatch(/tmp\./);
 });
+
+test('string_to_hash', function(){
+	let string = "foo";
+	let hash = autil.string_to_hash(string);
+	expect(hash).toBe("0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33");
+	string = "bar";
+	let hash2 = autil.string_to_hash(string);
+	expect(hash2).not.toBe(hash);
+});
