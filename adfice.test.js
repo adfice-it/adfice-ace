@@ -471,10 +471,11 @@ test('add_single_med', async () => {
 	let form_data = {};
     form_data['single_med_atc'] = 'B0GU501';
 	form_data['single_med_name'] = 'bogus name';
-	form_data['single_med_startdate'] = '1970-01-01';
+	form_data['single_med_startdate'] = '2023-01-01';
 	await adfice.add_single_med(patient_id, form_data);
 	meds = await adfice.get_meds(patient_id);
 	expect(meds.length).toBe(1);
+	expect(meds[0]['start_date'].toString().includes('2023')).toBe(true);
 	//cleanup
 	await adfice.sql_select('delete from patient_medication where patient_id = "' + patient_id + '";');
 })

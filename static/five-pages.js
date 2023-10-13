@@ -363,7 +363,7 @@ function create_meas_user_entered_html() {
         '	<tr>' +
         '		<td class="meas_user_entered">aantal functionele beperkingen*</td>' +
         '		<td class="meas_user_entered" id="user_number_of_limitations_db"><div id="user_number_of_limitations_mis"></div></td>' +
-        '		<td class="meas_user_entered"><select id="user_number_of_limitations" name="ADL_dropdown"><option value=""></option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></td>' +
+        '		<td class="meas_user_entered"><select id="user_number_of_limitations" name="ADL_dropdown"><option id="ADL_dropdown_null" value=""></option><option id="ADL_dropdown_0" value="0">0</option><option id="ADL_dropdown_1" value="1">1</option><option id="ADL_dropdown_2" value="2">2</option><option id="ADL_dropdown_3" value="3">3</option><option id="ADL_dropdown_4" value="4">4</option><option id="ADL_dropdown_5" value="5">5</option><option id="ADL_dropdown_6" value="6">6</option></select></td>' +
         '		<td><button type="button" id="del_number_of_limitations" onclick="delete_user_entered(\'user_number_of_limitations\')">Verwijder</button> </td></tr>' +
         '	<tr>' +
         '		<td class="meas_user_entered">aantal valincidenten laatste 12 maanden</td>' +
@@ -378,13 +378,13 @@ function create_meas_user_entered_html() {
         '	<tr>' +
         '		<td class="meas_user_entered">opleidingsniveau**</td>' +
         '		<td class="meas_user_entered" id="user_education_hml_db"><div id="user_education_hml_mis"></div></td>' +
-        '		<td class="meas_user_entered"><select id="user_education_hml" name="education_dropdown"><option value=""></option><option value="1">Laag</option><option value="2">Midden</option><option value="3">Hoog</option></select></td>' +
+        '		<td class="meas_user_entered"><select id="user_education_hml" name="education_dropdown"><option id="edu_dropdown_null" value=""></option><option id="edu_dropdown_1" value="1">Laag</option><option id="edu_dropdown_2" value="2">Midden</option><option id="edu_dropdown_3" value="3">Hoog</option></select></td>' +
         '		<td><button type="button" id="del_education_hml" onclick="delete_user_entered(\'user_education_hml\')">Verwijder</button> </td></tr>' +
         '	<tr>' +
         '		<td class="meas_user_entered">angst om te vallen***</td>' +
         '		<td class="meas_user_entered" id="fear_db"><div id="user_fear_mis"></div></td>' +
-        '		<td class="meas_user_entered"><select id="fear_dropdown" name="fear_dropdown"><option value=""></option><option value="0">0: niet bang</option><option value="1">1: een beetje/redelijk</option><option value="2">2: erg bezorgd</option></select></td>' +
-        '		<td><button type="button" id="del_fear" onclick="delete_user_entered(\'fear0\');delete_user_entered(\'fear1\');delete_user_entered(\'fear2\')">Verwijder</button> </td>' +
+        '		<td class="meas_user_entered"><select id="fear_dropdown" name="fear_dropdown"><option  id="fear_dropdown_null" value=""></option><option id="fear_dropdown_0" value="0">0: niet bang</option><option id="fear_dropdown_1" value="1">1: een beetje/redelijk</option><option id="fear_dropdown_2" value="2">2: erg bezorgd</option></select></td>' +
+        '		<td><button type="button" id="del_fear" onclick="delete_user_entered(\'user_fear0\');delete_user_entered(\'user_fear1\');delete_user_entered(\'user_fear2\')">Verwijder</button> </td>' +
         '		</tr>' +
         '</tbody></table>'
     return html;
@@ -905,11 +905,33 @@ function nice_date(dtstring) {
     if (dtstring == null) {
         return '';
     }
-    // expects string in the form of YYYY-MM-DDTHH:MM:SS.mmmm
+    // expects string in the form of YYYY-MM-DDTHH:MM:SS.mmmZ
     if (dtstring.match(/^([0-9]{4}.[0-9]{2}.[0-9]{2}.*)$/)) {
-        let year = dtstring.substring(0, 4);
-        let m = dtstring.substring(5, 7);
-        let d = dtstring.substring(8, 10);
+        let z = dtstring.substring((dtstring.length)-1, dtstring.length);
+		let year = null;
+		let m = null;
+		let d = null;
+		if(z == 'Z'){
+			let date = new Date(dtstring);			
+			year = date.getFullYear();
+			let month = (date.getMonth() + 1).toString(); //javascript 0-offset months
+			if(month.length == 1) {
+				m = '0' + month;
+			} else {
+				m = month;
+			}
+			let day = (date.getDate()).toString();
+			if(day.length == 1) {
+				d = '0' + day;
+			} else {
+				d = day;
+			}
+		} else {
+			year = dtstring.substring(0, 4);
+			m = dtstring.substring(5, 7);
+			d = dtstring.substring(8, 10);			
+		}
+		
         return d + '-' + m + '-' + year;
     } else {
         return 'onbekend';

@@ -114,12 +114,17 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             let birth_date = req.query.birthdate;
             let participant = req.query.participant;
 			let mrn = 'Deelnemer-' + participant;
+			let user_id = autil.string_to_hash(req.query.user);
             try{
 				id = await adfice.id_for_mrn(mrn);
 			} catch (error) {
 				console.log(error);
 			}
 			if(!id){
+				if(!birth_date || !participant || !user_id){
+					res.redirect('/dataentry?error=missing');
+					return;
+				}
 				let patient = {
 					mrn: mrn,
 					ehr_pid: null,
@@ -132,12 +137,10 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 					id = await adfice.write_patient_from_json(patient);
 				} catch (error) {
 					console.log(error);
-	// TODO add error message for user
-					res.redirect('/dataentry');
+					res.redirect('/dataentry?error=creeateFailed');
 					return;
 				}
 			}
-            let user_id = autil.string_to_hash(req.query.user);
 			let doctor_id = await adfice.doctor_id_for_user(user_id);
             log_debug(server, 'setting doctor id:', doctor_id);
             req.session.doctor_id = doctor_id;

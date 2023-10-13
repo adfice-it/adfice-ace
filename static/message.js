@@ -127,9 +127,9 @@ function user_entered_birthdate(){
         message['submit_birthdate'] = {};
         let form = document.getElementById('edit_birthdate_form');
         for (let i = 0; i < form.elements.length; ++i) {
-            if (form.elements[i].id != "button_submit_single_med") {
+            if (form.elements[i].id != "button_submit_birthdate") {
                 let val = form.elements[i].value;
-                message['button_submit_birthdate'][form.elements[i].id] = val;
+                message['submit_birthdate'][form.elements[i].id] = val;
             }
         }
         console.log(message);
