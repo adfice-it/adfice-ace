@@ -120,22 +120,33 @@ function user_entered_birthdate(){
         ++message_globals.weirdness;
         return;
     }
+	
+	let form = document.getElementById('edit_birthdate_form');
+	let id = '';
+	let val = '';
+	for (let i = 0; i < form.elements.length; ++i) {
+		if (form.elements[i].id == "age_birthdate") {
+			id = form.elements[i].id;
+			val = form.elements[i].value;
+		}
+	}
+	// if value is empty, ignore the button press
+	if (val == ''){
+		localStorage.clear();
+		return;
+	}
+	else {
+		send_message('submit_birthdate', function(message) {
+			message.patient_id = message_globals.patient_id;
 
-    send_message('submit_birthdate', function(message) {
-        message.patient_id = message_globals.patient_id;
+			message['submit_birthdate'] = {};
+			message['submit_birthdate'][id] = val;
 
-        message['submit_birthdate'] = {};
-        let form = document.getElementById('edit_birthdate_form');
-        for (let i = 0; i < form.elements.length; ++i) {
-            if (form.elements[i].id != "button_submit_birthdate") {
-                let val = form.elements[i].value;
-                message['submit_birthdate'][form.elements[i].id] = val;
-            }
-        }
-        console.log(message);
-    });
-    localStorage.clear();
-    window.location.reload(true);
+			console.log(message);
+		});
+		localStorage.clear();
+		window.location.reload(true);
+	}
 }
 
 function user_entered_single_med() {
@@ -145,12 +156,21 @@ function user_entered_single_med() {
         ++message_globals.weirdness;
         return;
     }
+	
+	let form = document.getElementById('single_med_form');
+	// all form elements must have a value
+	for (let i = 0; i < form.elements.length; ++i) {
+		if (form.elements[i].value == '') {
+			localStorage.clear();
+			return;
+		}
+	}
 
     send_message('submit_single_med', function(message) {
         message.patient_id = message_globals.patient_id;
 
         message['submit_single_med'] = {};
-        let form = document.getElementById('single_med_form');
+        
         for (let i = 0; i < form.elements.length; ++i) {
             if (form.elements[i].id != "button_submit_single_med" 
 				&& !form.elements[i].id.includes('remove')) {

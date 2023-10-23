@@ -171,6 +171,14 @@ test('change birthdate', async t => {
 	let age2Str = await Selector('#data_entry_age').innerText;
 	let age2 = Number(age2Str.match(/\d+/)[0]);
 	await t.expect(age).gt(age2);
+
+	// click send with empty birthdate
+	send = await Selector('#button_submit_birthdate');
+	try{ await t.click(send); }	catch(error){}
+	
+	age2Str = await Selector('#data_entry_age').innerText;
+	age2 = Number(age2Str.match(/\d+/)[0]);
+	await t.expect(age).gt(age2);
     
 });
 
@@ -225,7 +233,26 @@ test('enter and remove medication', async t => {
 	}
 	await t.expect(medlist2.withText(code).exists).notOk();
 	await t.expect(medlist2.withText('B0GUS2').exists).ok();
-  
+	
+	// click send with empty medication fields
+	try{ await t.click(Selector('#button_submit_single_med')); }	catch(error){}
+	await t.expect(Selector('#data_entry_med_list').withText('B0GUS2').exists).ok();
+	
+	await t.typeText(Selector('#single_med_atc'), 'B0GUS3');	
+	try{ await t.click(Selector('#button_submit_single_med')); }	catch(error){}
+	await t.expect(Selector('#data_entry_med_list').withText('B0GUS2').exists).ok();
+	await t.expect(Selector('#data_entry_med_list').withText('B0GUS3').exists).notOk();
+	
+	await t.typeText(Selector('#single_med_name'), 'Bogus Med 3');
+	try{ await t.click(Selector('#button_submit_single_med')); }	catch(error){}
+	await t.expect(Selector('#data_entry_med_list').withText('B0GUS2').exists).ok();
+	await t.expect(Selector('#data_entry_med_list').withText('B0GUS3').exists).notOk();
+	
+	await t.typeText(Selector('#single_med_startdate'), '2023-01-01');
+	try{ await t.click(Selector('#button_submit_single_med')); }	catch(error){}
+	await t.expect(Selector('#data_entry_med_list').withText('B0GUS2').exists).ok();
+	await t.expect(Selector('#data_entry_med_list').withText('B0GUS3').exists).ok();
+	
 });
 
 
@@ -299,12 +326,17 @@ test('change problems', async t => {
 
 test('enter labs', async t => {
     let window1 = await navigate_to_patient(t, 'P' + this_test_part);
-    
+	
+	// check that submitting an empty form is OK
+	let send = await Selector('#button_submit_labs');
+	try{ await t.click(send); } catch (error){} // do nothing, seems to be a TestCafe problem
+	    
 	let labs_natrium = await Selector('#labs_natrium');
+	await t.expect(labs_natrium.value).eql('');
+	
 	let labs_kalium = await Selector('#labs_kalium');
 	let labs_calcium = await Selector('#labs_calcium');
 	let labs_egfr = await Selector('#labs_egfr');
-	let send = await Selector('#button_submit_labs');
 	
 	await t.typeText(labs_natrium, '124');
 	await t.typeText(labs_kalium, '3.5');
@@ -418,11 +450,27 @@ test('edit labs', async t => {
 
 test('enter measurements', async t => {
     let window1 = await navigate_to_patient(t, 'P' + this_test_part);
-    
+	
+	// check that submitting an empty form doesn't change values
+	let send = await Selector('#button_submit_user_entered_meas');
+	try{ await t.click(send); } catch (error) {} //do nothing, seems to be a TestCafe problem
+	
+	await t.expect(Selector('#user_GDS_score_mis').innerText).eql('invoeren');
+	await t.expect(Selector('#user_grip_kg_mis').innerText).eql('invoeren');
+	await t.expect(Selector('#user_walking_speed_m_per_s_mis').innerText).eql('invoeren');
+	await t.expect(Selector('#user_height_cm_mis').innerText).eql('invoeren');
+	await t.expect(Selector('#user_weight_kg_mis').innerText).eql('invoeren');
+	await t.expect(Selector('#user_systolic_bp_mmHg_mis').innerText).eql('invoeren');
+	await t.expect(Selector('#user_number_of_limitations_mis').innerText).eql('invoeren');
+	await t.expect(Selector('#user_nr_falls_12m_mis').innerText).eql('invoeren');
+	await t.expect(Selector('#user_smoking_mis').innerText).eql('invoeren');
+	await t.expect(Selector('#user_education_hml_mis').innerText).eql('invoeren');
+	await t.expect(Selector('#user_fear_mis').innerText).eql('invoeren');
+			    
 	let user_GDS_score = await Selector('#user_GDS_score'); //dropdown
 	let user_grip_kg = await Selector('#user_grip_kg'); //0-99
 	let user_walking_speed_m_per_s = await Selector('#user_walking_speed_m_per_s'); //0-99
-	let user_height_cm = await Selector('#user_height_cm'); //40=250
+	let user_height_cm = await Selector('#user_height_cm'); //40-250
 	let user_weight_kg = await Selector('#user_weight_kg'); //20-500
 	let user_systolic_bp_mmHg = await Selector('#user_systolic_bp_mmHg'); //20-250
 	let user_number_of_limitations = await Selector('#user_number_of_limitations'); //dropdown
@@ -430,14 +478,7 @@ test('enter measurements', async t => {
 	let user_smoking = await Selector('#user_smoking'); //dropdown
 	let user_education_hml = await Selector('#user_education_hml'); //dropdwon
 	let fear_dropdown = await Selector('#fear_dropdown'); //dropdown
-	let send = await Selector('#button_submit_user_entered_meas');
-		
-	await t.expect(user_GDS_score.value).notEql('1');
-	await t.expect(user_nr_falls_12m.value).notEql('3');
-	await t.expect(Selector('#user_GDS_score_mis').innerText).notEql('1');
-	await t.expect(Selector('#user_nr_falls_12m_mis').innerText).notEql('3');
 	
-
 	await t.click(user_GDS_score);
 	await t.click(Selector('#GDS_dropdown_1', {
         text: '1'

@@ -39,16 +39,16 @@
 
 <div id = "data_entry_age"></div><br><br>
 <form id="edit_birthdate_form">				
-Zo nodig, geboortedatum corrigeren: <input id = "age_birthdate" type = "date"><br>
+Zo nodig, geboortedatum corrigeren: <input id = "age_birthdate" type = "date" required><br>
 <input id="button_submit_birthdate" type="button" onclick="user_entered_birthdate()" value="Verstuur"></form>
 <br><br><br>				
 
 <h3>Medicatie</h3>
 <div id = "data_entry_med_list"></div><br><br>
 <form id="single_med_form">				
-ATC <input id = "single_med_atc" type = "text" size="10"><br>
-naam <input id = "single_med_name" type = "text" size = "160"><br>
-start datum <input id = "single_med_startdate" type = "date"><br>
+ATC <input id = "single_med_atc" type = "text" size="10" required><br>
+naam <input id = "single_med_name" type = "text" size = "160" required><br>
+start datum <input id = "single_med_startdate" type = "date" required><br>
 (Als de startdatum onbekend is, gebruik 01-01 van de geschat startjaar.)<br>
 <input id="button_submit_single_med" type="button" onclick="user_entered_single_med()" value="Verstuur"></form>
 <br><br><br>
