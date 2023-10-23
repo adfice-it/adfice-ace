@@ -554,11 +554,10 @@ test('add_labs', async () => {
 	form_data['natrium'] = 111;
 	form_data['kalium'] = 3.1;
 	form_data['calcium'] = 1.1;
-	form_data['kreatinine'] = 111;
 	form_data['eGFR'] = 30;
 	await adfice.add_labs(patient_id, form_data);
 	labs = await adfice.get_labs(patient_id);
-	expect(labs.length).toBe(5);
+	expect(labs.length).toBe(4);
 	
 	form_data = {}; //  check that it can handle an empty form
 	await adfice.add_labs(patient_id, form_data);
@@ -585,15 +584,14 @@ test('remove_labs', async () => {
 	form_data['natrium'] = 111;
 	form_data['kalium'] = 3.1;
 	form_data['calcium'] = 1.1;
-	form_data['kreatinine'] = 111;
 	form_data['eGFR'] = ">60";
 	await adfice.add_labs(patient_id, form_data);
 	labs = await adfice.get_labs(patient_id);
-	expect(labs.length).toBe(5);
+	expect(labs.length).toBe(4);
 	
 	await adfice.remove_lab('eGFR', patient_id);
 	labs = await adfice.get_labs(patient_id);
-	expect(labs.length).toBe(4);
+	expect(labs.length).toBe(3);
 	
 	// cleanup
 	form_data = {};

@@ -290,7 +290,7 @@ function prediction_data_start(measurements) {
         fear = 2;
         user_fear = 2;
     }
-    document.getElementById('d_user_fear').innerHTML = fear;
+    document.getElementById('d_user_fear').innerHTML = user_fear;
     document.getElementById('fear_of_falls_date_measured').innerHTML = old_date(nice_date(measurements.fear_of_falls_date_measured));
 
     if (measurements.user_values_updated != null) {
@@ -309,20 +309,20 @@ function fill_user_entered_meas(measurements) {
     document.getElementById('user_nr_falls_12m_mis').innerHTML = nice_value(measurements.user_nr_falls_12m) || nice_value(measurements.nr_falls_12m) || '<span class =\'missing\'>invoeren</span>';
     document.getElementById('user_smoking_mis').innerHTML = nice_value(measurements.user_smoking) || nice_value(measurements.smoking) || '<span class =\'missing\'>invoeren</span>';
     document.getElementById('user_education_hml_mis').innerHTML = nice_value(measurements.user_education_hml) || nice_value(measurements.education_hml) || '<span class =\'missing\'>invoeren</span>';
-    let user_fear = null;
-    if (measurements.user_fear0) {
-        user_fear = 0;
+    let fear = null;
+    if (measurements.user_fear0 || measurements.fear0) {
+        fear = 0;
     }
-    if (measurements.user_fear1) {
-        user_fear = 1;
+    if (measurements.user_fear1 || measurements.fear1) {
+        fear = 1;
     }
-    if (measurements.user_fear2) {
-        user_fear = 2;
+    if (measurements.user_fear2 || measurements.fear2) {
+        fear = 2;
     }
-    if (!user_fear) {
+    if (fear == null) {
         document.getElementById('user_fear_mis').innerHTML = '<span class =\'missing\'>invoeren</span>';
     } else {
-        document.getElementById('user_fear_mis').innerHTML = user_fear;
+        document.getElementById('user_fear_mis').innerHTML = fear;
     }
 }
 
@@ -872,9 +872,6 @@ function data_entry_labs() {
 			}
 			if (labs[i].lab_test_name == "calcium") {
 				document.getElementById('labs_calcium').value = labs[i].lab_test_result;
-			}
-			if (labs[i].lab_test_name == "kreatinine") {
-				document.getElementById('labs_kreatinine').value = labs[i].lab_test_result;
 			}
 			if (labs[i].lab_test_name == "eGFR") {
 				if (labs[i].lab_test_result == ">60") {

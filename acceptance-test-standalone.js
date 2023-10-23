@@ -303,15 +303,12 @@ test('enter labs', async t => {
 	let labs_natrium = await Selector('#labs_natrium');
 	let labs_kalium = await Selector('#labs_kalium');
 	let labs_calcium = await Selector('#labs_calcium');
-	let labs_kreatinine = await Selector('#labs_kreatinine');
 	let labs_egfr = await Selector('#labs_egfr');
-	let labs_egfr_n = await Selector('#labs_egfr_n');
 	let send = await Selector('#button_submit_labs');
 	
 	await t.typeText(labs_natrium, '124');
 	await t.typeText(labs_kalium, '3.5');
 	await t.typeText(labs_calcium, '2.10');
-	await t.typeText(labs_kreatinine, '132');
 	await t.typeText(labs_egfr, '30');
 	
 	try{
@@ -321,15 +318,12 @@ test('enter labs', async t => {
 	labs_natrium = await Selector('#labs_natrium');
 	labs_kalium = await Selector('#labs_kalium');
 	labs_calcium = await Selector('#labs_calcium');
-	labs_kreatinine = await Selector('#labs_kreatinine');
 	labs_egfr = await Selector('#labs_egfr');
-	labs_egfr_n = await Selector('#labs_egfr_n');
 	send = await Selector('#button_submit_labs');
 
 	await t.expect(labs_natrium.value).eql('124');
 	await t.expect(labs_kalium.value).eql('3.5');
 	await t.expect(labs_calcium.value).eql('2.10');
-	await t.expect(labs_kreatinine.value).eql('132');
 	await t.expect(labs_egfr.value).eql('30');
 	
 	let remove_natrium = await Selector('#remove_natrium');
@@ -354,6 +348,7 @@ test('enter labs', async t => {
 	
 	await t.expect(labs_natrium.value).notEql('124');
 	await t.expect(labs_kalium.value).eql('3.5');
+	
 
 });
 
@@ -364,13 +359,11 @@ test('edit labs', async t => {
 	let labs_natrium = await Selector('#labs_natrium');
 	let labs_kalium = await Selector('#labs_kalium');
 	let labs_calcium = await Selector('#labs_calcium');
-	let labs_kreatinine = await Selector('#labs_kreatinine');
 	let labs_egfr = await Selector('#labs_egfr');
 	
 	await t.expect(labs_natrium.value).notEql('124');
 	await t.expect(labs_kalium.value).eql('3.5');
 	await t.expect(labs_calcium.value).eql('2.10');
-	await t.expect(labs_kreatinine.value).eql('132');
 	await t.expect(labs_egfr.value).eql('30');
 		
 	try{
@@ -409,20 +402,18 @@ test('edit labs', async t => {
 		await t.click(send);
 	} catch (error){} // do nothing, seems to be a TestCafe problem
 	labs_kalium = await Selector('#labs_kalium');
-	labs_kreatinine = await Selector('#labs_kreatinine');	
 	await t.expect(labs_kalium.value).notEql('4,5');
 	await t.expect(labs_kalium.value).notEql('4.5');
-	await t.expect(labs_kreatinine.value).eql('132');
 	
 	try{ await t.click(Selector('#remove_kalium')); } catch (error) {}
 	try{ await t.click(Selector('#remove_calcium')); } catch (error) {}
-	try{ await t.click(Selector('#remove_kreatinine')); } catch (error) {}
 	try{ await t.click(Selector('#remove_eGFR_normal')); } catch (error) {}
 	
 	await t.expect(labs_kalium.value).notEql('3.5');
 	await t.expect(labs_calcium.value).notEql('2.1');
-	await t.expect(labs_kreatinine.value).notEql('132');
 	await t.expect(labs_egfr.value).notEql('30');
+	await t.expect(Selector('#labs_egfr_n').checked).notOk();
+	
 });	
 
 test('enter measurements', async t => {
@@ -527,6 +518,7 @@ test('enter measurements', async t => {
 });
 
 test('go to CDSS', async t => {
+	//TODO patient should have at least 1 medication to go to CDSS
     let window1 = await navigate_to_patient(t, 'P' + this_test_part);
 	
 	/* add one real medication */
@@ -536,7 +528,12 @@ test('go to CDSS', async t => {
 	await t.typeText(Selector('#single_med_startdate'), '2023-01-01');
 	try{ await t.click(Selector('#button_submit_single_med')); } catch(error){}
 	
-	/* put meas back so we can check the prediction model on the next page */
+	/* put meas and labs back */
+	await t.typeText(Selector('#labs_natrium'), '124');
+	await t.typeText(Selector('#labs_kalium'), '3.5');
+	await t.typeText(Selector('#labs_calcium'), '2.10');
+	await t.typeText(Selector('#labs_egfr'), '30');
+	try{ await t.click(Selector('#button_submit_labs')); } catch(error){}
 			
 	await t.click(Selector('#user_GDS_score'));
 	await t.click(Selector('#GDS_dropdown_1', {
@@ -575,11 +572,61 @@ test('go to CDSS', async t => {
 });
 
 test('go to CDSS2', async t => {
+	//TODO deal with null values
 	let window1 = await navigate_to_patient(t, 'P' + this_test_part);
 	
 	try{ await t.click(Selector('#button_submit_done2')); } catch(error) {}
 	
 	await t.expect(getLocation()).contains('/start');
 	
-	//TODO check a few items on the start page to make sure the data came through
+	let med_div = await Selector("#meds-with-rules");
+	await t.expect(med_div.withText("Amlodipine").exists).ok();
+	let other_med_div = Selector("#meds-without-rules-list");
+	await t.expect(other_med_div.withText("Bogus").exists).ok();
+	
+	let gauge_risk_score = await Selector("#gauge-risk-score");
+	await t.expect(gauge_risk_score.withText("50").exists).ok();
+	
+    let problem_table = await Selector("#problem_table");
+    await t.expect(problem_table.withText("Hypertensie	Ja").exists).ok();
+    await t.expect(problem_table.withText("Lewy body dementie	Nee").exists).ok();
+	await t.expect(problem_table.withText("Atriumfibrilleren	Ja").exists).ok();
+	
+    let lab_table = await Selector("#lab_table");
+    await t.expect(lab_table.withText("natrium").exists).ok();
+    await t.expect(lab_table.withText("124").exists).ok();
+
+
+//prediction data table
+    await t.expect(Selector("#d_user_GDS_score").withText("1").exists).ok();
+    await t.expect(Selector("#d_user_grip_kg").withText("5").exists).ok();
+	await t.expect(Selector("#d_user_walking_speed_m_per_s").withText("0.5").exists).ok();
+	await t.expect(Selector("#d_user_bmi_calc").withText("22.2").exists).ok();
+	await t.expect(Selector("#d_user_systolic_bp_mmHg").withText("150").exists).ok();
+	await t.expect(Selector("#d_user_number_of_limitations").withText("1").exists).ok();
+	await t.expect(Selector("#d_user_nr_falls_12m").withText("3").exists).ok();
+	await t.expect(Selector("#has_antiepileptica").withText("0").exists).ok();
+	await t.expect(Selector("#has_ca_blocker").withText("1").exists).ok();
+	await t.expect(Selector("#has_incont_med").withText("0").exists).ok();
+	await t.expect(Selector("#d_user_smoking").withText("1").exists).ok();
+	await t.expect(Selector("#d_user_education_hml").withText("1").exists).ok();
+	await t.expect(Selector("#d_user_fear").withText("2").exists).ok();
+
+//prediction missing table
+    let missing_table = await Selector("#prediction_missing_form_container");
+    await t.expect(missing_table.withText("grijpkracht").exists).ok();
+    await t.expect(missing_table.withText("invoeren").exists).notOk();
+
+    await t.expect(Selector("#user_GDS_score_mis").withText("1").exists).ok();
+    await t.expect(Selector("#user_grip_kg_mis").withText("5").exists).ok();
+	await t.expect(Selector("#user_walking_speed_m_per_s_mis").withText("0.5").exists).ok();
+	await t.expect(Selector("#user_height_cm_db").withText("150").exists).ok();
+	await t.expect(Selector("#user_weight_kg_db").withText("50").exists).ok();
+	await t.expect(Selector("#user_systolic_bp_mmHg_mis").withText("150").exists).ok();
+	await t.expect(Selector("#user_number_of_limitations_mis").withText("1").exists).ok();
+	await t.expect(Selector("#user_nr_falls_12m_mis").withText("3").exists).ok();
+	await t.expect(Selector("#user_smoking_mis").withText("1").exists).ok();
+	await t.expect(Selector("#user_education_hml_mis").withText("1").exists).ok();
+	await t.expect(Selector("#user_fear_mis").withText("2").exists).ok();
+
 });

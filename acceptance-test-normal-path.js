@@ -474,6 +474,21 @@ test('Test prediction values present', async t => {
     let prediction_table = Selector("#prediction_data_container");
     await t.expect(prediction_table.withText("21.5").exists).ok();
     await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
+	
+	await t.expect(Selector("#GDS_score").withText("1").exists).ok();
+    await t.expect(Selector("#grip_kg").withText("21.5").exists).ok();
+	await t.expect(Selector("#walking_speed_m_per_s").withText("0.6").exists).ok();
+	await t.expect(Selector("#BMI").withText("21.5").exists).ok();
+	await t.expect(Selector("#systolic_bp_mmHg").withText("140").exists).ok();
+	await t.expect(Selector("#number_of_limitations").withText("1").exists).ok();
+	await t.expect(Selector("#nr_falls_12m").withText("3").exists).ok();
+	await t.expect(Selector("#has_antiepileptica").withText("0").exists).ok();
+	await t.expect(Selector("#has_ca_blocker").withText("0").exists).ok();
+	await t.expect(Selector("#has_incont_med").withText("1").exists).ok();
+	await t.expect(Selector("#smoking").withText("1").exists).ok();
+	await t.expect(Selector("#education_hml").withText("3").exists).ok();
+	await t.expect(Selector("#fear").withText("2").exists).ok();
+
 });
 
 test('Test prediction values present when user-entered', async t => {
@@ -489,21 +504,38 @@ test('Test prediction values present when user-entered', async t => {
     await t.expect(prediction_table.withText("120").exists).ok();
     await t.expect(prediction_table.withText("anti-epileptica").exists).ok();
 
-    let missing_table = Selector("#prediction_missing_form_container");
-    await t.expect(missing_table.withText("roker").exists).ok();
+	await t.expect(Selector("#d_user_GDS_score").withText("0").exists).ok();
+    await t.expect(Selector("#d_user_grip_kg").withText("25").exists).ok();
+	await t.expect(Selector("#d_user_walking_speed_m_per_s").withText("0.3").exists).ok();
+	await t.expect(Selector("#d_user_bmi_calc").withText("19.5").exists).ok();
+	await t.expect(Selector("#d_user_systolic_bp_mmHg").withText("120").exists).ok();
+	await t.expect(Selector("#d_user_number_of_limitations").withText("2").exists).ok();
+	await t.expect(Selector("#d_user_nr_falls_12m").withText("1").exists).ok();
+	await t.expect(Selector("#has_antiepileptica").withText("0").exists).ok();
+	await t.expect(Selector("#has_ca_blocker").withText("0").exists).ok();
+	await t.expect(Selector("#has_incont_med").withText("0").exists).ok();
+	await t.expect(Selector("#d_user_smoking").withText("0").exists).ok();
+	await t.expect(Selector("#d_user_education_hml").withText("3").exists).ok();
+	await t.expect(Selector("#d_user_fear").withText("1").exists).ok();
+
+    let missing_table = await Selector("#prediction_missing_form_container");
+    await t.expect(missing_table.withText("grijpkracht").exists).ok();
+    await t.expect(missing_table.withText("invoeren").exists).notOk();
+	
+	await t.expect(Selector("#user_GDS_score_mis").withText("0").exists).ok();
+    await t.expect(Selector("#user_grip_kg_mis").withText("25").exists).ok();
+	await t.expect(Selector("#user_walking_speed_m_per_s_mis").withText("0.3").exists).ok();
+	await t.expect(Selector("#user_height_cm_mis").withText("160").exists).ok();
+	await t.expect(Selector("#user_weight_kg_mis").withText("50").exists).ok();
+	await t.expect(Selector("#user_systolic_bp_mmHg_mis").withText("120").exists).ok();
+	await t.expect(Selector("#user_number_of_limitations_mis").withText("2").exists).ok();
+	await t.expect(Selector("#user_nr_falls_12m_mis").withText("1").exists).ok();
+	await t.expect(Selector("#user_smoking_mis").withText("0").exists).ok();
+	await t.expect(Selector("#user_education_hml_mis").withText("3").exists).ok();
+	await t.expect(Selector("#user_fear_mis").withText("1").exists).ok();
+
 });
 
-/*
-The important tests in the following two tests are commented out, because they fail.
-Emperically, the code works as expected. The first 
-missing_table3.withText("1").exists).notOk();
-passes, so it is probably not an issue with the wrong selector.
-I've tried adding
-await t.wait(5000);
-and
-await t.navigateTo(url);
-and breaking the test up into 3 separate tests, but none of this helps.
-*/
 test('Test user entering values', async t => {
     let mrn = 'DummyMRN-000000173';
     let fhir = 'DummyFHIR-000000173';
@@ -513,9 +545,12 @@ test('Test user entering values', async t => {
     let url = `${BASE_URL}/start?id=${patient_id}`;
     await t.navigateTo(url);
     await change_flex_style_to_inline(t);
-
+	
     // Selectors that are used to check state should be awaited
-    let missing_table = await Selector("#prediction_missing_form_container");
+	let missing_table = await Selector("#prediction_missing_form_container");
+    await t.expect(missing_table.withText("grijpkracht").exists).ok();
+    await t.expect(missing_table.withText("invoeren").exists).ok();
+
     let prediction = await Selector("#patient_info", {
         timeout: 1000
     });
