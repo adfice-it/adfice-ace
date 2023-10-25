@@ -54,3 +54,8 @@ http://localhost:8080/load?mrn=DummyMRN-000000167&fhir=DummyFHIR-000000167&user=
 
 For testing purposes, a shorter session timeout can be set:
 http://localhost:8080/load?mrn=DummyMRN-000000167&user=dr_bob&participant=10167&tsec=125
+
+Connect to container:
+docker exec -it adfice_13306_mariadb bash
+mariadb --user=adfice --password
+<enter password from local adfice_mariadb_user_password file>

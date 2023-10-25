@@ -78,7 +78,7 @@ test('enter a new patient', async t => {
     await t.typeText(doctor_field, 'arts');
 	
 	await t.selectText(participant_field);
-    await t.typeText(participant_field, 'P' + this_test_part);
+    await t.typeText(participant_field, 'TEST' + this_test_part);
 	
 	await t.typeText(birthdate_field, '1940-01-01');
 	
@@ -103,7 +103,7 @@ test('enter a new patient bad input', async t => {
     await t.typeText(doctor_field, 'arts');
 	
 	await t.selectText(participant_field);
-    await t.typeText(participant_field, 'P' + this_test_part+1);
+    await t.typeText(participant_field, 'TEST' + this_test_part+1);
 	
 	await t.click(send);
 	
@@ -141,7 +141,7 @@ test('enter an existing patient', async t => {
     await t.typeText(doctor_field, 'arts');
 	
 	await t.selectText(participant_field);
-    await t.typeText(participant_field, 'P' + this_test_part);
+    await t.typeText(participant_field, 'TEST' + this_test_part);
 	
 	await t.click(send);
 	
@@ -151,7 +151,7 @@ test('enter an existing patient', async t => {
 /* tests for dataentry2 */
 
 test('change birthdate', async t => {
-    let window1 = await navigate_to_patient(t, 'P' + this_test_part);
+    let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
     
 	let ageStr = await Selector('#data_entry_age').innerText;
 	let age = Number(ageStr.match(/\d+/)[0]);
@@ -183,7 +183,8 @@ test('change birthdate', async t => {
 });
 
 test('enter and remove medication', async t => {
-    let window1 = await navigate_to_patient(t, 'P' + this_test_part);
+	//TODO what happens if you try to enter 2 meds with the same ATC code?
+    let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
 	
 	let code = 'B0GUS1';
     
@@ -257,7 +258,7 @@ test('enter and remove medication', async t => {
 
 
 test('enter problems', async t => {
-    let window1 = await navigate_to_patient(t, 'P' + this_test_part);
+    let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
     
 	let hypertensie_rb_y = await Selector('#hypertensie_rb_y');
 	let hypertensie_rb_n = await Selector('#hypertensie_rb_n');
@@ -290,7 +291,7 @@ test('enter problems', async t => {
 
 test('change problems', async t => {
 	// this test assumes that enter problems has been run
-    let window1 = await navigate_to_patient(t, 'P' + this_test_part);
+    let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
     
 	let hypertensie_rb_y = await Selector('#hypertensie_rb_y');
 	let hypertensie_rb_n = await Selector('#hypertensie_rb_n');
@@ -325,7 +326,7 @@ test('change problems', async t => {
 });
 
 test('enter labs', async t => {
-    let window1 = await navigate_to_patient(t, 'P' + this_test_part);
+    let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
 	
 	// check that submitting an empty form is OK
 	let send = await Selector('#button_submit_labs');
@@ -386,7 +387,7 @@ test('enter labs', async t => {
 
 test('edit labs', async t => {
 	// this test assumes that enter labs has been run
-    let window1 = await navigate_to_patient(t, 'P' + this_test_part);
+    let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
 	
 	let labs_natrium = await Selector('#labs_natrium');
 	let labs_kalium = await Selector('#labs_kalium');
@@ -449,7 +450,7 @@ test('edit labs', async t => {
 });	
 
 test('enter measurements', async t => {
-    let window1 = await navigate_to_patient(t, 'P' + this_test_part);
+    let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
 	
 	// check that submitting an empty form doesn't change values
 	let send = await Selector('#button_submit_user_entered_meas');
@@ -560,7 +561,7 @@ test('enter measurements', async t => {
 
 test('go to CDSS', async t => {
 	//TODO patient should have at least 1 medication to go to CDSS
-    let window1 = await navigate_to_patient(t, 'P' + this_test_part);
+    let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
 	
 	/* add one real medication */
 
@@ -613,8 +614,7 @@ test('go to CDSS', async t => {
 });
 
 test('go to CDSS2', async t => {
-	//TODO deal with null values
-	let window1 = await navigate_to_patient(t, 'P' + this_test_part);
+	let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
 	
 	try{ await t.click(Selector('#button_submit_done2')); } catch(error) {}
 	
