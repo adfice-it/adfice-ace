@@ -1,13 +1,5 @@
 /* The purpose of this script is to remove data from patients that have withdrawn from the study. */
 
-create table pid (id_from_patient int unsigned, patient_id varchar(36));
-
-insert into pid
-(select id, patient_id from patient where participant_number = "WITHDRAWN" and row_updated < DATE_SUB(NOW(), INTERVAL 1 DAY)); -- if the WITHDRAWN status was just added, don't delete them (yet)
-
-insert into pid
-(select id, patient_id from patient where participant_number is null and id > 179 and row_created < DATE_SUB(NOW(), INTERVAL 2 MONTH)); -- patients 1 to 179 are test patients
-
 delete from etl_bsn_patient where patient_id in (select patient_id from pid);
 
 delete from etl_mrn_patient where patient_id in (select patient_id from pid);

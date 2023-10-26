@@ -12,6 +12,8 @@ LOCATION=XXX
 mysqldump --opt --user=${USER} --password=${PASS} adfice research_patient research_initial_rules_fired research_last_rules_fired research_initial_checkboxes research_last_checkboxes research_initial_patient_measurement research_last_patient_measurement > $(date "+%b_%d_%Y_%H_%M_%S")adfice_${LOCATION}.sql
 */
 
+drop table research_map;
+
 truncate table research_patient;
 truncate table research_initial_rules_fired;
 truncate table research_last_rules_fired;
@@ -475,5 +477,3 @@ left join patient_measurement
 on research_map.patient_id = patient_measurement.patient_id
 where patient_measurement.row_created >= @lookback;
 -- Should not be any duplicates here; this table should have one row per patient.
-
-drop table research_map;
