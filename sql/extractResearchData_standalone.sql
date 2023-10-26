@@ -17,7 +17,6 @@ truncate table research_initial_rules_fired;
 truncate table research_last_rules_fired;
 truncate table research_initial_checkboxes;
 truncate table research_last_checkboxes;
-truncate table research_initial_patient_measurement_standalone;
 truncate table research_last_patient_measurement;
 
 CREATE TABLE research_map
@@ -145,7 +144,7 @@ SELECT
      null,
      @location_id, -- location_id; will be different for each location
      research_map.participant_number, 
-     if(initial_checkboxes.doctor_id is null,0,sha2(initial_checkboxes.doctor_id,224)),,
+     if(initial_checkboxes.doctor_id is null,0,sha2(initial_checkboxes.doctor_id,224)),
      initial_checkboxes.ATC_code,
      initial_checkboxes.medication_criteria_id,
      initial_checkboxes.select_box_num,
@@ -254,6 +253,8 @@ CREATE TABLE IF NOT EXISTS `research_initial_patient_measurement_standalone` (
   PRIMARY KEY (`id`), 
   UNIQUE KEY `participant`(location_id,participant_number)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+truncate table research_initial_patient_measurement_standalone; -- put this here so it doesn't throw an error on the first run
 
 INSERT INTO research_initial_patient_measurement_standalone (
   id,
@@ -475,4 +476,4 @@ on research_map.patient_id = patient_measurement.patient_id
 where patient_measurement.row_created >= @lookback;
 -- Should not be any duplicates here; this table should have one row per patient.
 
--- drop table research_map;
+drop table research_map;
