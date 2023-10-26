@@ -34,7 +34,11 @@ INSERT INTO research_map (participant_number, mrn) VALUES
 ('participant2','DummyMRN-000000167');
 
 UPDATE research_map
-SET patient_id = (select patient_id from etl_mrn_patient where etl_mrn_patient.mrn = research_map.mrn), patient_pk = (select id from etl_mrn_patient where etl_mrn_patient.mrn = research_map.mrn);
+SET patient_id = (select patient_id from etl_mrn_patient where etl_mrn_patient.mrn = research_map.mrn);
+
+-- patient_pk is needed to link to patient_history, which contains the id but not the patient_id field
+UPDATE research_map
+SET patient_pk = (select id from patient where research_map.patient_id = patient.patient_id);
 
 UPDATE patient set participant_number = 
      (select participant_number 

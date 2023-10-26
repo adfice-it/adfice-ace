@@ -17,12 +17,12 @@ truncate table research_initial_rules_fired;
 truncate table research_last_rules_fired;
 truncate table research_initial_checkboxes;
 truncate table research_last_checkboxes;
-truncate table research_initial_patient_measurement;
+truncate table research_initial_patient_measurement_standalone;
 truncate table research_last_patient_measurement;
 
-SELECT participant_number, patient_id, mrn
-INTO research_map
-FROM patient join etl_mrn_patient on patient.patient_id=etl_mrn_patient.patient_id
+CREATE TABLE research_map
+SELECT participant_number, patient.patient_id, mrn, patient.id as patient_pk
+FROM patient join etl_mrn_patient on patient.patient_id=etl_mrn_patient.patient_id;
 
 -- we don't have the most consistent naming scheme...
 DELETE FROM research_map where mrn like 'Dummy%' or mrn like 'sir%' or mrn = 'mrn0279429439' or mrn = 'mrn8849259164' or participant_number like 'TEST%';
@@ -145,7 +145,7 @@ SELECT
      null,
      @location_id, -- location_id; will be different for each location
      research_map.participant_number, 
-     if(ehr_user_id is null,0,sha2(ehr_user_id,224)),
+     if(initial_checkboxes.doctor_id is null,0,sha2(initial_checkboxes.doctor_id,224)),,
      initial_checkboxes.ATC_code,
      initial_checkboxes.medication_criteria_id,
      initial_checkboxes.select_box_num,
@@ -159,11 +159,12 @@ FROM research_map
           and patient_advice_selection_history.log_row_created = first_date.minRC
           ORDER BY patient_advice_selection_history.log_id) as initial_checkboxes
      on research_map.patient_id = initial_checkboxes.patient_id
-	 left join etl_user on initial_checkboxes.doctor_id = etl_user.doctor_id
 WHERE initial_checkboxes.log_row_created >= @lookback;
 -- no need to look for freetext; the initial state is machine-generated and does not have freetext.
 -- in the history table row_created is the timestamp of the original creation, and row_updated has the timestamp of the latest change.
 -- Checkbox 42b-2 is initially selected by more than one rule, so it has more than one entry with the same time stamp. We might actually want to know about this, so I have removed the unique-key constraint from this table.
+
+UPDATE research_initial_checkboxes SET initial_user_hash = (SELECT sha2(ehr_user_id,224) from etl_user where etl_user.doctor_id = research_initial_checkboxes.initial_user_hash) where initial_user_hash != 0;
 
 INSERT INTO research_last_checkboxes (
   `row_id`,
@@ -181,7 +182,7 @@ SELECT
      null,
      @location_id, -- location_id; will be different for each location
      research_map.participant_number, 
-     if(ehr_user_id is null,0,sha2(ehr_user_id,224)),
+     if(patient_advice_selection.doctor_id is null,0,sha2(patient_advice_selection.doctor_id,224)),
      patient_advice_selection.ATC_code,
      patient_advice_selection.medication_criteria_id,
      patient_advice_selection.select_box_num,
@@ -195,9 +196,64 @@ left join patient_advice_freetext on
      patient_advice_selection.ATC_code = patient_advice_freetext.ATC_code AND
      patient_advice_selection.medication_criteria_id = patient_advice_freetext.medication_criteria_id AND
      patient_advice_selection.select_box_num = patient_advice_freetext.select_box_num
-left join etl_user on initial_checkboxes.doctor_id = etl_user.doctor_id
 WHERE patient_advice_selection.row_created >= @lookback;
 -- This ought to have only the latest advice, so should not be any duplicates here.
+
+UPDATE research_last_checkboxes set last_user_hash = (SELECT sha2(ehr_user_id,224) from etl_user where etl_user.doctor_id = research_last_checkboxes.last_user_hash) where last_user_hash != 0;
+
+CREATE TABLE IF NOT EXISTS `research_initial_patient_measurement_standalone` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `location_id` int unsigned NOT NULL,
+  `participant_number` varchar(50) DEFAULT NULL,
+  `initial_date_retrieved` datetime DEFAULT NULL,
+  `initial_user_education_hml` smallint unsigned DEFAULT NULL,
+  `initial_education_hml` smallint unsigned DEFAULT NULL,
+  `initial_user_height_cm` decimal(5,2) DEFAULT NULL,
+  `initial_height_cm` decimal(5,2) DEFAULT NULL,
+  `initial_height_date_measured` datetime DEFAULT NULL,
+  `initial_user_weight_kg` decimal(5,2) DEFAULT NULL,
+  `initial_weight_kg` decimal(5,2) DEFAULT NULL,
+  `initial_weight_date_measured` datetime DEFAULT NULL,
+  `initial_BMI` decimal(5,2) DEFAULT NULL,
+  `initial_BMI_date_measured` datetime DEFAULT NULL,
+  `initial_user_GDS_score` int unsigned DEFAULT NULL,
+  `initial_GDS_score` int unsigned DEFAULT NULL,
+  `initial_GDS_date_measured` datetime DEFAULT NULL,
+  `initial_user_grip_kg` decimal(5,2) DEFAULT NULL,
+  `initial_grip_kg` decimal(5,2) DEFAULT NULL,
+  `initial_grip_date_measured` datetime DEFAULT NULL,
+  `initial_user_walking_speed_m_per_s` decimal(5,3) DEFAULT NULL,
+  `initial_walking_speed_m_per_s` decimal(5,3) DEFAULT NULL,
+  `initial_walking_date_measured` datetime DEFAULT NULL,
+  `initial_user_systolic_bp_mmHg` int unsigned DEFAULT NULL,
+  `initial_systolic_bp_mmHg` int unsigned DEFAULT NULL,
+  `initial_diastolic_bp_mmHg` int unsigned DEFAULT NULL,
+  `initial_bp_date_measured` datetime DEFAULT NULL,
+  `initial_user_number_of_limitations` smallint unsigned DEFAULT NULL,
+  `initial_number_of_limitations` smallint unsigned DEFAULT NULL,
+  `initial_functional_limit_date_measured` datetime DEFAULT NULL,
+  `initial_user_fear0` tinyint DEFAULT NULL,
+  `initial_user_fear1` tinyint DEFAULT NULL,
+  `initial_user_fear2` tinyint DEFAULT NULL,
+  `initial_fear0` tinyint DEFAULT NULL,
+  `initial_fear1` tinyint DEFAULT NULL,
+  `initial_fear2` tinyint DEFAULT NULL,
+  `initial_fear_of_falls_date_measured` datetime DEFAULT NULL,
+  `initial_user_nr_falls_12m` int unsigned DEFAULT NULL,
+  `initial_nr_falls_12m` int unsigned DEFAULT NULL,
+  `initial_nr_falls_date_measured` datetime DEFAULT NULL,
+  `initial_user_smoking` tinyint DEFAULT NULL,
+  `initial_smoking` tinyint DEFAULT NULL,
+  `initial_smoking_date_measured` datetime DEFAULT NULL,
+  `initial_has_antiepileptica` tinyint DEFAULT NULL,
+  `initial_has_ca_blocker` tinyint DEFAULT NULL,
+  `initial_has_incont_med` tinyint DEFAULT NULL,
+  `initial_prediction_result` int unsigned DEFAULT NULL,
+  `initial_user_values_updated` datetime DEFAULT NULL,
+  `initial_row_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`), 
+  UNIQUE KEY `participant`(location_id,participant_number)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO research_initial_patient_measurement_standalone (
   id,
