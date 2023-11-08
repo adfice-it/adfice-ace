@@ -12,7 +12,7 @@ LOCATION=XXX
 mysqldump --opt --user=${USER} --password=${PASS} adfice research_patient research_initial_rules_fired research_last_rules_fired research_initial_checkboxes research_last_checkboxes research_initial_patient_measurement research_last_patient_measurement > $(date "+%b_%d_%Y_%H_%M_%S")adfice_${LOCATION}.sql
 */
 
-drop table research_map;
+drop table if exists research_map;
 
 truncate table research_patient;
 truncate table research_initial_rules_fired;
