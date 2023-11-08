@@ -15,7 +15,6 @@ Important:
 
 Mid Priority:
 * Standalone: does the system handle null med start dates? If so, allow nulls.
-* Add instructions +/- additional convenience scripts for extracting research data from standalone system
 * Consider moving bin/db-create-portal-tables.sh to the valportaal repo. The tables actually belong to the valportaal, although symlinking them to adfice is handy since adfice needs to write to those tables as well.
 * Can we implment a better fake OAuth for testing?
 

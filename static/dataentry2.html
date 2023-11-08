@@ -40,7 +40,7 @@
 <div id = "data_entry_age"></div><br><br>
 <form id="edit_birthdate_form">				
 Zo nodig, geboortedatum corrigeren: <input id = "age_birthdate" type = "date" required><br>
-<input id="button_submit_birthdate" type="button" onclick="user_entered_birthdate()" value="Verstuur"></form>
+<input id="button_submit_birthdate" type="button" onclick="data_entry_submit_button()" value="Verstuur"></form>
 <br><br><br>				
 
 <h3>Medicatie</h3>
@@ -50,7 +50,7 @@ ATC <input id = "single_med_atc" type = "text" size="10" required><br>
 naam <input id = "single_med_name" type = "text" size = "160" required><br>
 start datum <input id = "single_med_startdate" type = "date" required><br>
 (Als de startdatum onbekend is, gebruik 01-01 van de geschat startjaar.)<br>
-<input id="button_submit_single_med" type="button" onclick="user_entered_single_med()" value="Verstuur"></form>
+<input id="button_submit_single_med" type="button" onclick="data_entry_med_submit_button()" value="Verstuur"></form>
 <br><br><br>
 
 <!-- <form id="multiple_med_form">				
@@ -61,7 +61,7 @@ TODO
 <h3>Probleemlijst</h3>
 <form id="problems_form">				
 <div id="data_entry_problems"></div></div> <!-- filled in by five_pages.js -->
-<input id="button_submit_problems" type="button" onclick="user_entered_problems()" value="Verstuur"></form>
+<input id="button_submit_problems" type="button" onclick="data_entry_submit_button()" value="Verstuur"></form>
 <br><br><br>
 
 <h3>Lab</h3>
@@ -72,7 +72,7 @@ Calcium: <input type="number" id="labs_calcium" name="calcium" min="0" max="100"
 eGFR: <input type="number" id="labs_egfr" name="eGFR" min="0" max="100" step="0.01"><button type="button" id="remove_eGFR" onclick="remove_lab('eGFR')">Verwijder</button><br>
 Als de exacte waarde van de eGFR onbekend is maar boven 60 is, laat de bovenstaande veld leeg blijven en klik de onderstaande knop.<br>
 eGFR >60: <input type="radio" id="labs_egfr_n" id="eGFR_normal" name="eGFR_normal" value=">60"><button type="button" id="remove_eGFR_normal" onclick="remove_lab('eGFR')">Verwijder</button><br>
-<input id="button_submit_labs" type="button" onclick="user_entered_labs()" value="Verstuur"></form>
+<input id="button_submit_labs" type="button" onclick="data_entry_submit_button()" value="Verstuur"></form>
 <br><br><br>
 
 <h3>Metingen</h3>
@@ -80,7 +80,7 @@ eGFR >60: <input type="radio" id="labs_egfr_n" id="eGFR_normal" name="eGFR_norma
 <div id="user_entered_meas_container">
 <!-- filled by five_pages.js -->
 </div> <!-- end user_entered_meas_container -->
-<input id="button_submit_user_entered_meas" type="button" onclick="user_entered_meas()" value="Verstuur"></form>
+<input id="button_submit_user_entered_meas" type="button" onclick="data_entry_submit_button()" value="Verstuur"></form>
 <div id="footnote_meas"></div><!-- footnote_meas -->
 
 <br><br><br>

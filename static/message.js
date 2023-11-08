@@ -113,15 +113,54 @@ function update_meas() {
     window.location.reload(true);
 }
 
-function user_entered_birthdate(){
+function data_entry_submit_button(){
 	if (!message_globals.ws) {
         message_globals.logger.error(
-            'got a submit_birthdate request but websocket is null');
+            'got a dataenry submit request but websocket is null');
         ++message_globals.weirdness;
         return;
     }
 	
-	let form = document.getElementById('edit_birthdate_form');
+	let birthdate_function = user_entered_birthdate(document.getElementById('edit_birthdate_form'));
+	let single_med_function = user_entered_single_med(document.getElementById('single_med_form'));
+	let problem_function = user_entered_problems(document.getElementById('problems_form'));
+	let lab_function = user_entered_labs(document.getElementById('labs_form'));
+	let meas_function = user_entered_meas(document.getElementById('user_entered_meas_form'));
+	
+	if (birthdate_function){
+		send_message('submit_birthdate', birthdate_function);
+	}
+	if (single_med_function){
+		send_message('submit_single_med', single_med_function);
+	}
+	if (problem_function){
+	    send_message('submit_problems', problem_function);
+	}
+	if (lab_function){
+	    send_message('submit_labs', lab_function);
+	}
+	if (meas_function){
+		send_message('submit_meas', meas_function);
+	}
+	
+	localStorage.clear();
+	window.location.reload(true);
+}
+
+function data_entry_med_submit_button(){
+	let form = document.getElementById('single_med_form');
+	// first check if the med form is complete.
+	for (let i = 0; i < form.elements.length; ++i) {
+		if (form.elements[i].value == '') {
+			localStorage.clear();
+			return;
+		}
+	}
+	// if the function did not return early, roll through to regular data entry submission
+	data_entry_submit_button();
+}
+
+function user_entered_birthdate(form){
 	let id = '';
 	let val = '';
 	for (let i = 0; i < form.elements.length; ++i) {
@@ -132,41 +171,26 @@ function user_entered_birthdate(){
 	}
 	// if value is empty, ignore the button press
 	if (val == ''){
-		localStorage.clear();
-		return;
-	}
-	else {
-		send_message('submit_birthdate', function(message) {
+		return null;
+	} else {
+		return function(message) {
 			message.patient_id = message_globals.patient_id;
 
 			message['submit_birthdate'] = {};
 			message['submit_birthdate'][id] = val;
 
 			console.log(message);
-		});
-		localStorage.clear();
-		window.location.reload(true);
+		};
 	}
 }
 
-function user_entered_single_med() {
-    if (!message_globals.ws) {
-        message_globals.logger.error(
-            'got a submit single med request but websocket is null');
-        ++message_globals.weirdness;
-        return;
-    }
-	
-	let form = document.getElementById('single_med_form');
-	// all form elements must have a value
+function user_entered_single_med(form) {
 	for (let i = 0; i < form.elements.length; ++i) {
 		if (form.elements[i].value == '') {
-			localStorage.clear();
-			return;
+			return null;
 		}
 	}
-
-    send_message('submit_single_med', function(message) {
+    return function(message) {
         message.patient_id = message_globals.patient_id;
 
         message['submit_single_med'] = {};
@@ -179,9 +203,7 @@ function user_entered_single_med() {
             }
         }
         console.log(message);
-    });
-    localStorage.clear();
-    window.location.reload(true);
+    };
 }
 
 function remove_med(atc_code) {
@@ -203,81 +225,75 @@ function remove_med(atc_code) {
     window.location.reload(true);
 }
 
-function user_entered_problems() {
-    if (!message_globals.ws) {
-        message_globals.logger.error(
-            'got a submit problems request but websocket is null');
-        ++message_globals.weirdness;
-        return;
-    }
-
-    send_message('submit_problems', function(message) {
-        message.patient_id = message_globals.patient_id;
-
-        message['submit_problems'] = {};
-        let form = document.getElementById('problems_form');
-        for (let i = 0; i < form.elements.length; ++i) {
-            if (form.elements[i].id != "button_submit_problems") {
-                let val = form.elements[i].value;
-                if (val == 'Ja') {
-                    let radio_button = document.getElementById(form.elements[i].id);
-                    if (radio_button.checked) {
-                        message['submit_problems'][form.elements[i].id] = val;
-                    }
-                }
-            }
-        }
-        console.log(message);
-    });
-    localStorage.clear();
-    window.location.reload(true);
+function user_entered_problems(form) {
+	let empty = 1;
+	for (let i = 0; i < form.elements.length; ++i) {
+		if (form.elements[i].value == 'Ja'){
+			empty = 0;
+		}
+	}
+	if (empty) {
+		return null;
+	} else {
+		return function(message) {
+			message.patient_id = message_globals.patient_id;
+			message['submit_problems'] = {};
+			for (let i = 0; i < form.elements.length; ++i) {
+				if (form.elements[i].id != "button_submit_problems") {
+					let val = form.elements[i].value;
+					if (val == 'Ja') {
+						let radio_button = document.getElementById(form.elements[i].id);
+						if (radio_button.checked) {
+							message['submit_problems'][form.elements[i].id] = val;
+						}
+					}
+				}
+			}
+			console.log(message);
+		};
+	}
 }
 
-function user_entered_labs() {
-    if (!message_globals.ws) {
-        message_globals.logger.error(
-            'got a submit labs request but websocket is null');
-        ++message_globals.weirdness;
-        return;
-    }
-
-    send_message('submit_labs', function(message) {
-        message.patient_id = message_globals.patient_id;
-
-        message['submit_labs'] = {};
-        let form = document.getElementById('labs_form');
-        let radio_button = document.getElementById("labs_egfr_n");
-        let numeric_egfr = false;
-        for (let i = 0; i < form.elements.length; ++i) {
-            if (form.elements[i].id != "button_submit_labs" &&
-                form.elements[i].id != "labs_egfr_n") {
-                let val = form.elements[i].value;
-                if (val > 0) {
-                    message['submit_labs'][form.elements[i].name] = val;
-                    if (form.elements[i].name == 'eGFR') {
-                        numeric_egfr = true;
-                    }
-                }
-            }
-        }
-        if (radio_button.checked && !numeric_egfr) { // if there is a numeric eGFR then the radio button is overridden
-            message['submit_labs']["eGFR"] = radio_button.value;
-        }
-        console.log(message);
-    });
-    localStorage.clear();
-    window.location.reload(true);
+function user_entered_labs(form) {
+	let empty = 1;
+	for (let i = 0; i < form.elements.length -1; ++i) { //not the submit button
+		if (form.elements[i].value > 0){
+			empty = 0;
+		}
+	}
+	if (empty){
+		return null;
+	} else {	
+		return function(message) {
+			message.patient_id = message_globals.patient_id;
+			message['submit_labs'] = {};
+			let form = document.getElementById('labs_form');
+			let radio_button = document.getElementById("labs_egfr_n");
+			let numeric_egfr = false;
+			for (let i = 0; i < form.elements.length; ++i) {
+				if (form.elements[i].id != "button_submit_labs" &&
+					form.elements[i].id != "labs_egfr_n") {
+					let val = form.elements[i].value;
+					if (val > 0) {
+						message['submit_labs'][form.elements[i].name] = val;
+						if (form.elements[i].name == 'eGFR') {
+							numeric_egfr = true;
+						}
+					}
+				}
+			}
+			if (radio_button.checked && !numeric_egfr) { // if there is a numeric eGFR then the radio button is overridden
+				message['submit_labs']["eGFR"] = radio_button.value;
+			}
+			console.log(message);
+		};
+	}
 }
 
-function user_entered_meas() {
-    if (!message_globals.ws) {
-        message_globals.logger.error(
-            'got a submit_meas event but websocket is null');
-        ++message_globals.weirdness;
-        return;
-    }
-
-    send_message('submit_meas', function(message) {
+function user_entered_meas(form) {
+//TODO deal with empty form
+console.log(form);
+    return function(message) {
         message.patient_id = message_globals.patient_id;
 
         message['submit_meas'] = {};
@@ -289,9 +305,7 @@ function user_entered_meas() {
             }
         }
         console.log(message);
-    });
-    localStorage.clear();
-    window.location.reload(true);
+    };
 }
 
 function delete_user_entered(to_be_deleted) {
