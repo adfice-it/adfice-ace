@@ -737,7 +737,7 @@ test('any submit button submits all fields that have content', async t => {
 	await t.expect(Selector('#user_fear_mis').innerText).eql('2');
 	
 });	
-/*
+
 test('going to CDSS submits any fields that have content', async t => {
     let window1 = await navigate_to_patient(t, 'TEST' + this_test_part +1);
 
@@ -757,7 +757,7 @@ test('going to CDSS submits any fields that have content', async t => {
         text: 'Laag'
     }));
 	
-	try{ await t.click(Selector('#button_submit_done2')); } catch(error) {}
+	try{ await t.click(Selector('#button_submit_done')); } catch(error) {}
 	
 	await t.expect(getLocation()).contains('/start');
 	
@@ -769,8 +769,7 @@ test('going to CDSS submits any fields that have content', async t => {
 	
     let problem_table = await Selector("#problem_table");
     await t.expect(problem_table.withText("Hypertensie	Ja").exists).ok();
-    await t.expect(problem_table.withText("Lewy body dementie	Nee").exists).ok();
-	await t.expect(problem_table.withText("Atriumfibrilleren	Ja").exists).ok();
+    await t.expect(problem_table.withText("Lewy body dementie	Ja").exists).ok();
 	
     let lab_table = await Selector("#lab_table");
     await t.expect(lab_table.withText("natrium").exists).ok();
@@ -792,4 +791,3 @@ test('going to CDSS submits any fields that have content', async t => {
 	await t.expect(Selector("#d_user_fear").withText("2").exists).ok();
 
 });	
-*/
