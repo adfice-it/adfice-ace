@@ -574,9 +574,9 @@ function patient_medicine_advice_table() {
 
 function other_med_advice_area() {
     /*
-     * TODO: this is 95% duplicate code
-     * The code supports multiple boxes only so it has the same shape as
-     * other nearly duplicate code, which needs to be factored together.
+     * This code has some overlap with the other html-generating functions. 
+	 * However, factoring out the overlapping functionality runs the risk of 
+	 * making it difficult to understand what is actually happening.
      */
     let other_advices = get_patient_advice().advice_other_text;
     let html = '';
@@ -638,7 +638,7 @@ function patient_other_med_advice_area() {
     set_element_inner('div_other_med_advice', html);
 }
 
-// TODO: This is mostly duplicate code
+// This code has some overlap with the previous block
 function non_med_advice_area(hide_additional) {
     let html = '';
     let nm_advices = get_patient_advice().advice_text_non_med;
@@ -719,7 +719,7 @@ function patient_non_med_advice() {
     set_element_inner('patient-non-med-advice-list', html);
 }
 
-// TODO: lots of duplication here, too
+// See above note regarding duplication
 function div_all_ehr_text() {
     // <div id="div_all_ehr_text" class="div_all_ehr_text">
     let html = '';
