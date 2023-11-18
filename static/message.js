@@ -123,6 +123,7 @@ function data_entry_submit_button(){
 	
 	let birthdate_function = user_entered_birthdate(document.getElementById('edit_birthdate_form'));
 	let single_med_function = user_entered_single_med(document.getElementById('single_med_form'));
+	let multi_med_function = user_entered_multi_med(document.getElementById('multi_med_form'));
 	let problem_function = user_entered_problems(document.getElementById('problems_form'));
 	let lab_function = user_entered_labs(document.getElementById('labs_form'));
 	let meas_function = user_entered_meas(document.getElementById('user_entered_meas_form'));
@@ -132,6 +133,9 @@ function data_entry_submit_button(){
 	}
 	if (single_med_function){
 		send_message('submit_single_med', single_med_function);
+	}
+	if (multi_med_function){
+		send_message('submit_multi_med', multi_med_function);
 	}
 	if (problem_function){
 	    send_message('submit_problems', problem_function);
@@ -223,6 +227,58 @@ function remove_med(atc_code) {
     });
     localStorage.clear();
     window.location.reload(true);
+}
+
+function user_entered_multi_med(form){
+	let id = 'multi_med';
+	let val = form.elements[0].value;
+	
+	// if value is empty, ignore the button press
+	if (val == ''){
+		return null;
+	} else {
+		let strings = val.split("\t");
+		let messages = [];
+		let counter = 0;
+		let count_to_4 = 0;
+		let atc_regex = /[a-zA-Z]\d\d./;
+
+		while(counter < strings.length){
+			let med_msg = {};
+			while(count_to_4 < 4){
+				if(strings[counter]) {med_msg['single_med_name'] = strings[counter].trim();}
+				counter++; count_to_4++; // do nothing with generic name
+				counter++; count_to_4++;
+				if (strings[counter] && atc_regex.test(strings[counter])) {
+					med_msg['single_med_atc'] = strings[counter].trim();
+					}
+				counter++; count_to_4++;
+				if(strings[counter]) {med_msg['single_med_startdate'] = strings[counter].trim();}
+				count_to_4++;
+			}
+			if(Object.keys(med_msg).length == 3){ 
+				messages.push(med_msg)
+			};
+			count_to_4 = 0;
+			counter++; 
+		}
+		
+// console.log(JSON.stringify(messages,null,4));
+
+var start = new Date().getTime();
+var end = start;
+while(end < start + 10000) {
+end = new Date().getTime();
+}
+   
+		return function(message) {
+			message.patient_id = message_globals.patient_id;
+
+			message['submit_multi_med'] = {};
+			message['submit_multi_med']['med_array'] = messages;
+			console.log(message);
+		};
+	}
 }
 
 function user_entered_problems(form) {

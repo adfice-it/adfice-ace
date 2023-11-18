@@ -518,6 +518,42 @@ test('add_single_med affecting prediction data', async () => {
 	await adfice.sql_select('delete from patient_measurement where patient_id = "' + patient_id + '";');
 })
 
+test('add_multi_med', async () => {
+	let patient_id = '00000000-0000-4000-8000-100000000172';
+	let meds = await adfice.get_meds(patient_id);
+	expect(meds.length).toBe(0);
+	let form_data = {};
+    form_data['med_array'] = 
+		[
+			{
+				"single_med_name": "Excedrin, filmomhulde tabletten",
+				"single_med_atc": "N02BA51",
+				"single_med_startdate": "2023-01-01"
+			},
+			{
+				"single_med_name": "Celebrex 100 mg, harde capsules",
+				"single_med_atc": "M01AH01",
+				"single_med_startdate": "2021-01-01"
+			},
+			{
+				"single_med_name": "Nortrilen 10 mg, filmomhulde tabletten",
+				"single_med_atc": "N06AA10",
+				"single_med_startdate": "2022-01-01"
+			},
+			{
+				"single_med_name": "Paracetamol Linn 500 mg, tabletten",
+				"single_med_atc": "N02BE01",
+				"single_med_startdate": "2020-01-01"
+			}
+		];
+	await adfice.add_multi_med(patient_id, form_data);
+	meds = await adfice.get_meds(patient_id);
+	expect(meds.length).toBe(4);
+	
+	//cleanup
+	await adfice.sql_select('delete from patient_medication where patient_id = "' + patient_id + '";');
+})
+
 test('add_problems', async () => {
 	let patient_id = '00000000-0000-4000-8000-100000000172';
 	let problems = await adfice.get_problems(patient_id);

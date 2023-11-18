@@ -256,6 +256,47 @@ test('enter and remove medication', async t => {
 	
 });
 
+test('enter and remove medication', async t => {
+	//TODO what happens if you try to enter 2 meds with the same ATC code?
+    let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
+	
+	let paste_me = `Excedrin, filmomhulde tabletten	ACETYLSALICYLZUUR#COFFEINE 0-WATER#PARACETAMOL	N02BA51	2023-01-01	
+Celebrex 100 mg, harde capsules	CELECOXIB	M01AH01	2021-01-01	
+Nortrilen 10 mg, filmomhulde tabletten	NORTRIPTYLINEHYDROCHLORIDE	N06AA10	2022-01-01	
+Paracetamol Linn 500 mg, tabletten	PARACETAMOL	N02BE01	2020-01-01	
+
+	`;
+    
+	let medlist = await Selector('#data_entry_med_list');
+	await t.expect(medlist.withText('N02BA51').exists).notOk();
+	
+	await t.typeText(Selector('#multi_med'), paste_me);
+	
+	try{ await t.click(Selector('#button_submit_multi_med')); }	catch(error){}
+	
+	let medlist2 = await Selector('#data_entry_med_list');
+	await t.expect(medlist2.withText('N02BA51').exists).ok();
+	await t.expect(medlist2.withText('Nortrilen').exists).ok();
+	await t.expect(medlist2.withText('01-01-2020').exists).ok();
+	
+	try{ await t.click(Selector('#remove_N02BA51')); } catch(error){}
+	medlist2 = await Selector('#data_entry_med_list');
+	await t.expect(medlist2.withText('N02BA51').exists).notOk();
+	await t.expect(medlist2.withText('Nortrilen').exists).ok();
+	
+	// click send with empty medication field
+	try{ await t.click(Selector('#button_submit_multi_med')); }	catch(error){}
+	medlist2 = await Selector('#data_entry_med_list');
+	await t.expect(medlist2.withText('Nortrilen').exists).ok();
+	
+	//cleanup
+	try{ await t.click(Selector('#remove_M01AH01')); } catch(error){}
+	try{ await t.click(Selector('#remove_N06AA10')); } catch(error){}
+	try{ await t.click(Selector('#remove_N02BE01')); } catch(error){}
+	await t.expect(Selector('#data_entry_med_list').withText('B0GUS2').exists).ok();
+	
+});
+
 
 test('enter problems', async t => {
     let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);

@@ -1009,6 +1009,13 @@ async function add_single_med(patient_id, form_data) {
     }
 }
 
+async function add_multi_med(patient_id, form_data){
+	let med_array = form_data['med_array'];
+	for (let i = 0; i < med_array.length; ++i) {
+		await this.add_single_med(patient_id, med_array[i]);
+	}
+}
+
 async function add_problems(patient_id, form_data) {
     let sql1 = 'DELETE FROM patient_problem where patient_id = "' + patient_id + '";';
     let problem_names = Object.keys(form_data);
@@ -1782,6 +1789,7 @@ function adfice_init(db) {
         add_log_event_copy_ehr_text: add_log_event_copy_ehr_text,
         add_labs: add_labs,
         add_meas: add_meas,
+		add_multi_med: add_multi_med,
         add_problems: add_problems,
         add_single_med: add_single_med,
         doctor_id_for_user: doctor_id_for_user,

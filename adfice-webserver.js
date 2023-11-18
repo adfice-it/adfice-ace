@@ -402,6 +402,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
 		} else if (message.type == 'submit_single_med') {
             await adfice.add_single_med(
                 patient_id, message['submit_single_med']);
+		} else if (message.type == 'submit_multi_med') {
+            await adfice.add_multi_med(
+                patient_id, message['submit_multi_med']);		
 		} else if (message.type == 'remove_med') {
             await adfice.remove_med(
                 message['remove_med']['atc_code'], patient_id);
