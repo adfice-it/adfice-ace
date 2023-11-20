@@ -183,10 +183,9 @@ test('change birthdate', async t => {
 });
 
 test('enter and remove medication', async t => {
-	//TODO what happens if you try to enter 2 meds with the same ATC code?
     let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
 	
-	let code = 'B0GUS1';
+	let code = 'B09US1';
     
 	let medlist = await Selector('#data_entry_med_list');
 	await t.expect(medlist.withText('Geen').exists).ok();
@@ -213,7 +212,7 @@ test('enter and remove medication', async t => {
 	await t.expect(medlist2.withText('Bogus Med').exists).ok();
 	await t.expect(medlist2.withText('01-01-2023').exists).ok();
 	
-	await t.typeText(atc, 'B0GUS2');
+	await t.typeText(atc, 'B09US2');
 	await t.typeText(name, 'Bogus Med 2');
 	await t.typeText(startdate, '2023-01-01');
 	
@@ -233,31 +232,30 @@ test('enter and remove medication', async t => {
 		// throws an error, but as far as I can tell, only in TestCafe. Ignore it.
 	}
 	await t.expect(medlist2.withText(code).exists).notOk();
-	await t.expect(medlist2.withText('B0GUS2').exists).ok();
+	await t.expect(medlist2.withText('B09US2').exists).ok();
 	
 	// click send with empty medication fields
 	try{ await t.click(Selector('#button_submit_single_med')); }	catch(error){}
-	await t.expect(Selector('#data_entry_med_list').withText('B0GUS2').exists).ok();
+	await t.expect(Selector('#data_entry_med_list').withText('B09US2').exists).ok();
 	
-	await t.typeText(Selector('#single_med_atc'), 'B0GUS3');	
+	await t.typeText(Selector('#single_med_atc'), 'B09US3');	
 	try{ await t.click(Selector('#button_submit_single_med')); }	catch(error){}
-	await t.expect(Selector('#data_entry_med_list').withText('B0GUS2').exists).ok();
-	await t.expect(Selector('#data_entry_med_list').withText('B0GUS3').exists).notOk();
+	await t.expect(Selector('#data_entry_med_list').withText('B09US2').exists).ok();
+	await t.expect(Selector('#data_entry_med_list').withText('B09US3').exists).notOk();
 	
 	await t.typeText(Selector('#single_med_name'), 'Bogus Med 3');
 	try{ await t.click(Selector('#button_submit_single_med')); }	catch(error){}
-	await t.expect(Selector('#data_entry_med_list').withText('B0GUS2').exists).ok();
-	await t.expect(Selector('#data_entry_med_list').withText('B0GUS3').exists).notOk();
+	await t.expect(Selector('#data_entry_med_list').withText('B09US2').exists).ok();
+	await t.expect(Selector('#data_entry_med_list').withText('B09US3').exists).notOk();
 	
 	await t.typeText(Selector('#single_med_startdate'), '2023-01-01');
 	try{ await t.click(Selector('#button_submit_single_med')); }	catch(error){}
-	await t.expect(Selector('#data_entry_med_list').withText('B0GUS2').exists).ok();
-	await t.expect(Selector('#data_entry_med_list').withText('B0GUS3').exists).ok();
+	await t.expect(Selector('#data_entry_med_list').withText('B09US2').exists).ok();
+	await t.expect(Selector('#data_entry_med_list').withText('B09US3').exists).ok();
 	
 });
 
-test('enter and remove medication', async t => {
-	//TODO what happens if you try to enter 2 meds with the same ATC code?
+test('add multi meds', async t => {
     let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
 	
 	let paste_me = `Excedrin, filmomhulde tabletten	ACETYLSALICYLZUUR#COFFEINE 0-WATER#PARACETAMOL	N02BA51	2023-01-01	
@@ -293,7 +291,68 @@ Paracetamol Linn 500 mg, tabletten	PARACETAMOL	N02BE01	2020-01-01
 	try{ await t.click(Selector('#remove_M01AH01')); } catch(error){}
 	try{ await t.click(Selector('#remove_N06AA10')); } catch(error){}
 	try{ await t.click(Selector('#remove_N02BE01')); } catch(error){}
-	await t.expect(Selector('#data_entry_med_list').withText('B0GUS2').exists).ok();
+	await t.expect(Selector('#data_entry_med_list').withText('B09US2').exists).ok();
+	
+});
+
+test('cannot add duplicate meds', async t => {
+    let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
+	await t.expect(Selector('#single_med_error').withText('ATC').exists).notOk();
+	
+	await t.typeText(Selector('#single_med_atc'), 'B09US2');
+	await t.typeText(Selector('#single_med_name'), 'Bogus Med 2');
+	await t.typeText(Selector('#single_med_startdate'), '2023-04-01');
+	
+	try{ await t.click(Selector('#button_submit_single_med')); } catch(error){ console.log(error);}
+	
+	await t.expect(Selector('#single_med_error').withText('ATC').exists).ok();
+	
+	await t.typeText(Selector('#single_med_atc'), 'B09US22', { replace: true });
+	await t.typeText(Selector('#single_med_name'), 'Bogus Med 2', { replace: true });
+	await t.typeText(Selector('#single_med_startdate'), '2023-04-01', { replace: true });
+	
+	try{ await t.click(Selector('#button_submit_single_med')); } catch(error){ console.log(error);}
+	
+	await t.expect(Selector('#single_med_error').withText('naam').exists).ok();
+	
+	await t.typeText(Selector('#single_med_atc'), 'B09US22', { replace: true });
+	/* the above line throws this error.
+Empirically the code works and does not throw any errors, so probably this is a TestCafe problem. 
+{
+  code: 'E1',
+  isTestCafeError: true,
+  callsite: CallsiteRecord {
+    filename: 'C:\\cygwin64\\home\\skmedlock\\src\\adfice-ace\\acceptance-test-s
+tandalone.js',
+    lineNum: 318,
+    callsiteFrameIdx: 5,
+    stackFrames: [
+      [Object],    [Object],
+      [Object],    [Object],
+      [Object],    [Object],
+      CallSite {}, [Object],
+      [Object],    [Object]
+    ],
+    isV8Frames: true
+  },
+  errStack: 'element is null\n' +
+    'ws_on_close@http://127.0.0.1:53657/assets/message.js:720:5\n',
+  pageDestUrl: 'http://127.0.0.1:53657/dataentry2?id=67aa03c3fa6447d17b60a56b4d5
+c2986',
+  id: 'QOs4VGc'
+}
+*/		
+	await t.typeText(Selector('#single_med_name'), 'Bogus Med 22', { replace: true });
+	await t.typeText(Selector('#single_med_startdate'), '2023-04-01', { replace: true });
+
+	try{ await t.click(Selector('#button_submit_single_med')); } catch(error){ console.log(error);}
+	
+	await t.expect(Selector('#single_med_error').withText('naam').exists).notOk();
+	let medlist = await Selector('#data_entry_med_list');
+	await t.expect(medlist.withText('Bogus Med 22').exists).ok();
+	
+	//cleanup
+	try{ await t.click(Selector('#remove_B09US22')); } catch(error){}
 	
 });
 

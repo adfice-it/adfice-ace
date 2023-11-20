@@ -120,7 +120,8 @@ function data_entry_submit_button(){
         ++message_globals.weirdness;
         return;
     }
-	
+	//clear the error message div
+	document.getElementById('single_med_error').innerHTML = '';
 	let birthdate_function = user_entered_birthdate(document.getElementById('edit_birthdate_form'));
 	let single_med_function = user_entered_single_med(document.getElementById('single_med_form'));
 	let multi_med_function = user_entered_multi_med(document.getElementById('multi_med_form'));
@@ -153,6 +154,10 @@ function data_entry_submit_button(){
 
 function data_entry_med_submit_button(){
 	let form = document.getElementById('single_med_form');
+/*var start = new Date().getTime();
+var end = start;
+while(end < start + 10000) { end = new Date().getTime(); }
+*/
 	// first check if the med form is complete.
 	for (let i = 0; i < form.elements.length; ++i) {
 		if (form.elements[i].value == '') {
@@ -243,6 +248,7 @@ function user_entered_multi_med(form){
 		let count_to_4 = 0;
 		let atc_regex = /[a-zA-Z]\d\d./;
 
+//TODO check for duplicates. If ATC is a duplicate, concatenate the names.
 		while(counter < strings.length){
 			let med_msg = {};
 			while(count_to_4 < 4){
@@ -265,12 +271,6 @@ function user_entered_multi_med(form){
 		
 // console.log(JSON.stringify(messages,null,4));
 
-var start = new Date().getTime();
-var end = start;
-while(end < start + 10000) {
-end = new Date().getTime();
-}
-   
 		return function(message) {
 			message.patient_id = message_globals.patient_id;
 

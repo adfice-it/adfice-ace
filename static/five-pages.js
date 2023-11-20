@@ -897,6 +897,21 @@ function data_entry_done() {
 	window.location.href='start?id=' + five_pages.patient_id;
 }
 
+function duplicate_med_check() {
+	let form = document.getElementById('single_med_form');
+	let meds = get_patient_advice().medications;
+	for (let i = 0; i < meds.length; ++i) {
+		if(meds[i].ATC_code == form.elements['single_med_atc'].value.toUpperCase()){
+			document.getElementById('single_med_error').innerHTML = "Elk medicatie moet een uniek ATC hebben. Als de pati\&euml;nt 2 medicaties met dezelfde ATC gebruikt, verwijder de huidige en voer een nieuwe medicatie in met beide namen (met een / tussen de namen).";
+			return false;
+		} else if(meds[i].medication_name.toUpperCase() == form.elements['single_med_name'].value.toUpperCase()){
+			document.getElementById('single_med_error').innerHTML = "Elk medicatie moet een uniek naam hebben. Controleer even de medicatielijst.";
+			return false;
+		}
+	}
+	return true;
+}
+
 
 function nice_date(dtstring) {
     if (dtstring == null) {
