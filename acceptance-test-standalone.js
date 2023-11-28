@@ -356,6 +356,45 @@ c2986',
 	
 });
 
+test('multi meds handles duplicates', async t => {
+    let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
+	
+	let paste_me = `Excedrin, filmomhulde tabletten	ACETYLSALICYLZUUR#COFFEINE 0-WATER#PARACETAMOL	N02BA51	2023-01-01	
+Paracetamol	ACETYLSALICYLZUUR 0-WATER#PARACETAMOL	N02BA51	2023-01-01	
+Celebrex 100 mg, harde capsules	CELECOXIB	M01AH01	2021-01-01	
+	`;
+    
+	let medlist = await Selector('#data_entry_med_list');
+	await t.expect(medlist.withText('N02BA51').exists).notOk();
+	
+	await t.typeText(Selector('#multi_med'), paste_me);
+	
+	try{ await t.click(Selector('#button_submit_multi_med')); }	catch(error){}
+	
+	let medlist2 = await Selector('#data_entry_med_list');
+	await t.expect(medlist2.withText('Excedrin').exists).ok();
+	await t.expect(medlist2.withText('/Paracetamol').exists).ok();
+	await t.expect(medlist2.withText('N02BA51').exists).ok();
+	
+	//cleanup first part
+	try{ await t.click(Selector('#remove_N02BA51')); } catch(error){}
+	try{ await t.click(Selector('#remove_M01AH01')); } catch(error){}
+	
+	paste_me = `Excedrin, filmomhulde tabletten	ACETYLSALICYLZUUR#COFFEINE 0-WATER#PARACETAMOL	N02BA51	2023-01-01	
+Excedrin, filmomhulde tabletten	ACETYLSALICYLZUUR#COFFEINE 0-WATER#PARACETAMOL	N02BA51	2023-01-01	
+Celebrex 100 mg, harde capsules	CELECOXIB	M01AH01	2021-01-01	
+	`;
+	
+	await t.typeText(Selector('#multi_med'), paste_me);
+	try{ await t.click(Selector('#button_submit_multi_med')); }	catch(error){}
+	medlist2 = await Selector('#data_entry_med_list');
+	await t.expect(medlist2.withText('N02BA51').exists).ok();
+	await t.expect(medlist2.withText('/').exists).notOk();
+	
+	//cleanup
+	try{ await t.click(Selector('#remove_N02BA51')); } catch(error){}
+	try{ await t.click(Selector('#remove_M01AH01')); } catch(error){}
+});
 
 test('enter problems', async t => {
     let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);

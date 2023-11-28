@@ -147,17 +147,16 @@ function data_entry_submit_button(){
 	if (meas_function){
 		send_message('submit_meas', meas_function);
 	}
-	
+/* var start = new Date().getTime();
+var end = start;
+while(end < start + 10000) { end = new Date().getTime(); }
+*/
 	localStorage.clear();
 	window.location.reload(true);
 }
 
 function data_entry_med_submit_button(){
 	let form = document.getElementById('single_med_form');
-/*var start = new Date().getTime();
-var end = start;
-while(end < start + 10000) { end = new Date().getTime(); }
-*/
 	// first check if the med form is complete.
 	for (let i = 0; i < form.elements.length; ++i) {
 		if (form.elements[i].value == '') {
@@ -248,28 +247,47 @@ function user_entered_multi_med(form){
 		let count_to_4 = 0;
 		let atc_regex = /[a-zA-Z]\d\d./;
 
-//TODO check for duplicates. If ATC is a duplicate, concatenate the names.
 		while(counter < strings.length){
 			let med_msg = {};
+			let single_med_name, single_med_atc, single_med_startdate;
 			while(count_to_4 < 4){
-				if(strings[counter]) {med_msg['single_med_name'] = strings[counter].trim();}
+				if(strings[counter]) {single_med_name = strings[counter].trim();}
 				counter++; count_to_4++; // do nothing with generic name
 				counter++; count_to_4++;
 				if (strings[counter] && atc_regex.test(strings[counter])) {
-					med_msg['single_med_atc'] = strings[counter].trim();
+					single_med_atc = strings[counter].trim();
 					}
 				counter++; count_to_4++;
-				if(strings[counter]) {med_msg['single_med_startdate'] = strings[counter].trim();}
+				if(strings[counter]) {single_med_startdate = strings[counter].trim();}
 				count_to_4++;
 			}
-			if(Object.keys(med_msg).length == 3){ 
-				messages.push(med_msg)
-			};
+			if(single_med_name && single_med_atc && single_med_startdate){
+				let is_duplicate = 0;
+				for (let i = 0; i < messages.length; ++i) {
+					//if name = an existing name, drop this entry
+					if(messages[i]['single_med_name'] == single_med_name){
+						is_duplicate = 1;
+					  //if atc = an existing atc, concatenate the name and stop further processing
+					} else if (messages[i]['single_med_atc'] == single_med_atc){
+						messages[i]['single_med_name'] = messages[i]['single_med_name'] + "/" + single_med_name;
+						is_duplicate = 1;
+					}
+				}
+				if(!is_duplicate){
+					med_msg['single_med_name'] = single_med_name;
+					med_msg['single_med_atc'] = single_med_atc;
+					med_msg['single_med_startdate'] = single_med_startdate;
+					messages.push(med_msg)
+				}
+			}
+			single_med_name = null;
+			single_med_atc = null;
+			single_med_startdate = null;
 			count_to_4 = 0;
 			counter++; 
 		}
 		
-// console.log(JSON.stringify(messages,null,4));
+ console.log(JSON.stringify(messages,null,4));
 
 		return function(message) {
 			message.patient_id = message_globals.patient_id;
