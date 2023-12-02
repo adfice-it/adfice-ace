@@ -287,9 +287,7 @@ function user_entered_multi_med(form){
 			counter++; 
 		}
 		
- console.log(JSON.stringify(messages,null,4));
-
-		return function(message) {
+ 		return function(message) {
 			message.patient_id = message_globals.patient_id;
 
 			message['submit_multi_med'] = {};

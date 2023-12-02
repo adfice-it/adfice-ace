@@ -182,6 +182,15 @@ test('change birthdate', async t => {
     
 });
 
+test('do not go to CDSS if there are no meds', async t => {
+	let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
+	
+	try{ await t.click(Selector('#button_submit_done2')); } catch(error) {}
+	
+	await t.expect(getLocation()).contains('/dataentry2');
+	await t.expect(Selector('#single_med_error').withText('tenminste').exists).ok();
+});
+
 test('enter and remove medication', async t => {
     let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
 	

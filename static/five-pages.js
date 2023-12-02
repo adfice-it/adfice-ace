@@ -894,7 +894,12 @@ function data_entry_meas() {
 }
 
 function data_entry_done() {
-	window.location.href='start?id=' + five_pages.patient_id;
+	let meds = document.getElementById('data_entry_med_list');
+	if(meds.innerHTML.startsWith('Geen')){
+		document.getElementById('single_med_error').innerHTML = 'Er moet tenminste 1 medicatie vermeld worden voordat u naar de CDSS gaat.';
+	} else {
+		window.location.href='start?id=' + five_pages.patient_id;
+	}
 }
 
 function duplicate_med_check() {
