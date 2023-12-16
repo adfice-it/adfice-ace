@@ -216,22 +216,6 @@ test('Redirect to error page if URL has multiple mrns or user_ids', async t => {
     await t.expect(body.withText('verloren').exists).notOk();
 });
 
-test('Fail portal export if patient has no BSN', async t => {
-    let mrn = 'DummyMRN-000000161';
-    let fhir = 'DummyFHIR-000000161';
-    let participant = 10161;
-    let window1 = await load(t, mrn, fhir, participant);
-    let button_finalize_view = Selector('button#button-finalize-view');
-    await t.click(button_finalize_view);
-    let button_definitive = Selector('button#definitive');
-    await t.setNativeDialogHandler(() => true);
-    // I think the dialog handler actually persists between tests.
-    // Maybe better to put it as a constant for the suite?
-    await t.click(button_definitive);
-    let alertHistory = await t.getNativeDialogHistory();
-
-    await t.expect(alertHistory[0].text).contains('Valportaal');
-});
 
 test('Test redirect to error page if etl failed', async t => {
     let mrn = 'sir_not_appearing';

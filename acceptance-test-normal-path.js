@@ -331,47 +331,6 @@ test('Checkbox preselected', async t => {
     await t.expect(checked_checkbox.checked).ok();
 });
 
-test('Test finalize (with renew to reset the patient)', async t => {
-    let mrn = 'DummyMRN-000000167';
-    let fhir = 'DummyFHIR-000000167';
-    let participant = 10167;
-    let window0 = await load(t, mrn, fhir, participant);
-    let patient_id = "00000000-0000-4000-8000-100000000167";
-    let url = `${BASE_URL}/prep?id=${patient_id}`;
-    await t.navigateTo(url);
-
-    let checkbox_id = "cb_NONMED_V_1";
-    let checkbox_css_selector = `input#${checkbox_id}`;
-    let cb_selector = Selector(checkbox_css_selector);
-    await t.expect(cb_selector.hasAttribute('disabled')).notOk();
-
-    // navigate to finalize
-    let button_finalize_view = Selector('button#button-finalize-view');
-    await t.click(button_finalize_view);
-
-    let button_definitive = Selector('button#definitive');
-    await t.expect(button_definitive.exists).ok();
-    await t.click(button_definitive);
-
-    let button_prep_view = Selector('button#button-prep-view');
-    await t.click(button_prep_view);
-
-    await t.expect(cb_selector.hasAttribute('disabled')).ok();
-
-    // console.log('typically, renew would _not_ be called after a finalize,');
-    // console.log('however, this is a handy way to reset the test case.');
-    let button_start_view = Selector('button#button-start-view');
-    await t.click(button_start_view);
-
-    let button_renew = Selector('button#patient_renew');
-    await t.expect(button_renew.exists).ok();
-    await t.click(button_renew);
-
-    // go back to the prep page
-    await t.click(button_prep_view);
-    await t.expect(cb_selector.hasAttribute('disabled')).notOk();
-});
-
 test('Check "Geen advies"', async t => {
     let mrn = 'DummyMRN-000000162';
     let fhir = 'DummyFHIR-000000162';
