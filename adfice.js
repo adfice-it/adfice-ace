@@ -128,10 +128,6 @@ function patientListOfInserts(patient_id, patient) {
         '(patient_id, participant_number, birth_date, age, is_final) ' +
         'VALUES (?,?,?,?,0)';
     list_of_transactions.push([sql1, [patient_id, patient['participant_number'], patient['birth_date'], age]]);
-    let sql2 = '/* adfice.patientListOfInserts */ INSERT INTO etl_bsn_patient ' +
-        '(patient_id, bsn) ' +
-        "VALUES (?,?)";
-    list_of_transactions.push([sql2, [patient_id, patient['bsn']]]);
     return list_of_transactions;
 }
 
@@ -142,9 +138,6 @@ function patientListOfUpdates(patient_id, patient) {
         'SET birth_date = ?, age = ?, is_final = 0 ' +
         "WHERE patient_id = '" + patient_id + "'";
     list_of_transactions.push([sql1, [patient['birth_date'], age]]);
-    let sql2 = '/* adfice.patientListOfUpdates */ UPDATE etl_bsn_patient ' +
-        "SET bsn = ? WHERE patient_id = '" + patient_id + "'";
-    list_of_transactions.push([sql2, [patient['bsn']]]);
     return list_of_transactions;
 }
 

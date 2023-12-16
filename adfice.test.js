@@ -1527,12 +1527,10 @@ test('test get patient table sql and params', async function() {
         birth_date: '1930-01-01'
     };
     let list_of_inserts = adfice.patientListOfInserts(patient_id, patient, 100175);
-    expect(list_of_inserts.length).toBe(3);
+    expect(list_of_inserts.length).toBe(2);
     expect(list_of_inserts[1][0]).toContain("INSERT INTO patient");
     expect(list_of_inserts[1][0]).toContain("is_final) VALUES (?,?,?,?,0)");
     expect(list_of_inserts[1][1].length).toBe(4);
-    expect(list_of_inserts[2][0]).toContain("INSERT INTO etl_bsn_patient");
-    expect(list_of_inserts[2][1].length).toBe(2);
 });
 
 test('test get patient table sql and params with nulls', async function() {
@@ -1544,12 +1542,10 @@ test('test get patient table sql and params with nulls', async function() {
         birth_date: null
     };
     let list_of_inserts = adfice.patientListOfInserts(patient_id, patient, 100175);
-    expect(list_of_inserts.length).toBe(3);
+    expect(list_of_inserts.length).toBe(2);
     expect(list_of_inserts[1][0]).toContain("INSERT INTO patient");
     expect(list_of_inserts[1][0]).toContain("is_final) VALUES (?,?,?,?,0)");
     expect(list_of_inserts[1][1].length).toBe(4);
-    expect(list_of_inserts[2][0]).toContain("INSERT INTO etl_bsn_patient");
-    expect(list_of_inserts[2][1].length).toBe(2);
 });
 
 test('test get med sql and params', async function() {
