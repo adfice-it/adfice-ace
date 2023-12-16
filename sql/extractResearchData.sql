@@ -60,7 +60,9 @@ INSERT INTO research_patient (
      time_copied,
      ehr_text_was_copied,
      time_ehr_text_copied,
-     was_sent_to_portal
+     was_sent_to_portal,
+     was_renewed,
+	 time_renewed
 )
 SELECT 
      null,
@@ -86,6 +88,7 @@ from patient
           from logged_events 
           where event_type = 3 order by row_created desc limit 1) as ehr_copy 
           on patient.patient_id = ehr_copy_pid
+-- ADD WAS_RENEWED and time_renewed		  
 WHERE patient.participant_number is not null and patient.participant_number != '' and patient.row_updated >= @lookback;
 -- I'm not sure why I had an "on duplicate key" here....
 /* ON DUPLICATE KEY UPDATE 
