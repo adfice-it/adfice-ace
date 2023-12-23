@@ -74,21 +74,26 @@ SELECT
      copied_rc, -- time_copied
      if(ehr_copy_pid is null,0,1) as ehr_text_was_copied,
      ehr_copy_rc, -- time_ehr_text_copied
-     if(patient.is_final,1,0) as was_sent_to_portal
+     if(patient.is_final,1,0) as was_sent_to_portal,
+	 if(renew_pid is null,0,1) as was_renewed,
+     renew_rc -- time_copied
 from patient 
-    left join (select patient_id as printed_pid, row_created as printed_rc 
+    left join (select patient_id as printed_pid, max(row_created) as printed_rc 
           from logged_events 
-          where event_type = 1 order by row_created desc limit 1) as printed 
+          where event_type = 1 group by patient_id) as printed 
           on patient.patient_id = printed_pid
-    left join (select patient_id as copied_pid, row_created as copied_rc 
+    left join (select patient_id as copied_pid, max(row_created) as copied_rc 
           from logged_events 
-          where event_type = 2 order by row_created desc limit 1) as copied 
+          where event_type = 2 group by patient_id) as copied 
           on patient.patient_id = copied_pid
-     left join (select patient_id as ehr_copy_pid, row_created as ehr_copy_rc 
+    left join (select patient_id as ehr_copy_pid, max(row_created) as ehr_copy_rc 
           from logged_events 
-          where event_type = 3 order by row_created desc limit 1) as ehr_copy 
+          where event_type = 3 group by patient_id) as ehr_copy 
           on patient.patient_id = ehr_copy_pid
--- ADD WAS_RENEWED and time_renewed		  
+	left join (select patient_id as renew_pid, max(row_created) as renew_rc 
+          from logged_events 
+          where event_type = 4 group by patient_id) as renew 
+          on patient.patient_id = renew_pid
 WHERE patient.participant_number is not null and patient.participant_number != '' and patient.row_updated >= @lookback;
 -- I'm not sure why I had an "on duplicate key" here....
 /* ON DUPLICATE KEY UPDATE 
@@ -102,9 +107,11 @@ WHERE patient.participant_number is not null and patient.participant_number != '
      time_sent_to_portal = (if(patient.is_final,patient.row_updated,null));
 */
 
+/*
 UPDATE research_patient
 SET time_sent_to_portal = (select row_updated from patient_history join research_map on patient_history.id = research_map.patient_pk where research_map.participant_number = research_patient.participant_number and is_final = 1 order by row_updated asc limit 1)
 WHERE was_sent_to_portal = 1;
+*/
 
 INSERT INTO research_initial_rules_fired (
   id,

@@ -26,6 +26,8 @@ CREATE TABLE `research_patient` (
   `time_ehr_text_copied` datetime DEFAULT NULL,
   `was_sent_to_portal` tinyint(1) NOT NULL,
   `time_sent_to_portal` datetime DEFAULT NULL,
+  `was_renewed` tinyint(1) NOT NULL,
+  `time_renewed` datetime DEFAULT NULL,
    PRIMARY KEY (`research_patient_id`), 
    UNIQUE KEY `participant`(location_id,participant_number)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
