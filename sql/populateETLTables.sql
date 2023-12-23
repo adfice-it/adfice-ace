@@ -24,7 +24,7 @@ INSERT INTO problem (id, problem_name, display_name) VALUES
 (18,'schizofrenie','Schizoaffectieve aandoening'),
 (19,'dementie','Dementie'),
 (20,'lewy-bodies-dementia','Lewy body dementie'),
-(21,'parkinson','Ziekte van Parkinson'),
+(21,'parkinson','Ziekte van Parkinson en gerelateerde aandoeningen'),
 (22,'multiple-system-atrophy','Multisysteematrofie'),
 (23,'progressive-supranuclear-palsy','Progressieve supranucleaire parese'),
 (24,'epilepsy','Epilepsie'),
