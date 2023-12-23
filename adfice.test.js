@@ -96,6 +96,7 @@ test('test refresh_data for valid patient_id', async () => {
     let patient_id = "00000000-0000-4000-8000-100000000163";
     let refresh_data = await adfice.get_refresh_data(patient_id);
     expect(refresh_data.fhir).toBe("DummyFHIR-000000163");
+	expect(refresh_data.birth_date).toBe("1940-6-16");
 });
 
 test('test refresh_data for null patient_id', async () => {

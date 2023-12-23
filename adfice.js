@@ -1678,10 +1678,17 @@ async function get_refresh_data(patient_id) {
     if (results.length == 0) {
         return null;
     }
+	let sql2 = 'SELECT birth_date from patient where patient_id=?';
+	let results2 = await this.sql_select(sql2, params);
+	let date = new Date(results2[0].birth_date);			
+	let year = date.getFullYear();
+	let month = (date.getMonth() + 1).toString(); //javascript 0-offset months
+	let day = (date.getDate()).toString();
     let result = {
         mrn: results[0].mrn,
         fhir: results[0].fhir,
-        refresh_token: results[0].refresh_token
+        refresh_token: results[0].refresh_token,
+		birth_date: year + "-" + month + "-" + day
     }
     return result;
 }
