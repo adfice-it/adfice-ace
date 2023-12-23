@@ -49,7 +49,8 @@ CREATE TABLE `patient_history` (
   `log_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `log_row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `log_op` tinyint NOT NULL,
-  `id` int unsigned NOT NULL, -- note that this tracks id (the PK) not patient_id. Adding patient_id might be a good idea in the future.
+  `id` int unsigned NOT NULL, -- note that this tracks id (the PK) not patient_id. 
+  `patient_id` varchar(36) NOT NULL, -- added after first deploy
   `display_name` varchar(100) DEFAULT NULL,
   `participant_number` varchar(50) DEFAULT NULL,
   `birth_date` date,
@@ -71,6 +72,7 @@ CREATE TRIGGER patient_history_insert
           NULL,
           0,
           NEW.id,
+		  NEW.patient_id,
           NEW.display_name,
           NEW.participant_number,
           NEW.birth_date,
@@ -89,6 +91,7 @@ CREATE TRIGGER patient_history_update
           NULL,
           1,
           OLD.id,
+		  OLD.patient_id,
           OLD.display_name,
           OLD.participant_number,
           OLD.birth_date,
@@ -107,6 +110,7 @@ CREATE TRIGGER patient_history_delete
           NULL,
           2,
           OLD.id,
+		  OLD.patient_id,
           OLD.display_name,
           OLD.participant_number,
           OLD.birth_date,
