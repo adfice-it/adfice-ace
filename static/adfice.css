@@ -88,6 +88,12 @@ body {
     border: 2px solid green;
 }
 
+#print_consult_container{
+	display: flex;
+	position: absolute;
+	right: 0;
+}
+
 #patient_info {
     background: #d9d9d9;
     width: 99%;
