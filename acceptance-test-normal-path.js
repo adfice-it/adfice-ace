@@ -77,6 +77,7 @@ async function load(t, mrn, fhir, participant) {
 
 const getWindowLocation = ClientFunction(() => window.location);
 
+
 async function check_checkbox_and_freetext(t, mrn, fhir, participant, id) {
     await load(t, mrn, fhir, participant);
     // ensure our cb is selected
@@ -663,56 +664,91 @@ test('Nonmed headers display correctly', async t => {
     let url = `${BASE_URL}/prep?id=${patient_id}`;
     await t.navigateTo(url);
     await change_flex_style_to_inline(t);
-    let cb_selector = Selector('#cb_NONMED_B_2');
-    await t.expect(cb_selector.visible).ok();
-    let b2_is_checked = await cb_selector.checked;
-    if (!b2_is_checked) {
-        await t.click(cb_selector);
+	let cb_selector_b1 = Selector('#cb_NONMED_B_1');
+    let cb_selector_b2 = Selector('#cb_NONMED_B_2');
+	let cb_selector_c1 = Selector('#cb_NONMED_C_1');
+	let cb_selector_g1 = Selector('#cb_NONMED_G_1');
+    //make sure page has loaded
+	await t.expect(cb_selector_g1.visible).ok();
+    if (!(await cb_selector_b1.checked)) {
+        await t.click(cb_selector_b1);
     }
-    let cb_selector2 = Selector('#cb_NONMED_G_1');
-    await t.expect(cb_selector2.visible).ok();
-    let g_is_checked = await cb_selector2.checked;
-    if (!g_is_checked) {
-        await t.click(cb_selector2);
+
+    if (!(await cb_selector_b2.checked)) {
+        await t.click(cb_selector_b2);
+    }
+	if (await cb_selector_c1.checked) { //this one is unchecked
+        await t.click(cb_selector_c1);
+    }
+    if (!(await cb_selector_g1.checked)) {
+        await t.click(cb_selector_g1);
     }
     // check that correct headers appear
-    let beweg1 = Selector('#td_nm_category_name_B_1');
-    let beweg2 = Selector('#td_nm_category_name_B_2');
-    let fysio = Selector('#td_nm_category_name_C_1');
-    let shoe = Selector('#td_nm_category_name_G_1');
-    await t.expect(beweg1.visible).ok();
-    await t.expect(beweg2.visible).notOk();
-    await t.expect(fysio.visible).ok();
-    await t.expect(shoe.visible).ok();
+    let p_beweg1 = Selector('#td_nm_category_name_B_1');
+    let p_beweg2 = Selector('#td_nm_category_name_B_2');
+    let p_fysio = Selector('#td_nm_category_name_C_1');
+    let p_shoe = Selector('#td_nm_category_name_G_1');
+    await t.expect(p_beweg1.visible).ok();
+    await t.expect(p_beweg2.visible).notOk();
+    await t.expect(p_fysio.visible).ok();
+    await t.expect(p_shoe.visible).ok();
 
     // switch to consult view
     let button_consult_view = Selector('button#button-consult-view');
     await t.click(button_consult_view);
     await change_flex_style_to_inline(t);
     // check that correct headers appear
-    beweg1 = Selector('#td_nm_category_name_B_1');
-    beweg2 = Selector('#td_nm_category_name_B_2');
-    fysio = Selector('#td_nm_category_name_C_1');
-    shoe = Selector('#td_nm_category_name_G_1');
-    await t.expect(beweg1.visible).ok();
-    await t.expect(beweg2.visible).notOk();
-    await t.expect(fysio.visible).notOk();
-    await t.expect(shoe.visible).ok();
+    let c_beweg1 = Selector('#td_nm_category_name_B_1');
+    let c_beweg2 = Selector('#td_nm_category_name_B_2');
+    let c_fysio = Selector('#td_nm_category_name_C_1');
+    let c_shoe = Selector('#td_nm_category_name_G_1');
+    await t.expect(c_beweg1.visible).ok();
+    await t.expect(c_beweg2.visible).notOk();
+    await t.expect(c_fysio.visible).notOk();
+    await t.expect(c_shoe.visible).ok();
 
     // switch to advies view
     let button_advise_view = Selector('button#button-advise-view');
     await t.click(button_advise_view);
     await change_flex_style_to_inline(t);
     // check that correct headers appear
-    beweg1 = Selector('#patient_nm_cat_B_1');
-    beweg2 = Selector('#patient_nm_cat_B_2');
-    fysio = Selector('#patient_nm_cat_C_1');
-    shoe = Selector('#patient_nm_cat_G_1');
-    await t.expect(beweg1.visible).ok();
-    await t.expect(beweg2.visible).notOk();
-    await t.expect(fysio.visible).notOk();
-    await t.expect(shoe.visible).ok();
-
+    let a_beweg1 = Selector('#patient_nm_cat_B_1');
+    let a_beweg2 = Selector('#patient_nm_cat_B_2');
+    let a_fysio = Selector('#patient_nm_cat_C_1');
+    let a_shoe = Selector('#patient_nm_cat_G_1');
+    await t.expect(a_beweg1.visible).ok();
+    await t.expect(a_beweg2.visible).notOk();
+    await t.expect(a_fysio.visible).notOk();
+    await t.expect(a_shoe.visible).ok();
+	
+	// switch to prep view
+    let button_prep_view = Selector('button#button-prep-view');
+	await t.click(button_prep_view);
+    await change_flex_style_to_inline(t);
+	// un-check beweging1
+	await t.expect(cb_selector_b1.visible).ok();
+    if (await cb_selector_b1.checked) {
+        await t.click(cb_selector_b1);
+    }
+	
+    // check headers on prep page
+	p_beweg1 = await Selector('#td_nm_category_name_B_1');
+	p_beweg2 = await Selector('#td_nm_category_name_B_2');
+	await t.expect(p_beweg1.visible).ok(); // on prep page, it is always the first header that's visible
+    await t.expect(p_beweg2.visible).notOk();
+	
+	// switch to consult view
+    await t.click(button_consult_view);
+    await change_flex_style_to_inline(t);
+	await t.expect(c_beweg1.visible).notOk();
+    await t.expect(c_beweg2.visible).ok();
+	
+	// switch to advice view
+	await t.click(button_advise_view);
+    await change_flex_style_to_inline(t);
+    await t.expect(a_beweg1.visible).notOk();
+    await t.expect(a_beweg2.visible).ok();
+    
 });
 
 test('Other med advice box', async t => {
@@ -995,5 +1031,7 @@ test('Test that contact phone displays', async t => {
 
 
 });
+
+
 //TODO check what etl returns when some meas are missing, and make sure adfice handles this correctly.
 //JSON tends to just delete null values; make sure this doesn't cause problems.

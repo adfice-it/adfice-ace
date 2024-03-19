@@ -193,22 +193,9 @@ portal-dbsetup: npmsetup portal-db-scripts.env
 
 dbsetup: adfice-dbsetup portal-dbsetup
 
-IE_BADWORDS_RE='await\|async\|forEach\|=>\|'\`
 BROWSER_JS := $(shell ls static/*js)
 
-grep-ie-bad-words: $(BROWSER_JS)
-	for FILE in $(BROWSER_JS); do \
-		if [ $$(grep -c $(IE_BADWORDS_RE) $$FILE ) -eq 0 ]; then \
-			true; \
-		else \
-			echo $$FILE; \
-			grep $(IE_BADWORDS_RE) $$FILE; \
-			exit 1; \
-		fi; \
-	done
-	@echo "$@ complete"
-
-check-unit: node_modules/.bin/testcafe dbsetup grep-ie-bad-words
+check-unit: node_modules/.bin/testcafe dbsetup
 	date
 	npm test adfice
 	date

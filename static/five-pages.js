@@ -653,12 +653,14 @@ function non_med_advice_area(hide_additional) {
         let row_id = 'tr_' + nma_id_base;
         let category_name = nm_advice.category_name;
         let category_name_class = "";
-        if (category_name != last_category_name) {
-            last_category_name = category_name;
-            category_name_class = "nm_category_entry_first";
-        } else {
-            category_name_class = "nm_category_entry_additional";
-        }
+        if(hide_additional){
+			if (category_name != last_category_name) {
+				last_category_name = category_name;
+				category_name_class = "nm_category_entry_first";
+			} else {
+				category_name_class = "nm_category_entry_additional";
+			}
+		}
         html += '<div id="' + row_id + '" class="nonmed_row">\n';
         let td_nm_cat_id = ['td', 'nm', 'category', 'name',
             nm_advice.category_id, boxnum
@@ -685,28 +687,49 @@ function non_med_advice_area(hide_additional) {
     document.getElementById("ft_NONMED_V_1_1").className = "ft_input ft_big";
 }
 
+function non_med_advice_area_consult(){
+	let nm_headers = document.querySelectorAll('[id^=td_nm_category_name_]');
+	nm_headers.forEach((header) => {
+	  header.style.visibility = 'hidden';
+	});
+	let nm_map = get_selected_nonmed_cb_map();
+	nm_map.forEach (function(cb_num, cb_key) {
+		let lowest_nm_header = 'td_nm_category_name_' + cb_key.substring(10,11) + '_' + cb_num;
+		console.log(lowest_nm_header);
+		document.getElementById(lowest_nm_header).style.visibility = 'visible';
+	});
+}
+
+function get_selected_nonmed_cb_map(){
+	let cb_list = get_patient_advice().selected_advice;
+	let cb_keys = Object.keys(cb_list);
+	let nm_map = new Map();
+	for (let i = 0; i < cb_keys.length; ++i) {
+		if(cb_keys[i].lastIndexOf("cb_NONMED_", 0) === 0 
+			&& cb_list[cb_keys[i]] == true){
+			let cb_number = cb_keys[i].substring(12,cb_keys[i].length);
+			let prefix = cb_keys[i].substring(0,11);
+			if(nm_map.get(prefix) == null || cb_number < nm_map.get(prefix)){
+				nm_map.set(prefix, cb_number);
+			}
+		}
+	}
+	return nm_map;
+}
+
 function patient_non_med_advice() {
     let html = '';
     let nm_advices = get_patient_advice().advice_text_non_med;
-    let last_category_name = '';
     for (let i = 0; i < nm_advices.length; ++i) {
         let nm_advice = nm_advices[i];
         let nma_prefix = "nma_" + i;
         let category = nm_advice.category_id;
         let category_name = nm_advice.category_name;
-        let category_name_class = "";
         let boxnum = nm_advice.select_box_num;
         let nma_id_base = ['NONMED', category, boxnum].join('_');
         let row_id = 'pt_' + nma_id_base;
-        if (category_name != last_category_name) {
-            last_category_name = category_name;
-            category_name_class = "nm_category_entry_first";
-        } else {
-            category_name_class = "nm_category_entry_additional";
-        }
         html += '<div id="' + 'patient_nm_cat_' + category + '_' + boxnum + '"' +
             ' class="patient_nm_category_name ' +
-            category_name_class +
             '" style="display:none">' +
             category_name + '</div><!-- patient_nm_cat -->\n'
         html += '<div id="' + row_id + '" class="patient_nonmed_cb_row"';
@@ -717,6 +740,13 @@ function patient_non_med_advice() {
         html += '</div> <!-- ' + row_id + ' -->\n';
     }
     set_element_inner('patient-non-med-advice-list', html);
+	// adjust visibility of headers on nonmed advice
+	let nm_map = get_selected_nonmed_cb_map();
+	nm_map.forEach (function(cb_num, cb_key) {
+		let lowest_nm_header = 'patient_nm_cat_' + cb_key.substring(10,11) + '_' + cb_num;
+		document.getElementById(lowest_nm_header).style.display = 'block';
+	});
+	
 }
 
 // See above note regarding duplication
@@ -1026,8 +1056,9 @@ function consult_page_setup() {
     let include_no_checkbox_advice = 0;
     big_nested_medicine_advice_table(include_no_checkbox_advice);
     other_med_advice_area();
-    let hide_additional = 1;
+    let hide_additional = 0;
     non_med_advice_area(hide_additional);
+	non_med_advice_area_consult();
     is_final();
 }
 

@@ -444,6 +444,7 @@ function process_checkbox(checkbox_id, checked) {
         checkbox.checked = checked;
     }
 
+	// for all checkboxes
     let tr_row_id = checkbox_id.replace(/^cb_/, 'tr_');
     let tr_row = document.getElementById(tr_row_id);
     if (tr_row) {
@@ -456,6 +457,8 @@ function process_checkbox(checkbox_id, checked) {
         }
     }
 
+// probably should be using patient_advice object for this when the final page loads, rather htan changing it here.
+	// for text to be pasted into the EHR
     let ehr_row_id = checkbox_id.replace(/^cb_/, 'et_');
     let ehr_row = document.getElementById(ehr_row_id);
     if (ehr_row) {
@@ -470,17 +473,13 @@ function process_checkbox(checkbox_id, checked) {
         }
     }
 
+	// probably should be using patient_advice object for this when the advice page loads, rather htan changing it here.
     // "patient row" is the advice for patients; only exists on the Advice page
     let patient_row_id = checkbox_id.replace(/^cb_/, 'pt_');
     let patient_row = document.getElementById(patient_row_id);
     let cat_id = '';
     if (checkbox_id.lastIndexOf("cb_NONMED_", 0) === 0) {
         cat_id = checkbox_id.replace(/^cb_NONMED_/, 'patient_nm_cat_');
-    }
-    let cat_name_div = '';
-    if (cat_id) {
-        //cat_id will be empty for 'cb_OTHER_other_1' (free text box other med advice)
-        cat_name_div = document.getElementById(cat_id);
     }
     if (message_globals.debug > 0) {
         message_globals.logger.log(JSON.stringify({
@@ -491,21 +490,16 @@ function process_checkbox(checkbox_id, checked) {
             cat_id: cat_id
         }));
     }
+
     if (patient_row) {
         if (checked) {
             // patient_row.classList.add("checkbox-checked");
             // patient_row.classList.remove("checkbox-unchecked");
             patient_row.style.display = 'block';
-            if (cat_name_div) {
-                cat_name_div.style.display = 'block';
-            }
         } else {
             // patient_row.classList.add("checkbox-unchecked");
             // patient_row.classList.remove("checkbox-checked");
             patient_row.style.display = 'none';
-            if (cat_name_div) {
-                cat_name_div.style.display = 'none';
-            }
         }
     }
 }
