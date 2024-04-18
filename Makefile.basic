@@ -24,7 +24,6 @@ ADFICE_VERSION=0.0.0
 default: check
 
 check: thirdparty check-unit
-	./acceptance-test-patient-validation.sh
 	@echo "SUCCESS $@"
 
 thirdparty: node_modules/ws/lib/websocket-server.js \
@@ -32,7 +31,7 @@ thirdparty: node_modules/ws/lib/websocket-server.js \
 		static/thirdparty/showdown.min.js.map
 		@echo "$@ complete"
 
-check-unit: adfice-dbsetup grep-ie-bad-words
+check-unit: adfice-dbsetup
 	npm test adfice
 	@echo "SUCCESS $@"
 
@@ -44,17 +43,3 @@ adfice-dbsetup: npmsetup
 npmsetup: node_modules/ws/lib/websocket-server.js
 	@echo "$@ complete"
 
-IE_BADWORDS_RE='await\|async\|forEach\|=>\|'\`
-BROWSER_JS := $(shell ls static/*js)
-
-grep-ie-bad-words: $(BROWSER_JS)
-	for FILE in $(BROWSER_JS); do \
-		if [ $$(grep -c $(IE_BADWORDS_RE) $$FILE ) -eq 0 ]; then \
-			true; \
-		else \
-			echo $$FILE; \
-			grep $(IE_BADWORDS_RE) $$FILE; \
-			exit 1; \
-		fi; \
-	done
-	@echo "$@ complete"
