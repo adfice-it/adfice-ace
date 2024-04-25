@@ -50,7 +50,7 @@ INSERT INTO research_patient (
 SELECT 
      null,
      @location_id, -- location_id; will be different for each location
-     patient.participant_number, 
+     research_map.participant_number, 
      if(printed_pid is null,0,1) as was_printed,
      printed_rc, -- time_printed
      if(copied_pid is null,0,1) as was_copied,
@@ -60,24 +60,25 @@ SELECT
      if(patient.is_final,1,0) as was_sent_to_portal,
 	 if(renew_pid is null,0,1) as was_renewed,
      renew_rc -- time_copied
-from patient 
+from research_map 
+	join patient on research_map.patient_id = patient.patient_id
     left join (select patient_id as printed_pid, max(row_created) as printed_rc 
           from logged_events 
           where event_type = 1 group by patient_id) as printed 
-          on patient.patient_id = printed_pid
+          on research_map.patient_id = printed_pid
     left join (select patient_id as copied_pid, max(row_created) as copied_rc 
           from logged_events 
           where event_type = 2 group by patient_id) as copied 
-          on patient.patient_id = copied_pid
+          on research_map.patient_id = copied_pid
     left join (select patient_id as ehr_copy_pid, max(row_created) as ehr_copy_rc 
           from logged_events 
           where event_type = 3 group by patient_id) as ehr_copy 
-          on patient.patient_id = ehr_copy_pid
+          on research_map.patient_id = ehr_copy_pid
 	left join (select patient_id as renew_pid, max(row_created) as renew_rc 
           from logged_events 
           where event_type = 4 group by patient_id) as renew 
-          on patient.patient_id = renew_pid
-WHERE patient.participant_number is not null and patient.participant_number != '' and patient.row_updated >= @lookback;
+          on research_map.patient_id = renew_pid
+WHERE research_map.participant_number is not null and research_map.participant_number != '' and patient.row_updated >= @lookback;
 -- I'm not sure why I had an "on duplicate key" here....
 /* ON DUPLICATE KEY UPDATE 
      was_printed = if(printed_pid is null,0,1),
@@ -205,7 +206,6 @@ left join patient_advice_freetext on
 WHERE patient_advice_selection.row_created >= @lookback;
 -- This ought to have only the latest advice, so should not be any duplicates here.
 
-UPDATE research_last_checkboxes set last_user_hash = (SELECT sha2(ehr_user_id,224) from etl_user where etl_user.doctor_id = research_last_checkboxes.last_user_hash) where last_user_hash != 0;
 
 CREATE TABLE IF NOT EXISTS `research_initial_patient_measurement_standalone` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
