@@ -219,9 +219,16 @@ span.valportaal{
 .freetext {
     display: inline-block;
 }
+/*
 .ft_input {
     width: 50em;
 }
+*/
+.ft_input {
+    width: 100%;
+	max-height: 100%;
+}
+
 .ft_big {
 	height: 4em;
 }
@@ -270,12 +277,14 @@ span.valportaal{
 
 .advice_selection_area{
     background: #f5f5f5;
+	width: 50%;
 }
 
 .med_advice_container{
 	background: #f7f7f7;
 	padding: 0.5em;
 	margin-bottom: 1em;
+	break-inside: avoid;
 }
 
 .med_advice_row1{
@@ -298,6 +307,7 @@ span.valportaal{
 	padding-right: 5px;
     padding-left: 5px;
     height: 100%;
+	width: 50%;
 }
 
 .med_name{
