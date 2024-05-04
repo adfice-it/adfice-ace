@@ -33,7 +33,7 @@ delete from patient_problem_history where patient_id in (select patient_id from 
 delete from patient_problem where patient_id in (select patient_id from pid);
 
 create table ppid
-select id from patient where patient_id in (select patient_id from pid)
+select id from patient where patient_id in (select patient_id from pid);
 
 delete from patient where patient_id in (select patient_id from pid);
 
