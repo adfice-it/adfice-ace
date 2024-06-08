@@ -280,6 +280,26 @@ span.valportaal{
 	width: 50%;
 }
 
+.advice_selection_area_consult{
+    background: #f5f5f5;
+	width: 70%;
+}
+
+.checkbox_table{
+	width: 100%;
+}
+
+tr.checkbox-checked{
+	width: 100%;
+}
+
+td.td_checkbox{
+	width: 2em;
+}
+td.td_advice{
+	width: 100%
+}
+
 .med_advice_container{
 	background: #f7f7f7;
 	padding: 0.5em;

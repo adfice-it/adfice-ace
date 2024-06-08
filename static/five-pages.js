@@ -436,7 +436,6 @@ function input_checkbox(checkbox_id) {
         ' style="visibility:hidden" />';
 }
 
-// TODO: break this into smaller functions, perhaps at each level of nesting
 function big_nested_medicine_advice_table(include_no_checkbox_advice) {
     let medication_advice = get_patient_advice().medication_advice || [];
     let html = '';
@@ -503,11 +502,7 @@ function big_nested_medicine_advice_table(include_no_checkbox_advice) {
         html += ' class="advice_selection_area">';
         html += '<div class="checkbox_section_header"';
         html += '>Maatregelen (aangekruist indien aanbevolen):</div>';
-
-
-        // TODO: factor out this loop
-        // TODO: extract into checkbox-table.include.html
-        html += '<table>\n';
+        html += '<table class="checkbox_table">\n';
         html += '<tr><td colspan = 2>Kies een of meer maatregel(en):</td></tr>\n'
         for (let j = 0; j < cb_advices.length; ++j) {
             let cb_advice = cb_advices[j];
@@ -518,10 +513,10 @@ function big_nested_medicine_advice_table(include_no_checkbox_advice) {
             let checkbox_id = 'cb_' + advice_id_base;
             let row_id = 'tr_' + advice_id_base;
             html += '<tr id="' + row_id + '">\n';
-            html += '<td class="checkbox_row">';
+            html += '<td class="checkbox_row td_checkbox">';
             html += input_checkbox(checkbox_id);
             html += '</td>\n';
-            html += '<td class="checkbox_row">';
+            html += '<td class="checkbox_row td_advice">';
             let asa_cdss_id = asa_prefix + '_cdss';
             html += '<div id="' + asa_prefix + '_cdss" class="med_cdss">';
             let allow_edit = 1;
@@ -530,7 +525,7 @@ function big_nested_medicine_advice_table(include_no_checkbox_advice) {
             html += '</div> <!-- ' + asa_cdss_id + ' --></td>\n';
             html += '</tr>\n';
         }
-        html += '</table>\n';
+        html += '</table>\n';		
         html += '</div><!-- advice_selection_area_' + i + ' -->\n';
         html += '</div><!-- div_advice_row2_' + atc + ' -->\n';
         html += '</div><!-- div_advice_' + atc + ' -->\n';
@@ -1055,6 +1050,10 @@ function consult_page_setup() {
     gauge_risk_score();
     let include_no_checkbox_advice = 0;
     big_nested_medicine_advice_table(include_no_checkbox_advice);
+	var checkboxAreaArray = document.getElementsByClassName("advice_selection_area");
+    for(var i = (checkboxAreaArray.length - 1); i >= 0; i--){
+        checkboxAreaArray[i].className = "advice_selection_area_consult";
+    }
     other_med_advice_area();
     let hide_additional = 0;
     non_med_advice_area(hide_additional);
