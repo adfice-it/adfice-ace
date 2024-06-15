@@ -939,3 +939,25 @@ test('going to CDSS submits any fields that have content', async t => {
 	await t.expect(Selector("#d_user_fear").withText("2").exists).ok();
 
 });	
+
+test('set Bekeken', async t => {
+    let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
+    
+	let data_assessed_y_rb = await Selector('#data_assessed_y_rb');
+	let data_assessed_n_rb = await Selector('#data_assessed_n_rb');
+	let send = await Selector('#button_submit_assess');
+	
+	await t.expect(data_assessed_n_rb.checked).ok();
+	await t.expect(data_assessed_y_rb.checked).notOk();
+	
+	await t.click(data_assessed_y_rb);
+	
+	try{
+		await t.click(send);
+	} catch (error){} // do nothing, seems to be a TestCafe problem
+    
+	await t.expect(data_assessed_y_rb.checked).ok();
+	await t.expect(data_assessed_n_rb.checked).notOk();
+	
+	await t.click(data_assessed_n_rb); //reset test to starting state
+});

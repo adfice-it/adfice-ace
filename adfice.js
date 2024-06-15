@@ -1060,6 +1060,23 @@ async function add_meas(patient_id, form_data) {
     await this.update_prediction_with_user_values(patient_id, form_data);
 }
 
+async function data_assessed(patient_id, form_data) {
+	let data_assessed = form_data['data_assessed'];
+    let db = await this.db_init();
+	let da = 0;
+	if(data_assessed==true){ 
+		da = 1;
+	}
+	if(data_assessed==null){
+		da = null; //for resetting for the tests
+	}
+	let sql = `/* adfice.data_assessed */ UPDATE patient
+		SET data_assessed = ?
+		WHERE patient_id = ?`;
+	let params = [da, patient_id];
+	await db.sql_query(sql, params);
+}
+
 async function create_new_meas_entry(patient_id) {
     let db = await this.db_init();
     let sql = `/* adfice.create_new_meas_entry */
@@ -1205,6 +1222,10 @@ async function get_advice_for_patient(patient_id) {
     if (patient.is_final) {
         is_final = true;
     }
+	let data_assessed = false;
+	if (patient.data_assessed) {
+        data_assessed = true;
+    }
 
     let lab_rows = await this.get_labs(patient_id);
     let labTests = structure_labs(lab_rows);
@@ -1318,6 +1339,7 @@ async function get_advice_for_patient(patient_id) {
     patient_advice.age = age;
     patient_advice.mrn = patient.mrn;
     patient_advice.is_final = is_final;
+	patient_advice.data_assessed = data_assessed;
     patient_advice.labs = lab_rows;
     patient_advice.medications = meds;
     patient_advice.meds_without_rules = meds_without_fired;
@@ -1793,7 +1815,8 @@ function adfice_init(db) {
 		add_multi_med: add_multi_med,
         add_problems: add_problems,
         add_single_med: add_single_med,
-        doctor_id_for_user: doctor_id_for_user,
+		data_assessed: data_assessed,
+		doctor_id_for_user: doctor_id_for_user,
         finalize_and_export: finalize_and_export,
         get_advice_for_patient: get_advice_for_patient,
         get_advice_texts_checkboxes: get_advice_texts_checkboxes,

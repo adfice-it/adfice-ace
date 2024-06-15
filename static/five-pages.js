@@ -918,6 +918,22 @@ function data_entry_meas() {
     fill_user_entered_meas(measurements);
 }
 
+function data_entry_assess(){
+	let data_assessed = get_patient_advice().data_assessed;
+	let html = 'Bekeken door arts: ';
+	html += '<input type="radio" name="data_assessed_rb" id="data_assessed_y_rb" value="Ja"';
+	if(data_assessed){
+		html += 'checked = "checked"';
+	}
+	html += '> Ja  ';
+	html += '<input type="radio" name="data_assessed_rb" id="data_assessed_n_rb" value="Nee"';
+	if(!data_assessed){
+		html += 'checked = "checked"';
+	}
+	html += '> Nee';
+	document.getElementById('data_entry_assess').innerHTML = html;
+}
+
 function data_entry_done() {
 	let meds = document.getElementById('data_entry_med_list');
 	if(meds.innerHTML.startsWith('Geen')){
@@ -1084,6 +1100,7 @@ function data_entry_page_setup() {
     data_entry_problem_list();
     data_entry_labs();
     data_entry_meas();
+	data_entry_assess();
 }
 
 // These functions will be called from the web page, e.g.:

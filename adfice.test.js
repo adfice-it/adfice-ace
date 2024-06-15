@@ -666,6 +666,25 @@ test('add_meas', async () => {
 	await adfice.sql_select('delete from patient_measurement where patient_id = "' + patient_id + '";');
 })
 
+test('data assessed', async () => {
+	let patient_id = '00000000-0000-4000-8000-100000000027';
+	let patient = await adfice.get_patient_by_id(patient_id);
+	expect(patient['data_assessed']).toBe(null);
+	let data_assessed = {};
+	data_assessed['data_assessed'] = true;
+	await adfice.data_assessed(patient_id, data_assessed);
+	patient = await adfice.get_patient_by_id(patient_id);
+	expect(patient['data_assessed']).toBe(1);
+	data_assessed['data_assessed'] = false;
+	await adfice.data_assessed(patient_id, data_assessed);
+	patient = await adfice.get_patient_by_id(patient_id);
+	expect(patient['data_assessed']).toBe(0);
+	data_assessed['data_assessed'] = null;
+	await adfice.data_assessed(patient_id, data_assessed);
+	patient = await adfice.get_patient_by_id(patient_id);
+	expect(patient['data_assessed']).toBe(null);
+	})
+
 test('get_advice_for_patient(27), with labs and problems', async () => {
     //console.log('27');
     let patient_id = "00000000-0000-4000-8000-100000000027";
@@ -688,6 +707,16 @@ test('get_advice_for_patient(27), with labs and problems', async () => {
     let noCheckbox0 = adviceTextsNoCheckboxes[0];
     expect(noCheckbox0['medication_criteria_id']).toBe("19a");
     expect(noCheckbox0.cdss_split[0].text).toContain("depressie");
+
+	//check that data_assessed gets added
+	expect(patientAdvice.data_assessed).toBe(false);
+	let data_assessed = {};
+	data_assessed['data_assessed'] = true;
+	await adfice.data_assessed(patient_id, data_assessed);
+	patientAdvice = await adfice.get_advice_for_patient(patient_id);
+	expect(patientAdvice.data_assessed).toBe(true);
+	data_assessed['data_assessed'] = null;
+	await adfice.data_assessed(patient_id, data_assessed);
 })
 
 test('get_advice_for_patient(1), no med rule advice', async () => {

@@ -420,6 +420,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         } else if (message.type == 'submit_meas') {
             await adfice.add_meas(
                 patient_id, message['submit_meas']);
+		} else if (message.type == 'submit_assess') {
+            await adfice.data_assessed(
+                patient_id, message['submit_assess']);
         } else {
             send_all(kind, patient_id, message);
         }

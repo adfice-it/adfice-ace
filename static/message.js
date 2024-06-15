@@ -128,6 +128,7 @@ function data_entry_submit_button(){
 	let problem_function = user_entered_problems(document.getElementById('problems_form'));
 	let lab_function = user_entered_labs(document.getElementById('labs_form'));
 	let meas_function = user_entered_meas(document.getElementById('user_entered_meas_form'));
+	let assess_function = user_entered_assessed(document.getElementById('data_assess_form'));
 	
 	if (birthdate_function){
 		send_message('submit_birthdate', birthdate_function);
@@ -146,6 +147,9 @@ function data_entry_submit_button(){
 	}
 	if (meas_function){
 		send_message('submit_meas', meas_function);
+	}
+	if (assess_function){
+		send_message('submit_assess', assess_function);
 	}
 /* var start = new Date().getTime();
 var end = start;
@@ -378,6 +382,45 @@ console.log(form);
         }
         console.log(message);
     };
+}
+
+function user_entered_assessed(form) {
+	// [0] is the Ja button, [1] is the Nee button, and [2] is the submit button
+	let ja_checked = document.getElementById(form.elements[0].id).checked;
+	let nee_checked = document.getElementById(form.elements[1].id).checked;
+	if (!ja_checked && !nee_checked) {
+		// form is empty
+		return null;
+	} else {
+		return function(message) {
+			message.patient_id = message_globals.patient_id;
+			message['submit_assess'] = {};
+			message['submit_assess']['data_assessed'] = ja_checked;
+			console.log(message);
+		};
+	}
+	
+
+/*
+	} else {
+		return function(message) {
+			message.patient_id = message_globals.patient_id;
+			message['submit_assess'] = {};
+			for (let i = 0; i < form.elements.length; ++i) {
+				if (form.elements[i].id != "button_submit_assess") {
+					let val = form.elements[i].value;
+					if (val == 'Ja') {
+						let radio_button = document.getElementById(form.elements[i].id);
+						if (radio_button.checked) {
+							message['submit_assess'][form.elements[i].id] = val;
+						}
+					}
+				}
+			}
+			console.log(message);
+		};
+	}
+*/	
 }
 
 function delete_user_entered(to_be_deleted) {

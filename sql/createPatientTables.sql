@@ -38,6 +38,7 @@ CREATE TABLE `patient` (
   `participant_number` varchar(50) DEFAULT NULL,
   `birth_date` date,
   `age` int unsigned,
+  `data_assessed` tinyint(1),
   `is_final` tinyint(1),
   `row_created` timestamp DEFAULT CURRENT_TIMESTAMP,
   `row_updated` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -55,6 +56,7 @@ CREATE TABLE `patient_history` (
   `participant_number` varchar(50) DEFAULT NULL,
   `birth_date` date,
   `age` int unsigned,
+  `data_assessed` tinyint(1),
   `is_final` tinyint(1),
   `row_created` timestamp NOT NULL,
   `row_updated` timestamp NOT NULL,
@@ -77,6 +79,7 @@ CREATE TRIGGER patient_history_insert
           NEW.participant_number,
           NEW.birth_date,
           NEW.age,
+		  NEW.data_assessed,
           NEW.is_final,
           NEW.row_created,
           NEW.row_updated
@@ -96,6 +99,7 @@ CREATE TRIGGER patient_history_update
           OLD.participant_number,
           OLD.birth_date,
           OLD.age,
+		  OLD.data_assessed,
           OLD.is_final,
           OLD.row_created,
           OLD.row_updated
@@ -115,6 +119,7 @@ CREATE TRIGGER patient_history_delete
           OLD.participant_number,
           OLD.birth_date,
           OLD.age,
+		  OLD.data_assessed,
           OLD.is_final,
           OLD.row_created,
           OLD.row_updated
