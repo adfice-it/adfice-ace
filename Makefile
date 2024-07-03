@@ -221,6 +221,7 @@ ADFICE_TAR_CONTENTS=COPYING \
 		INSTALL.md \
 		Makefile \
 		Makefile.basic \
+		local.env \
 		notes \
 		package.json \
 		README.md \
