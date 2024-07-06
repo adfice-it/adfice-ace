@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
--- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+-- Copyright (C) 2021-2024 Stichting Open Electronics Lab
 -- use adfice;
 SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
 INSERT INTO med_rules (medication_criteria_id, active, needs_review, medication_criteria, patient_group_criteria, preselect_criteria, selector_logic, condition_logic, reference) VALUES

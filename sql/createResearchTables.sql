@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
--- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+-- Copyright (C) 2021-2024 Stichting Open Electronics Lab
 
 /* These tables exist only for research purposes, and contain the data that
    will be used in the analysis. They will be populated by a script that is 

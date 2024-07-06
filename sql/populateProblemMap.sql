@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
--- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+-- Copyright (C) 2021-2024 Stichting Open Electronics Lab
 /*
 According to the internet, Lewy-bodies should get ICD-10 code G31.83
 https://www.icd10data.com/ICD10CM/Codes/G00-G99/G30-G32/G31-/G31.83

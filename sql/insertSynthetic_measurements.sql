@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
--- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+-- Copyright (C) 2021-2024 Stichting Open Electronics Lab
 SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
 INSERT INTO patient_measurement
 (patient_id, date_retrieved, education_hml, height_cm, height_date_measured, weight_kg,

@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
--- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+-- Copyright (C) 2021-2024 Stichting Open Electronics Lab
 SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
 
 INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_result, lab_test_units) VALUES

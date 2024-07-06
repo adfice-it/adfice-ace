@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
--- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+-- Copyright (C) 2021-2024 Stichting Open Electronics Lab
 SET CHARACTER SET utf8; -- enable unicode support in older clients
 INSERT INTO med_advice_text (medication_criteria_id, select_box_num, select_box_category, select_box_designator, cdss, ehr, patient) VALUES
 ("6",NULL,"","","**Deze patiënt heeft een angststoornis:** Bij sommige patiënten met een angststoornis is langdurig gebruik van benzodiazepine&#39;s nodig. Overweeg veiligere alternatieven en lagere dosis. Benzodiazepine&#39;s kunnen ook gebruikt worden bij een acute slaapstoornis voor \&lt; 2 weken of bij epilepsie.","",""),

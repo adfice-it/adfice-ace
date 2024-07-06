@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
--- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+-- Copyright (C) 2021-2024 Stichting Open Electronics Lab
 CREATE TABLE `select_box_category_priority` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `priority` int(10) unsigned NOT NULL,

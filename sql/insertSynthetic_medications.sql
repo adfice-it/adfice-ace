@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
--- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+-- Copyright (C) 2021-2024 Stichting Open Electronics Lab
 INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES
 ("00000000-0000-4000-8000-100000000002",(select NOW()),"darifenacin","darifenacin","G04BD10",'2019-02-11'),
 ("00000000-0000-4000-8000-100000000004",(select NOW()),"diazepam","diazepam","N05BA01",(select NOW())),

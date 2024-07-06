@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
--- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+-- Copyright (C) 2021-2024 Stichting Open Electronics Lab
 SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
 INSERT INTO patient_problem (patient_id, date_retrieved, start_date, name) VALUES
 ("00000000-0000-4000-8000-100000000005",(select NOW()),'2019-02-11',"angststoornis"),

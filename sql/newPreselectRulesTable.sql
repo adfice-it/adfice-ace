@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
--- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+-- Copyright (C) 2021-2024 Stichting Open Electronics Lab
 SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
 INSERT INTO preselect_rules (medication_criteria_id, select_box_num, preselect_num, preselect_or, preselect_not, preselect_problem, preselect_age, preselect_drug, preselect_lab, preselect_allergy) VALUES
 ("6e",1,1,NULL,NULL,"!angststoornis &!epilepsy",NULL,"&medication.start_date >= now-2-weeks",NULL,NULL), 

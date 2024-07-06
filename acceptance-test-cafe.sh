@@ -1,6 +1,6 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+# Copyright (C) 2021-2024 Stichting Open Electronics Lab
 if [ "_${VERBOSE}_" != "__" ] && [ "$VERBOSE" != "0" ]; then
 	set -x
 fi

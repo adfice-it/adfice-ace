@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: GPL-3.0-or-later
--- Copyright (C) 2021 S. K. Medlock, E. K. Herman, K. M. Shaw
+-- Copyright (C) 2021-2024 Stichting Open Electronics Lab
 SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
 INSERT INTO patient_allergies (patient_id, date_retrieved, ATC, start_date, as_documented) VALUES
 ("00000000-0000-4000-8000-100000000007",'2021-02-11',"N05BA",'2021-02-11',"benzodiazepines"),
