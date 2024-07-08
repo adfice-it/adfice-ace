@@ -792,6 +792,570 @@ test('verification3: conforms to spec', async () => {
 
 });
 
+test('verification4: check duplicate criteria', async () => {
+	let date_retrieved = "2024-07-08";
+	let start_date = "2024-01-01";
+	let patient_id = "00000000-0000-4000-8000-100000000004";
+
+// med-only rule
+	//cleanup if there was a failure last run
+	let sql_delete_med = "DELETE FROM patient_medication where patient_id = ? and start_date = ?;";
+	let params_delete_med = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	
+	let sql_add_med = "INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES (?,?,?,?,?,?)"
+	let params_med = [patient_id, date_retrieved, "test6", "test6", 'N05BA02', start_date];
+	await adfice.db.sql_query(sql_add_med,params_med);
+	let patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    let fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("6b,6e,7,11");
+	fired0 = null;
+    patientAdvice = null;
+	//cleanup
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+		
+	
+// sql criteria
+	//6
+	patient_id = "00000000-0000-4000-8000-100000000005";
+
+	let sql_delete_prob = 'DELETE FROM patient_problem where patient_id = ? and start_date = ?;';
+	let params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	let sql_add_prob = "INSERT INTO patient_problem (patient_id, date_retrieved, start_date, name) VALUES (?,?,?,?);";
+	let params_prob = [patient_id, date_retrieved, start_date, "angststoornis"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("6,6e,7,11");
+    fired0 = null;
+    patientAdvice = null;	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//6a
+	patient_id = "00000000-0000-4000-8000-100000000006";
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "epilepsy"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("6a,6e,7,11");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+	//6b
+    patient_id = "00000000-0000-4000-8000-100000000008";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "lewy-bodies-dementie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("6b,6e,7,9,11");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+	//10
+    patient_id = "00000000-0000-4000-8000-100000000009";
+	params_delete_med = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	params_med = [patient_id, date_retrieved, "test9", "test9", 'J05AE01', start_date];
+	await adfice.db.sql_query(sql_add_med,params_med);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("6b,6e,7,10,11");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	
+	//14, 14a
+	patient_id = "00000000-0000-4000-8000-100000000015";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "delier"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("14,14a,16,18,105");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+	//14b
+    patient_id = "00000000-0000-4000-8000-100000000016";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "dementie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("14,14b,16,18");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//14c
+    patient_id = "00000000-0000-4000-8000-100000000017";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "schizofrenie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("14c,16,18");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	// I don't think 14d can have duplicate entries
+	
+	//15
+	patient_id = "00000000-0000-4000-8000-100000000018";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "lewy-bodies-dementie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("14d,15,16,18");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//19
+	patient_id = "00000000-0000-4000-8000-100000000026";
+	let date = new Date();			
+	let year = date.getFullYear();
+	let m = (date.getMonth() + 1); //javascript 0-offset months
+	let month = m -2;
+	if(month < 0){month = 11};
+	let day = (date.getDate()).toString();
+	let recent_start_date = year + '-' + month + '-' + day;
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "depressie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("19,19d,19f,20,22,23,25a,105");
+	fired0 = null;
+    patientAdvice = null;
+	params_delete_med = [patient_id, recent_start_date];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	params_med = [patient_id, date_retrieved, "test19", "test19", 'N06AA02', recent_start_date];
+	await adfice.db.sql_query(sql_add_med,params_med);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+	expect(fired0).toBe("19,19d,19f,20,22,23,25a,105");
+	fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	
+	//19a
+    patient_id = "00000000-0000-4000-8000-100000000027";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "depressie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("19a,19d,19f,20,22,25a,105");
+	fired0 = null;
+    patientAdvice = null;
+	params_delete_med = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	params_med = [patient_id, date_retrieved, "test19aa", "test19", 'N06AA02', start_date];
+	await adfice.db.sql_query(sql_add_med,params_med);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("19a,19d,19f,20,22,25a,105");
+	fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	
+	//19b
+	patient_id = "00000000-0000-4000-8000-100000000028";
+    params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "angststoornis"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("19b,19d,19f,23,25a");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+	//I think 19c, 21, 22 cannot have duplicate problems
+	
+// first labs
+	//23
+	patient_id = "00000000-0000-4000-8000-100000000025";
+	let sql_delete_lab = "DELETE FROM patient_lab where patient_id = ? and date_measured = ?";
+	let params_delete_lab = [patient_id,start_date];
+	await adfice.db.sql_query(sql_delete_lab,params_delete_lab);
+	
+	let sql_add_lab = "INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_result, lab_test_units) VALUES (?,?,?,?,?,?);"
+	let params_lab = [patient_id, date_retrieved, start_date, "kalium",2.4,"mmol/l"];
+	await adfice.db.sql_query(sql_add_lab,params_lab);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();    
+    expect(fired0).toBe("19c,19d,19f,20,21,23,25a,105");
+	fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_lab,params_delete_lab);
+
+	//24 is OK: labs table does not permit 2 labs with the same name
+
+	//25
+	patient_id = "00000000-0000-4000-8000-100000000031";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "orthostatische-hypotensie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "tachycardia"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("19c,19d,19f,20,22,25,25a");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//26
+	patient_id = "00000000-0000-4000-8000-100000000034";
+    params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "progressive-supranuclear-palsy"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("26,27,27b");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+	//26a
+	patient_id = "00000000-0000-4000-8000-100000000036";
+    params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "progressive-supranuclear-palsy"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "orthostatische-hypotensie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("26,26a,27,27b");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+	//26b
+	patient_id = "00000000-0000-4000-8000-100000000160";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("26b,27,27b");
+    fired0 = null;
+    patientAdvice = null;
+	params_prob = [patient_id, date_retrieved, start_date, "progressive-supranuclear-palsy"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("26,27,27b");
+	fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+	//35 - confirm that rule does not fire if 2nd med is present
+	patient_id = "00000000-0000-4000-8000-100000000134";
+	params_delete_med = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+	expect(fired0).toBe("35,38,42,42b,44,45");
+	params_med = [patient_id, date_retrieved, "test35", "test35", 'C09AA01', start_date];
+	await adfice.db.sql_query(sql_add_med,params_med);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("38,42,42b,44,45");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+    
+	
+	//36
+	patient_id = "00000000-0000-4000-8000-100000000042";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "hartfalen"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("35,36,42,42b,44,45");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//37
+	patient_id = "00000000-0000-4000-8000-100000000043";
+    params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "hartfalen"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("35,36,37,42,42b,44,45");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//38
+	patient_id = "00000000-0000-4000-8000-100000000044";
+    params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "hypertensie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("35,38,42,42b,44,45");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//40
+	patient_id = "00000000-0000-4000-8000-100000000045";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "hypokalemia"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+	expect(fired0).toBe("35,40,41,42,42b,44,45");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+	//40a
+	patient_id = "00000000-0000-4000-8000-100000000046";
+    params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "hyponatremia"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+	expect(fired0).toBe("35,40a,41,42,42b,44,45");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//40b
+	patient_id = "00000000-0000-4000-8000-100000000047";
+    params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "hypercalcemia"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("35,40b,41,42,42b,44,45");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+	//40c
+	patient_id = "00000000-0000-4000-8000-100000000048";
+    params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "jicht"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("35,40c,41,42,42b,44,45");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+	//48
+	patient_id = "00000000-0000-4000-8000-100000000051";
+    params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "progressive-supranuclear-palsy"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "orthostatische-hypotensie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("45,46,48,48a,49");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+    //52
+	patient_id = "00000000-0000-4000-8000-100000000055";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "hypertensie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("45,46,48a,51,52");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//53
+	patient_id = "00000000-0000-4000-8000-100000000053";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "schizofrenie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("45,50,51a,53");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//57a
+	patient_id = "00000000-0000-4000-8000-100000000060";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "diabetes"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("45,56,57,57a,58,61,62");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+	//58
+	patient_id = "00000000-0000-4000-8000-100000000059";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "angststoornis"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "schizofrenie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("45,56,57,58,61,62");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//59
+	patient_id = "00000000-0000-4000-8000-100000000146";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("45,56,57,57a,59,61,62"); // test the normal state first
+    fired0 = null;
+    patientAdvice = null;
+	params_prob = [patient_id, date_retrieved, start_date, "angina-pectoris"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("45,56,57,57a,59,61,62");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//68, 69, 70, 79, 80, 80a, 80b, 81 OK: patient_labs does not allow two labs of the same name
+	
+	//83
+	patient_id = "00000000-0000-4000-8000-100000000084";
+    params_delete_med = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	params_med = [patient_id, date_retrieved, "test83", "test83", 'N02AJ06', start_date];
+	await adfice.db.sql_query(sql_add_med,params_med);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("78,80b,81,83,84");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+
+	//86
+	patient_id = "00000000-0000-4000-8000-100000000091";
+    params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "paraplegia"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("86,88,91,94");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//87
+	patient_id = "00000000-0000-4000-8000-100000000092";
+	params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "angststoornis"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "schizofrenie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("87,88,89,94");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+	//89, 90, 91  OK, patient_labs does not allow 2 labs of the same name
+	
+	//102
+	patient_id = "00000000-0000-4000-8000-100000000102";
+    params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "progressive-supranuclear-palsy"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("100,101,102,104");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+    
+	//12
+	patient_id = "00000000-0000-4000-8000-100000000012";
+    params_delete_prob = [patient_id, start_date];	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "diabetes"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "schizofrenie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();
+    expect(fired0).toBe("12,13,13a");
+    fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+    
+    
+/*	params_delete_lab = [patient_id,start_date];
+	await adfice.db.sql_query(sql_delete_lab,params_delete_lab);
+	params_lab = [patient_id, date_retrieved, start_date, "kalium",2.4,"mmol/l"];
+	await adfice.db.sql_query(sql_add_lab,params_lab);
+    patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    fired0 = patientAdvice.medication_advice[0].fired.toString();    
+    expect(fired0).toBe("35,40,41,42,42b,44,45");
+	fired0 = null;
+    patientAdvice = null;
+	await adfice.db.sql_query(sql_delete_lab,params_delete_lab);
+*/
+
+});
 /*
 // get the list of rules that have been fired by validation patients
 test('validatation1: fake patients for clinicians to check', async () => {
