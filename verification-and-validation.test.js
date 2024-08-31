@@ -933,8 +933,7 @@ test('verification4: check duplicate criteria', async () => {
 	let m = (date.getMonth() + 1); //javascript 0-offset months
 	let month = m -2;
 	if(month < 0){month = 11};
-	let day = (date.getDate()).toString();
-	let recent_start_date = year + '-' + month + '-' + day;
+	let recent_start_date = year + '-' + month + '-01';
 	params_delete_prob = [patient_id, start_date];	
 	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
 	params_prob = [patient_id, date_retrieved, start_date, "depressie"];
@@ -1342,20 +1341,40 @@ test('verification4: check duplicate criteria', async () => {
     patientAdvice = null;
 	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
     
-    
-/*	params_delete_lab = [patient_id,start_date];
+});
+
+test('verification5: eGFR with no date should fire rule 81', async () => {
+	let date_retrieved = "2024-07-30";
+	let start_date = "2024-01-01";
+	let patient_id = "00000000-0000-4000-8000-100000000004";
+
+	//cleanup if there was a failure last run
+	let sql_delete_med = "DELETE FROM patient_medication where patient_id = ? and start_date = ?;";
+	let params_delete_med = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	let sql_delete_lab = "DELETE FROM patient_lab where patient_id = ? and date_measured IS NULL";
+	let params_delete_lab = [patient_id];
 	await adfice.db.sql_query(sql_delete_lab,params_delete_lab);
-	params_lab = [patient_id, date_retrieved, start_date, "kalium",2.4,"mmol/l"];
+	
+	let sql_add_med = "INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, generic_name, ATC_code, start_date) VALUES (?,?,?,?,?,?)"
+	let params_med = [patient_id, date_retrieved, "naproxen 02", "naproxen 02", 'M01AE02', start_date];
+	await adfice.db.sql_query(sql_add_med,params_med);
+	let sql_add_lab = "INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_result, lab_test_units) VALUES (?,?,?,?,?,?);"
+	let params_lab = [patient_id, date_retrieved, null, "eGFR",50,"mL/min/1.73 m²"];
 	await adfice.db.sql_query(sql_add_lab,params_lab);
-    patientAdvice = await adfice.get_advice_for_patient(patient_id);
-    fired0 = patientAdvice.medication_advice[0].fired.toString();    
-    expect(fired0).toBe("35,40,41,42,42b,44,45");
+	let patientAdvice = await adfice.get_advice_for_patient(patient_id);
+    let fired0 = patientAdvice.medication_advice[0].fired.toString();
+    // this test will fail; an eGFR with no date_measured does not fire any of the advice rules
+	expect(fired0).toBe("78,80a,81,84");
+	// expect(fired0).toBe("78,79,80a,81,84");
 	fired0 = null;
     patientAdvice = null;
-	await adfice.db.sql_query(sql_delete_lab,params_delete_lab);
-*/
-
+	//cleanup
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+		
 });
+
+
 /*
 // get the list of rules that have been fired by validation patients
 test('validatation1: fake patients for clinicians to check', async () => {

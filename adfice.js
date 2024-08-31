@@ -127,7 +127,11 @@ function patientListOfInserts(patient_id, patient) {
     let sql1 = '/* adfice.patientListOfInserts */ INSERT INTO patient ' +
         '(patient_id, participant_number, birth_date, age, is_final) ' +
         'VALUES (?,?,?,?,0)';
-    list_of_transactions.push([sql1, [patient_id, patient['participant_number'], patient['birth_date'], age]]);
+	let participant_number = patient['participant_number'];
+	if(participant_number){
+		participant_number = participant_number.trim();
+	}
+    list_of_transactions.push([sql1, [patient_id, participant_number, patient['birth_date'], age]]);
     return list_of_transactions;
 }
 
@@ -191,7 +195,7 @@ function medListOfInserts(patient_id, medications) {
         }
         if (medication['ATC'] != null) {
             sql += ", ATC_code";
-            params.push(medication['ATC']);
+            params.push(medication['ATC'].trim());
             values += ',?';
         }
         if (medication['start_date'] != null) {
@@ -965,7 +969,7 @@ async function update_birthdate(patient_id, form_data){
 }
 
 async function add_single_med(patient_id, form_data) {
-	let atc = form_data['single_med_atc'].toUpperCase();
+	let atc = form_data['single_med_atc'].toUpperCase().trim();
     let sql = `/* adfice.add_single_med */
          INSERT INTO patient_medication (id, patient_id, ATC_code, medication_name, generic_name, start_date)
 		 VALUES(null,?,?,?,?,?)`;
@@ -1270,7 +1274,6 @@ async function get_advice_for_patient(patient_id) {
 
         let advice_text = await this.get_advice_texts_checkboxes(fired,
             all_cb_advice);
-
         let advice_text_no_box = await this.get_advice_texts_no_checkboxes(
             fired);
 
