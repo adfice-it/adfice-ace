@@ -508,11 +508,13 @@ test('enter labs', async t => {
 	let labs_kalium = await Selector('#labs_kalium');
 	let labs_calcium = await Selector('#labs_calcium');
 	let labs_egfr = await Selector('#labs_egfr');
+	let labs_date_egfr = await Selector('#labs_date_egfr');
 	
 	await t.typeText(labs_natrium, '124');
 	await t.typeText(labs_kalium, '3.5');
 	await t.typeText(labs_calcium, '2.10');
 	await t.typeText(labs_egfr, '30');
+	await t.typeText(labs_date_egfr, '2024-09-07');
 	
 	try{
 		await t.click(send);
@@ -522,12 +524,14 @@ test('enter labs', async t => {
 	labs_kalium = await Selector('#labs_kalium');
 	labs_calcium = await Selector('#labs_calcium');
 	labs_egfr = await Selector('#labs_egfr');
+	labs_date_egfr = await Selector('#labs_date_egfr');
 	send = await Selector('#button_submit_labs');
 
 	await t.expect(labs_natrium.value).eql('124');
 	await t.expect(labs_kalium.value).eql('3.5');
 	await t.expect(labs_calcium.value).eql('2.1'); // it looks like it = 2.10 to me, but TestCafe seems to think it should be 2.1 .
 	await t.expect(labs_egfr.value).eql('30');
+	await t.expect(labs_date_egfr.value).eql('2024-09-07');
 	
 	let remove_natrium = await Selector('#remove_natrium');
 	
@@ -552,7 +556,15 @@ test('enter labs', async t => {
 	await t.expect(labs_natrium.value).notEql('124');
 	await t.expect(labs_kalium.value).eql('3.5');
 	
-
+	// TODO git scheck that a date with no eGFR is rejected
+/*	await t.typeText(labs_date_egfr, '2024-09-07');
+	
+	try{
+		await t.click(send);
+	} catch (error){} // do nothing, seems to be a TestCafe problem
+	
+	await t.expect(labs_date_egfr.value).notEql('2024-09-07');
+*/
 });
 
 test('edit labs', async t => {
@@ -563,6 +575,7 @@ test('edit labs', async t => {
 	let labs_kalium = await Selector('#labs_kalium');
 	let labs_calcium = await Selector('#labs_calcium');
 	let labs_egfr = await Selector('#labs_egfr');
+	let labs_date_egfr = await Selector('#labs_date_egfr');
 	
 	await t.expect(labs_natrium.value).notEql('124');
 	await t.expect(labs_kalium.value).eql('3.5');
@@ -583,6 +596,7 @@ test('edit labs', async t => {
 	labs_egfr = await Selector('#labs_egfr');
 	labs_egfr_n = await Selector('#labs_egfr_n');
 	await t.expect(labs_egfr.value).notEql('30');
+	await t.expect(labs_date_egfr.value).notEql('2024-09-07');
 	await t.expect(labs_egfr_n.checked).ok();
 	
 	// does it deal with various bad inputs?
@@ -610,12 +624,14 @@ test('edit labs', async t => {
 	
 	try{ await t.click(Selector('#remove_kalium')); } catch (error) {}
 	try{ await t.click(Selector('#remove_calcium')); } catch (error) {}
-	try{ await t.click(Selector('#remove_eGFR_normal')); } catch (error) {}
+	try{ await t.click(Selector('#remove_eGFR')); } catch (error) {}
 	
 	await t.expect(labs_kalium.value).notEql('3.5');
 	await t.expect(labs_calcium.value).notEql('2.1');
 	await t.expect(labs_egfr.value).notEql('30');
 	await t.expect(Selector('#labs_egfr_n').checked).notOk();
+	
+	
 	
 });	
 

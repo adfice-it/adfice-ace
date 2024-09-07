@@ -337,6 +337,7 @@ function user_entered_labs(form) {
 			empty = 0;
 		}
 	}
+	//TODO if there is a date measured but no eGFR value, treat as empty
 	if (empty){
 		return null;
 	} else {	
@@ -350,7 +351,7 @@ function user_entered_labs(form) {
 				if (form.elements[i].id != "button_submit_labs" &&
 					form.elements[i].id != "labs_egfr_n") {
 					let val = form.elements[i].value;
-					if (val > 0) {
+					if (val) {
 						message['submit_labs'][form.elements[i].name] = val;
 						if (form.elements[i].name == 'eGFR') {
 							numeric_egfr = true;

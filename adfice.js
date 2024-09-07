@@ -665,7 +665,6 @@ async function get_patient_by_id(patient_id) {
     return patient;
 }
 
-// Why is patient_id in params twice?
 async function get_labs(patient_id) {
     var sql = `/* adfice.get_labs */
         SELECT lab_test_name
@@ -674,7 +673,7 @@ async function get_labs(patient_id) {
           FROM patient_lab
          WHERE patient_id=?
       ORDER BY id`;
-    let params = [patient_id, patient_id];
+    let params = [patient_id];
     let result = await this.sql_select(sql, params);
     return result;
 }
@@ -1046,13 +1045,21 @@ async function add_labs(patient_id, form_data) {
 		DELETE FROM patient_lab WHERE patient_id = "` + patient_id + '";';
     let lab_names = Object.keys(form_data);
     let sql2 = `/* adfice.add_labs */
-         INSERT INTO patient_lab (patient_id, date_retrieved, lab_test_name, lab_test_result) 
-		 VALUES (?,?,?,?);`;
+         INSERT INTO patient_lab (patient_id, date_retrieved, lab_test_name, lab_test_result, date_measured) 
+		 VALUES (?,?,?,?,?);`;
     let list_of_inserts = [];
     for (let i = 0; i < lab_names.length; ++i) {
         let params = [];
-        params.push(patient_id, nowString(), lab_names[i], form_data[lab_names[i]]);
-        list_of_inserts.push([sql2, params]);
+		let date_measured = null;
+		if(lab_names[i] == 'eGFR'){
+			if(lab_names[i+1] == 'date_eGFR'){
+				date_measured = form_data[lab_names[i+1]];
+			}
+		}
+		if(lab_names[i] != 'date_eGFR'){
+			params.push(patient_id, nowString(), lab_names[i], form_data[lab_names[i]],date_measured);
+			list_of_inserts.push([sql2, params]);
+		}
     }
 
     let db = await this.db_init();

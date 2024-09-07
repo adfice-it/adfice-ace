@@ -904,6 +904,20 @@ function data_entry_labs() {
 				} else {
 					document.getElementById('labs_egfr').value = labs[i].lab_test_result;
 				}
+				if (labs[i].date_measured){
+					let egfr_date = new Date(labs[i].date_measured);
+					let month = egfr_date.getMonth() +1;
+					let monthString = month.toString();
+					if(month < 10){
+						monthString = "0" + monthString;
+					}
+					let day = egfr_date.getDate();
+					let dayString = day.toString();
+					if(day < 10){
+						dayString = "0" + dayString;
+					}
+					document.getElementById('labs_date_egfr').value = egfr_date.getFullYear() + '-' + monthString  + '-' + dayString;
+				}
 			}
 		}
     }

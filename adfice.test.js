@@ -582,19 +582,25 @@ test('add_problems', async () => {
 	expect(problems.length).toBe(0);
 })
 
+
 test('add_labs', async () => {
 	let patient_id = '00000000-0000-4000-8000-100000000172';
+	
+	//clean up if it crashed last time
+	let form_data = {};
+	await adfice.add_labs(patient_id, form_data);
 		
 	let labs = await adfice.get_labs(patient_id);
 	expect(labs.length).toBe(0);
-	let form_data = {};
 	form_data['natrium'] = 111;
 	form_data['kalium'] = 3.1;
 	form_data['calcium'] = 1.1;
 	form_data['eGFR'] = 30;
+	form_data['date_eGFR'] = '2024-09-07';
 	await adfice.add_labs(patient_id, form_data);
 	labs = await adfice.get_labs(patient_id);
 	expect(labs.length).toBe(4);
+	expect(labs[3]['date_measured'].toString()).toContain('2024');
 	
 	form_data = {}; //  check that it can handle an empty form
 	await adfice.add_labs(patient_id, form_data);
