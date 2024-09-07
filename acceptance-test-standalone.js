@@ -179,7 +179,29 @@ test('change birthdate', async t => {
 	age2Str = await Selector('#data_entry_age').innerText;
 	age2 = Number(age2Str.match(/\d+/)[0]);
 	await t.expect(age).gt(age2);
+	
+	//reset birthdate to 1940
+	await t.typeText(birthdate_field, '1940-01-01');
+	try{
+		await t.click(send);
+	}
+	catch(error){
+		// throws an error, but as far as I can tell, only in TestCafe. Ignore it.
+	}
     
+});
+
+test('check birthdate', async t => {
+	// birthdate is '1940-01-01'
+	let today = new Date();
+    let age = today.getFullYear() - 1940;
+    if (today.getMonth() < 1 || (today.getMonth() == 1 && today.getDate() < 1)) {
+      age--;
+    }
+	let window1 = await navigate_to_patient(t, 'TEST' + this_test_part);
+	let ageStr = await Selector('#data_entry_age').innerText;
+	let ageRetrieved = Number(ageStr.match(/\d+/)[0]);
+	await t.expect(age).eql(ageRetrieved);
 });
 
 test('do not go to CDSS if there are no meds', async t => {

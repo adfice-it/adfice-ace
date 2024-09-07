@@ -149,8 +149,16 @@ function calculateAge(patient) {
     if (patient['birth_date'] == null) {
         return null;
     }
-    let diff = new Date().getTime() - new Date(patient['birth_date']).getTime();
-    return (diff / 31536000000).toFixed(0);
+	let today = new Date();
+	let ageTokens = patient['birth_date'].split('-');
+    let year = ageTokens[0]
+    let month = ageTokens[1]
+    let day = ageTokens[2]
+    let age = today.getFullYear() - year;
+    if (today.getMonth() < month || (today.getMonth() == month && today.getDate() < day)) {
+      age--;
+    }
+	return age;
 }
 
 function nowString() {
@@ -1764,7 +1772,8 @@ function adfice_init(db) {
         /* "private" and "friend" member functions */
         add_log_event: add_log_event,
         box_states_to_selection_states: box_states_to_selection_states,
-        calculate_store_prediction_result: calculate_store_prediction_result,
+        calculateAge: calculateAge,
+		calculate_store_prediction_result: calculate_store_prediction_result,
         calculate_prediction_result: calculate_prediction_result,
         calculate_prediction_result_meas: calculate_prediction_result_meas,
         create_new_meas_entry: create_new_meas_entry,

@@ -2249,6 +2249,31 @@ test('test renew_patient', async function() {
     expect(retrieved_meas[0]['smoking']).toBe(1);
 });
 
+test('test calculateAge', async function() {
+	let patient = {birth_date: '1940-01-01'};
+	let today = new Date();
+	let age = today.getFullYear() - 1940;
+    if (today.getMonth() < 1 || (today.getMonth() == 1 && today.getDate() < 1)) {
+      age--;
+    }
+	let ageRetrieved = adfice.calculateAge(patient);
+	expect(ageRetrieved).toBe(age);
+	patient = {birth_date: '1940-12-31'};
+	age = today.getFullYear() - 1940;
+	if (today.getMonth() < 12 || (today.getMonth() == 12 && today.getDate() < 31)) {
+      age--;
+    }
+	ageRetrieved = adfice.calculateAge(patient);
+	expect(ageRetrieved).toBe(age);
+	patient = {birth_date: '1940-06-06'};
+	age = today.getFullYear() - 1940;
+	if (today.getMonth() < 6 || (today.getMonth() == 6 && today.getDate() < 6)) {
+      age--;
+    }
+	ageRetrieved = adfice.calculateAge(patient);
+	expect(ageRetrieved).toBe(age);
+});
+
 test('test writePatientFromJSON bad data', async function() {
     let fake_pid = Math.random().toString().substr(2, 10);
     let fake_mrn = 'mrn' + fake_pid;
