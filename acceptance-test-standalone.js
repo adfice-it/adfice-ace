@@ -556,15 +556,6 @@ test('enter labs', async t => {
 	await t.expect(labs_natrium.value).notEql('124');
 	await t.expect(labs_kalium.value).eql('3.5');
 	
-	// TODO git scheck that a date with no eGFR is rejected
-/*	await t.typeText(labs_date_egfr, '2024-09-07');
-	
-	try{
-		await t.click(send);
-	} catch (error){} // do nothing, seems to be a TestCafe problem
-	
-	await t.expect(labs_date_egfr.value).notEql('2024-09-07');
-*/
 });
 
 test('edit labs', async t => {
@@ -598,6 +589,34 @@ test('edit labs', async t => {
 	await t.expect(labs_egfr.value).notEql('30');
 	await t.expect(labs_date_egfr.value).notEql('2024-09-07');
 	await t.expect(labs_egfr_n.checked).ok();
+	
+	// add the date to the non-numeric eGFR
+	await t.typeText(labs_date_egfr, '2024-09-07');
+	try{
+		await t.click(send);
+	} catch (error){} // do nothing, seems to be a TestCafe problem	
+	await t.expect(labs_date_egfr.value).eql('2024-09-07');
+	
+	// clear eGFR
+	try{
+		await t.click(Selector('#remove_eGFR'));
+	} catch (error) {} //do nothing, seems to be a TestCafe problem
+	
+		// check that a date with no eGFR is rejected
+	await t.typeText(labs_date_egfr, '2024-09-07');
+	try{
+		await t.click(send);
+	} catch (error){} // do nothing, seems to be a TestCafe problem
+	await t.expect(labs_date_egfr.value).notEql('2024-09-07');
+	
+	// check that an eGFR with no date is OK
+	await t.typeText(labs_egfr, '30');
+	try{
+		await t.click(send);
+	} catch (error){} // do nothing, seems to be a TestCafe problem
+	await t.expect(labs_egfr.value).eql('30');
+
+	
 	
 	// does it deal with various bad inputs?
 // evidently the max value on a numeric input is ignored, so this test would fail.	

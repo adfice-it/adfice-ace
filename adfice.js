@@ -155,7 +155,8 @@ function calculateAge(patient) {
     let month = ageTokens[1]
     let day = ageTokens[2]
     let age = today.getFullYear() - year;
-    if (today.getMonth() < month || (today.getMonth() == month && today.getDate() < day)) {
+    /* istanbul ignore else */
+	if (today.getMonth() < month || (today.getMonth() == month && today.getDate() < day)) {
       age--;
     }
 	return age;
@@ -1044,6 +1045,7 @@ async function add_labs(patient_id, form_data) {
     let sql1 = `/* adfice.add_labs */
 		DELETE FROM patient_lab WHERE patient_id = "` + patient_id + '";';
     let lab_names = Object.keys(form_data);
+	let eGFR_date = form_data["date_eGFR"] || null;
     let sql2 = `/* adfice.add_labs */
          INSERT INTO patient_lab (patient_id, date_retrieved, lab_test_name, lab_test_result, date_measured) 
 		 VALUES (?,?,?,?,?);`;
@@ -1052,9 +1054,7 @@ async function add_labs(patient_id, form_data) {
         let params = [];
 		let date_measured = null;
 		if(lab_names[i] == 'eGFR'){
-			if(lab_names[i+1] == 'date_eGFR'){
-				date_measured = form_data[lab_names[i+1]];
-			}
+			date_measured = eGFR_date;
 		}
 		if(lab_names[i] != 'date_eGFR'){
 			params.push(patient_id, nowString(), lab_names[i], form_data[lab_names[i]],date_measured);

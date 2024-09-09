@@ -332,29 +332,46 @@ function user_entered_problems(form) {
 
 function user_entered_labs(form) {
 	let empty = 1;
+	let egfr = null;
+	let radio_button = document.getElementById("labs_egfr_n");
 	for (let i = 0; i < form.elements.length -1; ++i) { //not the submit button
 		if (form.elements[i].value > 0){
 			empty = 0;
 		}
+		if(form.elements[i].id == "labs_egfr"){
+			egfr = form.elements[i].value;
+		}
 	}
-	//TODO if there is a date measured but no eGFR value, treat as empty
+	if(!egfr){
+		if(radio_button.checked){
+			egfr = true;
+			empty = 0;
+console.log("detected checked radio");
+		}
+	}
 	if (empty){
 		return null;
-	} else {	
+console.log("was empty");		
+	} else {
 		return function(message) {
 			message.patient_id = message_globals.patient_id;
 			message['submit_labs'] = {};
 			let form = document.getElementById('labs_form');
-			let radio_button = document.getElementById("labs_egfr_n");
 			let numeric_egfr = false;
 			for (let i = 0; i < form.elements.length; ++i) {
 				if (form.elements[i].id != "button_submit_labs" &&
 					form.elements[i].id != "labs_egfr_n") {
-					let val = form.elements[i].value;
-					if (val) {
-						message['submit_labs'][form.elements[i].name] = val;
-						if (form.elements[i].name == 'eGFR') {
-							numeric_egfr = true;
+					if(form.elements[i].id == "labs_date_egfr"
+						&& !egfr){
+							console.log("skipped date with no egfr");
+					} else {
+						let val = form.elements[i].value;
+						if (val) {
+							message['submit_labs'][form.elements[i].name] = val;
+console.log("sent " + form.elements[i].name);							
+							if (form.elements[i].name == 'eGFR') {
+								numeric_egfr = true;
+							}
 						}
 					}
 				}
