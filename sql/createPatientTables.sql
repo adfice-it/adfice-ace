@@ -919,6 +919,14 @@ CREATE TABLE `rules_fired` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+CREATE TABLE `load_state` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `patient_id` varchar(36) NOT NULL,
+  `load_state` int unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- END of patient table creation.
 --

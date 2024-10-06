@@ -183,7 +183,8 @@ INSERT INTO etl_mrn_patient (mrn, fhir, patient_id) VALUES
 -- 177 and 178 created by acceptance_test_normal
 ('sir_no_renew','sir_no_renew', "00000000-0000-4000-8000-100000000179"),
 ('DummyMRN-000000180','DummyFHIR-000000180', "00000000-0000-4000-8000-100000000180"),
-('DummyMRN-000000181','DummyFHIR-000000181', "00000000-0000-4000-8000-100000000181");
+('DummyMRN-000000181','DummyFHIR-000000181', "00000000-0000-4000-8000-100000000181"),
+('sir_delay','sir_delay', "00000000-0000-4000-8000-100000000182");
 
 INSERT INTO etl_bsn_patient (bsn, patient_id) VALUES
 ('888000001', "00000000-0000-4000-8000-100000000001"),
@@ -363,7 +364,8 @@ INSERT INTO etl_bsn_patient (bsn, patient_id) VALUES
 ('888000176', "00000000-0000-4000-8000-100000000176"),
 ('888000179', "00000000-0000-4000-8000-100000000179"),
 ('888000180', "00000000-0000-4000-8000-100000000180"),
-('888000181', "00000000-0000-4000-8000-100000000181");
+('888000181', "00000000-0000-4000-8000-100000000181"),
+('888000182', "00000000-0000-4000-8000-100000000182");
 
 INSERT INTO etl_user (doctor_id, ehr_user_id) VALUES
 ('b2eb56d6-3e6e-48c7-992f-f8556fc9bd07', 'dr_alice'),
@@ -568,9 +570,11 @@ INSERT INTO patient (patient_id,display_name,birth_date,age) VALUES
 /* fake patients for reload test */
 INSERT INTO patient (patient_id,display_name,participant_number,birth_date,age) VALUES
 ("00000000-0000-4000-8000-100000000174","Mr. Reload",777,'1942-01-08',80),
-("00000000-0000-4000-8000-100000000179","Mr. Reload2",778,'1942-01-08',80);
+("00000000-0000-4000-8000-100000000179","Mr. Reload2",778,'1942-01-08',80),
+("00000000-0000-4000-8000-100000000182","Mr. de Lay",779,'1943-10-01',81);
 
 /* for checking age = null */
 INSERT INTO patient (patient_id,display_name,participant_number,birth_date,age) VALUES
 ("00000000-0000-4000-8000-100000000180","Ms. Ageless",10180,null,null);
 -- 181 above
+-- 182 above

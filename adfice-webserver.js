@@ -18,7 +18,7 @@ const cookie_secret = autil.uuid4_new_string();
 const DEBUG = ((process.env.DEBUG !== undefined) &&
     (process.env.DEBUG !== "0"));
 
-// this is actually a kind of constant, but we can "check" it on each page load
+// this should change very rarely, but ideally we get it dynamically
 var iss = "";
 
 function log_debug(server, msg) {
@@ -101,6 +101,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
     app.get("/patient-validation", render_validation_advice);
 
     app.use("/load-error", express.static('static/load-error.html'));
+	
+	app.use("/loading", express.static('static/loading.html'));
+	
     let standalone_flag = await adfice.get_env_var('STANDALONE');
     if (standalone_flag) { // note that any value for STANDALONE seems to evaluate to TRUE
         // gets basic info to create session and patient
@@ -219,7 +222,9 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
         let fhir = req.query.fhir;
         let user_id = req.query.user;
         // ISSuer identifier authorization server
-        iss = req.query.iss;
+        if(req.query.iss){
+			iss = req.query.iss;
+		}
 
         let etl_opts = await autil.from_json_file(etl_opts_path);
         let adfice_url = 'https://' + req.get('host') + '/auth';
@@ -351,12 +356,14 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
             }
         } else if (message.type == 'patient_renew') {
             await adfice.add_log_event_renew(doctor_id, patient_id);
+			await adfice.set_load_state(patient_id,1);
             let etl_opts = await autil.from_json_file(etl_opts_path);
             let refresh_data = await adfice.get_refresh_data(patient_id);
             let etl_patient = await etl.renew(refresh_data, etl_opts);
             if (!etl_patient || Object.keys(etl_patient).length == 0) {
                 let err_text_en = "etl_renew failed to retrieve new patient data for " + patient_id;
                 send_error(ws, err_text_en, kind, patient_id);
+				await adfice.set_load_state(patient_id,0);				
             } else {
                 let returned_patient = await adfice.renew_patient(patient_id, etl_patient);
                 if (returned_patient != patient_id) {
@@ -372,6 +379,7 @@ async function create_webserver(hostname, port, logger, etl, etl_opts_path) {
                     // console.log(new_msg);
                     send_all(kind, patient_id, new_msg);
                 }
+				await adfice.set_load_state(patient_id,0);
             }
         } else if (message.type == 'was_printed') {
             await adfice.add_log_event_print(doctor_id, patient_id);

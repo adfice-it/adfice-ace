@@ -235,4 +235,6 @@ INSERT INTO patient_medication (patient_id, date_retrieved, medication_name, gen
 /* fake patient for data reload test */
 ("00000000-0000-4000-8000-100000000174",(select NOW()),"lixisenatide","lixisenatide","A10BJ03",'2019-02-11'),
 ("00000000-0000-4000-8000-100000000174",(select NOW()),"levodopa","levodopa","N04BA01",'2019-02-11'),
-("00000000-0000-4000-8000-100000000179",(select NOW()),"levodopa","levodopa","N04BA01",'2019-02-11');
+("00000000-0000-4000-8000-100000000179",(select NOW()),"levodopa","levodopa","N04BA01",'2019-02-11'),
+("00000000-0000-4000-8000-100000000182",(select NOW()),"lixisenatide","lixisenatide","A10BJ03",'2019-02-11'),
+("00000000-0000-4000-8000-100000000182",(select NOW()),"levodopa","levodopa","N04BA01",'2019-02-11');

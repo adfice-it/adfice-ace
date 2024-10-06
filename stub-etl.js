@@ -278,10 +278,27 @@ async function etl(token_json, etl_opts) {
             medications: bad_meds,
             problems: problems,
             labs: labs,
-            measurements: {}
+            measurements: meas
         };
         return patient_json;
     }
+	if (mrn == "sir_delay") {
+		await new Promise(resolve => setTimeout(resolve, 1000));
+        let patient_json = {
+            ehr_pid: fhir,
+            mrn: mrn,
+            refresh_token: 'bogus_token',
+            bsn: fake_bsn,
+            birth_date: '1930-01-01',
+            participant_number: study + participant,
+            medications: medications,
+            problems: problems,
+            labs: labs,
+            measurements: meas
+        };
+        return patient_json;
+    }
+	
 
     let patient_json = {
         ehr_pid: fhir,

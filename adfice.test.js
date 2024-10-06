@@ -38,6 +38,17 @@ async function clear_advice_for_patient(adfice, patient_id) {
     return rs;
 }
 
+test('test get/set load state', async () => {
+    let patient_id = Math.random().toString().substr(2, 10);
+    let return_value = await adfice.set_load_state(patient_id, 1);
+	let load_state = await adfice.get_load_state(patient_id);
+    expect(load_state).toBe(1);
+
+	await adfice.set_load_state(patient_id, 0);
+	load_state = await adfice.get_load_state(patient_id);
+	expect(load_state).toBe(0);
+});
+
 test('test patient_id for valid mrn', async () => {
     let mrn = 'DummyMRN-000000163';
     let patient_id = await adfice.id_for_mrn(mrn);

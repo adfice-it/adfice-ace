@@ -1231,7 +1231,8 @@ async function get_all_labs() {
 // returns a JSON representation of all the data we have on this patient
 // note that this is NOT the function that populates the patient_advice column in the portal
 async function get_advice_for_patient(patient_id) {
-    let patient = await this.get_patient_by_id(patient_id);
+console.log("get_advice_for_patient was called");	
+	let patient = await this.get_patient_by_id(patient_id);
     if (patient.patient_id != patient_id) {
         return {};
     }
@@ -1351,9 +1352,11 @@ async function get_advice_for_patient(patient_id) {
     for (let i = 0; i < sql_labs.length; ++i) {
         all_labs.push(sql_labs[i].lab_name);
     }
+	let load_state = this.get_load_state(patient_id);
 
     let patient_advice = {};
     patient_advice.patient_id = patient_id;
+	patient_advice.load_state = load_state;
     patient_advice.age = age;
     patient_advice.mrn = patient.mrn;
     patient_advice.is_final = is_final;
@@ -1669,6 +1672,48 @@ async function add_log_event_access(user_id, patient_id) {
     return await this.sql_select(sql, params);
 }
 
+/* set load state = 1 for loading; delete row when done */
+async function set_load_state(patient_id, load_state) {
+    let sql = `/* adfice.set_load_state */`
+	let params = [];
+	
+	if(load_state == 1){
+		sql += `INSERT INTO load_state
+           ( patient_id
+           , load_state
+           )
+		  VALUES (?,?)`;
+		params = [
+			patient_id,
+			load_state
+		];
+	} else {
+		sql += `DELETE FROM load_state where patient_id = ?`;
+		params = [patient_id];
+	}
+	
+    return await this.sql_select(sql, params);
+}
+
+async function get_load_state(patient_id) {
+    let sql = `/* adfice.get_load_state */
+		SELECT load_state from load_state
+		WHERE patient_id = ?;`;
+	let params = [patient_id];
+	
+    let load_state = await this.sql_select(sql, params);
+	
+	if(!load_state[0]){
+		return 0;
+	} else if(load_state[0]['load_state'] == 1){
+		return 1;
+	}
+	else {
+		/* istanbul ignore next */
+		return 0; // this should never happen, but if in doubt return 0
+	}
+}
+
 async function id_for_mrn(mrn) {
     if (!mrn) {
         return null;
@@ -1841,6 +1886,7 @@ function adfice_init(db) {
         get_advice_texts_checkboxes: get_advice_texts_checkboxes,
         get_env_var: get_env_var,
         get_help_phone: get_help_phone,
+		get_load_state,
         get_patient_measurements: get_patient_measurements,
         get_refresh_data: get_refresh_data,
         id_for_fhir: id_for_fhir,
@@ -1850,6 +1896,7 @@ function adfice_init(db) {
         remove_med: remove_med,
         renew_patient: renew_patient,
         set_advice_for_patient: set_advice_for_patient,
+		set_load_state,
         shutdown: shutdown,
 		update_birthdate: update_birthdate,
         write_patient_from_json: write_patient_from_json,
