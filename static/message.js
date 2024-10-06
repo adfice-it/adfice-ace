@@ -958,7 +958,9 @@ function make_definitive() {
 
 function patient_renew() {
     send_message('patient_renew');
-    window.location.reload(true);
+    let patient_id = five_pages.patient_id;
+    let url = "/loading?id=" + patient_id;
+    window.location = url;
     return true;
 }
 

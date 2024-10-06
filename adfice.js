@@ -1231,7 +1231,6 @@ async function get_all_labs() {
 // returns a JSON representation of all the data we have on this patient
 // note that this is NOT the function that populates the patient_advice column in the portal
 async function get_advice_for_patient(patient_id) {
-console.log("get_advice_for_patient was called");	
 	let patient = await this.get_patient_by_id(patient_id);
     if (patient.patient_id != patient_id) {
         return {};
@@ -1352,7 +1351,7 @@ console.log("get_advice_for_patient was called");
     for (let i = 0; i < sql_labs.length; ++i) {
         all_labs.push(sql_labs[i].lab_name);
     }
-	let load_state = this.get_load_state(patient_id);
+	let load_state = await this.get_load_state(patient_id);
 
     let patient_advice = {};
     patient_advice.patient_id = patient_id;

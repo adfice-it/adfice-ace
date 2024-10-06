@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="1">
 <title id="header-title">Error</title>
 <link rel="stylesheet" type="text/css" href="assets/adfice.css">
 <style>
@@ -19,8 +20,36 @@
      style="max-width: 10%; height: auto; display: inline;"
      alt="Advice IT logo"
 >
+<div id=patient_info>
+<strong>Pati&euml;ntinformatie:</strong><br/>
+Patient: <span id="patient-info-id"></span><br/>
+Leeftijd: <span id="patient-info-age"></span><br/>
+<div style="height: 2em;"></div><br/>
+</div> <!-- patient_info -->
+
 <p>
 Aan het laden van data uit het EPD. Een ogenblik geduld a.u.b. ...
 </p>
+<div id="footer" class="footer">
+<span id="footer-patient-label">Patient:</span>
+<span id="footer-patient-id"></span>
+<span id="viewer-count"
+	class="footer-viewer-count">connecting ...</span>
+<span id="locked">Deze dossier is vergrendeld.</span>
+<div class="button" onclick="top_function()" id="goToTop" title="Go to top">Naar boven</div>
+</div><!-- footer -->
+<div id="expiration">
+	<p>Het lijkt dat niemand aanwezig is. Klik op de onderstaande knop om uw sessie te vernieuwen.</p>
+	<div id="timeout-time"></div>
+	<br><br>
+<button id="button-reset-timeout"
+	onclick="reset_session_timeout()">Sessie vernieuwen</button>
+</div><!-- expiration -->
 </body>
+<script src="assets/basic-utils.js"></script>
+<script src="assets/message.js"></script>
+<script src="assets/five-pages.js"></script>
+<script>
+window.addEventListener('load', function(event) { loading_page_load(); });
+</script>
 </html>

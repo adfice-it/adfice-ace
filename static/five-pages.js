@@ -1117,6 +1117,13 @@ function data_entry_page_setup() {
 	data_entry_assess();
 }
 
+function loading_page_setup() {
+    let load_state = get_patient_advice().load_state;
+    if (load_state == 0) {
+        window.location = '/start?id=' + five_pages.patient_id;
+    }
+}
+
 // These functions will be called from the web page, e.g.:
 // <script>
 // window.addEventListener('load', function(event) { start_page_load(); });
@@ -1146,6 +1153,10 @@ function data_entry_page_load() {
     page_load(data_entry_page_setup);
 }
 
+function loading_page_load() {
+    page_load(loading_page_setup);
+}
+
 function top_function() {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
@@ -1168,6 +1179,7 @@ if (typeof module !== 'undefined') {
         advise_page_load: advise_page_load,
         finalize_page_load: finalize_page_load,
         data_entry_page_load: data_entry_page_load,
+        loading_page_load: loading_page_load,
         get_five_pages: get_five_pages
     }
 }
