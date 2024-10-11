@@ -344,8 +344,7 @@ or C01EA01","bijwerking","","(atc:C01DX16 | atc:C01EA01)","allergic-reaction",17
 ("55","yes","no","vasodilators not covered elsewhere: C01DX16
 or C01EA01","all","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","(atc:C01DX16 | atc:C01EA01)","",17),
 ("56","yes","no","Beta-blokkers
-C07 beta-blockers NOT (C07B, C07C, or C07D) (combinations with diuretics)
-S01ED beta-blocker eyedrops","all","{{preselect box 1}{
+C07 beta-blockers NOT (C07B, C07C, or C07D) (combinations with diuretics)","all","{{preselect box 1}{
 SELECTOR (
 C07AA
 OR C07AG
@@ -357,11 +356,7 @@ OR C07EA
 OR C07FX01
 OR C07FX02
 OR C07FX06 
-OR C07FA05
-OR S01ED01
-OR S01ED03
-OR S01ED04
-OR S01ED05) AND CONDITION()
+OR C07FA05) AND CONDITION()
 
 OR
 SELECTOR() AND CONDITION(
@@ -379,7 +374,8 @@ NOT atriumfibrilleren (probleemlijst) AND NOT angina pectoris (probleemlijst)
 AND NOT myocardinfarct (probleemlijst)
 )
 )
-}}","(atc:C07 | atc:S01ED) & ! atc:C07B & ! atc:C07C & ! atc:C07D","",18),
+}}","atc:C07 & ! atc:C07B & ! atc:C07C & ! atc:C07D","",18),
+("56a","yes","no","Beta-blocker eyedrops","all","","atc:S01ED","",18),
 ("57","yes","no","Beta-blokkers: niet selectieve 
 C07AA
 C07AG
@@ -415,13 +411,13 @@ S01ED03
 S01ED04
 S01ED05","diabetes","","atc:C07AA | atc:C07AG | atc:C07BA | atc:C07BG | atc:C07CA | atc:C07CG | atc:C07DA | atc:C07EA | atc:C07FX01 | atc:C07FX02 | atc:C07FX06 | atc:C07FA05 | atc:S01ED01 | atc:S01ED03 | atc:S01ED04 | atc:S01ED05 ","problem:diabetes",18),
 ("58","yes","no","Beta-blokkers
-C07 beta-blockers NOT (C07B, C07C, or C07D) (combinations with diuretics)
-S01ED beta-blocker eyedrops","NOT atriumfibrilleren
+C07 beta-blockers NOT (C07B, C07C, or C07D) (combinations with diuretics)","NOT atriumfibrilleren
 AND NOT angina pectoris
-NOT MI","","(atc:C07 | atc:S01ED) & ! atc:C07B & ! atc:C07C & ! atc:C07D","! problem:atriumfibrilleren & ! problem:angina-pectoris & ! problem:myocardinfarct",18),
+NOT MI","","atc:C07 & ! atc:C07B & ! atc:C07C & ! atc:C07D","! problem:atriumfibrilleren & ! problem:angina-pectoris & ! problem:myocardinfarct",18),
+("58a","yes","no","Beta-blocker eyedrops (S01ED)","","","atc:S01ED","",18),
 ("59","yes","no","Beta-blokkers C07 beta-blockers NOT preferred (selective) ones: C07AB selective beta-blockers, C07BB, C07CB, C07DB selective beta-blockers in combinations) ","atriumfibrilleren
 OR angina pectoris
-OR MI","","(atc:C07 | atc:S01ED) & ! atc:C07AB & ! atc:C07BB & ! atc:C07CB & ! atc:C07DB","problem:atriumfibrilleren | problem:angina-pectoris | problem:myocardinfarct",18),
+OR MI","","atc:C07 & ! atc:C07AB & ! atc:C07BB & ! atc:C07CB & ! atc:C07DB","problem:atriumfibrilleren | problem:angina-pectoris | problem:myocardinfarct",18),
 ("60","yes","no","Beta-blokkers
 C07 beta-blockers NOT (C07B, C07C, or C07D) (combinations with diuretics)
 S01ED beta-blocker eyedrops","bijwerking","","(atc:C07 | atc:S01ED) & ! atc:C07B & ! atc:C07C & ! atc:C07D","allergic-reaction",18),
@@ -481,10 +477,7 @@ AND NOT N02AB03 ) AND CONDITION()}}","atc:N02A","",22),
 ("76","yes","no","Opiates N02A ","all","{{preselect box 1 if a stop-, afbouw-, or vervangen- option is checked}}","atc:N02A","",22),
 ("78","yes","no","NSAIDs:(excl. combinations w/ opioids)
 M01A Anti-inflammatory and antirheumatic products, non-steroids 
-M01B Anti-inflammatory/antirheumatic agents in combination 
-or ATC S01BC (ocular NSAIDs)
-or ATC S01CC (ocular combinations with NSAIDs)
-or ATC D11AX18  (diclofenac topical)","all","{{preselect box 2}{
+M01B Anti-inflammatory/antirheumatic agents in combination","all","{{preselect box 2}{
 (SELECTOR() AND CONDITION(eGFR <= 30ml/min))
 
 OR
@@ -498,62 +491,38 @@ OR N02AJ06
 OR N02AJ13 
 OR N02AJ17)
 ))
-}}","atc:M01A | atc:M01B | atc:S01BC | atc:S01CC | atc:D11AX18","",24),
+}}","atc:M01A | atc:M01B","",24),
 ("79","yes","no","NSAIDs:(excl. combinations w/ opioids)
 M01A Anti-inflammatory and antirheumatic products, non-steroids 
-M01B Anti-inflammatory/antirheumatic agents in combination 
-or ATC S01BC (ocular NSAIDs)
-or ATC S01CC (ocular combinations with NSAIDs)
-or ATC D11AX18  (diclofenac topical)","normal renal function","","atc:M01A | atc:M01B | atc:S01BC | atc:S01CC | atc:D11AX18","measurement.eGFR.value > 30 && measurement.eGFR.date <= now-11-months",24),
+M01B Anti-inflammatory/antirheumatic agents in combination","normal renal function","","atc:M01A | atc:M01B","measurement.eGFR.value > 30 && measurement.eGFR.date <= now-11-months",24),
 ("80","yes","no","NSAIDs:(excl. combinations w/ opioids)
 M01A Anti-inflammatory and antirheumatic products, non-steroids 
-M01B Anti-inflammatory/antirheumatic agents in combination 
-or ATC S01BC (ocular NSAIDs)
-or ATC S01CC (ocular combinations with NSAIDs)
-or ATC D11AX18  (diclofenac topical)","low renal function","","atc:M01A | atc:M01B | atc:S01BC | atc:S01CC | atc:D11AX18","measurement.eGFR.value <= 30",24),
+M01B Anti-inflammatory/antirheumatic agents in combination","low renal function","","atc:M01A | atc:M01B","measurement.eGFR.value <= 30",24),
 ("80a","yes","no","NSAIDs NOT diclofenac and (excl. combinations w/ opioids)
 M01A Anti-inflammatory and antirheumatic products, non-steroids 
-M01B Anti-inflammatory/antirheumatic agents in combination 
-or ATC S01BC (ocular NSAIDs)
-or ATC S01CC (ocular combinations with NSAIDs)
-or ATC D11AX18  (diclofenac topical)","NOT low renal function","","(atc:M01A | atc:M01B | atc:S01BC | atc:S01CC | atc:D11AX18) & ! atc:M01AB05 & ! atc:M01AB55","! measurement.eGFR.value <= 30",24),
+M01B Anti-inflammatory/antirheumatic agents in combination","NOT low renal function","","(atc:M01A | atc:M01B) & ! atc:M01AB05 & ! atc:M01AB55","! measurement.eGFR.value <= 30",24),
 ("80b","yes","no","NSAIDs NOT naproxen and (excl. combinations w/ opioids)
 M01A Anti-inflammatory and antirheumatic products, non-steroids (not combinations)
-M01B Anti-inflammatory/antirheumatic agents in combination 
-or ATC S01BC (ocular NSAIDs)
-or ATC S01CC (ocular combinations with NSAIDs)
-or ATC D11AX18  (diclofenac topical)","NOT low renal function","","(atc:M01A | atc:M01B | atc:S01BC | atc:S01CC | atc:D11AX18) & ! atc:M01AE02 & ! atc:M01AE52 & ! atc:M01AE56","! measurement.eGFR.value <= 30",24),
+M01B Anti-inflammatory/antirheumatic agents in combination","NOT low renal function","","(atc:M01A | atc:M01B) & ! atc:M01AE02 & ! atc:M01AE52 & ! atc:M01AE56","! measurement.eGFR.value <= 30",24),
 ("81","yes","no","NSAIDs:(excl. combinations w/ opioids)
 M01A Anti-inflammatory and antirheumatic products, non-steroids 
-M01B Anti-inflammatory/antirheumatic agents in combination 
-or ATC S01BC (ocular NSAIDs)
-or ATC S01CC (ocular combinations with NSAIDs)
-or ATC D11AX18  (diclofenac topical)","unknown renal function","","atc:M01A | atc:M01B | atc:S01BC | atc:S01CC | atc:D11AX18","! measurement.eGFR",24),
+M01B Anti-inflammatory/antirheumatic agents in combination","unknown renal function","","atc:M01A | atc:M01B","! measurement.eGFR",24),
 ("83","yes","no","NSAIDs:(excl. combinations w/ opioids)
 M01A Anti-inflammatory and antirheumatic products, non-steroids 
-M01B Anti-inflammatory/antirheumatic agents in combination 
-or ATC S01BC (ocular NSAIDs)
-or ATC S01CC (ocular combinations with NSAIDs)
-or ATC D11AX18  (diclofenac topical)","paracetamol (
+M01B Anti-inflammatory/antirheumatic agents in combination","paracetamol (
 N02BE01
 OR N02BE51
 OR N02BE71
 OR N02AJ01 
 OR N02AJ06 
 OR N02AJ13 
-OR N02AJ17)","","atc:M01A | atc:M01B | atc:S01BC | atc:S01CC | atc:D11AX18","atc:N02BE01 | atc:N02BE51 | atc:N02BE71 | atc:N02AJ01 | atc:N02AJ06 | atc:N02AJ13 | atc:N02AJ17",24),
+OR N02AJ17)","","atc:M01A | atc:M01B","atc:N02BE01 | atc:N02BE51 | atc:N02BE71 | atc:N02AJ01 | atc:N02AJ06 | atc:N02AJ13 | atc:N02AJ17",24),
 ("83a","yes","no","NSAIDs:(excl. combinations w/ opioids)
 M01A Anti-inflammatory and antirheumatic products, non-steroids 
-M01B Anti-inflammatory/antirheumatic agents in combination 
-or ATC S01BC (ocular NSAIDs)
-or ATC S01CC (ocular combinations with NSAIDs)
-or ATC D11AX18  (diclofenac topical)","bijwerking","","atc:M01A | atc:M01B | atc:S01BC | atc:S01CC | atc:D11AX18","allergic-reaction",24),
+M01B Anti-inflammatory/antirheumatic agents in combination","bijwerking","","atc:M01A | atc:M01B","allergic-reaction",24),
 ("84","yes","no","NSAIDs:(excl. combinations w/ opioids)
 M01A Anti-inflammatory and antirheumatic products, non-steroids 
-M01B Anti-inflammatory/antirheumatic agents in combination 
-or ATC S01BC (ocular NSAIDs)
-or ATC S01CC (ocular combinations with NSAIDs)
-or ATC D11AX18  (diclofenac topical)","all","","atc:M01A | atc:M01B | atc:S01BC | atc:S01CC | atc:D11AX18","",24),
+M01B Anti-inflammatory/antirheumatic agents in combination","all","","atc:M01A | atc:M01B","",24),
 ("86","yes","no","Muscle relaxants N03","paraplegia or dwaarslaesie","","atc:M03","(problem:paraplegia | problem:dwarslesie)",25),
 ("87","yes","no","Muscle relaxants N03","NOT paraplegia AND NOT dwaarslaesie","","atc:M03","! problem:paraplegia & ! problem:dwarslesie",25),
 ("88","yes","no","Muscle relaxants N03","all","{{preselect box 2}{

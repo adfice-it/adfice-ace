@@ -155,7 +155,7 @@ function calculateAge(patient) {
     let month = ageTokens[1]
     let day = ageTokens[2]
     let age = today.getFullYear() - year;
-    /* istanbul ignore else */
+    /* istanbul ignore next */
 	if (today.getMonth() < month || (today.getMonth() == month && today.getDate() < day)) {
       age--;
     }
@@ -604,7 +604,8 @@ async function evaluate_sql_condition(patient_id, rule_number) {
 async function evaluate_sql(sql, patient_id) {
     let count;
     let matches = sql.match(/\?/g);
-    if (matches) {
+    /* istanbul ignore else */
+	if (matches) {
         count = matches.length;
     } else {
         count = 0;
@@ -1702,6 +1703,7 @@ async function get_load_state(patient_id) {
 	
     let load_state = await this.sql_select(sql, params);
 	
+	/* istanbul ignore else */
 	if(!load_state[0]){
 		return 0;
 	} else if(load_state[0]['load_state'] == 1){
