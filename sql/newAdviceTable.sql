@@ -10,7 +10,7 @@ Als een benzodiazepine geïndiceerd is dan gaat de voorkeur naar lorazepam.
 Behandel **korte-termijn gebruik voor acute slaapstoornis** bij voorkeur met niet-medicamenteuze slaapadviezen. Indien medicamenteuze therapie is geïndiceerd dan gaat de voorkeur bij ouderen uit naar temazepam, zopiclon of zolpidem. Bij het vervangen van een sedativum wordt afbouwen aanbevolen. Zie [CalcBenzo - Psychiatrienet](http://wiki.psychiatrienet.nl/wiki/Special:RunQuery/CalcBenzo).
 Stoppen bij: 
 - Sedatie overdag, cognitieve stoornissen of psychomotore bijwerkingen
-- Indien de indicatie slaap- en/of angststoornis is","",""),
+- Indien de indicatie slaapstoornis is","",""),
 ("6e",1,"stop","","Stoppen (bij gebruik \&lt;2 weken)","Stop","U kunt direct stoppen."),
 ("6e",2,"taper-stop","","Afbouwen waarna stoppen: elke 2 weken: 75%, 50%, 25%, 12,5%, 0%: {{free text}}","Afbouwen volgens afbouwschema waarna stop: {{free text}}","Stoppen via een afbouwschema. Slaapmedicatie werkt vaak maar kort (maximaal 4 weken). Na een paar weken raken de hersenen gewend aan de medicijnen die dan niet meer zo goed werken. Omdat er wel gevaar is voor (ernstige) bijwerkingen zoals geheugenverlies en vallen, adviseert de arts u de slaapmiddelen te gaan verlagen en stoppen. Afbouwen kan tijdelijk klachten geven van slapeloosheid, angst, zweten en oorsuizen. {{free text}}"),
 ("6e",3,"taper-reduce","","Afbouwen tot de minimaal effectieve dosis: elke 2 weken: 75%, 50%, 25%, 12,5%: {{free text}}","Afbouwen tot de minimaal effectieve dosis volgens afbouwschema: {{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
