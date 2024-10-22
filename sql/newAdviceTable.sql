@@ -46,9 +46,9 @@ Bespreek het met uw dokter, als het niet lukt om deze adviezen op te volgen."),
 
 Bij **korte-termijn gebruik voor acute slaapstoornis** gebruik bij voorkeur temazepam (sneller inwerkingtreding en korte halfwaardetijd).
 
-Stoppen bij
--Sedatie overdag, cognitieve stoornissen of psychomotore bijwerkingen
--Indien zowel de indicatie slaap- als angststoornis","",""),
+Stoppen bij: 
+- Sedatie overdag, cognitieve stoornissen of psychomotore bijwerkingen
+- Indien de indicatie slaapstoornis is","",""),
 ("13",1,"taper-stop","","Afbouwen volgens afbouwschema waarna stop: {{free text}}","Afbouwen volgens afbouwschema waarna stop: {{free text}}","Stoppen via een afbouwschema. {{free text}}"),
 ("13",2,"taper-reduce","","Afbouwen tot de minimaal effectieve dosis volgens afbouwschema: {{free text}}","Afbouwen tot de minimaal effectieve dosis volgens afbouwschema: {{free text}}","Verlagen van dosering via een afbouwschema. {{free text}}"),
 ("13",3,"refer","psychologist","Doorverwijzing psycholoog via huisarts: {{free text}}","Doorverwijzing psycholoog via huisarts: {{free text}}","De huisarts zal u doorverwijzen naar een psycholoog. Overleg met uw huisarts voor een psycholoog bij u in de buurt. {{free text}}"),
