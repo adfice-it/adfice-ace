@@ -286,7 +286,7 @@ Op deze website vindt u dingen die u moet regelen als uw naaste dementie heeft: 
 Er wordt een casemanager voor u aangevraagd. Een casemanager is een onafhankelijke en vaste begeleider voor mensen met dementie én hun naasten. Een casemanager informeert, begeleidt, denkt mee, adviseert en regelt zorg. Zo helpt de casemanager om te gaan met de ziekte en met de gevolgen ervan in het dagelijks leven. De casemanager neemt contact met u op voor het maken van een afspraak. Heeft de casemanager na twee weken nog niet gebeld? Neem dan contact met ons op. {{free text}}'),
 ('T',4,0,'Informatie mild cognitive impairment','Informatie mild cognitive impairment','<span class="patient_nonmed_category">Dementie: </span>
 
-Op deze website vind u informatie over het voorstadium van dementie (mild cognitive impairment): [https://www.dementie.nl/mild-cognitive-impairment-mci](https://www.dementie.nl/mild-cognitive-impairment-mci).'),
+Op deze website vindt u informatie over mild cognitive impairment: [https://www.dementie.nl/mild-cognitive-impairment-mci](https://www.dementie.nl/mild-cognitive-impairment-mci).'),
 ('T',5,0,'Informatie ziekte van Alzheimer','Informatie ziekte van Alzheimer','<span class="patient_nonmed_category">Dementie: </span>
 
 Op deze website vind u informatie over de ziekte van Alzheimer: [https://www.dementie.nl/ziekte-van-alzheimer](https://www.dementie.nl/ziekte-van-alzheimer).'),
