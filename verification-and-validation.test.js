@@ -775,12 +775,13 @@ test('verification3: conforms to spec', async () => {
     expect(fired0).toBe("35,41,42,42a,44,45,62");
     fired0 = null;
     patientAdvice = null;
-    patient_id = "00000000-0000-4000-8000-100000000128";
+/*    patient_id = "00000000-0000-4000-8000-100000000128";
     patientAdvice = await adfice.get_advice_for_patient(patient_id);
     fired0 = patientAdvice.medication_advice[0].fired.toString();
     expect(fired0).toBe("78,80a,80b,81,84");
     fired0 = null;
     patientAdvice = null;
+*/	/* removed topical NSAIDs */
 
     // TODO check for other combi drugs that aren't handled correctly,
     // as well as ATCs that appear in >1 vervolg rule
