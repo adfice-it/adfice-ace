@@ -19,7 +19,7 @@ truncate table research_initial_checkboxes;
 truncate table research_last_checkboxes;
 truncate table research_initial_patient_measurement;
 truncate table research_last_patient_measurement;
-
+/*
 CREATE TABLE `research_map` (
   `participant_number` varchar(50) DEFAULT NULL,
   `mrn` varchar(50) NOT NULL,
@@ -44,7 +44,7 @@ UPDATE patient set participant_number =
      (select participant_number 
       from research_map 
       where research_map.patient_id = patient.patient_id) where participant_number is null OR participant_number = '';
-
+*/
 SET @location_id = if(@location_id is null, 0, @location_id);
 SET @lookback = if(@lookback is null, '2022-08-01', @lookback); 
 -- @lookback is used so we can extract data in batches (without duplication)
