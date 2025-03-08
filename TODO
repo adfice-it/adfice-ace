@@ -1,20 +1,11 @@
 Important:
+* Precheck boxes do not work in Standalone. The prechecked boxes are only loaded when the data first comes from the EHR, to prevent accidentally overwriting the doctor's choices. Since there is no load out of the EHR, this step never happens. Consider adding a button to Standalone to run this manually.
 * Session handling does not work correctly
   - session expires even if "renew session" is clicked
   - session sometimes expires early, seems related to loading/viewing another page, including refpages
-* Entering wildly incorrect values in the start page UI causes a crash:
-  text: "Out of range value for column 'user_height_cm' at row 1",
-  sql: '/* adfice.update_prediction_with_user_values */\n' +
-    '        UPDATE patient_measurement\n' +
-    "           SET user_height_cm=?,user_values_updated = (select now()) WHERE patient_id = ?  - parameters:['2000','0881d83980f8855292ee8d38eeb03526']",
-  fatal: false,
-  errno: 1264,
-  sqlState: '22003',
-  code: 'ER_WARN_DATA_OUT_OF_RANGE'
-  I guess at some point we set limits for the database fields, but didn't build those limits into the software.
+
 
 Mid Priority:
-* Standalone: does the system handle null med start dates? If so, allow nulls.
 * Consider moving bin/db-create-portal-tables.sh to the valportaal repo. The tables actually belong to the valportaal, although symlinking them to adfice is handy since adfice needs to write to those tables as well.
 * Can we implment a better fake OAuth for testing?
 

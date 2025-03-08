@@ -89,12 +89,20 @@ async function evaluate_preselected(preselect_rule, patient_id, atc_code,
             selector_result = false;
         }
     }
+//if(patient_id == '00000000-0000-4000-8000-100000000081'){
+//	console.log('preselect_or=' + preselect_rule['preselect_or']);
+//	console.log('after preselect_or selector_result=' + selector_result);
+//}	
     if (preselect_rule['preselect_not'] != null) {
         let let_selector_string = preselect_rule['preselect_not'].toString();
         if (matches_selector(atc_code, let_selector_string)) {
             selector_result = false;
         }
     }
+//if(patient_id == '00000000-0000-4000-8000-100000000081'){
+//	console.log('preselect_not=' + preselect_rule['preselect_not']);
+//	console.log('after preselect_not selector=' + selector_result);
+//}	
     // if no condition is specified, then
     // it is true for all patients
     let condition_result = true;
@@ -105,6 +113,10 @@ async function evaluate_preselected(preselect_rule, patient_id, atc_code,
             condition_result = false;
         }
     }
+//if(patient_id == '00000000-0000-4000-8000-100000000081'){
+//	console.log('sql_condition=' + preselect_rule['sql_condition']);
+//	console.log('condition_result=' + condition_result);
+//}	
     if (selector_result && condition_result) {
         return true;
     } else {

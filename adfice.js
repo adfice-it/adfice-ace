@@ -1397,6 +1397,9 @@ async function logFiredRules(patient_id, meds_with_rules_to_fire) {
 
 async function determine_preselected_checkboxes(fired, patient_id, atc_code) {
     let preselected = {};
+//if(patient_id == '00000000-0000-4000-8000-100000000081'){
+//	console.log('fired=' + fired + "; atc_code=" + atc_code);
+//}
     for (let i = 0; i < fired.length; ++i) {
         let rule_number = fired[i].toString();
         let preselectRules = await this.get_preselect_rules(rule_number);

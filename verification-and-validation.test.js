@@ -1412,6 +1412,11 @@ test('verification6: pre-check checkboxes', async () => {
 	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
 	expect(checkboxes.cb_N05BA01_6e_1).toBe("checked");
 	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//checkbox 2 rule 2
+	patient_id = "00000000-0000-4000-8000-100000000008";
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N05BA01_6e_2).toBe("checked");
 
 /*
 let patientAdvice = await adfice.get_advice_for_patient(patient_id);	
@@ -1466,16 +1471,6 @@ test('verification7: pre-check checkbox rules should tolerate duplicate criteria
 	//cleanup
 	await adfice.db.sql_query(sql_delete_med,params_delete_med);
 	
-	//6e checkbox 2 rule 1
-	patient_id = "00000000-0000-4000-8000-100000000007";
-	params_delete_med = [patient_id, start_date];
-	await adfice.db.sql_query(sql_delete_med,params_delete_med);
-	params_med = [patient_id, date_retrieved, "test6e2", "test6e2", 'N05CA02', start_date];
-	await adfice.db.sql_query(sql_add_med,params_med);
-	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
-	expect(checkboxes.cb_N05CA02_6e_2).toBe("checked");
-	await adfice.db.sql_query(sql_delete_med,params_delete_med);
-	
 	//checkbox 1 rule 2
 	patient_id = "00000000-0000-4000-8000-100000000004";
 	params_delete_prob = [patient_id, start_date];
@@ -1497,8 +1492,562 @@ test('verification7: pre-check checkbox rules should tolerate duplicate criteria
 	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
 	await adfice.db.sql_query(sql_delete_med,params_delete_med);
 	
+	//6e checkbox 2 rule 1
+	patient_id = "00000000-0000-4000-8000-100000000008";
+	params_delete_med = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	params_med = [patient_id, date_retrieved, "test6e2", "test6e2", 'N05CA02', start_date];
+	await adfice.db.sql_query(sql_add_med,params_med);
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N05CA02_6e_2).toBe("checked");
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+		
+	//6e checkbox 2 rule 2
+	patient_id = "00000000-0000-4000-8000-100000000008"; // has Parkinson, N05BA01
+	atc_code = 'N05BA02';
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_delete_med = [patient_id, just_started];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	params_prob = [patient_id, date_retrieved, start_date, "progressive-supranuclear-palsy"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_med = [patient_id, date_retrieved, "test6e2", "test6e2", 'N05BA02', just_started];
+	await adfice.db.sql_query(sql_add_med,params_med);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N05BA02_6e_2).toBe("checked");
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	
+	//6e checkbox 2 rule 3: check if ATC N05CM05 
+	patient_id = "00000000-0000-4000-8000-100000000011";
+	atc_code = 'N05CM05';
+	// should be checked for this patient
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N05CM05_6e_2).toBe("checked");
+	
+	//13 checkbox 1 rule 1: check if ATC = N05BB01
+	patient_id = "00000000-0000-4000-8000-100000000012";
+	params_delete_med = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	atc_code = 'N05BE01';
+	fired = ['13'];
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N05BE01_13_1).toBeFalsy;
+	atc_code = 'N05BB01';
+	params_med = [patient_id, date_retrieved, "test13", "test13", 'N05BB01', start_date];
+	await adfice.db.sql_query(sql_add_med,params_med);
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N05BB01_13_1).toBe("checked");
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	
+	//16 checkbox 2 rule 1: check if ATC in N05AA01,N05AA03,N05AB03,N05AB06,N05AC02,N05AH03,N05AH04
+	patient_id = "00000000-0000-4000-8000-100000000014";
+	params_delete_med = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	atc_code = 'N05AD01';
+	fired = ['16'];
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N05AD01_16_2).toBeFalsy;
+	atc_code = 'N05AH04';
+	params_med = [patient_id, date_retrieved, "test16", "test16", 'N05AH04', start_date];
+	await adfice.db.sql_query(sql_add_med,params_med);
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N05AH04_16_2).toBe("checked");
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	
+	//19f box 1 rule 1: not depressie, not angststoornis
+	fired = ['19f'];
+	patient_id = "00000000-0000-4000-8000-100000000029"; // has no probs
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	atc_code = 'N06AB03';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N06AB03_19f_1).toBe("checked"); //default should be checked
+	params_prob = [patient_id, date_retrieved, start_date, "depressie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N06AB03_19f_1).toBeFalsy;
+	params_prob = [patient_id, date_retrieved, start_date, "angststoornis"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N06AB03_19f_1).toBeFalsy;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//19f box 1 rule 2: check if ATC in N06AA, N06AB05
+	patient_id = "00000000-0000-4000-8000-100000000027"; // has depressie, N06AA09
+	atc_code = 'N06AA09';
+	// should be checked for this patient
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N06AA09_19f_1).toBe("checked");
+	
+	//27 box 2 rule 1: check if ATC in N04AA01,N04AA02,N04AA04,N04AB02,N04AC01
+	fired = ['27'];
+	patient_id = "00000000-0000-4000-8000-100000000033"; // has N04AA02
+	atc_code = 'N04AA02';
+	// should be checked for this patient
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N04AA02_27_2).toBe("checked");
+	// should be not checked for this patient
+	patient_id = "00000000-0000-4000-8000-100000000034"; // has N04BA01
+	atc_code = 'N04BA01';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N04AA02_27_2).toBeFalsy;
+	
+	//36 box 1 rule 1: always checked (box says to check if symptoms are still present)
+	fired = ['36'];
+	patient_id = "00000000-0000-4000-8000-100000000042";
+	atc_code = 'C03CA01';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C03CA01_36_1).toBe("checked");
+	//36 box 2 rule 1: always checked (box says to consult cardiologist)
+	expect(checkboxes.cb_C03CA01_36_2).toBe("checked");
+	
+	//42a checkbox 2 rule 1: defunct
+
+	//42a checkbox 2 rule 2: diuretics + beta-blockers: any diuretic and NOT hypertensie and NOT hartfalen
+	patient_id = "00000000-0000-4000-8000-100000000072"; // C07BB02 Metoprolol and thiazides; 
+	atc_code = 'C07BB02';
+	fired = ['42a'];
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	// should be checked if there is no dx; i.e. no indication
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07BB02_42a_2).toBe("checked");
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "hypertensie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07BB02_42a_2).toBeFalsy;
+	params_prob = [patient_id, date_retrieved, start_date, "hartfalen"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07BB02_42a_2).toBeFalsy;
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//42a checkbox 2 rule 3: if thiazide + jicht or hyponatremia, hypokalemia, or hypocalcemia, should be checked
+	patient_id = "00000000-0000-4000-8000-100000000072"; // C07BB02 Metoprolol and thiazides; 
+	atc_code = 'C07BB02';
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	let sql_delete_lab = "DELETE FROM patient_lab where patient_id = ? and date_measured = ?";
+	let params_delete_lab = [patient_id,start_date];
+	await adfice.db.sql_query(sql_delete_lab,params_delete_lab);
+	// start with it unchecked due to hartfalen
+	params_prob = [patient_id, date_retrieved, start_date, "hartfalen"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07BB02_42a_2).toBeFalsy;
+	// check it due to labs
+	let sql_add_lab = "INSERT INTO patient_lab (patient_id, date_retrieved, date_measured, lab_test_name, lab_test_result, lab_test_units) VALUES (?,?,?,?,?,?);"
+	let params_lab = [patient_id, date_retrieved, start_date, "natrium",100,"mmol/l"];
+	await adfice.db.sql_query(sql_add_lab,params_lab);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07BB02_42a_2).toBe("checked");
+	params_lab = [patient_id, date_retrieved, start_date, "kalium",2.5,"mmol/l"];
+	await adfice.db.sql_query(sql_add_lab,params_lab);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07BB02_42a_2).toBe("checked");
+	params_prob = [patient_id, date_retrieved, start_date, "hyponatremia"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07BB02_42a_2).toBe("checked");
+	params_prob = [patient_id, date_retrieved, start_date, "hypokalemia"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07BB02_42a_2).toBe("checked");
+	await adfice.db.sql_query(sql_delete_lab,params_delete_lab);
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+
+	//42a checkbox 2 rule 4: check with parkinson-like conditions and orthostatic hypotension
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "hartfalen"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "lewy-bodies-dementie"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "orthostatische-hypotensie"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07BB02_42a_2).toBe("checked");
+	params_prob = [patient_id, date_retrieved, start_date, "multiple-system-atrophy"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07BB02_42a_2).toBe("checked");
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//42b checkbox 2 rule 5: check if ATC = C07DA
+	patient_id = "00000000-0000-4000-8000-100000000127";
+	params_delete_med = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	atc_code = 'C07DB01';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07DB01_42a_2).toBeFalsy;
+	atc_code = 'C07DA06';
+	params_med = [patient_id, date_retrieved, "test42b", "test42b", 'C07DA06', start_date];
+	await adfice.db.sql_query(sql_add_med,params_med);
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07DA06_42a_2).toBe("checked");
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	
+	//42b checkbox 2 rule 1: check if lisdiuretic and no hartfalen
+	patient_id = "00000000-0000-4000-8000-100000000041";
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	atc_code = 'C03CA01';
+	fired = ['42b'];
+	// default patient has no heart failure, box should be checked
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C03CA01_42b_2).toBe("checked");
+	params_prob = [patient_id, date_retrieved, start_date, "hypertensie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C03CA01_42b_2).toBe("checked");
+	params_prob = [patient_id, date_retrieved, start_date, "hartfalen"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C03CA01_42b_2).toBeFalsy;
+	
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//42b checkbox 2 rule 2: check if any diuretic and no hypertensie or hartfalen
+	patient_id = "00000000-0000-4000-8000-100000000045"; //C03AA03 and no probs
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	atc_code = 'C03AA03';
+	fired = ['42b'];
+	// default patient has no hypertension or heart failure, box should be checked
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C03AA03_42b_2).toBe("checked");
+	params_prob = [patient_id, date_retrieved, start_date, "hypertensie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C03AA03_42b_2).toBeFalsy;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//42b checkbox 2 rule 4: check if any diuretic and parkinson-like condition and orthostatic hypotension
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "hypertensie"];
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "lewy-bodies-dementie"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "orthostatische-hypotensie"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C03AA03_42b_2).toBe("checked");
+	params_prob = [patient_id, date_retrieved, start_date, "multiple-system-atrophy"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C03AA03_42b_2).toBe("checked");
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
 	
 
+	
+	//46 checkbox 1 rule 1: check if parkinson-like condition and orthostatic hypotension
+	patient_id = "00000000-0000-4000-8000-100000000050";
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	atc_code = 'C03AA03';
+	fired = ['46'];
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C03AA03_46_1).toBeFalsy;
+	params_prob = [patient_id, date_retrieved, start_date, "lewy-bodies-dementie"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "orthostatische-hypotensie"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C03AA03_46_1).toBe("checked");
+	params_prob = [patient_id, date_retrieved, start_date, "multiple-system-atrophy"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C03AA03_46_1).toBe("checked");
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//46 checkbox 1 rule 2: check if ATC in C02A,C04,C08,C02CA,C02DA,C02DB,C02DC,C02DG01,C02DD01
+	patient_id = "00000000-0000-4000-8000-100000000071";
+	atc_code = 'C04AA02';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C04AA02_46_1).toBe("checked");
+	
+	//50 checkbox 1 rule 1: check if parkinson-like condition and orthostatic hypotension
+	patient_id = "00000000-0000-4000-8000-100000000053";
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	atc_code = 'C08DA01';
+	fired = ['50'];
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C08DA01_50_1).toBeFalsy;
+	params_prob = [patient_id, date_retrieved, start_date, "lewy-bodies-dementie"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "orthostatische-hypotensie"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C08DA01_50_1).toBe("checked");
+	params_prob = [patient_id, date_retrieved, start_date, "multiple-system-atrophy"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C08DA01_50_1).toBe("checked");
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//54 checkbox 1 rule 1: always checked (drugs which fall under this rule are generally contraindicated)
+	fired = ['54'];
+	patient_id = "00000000-0000-4000-8000-100000000057";
+	atc_code = 'C01DX16';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C01DX16_54_1).toBe("checked");
+	
+	//56 checkbox 1 rule 1: check if in C07AA,C07AG,C07BA,C07BG,C07CA,C07CG,C07EA,C07FX01,C07FX02,C07FX06,C07FA05,S01ED01,S01ED03,S01ED04,S01ED05
+	fired = ['56'];
+	patient_id = "00000000-0000-4000-8000-100000000059";
+	atc_code = 'C07AA07';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07AA07_56_1).toBe("checked");
+	// add atriumfibrilleren and confirm that it stays checked
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "atriumfibrilleren"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07AA07_56_1).toBe("checked");
+	//add myocardinfarct as well
+	params_prob = [patient_id, date_retrieved, start_date, "myocardinfarct"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07AA07_56_1).toBe("checked");
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//56 checkbox 1 rule 2: check if parkinson or parkinson-like dz and orthostatic hypotension
+	patient_id = "00000000-0000-4000-8000-100000000062"; // C07AB02 and atriumfibrilleren
+	atc_code = 'C07AB02';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07AB02_56_1).toBeFalsy;
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "lewy-bodies-dementie"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "orthostatische-hypotensie"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07AB02_56_1).toBe("checked");
+	params_prob = [patient_id, date_retrieved, start_date, "multiple-system-atrophy"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07AB02_56_1).toBe("checked");
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//56 checkbox 1 rule 3: check if not atriumfibrilleren, angina-pectoris, or myocardinfarct
+	patient_id = "00000000-0000-4000-8000-100000000061"; // C07AB02 and not atriumfibrilleren
+	atc_code = 'C07AB02';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C07AB02_56_1).toBe("checked");
+	//negative case already demonstrated as part of checking rule 1
+	
+	//63 checkbox 1 rule 1: check if parkinson or parkinson-like dz and orthostatic hypotension
+	fired = ['63'];
+	patient_id = "00000000-0000-4000-8000-100000000064"; // C09AA06, no probs
+	atc_code = 'C09AA06';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C09AA06_63_1).toBeFalsy;
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "lewy-bodies-dementie"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "orthostatische-hypotensie"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C09AA06_63_1).toBe("checked");
+	params_prob = [patient_id, date_retrieved, start_date, "multiple-system-atrophy"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C09AA06_63_1).toBe("checked");
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//64 checkbox 1 rule 1: check if in C10BX03,C10BX07,C10BX09,C10BX11,C10BX14
+	fired = ['64'];
+	patient_id = "00000000-0000-4000-8000-100000000066"; // C10AA01, no probs
+	atc_code = 'C10AA01';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C10AA01_64_1).toBeFalsy;
+	atc_code = 'C10BX11';
+	params_delete_med = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	params_med = [patient_id, date_retrieved, "test64", "test64", 'C10BX11', start_date];
+	await adfice.db.sql_query(sql_add_med,params_med);
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_C10BX11_64_1).toBe("checked");
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	
+	//67 checkbox 2 rule 1: check if NOT in N02AA01,N02AA05,N02AB03
+	fired = ['67'];
+	patient_id = "00000000-0000-4000-8000-100000000081"; // N02AX02, no probs
+	atc_code = 'N02AX02';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N02AX02_67_2).toBe("checked");
+	// should be checked for this patient
+	patient_id = "00000000-0000-4000-8000-100000000076"; // N02AA01, no probs
+	atc_code = 'N02AA01';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_N02AA01_67_2).toBeFalsy;
+	
+	//78 checkbox 2 rule 1:  measurement.eGFR.value <= 30
+	fired = ['78'];
+	patient_id = "00000000-0000-4000-8000-100000000085"; // M01AB05, eGFR OK
+	atc_code = 'M01AB05';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_M01AB05_78_2).toBeFalsy;
+	patient_id = "00000000-0000-4000-8000-100000000086"; // M01AB05, eGFR low
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_M01AB05_78_2).toBe("checked");
+	
+	//78 checkbox 2 rule 2: combedication with N02BE01,N02BE51,N02BE71,N02AJ01,N02AJ06,N02AJ13,N02AJ17
+	patient_id = "00000000-0000-4000-8000-100000000084"; // M01AB05, comedication with N02BE51
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_M01AB05_78_2).toBe("checked");
+	
+	//88 checkbox 2 rule 1: check if !paraplegia &!dwarslesie
+	fired = ['88'];
+	patient_id = "00000000-0000-4000-8000-100000000090"; // M03AC01, no probs
+	atc_code = 'M03AC01';
+	// should be checked if no probs
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_M03AC01_88_2).toBe("checked");
+	patient_id = "00000000-0000-4000-8000-100000000091"; // M03AC01, dwarslesie
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_M03AC01_88_2).toBeFalsy;
+	params_delete_prob = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	params_prob = [patient_id, date_retrieved, start_date, "paraplegia"]; 
+	await adfice.db.sql_query(sql_add_prob,params_prob);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_M03AC01_88_2).toBeFalsy;
+	await adfice.db.sql_query(sql_delete_prob,params_delete_prob);
+	
+	//88 checkbox 2 rule 2: check if M03BA03,M03BC01
+	patient_id = "00000000-0000-4000-8000-100000000091"; // M03BA03, dwarslesie
+	atc_code = 'M03BA03';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_M03BA03_88_2).toBe("checked");
+	
+	//100 checkbox 3 rule 1: not R06AX29,R06AE07,R06AE09,R06AX13,R06AX27,R06AX22,R06AX26,R06AX25,R06AX28
+	fired=['100'];
+	patient_id = "00000000-0000-4000-8000-100000000099"; // R06AX13
+	atc_code = 'R06AX13';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_R06AX13_100_3).toBeFalsy;
+	patient_id = "00000000-0000-4000-8000-100000000100"; // R06AD02
+	atc_code = 'R06AD02';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_R06AD02_100_3).toBe("checked");
+	
+	//105a checkbox 1 rule 1: always checked	
+	fired=['105a'];
+	patient_id = "00000000-0000-4000-8000-100000000104";
+	atc_code = 'A03AA07';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_A03AA07_105a_1).toBe("checked");
+	
+	//106 checkbox 1 rule 1: always checked
+	fired=['106'];
+	patient_id = "00000000-0000-4000-8000-100000000106";
+	atc_code = 'A03BB01';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_A03BB01_106_1).toBe("checked");
+	
+	//113 checkbox 1 rule 1: always checked
+	fired=['113'];
+	patient_id = "00000000-0000-4000-8000-100000000111";
+	atc_code = 'G04CA03';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_G04CA03_113_1).toBe("checked");
+	
+	//121 checkbox 1 rule 1: check if A10BH,A10BJ,A10BK,A10BB and not A10BB03,A10BB09
+	fired = ['121'];
+	patient_id = "00000000-0000-4000-8000-100000000001"; // no meds, no probs
+	atc_code = 'A10AA01';
+	params_delete_med = [patient_id, start_date];
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	params_med = [patient_id, date_retrieved, "test121", "test121", 'A10AA01', start_date];
+	await adfice.db.sql_query(sql_add_med,params_med);
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_A10AA01_121_1).toBeFalsy;
+	await adfice.db.sql_query(sql_delete_med,params_delete_med);
+	
+	patient_id = "00000000-0000-4000-8000-100000000116"; // A10BB07
+	atc_code = 'A10BB07';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_A10BB07_121_1).toBe("checked");
+	
+	patient_id = "00000000-0000-4000-8000-100000000115"; // A10BB09
+	atc_code = 'A10BB09';
+	checkboxes = null;
+	checkboxes = await adfice.determine_preselected_checkboxes(fired, patient_id, atc_code);
+	expect(checkboxes.cb_A10BB09_121_1).toBeFalsy;
+	
 });
 
 
