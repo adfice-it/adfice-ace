@@ -902,7 +902,7 @@ async function set_sql_freetexts(sqls_and_params, patient_id, doctor_id,
     }
 }
 
-// called from adfice-webserver-runner
+// called from adfice-webserver
 async function set_advice_for_patient(patient_id, doctor,
     cb_states, freetexts) {
     const doctor_id = doctor;

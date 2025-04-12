@@ -108,6 +108,13 @@ async function etl(token_json, etl_opts) {
             dose_text: null
         },
         {
+            ATC: 'C01DA02',
+            generic_name: 'glyceryl trinitrate',
+            display_name: 'glyceryl trinitrate',
+            start_date: '2021-01-27 10:10:00.000',
+            dose_text: '4x daily'
+        },
+        {
             ATC: null,
             generic_name: 'zinkzalf',
             display_name: 'zinkzalf',

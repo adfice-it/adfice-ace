@@ -24,6 +24,12 @@ function user_entered_patient() {
 	let participant = document.getElementById("participant").value;
 	window.location.href = '/user-entered?user=' + doctor_field + '&birthdate=' + birthdate + '&participant=' + participant;
 }
+function direct_to_cdss() {
+	let doctor_field = document.getElementById("doctor_field").value;
+	let birthdate = document.getElementById("birthdate").value;
+	let participant = document.getElementById("participant").value;
+	window.location.href = '/user-entered-direct?user=' + doctor_field + '&birthdate=' + birthdate + '&participant=' + participant;
+}
 </script>
 <img src="assets/Advice_IT_logo_small.png"
      style="max-width: 10%; height: auto; display: inline;"
@@ -49,7 +55,10 @@ function user_entered_patient() {
 Laatste naam arts: <input type="text" id="doctor_field" required /><br>
 Patient participant nr: <input type="text" id="participant" required /><br>
 Patient geboortedatum: <input type="date" id="birthdate" min="1903-01-01" max="1973-12-31" /> Als u wil de geboortedatum veranderen, doe dat op de volgende pagina.<br>
-<input id="button_submit_patient" type="button" onclick="user_entered_patient()" value="Verstuur"></form>
+<input id="button_submit_patient" type="button" onclick="user_entered_patient()" value="Nieuwe patient/patientdata bewerken">
+<br>
+<input id="button_direct_cdss" type="button" onclick="direct_to_cdss()" value="Direct naar CDSS">
+</form>
 </div>
 
 <script>
@@ -65,6 +74,9 @@ if(error == 'missing'){
 }
 if(error == 'creeateFailed'){
 	document.getElementById("dataentry_error").innerHTML = "Er was een fout optreden tijdens het maken van een nieuwe record. Zorg dat alle data correct ingevoerd is en probeer het nog eens.";
+}
+if(error == 'patientNotFound'){
+	document.getElementById("dataentry_error").innerHTML = "Er was geen patient gevonden. Controleer de participant nummer of klik op nieuwe patient om een patient te creeeren.";
 }
 </script>
 </body>

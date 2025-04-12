@@ -1,5 +1,6 @@
 Important:
 * Precheck boxes do not work in Standalone. The prechecked boxes are only loaded when the data first comes from the EHR, to prevent accidentally overwriting the doctor's choices. Since there is no load out of the EHR, this step never happens. Consider adding a button to Standalone to run this manually.
+	- Confirmed that preselected checkboxes do work if a patient is loaded with the reload button and stub-etl. Thus it probably does work when loaded from a non-stub-etl too. Next step is to figure out what is different between the stub-etl load and the standalone load.
 * Session handling does not work correctly
   - session expires even if "renew session" is clicked
   - session sometimes expires early, seems related to loading/viewing another page, including refpages
