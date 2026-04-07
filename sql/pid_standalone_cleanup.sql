@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2023-2026 Stichting Open Electronics Lab
 create table if not exists pid (id_from_patient int unsigned, patient_id varchar(36));
 
 insert into pid

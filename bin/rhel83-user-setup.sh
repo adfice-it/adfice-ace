@@ -1,4 +1,6 @@
 #!/bin/bash
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2021-2026 Stichting Open Electronics Lab
 set -x
 set -e
 

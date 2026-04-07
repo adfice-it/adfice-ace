@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Copyright (C) 2021-2024 Stichting Open Electronics Lab
+// Copyright (C) 2021-2026 Stichting Open Electronics Lab
 // vim: set sts=4 shiftwidth=4 expandtab :
 "use strict";
 

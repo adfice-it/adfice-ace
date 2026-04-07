@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2021-2026 Stichting Open Electronics Lab
 SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
 INSERT INTO nonmed_header (category_id,category_name)
 VALUES

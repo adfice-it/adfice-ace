@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2022-2026 Stichting Open Electronics Lab
 set @reloadtime = '2022-09-21 17:14:05';
 set @patient_id = '00000000-0000-4000-8000-100000000174';
 

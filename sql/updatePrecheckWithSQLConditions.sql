@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2021-2026 Stichting Open Electronics Lab
 alter table preselect_rules add column sql_condition varchar(1000);
 UPDATE preselect_rules SET sql_condition="select true where (select true where (select patient_id from patient_problem where patient_id = ? and name IN(\'angststoornis\',\'epilepsy\') limit 1) IS NULL) and (select true from patient_medication where patient_id = ? and ((ATC_code LIKE \'N05C%\' AND ATC_code NOT LIKE \'N05CH%\') or ATC_code LIKE \'N05BA%\') and start_date > CURRENT_DATE() - INTERVAL 2 WEEK limit 1);" where medication_criteria_id="6e" and select_box_num = 1 and preselect_num = 1;
 UPDATE preselect_rules SET sql_condition="select true where (select true where (select patient_id from patient_problem where patient_id = ? and name IN(\'angststoornis\',\'epilepsy\') limit 1) IS NULL) and (select true from patient_medication where patient_id = ? and ((ATC_code LIKE \'N05C%\' AND ATC_code NOT LIKE \'N05CH%\') or ATC_code LIKE \'N05BA%\') and start_date <= CURRENT_DATE() - INTERVAL 2 WEEK  limit 1);" where medication_criteria_id="6e" and select_box_num = 2 and preselect_num = 1;

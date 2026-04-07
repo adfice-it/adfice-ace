@@ -1,4 +1,5 @@
-create table if not exists pid (id_from_patient int unsigned, patient_id varchar(36));
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2023-2026 Stichting Open Electronics Lab
 
 insert into pid
 (select id, patient_id from patient where participant_number = "WITHDRAWN" and row_updated < DATE_SUB(NOW(), INTERVAL 1 DAY)); -- if the WITHDRAWN status was just added, don't delete them (yet)

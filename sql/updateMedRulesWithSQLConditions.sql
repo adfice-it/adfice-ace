@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2021-2026 Stichting Open Electronics Lab
 alter table med_rules add column sql_condition varchar(1000);
 /*
 Note on date comparison: 

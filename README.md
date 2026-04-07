@@ -1,5 +1,8 @@
 # adfice-ace
 
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2021-2026 Stichting Open Electronics Lab -->
+
 The purpose of this system is to evaluate patient data using guideline-based
 rules and produce a summary of guideline recommendations for medications
 relating to falls.

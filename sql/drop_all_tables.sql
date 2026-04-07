@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2022-2026 Stichting Open Electronics Lab
 DROP TABLE IF EXISTS access_log;
 DROP TABLE IF EXISTS education_level;
 DROP TABLE IF EXISTS etl_bsn_patient;

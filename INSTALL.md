@@ -1,5 +1,8 @@
 # INSTALL
 
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2021-2026 Stichting Open Electronics Lab -->
+
 To run an instance of the Adfice webserver:
 
 1. Obtain a copy of the code:

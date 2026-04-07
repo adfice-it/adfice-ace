@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2023-2026 Stichting Open Electronics Lab
 /* The purpose of this script is to remove data from patients that have withdrawn from the study. */
 
 delete from etl_bsn_patient where patient_id in (select patient_id from pid);

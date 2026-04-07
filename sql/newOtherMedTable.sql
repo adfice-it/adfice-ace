@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
+-- Copyright (C) 2021-2026 Stichting Open Electronics Lab
 SET CHARACTER SET 'utf8'; -- enable unicode support in older clients
 INSERT INTO med_other_text (
 medication_criteria_id,
