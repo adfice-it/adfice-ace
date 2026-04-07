@@ -817,7 +817,9 @@ function ws_on_close(event) {
 
 function ws_on_error(err) {
     message_globals.logger.error('Socket error: ', err.message);
-    message_globals.ws.close();
+    if (message_globals.ws) {
+        message_globals.ws.close();
+    }
 };
 
 function connect_web_socket() {
