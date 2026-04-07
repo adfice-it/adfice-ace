@@ -39,7 +39,9 @@ function send_message(message_type, apply) {
     } catch (err) {
         message_globals.logger.log(err, 'could not send:', msg_str);
         ++message_globals.weirdness;
-        message_globals.ws = null;
+        if (message_globals.ws) {
+            message_globals.ws.close();
+        }
     }
 }
 
