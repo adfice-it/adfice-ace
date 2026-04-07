@@ -23,7 +23,11 @@ var iss = "";
 
 function log_debug(server, msg) {
     if (DEBUG) {
-        server.logger.log(msg);
+        if (!server || !server.logger) {
+            console.log(msg);
+        } else {
+            server.logger.log(msg);
+        }
     }
 }
 

@@ -39,7 +39,9 @@ function send_message(message_type, apply) {
     } catch (err) {
         message_globals.logger.log(err, 'could not send:', msg_str);
         ++message_globals.weirdness;
-        message_globals.ws = null;
+        if (message_globals.ws) {
+            message_globals.ws.close();
+        }
     }
 }
 
@@ -817,7 +819,9 @@ function ws_on_close(event) {
 
 function ws_on_error(err) {
     message_globals.logger.error('Socket error: ', err.message);
-    message_globals.ws.close();
+    if (message_globals.ws) {
+        message_globals.ws.close();
+    }
 };
 
 function connect_web_socket() {
